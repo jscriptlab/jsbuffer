@@ -1,9 +1,11 @@
 {
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "1.x",
     "@types/node": "18.x",
     "@typescript-eslint/eslint-plugin": "5.x",
     "@typescript-eslint/parser": "5.x",
     "eslint": "8.x",
+    "nyc": "15.x",
     "prettier": "2.x",
     "sarg": "5.x",
     "ts-node": "10.x",
@@ -25,7 +27,8 @@
   ],
   "scripts": {
     "prepublishOnly": "yarn test && npx tsc -b cli --force",
-    "test": "npx tsc -b test --force && npx sarg --bail \"test/**/*.js\""
+    "test": "npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
+    "coverage": "npx tsc -b test --force && npx nyc --exclude-node-modules yarn test"
   },
   "dependencies": {
     "cyclic-rc": "^2.0.12",

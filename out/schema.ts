@@ -5,7 +5,7 @@ import {IRequest} from './__types__';
 import {encodeUserTrait} from './User';
 import {decodeUserTrait} from './User';
 
-export function createVoid(params: Omit<Void,'_name'>): Void {
+export function Void(params: Omit<Void,'_name'>): Void {
   return {
     _name: 'schema.Void',
     ...params
@@ -24,7 +24,7 @@ export function decodeVoid(d: IDeserializer): Void | null {
 export interface Void  {
   _name: 'schema.Void';
 }
-export function createMsg(params: Omit<msg,'_name'>): msg {
+export function msg(params: Omit<msg,'_name'>): msg {
   return {
     _name: 'schema.msg',
     ...params
@@ -49,7 +49,7 @@ export interface msg  {
   _name: 'schema.msg';
   data: Uint8Array;
 }
-export function createUsers(params: Omit<Users,'_name'>): Users {
+export function Users(params: Omit<Users,'_name'>): Users {
   return {
     _name: 'schema.Users',
     ...params
@@ -88,7 +88,7 @@ export interface Users  {
   _name: 'schema.Users';
   users: ReadonlyArray<User>;
 }
-export function createGetUserById(params: Omit<GetUserById,'_name'>): GetUserById {
+export function GetUserById(params: Omit<GetUserById,'_name'>): GetUserById {
   return {
     _name: 'schema.GetUserById',
     ...params
@@ -112,7 +112,7 @@ export interface GetUserById extends IRequest<Users> {
   _name: 'schema.GetUserById';
   userId: number;
 }
-export function createPost(params: Omit<Post,'_name'>): Post {
+export function Post(params: Omit<Post,'_name'>): Post {
   return {
     _name: 'schema.Post',
     ...params
@@ -136,7 +136,7 @@ export interface Post  {
   _name: 'schema.Post';
   id: number;
 }
-export function createPosts(params: Omit<Posts,'_name'>): Posts {
+export function Posts(params: Omit<Posts,'_name'>): Posts {
   return {
     _name: 'schema.Posts',
     ...params
@@ -175,7 +175,7 @@ export interface Posts  {
   _name: 'schema.Posts';
   posts: ReadonlyArray<Post>;
 }
-export function createGetPostById(params: Omit<GetPostById,'_name'>): GetPostById {
+export function GetPostById(params: Omit<GetPostById,'_name'>): GetPostById {
   return {
     _name: 'schema.GetPostById',
     ...params
@@ -199,7 +199,7 @@ export interface GetPostById extends IRequest<Posts> {
   _name: 'schema.GetPostById';
   postId: number;
 }
-export function createGetConversations(params: Omit<GetConversations,'_name'>): GetConversations {
+export function GetConversations(params: Omit<GetConversations,'_name'>): GetConversations {
   return {
     _name: 'schema.GetConversations',
     ...params
@@ -218,7 +218,7 @@ export function decodeGetConversations(d: IDeserializer): GetConversations | nul
 export interface GetConversations extends IRequest<Conversations> {
   _name: 'schema.GetConversations';
 }
-export function createCoordinates(params: Omit<Coordinates,'_name'>): Coordinates {
+export function Coordinates(params: Omit<Coordinates,'_name'>): Coordinates {
   return {
     _name: 'schema.Coordinates',
     ...params

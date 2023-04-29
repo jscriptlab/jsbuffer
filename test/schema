@@ -1,5 +1,6 @@
 import { User } from "./User";
 import { Conversations } from "./conversation/index";
+import "./message";
 
 type Void {
 

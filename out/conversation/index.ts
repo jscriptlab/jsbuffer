@@ -3,7 +3,7 @@ import { ISerializer, IDeserializer } from './../__types__';
 import {encodeUser} from './SecondUser';
 import {decodeUser} from './SecondUser';
 
-export function createConversation(params: Omit<Conversation,'_name'>): Conversation {
+export function Conversation(params: Omit<Conversation,'_name'>): Conversation {
   return {
     _name: 'conversation.index.Conversation',
     ...params
@@ -34,7 +34,7 @@ export interface Conversation  {
   id: number;
   user: User;
 }
-export function createConversations(params: Omit<Conversations,'_name'>): Conversations {
+export function Conversations(params: Omit<Conversations,'_name'>): Conversations {
   return {
     _name: 'conversation.index.Conversations',
     ...params

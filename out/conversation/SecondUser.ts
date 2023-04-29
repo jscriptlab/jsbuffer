@@ -1,8 +1,8 @@
 import { ISerializer, IDeserializer } from './../__types__';
 
-export function createUser(params: Omit<User,'_name'>): User {
+export function User(params: Omit<User,'_name'>): User {
   return {
-    _name: 'conversation.seconduser.User',
+    _name: 'conversation.secondUser.User',
     ...params
   };
 }
@@ -16,11 +16,11 @@ export function decodeUser(d: IDeserializer): User | null {
   let firstName: string;
   firstName = d.readString();
   return {
-    _name: 'conversation.seconduser.User',
+    _name: 'conversation.secondUser.User',
     firstName
   };
 }
 export interface User  {
-  _name: 'conversation.seconduser.User';
+  _name: 'conversation.secondUser.User';
   firstName: string;
 }

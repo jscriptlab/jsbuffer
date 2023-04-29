@@ -21,7 +21,7 @@ import {
   getTypeDefinitionOrCallDefinitionNamePropertyValue,
   getTypeDefinitionOrCallDefinitionObjectCreator,
   getTypeDefinitionOrCallEncoderFunctionName,
-} from './functionNames';
+} from './fileGeneratorUtilities';
 import crc from 'cyclic-rc';
 import JavaScriptObjectStringify from './JavaScriptObjectStringify';
 
@@ -202,7 +202,10 @@ export default class FileGenerator extends CodeStream {
     this.#files.push(outFile);
     for (const node of this.#nodes) {
       switch (node.type) {
-        case NodeType.ImportDefinition:
+        case NodeType.ImportStatement:
+          if (node.requirements === null) {
+            break;
+          }
           this.write(
             `import {${node.requirements
               .map((r) => r.value)
@@ -296,7 +299,7 @@ export default class FileGenerator extends CodeStream {
   async #processNode(node: ASTGeneratorOutputNode) {
     const files = this.#files;
     switch (node.type) {
-      case NodeType.ImportDefinition: {
+      case NodeType.ImportStatement: {
         const fileGenerator = new FileGenerator(
           {
             path: path.resolve(path.dirname(this.#file.path), node.from.value),
@@ -310,8 +313,10 @@ export default class FileGenerator extends CodeStream {
           }
         );
         files.push(...(await fileGenerator.generate()));
-        for (const r of node.requirements) {
-          this.#ownIdentifier(r, fileGenerator);
+        if (node.requirements) {
+          for (const r of node.requirements) {
+            this.#ownIdentifier(r, fileGenerator);
+          }
         }
         break;
       }

@@ -4,3 +4,4 @@
 *.map
 tsconfig.tsbuildinfo
 !.eslintrc.js
+/.nyc_output

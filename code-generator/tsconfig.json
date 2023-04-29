@@ -4,7 +4,8 @@
     "index.ts",
     "FileGenerator.ts",
     "JavaScriptObjectStringify.ts",
-    "functionNames.ts"
+    "fileGeneratorUtilities.ts",
+    "stringUtilities.ts"
   ],
   "compilerOptions": {
     "types": ["node"]

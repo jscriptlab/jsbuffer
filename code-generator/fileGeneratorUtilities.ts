@@ -1,8 +1,9 @@
-import { INodeCallDefinition, INodeTypeDefinition } from '../src/ASTGenerator';
-
-function upperFirst(value: string) {
-  return `${value[0]?.toUpperCase()}${value.substring(1)}`;
-}
+import {
+  INodeCallDefinition,
+  INodeTypeDefinition,
+  NodeType,
+} from '../src/ASTGenerator';
+import { lowerFirst, upperFirst } from './stringUtilities';
 
 export function getTypeDefinitionOrCallEncoderFunctionName(
   node: INodeTypeDefinition | INodeCallDefinition
@@ -28,13 +29,18 @@ export function getTypeDefinitionOrCallDefinitionNamePropertyValue(
   node: INodeTypeDefinition | INodeCallDefinition,
   file: string
 ) {
-  return `${file.toLocaleLowerCase().split('/').join('.')}.${node.name.value}`;
+  return `${file.split('/').map(lowerFirst).join('.')}.${node.name.value}`;
 }
 
 export function getTypeDefinitionOrCallDefinitionObjectCreator(
   value: INodeTypeDefinition | INodeCallDefinition
 ) {
-  return `create${upperFirst(value.name.value)}`;
+  switch (value.type) {
+    case NodeType.CallDefinition:
+      return upperFirst(value.name.value);
+    case NodeType.TypeDefinition:
+      return value.name.value;
+  }
 }
 
 export function getTypeDefinitionOrCallDefinitionInterfaceName(

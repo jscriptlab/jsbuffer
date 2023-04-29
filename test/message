@@ -1,0 +1,11 @@
+
+type Message {
+  int id;
+}
+type Messages {
+  vector<Message> messages;
+}
+call GetMessages => Messages {
+  int offset;
+  int limit;
+}

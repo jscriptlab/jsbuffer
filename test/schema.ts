@@ -1,12 +1,12 @@
 import { Suite } from 'sarg';
 import {
-  createGetConversations,
-  createGetPostById,
-  createMsg,
+  GetConversations,
+  GetPostById,
   decodeMsg,
   decodeRequestTrait,
   encodeMsg,
   encodeRequestTrait,
+  msg,
 } from '../out/schema';
 import { Serializer, Deserializer } from '../codec';
 import { TextDecoder, TextEncoder } from 'util';
@@ -19,12 +19,12 @@ suite.test('it should encode Request trait', () => {
   const s = new Serializer({
     textEncoder: new TextEncoder(),
   });
-  encodeRequestTrait(s, createGetConversations({}));
+  encodeRequestTrait(s, GetConversations({}));
   const d = new Deserializer({
     textDecoder: new TextDecoder(),
     buffer: s.view(),
   });
-  assert.strict.deepEqual(decodeRequestTrait(d), createGetConversations({}));
+  assert.strict.deepEqual(decodeRequestTrait(d), GetConversations({}));
 });
 
 suite.test('it should encode get post by id call', () => {
@@ -33,7 +33,7 @@ suite.test('it should encode get post by id call', () => {
   });
   encodeRequestTrait(
     s,
-    createGetPostById({
+    GetPostById({
       postId: 100000,
     })
   );
@@ -43,7 +43,7 @@ suite.test('it should encode get post by id call', () => {
   });
   assert.strict.deepEqual(
     decodeRequestTrait(d),
-    createGetPostById({
+    GetPostById({
       postId: 100000,
     })
   );
@@ -56,7 +56,7 @@ suite.test('it should encode types with buffers in it', () => {
   const data = crypto.webcrypto.getRandomValues(new Uint8Array(1000));
   encodeMsg(
     s,
-    createMsg({
+    msg({
       data,
     })
   );
@@ -66,7 +66,7 @@ suite.test('it should encode types with buffers in it', () => {
   });
   assert.strict.deepEqual(
     decodeMsg(d),
-    createMsg({
+    msg({
       data,
     })
   );

@@ -29,13 +29,19 @@ export default class Deserializer {
     this.#rewind(Uint32Array.BYTES_PER_ELEMENT);
   }
   public readUint8() {
-    this.#ensureOffset(1);
+    this.#ensureAvailableByteLength(1);
     const result = this.#dataView.getUint8(this.#readOffset);
     this.#readOffset++;
     return result;
   }
+  public readInt8() {
+    this.#ensureAvailableByteLength(1);
+    const result = this.#dataView.getInt8(this.#readOffset);
+    this.#readOffset++;
+    return result;
+  }
   public readBuffer(length: number) {
-    this.#ensureOffset(length);
+    this.#ensureAvailableByteLength(length);
     const view = this.#view.subarray(
       this.#readOffset,
       this.#readOffset + length
@@ -44,13 +50,13 @@ export default class Deserializer {
     return view;
   }
   public readUint32() {
-    this.#ensureOffset(4);
+    this.#ensureAvailableByteLength(4);
     const result = this.#dataView.getUint32(this.#readOffset, true);
     this.#readOffset += 4;
     return result;
   }
   public readUint16() {
-    this.#ensureOffset(2);
+    this.#ensureAvailableByteLength(2);
     const result = this.#dataView.getUint16(this.#readOffset, true);
     this.#readOffset += 2;
     return result;
@@ -61,30 +67,30 @@ export default class Deserializer {
     return this.#textDecoder.decode(buffer);
   }
   public readInt32() {
-    this.#ensureOffset(4);
+    this.#ensureAvailableByteLength(4);
     const result = this.#dataView.getInt32(this.#readOffset, true);
     this.#readOffset += 4;
     return result;
   }
   public readInt16() {
-    this.#ensureOffset(2);
+    this.#ensureAvailableByteLength(2);
     const result = this.#dataView.getInt16(this.#readOffset, true);
     this.#readOffset += 2;
     return result;
   }
   public readDouble() {
-    this.#ensureOffset(8);
+    this.#ensureAvailableByteLength(8);
     const result = this.#dataView.getFloat64(this.#readOffset, true);
     this.#readOffset += 8;
     return result;
   }
   public readFloat() {
-    this.#ensureOffset(4);
+    this.#ensureAvailableByteLength(4);
     const result = this.#dataView.getFloat32(this.#readOffset, true);
     this.#readOffset += 4;
     return result;
   }
-  #ensureOffset(requiredByteLength: number) {
+  #ensureAvailableByteLength(requiredByteLength: number) {
     const remaining = this.#view.byteLength - this.#readOffset;
     if (remaining < requiredByteLength) {
       throw new Error(

@@ -1,6 +1,6 @@
 import { ISerializer, IDeserializer } from './__types__';
 
-export function createUser(params: Omit<user,'_name'>): user {
+export function user(params: Omit<user,'_name'>): user {
   return {
     _name: 'user.user',
     ...params
@@ -42,7 +42,7 @@ export interface user  {
   firstName: string;
   aliases: ReadonlyArray<string>;
 }
-export function createUserDeleted(params: Omit<userDeleted,'_name'>): userDeleted {
+export function userDeleted(params: Omit<userDeleted,'_name'>): userDeleted {
   return {
     _name: 'user.userDeleted',
     ...params
@@ -66,7 +66,7 @@ export interface userDeleted  {
   _name: 'user.userDeleted';
   deletedAt: number;
 }
-export function createTest(params: Omit<test,'_name'>): test {
+export function test(params: Omit<test,'_name'>): test {
   return {
     _name: 'user.test',
     ...params

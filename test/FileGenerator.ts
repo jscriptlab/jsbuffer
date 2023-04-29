@@ -1,5 +1,5 @@
 import { Suite } from 'sarg';
-import FileGenerator from '../code-generator/FileGenerator';
+import FileGenerator, { IOutputFile } from '../code-generator/FileGenerator';
 import path from 'path';
 import fs from 'fs';
 import { TextEncoder, TextDecoder } from 'util';
@@ -29,7 +29,9 @@ suite.test('FileGenerator: it should generate files', async () => {
   );
   await fs.promises.rm(outDir, { force: true, recursive: true });
   await fs.promises.mkdir(outDir);
-  for (const file of await f.generate()) {
+  let files: IOutputFile[];
+  files = await f.generate();
+  for (const file of files) {
     const outFile = path.resolve(outDir, file.file);
     try {
       await fs.promises.access(path.dirname(outFile), fs.constants.W_OK);

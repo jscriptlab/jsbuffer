@@ -1,17 +1,20 @@
 export default class Serializer {
-  readonly #tailByteLength = 1024 * 1024 * 2;
+  readonly #tailByteLength;
   readonly #textEncoder;
   #arrayBuffer;
   #writeOffset;
   public constructor({
     textEncoder,
+    tailByteLength = 1024 * 1024 * 2,
   }: {
+    tailByteLength?: number;
     textEncoder: {
       encode(value: string): Uint8Array;
     };
   }) {
     this.#writeOffset = 0;
     this.#textEncoder = textEncoder;
+    this.#tailByteLength = tailByteLength;
     this.#arrayBuffer = new ArrayBuffer(this.#tailByteLength);
   }
   public view() {
@@ -20,6 +23,11 @@ export default class Serializer {
   public writeUint8(value: number): void {
     this.#allocate(1);
     this.#dataView().setUint8(this.#writeOffset, value);
+    this.#writeOffset++;
+  }
+  public writeInt8(value: number): void {
+    this.#allocate(1);
+    this.#dataView().setInt8(this.#writeOffset, value);
     this.#writeOffset++;
   }
   public writeBuffer(value: Uint8Array): void {
@@ -68,6 +76,9 @@ export default class Serializer {
     this.#dataView().setFloat32(this.#writeOffset, value, true);
     this.#writeOffset += 4;
   }
+  public rewind() {
+    this.#writeOffset = 0;
+  }
   #dataView() {
     return new DataView(this.#arrayBuffer);
   }
@@ -80,9 +91,9 @@ export default class Serializer {
     if (remainingByteLength > requestedByteLength) {
       return;
     }
-    const newArrayBuffer = new ArrayBuffer(
-      this.#arrayBuffer.byteLength + requestedByteLength + this.#tailByteLength
-    );
+    const newByteLength =
+      this.#arrayBuffer.byteLength + requestedByteLength + this.#tailByteLength;
+    const newArrayBuffer = new ArrayBuffer(newByteLength);
     new Uint8Array(newArrayBuffer).set(this.#view());
     this.#arrayBuffer = newArrayBuffer;
   }

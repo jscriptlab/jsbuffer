@@ -45,7 +45,7 @@ export enum NodeType {
   LiteralString,
   TypeDefinition,
   CallDefinition,
-  ImportDefinition,
+  ImportStatement,
 }
 
 export interface INodeTemplateExpression extends INode {
@@ -79,8 +79,8 @@ export interface INodeTypeDefinition extends INode {
 }
 
 export interface INodeImportStatement extends INode {
-  type: NodeType.ImportDefinition;
-  requirements: INodeIdentifier[];
+  type: NodeType.ImportStatement;
+  requirements: INodeIdentifier[] | null;
   from: INodeLiteralString;
 }
 
@@ -162,13 +162,17 @@ export default class ASTGenerator {
   }
   #readImportStatement(): INodeImportStatement {
     const startToken = this.#expectKeyword('import');
-    this.#expectPunctuator('{');
-    const requirements = new Array<INodeIdentifier>();
-    do {
-      requirements.push(this.#expectIdentifier());
-    } while (this.#matchPunctuator(','));
-    this.#expectPunctuator('}');
-    this.#expectKeyword('from');
+    let requirements: Array<INodeIdentifier> | null;
+    if (this.#matchPunctuator('{')) {
+      requirements = new Array<INodeIdentifier>();
+      do {
+        requirements.push(this.#expectIdentifier());
+      } while (this.#matchPunctuator(','));
+      this.#expectPunctuator('}');
+      this.#expectKeyword('from');
+    } else {
+      requirements = null;
+    }
     const fileNameToken = this.#expectByType(TokenType.LiteralString);
     const fileName: INodeLiteralString = {
       type: NodeType.LiteralString,
@@ -180,7 +184,7 @@ export default class ASTGenerator {
     };
     const endToken = this.#expectPunctuator(';');
     return {
-      type: NodeType.ImportDefinition,
+      type: NodeType.ImportStatement,
       requirements,
       position: {
         start: startToken,
