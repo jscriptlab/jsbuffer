@@ -1,0 +1,4 @@
+{
+  "include": ["Serializer.ts", "index.ts", "Deserializer.ts"],
+  "extends": "../tsconfig.base.json"
+}

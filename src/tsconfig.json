@@ -1,0 +1,9 @@
+{
+  "include": [
+    "Tokenizer.ts",
+    "../exception/Exception.ts",
+    "Character.ts",
+    "ASTGenerator.ts"
+  ],
+  "extends": "../tsconfig.base.json"
+}

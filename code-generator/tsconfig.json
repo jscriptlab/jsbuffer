@@ -1,0 +1,18 @@
+{
+  "extends": "../tsconfig.base.json",
+  "include": [
+    "index.ts",
+    "FileGenerator.ts",
+    "JavaScriptObjectStringify.ts",
+    "functionNames.ts"
+  ],
+  "compilerOptions": {
+    "types": ["node"]
+  },
+  "references": [
+    { "path": "../src" },
+    {
+      "path": "../exception"
+    }
+  ]
+}

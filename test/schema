@@ -1,0 +1,37 @@
+import { User } from "./User";
+import { Conversations } from "./conversation/index";
+
+type Void {
+
+}
+
+type msg {
+  bytes data;
+}
+
+type Users : Result {
+  vector<User> users;
+}
+
+call GetUserById : Request => Users {
+  uint32 userId;
+}
+
+type Post {
+  int id;
+}
+
+type Posts : Result {
+  vector<Post> posts;
+}
+
+call GetPostById : Request => Posts {
+  uint32 postId;
+}
+
+call GetConversations : Request => Conversations {}
+
+type Coordinates {
+  double latitude;
+  double longitude;
+}

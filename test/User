@@ -1,0 +1,12 @@
+export type user : User {
+  string firstName;
+  vector<string> aliases;
+}
+export type userDeleted : User {
+  int deletedAt;
+}
+
+export type test : Test {
+  user user;
+  vector<vector<optional<string>>> b;
+}

@@ -1,0 +1,34 @@
+{
+  "devDependencies": {
+    "@types/node": "18.x",
+    "@typescript-eslint/eslint-plugin": "5.x",
+    "@typescript-eslint/parser": "5.x",
+    "eslint": "8.x",
+    "prettier": "2.x",
+    "sarg": "5.x",
+    "ts-node": "10.x",
+    "typescript": "5.x"
+  },
+  "name": "jsbuffer",
+  "license": "MIT",
+  "version": "0.0.10",
+  "main": "./src/index.js",
+  "bin": {
+    "buf": "./cli/index.js"
+  },
+  "files": [
+    "cli/**/*.js",
+    "exception/**/*.js",
+    "src/**/*.js",
+    "code-generator/**/*.js",
+    "codec/**/*.js"
+  ],
+  "scripts": {
+    "prepublishOnly": "yarn test && npx tsc -b cli --force",
+    "test": "npx tsc -b test --force && npx sarg --bail \"test/**/*.js\""
+  },
+  "dependencies": {
+    "cyclic-rc": "^2.0.12",
+    "textstreamjs": "0.x"
+  }
+}
