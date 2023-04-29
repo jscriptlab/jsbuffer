@@ -14,7 +14,7 @@
   "version": "0.0.10",
   "main": "./src/index.js",
   "bin": {
-    "buf": "./cli/index.js"
+    "jsbuffer": "./cli/index.js"
   },
   "files": [
     "cli/**/*.js",
