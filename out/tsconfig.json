@@ -1,6 +1,16 @@
 {
     "compilerOptions": {
-        "noUncheckedIndexedAccess": false
+        "noUncheckedIndexedAccess": false,
+        "noUnusedLocals": false
     },
+    "include": [
+        "./User.ts",
+        "./conversation/index.ts",
+        "./conversation/SecondUser.ts",
+        "./message.ts",
+        "./Request.ts",
+        "./schema.ts",
+        "./__types__.ts"
+    ],
     "extends": "../tsconfig.base.json"
 }

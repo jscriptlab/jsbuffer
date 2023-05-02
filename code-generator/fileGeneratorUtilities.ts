@@ -1,32 +1,37 @@
 import {
   INodeCallDefinition,
+  INodeTraitDefinition,
   INodeTypeDefinition,
   NodeType,
 } from '../src/ASTGenerator';
 import { lowerFirst, upperFirst } from './stringUtilities';
 
-export function getTypeDefinitionOrCallEncoderFunctionName(
-  node: INodeTypeDefinition | INodeCallDefinition
+export function getEncodeFunctionName(
+  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
-  return `encode${upperFirst(node.name.value)}`;
+  switch (node.type) {
+    case NodeType.TraitDefinition:
+      return `encode${upperFirst(node.name.value)}Trait`;
+    case NodeType.TypeDefinition:
+    case NodeType.CallDefinition:
+      return `encode${upperFirst(node.name.value)}`;
+  }
 }
 
-export function getEncodeTraitFunctionName(name: string) {
-  return `encode${upperFirst(name)}Trait`;
-}
-
-export function getDecodeTraitFunctionName(name: string) {
-  return `decode${upperFirst(name)}Trait`;
-}
-
-export function getTypeDefinitionOrCallDecoderFunctionName(
-  node: INodeTypeDefinition | INodeCallDefinition
+export function getDecodeFunctionName(
+  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
-  return `decode${upperFirst(node.name.value)}`;
+  switch (node.type) {
+    case NodeType.TraitDefinition:
+      return `decode${upperFirst(node.name.value)}Trait`;
+    case NodeType.TypeDefinition:
+    case NodeType.CallDefinition:
+      return `decode${upperFirst(node.name.value)}`;
+  }
 }
 
 export function getTypeDefinitionOrCallDefinitionNamePropertyValue(
-  node: INodeTypeDefinition | INodeCallDefinition,
+  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition,
   file: string
 ) {
   return `${file.split('/').map(lowerFirst).join('.')}.${node.name.value}`;
@@ -43,8 +48,8 @@ export function getTypeDefinitionOrCallDefinitionObjectCreator(
   }
 }
 
-export function getTypeDefinitionOrCallDefinitionInterfaceName(
-  value: INodeTypeDefinition | INodeCallDefinition
+export function getTypeName(
+  value: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
   return value.name.value;
 }

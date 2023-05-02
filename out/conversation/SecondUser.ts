@@ -1,5 +1,5 @@
-import { ISerializer, IDeserializer } from './../__types__';
-
+import {ISerializer} from "./../__types__";
+import {IDeserializer} from "./../__types__";
 export function User(params: Omit<User,'_name'>): User {
   return {
     _name: 'conversation.secondUser.User',

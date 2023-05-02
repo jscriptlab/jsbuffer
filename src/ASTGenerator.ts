@@ -29,6 +29,8 @@ export class UnexpectedPunctuatorName extends ASTGenerationException {
   }
 }
 
+export class UnexpectedExport extends ASTGenerationException {}
+
 export class UnexpectedToken extends ASTGenerationException {
   public constructor(public readonly token: IToken) {
     super();
@@ -42,6 +44,7 @@ export enum NodeType {
   ExportStatement,
   TemplateExpression,
   ParamDefinition,
+  TraitDefinition,
   LiteralString,
   TypeDefinition,
   CallDefinition,
@@ -98,9 +101,15 @@ export interface INodeCallDefinition extends INode {
   parameters: ReadonlyArray<INodeParamDefinition>;
 }
 
+export interface INodeTraitDefinition extends INode {
+  type: NodeType.TraitDefinition;
+  name: INodeIdentifier;
+  traits: INodeIdentifier[];
+}
+
 export interface INodeExportStatement extends INode {
   type: NodeType.ExportStatement;
-  value: INodeTypeDefinition;
+  value: INodeTypeDefinition | INodeTraitDefinition | INodeCallDefinition;
 }
 
 export type Node =
@@ -115,7 +124,8 @@ export type ASTGeneratorOutputNode =
   | INodeExportStatement
   | INodeCallDefinition
   | INodeImportStatement
-  | INodeTypeDefinition;
+  | INodeTypeDefinition
+  | INodeTraitDefinition;
 
 export default class ASTGenerator {
   readonly #tokens;
@@ -133,11 +143,28 @@ export default class ASTGenerator {
         nodes.push(this.#readTypeStatement());
       } else if (this.#peek(TokenType.Keyword, 'call')) {
         nodes.push(this.#readCallStatement());
+      } else if (this.#peek(TokenType.Keyword, 'trait')) {
+        nodes.push(this.#readTraitStatement());
       } else {
         throw new UnexpectedToken(this.#match());
       }
     }
     return nodes;
+  }
+  #readTraitStatement(): INodeTraitDefinition {
+    const startToken = this.#expectKeyword('trait');
+    const name = this.#expectIdentifier();
+    this.#expectPunctuator('{');
+    const endToken = this.#expectPunctuator('}');
+    return {
+      type: NodeType.TraitDefinition,
+      name,
+      position: {
+        start: startToken,
+        end: endToken,
+      },
+      traits: [],
+    };
   }
   #readCallStatement(): INodeCallDefinition {
     const startToken = this.#expectKeyword('call');
@@ -204,6 +231,9 @@ export default class ASTGenerator {
     }
     return token;
   }
+  #peekKeyword(value: string) {
+    return this.#peek(TokenType.Keyword, value);
+  }
   #match(): IToken {
     const token = this.#tokens[0];
     if (typeof token === 'undefined') {
@@ -213,13 +243,23 @@ export default class ASTGenerator {
   }
   #readExportStatement(): INodeExportStatement {
     const startToken = this.#expectKeyword('export');
-    const type = this.#readTypeStatement();
+
+    let value: INodeTypeDefinition | INodeTraitDefinition | INodeCallDefinition;
+    if (this.#peekKeyword('type')) {
+      value = this.#readTypeStatement();
+    } else if (this.#peekKeyword('trait')) {
+      value = this.#readTraitStatement();
+    } else if (this.#peekKeyword('call')) {
+      value = this.#readCallStatement();
+    } else {
+      throw new UnexpectedExport();
+    }
     return {
       type: NodeType.ExportStatement,
-      value: type,
+      value,
       position: {
         start: startToken,
-        end: type.position.end,
+        end: value.position.end,
       },
     };
   }
@@ -295,13 +335,16 @@ export default class ASTGenerator {
     }
     return punctuator;
   }
-  #matchPunctuator(value: string) {
-    const punctuator = this.#peek(TokenType.Punctuator, value);
-    if (punctuator === null) {
+  #matchByType(expectedType: TokenType, value: string) {
+    const token = this.#peek(expectedType, value);
+    if (token === null) {
       return null;
     }
     this.#tokens.shift();
-    return punctuator;
+    return token;
+  }
+  #matchPunctuator(value: string) {
+    return this.#matchByType(TokenType.Punctuator, value);
   }
   #expectIdentifier(): INodeIdentifier {
     const id = this.#expectByType(TokenType.Identifier);

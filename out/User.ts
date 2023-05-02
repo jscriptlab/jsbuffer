@@ -1,5 +1,60 @@
-import { ISerializer, IDeserializer } from './__types__';
-
+import {ISerializer} from "./__types__";
+import {IDeserializer} from "./__types__";
+export type User = user | userDeleted;
+export function encodeUserTrait(s: ISerializer,value: User) {
+  switch(value._name) {
+    case 'user.user':
+      encodeUser(s,value);
+      break;
+    case 'user.userDeleted':
+      encodeUserDeleted(s,value);
+      break;
+  }
+}
+export function decodeUserTrait(d: IDeserializer) {
+  const __id = d.readInt32();
+  d.rewindInt32();
+  let value: user | userDeleted;
+  switch(__id) {
+    case -1320038052: {
+      const tmp = decodeUser(d);
+      if(tmp === null) return null;
+      value = tmp;
+      break;
+    }
+    case -1188236190: {
+      const tmp = decodeUserDeleted(d);
+      if(tmp === null) return null;
+      value = tmp;
+      break;
+    }
+    default: return null;
+  }
+  return value;
+}
+export type Test = test;
+export function encodeTestTrait(s: ISerializer,value: Test) {
+  switch(value._name) {
+    case 'user.test':
+      encodeTest(s,value);
+      break;
+  }
+}
+export function decodeTestTrait(d: IDeserializer) {
+  const __id = d.readInt32();
+  d.rewindInt32();
+  let value: test;
+  switch(__id) {
+    case -457344743: {
+      const tmp = decodeTest(d);
+      if(tmp === null) return null;
+      value = tmp;
+      break;
+    }
+    default: return null;
+  }
+  return value;
+}
 export function user(params: Omit<user,'_name'>): user {
   return {
     _name: 'user.user',
@@ -10,8 +65,8 @@ export function encodeUser(s: ISerializer, value: user) {
   s.writeInt32(-1320038052);
   s.writeString(value['firstName']);
   {
-    s.writeUint32(value['aliases'].length);
     const ia0 = value['aliases'].length;
+    s.writeUint32(ia0);
     for(let a0 = 0; a0 < ia0; a0++) {
       const va0 = value['aliases'][a0];
       s.writeString(va0);
@@ -76,13 +131,13 @@ export function encodeTest(s: ISerializer, value: test) {
   s.writeInt32(-457344743);
   encodeUser(s,value['user']);
   {
-    s.writeUint32(value['b'].length);
     const ia0 = value['b'].length;
+    s.writeUint32(ia0);
     for(let a0 = 0; a0 < ia0; a0++) {
       const va0 = value['b'][a0];
       {
-        s.writeUint32(va0.length);
         const ia1 = va0.length;
+        s.writeUint32(ia1);
         for(let a1 = 0; a1 < ia1; a1++) {
           const va1 = va0[a1];
           if(va1 === null) {
@@ -131,59 +186,4 @@ export interface test  {
   _name: 'user.test';
   user: user;
   b: ReadonlyArray<ReadonlyArray<string | null>>;
-}
-export type User = user | userDeleted;
-export function encodeUserTrait(s: ISerializer,value: User) {
-  switch(value._name) {
-    case 'user.user':
-      encodeUser(s,value);
-      break;
-    case 'user.userDeleted':
-      encodeUserDeleted(s,value);
-      break;
-  }
-}
-export function decodeUserTrait(d: IDeserializer) {
-  const __id = d.readInt32();
-  d.rewindInt32();
-  let value: user | userDeleted;
-  switch(__id) {
-    case -1320038052: {
-      const tmp = decodeUser(d);
-      if(tmp === null) return null;
-      value = tmp;
-      break;
-    }
-    case -1188236190: {
-      const tmp = decodeUserDeleted(d);
-      if(tmp === null) return null;
-      value = tmp;
-      break;
-    }
-    default: return null;
-  }
-  return value;
-}
-export type Test = test;
-export function encodeTestTrait(s: ISerializer,value: Test) {
-  switch(value._name) {
-    case 'user.test':
-      encodeTest(s,value);
-      break;
-  }
-}
-export function decodeTestTrait(d: IDeserializer) {
-  const __id = d.readInt32();
-  d.rewindInt32();
-  let value: test;
-  switch(__id) {
-    case -457344743: {
-      const tmp = decodeTest(d);
-      if(tmp === null) return null;
-      value = tmp;
-      break;
-    }
-    default: return null;
-  }
-  return value;
 }

@@ -1,7 +1,7 @@
 import CodeStream from 'textstreamjs';
 import Exception from '../exception/Exception';
 
-export class StringifyFailure extends Exception {
+export class ValueStringifyFailure extends Exception {
   public constructor(public readonly value: unknown) {
     super();
   }
@@ -55,7 +55,7 @@ export default class JavaScriptObjectStringify extends CodeStream {
     } else if (value === null) {
       this.append('null');
     } else {
-      throw new StringifyFailure(value);
+      throw new ValueStringifyFailure(value);
     }
   }
 }

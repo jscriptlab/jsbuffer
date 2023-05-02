@@ -1,3 +1,7 @@
+export trait User{}
+
+trait Test {}
+
 export type user : User {
   string firstName;
   vector<string> aliases;

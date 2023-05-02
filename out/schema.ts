@@ -1,10 +1,11 @@
-import {User} from './User';
-import {Conversations} from './conversation/index';
-import { ISerializer, IDeserializer } from './__types__';
-import {IRequest} from './__types__';
-import {encodeUserTrait} from './User';
-import {decodeUserTrait} from './User';
-
+import {User} from "./User";
+import {Conversations} from "./conversation/index";
+import {Request} from "./Request";
+import {ISerializer} from "./__types__";
+import {IDeserializer} from "./__types__";
+import {encodeUserTrait} from "./User";
+import {decodeUserTrait} from "./User";
+import {IRequest} from "./__types__";
 export function Void(params: Omit<Void,'_name'>): Void {
   return {
     _name: 'schema.Void',
@@ -49,6 +50,38 @@ export interface msg  {
   _name: 'schema.msg';
   data: Uint8Array;
 }
+export type Result = Users | Posts;
+export function encodeResultTrait(s: ISerializer,value: Result) {
+  switch(value._name) {
+    case 'schema.Users':
+      encodeUsers(s,value);
+      break;
+    case 'schema.Posts':
+      encodePosts(s,value);
+      break;
+  }
+}
+export function decodeResultTrait(d: IDeserializer) {
+  const __id = d.readInt32();
+  d.rewindInt32();
+  let value: Users | Posts;
+  switch(__id) {
+    case 2098859696: {
+      const tmp = decodeUsers(d);
+      if(tmp === null) return null;
+      value = tmp;
+      break;
+    }
+    case -507244125: {
+      const tmp = decodePosts(d);
+      if(tmp === null) return null;
+      value = tmp;
+      break;
+    }
+    default: return null;
+  }
+  return value;
+}
 export function Users(params: Omit<Users,'_name'>): Users {
   return {
     _name: 'schema.Users',
@@ -58,8 +91,8 @@ export function Users(params: Omit<Users,'_name'>): Users {
 export function encodeUsers(s: ISerializer, value: Users) {
   s.writeInt32(2098859696);
   {
-    s.writeUint32(value['users'].length);
     const ia0 = value['users'].length;
+    s.writeUint32(ia0);
     for(let a0 = 0; a0 < ia0; a0++) {
       const va0 = value['users'][a0];
       encodeUserTrait(s,va0);
@@ -74,9 +107,9 @@ export function decodeUsers(d: IDeserializer): Users | null {
     const ia0 = d.readUint32();
     users = new Array(ia0);
     for(let a0 = 0; a0 < ia0; a0++) {
-      const tmp = decodeUserTrait(d);
-      if(tmp === null) return null;
-      users[a0] = tmp;
+      const tmp2 = decodeUserTrait(d);
+      if(tmp2 === null) return null;
+      users[a0] = tmp2;
     }
   }
   return {
@@ -145,8 +178,8 @@ export function Posts(params: Omit<Posts,'_name'>): Posts {
 export function encodePosts(s: ISerializer, value: Posts) {
   s.writeInt32(-507244125);
   {
-    s.writeUint32(value['posts'].length);
     const ia0 = value['posts'].length;
+    s.writeUint32(ia0);
     for(let a0 = 0; a0 < ia0; a0++) {
       const va0 = value['posts'][a0];
       encodePost(s,va0);
@@ -246,77 +279,4 @@ export interface Coordinates  {
   _name: 'schema.Coordinates';
   latitude: number;
   longitude: number;
-}
-export type Result = Users | Posts;
-export function encodeResultTrait(s: ISerializer,value: Result) {
-  switch(value._name) {
-    case 'schema.Users':
-      encodeUsers(s,value);
-      break;
-    case 'schema.Posts':
-      encodePosts(s,value);
-      break;
-  }
-}
-export function decodeResultTrait(d: IDeserializer) {
-  const __id = d.readInt32();
-  d.rewindInt32();
-  let value: Users | Posts;
-  switch(__id) {
-    case 2098859696: {
-      const tmp = decodeUsers(d);
-      if(tmp === null) return null;
-      value = tmp;
-      break;
-    }
-    case -507244125: {
-      const tmp = decodePosts(d);
-      if(tmp === null) return null;
-      value = tmp;
-      break;
-    }
-    default: return null;
-  }
-  return value;
-}
-export type Request = GetUserById | GetPostById | GetConversations;
-export function encodeRequestTrait(s: ISerializer,value: Request) {
-  switch(value._name) {
-    case 'schema.GetUserById':
-      encodeGetUserById(s,value);
-      break;
-    case 'schema.GetPostById':
-      encodeGetPostById(s,value);
-      break;
-    case 'schema.GetConversations':
-      encodeGetConversations(s,value);
-      break;
-  }
-}
-export function decodeRequestTrait(d: IDeserializer) {
-  const __id = d.readInt32();
-  d.rewindInt32();
-  let value: GetUserById | GetPostById | GetConversations;
-  switch(__id) {
-    case 971329205: {
-      const tmp = decodeGetUserById(d);
-      if(tmp === null) return null;
-      value = tmp;
-      break;
-    }
-    case -1951096243: {
-      const tmp = decodeGetPostById(d);
-      if(tmp === null) return null;
-      value = tmp;
-      break;
-    }
-    case 804827749: {
-      const tmp = decodeGetConversations(d);
-      if(tmp === null) return null;
-      value = tmp;
-      break;
-    }
-    default: return null;
-  }
-  return value;
 }

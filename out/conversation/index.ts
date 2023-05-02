@@ -1,8 +1,8 @@
-import {User} from './SecondUser';
-import { ISerializer, IDeserializer } from './../__types__';
-import {encodeUser} from './SecondUser';
-import {decodeUser} from './SecondUser';
-
+import {User} from "./SecondUser";
+import {ISerializer} from "./../__types__";
+import {encodeUser} from "./SecondUser";
+import {IDeserializer} from "./../__types__";
+import {decodeUser} from "./SecondUser";
 export function Conversation(params: Omit<Conversation,'_name'>): Conversation {
   return {
     _name: 'conversation.index.Conversation',
@@ -43,8 +43,8 @@ export function Conversations(params: Omit<Conversations,'_name'>): Conversation
 export function encodeConversations(s: ISerializer, value: Conversations) {
   s.writeInt32(-386946239);
   {
-    s.writeUint32(value['conversations'].length);
     const ia0 = value['conversations'].length;
+    s.writeUint32(ia0);
     for(let a0 = 0; a0 < ia0; a0++) {
       const va0 = value['conversations'][a0];
       encodeConversation(s,va0);

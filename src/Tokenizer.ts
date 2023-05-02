@@ -42,7 +42,7 @@ export default class Tokenizer {
   readonly #contents;
   readonly #textEncoder;
   readonly #textDecoder;
-  readonly #keywords = ['call', 'from', 'import', 'type', 'export'];
+  readonly #keywords = ['call', 'from', 'trait', 'import', 'type', 'export'];
   #offset;
   #lineNumber;
   public constructor({

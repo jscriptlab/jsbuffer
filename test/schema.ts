@@ -3,15 +3,14 @@ import {
   GetConversations,
   GetPostById,
   decodeMsg,
-  decodeRequestTrait,
   encodeMsg,
-  encodeRequestTrait,
   msg,
 } from '../out/schema';
 import { Serializer, Deserializer } from '../codec';
 import { TextDecoder, TextEncoder } from 'util';
 import assert from 'assert';
 import crypto from 'crypto';
+import { decodeRequestTrait, encodeRequestTrait } from '../out/Request';
 
 const suite = new Suite();
 

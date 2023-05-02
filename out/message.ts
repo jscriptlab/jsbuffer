@@ -1,6 +1,6 @@
-import { ISerializer, IDeserializer } from './__types__';
-import {IRequest} from './__types__';
-
+import {ISerializer} from "./__types__";
+import {IDeserializer} from "./__types__";
+import {IRequest} from "./__types__";
 export function Message(params: Omit<Message,'_name'>): Message {
   return {
     _name: 'message.Message',
@@ -34,8 +34,8 @@ export function Messages(params: Omit<Messages,'_name'>): Messages {
 export function encodeMessages(s: ISerializer, value: Messages) {
   s.writeInt32(-863342777);
   {
-    s.writeUint32(value['messages'].length);
     const ia0 = value['messages'].length;
+    s.writeUint32(ia0);
     for(let a0 = 0; a0 < ia0; a0++) {
       const va0 = value['messages'][a0];
       encodeMessage(s,va0);

@@ -1,5 +1,5 @@
 import { Suite } from 'sarg';
-import FileGenerator, { IOutputFile } from '../code-generator/FileGenerator';
+import FileGenerator from '../code-generator/FileGenerator';
 import path from 'path';
 import fs from 'fs';
 import { TextEncoder, TextDecoder } from 'util';
@@ -18,9 +18,6 @@ suite.test('FileGenerator: it should generate files', async () => {
       outDir,
       indentationSize: 2,
       typeScriptConfiguration: {
-        compilerOptions: {
-          noUncheckedIndexedAccess: false,
-        },
         extends: '../tsconfig.base.json',
       },
       textDecoder: new TextDecoder(),
@@ -29,8 +26,7 @@ suite.test('FileGenerator: it should generate files', async () => {
   );
   await fs.promises.rm(outDir, { force: true, recursive: true });
   await fs.promises.mkdir(outDir);
-  let files: IOutputFile[];
-  files = await f.generate();
+  const files = await f.generate();
   for (const file of files) {
     const outFile = path.resolve(outDir, file.file);
     try {
