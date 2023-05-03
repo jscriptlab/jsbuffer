@@ -1,7 +1,10 @@
 import {ISerializer} from "./__types__";
 import {IDeserializer} from "./__types__";
 import {IRequest} from "./__types__";
-export function Message(params: Omit<Message,'_name'>): Message {
+export interface MessageInputParams {
+  id: number;
+}
+export function Message(params: MessageInputParams): Message {
   return {
     _name: 'message.Message',
     ...params
@@ -17,6 +20,9 @@ export function encodeMessage(s: ISerializer, value: Message) {
 }
 export function decodeMessage(__d: IDeserializer): Message | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== -1988975903) return null;
   let id: number;
   /**
@@ -32,7 +38,15 @@ export interface Message  {
   _name: 'message.Message';
   id: number;
 }
-export function Messages(params: Omit<Messages,'_name'>): Messages {
+export function MessageDefault(): Message {
+  return Message({
+    id: 0
+  });
+}
+export interface MessagesInputParams {
+  messages: ReadonlyArray<Message>;
+}
+export function Messages(params: MessagesInputParams): Messages {
   return {
     _name: 'message.Messages',
     ...params
@@ -53,6 +67,9 @@ export function encodeMessages(s: ISerializer, value: Messages) {
 }
 export function decodeMessages(__d: IDeserializer): Messages | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== -863342777) return null;
   let messages: Array<Message>;
   /**
@@ -77,7 +94,16 @@ export interface Messages  {
   _name: 'message.Messages';
   messages: ReadonlyArray<Message>;
 }
-export function GetMessages(params: Omit<GetMessages,'_name'>): GetMessages {
+export function MessagesDefault(): Messages {
+  return Messages({
+    messages: []
+  });
+}
+export interface GetMessagesInputParams {
+  offset: number;
+  limit: number;
+}
+export function GetMessages(params: GetMessagesInputParams): GetMessages {
   return {
     _name: 'message.GetMessages',
     ...params
@@ -98,6 +124,9 @@ export function encodeGetMessages(s: ISerializer, value: GetMessages) {
 }
 export function decodeGetMessages(__d: IDeserializer): GetMessages | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== -1766600538) return null;
   let offset: number;
   let limit: number;
@@ -119,4 +148,10 @@ export interface GetMessages extends IRequest<Messages> {
   _name: 'message.GetMessages';
   offset: number;
   limit: number;
+}
+export function GetMessagesDefault(): GetMessages {
+  return GetMessages({
+    offset: 0,
+    limit: 0
+  });
 }

@@ -6,7 +6,9 @@ import {IDeserializer} from "./__types__";
 import {encodeUserTrait} from "./User";
 import {decodeUserTrait} from "./User";
 import {IRequest} from "./__types__";
-export function Void(params: Omit<Void,'_name'>): Void {
+export interface VoidInputParams {
+}
+export function Void(params: VoidInputParams): Void {
   return {
     _name: 'schema.Void',
     ...params
@@ -17,6 +19,9 @@ export function encodeVoid(s: ISerializer, _: Void) {
 }
 export function decodeVoid(__d: IDeserializer): Void | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== 1293057661) return null;
   return {
     _name: 'schema.Void',
@@ -25,7 +30,14 @@ export function decodeVoid(__d: IDeserializer): Void | null {
 export interface Void  {
   _name: 'schema.Void';
 }
-export function msg(params: Omit<msg,'_name'>): msg {
+export function VoidDefault(): Void {
+  return Void({
+  });
+}
+export interface msgInputParams {
+  data: Uint8Array;
+}
+export function msg(params: msgInputParams): msg {
   return {
     _name: 'schema.msg',
     ...params
@@ -42,6 +54,9 @@ export function encodeMsg(s: ISerializer, value: msg) {
 }
 export function decodeMsg(__d: IDeserializer): msg | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== -2038157559) return null;
   let data: Uint8Array;
   /**
@@ -56,6 +71,11 @@ export function decodeMsg(__d: IDeserializer): msg | null {
 export interface msg  {
   _name: 'schema.msg';
   data: Uint8Array;
+}
+export function msgDefault(): msg {
+  return msg({
+    data: new Uint8Array(0)
+  });
 }
 export type Result = Users | Posts;
 export function encodeResultTrait(s: ISerializer,value: Result) {
@@ -89,7 +109,10 @@ export function decodeResultTrait(__d: IDeserializer) {
   }
   return value;
 }
-export function Users(params: Omit<Users,'_name'>): Users {
+export interface UsersInputParams {
+  users: ReadonlyArray<User>;
+}
+export function Users(params: UsersInputParams): Users {
   return {
     _name: 'schema.Users',
     ...params
@@ -110,6 +133,9 @@ export function encodeUsers(s: ISerializer, value: Users) {
 }
 export function decodeUsers(__d: IDeserializer): Users | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== 2098859696) return null;
   let users: Array<User>;
   /**
@@ -134,7 +160,15 @@ export interface Users  {
   _name: 'schema.Users';
   users: ReadonlyArray<User>;
 }
-export function GetUserById(params: Omit<GetUserById,'_name'>): GetUserById {
+export function UsersDefault(): Users {
+  return Users({
+    users: []
+  });
+}
+export interface GetUserByIdInputParams {
+  userId: number;
+}
+export function GetUserById(params: GetUserByIdInputParams): GetUserById {
   return {
     _name: 'schema.GetUserById',
     ...params
@@ -150,6 +184,9 @@ export function encodeGetUserById(s: ISerializer, value: GetUserById) {
 }
 export function decodeGetUserById(__d: IDeserializer): GetUserById | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== 971329205) return null;
   let userId: number;
   /**
@@ -165,7 +202,15 @@ export interface GetUserById extends IRequest<Users> {
   _name: 'schema.GetUserById';
   userId: number;
 }
-export function Post(params: Omit<Post,'_name'>): Post {
+export function GetUserByIdDefault(): GetUserById {
+  return GetUserById({
+    userId: 0
+  });
+}
+export interface PostInputParams {
+  id: number;
+}
+export function Post(params: PostInputParams): Post {
   return {
     _name: 'schema.Post',
     ...params
@@ -181,6 +226,9 @@ export function encodePost(s: ISerializer, value: Post) {
 }
 export function decodePost(__d: IDeserializer): Post | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== -974927074) return null;
   let id: number;
   /**
@@ -196,7 +244,15 @@ export interface Post  {
   _name: 'schema.Post';
   id: number;
 }
-export function Posts(params: Omit<Posts,'_name'>): Posts {
+export function PostDefault(): Post {
+  return Post({
+    id: 0
+  });
+}
+export interface PostsInputParams {
+  posts: ReadonlyArray<Post>;
+}
+export function Posts(params: PostsInputParams): Posts {
   return {
     _name: 'schema.Posts',
     ...params
@@ -217,6 +273,9 @@ export function encodePosts(s: ISerializer, value: Posts) {
 }
 export function decodePosts(__d: IDeserializer): Posts | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== -507244125) return null;
   let posts: Array<Post>;
   /**
@@ -241,7 +300,15 @@ export interface Posts  {
   _name: 'schema.Posts';
   posts: ReadonlyArray<Post>;
 }
-export function GetPostById(params: Omit<GetPostById,'_name'>): GetPostById {
+export function PostsDefault(): Posts {
+  return Posts({
+    posts: []
+  });
+}
+export interface GetPostByIdInputParams {
+  postId: number;
+}
+export function GetPostById(params: GetPostByIdInputParams): GetPostById {
   return {
     _name: 'schema.GetPostById',
     ...params
@@ -257,6 +324,9 @@ export function encodeGetPostById(s: ISerializer, value: GetPostById) {
 }
 export function decodeGetPostById(__d: IDeserializer): GetPostById | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== -1951096243) return null;
   let postId: number;
   /**
@@ -272,7 +342,14 @@ export interface GetPostById extends IRequest<Posts> {
   _name: 'schema.GetPostById';
   postId: number;
 }
-export function GetConversations(params: Omit<GetConversations,'_name'>): GetConversations {
+export function GetPostByIdDefault(): GetPostById {
+  return GetPostById({
+    postId: 0
+  });
+}
+export interface GetConversationsInputParams {
+}
+export function GetConversations(params: GetConversationsInputParams): GetConversations {
   return {
     _name: 'schema.GetConversations',
     ...params
@@ -283,6 +360,9 @@ export function encodeGetConversations(s: ISerializer, _: GetConversations) {
 }
 export function decodeGetConversations(__d: IDeserializer): GetConversations | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== 804827749) return null;
   return {
     _name: 'schema.GetConversations',
@@ -291,7 +371,15 @@ export function decodeGetConversations(__d: IDeserializer): GetConversations | n
 export interface GetConversations extends IRequest<Conversations> {
   _name: 'schema.GetConversations';
 }
-export function Coordinates(params: Omit<Coordinates,'_name'>): Coordinates {
+export function GetConversationsDefault(): GetConversations {
+  return GetConversations({
+  });
+}
+export interface CoordinatesInputParams {
+  latitude: number;
+  longitude: number;
+}
+export function Coordinates(params: CoordinatesInputParams): Coordinates {
   return {
     _name: 'schema.Coordinates',
     ...params
@@ -312,6 +400,9 @@ export function encodeCoordinates(s: ISerializer, value: Coordinates) {
 }
 export function decodeCoordinates(__d: IDeserializer): Coordinates | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== 858685263) return null;
   let latitude: number;
   let longitude: number;
@@ -334,7 +425,22 @@ export interface Coordinates  {
   latitude: number;
   longitude: number;
 }
-export function ShouldSupportSeveralSequentialVectorParams(params: Omit<ShouldSupportSeveralSequentialVectorParams,'_name'>): ShouldSupportSeveralSequentialVectorParams {
+export function CoordinatesDefault(): Coordinates {
+  return Coordinates({
+    latitude: 0.0,
+    longitude: 0.0
+  });
+}
+export interface ShouldSupportSeveralSequentialVectorParamsInputParams {
+  a: ReadonlyArray<number>;
+  b: ReadonlyArray<number>;
+  c: ReadonlyArray<string>;
+  d: ReadonlyArray<number>;
+  e: ReadonlyArray<number>;
+  f: ReadonlyArray<ReadonlyArray<number> | null>;
+  g: [number,number,number,ReadonlyArray<number>,string | null];
+}
+export function ShouldSupportSeveralSequentialVectorParams(params: ShouldSupportSeveralSequentialVectorParamsInputParams): ShouldSupportSeveralSequentialVectorParams {
   return {
     _name: 'schema.ShouldSupportSeveralSequentialVectorParams',
     ...params
@@ -451,6 +557,9 @@ export function encodeShouldSupportSeveralSequentialVectorParams(s: ISerializer,
 }
 export function decodeShouldSupportSeveralSequentialVectorParams(__d: IDeserializer): ShouldSupportSeveralSequentialVectorParams | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== -247992242) return null;
   let a: Array<number>;
   let b: Array<number>;
@@ -594,7 +703,22 @@ export interface ShouldSupportSeveralSequentialVectorParams  {
   f: ReadonlyArray<ReadonlyArray<number> | null>;
   g: [number,number,number,ReadonlyArray<number>,string | null];
 }
-export function simpleTupleTest(params: Omit<simpleTupleTest,'_name'>): simpleTupleTest {
+export function ShouldSupportSeveralSequentialVectorParamsDefault(): ShouldSupportSeveralSequentialVectorParams {
+  return ShouldSupportSeveralSequentialVectorParams({
+    a: [],
+    b: [],
+    c: [],
+    d: [],
+    e: [],
+    f: [],
+    g: [0,0.0,0.0,[],null]
+  });
+}
+export interface simpleTupleTestInputParams {
+  a: [number,number,number,ReadonlyArray<number>,string | null];
+  b: ReadonlyArray<[number,number,number,ReadonlyArray<number>,string | null]>;
+}
+export function simpleTupleTest(params: simpleTupleTestInputParams): simpleTupleTest {
   return {
     _name: 'schema.simpleTupleTest',
     ...params
@@ -682,6 +806,9 @@ export function encodeSimpleTupleTest(s: ISerializer, value: simpleTupleTest) {
 }
 export function decodeSimpleTupleTest(__d: IDeserializer): simpleTupleTest | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== 934509586) return null;
   let a: [number,number,number,Array<number>,string | null];
   let b: Array<[number,number,number,Array<number>,string | null]>;
@@ -776,4 +903,10 @@ export interface simpleTupleTest  {
   _name: 'schema.simpleTupleTest';
   a: [number,number,number,ReadonlyArray<number>,string | null];
   b: ReadonlyArray<[number,number,number,ReadonlyArray<number>,string | null]>;
+}
+export function simpleTupleTestDefault(): simpleTupleTest {
+  return simpleTupleTest({
+    a: [0,0.0,0.0,[],null],
+    b: []
+  });
 }

@@ -1,6 +1,11 @@
 import {ISerializer} from "./__types__";
 import {IDeserializer} from "./__types__";
-export function user(params: Omit<user,'_name'>): user {
+export interface userInputParams {
+  id: number;
+  firstName: string;
+  lastName: string;
+}
+export function user(params: userInputParams): user {
   return {
     _name: 'tupleTest2.user',
     ...params
@@ -26,6 +31,9 @@ export function encodeUser(s: ISerializer, value: user) {
 }
 export function decodeUser(__d: IDeserializer): user | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== -2072528781) return null;
   let id: number;
   let firstName: string;
@@ -55,7 +63,19 @@ export interface user  {
   firstName: string;
   lastName: string;
 }
-export function post(params: Omit<post,'_name'>): post {
+export function userDefault(): user {
+  return user({
+    id: 0,
+    firstName: "",
+    lastName: ""
+  });
+}
+export interface postInputParams {
+  id: number;
+  title: string;
+  comments: ReadonlyArray<comment>;
+}
+export function post(params: postInputParams): post {
   return {
     _name: 'tupleTest2.post',
     ...params
@@ -86,6 +106,9 @@ export function encodePost(s: ISerializer, value: post) {
 }
 export function decodePost(__d: IDeserializer): post | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== 1399718583) return null;
   let id: number;
   let title: string;
@@ -124,7 +147,19 @@ export interface post  {
   title: string;
   comments: ReadonlyArray<comment>;
 }
-export function comment(params: Omit<comment,'_name'>): comment {
+export function postDefault(): post {
+  return post({
+    id: 0,
+    title: "",
+    comments: []
+  });
+}
+export interface commentInputParams {
+  id: number;
+  title: string;
+  contents: string;
+}
+export function comment(params: commentInputParams): comment {
   return {
     _name: 'tupleTest2.comment',
     ...params
@@ -150,6 +185,9 @@ export function encodeComment(s: ISerializer, value: comment) {
 }
 export function decodeComment(__d: IDeserializer): comment | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== -510569877) return null;
   let id: number;
   let title: string;
@@ -179,7 +217,17 @@ export interface comment  {
   title: string;
   contents: string;
 }
-export function tupleTest(params: Omit<tupleTest,'_name'>): tupleTest {
+export function commentDefault(): comment {
+  return comment({
+    id: 0,
+    title: "",
+    contents: ""
+  });
+}
+export interface tupleTestInputParams {
+  data: [user,post,comment,ReadonlyArray<comment>,ReadonlyArray<comment | null>];
+}
+export function tupleTest(params: tupleTestInputParams): tupleTest {
   return {
     _name: 'tupleTest2.tupleTest',
     ...params
@@ -231,6 +279,9 @@ export function encodeTupleTest(s: ISerializer, value: tupleTest) {
 }
 export function decodeTupleTest(__d: IDeserializer): tupleTest | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== 2066879416) return null;
   let data: [user,post,comment,Array<comment>,Array<comment | null>];
   /**
@@ -295,4 +346,9 @@ export function decodeTupleTest(__d: IDeserializer): tupleTest | null {
 export interface tupleTest  {
   _name: 'tupleTest2.tupleTest';
   data: [user,post,comment,ReadonlyArray<comment>,ReadonlyArray<comment | null>];
+}
+export function tupleTestDefault(): tupleTest {
+  return tupleTest({
+    data: [userDefault(),postDefault(),commentDefault(),[],[]]
+  });
 }

@@ -1,6 +1,9 @@
 import {ISerializer} from "./../__types__";
 import {IDeserializer} from "./../__types__";
-export function User(params: Omit<User,'_name'>): User {
+export interface UserInputParams {
+  firstName: string;
+}
+export function User(params: UserInputParams): User {
   return {
     _name: 'conversation.secondUser.User',
     ...params
@@ -16,6 +19,9 @@ export function encodeUser(s: ISerializer, value: User) {
 }
 export function decodeUser(__d: IDeserializer): User | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== -420842594) return null;
   let firstName: string;
   /**
@@ -30,4 +36,9 @@ export function decodeUser(__d: IDeserializer): User | null {
 export interface User  {
   _name: 'conversation.secondUser.User';
   firstName: string;
+}
+export function UserDefault(): User {
+  return User({
+    firstName: ""
+  });
 }

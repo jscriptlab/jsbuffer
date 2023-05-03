@@ -55,7 +55,11 @@ export function decodeTestTrait(__d: IDeserializer) {
   }
   return value;
 }
-export function user(params: Omit<user,'_name'>): user {
+export interface userInputParams {
+  firstName: string;
+  aliases: ReadonlyArray<string>;
+}
+export function user(params: userInputParams): user {
   return {
     _name: 'user.user',
     ...params
@@ -81,6 +85,9 @@ export function encodeUser(s: ISerializer, value: user) {
 }
 export function decodeUser(__d: IDeserializer): user | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== -1320038052) return null;
   let firstName: string;
   let aliases: Array<string>;
@@ -110,7 +117,16 @@ export interface user  {
   firstName: string;
   aliases: ReadonlyArray<string>;
 }
-export function userDeleted(params: Omit<userDeleted,'_name'>): userDeleted {
+export function userDefault(): user {
+  return user({
+    firstName: "",
+    aliases: []
+  });
+}
+export interface userDeletedInputParams {
+  deletedAt: number;
+}
+export function userDeleted(params: userDeletedInputParams): userDeleted {
   return {
     _name: 'user.userDeleted',
     ...params
@@ -126,6 +142,9 @@ export function encodeUserDeleted(s: ISerializer, value: userDeleted) {
 }
 export function decodeUserDeleted(__d: IDeserializer): userDeleted | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== -1188236190) return null;
   let deletedAt: number;
   /**
@@ -141,7 +160,16 @@ export interface userDeleted  {
   _name: 'user.userDeleted';
   deletedAt: number;
 }
-export function test(params: Omit<test,'_name'>): test {
+export function userDeletedDefault(): userDeleted {
+  return userDeleted({
+    deletedAt: 0
+  });
+}
+export interface testInputParams {
+  user: user;
+  b: ReadonlyArray<ReadonlyArray<string | null>>;
+}
+export function test(params: testInputParams): test {
   return {
     _name: 'user.test',
     ...params
@@ -177,6 +205,9 @@ export function encodeTest(s: ISerializer, value: test) {
 }
 export function decodeTest(__d: IDeserializer): test | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== -457344743) return null;
   let user: user;
   let b: Array<Array<string | null>>;
@@ -218,4 +249,10 @@ export interface test  {
   _name: 'user.test';
   user: user;
   b: ReadonlyArray<ReadonlyArray<string | null>>;
+}
+export function testDefault(): test {
+  return test({
+    user: userDefault(),
+    b: []
+  });
 }

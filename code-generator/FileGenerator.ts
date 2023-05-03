@@ -20,6 +20,8 @@ import {
   getTypeDefinitionOrCallDefinitionNamePropertyValue,
   getTypeDefinitionOrCallDefinitionObjectCreator,
   getEncodeFunctionName,
+  getTypeInputParamsInterfaceName,
+  getDefaultFunctionName,
 } from './fileGeneratorUtilities';
 import crc from 'cyclic-rc';
 import JavaScriptObjectStringify from './JavaScriptObjectStringify';
@@ -113,7 +115,6 @@ export interface IFileGeneratorOptions {
   typeScriptConfiguration?: Record<string, unknown>;
   textEncoder: ITextEncoder;
   root?: FileGenerator | null;
-  firstRequiredBy?: FileGenerator | null;
 }
 
 export type ResolvedTypeExpression =
@@ -131,10 +132,10 @@ export type ResolvedTypeExpression =
         | 'int32'
         | 'uint8'
         | 'int8'
-        | 'float'
-        | 'double'
         | 'uint16'
         | 'int16'
+        | 'float'
+        | 'double'
         | 'string'
         | 'bytes';
     }
@@ -194,7 +195,6 @@ export default class FileGenerator extends CodeStream {
   readonly #fileGenerators = new Map<string, FileGenerator>();
   readonly #parent;
   readonly #traits = new Map<string, ITrait>();
-  // readonly #firstRequiredBy;
   #offset = 0;
   #nodes: Array<ASTGeneratorOutputNode> = [];
   public constructor(
@@ -204,7 +204,6 @@ export default class FileGenerator extends CodeStream {
       textEncoder,
       indentationSize,
       rootDir,
-      // firstRequiredBy,
       outDir,
       root: parent = null,
       typeScriptConfiguration,
@@ -215,7 +214,6 @@ export default class FileGenerator extends CodeStream {
     });
     this.#file = file;
     this.#parent = parent;
-    // this.#firstRequiredBy = firstRequiredBy;
     this.#outDir = outDir;
     this.#rootDir = rootDir;
     this.#indentationSize = indentationSize;
@@ -445,7 +443,6 @@ export default class FileGenerator extends CodeStream {
               indentationSize: this.#indentationSize,
               rootDir: this.#rootDir,
               outDir: this.#outDir,
-              firstRequiredBy: this,
               textDecoder: this.#textDecoder,
               textEncoder: this.#textEncoder,
             }
@@ -474,6 +471,79 @@ export default class FileGenerator extends CodeStream {
   #root() {
     return this.#parent ?? this;
   }
+  #generateTypeDefinitionOrCallDefaultObjectCreator(
+    node: INodeTypeDefinition | INodeCallDefinition
+  ) {
+    this.write(
+      `export function ${getDefaultFunctionName(node)}(): ${getTypeName(
+        node
+      )} {\n`,
+      () => {
+        this.write(
+          `return ${getTypeDefinitionOrCallDefinitionObjectCreator(node)}({\n`,
+          () => {
+            for (const p of node.parameters) {
+              this.write(
+                `${
+                  p.name.value
+                }: ${this.#resolvedTypeExpressionToDefaultExpression(
+                  this.#resolveTypeExpression(p.typeExpression)
+                )}`
+              );
+              if (p !== node.parameters[node.parameters.length - 1]) {
+                this.append(',');
+              }
+              this.append('\n');
+            }
+          },
+          '});\n'
+        );
+      },
+      '}\n'
+    );
+  }
+  #resolvedTypeExpressionToDefaultExpression(
+    resolved: ResolvedTypeExpression
+  ): string {
+    if ('generic' in resolved) {
+      switch (resolved.generic) {
+        case 'bytes':
+          return 'new Uint8Array(0)';
+        case 'float':
+        case 'double':
+          return '0.0';
+        case 'int':
+        case 'uint32':
+        case 'int32':
+        case 'uint16':
+        case 'int16':
+        case 'uint8':
+        case 'int8':
+          return '0';
+        case 'string':
+          return '""';
+      }
+    } else if ('template' in resolved) {
+      switch (resolved.template) {
+        case 'optional':
+          return 'null';
+        case 'tuple':
+          return `[${resolved.types
+            .map((e) => this.#resolvedTypeExpressionToDefaultExpression(e))
+            .join(',')}]`;
+        case 'vector':
+          return '[]';
+      }
+    }
+    const type = this.#resolvedTypeExpressionToDefinition(resolved);
+    if ('fileGenerator' in resolved) {
+      this.#requirements.add({
+        identifier: getDefaultFunctionName(type),
+        fileGenerator: resolved.fileGenerator,
+      });
+    }
+    return `${getDefaultFunctionName(type)}()`;
+  }
   #generateNodeCode(node: ASTGeneratorOutputNode) {
     switch (node.type) {
       case NodeType.ExportStatement:
@@ -485,6 +555,7 @@ export default class FileGenerator extends CodeStream {
         this.#generateTypeDefinitionOrCallEncoderFunction(node);
         this.#generateTypeDefinitionOrCallDecoderFunction(node);
         this.#generateTypeDefinitionOrCallInterface(node);
+        this.#generateTypeDefinitionOrCallDefaultObjectCreator(node);
         break;
       case NodeType.TraitDefinition: {
         const trait = this.#traits.get(node.name.value);
@@ -1009,11 +1080,6 @@ export default class FileGenerator extends CodeStream {
               }
               const exps = new Array<ITupleExpressionItem>();
               for (const typeExpression of resolved.expressions) {
-                // this.#generateDecodeTypeExpression(
-                //   exp,
-                //   `${value}[${i}]`,
-                //   depth + i
-                // );
                 const varName = `e${i}`;
                 this.write(
                   `let ${varName}: ${this.#resolveTypeExpressionToString({
@@ -1178,6 +1244,7 @@ export default class FileGenerator extends CodeStream {
       )}(__d: IDeserializer): ${interfaceName} | null {\n`,
       () => {
         this.write('const __id = __d.readInt32();\n');
+        this.#writeMultilineComment('decode header');
         this.write(
           `if(__id !== ${this.#getUniqueHeader(node)}) return null;\n`
         );
@@ -1222,7 +1289,14 @@ export default class FileGenerator extends CodeStream {
     node: INodeCallDefinition | INodeTypeDefinition
   ) {
     const interfaceName = getTypeName(node);
-    const paramsType = `Omit<${interfaceName},'_name'>`;
+    const paramsType = getTypeInputParamsInterfaceName(node);
+    this.write(
+      `export interface ${paramsType} {\n`,
+      () => {
+        this.#generateTypeDefinitionOrCallParameters(node);
+      },
+      '}\n'
+    );
     this.write(
       `export function ${getTypeDefinitionOrCallDefinitionObjectCreator(
         node

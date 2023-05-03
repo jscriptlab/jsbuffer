@@ -53,3 +53,15 @@ export function getTypeName(
 ) {
   return value.name.value;
 }
+
+export function getDefaultFunctionName(
+  value: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
+) {
+  return `${value.name.value}Default`;
+}
+
+export function getTypeInputParamsInterfaceName(
+  value: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
+) {
+  return `${value.name.value}InputParams`;
+}

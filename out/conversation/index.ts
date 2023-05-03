@@ -3,7 +3,12 @@ import {ISerializer} from "./../__types__";
 import {encodeUser} from "./SecondUser";
 import {IDeserializer} from "./../__types__";
 import {decodeUser} from "./SecondUser";
-export function Conversation(params: Omit<Conversation,'_name'>): Conversation {
+import {UserDefault} from "./SecondUser";
+export interface ConversationInputParams {
+  id: number;
+  user: User;
+}
+export function Conversation(params: ConversationInputParams): Conversation {
   return {
     _name: 'conversation.index.Conversation',
     ...params
@@ -24,6 +29,9 @@ export function encodeConversation(s: ISerializer, value: Conversation) {
 }
 export function decodeConversation(__d: IDeserializer): Conversation | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== 1477771794) return null;
   let id: number;
   let user: User;
@@ -48,7 +56,16 @@ export interface Conversation  {
   id: number;
   user: User;
 }
-export function Conversations(params: Omit<Conversations,'_name'>): Conversations {
+export function ConversationDefault(): Conversation {
+  return Conversation({
+    id: 0,
+    user: UserDefault()
+  });
+}
+export interface ConversationsInputParams {
+  conversations: ReadonlyArray<Conversation>;
+}
+export function Conversations(params: ConversationsInputParams): Conversations {
   return {
     _name: 'conversation.index.Conversations',
     ...params
@@ -69,6 +86,9 @@ export function encodeConversations(s: ISerializer, value: Conversations) {
 }
 export function decodeConversations(__d: IDeserializer): Conversations | null {
   const __id = __d.readInt32();
+  /**
+   * decode header
+   */
   if(__id !== -386946239) return null;
   let conversations: Array<Conversation>;
   /**
@@ -92,4 +112,9 @@ export function decodeConversations(__d: IDeserializer): Conversations | null {
 export interface Conversations  {
   _name: 'conversation.index.Conversations';
   conversations: ReadonlyArray<Conversation>;
+}
+export function ConversationsDefault(): Conversations {
+  return Conversations({
+    conversations: []
+  });
 }
