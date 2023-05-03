@@ -9,6 +9,7 @@
         "./conversation/SecondUser.ts",
         "./message.ts",
         "./Request.ts",
+        "./tupleTest2.ts",
         "./schema.ts",
         "./__types__.ts"
     ],

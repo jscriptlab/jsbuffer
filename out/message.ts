@@ -44,11 +44,11 @@ export function encodeMessages(s: ISerializer, value: Messages) {
    * encoding param: messages
    */
   const pv0 = value['messages'];
-  const l0 = pv0.length;
-  s.writeUint32(l0);
-  for(let i0 = 0; i0 < l0; i0++) {
-    const vi0 = pv0[i0];
-    encodeMessage(s,vi0);
+  const __l0 = pv0.length;
+  s.writeUint32(__l0);
+  for(let __i0 = 0; __i0 < __l0; __i0++) {
+    const v__i0 = pv0[__i0];
+    encodeMessage(s,v__i0);
   }
 }
 export function decodeMessages(__d: IDeserializer): Messages | null {

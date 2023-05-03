@@ -60,11 +60,11 @@ export function encodeConversations(s: ISerializer, value: Conversations) {
    * encoding param: conversations
    */
   const pv0 = value['conversations'];
-  const l0 = pv0.length;
-  s.writeUint32(l0);
-  for(let i0 = 0; i0 < l0; i0++) {
-    const vi0 = pv0[i0];
-    encodeConversation(s,vi0);
+  const __l0 = pv0.length;
+  s.writeUint32(__l0);
+  for(let __i0 = 0; __i0 < __l0; __i0++) {
+    const v__i0 = pv0[__i0];
+    encodeConversation(s,v__i0);
   }
 }
 export function decodeConversations(__d: IDeserializer): Conversations | null {

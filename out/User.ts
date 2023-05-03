@@ -72,11 +72,11 @@ export function encodeUser(s: ISerializer, value: user) {
    * encoding param: aliases
    */
   const pv1 = value['aliases'];
-  const l1 = pv1.length;
-  s.writeUint32(l1);
-  for(let i1 = 0; i1 < l1; i1++) {
-    const vi1 = pv1[i1];
-    s.writeString(vi1);
+  const __l1 = pv1.length;
+  s.writeUint32(__l1);
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    const v__i1 = pv1[__i1];
+    s.writeString(v__i1);
   }
 }
 export function decodeUser(__d: IDeserializer): user | null {
@@ -158,19 +158,19 @@ export function encodeTest(s: ISerializer, value: test) {
    * encoding param: b
    */
   const pv1 = value['b'];
-  const l1 = pv1.length;
-  s.writeUint32(l1);
-  for(let i1 = 0; i1 < l1; i1++) {
-    const vi1 = pv1[i1];
-    const l2 = vi1.length;
-    s.writeUint32(l2);
-    for(let i2 = 0; i2 < l2; i2++) {
-      const vi2 = vi1[i2];
-      if(vi2 === null) {
+  const __l1 = pv1.length;
+  s.writeUint32(__l1);
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    const v__i1 = pv1[__i1];
+    const __l2 = v__i1.length;
+    s.writeUint32(__l2);
+    for(let __i2 = 0; __i2 < __l2; __i2++) {
+      const v__i2 = v__i1[__i2];
+      if(v__i2 === null) {
         s.writeUint8(0);
       } else {
         s.writeUint8(1);
-        s.writeString(vi2);
+        s.writeString(v__i2);
       }
     }
   }

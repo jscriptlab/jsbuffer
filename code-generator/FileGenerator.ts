@@ -873,8 +873,8 @@ export default class FileGenerator extends CodeStream {
           this.write('}\n');
           break;
         case 'vector': {
-          const i = `i${depth}`;
-          const lengthVarName = `l${depth}`;
+          const i = `__i${depth}`;
+          const lengthVarName = `__l${depth}`;
           this.write(`const ${lengthVarName} = ${value}.length;\n`);
           this.write(`s.writeUint32(${lengthVarName});\n`);
           this.write(
@@ -892,17 +892,23 @@ export default class FileGenerator extends CodeStream {
           break;
         }
         case 'tuple': {
+          let i = 0;
           this.write(
             '{\n',
             () => {
-              let i = 0;
               for (const exp of resolved.expressions) {
-                const valueVarName = `t${depth}${i}`;
+                const valueVarName = `__t${depth}${i}`;
                 this.write(`const ${valueVarName} = ${value}[${i}];\n`);
-                this.#generateEncodeTypeExpression(
-                  exp,
-                  `${valueVarName}`,
-                  depth + 1
+                this.write(
+                  '{\n',
+                  () => {
+                    this.#generateEncodeTypeExpression(
+                      exp,
+                      `${valueVarName}`,
+                      depth + 1
+                    );
+                  },
+                  '}\n'
                 );
                 i++;
               }
@@ -1023,10 +1029,16 @@ export default class FileGenerator extends CodeStream {
                 i++;
               }
               for (const { index, varName, typeExpression } of exps) {
-                this.#generateDecodeTypeExpression(
-                  typeExpression,
-                  `${varName}`,
-                  depth + index
+                this.write(
+                  '{\n',
+                  () => {
+                    this.#generateDecodeTypeExpression(
+                      typeExpression,
+                      `${varName}`,
+                      depth + index
+                    );
+                  },
+                  '}\n'
                 );
               }
               this.write(

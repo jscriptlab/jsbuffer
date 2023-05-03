@@ -101,11 +101,11 @@ export function encodeUsers(s: ISerializer, value: Users) {
    * encoding param: users
    */
   const pv0 = value['users'];
-  const l0 = pv0.length;
-  s.writeUint32(l0);
-  for(let i0 = 0; i0 < l0; i0++) {
-    const vi0 = pv0[i0];
-    encodeUserTrait(s,vi0);
+  const __l0 = pv0.length;
+  s.writeUint32(__l0);
+  for(let __i0 = 0; __i0 < __l0; __i0++) {
+    const v__i0 = pv0[__i0];
+    encodeUserTrait(s,v__i0);
   }
 }
 export function decodeUsers(__d: IDeserializer): Users | null {
@@ -208,11 +208,11 @@ export function encodePosts(s: ISerializer, value: Posts) {
    * encoding param: posts
    */
   const pv0 = value['posts'];
-  const l0 = pv0.length;
-  s.writeUint32(l0);
-  for(let i0 = 0; i0 < l0; i0++) {
-    const vi0 = pv0[i0];
-    encodePost(s,vi0);
+  const __l0 = pv0.length;
+  s.writeUint32(__l0);
+  for(let __i0 = 0; __i0 < __l0; __i0++) {
+    const v__i0 = pv0[__i0];
+    encodePost(s,v__i0);
   }
 }
 export function decodePosts(__d: IDeserializer): Posts | null {
@@ -346,69 +346,69 @@ export function encodeShouldSupportSeveralSequentialVectorParams(s: ISerializer,
    * encoding param: a
    */
   const pv0 = value['a'];
-  const l0 = pv0.length;
-  s.writeUint32(l0);
-  for(let i0 = 0; i0 < l0; i0++) {
-    const vi0 = pv0[i0];
-    s.writeInt32(vi0);
+  const __l0 = pv0.length;
+  s.writeUint32(__l0);
+  for(let __i0 = 0; __i0 < __l0; __i0++) {
+    const v__i0 = pv0[__i0];
+    s.writeInt32(v__i0);
   }
   /**
    * encoding param: b
    */
   const pv1 = value['b'];
-  const l1 = pv1.length;
-  s.writeUint32(l1);
-  for(let i1 = 0; i1 < l1; i1++) {
-    const vi1 = pv1[i1];
-    s.writeDouble(vi1);
+  const __l1 = pv1.length;
+  s.writeUint32(__l1);
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    const v__i1 = pv1[__i1];
+    s.writeDouble(v__i1);
   }
   /**
    * encoding param: c
    */
   const pv2 = value['c'];
-  const l2 = pv2.length;
-  s.writeUint32(l2);
-  for(let i2 = 0; i2 < l2; i2++) {
-    const vi2 = pv2[i2];
-    s.writeString(vi2);
+  const __l2 = pv2.length;
+  s.writeUint32(__l2);
+  for(let __i2 = 0; __i2 < __l2; __i2++) {
+    const v__i2 = pv2[__i2];
+    s.writeString(v__i2);
   }
   /**
    * encoding param: d
    */
   const pv3 = value['d'];
-  const l3 = pv3.length;
-  s.writeUint32(l3);
-  for(let i3 = 0; i3 < l3; i3++) {
-    const vi3 = pv3[i3];
-    s.writeFloat(vi3);
+  const __l3 = pv3.length;
+  s.writeUint32(__l3);
+  for(let __i3 = 0; __i3 < __l3; __i3++) {
+    const v__i3 = pv3[__i3];
+    s.writeFloat(v__i3);
   }
   /**
    * encoding param: e
    */
   const pv4 = value['e'];
-  const l4 = pv4.length;
-  s.writeUint32(l4);
-  for(let i4 = 0; i4 < l4; i4++) {
-    const vi4 = pv4[i4];
-    s.writeUint32(vi4);
+  const __l4 = pv4.length;
+  s.writeUint32(__l4);
+  for(let __i4 = 0; __i4 < __l4; __i4++) {
+    const v__i4 = pv4[__i4];
+    s.writeUint32(v__i4);
   }
   /**
    * encoding param: f
    */
   const pv5 = value['f'];
-  const l5 = pv5.length;
-  s.writeUint32(l5);
-  for(let i5 = 0; i5 < l5; i5++) {
-    const vi5 = pv5[i5];
-    if(vi5 === null) {
+  const __l5 = pv5.length;
+  s.writeUint32(__l5);
+  for(let __i5 = 0; __i5 < __l5; __i5++) {
+    const v__i5 = pv5[__i5];
+    if(v__i5 === null) {
       s.writeUint8(0);
     } else {
       s.writeUint8(1);
-      const l7 = vi5.length;
-      s.writeUint32(l7);
-      for(let i7 = 0; i7 < l7; i7++) {
-        const vi7 = vi5[i7];
-        s.writeUint32(vi7);
+      const __l7 = v__i5.length;
+      s.writeUint32(__l7);
+      for(let __i7 = 0; __i7 < __l7; __i7++) {
+        const v__i7 = v__i5[__i7];
+        s.writeUint32(v__i7);
       }
     }
   }
@@ -417,25 +417,35 @@ export function encodeShouldSupportSeveralSequentialVectorParams(s: ISerializer,
    */
   const pv6 = value['g'];
   {
-    const t60 = pv6[0];
-    s.writeInt32(t60);
-    const t61 = pv6[1];
-    s.writeFloat(t61);
-    const t62 = pv6[2];
-    s.writeDouble(t62);
-    const t63 = pv6[3];
-    const l7 = t63.length;
-    s.writeUint32(l7);
-    for(let i7 = 0; i7 < l7; i7++) {
-      const vi7 = t63[i7];
-      s.writeUint32(vi7);
+    const __t60 = pv6[0];
+    {
+      s.writeInt32(__t60);
     }
-    const t64 = pv6[4];
-    if(t64 === null) {
-      s.writeUint8(0);
-    } else {
-      s.writeUint8(1);
-      s.writeString(t64);
+    const __t61 = pv6[1];
+    {
+      s.writeFloat(__t61);
+    }
+    const __t62 = pv6[2];
+    {
+      s.writeDouble(__t62);
+    }
+    const __t63 = pv6[3];
+    {
+      const __l7 = __t63.length;
+      s.writeUint32(__l7);
+      for(let __i7 = 0; __i7 < __l7; __i7++) {
+        const v__i7 = __t63[__i7];
+        s.writeUint32(v__i7);
+      }
+    }
+    const __t64 = pv6[4];
+    {
+      if(__t64 === null) {
+        s.writeUint8(0);
+      } else {
+        s.writeUint8(1);
+        s.writeString(__t64);
+      }
     }
   }
 }
@@ -535,21 +545,31 @@ export function decodeShouldSupportSeveralSequentialVectorParams(__d: IDeseriali
     let e2: number;
     let e3: Array<number>;
     let e4: string | null;
-    e0 = __d.readInt32();
-    e1 = __d.readFloat();
-    e2 = __d.readDouble();
     {
-      const iindex9 = __d.readUint32();
-      const oindex9 = new Array(iindex9);
-      e3 = oindex9;
-      for(let index9 = 0; index9 < iindex9; index9++) {
-        oindex9[index9] = __d.readUint32();
+      e0 = __d.readInt32();
+    }
+    {
+      e1 = __d.readFloat();
+    }
+    {
+      e2 = __d.readDouble();
+    }
+    {
+      {
+        const iindex9 = __d.readUint32();
+        const oindex9 = new Array(iindex9);
+        e3 = oindex9;
+        for(let index9 = 0; index9 < iindex9; index9++) {
+          oindex9[index9] = __d.readUint32();
+        }
       }
     }
-    if(__d.readUint8() === 1) {
-      e4 = __d.readString();
-    } else {
-      e4 = null;
+    {
+      if(__d.readUint8() === 1) {
+        e4 = __d.readString();
+      } else {
+        e4 = null;
+      }
     }
     g = [e0,e1,e2,e3,e4];
   }
@@ -587,55 +607,75 @@ export function encodeSimpleTupleTest(s: ISerializer, value: simpleTupleTest) {
    */
   const pv0 = value['a'];
   {
-    const t00 = pv0[0];
-    s.writeInt32(t00);
-    const t01 = pv0[1];
-    s.writeFloat(t01);
-    const t02 = pv0[2];
-    s.writeDouble(t02);
-    const t03 = pv0[3];
-    const l1 = t03.length;
-    s.writeUint32(l1);
-    for(let i1 = 0; i1 < l1; i1++) {
-      const vi1 = t03[i1];
-      s.writeUint32(vi1);
+    const __t00 = pv0[0];
+    {
+      s.writeInt32(__t00);
     }
-    const t04 = pv0[4];
-    if(t04 === null) {
-      s.writeUint8(0);
-    } else {
-      s.writeUint8(1);
-      s.writeString(t04);
+    const __t01 = pv0[1];
+    {
+      s.writeFloat(__t01);
+    }
+    const __t02 = pv0[2];
+    {
+      s.writeDouble(__t02);
+    }
+    const __t03 = pv0[3];
+    {
+      const __l1 = __t03.length;
+      s.writeUint32(__l1);
+      for(let __i1 = 0; __i1 < __l1; __i1++) {
+        const v__i1 = __t03[__i1];
+        s.writeUint32(v__i1);
+      }
+    }
+    const __t04 = pv0[4];
+    {
+      if(__t04 === null) {
+        s.writeUint8(0);
+      } else {
+        s.writeUint8(1);
+        s.writeString(__t04);
+      }
     }
   }
   /**
    * encoding param: b
    */
   const pv1 = value['b'];
-  const l1 = pv1.length;
-  s.writeUint32(l1);
-  for(let i1 = 0; i1 < l1; i1++) {
-    const vi1 = pv1[i1];
+  const __l1 = pv1.length;
+  s.writeUint32(__l1);
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    const v__i1 = pv1[__i1];
     {
-      const t20 = vi1[0];
-      s.writeInt32(t20);
-      const t21 = vi1[1];
-      s.writeFloat(t21);
-      const t22 = vi1[2];
-      s.writeDouble(t22);
-      const t23 = vi1[3];
-      const l3 = t23.length;
-      s.writeUint32(l3);
-      for(let i3 = 0; i3 < l3; i3++) {
-        const vi3 = t23[i3];
-        s.writeUint32(vi3);
+      const __t20 = v__i1[0];
+      {
+        s.writeInt32(__t20);
       }
-      const t24 = vi1[4];
-      if(t24 === null) {
-        s.writeUint8(0);
-      } else {
-        s.writeUint8(1);
-        s.writeString(t24);
+      const __t21 = v__i1[1];
+      {
+        s.writeFloat(__t21);
+      }
+      const __t22 = v__i1[2];
+      {
+        s.writeDouble(__t22);
+      }
+      const __t23 = v__i1[3];
+      {
+        const __l3 = __t23.length;
+        s.writeUint32(__l3);
+        for(let __i3 = 0; __i3 < __l3; __i3++) {
+          const v__i3 = __t23[__i3];
+          s.writeUint32(v__i3);
+        }
+      }
+      const __t24 = v__i1[4];
+      {
+        if(__t24 === null) {
+          s.writeUint8(0);
+        } else {
+          s.writeUint8(1);
+          s.writeString(__t24);
+        }
       }
     }
   }
@@ -654,21 +694,31 @@ export function decodeSimpleTupleTest(__d: IDeserializer): simpleTupleTest | nul
     let e2: number;
     let e3: Array<number>;
     let e4: string | null;
-    e0 = __d.readInt32();
-    e1 = __d.readFloat();
-    e2 = __d.readDouble();
     {
-      const iindex3 = __d.readUint32();
-      const oindex3 = new Array(iindex3);
-      e3 = oindex3;
-      for(let index3 = 0; index3 < iindex3; index3++) {
-        oindex3[index3] = __d.readUint32();
+      e0 = __d.readInt32();
+    }
+    {
+      e1 = __d.readFloat();
+    }
+    {
+      e2 = __d.readDouble();
+    }
+    {
+      {
+        const iindex3 = __d.readUint32();
+        const oindex3 = new Array(iindex3);
+        e3 = oindex3;
+        for(let index3 = 0; index3 < iindex3; index3++) {
+          oindex3[index3] = __d.readUint32();
+        }
       }
     }
-    if(__d.readUint8() === 1) {
-      e4 = __d.readString();
-    } else {
-      e4 = null;
+    {
+      if(__d.readUint8() === 1) {
+        e4 = __d.readString();
+      } else {
+        e4 = null;
+      }
     }
     a = [e0,e1,e2,e3,e4];
   }
@@ -686,21 +736,31 @@ export function decodeSimpleTupleTest(__d: IDeserializer): simpleTupleTest | nul
         let e2: number;
         let e3: Array<number>;
         let e4: string | null;
-        e0 = __d.readInt32();
-        e1 = __d.readFloat();
-        e2 = __d.readDouble();
         {
-          const iindex5 = __d.readUint32();
-          const oindex5 = new Array(iindex5);
-          e3 = oindex5;
-          for(let index5 = 0; index5 < iindex5; index5++) {
-            oindex5[index5] = __d.readUint32();
+          e0 = __d.readInt32();
+        }
+        {
+          e1 = __d.readFloat();
+        }
+        {
+          e2 = __d.readDouble();
+        }
+        {
+          {
+            const iindex5 = __d.readUint32();
+            const oindex5 = new Array(iindex5);
+            e3 = oindex5;
+            for(let index5 = 0; index5 < iindex5; index5++) {
+              oindex5[index5] = __d.readUint32();
+            }
           }
         }
-        if(__d.readUint8() === 1) {
-          e4 = __d.readString();
-        } else {
-          e4 = null;
+        {
+          if(__d.readUint8() === 1) {
+            e4 = __d.readString();
+          } else {
+            e4 = null;
+          }
         }
         oindex1[index1] = [e0,e1,e2,e3,e4];
       }
