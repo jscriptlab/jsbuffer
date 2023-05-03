@@ -11,19 +11,19 @@ export function encodeUserTrait(s: ISerializer,value: User) {
       break;
   }
 }
-export function decodeUserTrait(d: IDeserializer) {
-  const __id = d.readInt32();
-  d.rewindInt32();
+export function decodeUserTrait(__d: IDeserializer) {
+  const __id = __d.readInt32();
+  __d.rewindInt32();
   let value: user | userDeleted;
   switch(__id) {
     case -1320038052: {
-      const tmp = decodeUser(d);
+      const tmp = decodeUser(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
     case -1188236190: {
-      const tmp = decodeUserDeleted(d);
+      const tmp = decodeUserDeleted(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
@@ -40,13 +40,13 @@ export function encodeTestTrait(s: ISerializer,value: Test) {
       break;
   }
 }
-export function decodeTestTrait(d: IDeserializer) {
-  const __id = d.readInt32();
-  d.rewindInt32();
+export function decodeTestTrait(__d: IDeserializer) {
+  const __id = __d.readInt32();
+  __d.rewindInt32();
   let value: test;
   switch(__id) {
     case -457344743: {
-      const tmp = decodeTest(d);
+      const tmp = decodeTest(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
@@ -63,27 +63,40 @@ export function user(params: Omit<user,'_name'>): user {
 }
 export function encodeUser(s: ISerializer, value: user) {
   s.writeInt32(-1320038052);
-  s.writeString(value['firstName']);
-  {
-    const ia0 = value['aliases'].length;
-    s.writeUint32(ia0);
-    for(let a0 = 0; a0 < ia0; a0++) {
-      const va0 = value['aliases'][a0];
-      s.writeString(va0);
-    }
+  /**
+   * encoding param: firstName
+   */
+  const pv0 = value['firstName'];
+  s.writeString(pv0);
+  /**
+   * encoding param: aliases
+   */
+  const pv1 = value['aliases'];
+  const l1 = pv1.length;
+  s.writeUint32(l1);
+  for(let i1 = 0; i1 < l1; i1++) {
+    const vi1 = pv1[i1];
+    s.writeString(vi1);
   }
 }
-export function decodeUser(d: IDeserializer): user | null {
-  const __id = d.readInt32();
+export function decodeUser(__d: IDeserializer): user | null {
+  const __id = __d.readInt32();
   if(__id !== -1320038052) return null;
   let firstName: string;
   let aliases: Array<string>;
-  firstName = d.readString();
+  /**
+   * decoding param: firstName
+   */
+  firstName = __d.readString();
+  /**
+   * decoding param: aliases
+   */
   {
-    const ia0 = d.readUint32();
-    aliases = new Array(ia0);
-    for(let a0 = 0; a0 < ia0; a0++) {
-      aliases[a0] = d.readString();
+    const iindex1 = __d.readUint32();
+    const oindex1 = new Array(iindex1);
+    aliases = oindex1;
+    for(let index1 = 0; index1 < iindex1; index1++) {
+      oindex1[index1] = __d.readString();
     }
   }
   return {
@@ -105,13 +118,20 @@ export function userDeleted(params: Omit<userDeleted,'_name'>): userDeleted {
 }
 export function encodeUserDeleted(s: ISerializer, value: userDeleted) {
   s.writeInt32(-1188236190);
-  s.writeInt32(value['deletedAt']);
+  /**
+   * encoding param: deletedAt
+   */
+  const pv0 = value['deletedAt'];
+  s.writeInt32(pv0);
 }
-export function decodeUserDeleted(d: IDeserializer): userDeleted | null {
-  const __id = d.readInt32();
+export function decodeUserDeleted(__d: IDeserializer): userDeleted | null {
+  const __id = __d.readInt32();
   if(__id !== -1188236190) return null;
   let deletedAt: number;
-  deletedAt = d.readInt32();
+  /**
+   * decoding param: deletedAt
+   */
+  deletedAt = __d.readInt32();
   return {
     _name: 'user.userDeleted',
     deletedAt
@@ -129,48 +149,60 @@ export function test(params: Omit<test,'_name'>): test {
 }
 export function encodeTest(s: ISerializer, value: test) {
   s.writeInt32(-457344743);
-  encodeUser(s,value['user']);
-  {
-    const ia0 = value['b'].length;
-    s.writeUint32(ia0);
-    for(let a0 = 0; a0 < ia0; a0++) {
-      const va0 = value['b'][a0];
-      {
-        const ia1 = va0.length;
-        s.writeUint32(ia1);
-        for(let a1 = 0; a1 < ia1; a1++) {
-          const va1 = va0[a1];
-          if(va1 === null) {
-            s.writeUint8(0);
-          } else {
-            s.writeUint8(1);
-            s.writeString(va1);
-          }
-        }
+  /**
+   * encoding param: user
+   */
+  const pv0 = value['user'];
+  encodeUser(s,pv0);
+  /**
+   * encoding param: b
+   */
+  const pv1 = value['b'];
+  const l1 = pv1.length;
+  s.writeUint32(l1);
+  for(let i1 = 0; i1 < l1; i1++) {
+    const vi1 = pv1[i1];
+    const l2 = vi1.length;
+    s.writeUint32(l2);
+    for(let i2 = 0; i2 < l2; i2++) {
+      const vi2 = vi1[i2];
+      if(vi2 === null) {
+        s.writeUint8(0);
+      } else {
+        s.writeUint8(1);
+        s.writeString(vi2);
       }
     }
   }
 }
-export function decodeTest(d: IDeserializer): test | null {
-  const __id = d.readInt32();
+export function decodeTest(__d: IDeserializer): test | null {
+  const __id = __d.readInt32();
   if(__id !== -457344743) return null;
   let user: user;
   let b: Array<Array<string | null>>;
-  const tmp = decodeUser(d);
-  if(tmp === null) return null;
-  user = tmp;
+  /**
+   * decoding param: user
+   */
+  const tmp0 = decodeUser(__d);
+  if(tmp0 === null) return null;
+  user = tmp0;
+  /**
+   * decoding param: b
+   */
   {
-    const ia0 = d.readUint32();
-    b = new Array(ia0);
-    for(let a0 = 0; a0 < ia0; a0++) {
+    const iindex1 = __d.readUint32();
+    const oindex1 = new Array(iindex1);
+    b = oindex1;
+    for(let index1 = 0; index1 < iindex1; index1++) {
       {
-        const ia1 = d.readUint32();
-        b[a0] = new Array(ia1);
-        for(let a1 = 0; a1 < ia1; a1++) {
-          if(d.readUint8() === 1) {
-            b[a0][a1] = d.readString();
+        const iindex2 = __d.readUint32();
+        const oindex2 = new Array(iindex2);
+        oindex1[index1] = oindex2;
+        for(let index2 = 0; index2 < iindex2; index2++) {
+          if(__d.readUint8() === 1) {
+            oindex2[index2] = __d.readString();
           } else {
-            b[a0][a1] = null;
+            oindex2[index2] = null;
           }
         }
       }

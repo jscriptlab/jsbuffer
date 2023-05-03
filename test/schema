@@ -39,3 +39,19 @@ type Coordinates {
   double latitude;
   double longitude;
 }
+
+type ShouldSupportSeveralSequentialVectorParams{
+  vector<int> a;
+  vector<double> b;
+  vector<string> c;
+  vector<float> d;
+  vector<uint32> e;
+  vector<optional<vector<uint32>>> f;
+  tuple<int,float,double,vector<uint32>,optional<string>> g;
+}
+
+type simpleTupleTest {
+  tuple<int,float,double,vector<uint32>,optional<string>> a;
+  vector<tuple<int,float,double,vector<uint32>,optional<string>>> b;
+
+}

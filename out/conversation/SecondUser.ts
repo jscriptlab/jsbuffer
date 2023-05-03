@@ -8,13 +8,20 @@ export function User(params: Omit<User,'_name'>): User {
 }
 export function encodeUser(s: ISerializer, value: User) {
   s.writeInt32(-420842594);
-  s.writeString(value['firstName']);
+  /**
+   * encoding param: firstName
+   */
+  const pv0 = value['firstName'];
+  s.writeString(pv0);
 }
-export function decodeUser(d: IDeserializer): User | null {
-  const __id = d.readInt32();
+export function decodeUser(__d: IDeserializer): User | null {
+  const __id = __d.readInt32();
   if(__id !== -420842594) return null;
   let firstName: string;
-  firstName = d.readString();
+  /**
+   * decoding param: firstName
+   */
+  firstName = __d.readString();
   return {
     _name: 'conversation.secondUser.User',
     firstName

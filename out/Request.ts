@@ -23,25 +23,25 @@ export function encodeRequestTrait(s: ISerializer,value: Request) {
       break;
   }
 }
-export function decodeRequestTrait(d: IDeserializer) {
-  const __id = d.readInt32();
-  d.rewindInt32();
+export function decodeRequestTrait(__d: IDeserializer) {
+  const __id = __d.readInt32();
+  __d.rewindInt32();
   let value: GetUserById | GetPostById | GetConversations;
   switch(__id) {
     case 971329205: {
-      const tmp = decodeGetUserById(d);
+      const tmp = decodeGetUserById(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
     case -1951096243: {
-      const tmp = decodeGetPostById(d);
+      const tmp = decodeGetPostById(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
     case 804827749: {
-      const tmp = decodeGetConversations(d);
+      const tmp = decodeGetConversations(__d);
       if(tmp === null) return null;
       value = tmp;
       break;

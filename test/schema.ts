@@ -3,8 +3,11 @@ import {
   GetConversations,
   GetPostById,
   decodeMsg,
+  decodeSimpleTupleTest,
   encodeMsg,
+  encodeSimpleTupleTest,
   msg,
+  simpleTupleTest,
 } from '../out/schema';
 import { Serializer, Deserializer } from '../codec';
 import { TextDecoder, TextEncoder } from 'util';
@@ -67,6 +70,30 @@ suite.test('it should encode types with buffers in it', () => {
     decodeMsg(d),
     msg({
       data,
+    })
+  );
+});
+
+suite.test('it should encode tuple', () => {
+  const s = new Serializer({
+    textEncoder: new TextEncoder(),
+  });
+  encodeSimpleTupleTest(
+    s,
+    simpleTupleTest({
+      a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
+      b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+    })
+  );
+  const d = new Deserializer({
+    textDecoder: new TextDecoder(),
+    buffer: s.view(),
+  });
+  assert.strict.deepEqual(
+    decodeSimpleTupleTest(d),
+    simpleTupleTest({
+      a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
+      b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
     })
   );
 });

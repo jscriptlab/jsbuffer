@@ -364,13 +364,6 @@ export default class ASTGenerator {
     }
     return token;
   }
-  // #matchKeyword(value: string) {
-  //   const token = this.#matchByType(TokenType.Keyword);
-  //   if (token?.value !== value) {
-  //     return null;
-  //   }
-  //   return token;
-  // }
   #expectByType(expectedType: TokenType) {
     const token = this.#tokens[0];
     if (typeof token === 'undefined' || token.type !== expectedType) {
@@ -385,20 +378,6 @@ export default class ASTGenerator {
      */
     return token;
   }
-  // #matchByType(expectedType: TokenType) {
-  //   const token = this.#tokens[0];
-  //   if (typeof token === 'undefined' || token.type !== expectedType) {
-  //     return null;
-  //   }
-  //   /**
-  //    * remove first token
-  //    */
-  //   this.#tokens.shift();
-  //   /**
-  //    * return first token
-  //    */
-  //   return token;
-  // }
   #eof() {
     return this.#tokens.length === 0;
   }

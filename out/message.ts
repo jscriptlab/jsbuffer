@@ -9,13 +9,20 @@ export function Message(params: Omit<Message,'_name'>): Message {
 }
 export function encodeMessage(s: ISerializer, value: Message) {
   s.writeInt32(-1988975903);
-  s.writeInt32(value['id']);
+  /**
+   * encoding param: id
+   */
+  const pv0 = value['id'];
+  s.writeInt32(pv0);
 }
-export function decodeMessage(d: IDeserializer): Message | null {
-  const __id = d.readInt32();
+export function decodeMessage(__d: IDeserializer): Message | null {
+  const __id = __d.readInt32();
   if(__id !== -1988975903) return null;
   let id: number;
-  id = d.readInt32();
+  /**
+   * decoding param: id
+   */
+  id = __d.readInt32();
   return {
     _name: 'message.Message',
     id
@@ -33,26 +40,32 @@ export function Messages(params: Omit<Messages,'_name'>): Messages {
 }
 export function encodeMessages(s: ISerializer, value: Messages) {
   s.writeInt32(-863342777);
-  {
-    const ia0 = value['messages'].length;
-    s.writeUint32(ia0);
-    for(let a0 = 0; a0 < ia0; a0++) {
-      const va0 = value['messages'][a0];
-      encodeMessage(s,va0);
-    }
+  /**
+   * encoding param: messages
+   */
+  const pv0 = value['messages'];
+  const l0 = pv0.length;
+  s.writeUint32(l0);
+  for(let i0 = 0; i0 < l0; i0++) {
+    const vi0 = pv0[i0];
+    encodeMessage(s,vi0);
   }
 }
-export function decodeMessages(d: IDeserializer): Messages | null {
-  const __id = d.readInt32();
+export function decodeMessages(__d: IDeserializer): Messages | null {
+  const __id = __d.readInt32();
   if(__id !== -863342777) return null;
   let messages: Array<Message>;
+  /**
+   * decoding param: messages
+   */
   {
-    const ia0 = d.readUint32();
-    messages = new Array(ia0);
-    for(let a0 = 0; a0 < ia0; a0++) {
-      const tmp = decodeMessage(d);
-      if(tmp === null) return null;
-      messages[a0] = tmp;
+    const iindex0 = __d.readUint32();
+    const oindex0 = new Array(iindex0);
+    messages = oindex0;
+    for(let index0 = 0; index0 < iindex0; index0++) {
+      const tmp1 = decodeMessage(__d);
+      if(tmp1 === null) return null;
+      oindex0[index0] = tmp1;
     }
   }
   return {
@@ -72,16 +85,30 @@ export function GetMessages(params: Omit<GetMessages,'_name'>): GetMessages {
 }
 export function encodeGetMessages(s: ISerializer, value: GetMessages) {
   s.writeInt32(-1766600538);
-  s.writeInt32(value['offset']);
-  s.writeInt32(value['limit']);
+  /**
+   * encoding param: offset
+   */
+  const pv0 = value['offset'];
+  s.writeInt32(pv0);
+  /**
+   * encoding param: limit
+   */
+  const pv1 = value['limit'];
+  s.writeInt32(pv1);
 }
-export function decodeGetMessages(d: IDeserializer): GetMessages | null {
-  const __id = d.readInt32();
+export function decodeGetMessages(__d: IDeserializer): GetMessages | null {
+  const __id = __d.readInt32();
   if(__id !== -1766600538) return null;
   let offset: number;
   let limit: number;
-  offset = d.readInt32();
-  limit = d.readInt32();
+  /**
+   * decoding param: offset
+   */
+  offset = __d.readInt32();
+  /**
+   * decoding param: limit
+   */
+  limit = __d.readInt32();
   return {
     _name: 'message.GetMessages',
     offset,
