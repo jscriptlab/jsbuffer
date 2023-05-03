@@ -70,17 +70,17 @@ export function encodeUser(s: ISerializer, value: user) {
   /**
    * encoding param: firstName
    */
-  const pv0 = value['firstName'];
-  s.writeString(pv0);
+  const __pv0 = value['firstName'];
+  s.writeString(__pv0);
   /**
    * encoding param: aliases
    */
-  const pv1 = value['aliases'];
-  const __l1 = pv1.length;
+  const __pv1 = value['aliases'];
+  const __l1 = __pv1.length;
   s.writeUint32(__l1);
   for(let __i1 = 0; __i1 < __l1; __i1++) {
-    const v__i1 = pv1[__i1];
-    s.writeString(v__i1);
+    const __v__i1 = __pv1[__i1];
+    s.writeString(__v__i1);
   }
 }
 export function decodeUser(__d: IDeserializer): user | null {
@@ -117,10 +117,11 @@ export interface user  {
   firstName: string;
   aliases: ReadonlyArray<string>;
 }
-export function userDefault(): user {
+export function userDefault(params: Partial<userInputParams> = {}): user {
   return user({
     firstName: "",
-    aliases: []
+    aliases: [],
+    ...params
   });
 }
 export interface userDeletedInputParams {
@@ -137,8 +138,8 @@ export function encodeUserDeleted(s: ISerializer, value: userDeleted) {
   /**
    * encoding param: deletedAt
    */
-  const pv0 = value['deletedAt'];
-  s.writeInt32(pv0);
+  const __pv0 = value['deletedAt'];
+  s.writeInt32(__pv0);
 }
 export function decodeUserDeleted(__d: IDeserializer): userDeleted | null {
   const __id = __d.readInt32();
@@ -160,9 +161,10 @@ export interface userDeleted  {
   _name: 'user.userDeleted';
   deletedAt: number;
 }
-export function userDeletedDefault(): userDeleted {
+export function userDeletedDefault(params: Partial<userDeletedInputParams> = {}): userDeleted {
   return userDeleted({
-    deletedAt: 0
+    deletedAt: 0,
+    ...params
   });
 }
 export interface testInputParams {
@@ -180,25 +182,25 @@ export function encodeTest(s: ISerializer, value: test) {
   /**
    * encoding param: user
    */
-  const pv0 = value['user'];
-  encodeUser(s,pv0);
+  const __pv0 = value['user'];
+  encodeUser(s,__pv0);
   /**
    * encoding param: b
    */
-  const pv1 = value['b'];
-  const __l1 = pv1.length;
+  const __pv1 = value['b'];
+  const __l1 = __pv1.length;
   s.writeUint32(__l1);
   for(let __i1 = 0; __i1 < __l1; __i1++) {
-    const v__i1 = pv1[__i1];
-    const __l2 = v__i1.length;
+    const __v__i1 = __pv1[__i1];
+    const __l2 = __v__i1.length;
     s.writeUint32(__l2);
     for(let __i2 = 0; __i2 < __l2; __i2++) {
-      const v__i2 = v__i1[__i2];
-      if(v__i2 === null) {
+      const __v__i2 = __v__i1[__i2];
+      if(__v__i2 === null) {
         s.writeUint8(0);
       } else {
         s.writeUint8(1);
-        s.writeString(v__i2);
+        s.writeString(__v__i2);
       }
     }
   }
@@ -214,9 +216,9 @@ export function decodeTest(__d: IDeserializer): test | null {
   /**
    * decoding param: user
    */
-  const tmp0 = decodeUser(__d);
-  if(tmp0 === null) return null;
-  user = tmp0;
+  const __tmp0 = decodeUser(__d);
+  if(__tmp0 === null) return null;
+  user = __tmp0;
   /**
    * decoding param: b
    */
@@ -250,9 +252,10 @@ export interface test  {
   user: user;
   b: ReadonlyArray<ReadonlyArray<string | null>>;
 }
-export function testDefault(): test {
+export function testDefault(params: Partial<testInputParams> = {}): test {
   return test({
     user: userDefault(),
-    b: []
+    b: [],
+    ...params
   });
 }

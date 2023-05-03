@@ -14,8 +14,8 @@ export function encodeUser(s: ISerializer, value: User) {
   /**
    * encoding param: firstName
    */
-  const pv0 = value['firstName'];
-  s.writeString(pv0);
+  const __pv0 = value['firstName'];
+  s.writeString(__pv0);
 }
 export function decodeUser(__d: IDeserializer): User | null {
   const __id = __d.readInt32();
@@ -37,8 +37,9 @@ export interface User  {
   _name: 'conversation.secondUser.User';
   firstName: string;
 }
-export function UserDefault(): User {
+export function UserDefault(params: Partial<UserInputParams> = {}): User {
   return User({
-    firstName: ""
+    firstName: "",
+    ...params
   });
 }

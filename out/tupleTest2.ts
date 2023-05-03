@@ -16,18 +16,18 @@ export function encodeUser(s: ISerializer, value: user) {
   /**
    * encoding param: id
    */
-  const pv0 = value['id'];
-  s.writeInt32(pv0);
+  const __pv0 = value['id'];
+  s.writeInt32(__pv0);
   /**
    * encoding param: firstName
    */
-  const pv1 = value['firstName'];
-  s.writeString(pv1);
+  const __pv1 = value['firstName'];
+  s.writeString(__pv1);
   /**
    * encoding param: lastName
    */
-  const pv2 = value['lastName'];
-  s.writeString(pv2);
+  const __pv2 = value['lastName'];
+  s.writeString(__pv2);
 }
 export function decodeUser(__d: IDeserializer): user | null {
   const __id = __d.readInt32();
@@ -63,11 +63,12 @@ export interface user  {
   firstName: string;
   lastName: string;
 }
-export function userDefault(): user {
+export function userDefault(params: Partial<userInputParams> = {}): user {
   return user({
     id: 0,
     firstName: "",
-    lastName: ""
+    lastName: "",
+    ...params
   });
 }
 export interface postInputParams {
@@ -86,22 +87,22 @@ export function encodePost(s: ISerializer, value: post) {
   /**
    * encoding param: id
    */
-  const pv0 = value['id'];
-  s.writeInt32(pv0);
+  const __pv0 = value['id'];
+  s.writeInt32(__pv0);
   /**
    * encoding param: title
    */
-  const pv1 = value['title'];
-  s.writeString(pv1);
+  const __pv1 = value['title'];
+  s.writeString(__pv1);
   /**
    * encoding param: comments
    */
-  const pv2 = value['comments'];
-  const __l2 = pv2.length;
+  const __pv2 = value['comments'];
+  const __l2 = __pv2.length;
   s.writeUint32(__l2);
   for(let __i2 = 0; __i2 < __l2; __i2++) {
-    const v__i2 = pv2[__i2];
-    encodeComment(s,v__i2);
+    const __v__i2 = __pv2[__i2];
+    encodeComment(s,__v__i2);
   }
 }
 export function decodePost(__d: IDeserializer): post | null {
@@ -129,9 +130,9 @@ export function decodePost(__d: IDeserializer): post | null {
     const oindex2 = new Array(iindex2);
     comments = oindex2;
     for(let index2 = 0; index2 < iindex2; index2++) {
-      const tmp3 = decodeComment(__d);
-      if(tmp3 === null) return null;
-      oindex2[index2] = tmp3;
+      const __tmp3 = decodeComment(__d);
+      if(__tmp3 === null) return null;
+      oindex2[index2] = __tmp3;
     }
   }
   return {
@@ -147,11 +148,12 @@ export interface post  {
   title: string;
   comments: ReadonlyArray<comment>;
 }
-export function postDefault(): post {
+export function postDefault(params: Partial<postInputParams> = {}): post {
   return post({
     id: 0,
     title: "",
-    comments: []
+    comments: [],
+    ...params
   });
 }
 export interface commentInputParams {
@@ -170,18 +172,18 @@ export function encodeComment(s: ISerializer, value: comment) {
   /**
    * encoding param: id
    */
-  const pv0 = value['id'];
-  s.writeInt32(pv0);
+  const __pv0 = value['id'];
+  s.writeInt32(__pv0);
   /**
    * encoding param: title
    */
-  const pv1 = value['title'];
-  s.writeString(pv1);
+  const __pv1 = value['title'];
+  s.writeString(__pv1);
   /**
    * encoding param: contents
    */
-  const pv2 = value['contents'];
-  s.writeString(pv2);
+  const __pv2 = value['contents'];
+  s.writeString(__pv2);
 }
 export function decodeComment(__d: IDeserializer): comment | null {
   const __id = __d.readInt32();
@@ -217,11 +219,12 @@ export interface comment  {
   title: string;
   contents: string;
 }
-export function commentDefault(): comment {
+export function commentDefault(params: Partial<commentInputParams> = {}): comment {
   return comment({
     id: 0,
     title: "",
-    contents: ""
+    contents: "",
+    ...params
   });
 }
 export interface tupleTestInputParams {
@@ -238,40 +241,40 @@ export function encodeTupleTest(s: ISerializer, value: tupleTest) {
   /**
    * encoding param: data
    */
-  const pv0 = value['data'];
+  const __pv0 = value['data'];
   {
-    const __t00 = pv0[0];
+    const __t00 = __pv0[0];
     {
       encodeUser(s,__t00);
     }
-    const __t01 = pv0[1];
+    const __t01 = __pv0[1];
     {
       encodePost(s,__t01);
     }
-    const __t02 = pv0[2];
+    const __t02 = __pv0[2];
     {
       encodeComment(s,__t02);
     }
-    const __t03 = pv0[3];
+    const __t03 = __pv0[3];
     {
       const __l1 = __t03.length;
       s.writeUint32(__l1);
       for(let __i1 = 0; __i1 < __l1; __i1++) {
-        const v__i1 = __t03[__i1];
-        encodeComment(s,v__i1);
+        const __v__i1 = __t03[__i1];
+        encodeComment(s,__v__i1);
       }
     }
-    const __t04 = pv0[4];
+    const __t04 = __pv0[4];
     {
       const __l1 = __t04.length;
       s.writeUint32(__l1);
       for(let __i1 = 0; __i1 < __l1; __i1++) {
-        const v__i1 = __t04[__i1];
-        if(v__i1 === null) {
+        const __v__i1 = __t04[__i1];
+        if(__v__i1 === null) {
           s.writeUint8(0);
         } else {
           s.writeUint8(1);
-          encodeComment(s,v__i1);
+          encodeComment(s,__v__i1);
         }
       }
     }
@@ -294,19 +297,19 @@ export function decodeTupleTest(__d: IDeserializer): tupleTest | null {
     let e3: Array<comment>;
     let e4: Array<comment | null>;
     {
-      const tmp0 = decodeUser(__d);
-      if(tmp0 === null) return null;
-      e0 = tmp0;
+      const __tmp0 = decodeUser(__d);
+      if(__tmp0 === null) return null;
+      e0 = __tmp0;
     }
     {
-      const tmp1 = decodePost(__d);
-      if(tmp1 === null) return null;
-      e1 = tmp1;
+      const __tmp1 = decodePost(__d);
+      if(__tmp1 === null) return null;
+      e1 = __tmp1;
     }
     {
-      const tmp2 = decodeComment(__d);
-      if(tmp2 === null) return null;
-      e2 = tmp2;
+      const __tmp2 = decodeComment(__d);
+      if(__tmp2 === null) return null;
+      e2 = __tmp2;
     }
     {
       {
@@ -314,9 +317,9 @@ export function decodeTupleTest(__d: IDeserializer): tupleTest | null {
         const oindex3 = new Array(iindex3);
         e3 = oindex3;
         for(let index3 = 0; index3 < iindex3; index3++) {
-          const tmp4 = decodeComment(__d);
-          if(tmp4 === null) return null;
-          oindex3[index3] = tmp4;
+          const __tmp4 = decodeComment(__d);
+          if(__tmp4 === null) return null;
+          oindex3[index3] = __tmp4;
         }
       }
     }
@@ -327,9 +330,9 @@ export function decodeTupleTest(__d: IDeserializer): tupleTest | null {
         e4 = oindex4;
         for(let index4 = 0; index4 < iindex4; index4++) {
           if(__d.readUint8() === 1) {
-            const tmp6 = decodeComment(__d);
-            if(tmp6 === null) return null;
-            oindex4[index4] = tmp6;
+            const __tmp6 = decodeComment(__d);
+            if(__tmp6 === null) return null;
+            oindex4[index4] = __tmp6;
           } else {
             oindex4[index4] = null;
           }
@@ -347,8 +350,9 @@ export interface tupleTest  {
   _name: 'tupleTest2.tupleTest';
   data: [user,post,comment,ReadonlyArray<comment>,ReadonlyArray<comment | null>];
 }
-export function tupleTestDefault(): tupleTest {
+export function tupleTestDefault(params: Partial<tupleTestInputParams> = {}): tupleTest {
   return tupleTest({
-    data: [userDefault(),postDefault(),commentDefault(),[],[]]
+    data: [userDefault(),postDefault(),commentDefault(),[],[]],
+    ...params
   });
 }

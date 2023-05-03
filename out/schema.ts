@@ -30,8 +30,9 @@ export function decodeVoid(__d: IDeserializer): Void | null {
 export interface Void  {
   _name: 'schema.Void';
 }
-export function VoidDefault(): Void {
+export function VoidDefault(params: Partial<VoidInputParams> = {}): Void {
   return Void({
+    ...params
   });
 }
 export interface msgInputParams {
@@ -48,9 +49,9 @@ export function encodeMsg(s: ISerializer, value: msg) {
   /**
    * encoding param: data
    */
-  const pv0 = value['data'];
-  s.writeUint32(pv0.byteLength);
-  s.writeBuffer(pv0);
+  const __pv0 = value['data'];
+  s.writeUint32(__pv0.byteLength);
+  s.writeBuffer(__pv0);
 }
 export function decodeMsg(__d: IDeserializer): msg | null {
   const __id = __d.readInt32();
@@ -72,9 +73,10 @@ export interface msg  {
   _name: 'schema.msg';
   data: Uint8Array;
 }
-export function msgDefault(): msg {
+export function msgDefault(params: Partial<msgInputParams> = {}): msg {
   return msg({
-    data: new Uint8Array(0)
+    data: new Uint8Array(0),
+    ...params
   });
 }
 export type Result = Users | Posts;
@@ -123,12 +125,12 @@ export function encodeUsers(s: ISerializer, value: Users) {
   /**
    * encoding param: users
    */
-  const pv0 = value['users'];
-  const __l0 = pv0.length;
+  const __pv0 = value['users'];
+  const __l0 = __pv0.length;
   s.writeUint32(__l0);
   for(let __i0 = 0; __i0 < __l0; __i0++) {
-    const v__i0 = pv0[__i0];
-    encodeUserTrait(s,v__i0);
+    const __v__i0 = __pv0[__i0];
+    encodeUserTrait(s,__v__i0);
   }
 }
 export function decodeUsers(__d: IDeserializer): Users | null {
@@ -160,9 +162,10 @@ export interface Users  {
   _name: 'schema.Users';
   users: ReadonlyArray<User>;
 }
-export function UsersDefault(): Users {
+export function UsersDefault(params: Partial<UsersInputParams> = {}): Users {
   return Users({
-    users: []
+    users: [],
+    ...params
   });
 }
 export interface GetUserByIdInputParams {
@@ -179,8 +182,8 @@ export function encodeGetUserById(s: ISerializer, value: GetUserById) {
   /**
    * encoding param: userId
    */
-  const pv0 = value['userId'];
-  s.writeUint32(pv0);
+  const __pv0 = value['userId'];
+  s.writeUint32(__pv0);
 }
 export function decodeGetUserById(__d: IDeserializer): GetUserById | null {
   const __id = __d.readInt32();
@@ -202,9 +205,10 @@ export interface GetUserById extends IRequest<Users> {
   _name: 'schema.GetUserById';
   userId: number;
 }
-export function GetUserByIdDefault(): GetUserById {
+export function GetUserByIdDefault(params: Partial<GetUserByIdInputParams> = {}): GetUserById {
   return GetUserById({
-    userId: 0
+    userId: 0,
+    ...params
   });
 }
 export interface PostInputParams {
@@ -221,8 +225,8 @@ export function encodePost(s: ISerializer, value: Post) {
   /**
    * encoding param: id
    */
-  const pv0 = value['id'];
-  s.writeInt32(pv0);
+  const __pv0 = value['id'];
+  s.writeInt32(__pv0);
 }
 export function decodePost(__d: IDeserializer): Post | null {
   const __id = __d.readInt32();
@@ -244,9 +248,10 @@ export interface Post  {
   _name: 'schema.Post';
   id: number;
 }
-export function PostDefault(): Post {
+export function PostDefault(params: Partial<PostInputParams> = {}): Post {
   return Post({
-    id: 0
+    id: 0,
+    ...params
   });
 }
 export interface PostsInputParams {
@@ -263,12 +268,12 @@ export function encodePosts(s: ISerializer, value: Posts) {
   /**
    * encoding param: posts
    */
-  const pv0 = value['posts'];
-  const __l0 = pv0.length;
+  const __pv0 = value['posts'];
+  const __l0 = __pv0.length;
   s.writeUint32(__l0);
   for(let __i0 = 0; __i0 < __l0; __i0++) {
-    const v__i0 = pv0[__i0];
-    encodePost(s,v__i0);
+    const __v__i0 = __pv0[__i0];
+    encodePost(s,__v__i0);
   }
 }
 export function decodePosts(__d: IDeserializer): Posts | null {
@@ -286,9 +291,9 @@ export function decodePosts(__d: IDeserializer): Posts | null {
     const oindex0 = new Array(iindex0);
     posts = oindex0;
     for(let index0 = 0; index0 < iindex0; index0++) {
-      const tmp1 = decodePost(__d);
-      if(tmp1 === null) return null;
-      oindex0[index0] = tmp1;
+      const __tmp1 = decodePost(__d);
+      if(__tmp1 === null) return null;
+      oindex0[index0] = __tmp1;
     }
   }
   return {
@@ -300,9 +305,10 @@ export interface Posts  {
   _name: 'schema.Posts';
   posts: ReadonlyArray<Post>;
 }
-export function PostsDefault(): Posts {
+export function PostsDefault(params: Partial<PostsInputParams> = {}): Posts {
   return Posts({
-    posts: []
+    posts: [],
+    ...params
   });
 }
 export interface GetPostByIdInputParams {
@@ -319,8 +325,8 @@ export function encodeGetPostById(s: ISerializer, value: GetPostById) {
   /**
    * encoding param: postId
    */
-  const pv0 = value['postId'];
-  s.writeUint32(pv0);
+  const __pv0 = value['postId'];
+  s.writeUint32(__pv0);
 }
 export function decodeGetPostById(__d: IDeserializer): GetPostById | null {
   const __id = __d.readInt32();
@@ -342,9 +348,10 @@ export interface GetPostById extends IRequest<Posts> {
   _name: 'schema.GetPostById';
   postId: number;
 }
-export function GetPostByIdDefault(): GetPostById {
+export function GetPostByIdDefault(params: Partial<GetPostByIdInputParams> = {}): GetPostById {
   return GetPostById({
-    postId: 0
+    postId: 0,
+    ...params
   });
 }
 export interface GetConversationsInputParams {
@@ -371,8 +378,9 @@ export function decodeGetConversations(__d: IDeserializer): GetConversations | n
 export interface GetConversations extends IRequest<Conversations> {
   _name: 'schema.GetConversations';
 }
-export function GetConversationsDefault(): GetConversations {
+export function GetConversationsDefault(params: Partial<GetConversationsInputParams> = {}): GetConversations {
   return GetConversations({
+    ...params
   });
 }
 export interface CoordinatesInputParams {
@@ -390,13 +398,13 @@ export function encodeCoordinates(s: ISerializer, value: Coordinates) {
   /**
    * encoding param: latitude
    */
-  const pv0 = value['latitude'];
-  s.writeDouble(pv0);
+  const __pv0 = value['latitude'];
+  s.writeDouble(__pv0);
   /**
    * encoding param: longitude
    */
-  const pv1 = value['longitude'];
-  s.writeDouble(pv1);
+  const __pv1 = value['longitude'];
+  s.writeDouble(__pv1);
 }
 export function decodeCoordinates(__d: IDeserializer): Coordinates | null {
   const __id = __d.readInt32();
@@ -425,10 +433,11 @@ export interface Coordinates  {
   latitude: number;
   longitude: number;
 }
-export function CoordinatesDefault(): Coordinates {
+export function CoordinatesDefault(params: Partial<CoordinatesInputParams> = {}): Coordinates {
   return Coordinates({
     latitude: 0.0,
-    longitude: 0.0
+    longitude: 0.0,
+    ...params
   });
 }
 export interface ShouldSupportSeveralSequentialVectorParamsInputParams {
@@ -451,100 +460,100 @@ export function encodeShouldSupportSeveralSequentialVectorParams(s: ISerializer,
   /**
    * encoding param: a
    */
-  const pv0 = value['a'];
-  const __l0 = pv0.length;
+  const __pv0 = value['a'];
+  const __l0 = __pv0.length;
   s.writeUint32(__l0);
   for(let __i0 = 0; __i0 < __l0; __i0++) {
-    const v__i0 = pv0[__i0];
-    s.writeInt32(v__i0);
+    const __v__i0 = __pv0[__i0];
+    s.writeInt32(__v__i0);
   }
   /**
    * encoding param: b
    */
-  const pv1 = value['b'];
-  const __l1 = pv1.length;
+  const __pv1 = value['b'];
+  const __l1 = __pv1.length;
   s.writeUint32(__l1);
   for(let __i1 = 0; __i1 < __l1; __i1++) {
-    const v__i1 = pv1[__i1];
-    s.writeDouble(v__i1);
+    const __v__i1 = __pv1[__i1];
+    s.writeDouble(__v__i1);
   }
   /**
    * encoding param: c
    */
-  const pv2 = value['c'];
-  const __l2 = pv2.length;
+  const __pv2 = value['c'];
+  const __l2 = __pv2.length;
   s.writeUint32(__l2);
   for(let __i2 = 0; __i2 < __l2; __i2++) {
-    const v__i2 = pv2[__i2];
-    s.writeString(v__i2);
+    const __v__i2 = __pv2[__i2];
+    s.writeString(__v__i2);
   }
   /**
    * encoding param: d
    */
-  const pv3 = value['d'];
-  const __l3 = pv3.length;
+  const __pv3 = value['d'];
+  const __l3 = __pv3.length;
   s.writeUint32(__l3);
   for(let __i3 = 0; __i3 < __l3; __i3++) {
-    const v__i3 = pv3[__i3];
-    s.writeFloat(v__i3);
+    const __v__i3 = __pv3[__i3];
+    s.writeFloat(__v__i3);
   }
   /**
    * encoding param: e
    */
-  const pv4 = value['e'];
-  const __l4 = pv4.length;
+  const __pv4 = value['e'];
+  const __l4 = __pv4.length;
   s.writeUint32(__l4);
   for(let __i4 = 0; __i4 < __l4; __i4++) {
-    const v__i4 = pv4[__i4];
-    s.writeUint32(v__i4);
+    const __v__i4 = __pv4[__i4];
+    s.writeUint32(__v__i4);
   }
   /**
    * encoding param: f
    */
-  const pv5 = value['f'];
-  const __l5 = pv5.length;
+  const __pv5 = value['f'];
+  const __l5 = __pv5.length;
   s.writeUint32(__l5);
   for(let __i5 = 0; __i5 < __l5; __i5++) {
-    const v__i5 = pv5[__i5];
-    if(v__i5 === null) {
+    const __v__i5 = __pv5[__i5];
+    if(__v__i5 === null) {
       s.writeUint8(0);
     } else {
       s.writeUint8(1);
-      const __l7 = v__i5.length;
+      const __l7 = __v__i5.length;
       s.writeUint32(__l7);
       for(let __i7 = 0; __i7 < __l7; __i7++) {
-        const v__i7 = v__i5[__i7];
-        s.writeUint32(v__i7);
+        const __v__i7 = __v__i5[__i7];
+        s.writeUint32(__v__i7);
       }
     }
   }
   /**
    * encoding param: g
    */
-  const pv6 = value['g'];
+  const __pv6 = value['g'];
   {
-    const __t60 = pv6[0];
+    const __t60 = __pv6[0];
     {
       s.writeInt32(__t60);
     }
-    const __t61 = pv6[1];
+    const __t61 = __pv6[1];
     {
       s.writeFloat(__t61);
     }
-    const __t62 = pv6[2];
+    const __t62 = __pv6[2];
     {
       s.writeDouble(__t62);
     }
-    const __t63 = pv6[3];
+    const __t63 = __pv6[3];
     {
       const __l7 = __t63.length;
       s.writeUint32(__l7);
       for(let __i7 = 0; __i7 < __l7; __i7++) {
-        const v__i7 = __t63[__i7];
-        s.writeUint32(v__i7);
+        const __v__i7 = __t63[__i7];
+        s.writeUint32(__v__i7);
       }
     }
-    const __t64 = pv6[4];
+    const __t64 = __pv6[4];
     {
       if(__t64 === null) {
         s.writeUint8(0);
@@ -703,7 +712,7 @@ export interface ShouldSupportSeveralSequentialVectorParams  {
   f: ReadonlyArray<ReadonlyArray<number> | null>;
   g: [number,number,number,ReadonlyArray<number>,string | null];
 }
-export function ShouldSupportSeveralSequentialVectorParamsDefault(): ShouldSupportSeveralSequentialVectorParams {
+export function ShouldSupportSeveralSequentialVectorParamsDefault(params: Partial<ShouldSupportSeveralSequentialVectorParamsInputParams> = {}): ShouldSupportSeveralSequentialVectorParams {
   return ShouldSupportSeveralSequentialVectorParams({
     a: [],
     b: [],
@@ -711,7 +720,8 @@ export function ShouldSupportSeveralSequentialVectorParamsDefault(): ShouldSuppo
     d: [],
     e: [],
     f: [],
-    g: [0,0.0,0.0,[],null]
+    g: [0,0.0,0.0,[],null],
+    ...params
   });
 }
 export interface simpleTupleTestInputParams {
@@ -729,30 +739,30 @@ export function encodeSimpleTupleTest(s: ISerializer, value: simpleTupleTest) {
   /**
    * encoding param: a
    */
-  const pv0 = value['a'];
+  const __pv0 = value['a'];
   {
-    const __t00 = pv0[0];
+    const __t00 = __pv0[0];
     {
       s.writeInt32(__t00);
     }
-    const __t01 = pv0[1];
+    const __t01 = __pv0[1];
     {
       s.writeFloat(__t01);
     }
-    const __t02 = pv0[2];
+    const __t02 = __pv0[2];
     {
       s.writeDouble(__t02);
     }
-    const __t03 = pv0[3];
+    const __t03 = __pv0[3];
     {
       const __l1 = __t03.length;
       s.writeUint32(__l1);
       for(let __i1 = 0; __i1 < __l1; __i1++) {
-        const v__i1 = __t03[__i1];
-        s.writeUint32(v__i1);
+        const __v__i1 = __t03[__i1];
+        s.writeUint32(__v__i1);
       }
     }
-    const __t04 = pv0[4];
+    const __t04 = __pv0[4];
     {
       if(__t04 === null) {
         s.writeUint8(0);
@@ -765,34 +775,34 @@ export function encodeSimpleTupleTest(s: ISerializer, value: simpleTupleTest) {
   /**
    * encoding param: b
    */
-  const pv1 = value['b'];
-  const __l1 = pv1.length;
+  const __pv1 = value['b'];
+  const __l1 = __pv1.length;
   s.writeUint32(__l1);
   for(let __i1 = 0; __i1 < __l1; __i1++) {
-    const v__i1 = pv1[__i1];
+    const __v__i1 = __pv1[__i1];
     {
-      const __t20 = v__i1[0];
+      const __t20 = __v__i1[0];
       {
         s.writeInt32(__t20);
       }
-      const __t21 = v__i1[1];
+      const __t21 = __v__i1[1];
       {
         s.writeFloat(__t21);
       }
-      const __t22 = v__i1[2];
+      const __t22 = __v__i1[2];
       {
         s.writeDouble(__t22);
       }
-      const __t23 = v__i1[3];
+      const __t23 = __v__i1[3];
       {
         const __l3 = __t23.length;
         s.writeUint32(__l3);
         for(let __i3 = 0; __i3 < __l3; __i3++) {
-          const v__i3 = __t23[__i3];
-          s.writeUint32(v__i3);
+          const __v__i3 = __t23[__i3];
+          s.writeUint32(__v__i3);
         }
       }
-      const __t24 = v__i1[4];
+      const __t24 = __v__i1[4];
       {
         if(__t24 === null) {
           s.writeUint8(0);
@@ -904,9 +914,10 @@ export interface simpleTupleTest  {
   a: [number,number,number,ReadonlyArray<number>,string | null];
   b: ReadonlyArray<[number,number,number,ReadonlyArray<number>,string | null]>;
 }
-export function simpleTupleTestDefault(): simpleTupleTest {
+export function simpleTupleTestDefault(params: Partial<simpleTupleTestInputParams> = {}): simpleTupleTest {
   return simpleTupleTest({
     a: [0,0.0,0.0,[],null],
-    b: []
+    b: [],
+    ...params
   });
 }

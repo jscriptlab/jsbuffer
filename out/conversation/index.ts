@@ -19,13 +19,13 @@ export function encodeConversation(s: ISerializer, value: Conversation) {
   /**
    * encoding param: id
    */
-  const pv0 = value['id'];
-  s.writeInt32(pv0);
+  const __pv0 = value['id'];
+  s.writeInt32(__pv0);
   /**
    * encoding param: user
    */
-  const pv1 = value['user'];
-  encodeUser(s,pv1);
+  const __pv1 = value['user'];
+  encodeUser(s,__pv1);
 }
 export function decodeConversation(__d: IDeserializer): Conversation | null {
   const __id = __d.readInt32();
@@ -56,10 +56,11 @@ export interface Conversation  {
   id: number;
   user: User;
 }
-export function ConversationDefault(): Conversation {
+export function ConversationDefault(params: Partial<ConversationInputParams> = {}): Conversation {
   return Conversation({
     id: 0,
-    user: UserDefault()
+    user: UserDefault(),
+    ...params
   });
 }
 export interface ConversationsInputParams {
@@ -76,12 +77,12 @@ export function encodeConversations(s: ISerializer, value: Conversations) {
   /**
    * encoding param: conversations
    */
-  const pv0 = value['conversations'];
-  const __l0 = pv0.length;
+  const __pv0 = value['conversations'];
+  const __l0 = __pv0.length;
   s.writeUint32(__l0);
   for(let __i0 = 0; __i0 < __l0; __i0++) {
-    const v__i0 = pv0[__i0];
-    encodeConversation(s,v__i0);
+    const __v__i0 = __pv0[__i0];
+    encodeConversation(s,__v__i0);
   }
 }
 export function decodeConversations(__d: IDeserializer): Conversations | null {
@@ -99,9 +100,9 @@ export function decodeConversations(__d: IDeserializer): Conversations | null {
     const oindex0 = new Array(iindex0);
     conversations = oindex0;
     for(let index0 = 0; index0 < iindex0; index0++) {
-      const tmp1 = decodeConversation(__d);
-      if(tmp1 === null) return null;
-      oindex0[index0] = tmp1;
+      const __tmp1 = decodeConversation(__d);
+      if(__tmp1 === null) return null;
+      oindex0[index0] = __tmp1;
     }
   }
   return {
@@ -113,8 +114,9 @@ export interface Conversations  {
   _name: 'conversation.index.Conversations';
   conversations: ReadonlyArray<Conversation>;
 }
-export function ConversationsDefault(): Conversations {
+export function ConversationsDefault(params: Partial<ConversationsInputParams> = {}): Conversations {
   return Conversations({
-    conversations: []
+    conversations: [],
+    ...params
   });
 }

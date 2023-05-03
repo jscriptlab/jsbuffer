@@ -408,19 +408,6 @@ export default class FileGenerator extends CodeStream {
       case NodeType.CallDefinition:
       case NodeType.TypeDefinition:
         this.#definitions.set(node.name.value, node);
-        // for (const t of node.traits) {
-        //   const fileGenerator = this.#identifiers.get(t.value);
-        //   if (!(fileGenerator instanceof FileGenerator)) {
-        //     continue;
-        //   }
-        //   let traits = fileGenerator.#traits.get(t.value);
-        //   if (!traits) {
-        //     traits = [];
-        //     fileGenerator.#traits.set(t.value, traits);
-        //   }
-        //   traits.push(node);
-        // }
-        // this.#ownIdentifier(node.name.value, node);
         break;
       case NodeType.ExportStatement:
         this.#export(node);
@@ -475,9 +462,11 @@ export default class FileGenerator extends CodeStream {
     node: INodeTypeDefinition | INodeCallDefinition
   ) {
     this.write(
-      `export function ${getDefaultFunctionName(node)}(): ${getTypeName(
+      `export function ${getDefaultFunctionName(
         node
-      )} {\n`,
+      )}(params: Partial<${getTypeInputParamsInterfaceName(
+        node
+      )}> = {}): ${getTypeName(node)} {\n`,
       () => {
         this.write(
           `return ${getTypeDefinitionOrCallDefinitionObjectCreator(node)}({\n`,
@@ -490,11 +479,9 @@ export default class FileGenerator extends CodeStream {
                   this.#resolveTypeExpression(p.typeExpression)
                 )}`
               );
-              if (p !== node.parameters[node.parameters.length - 1]) {
-                this.append(',');
-              }
-              this.append('\n');
+              this.append(',\n');
             }
+            this.write('...params\n');
           },
           '});\n'
         );
@@ -951,10 +938,11 @@ export default class FileGenerator extends CodeStream {
           this.write(
             `for(let ${i} = 0; ${i} < ${lengthVarName}; ${i}++) {\n`,
             () => {
-              this.write(`const v${i} = ${value}[${i}];\n`);
+              const valueVarName = `__v${i}`;
+              this.write(`const ${valueVarName} = ${value}[${i}];\n`);
               this.#generateEncodeTypeExpression(
                 resolved.expression,
-                `v${i}`,
+                valueVarName,
                 depth + 1
               );
             },
@@ -1155,7 +1143,7 @@ export default class FileGenerator extends CodeStream {
         resolved.fileGenerator
       );
     } else {
-      const tmpVarName = `tmp${depth}`;
+      const tmpVarName = `__tmp${depth}`;
       this.write(
         `const ${tmpVarName} = ${getDecodeFunctionName(resolved)}(__d);\n`
       );
@@ -1210,7 +1198,7 @@ export default class FileGenerator extends CodeStream {
         let i = 0;
         for (const p of node.parameters) {
           this.#writeMultilineComment(`encoding param: ${p.name.value}`);
-          const valueVarName = `pv${i}`;
+          const valueVarName = `__pv${i}`;
           this.write(`const ${valueVarName} = value['${p.name.value}'];\n`);
           this.#generateEncodeTypeExpression(
             p.typeExpression,

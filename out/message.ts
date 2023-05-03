@@ -15,8 +15,8 @@ export function encodeMessage(s: ISerializer, value: Message) {
   /**
    * encoding param: id
    */
-  const pv0 = value['id'];
-  s.writeInt32(pv0);
+  const __pv0 = value['id'];
+  s.writeInt32(__pv0);
 }
 export function decodeMessage(__d: IDeserializer): Message | null {
   const __id = __d.readInt32();
@@ -38,9 +38,10 @@ export interface Message  {
   _name: 'message.Message';
   id: number;
 }
-export function MessageDefault(): Message {
+export function MessageDefault(params: Partial<MessageInputParams> = {}): Message {
   return Message({
-    id: 0
+    id: 0,
+    ...params
   });
 }
 export interface MessagesInputParams {
@@ -57,12 +58,12 @@ export function encodeMessages(s: ISerializer, value: Messages) {
   /**
    * encoding param: messages
    */
-  const pv0 = value['messages'];
-  const __l0 = pv0.length;
+  const __pv0 = value['messages'];
+  const __l0 = __pv0.length;
   s.writeUint32(__l0);
   for(let __i0 = 0; __i0 < __l0; __i0++) {
-    const v__i0 = pv0[__i0];
-    encodeMessage(s,v__i0);
+    const __v__i0 = __pv0[__i0];
+    encodeMessage(s,__v__i0);
   }
 }
 export function decodeMessages(__d: IDeserializer): Messages | null {
@@ -80,9 +81,9 @@ export function decodeMessages(__d: IDeserializer): Messages | null {
     const oindex0 = new Array(iindex0);
     messages = oindex0;
     for(let index0 = 0; index0 < iindex0; index0++) {
-      const tmp1 = decodeMessage(__d);
-      if(tmp1 === null) return null;
-      oindex0[index0] = tmp1;
+      const __tmp1 = decodeMessage(__d);
+      if(__tmp1 === null) return null;
+      oindex0[index0] = __tmp1;
     }
   }
   return {
@@ -94,9 +95,10 @@ export interface Messages  {
   _name: 'message.Messages';
   messages: ReadonlyArray<Message>;
 }
-export function MessagesDefault(): Messages {
+export function MessagesDefault(params: Partial<MessagesInputParams> = {}): Messages {
   return Messages({
-    messages: []
+    messages: [],
+    ...params
   });
 }
 export interface GetMessagesInputParams {
@@ -114,13 +116,13 @@ export function encodeGetMessages(s: ISerializer, value: GetMessages) {
   /**
    * encoding param: offset
    */
-  const pv0 = value['offset'];
-  s.writeInt32(pv0);
+  const __pv0 = value['offset'];
+  s.writeInt32(__pv0);
   /**
    * encoding param: limit
    */
-  const pv1 = value['limit'];
-  s.writeInt32(pv1);
+  const __pv1 = value['limit'];
+  s.writeInt32(__pv1);
 }
 export function decodeGetMessages(__d: IDeserializer): GetMessages | null {
   const __id = __d.readInt32();
@@ -149,9 +151,10 @@ export interface GetMessages extends IRequest<Messages> {
   offset: number;
   limit: number;
 }
-export function GetMessagesDefault(): GetMessages {
+export function GetMessagesDefault(params: Partial<GetMessagesInputParams> = {}): GetMessages {
   return GetMessages({
     offset: 0,
-    limit: 0
+    limit: 0,
+    ...params
   });
 }
