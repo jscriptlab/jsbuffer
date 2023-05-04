@@ -23,7 +23,7 @@ import {
   getTypeInputParamsInterfaceName,
   getDefaultFunctionName,
 } from './fileGeneratorUtilities';
-import crc from 'cyclic-rc';
+import crc from 'crc';
 import JavaScriptObjectStringify from './JavaScriptObjectStringify';
 
 export interface IFile {
@@ -1204,7 +1204,7 @@ export default class FileGenerator extends CodeStream {
     node: INodeTraitDefinition | INodeCallDefinition | INodeTypeDefinition
   ) {
     const view = new DataView(new ArrayBuffer(4));
-    const n = crc.crc_32(
+    const n = crc.crc32(
       `${this.#removeRootDir(this.#file.path)}.${node.name.value}`
     );
     view.setUint32(0, n, true);
