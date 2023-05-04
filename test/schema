@@ -55,3 +55,5 @@ type simpleTupleTest {
   tuple<int,float,double,vector<uint32>,optional<string>> a;
   vector<tuple<int,float,double,vector<uint32>,optional<string>>> b;
 }
+
+type emptyNode {}

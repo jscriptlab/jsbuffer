@@ -52,6 +52,12 @@ export class TypeScriptConfigurationParsingError extends Exception {
   }
 }
 
+export class UnexpectedTraitOutputNodeCount extends Exception {
+  public constructor(public readonly trait: INodeTraitDefinition) {
+    super();
+  }
+}
+
 export class UnsupportedTypeExpression extends Exception {
   public constructor(public readonly node: NodeTypeExpression) {
     super();
@@ -567,6 +573,7 @@ export default class FileGenerator extends CodeStream {
 
         this.#generateEncodeTraitFunction(node, trait.nodes);
         this.#generateDecodeTraitFunction(node, trait.nodes);
+        this.#generateTraitDefaultFunction(node, trait.nodes);
         break;
       }
       case NodeType.ImportStatement:
@@ -775,6 +782,30 @@ export default class FileGenerator extends CodeStream {
       throw new UnsupportedGenericExpression(exp);
     }
     return exp;
+  }
+  #generateTraitDefaultFunction(
+    trait: INodeTraitDefinition,
+    exps: ResolvedTypeExpression[]
+  ) {
+    const [firstNode] = exps;
+    if (typeof firstNode === 'undefined') {
+      throw new UnexpectedTraitOutputNodeCount(trait);
+    }
+    this.write(
+      `export function ${getDefaultFunctionName(trait)}() {\n`,
+      () => {
+        // FIXME: when traits exporting traits is implemented, this needs to be revisited to keep searching the list until a valid definition is found
+        const node = this.#resolvedTypeExpressionToDefinition(firstNode);
+        if ('fileGenerator' in firstNode) {
+          this.#request({
+            fileGenerator: firstNode.fileGenerator,
+            identifier: getDefaultFunctionName(node),
+          });
+        }
+        this.write(`return ${getDefaultFunctionName(node)}();\n`);
+      },
+      '}\n'
+    );
   }
   #generateEncodeTraitFunction(
     trait: INodeTraitDefinition,
@@ -1285,10 +1316,11 @@ export default class FileGenerator extends CodeStream {
       },
       '}\n'
     );
+    const defaultAssignment = node.parameters.length ? '' : ' = {}';
     this.write(
       `export function ${getTypeDefinitionOrCallDefinitionObjectCreator(
         node
-      )}(params: ${paramsType}): ${interfaceName} {\n`,
+      )}(params: ${paramsType}${defaultAssignment}): ${interfaceName} {\n`,
       () => {
         this.write(
           'return {\n',

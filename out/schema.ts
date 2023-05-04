@@ -8,7 +8,7 @@ import {decodeUserTrait} from "./User";
 import {IRequest} from "./__types__";
 export interface VoidInputParams {
 }
-export function Void(params: VoidInputParams): Void {
+export function Void(params: VoidInputParams = {}): Void {
   return {
     _name: 'schema.Void',
     ...params
@@ -110,6 +110,9 @@ export function decodeResultTrait(__d: IDeserializer) {
     default: return null;
   }
   return value;
+}
+export function ResultDefault() {
+  return UsersDefault();
 }
 export interface UsersInputParams {
   users: ReadonlyArray<User>;
@@ -356,7 +359,7 @@ export function GetPostByIdDefault(params: Partial<GetPostByIdInputParams> = {})
 }
 export interface GetConversationsInputParams {
 }
-export function GetConversations(params: GetConversationsInputParams): GetConversations {
+export function GetConversations(params: GetConversationsInputParams = {}): GetConversations {
   return {
     _name: 'schema.GetConversations',
     ...params
@@ -918,6 +921,35 @@ export function simpleTupleTestDefault(params: Partial<simpleTupleTestInputParam
   return simpleTupleTest({
     a: [0,0.0,0.0,[],null],
     b: [],
+    ...params
+  });
+}
+export interface emptyNodeInputParams {
+}
+export function emptyNode(params: emptyNodeInputParams = {}): emptyNode {
+  return {
+    _name: 'schema.emptyNode',
+    ...params
+  };
+}
+export function encodeEmptyNode(s: ISerializer, _: emptyNode) {
+  s.writeInt32(1110931631);
+}
+export function decodeEmptyNode(__d: IDeserializer): emptyNode | null {
+  const __id = __d.readInt32();
+  /**
+   * decode header
+   */
+  if(__id !== 1110931631) return null;
+  return {
+    _name: 'schema.emptyNode',
+  };
+}
+export interface emptyNode  {
+  _name: 'schema.emptyNode';
+}
+export function emptyNodeDefault(params: Partial<emptyNodeInputParams> = {}): emptyNode {
+  return emptyNode({
     ...params
   });
 }

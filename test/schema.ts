@@ -4,6 +4,7 @@ import {
   GetPostById,
   decodeMsg,
   decodeSimpleTupleTest,
+  emptyNode,
   encodeMsg,
   encodeSimpleTupleTest,
   msg,
@@ -73,6 +74,13 @@ suite.test('it should encode types with buffers in it', () => {
     })
   );
 });
+
+suite.test(
+  'definitions with no params might be initialized with no params',
+  () => {
+    emptyNode();
+  }
+);
 
 suite.test('it should encode tuple', () => {
   const s = new Serializer({

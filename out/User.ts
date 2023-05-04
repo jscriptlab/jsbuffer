@@ -32,6 +32,9 @@ export function decodeUserTrait(__d: IDeserializer) {
   }
   return value;
 }
+export function UserDefault() {
+  return userDefault();
+}
 export type Test = test;
 export function encodeTestTrait(s: ISerializer,value: Test) {
   switch(value._name) {
@@ -54,6 +57,9 @@ export function decodeTestTrait(__d: IDeserializer) {
     default: return null;
   }
   return value;
+}
+export function TestDefault() {
+  return testDefault();
 }
 export interface userInputParams {
   firstName: string;

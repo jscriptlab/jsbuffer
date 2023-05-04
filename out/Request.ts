@@ -9,6 +9,7 @@ import {IDeserializer} from "./__types__";
 import {decodeGetUserById} from "./schema";
 import {decodeGetPostById} from "./schema";
 import {decodeGetConversations} from "./schema";
+import {GetUserByIdDefault} from "./schema";
 export type Request = GetUserById | GetPostById | GetConversations;
 export function encodeRequestTrait(s: ISerializer,value: Request) {
   switch(value._name) {
@@ -49,4 +50,7 @@ export function decodeRequestTrait(__d: IDeserializer) {
     default: return null;
   }
   return value;
+}
+export function RequestDefault() {
+  return GetUserByIdDefault();
 }
