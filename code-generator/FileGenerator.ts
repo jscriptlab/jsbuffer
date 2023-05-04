@@ -1200,13 +1200,34 @@ export default class FileGenerator extends CodeStream {
     this.write(`if(${intermediaryValueVarName} === null) return null;\n`);
     this.write(`${value} = ${intermediaryValueVarName};\n`);
   }
+  #getUniqueHeaderString(
+    node: INodeTraitDefinition | INodeCallDefinition | INodeTypeDefinition
+  ) {
+    const values = [
+      node.type.toString(),
+      `${this.#removeRootDir(this.#file.path)}.${node.name.value}`,
+    ];
+    switch (node.type) {
+      case NodeType.CallDefinition:
+      case NodeType.TypeDefinition:
+        values.push(
+          node.parameters
+            .map((p) =>
+              this.#resolveTypeExpressionToString({
+                readOnly: true,
+                typeExpression: p.typeExpression,
+              })
+            )
+            .join(', ')
+        );
+    }
+    return values.join(' : ');
+  }
   #getUniqueHeader(
     node: INodeTraitDefinition | INodeCallDefinition | INodeTypeDefinition
   ) {
+    const n = crc.crc32(this.#getUniqueHeaderString(node));
     const view = new DataView(new ArrayBuffer(4));
-    const n = crc.crc32(
-      `${this.#removeRootDir(this.#file.path)}.${node.name.value}`
-    );
     view.setUint32(0, n, true);
     return view.getInt32(0, true);
   }

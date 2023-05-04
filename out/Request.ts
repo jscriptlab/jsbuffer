@@ -29,19 +29,19 @@ export function decodeRequestTrait(__d: IDeserializer) {
   __d.rewindInt32();
   let value: GetUserById | GetPostById | GetConversations;
   switch(__id) {
-    case 971329205: {
+    case -1984357298: {
       const tmp = decodeGetUserById(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
-    case -1951096243: {
+    case -1572332129: {
       const tmp = decodeGetPostById(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
-    case 804827749: {
+    case 814848329: {
       const tmp = decodeGetConversations(__d);
       if(tmp === null) return null;
       value = tmp;

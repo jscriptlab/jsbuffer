@@ -16,13 +16,13 @@ export function decodeUserTrait(__d: IDeserializer) {
   __d.rewindInt32();
   let value: user | userDeleted;
   switch(__id) {
-    case -1320038052: {
+    case 830789580: {
       const tmp = decodeUser(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
-    case -1188236190: {
+    case -1010206580: {
       const tmp = decodeUserDeleted(__d);
       if(tmp === null) return null;
       value = tmp;
@@ -48,7 +48,7 @@ export function decodeTestTrait(__d: IDeserializer) {
   __d.rewindInt32();
   let value: test;
   switch(__id) {
-    case -457344743: {
+    case -1945733013: {
       const tmp = decodeTest(__d);
       if(tmp === null) return null;
       value = tmp;
@@ -72,7 +72,7 @@ export function user(params: userInputParams): user {
   };
 }
 export function encodeUser(s: ISerializer, value: user) {
-  s.writeInt32(-1320038052);
+  s.writeInt32(830789580);
   /**
    * encoding param: firstName
    */
@@ -94,7 +94,7 @@ export function decodeUser(__d: IDeserializer): user | null {
   /**
    * decode header
    */
-  if(__id !== -1320038052) return null;
+  if(__id !== 830789580) return null;
   let firstName: string;
   let aliases: Array<string>;
   /**
@@ -140,7 +140,7 @@ export function userDeleted(params: userDeletedInputParams): userDeleted {
   };
 }
 export function encodeUserDeleted(s: ISerializer, value: userDeleted) {
-  s.writeInt32(-1188236190);
+  s.writeInt32(-1010206580);
   /**
    * encoding param: deletedAt
    */
@@ -152,7 +152,7 @@ export function decodeUserDeleted(__d: IDeserializer): userDeleted | null {
   /**
    * decode header
    */
-  if(__id !== -1188236190) return null;
+  if(__id !== -1010206580) return null;
   let deletedAt: number;
   /**
    * decoding param: deletedAt
@@ -184,7 +184,7 @@ export function test(params: testInputParams): test {
   };
 }
 export function encodeTest(s: ISerializer, value: test) {
-  s.writeInt32(-457344743);
+  s.writeInt32(-1945733013);
   /**
    * encoding param: user
    */
@@ -216,7 +216,7 @@ export function decodeTest(__d: IDeserializer): test | null {
   /**
    * decode header
    */
-  if(__id !== -457344743) return null;
+  if(__id !== -1945733013) return null;
   let user: user;
   let b: Array<Array<string | null>>;
   /**

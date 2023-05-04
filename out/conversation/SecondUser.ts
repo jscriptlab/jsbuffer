@@ -10,7 +10,7 @@ export function User(params: UserInputParams): User {
   };
 }
 export function encodeUser(s: ISerializer, value: User) {
-  s.writeInt32(-420842594);
+  s.writeInt32(1030058769);
   /**
    * encoding param: firstName
    */
@@ -22,7 +22,7 @@ export function decodeUser(__d: IDeserializer): User | null {
   /**
    * decode header
    */
-  if(__id !== -420842594) return null;
+  if(__id !== 1030058769) return null;
   let firstName: string;
   /**
    * decoding param: firstName

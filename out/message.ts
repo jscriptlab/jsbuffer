@@ -11,7 +11,7 @@ export function Message(params: MessageInputParams): Message {
   };
 }
 export function encodeMessage(s: ISerializer, value: Message) {
-  s.writeInt32(-1988975903);
+  s.writeInt32(2109340419);
   /**
    * encoding param: id
    */
@@ -23,7 +23,7 @@ export function decodeMessage(__d: IDeserializer): Message | null {
   /**
    * decode header
    */
-  if(__id !== -1988975903) return null;
+  if(__id !== 2109340419) return null;
   let id: number;
   /**
    * decoding param: id
@@ -54,7 +54,7 @@ export function Messages(params: MessagesInputParams): Messages {
   };
 }
 export function encodeMessages(s: ISerializer, value: Messages) {
-  s.writeInt32(-863342777);
+  s.writeInt32(1839199230);
   /**
    * encoding param: messages
    */
@@ -71,7 +71,7 @@ export function decodeMessages(__d: IDeserializer): Messages | null {
   /**
    * decode header
    */
-  if(__id !== -863342777) return null;
+  if(__id !== 1839199230) return null;
   let messages: Array<Message>;
   /**
    * decoding param: messages
@@ -112,7 +112,7 @@ export function GetMessages(params: GetMessagesInputParams): GetMessages {
   };
 }
 export function encodeGetMessages(s: ISerializer, value: GetMessages) {
-  s.writeInt32(-1766600538);
+  s.writeInt32(-600062912);
   /**
    * encoding param: offset
    */
@@ -129,7 +129,7 @@ export function decodeGetMessages(__d: IDeserializer): GetMessages | null {
   /**
    * decode header
    */
-  if(__id !== -1766600538) return null;
+  if(__id !== -600062912) return null;
   let offset: number;
   let limit: number;
   /**

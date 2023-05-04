@@ -15,7 +15,7 @@ export function Conversation(params: ConversationInputParams): Conversation {
   };
 }
 export function encodeConversation(s: ISerializer, value: Conversation) {
-  s.writeInt32(1477771794);
+  s.writeInt32(-563833943);
   /**
    * encoding param: id
    */
@@ -32,7 +32,7 @@ export function decodeConversation(__d: IDeserializer): Conversation | null {
   /**
    * decode header
    */
-  if(__id !== 1477771794) return null;
+  if(__id !== -563833943) return null;
   let id: number;
   let user: User;
   /**
@@ -73,7 +73,7 @@ export function Conversations(params: ConversationsInputParams): Conversations {
   };
 }
 export function encodeConversations(s: ISerializer, value: Conversations) {
-  s.writeInt32(-386946239);
+  s.writeInt32(-1956221194);
   /**
    * encoding param: conversations
    */
@@ -90,7 +90,7 @@ export function decodeConversations(__d: IDeserializer): Conversations | null {
   /**
    * decode header
    */
-  if(__id !== -386946239) return null;
+  if(__id !== -1956221194) return null;
   let conversations: Array<Conversation>;
   /**
    * decoding param: conversations

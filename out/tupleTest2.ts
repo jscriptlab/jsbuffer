@@ -12,7 +12,7 @@ export function user(params: userInputParams): user {
   };
 }
 export function encodeUser(s: ISerializer, value: user) {
-  s.writeInt32(-2072528781);
+  s.writeInt32(-556582279);
   /**
    * encoding param: id
    */
@@ -34,7 +34,7 @@ export function decodeUser(__d: IDeserializer): user | null {
   /**
    * decode header
    */
-  if(__id !== -2072528781) return null;
+  if(__id !== -556582279) return null;
   let id: number;
   let firstName: string;
   let lastName: string;
@@ -83,7 +83,7 @@ export function post(params: postInputParams): post {
   };
 }
 export function encodePost(s: ISerializer, value: post) {
-  s.writeInt32(1399718583);
+  s.writeInt32(207786521);
   /**
    * encoding param: id
    */
@@ -110,7 +110,7 @@ export function decodePost(__d: IDeserializer): post | null {
   /**
    * decode header
    */
-  if(__id !== 1399718583) return null;
+  if(__id !== 207786521) return null;
   let id: number;
   let title: string;
   let comments: Array<comment>;
@@ -168,7 +168,7 @@ export function comment(params: commentInputParams): comment {
   };
 }
 export function encodeComment(s: ISerializer, value: comment) {
-  s.writeInt32(-510569877);
+  s.writeInt32(-78333276);
   /**
    * encoding param: id
    */
@@ -190,7 +190,7 @@ export function decodeComment(__d: IDeserializer): comment | null {
   /**
    * decode header
    */
-  if(__id !== -510569877) return null;
+  if(__id !== -78333276) return null;
   let id: number;
   let title: string;
   let contents: string;
@@ -237,7 +237,7 @@ export function tupleTest(params: tupleTestInputParams): tupleTest {
   };
 }
 export function encodeTupleTest(s: ISerializer, value: tupleTest) {
-  s.writeInt32(2066879416);
+  s.writeInt32(-47093845);
   /**
    * encoding param: data
    */
@@ -285,7 +285,7 @@ export function decodeTupleTest(__d: IDeserializer): tupleTest | null {
   /**
    * decode header
    */
-  if(__id !== 2066879416) return null;
+  if(__id !== -47093845) return null;
   let data: [user,post,comment,Array<comment>,Array<comment | null>];
   /**
    * decoding param: data

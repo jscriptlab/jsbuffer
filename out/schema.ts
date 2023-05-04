@@ -15,14 +15,14 @@ export function Void(params: VoidInputParams = {}): Void {
   };
 }
 export function encodeVoid(s: ISerializer, _: Void) {
-  s.writeInt32(1293057661);
+  s.writeInt32(-1357667663);
 }
 export function decodeVoid(__d: IDeserializer): Void | null {
   const __id = __d.readInt32();
   /**
    * decode header
    */
-  if(__id !== 1293057661) return null;
+  if(__id !== -1357667663) return null;
   return {
     _name: 'schema.Void',
   };
@@ -45,7 +45,7 @@ export function msg(params: msgInputParams): msg {
   };
 }
 export function encodeMsg(s: ISerializer, value: msg) {
-  s.writeInt32(-2038157559);
+  s.writeInt32(716170895);
   /**
    * encoding param: data
    */
@@ -58,7 +58,7 @@ export function decodeMsg(__d: IDeserializer): msg | null {
   /**
    * decode header
    */
-  if(__id !== -2038157559) return null;
+  if(__id !== 716170895) return null;
   let data: Uint8Array;
   /**
    * decoding param: data
@@ -95,13 +95,13 @@ export function decodeResultTrait(__d: IDeserializer) {
   __d.rewindInt32();
   let value: Users | Posts;
   switch(__id) {
-    case 2098859696: {
+    case 2102518628: {
       const tmp = decodeUsers(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
-    case -507244125: {
+    case -1201900047: {
       const tmp = decodePosts(__d);
       if(tmp === null) return null;
       value = tmp;
@@ -124,7 +124,7 @@ export function Users(params: UsersInputParams): Users {
   };
 }
 export function encodeUsers(s: ISerializer, value: Users) {
-  s.writeInt32(2098859696);
+  s.writeInt32(2102518628);
   /**
    * encoding param: users
    */
@@ -141,7 +141,7 @@ export function decodeUsers(__d: IDeserializer): Users | null {
   /**
    * decode header
    */
-  if(__id !== 2098859696) return null;
+  if(__id !== 2102518628) return null;
   let users: Array<User>;
   /**
    * decoding param: users
@@ -181,7 +181,7 @@ export function GetUserById(params: GetUserByIdInputParams): GetUserById {
   };
 }
 export function encodeGetUserById(s: ISerializer, value: GetUserById) {
-  s.writeInt32(971329205);
+  s.writeInt32(-1984357298);
   /**
    * encoding param: userId
    */
@@ -193,7 +193,7 @@ export function decodeGetUserById(__d: IDeserializer): GetUserById | null {
   /**
    * decode header
    */
-  if(__id !== 971329205) return null;
+  if(__id !== -1984357298) return null;
   let userId: number;
   /**
    * decoding param: userId
@@ -224,7 +224,7 @@ export function Post(params: PostInputParams): Post {
   };
 }
 export function encodePost(s: ISerializer, value: Post) {
-  s.writeInt32(-974927074);
+  s.writeInt32(377172772);
   /**
    * encoding param: id
    */
@@ -236,7 +236,7 @@ export function decodePost(__d: IDeserializer): Post | null {
   /**
    * decode header
    */
-  if(__id !== -974927074) return null;
+  if(__id !== 377172772) return null;
   let id: number;
   /**
    * decoding param: id
@@ -267,7 +267,7 @@ export function Posts(params: PostsInputParams): Posts {
   };
 }
 export function encodePosts(s: ISerializer, value: Posts) {
-  s.writeInt32(-507244125);
+  s.writeInt32(-1201900047);
   /**
    * encoding param: posts
    */
@@ -284,7 +284,7 @@ export function decodePosts(__d: IDeserializer): Posts | null {
   /**
    * decode header
    */
-  if(__id !== -507244125) return null;
+  if(__id !== -1201900047) return null;
   let posts: Array<Post>;
   /**
    * decoding param: posts
@@ -324,7 +324,7 @@ export function GetPostById(params: GetPostByIdInputParams): GetPostById {
   };
 }
 export function encodeGetPostById(s: ISerializer, value: GetPostById) {
-  s.writeInt32(-1951096243);
+  s.writeInt32(-1572332129);
   /**
    * encoding param: postId
    */
@@ -336,7 +336,7 @@ export function decodeGetPostById(__d: IDeserializer): GetPostById | null {
   /**
    * decode header
    */
-  if(__id !== -1951096243) return null;
+  if(__id !== -1572332129) return null;
   let postId: number;
   /**
    * decoding param: postId
@@ -366,14 +366,14 @@ export function GetConversations(params: GetConversationsInputParams = {}): GetC
   };
 }
 export function encodeGetConversations(s: ISerializer, _: GetConversations) {
-  s.writeInt32(804827749);
+  s.writeInt32(814848329);
 }
 export function decodeGetConversations(__d: IDeserializer): GetConversations | null {
   const __id = __d.readInt32();
   /**
    * decode header
    */
-  if(__id !== 804827749) return null;
+  if(__id !== 814848329) return null;
   return {
     _name: 'schema.GetConversations',
   };
@@ -397,7 +397,7 @@ export function Coordinates(params: CoordinatesInputParams): Coordinates {
   };
 }
 export function encodeCoordinates(s: ISerializer, value: Coordinates) {
-  s.writeInt32(858685263);
+  s.writeInt32(1260153754);
   /**
    * encoding param: latitude
    */
@@ -414,7 +414,7 @@ export function decodeCoordinates(__d: IDeserializer): Coordinates | null {
   /**
    * decode header
    */
-  if(__id !== 858685263) return null;
+  if(__id !== 1260153754) return null;
   let latitude: number;
   let longitude: number;
   /**
@@ -459,7 +459,7 @@ export function ShouldSupportSeveralSequentialVectorParams(params: ShouldSupport
   };
 }
 export function encodeShouldSupportSeveralSequentialVectorParams(s: ISerializer, value: ShouldSupportSeveralSequentialVectorParams) {
-  s.writeInt32(-247992242);
+  s.writeInt32(-992083773);
   /**
    * encoding param: a
    */
@@ -572,7 +572,7 @@ export function decodeShouldSupportSeveralSequentialVectorParams(__d: IDeseriali
   /**
    * decode header
    */
-  if(__id !== -247992242) return null;
+  if(__id !== -992083773) return null;
   let a: Array<number>;
   let b: Array<number>;
   let c: Array<string>;
@@ -738,7 +738,7 @@ export function simpleTupleTest(params: simpleTupleTestInputParams): simpleTuple
   };
 }
 export function encodeSimpleTupleTest(s: ISerializer, value: simpleTupleTest) {
-  s.writeInt32(934509586);
+  s.writeInt32(1950454485);
   /**
    * encoding param: a
    */
@@ -822,7 +822,7 @@ export function decodeSimpleTupleTest(__d: IDeserializer): simpleTupleTest | nul
   /**
    * decode header
    */
-  if(__id !== 934509586) return null;
+  if(__id !== 1950454485) return null;
   let a: [number,number,number,Array<number>,string | null];
   let b: Array<[number,number,number,Array<number>,string | null]>;
   /**
@@ -933,14 +933,14 @@ export function emptyNode(params: emptyNodeInputParams = {}): emptyNode {
   };
 }
 export function encodeEmptyNode(s: ISerializer, _: emptyNode) {
-  s.writeInt32(1110931631);
+  s.writeInt32(-1657223713);
 }
 export function decodeEmptyNode(__d: IDeserializer): emptyNode | null {
   const __id = __d.readInt32();
   /**
    * decode header
    */
-  if(__id !== 1110931631) return null;
+  if(__id !== -1657223713) return null;
   return {
     _name: 'schema.emptyNode',
   };
