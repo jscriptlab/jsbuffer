@@ -6,7 +6,8 @@ export class ASTGenerationException extends Exception {}
 export class UnexpectedTokenType extends ASTGenerationException {
   public constructor(
     public readonly expectedTokenType: TokenType,
-    public readonly giveToken: IToken | null
+    public readonly giveToken: IToken | null,
+    public readonly lastToken: IToken | null
   ) {
     super();
   }
@@ -129,6 +130,7 @@ export type ASTGeneratorOutputNode =
 
 export default class ASTGenerator {
   readonly #tokens;
+  #lastToken: IToken | null = null;
   public constructor(tokens: ReadonlyArray<IToken>) {
     this.#tokens = Array.from(tokens);
   }
@@ -340,7 +342,7 @@ export default class ASTGenerator {
     if (token === null) {
       return null;
     }
-    this.#tokens.shift();
+    this.#lastToken = this.#tokens.shift() ?? null;
     return token;
   }
   #matchPunctuator(value: string) {
@@ -367,12 +369,16 @@ export default class ASTGenerator {
   #expectByType(expectedType: TokenType) {
     const token = this.#tokens[0];
     if (typeof token === 'undefined' || token.type !== expectedType) {
-      throw new UnexpectedTokenType(expectedType, token ?? null);
+      throw new UnexpectedTokenType(
+        expectedType,
+        token ?? null,
+        this.#lastToken
+      );
     }
     /**
      * remove first token
      */
-    this.#tokens.shift();
+    this.#lastToken = this.#tokens.shift() ?? null;
     /**
      * return first token
      */
