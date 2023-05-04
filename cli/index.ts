@@ -10,9 +10,14 @@ import { TextDecoder, TextEncoder } from 'util';
   const args = Array.from(process.argv).slice(2);
   let outDir = 'schema';
   let mainFile: string | null = null;
+  let tsExtends: string | null = null;
   for (let i = 0; i < args.length; i++) {
     const arg = args[0];
     switch (arg) {
+      case '--extends':
+        args.shift();
+        tsExtends = args.shift() ?? null;
+        break;
       case '-o': {
         args.shift();
         const maybeOutDir = args.shift();
@@ -50,6 +55,13 @@ import { TextDecoder, TextEncoder } from 'util';
   console.log(mainFile);
   await fs.promises.access(mainFile, fs.constants.R_OK);
   assert.strict.ok((await fs.promises.stat(mainFile)).isFile());
+  let typeScriptConfiguration: Record<string, unknown> = {};
+  if (tsExtends !== null) {
+    typeScriptConfiguration = {
+      ...typeScriptConfiguration,
+      extends: path.relative(outDir, path.resolve(process.cwd(), tsExtends)),
+    };
+  }
   const generator = new FileGenerator(
     {
       path: mainFile,
@@ -58,6 +70,7 @@ import { TextDecoder, TextEncoder } from 'util';
       textDecoder: new TextDecoder(),
       textEncoder: new TextEncoder(),
       rootDir: path.dirname(mainFile),
+      typeScriptConfiguration,
       outDir,
       indentationSize: 4,
     }
