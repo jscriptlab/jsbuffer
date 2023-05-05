@@ -162,7 +162,7 @@ export function compareUser(__a: user, __b: user) {
 }
 export function updateUser(value: user, changes: Partial<userInputParams>) {
   if(typeof changes['firstName'] !== 'undefined') {
-    if(changes['firstName'] === value['firstName']) {
+    if(!(changes['firstName'] === value['firstName'])) {
       value = user({
         ...value,
         firstName: changes['firstName'],
@@ -170,7 +170,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
     }
   }
   if(typeof changes['aliases'] !== 'undefined') {
-    if(changes['aliases'].length === value['aliases'].length && changes['aliases'].every((__i,index) => (__i === value['aliases'][index]))) {
+    if(!(changes['aliases'].length === value['aliases'].length && changes['aliases'].every((__i,index) => (__i === value['aliases'][index])))) {
       value = user({
         ...value,
         aliases: changes['aliases'],
@@ -232,7 +232,7 @@ export function compareUserDeleted(__a: userDeleted, __b: userDeleted) {
 }
 export function updateUserDeleted(value: userDeleted, changes: Partial<userDeletedInputParams>) {
   if(typeof changes['deletedAt'] !== 'undefined') {
-    if(changes['deletedAt'] === value['deletedAt']) {
+    if(!(changes['deletedAt'] === value['deletedAt'])) {
       value = userDeleted({
         ...value,
         deletedAt: changes['deletedAt'],
@@ -348,7 +348,7 @@ export function compareTest(__a: test, __b: test) {
 }
 export function updateTest(value: test, changes: Partial<testInputParams>) {
   if(typeof changes['user'] !== 'undefined') {
-    if(compareUser(changes['user'],value['user'])) {
+    if(!(compareUser(changes['user'],value['user']))) {
       value = test({
         ...value,
         user: changes['user'],
@@ -356,7 +356,7 @@ export function updateTest(value: test, changes: Partial<testInputParams>) {
     }
   }
   if(typeof changes['b'] !== 'undefined') {
-    if(changes['b'].length === value['b'].length && changes['b'].every((__i,index) => (__i.length === value['b'][index].length && __i.every((__i,index) => (((__dp31, __dp32) => __dp31 !== null && __dp32 !== null ? __dp31 === __dp32 : __dp31 === __dp32)(__i,value['b'][index][index])))))) {
+    if(!(changes['b'].length === value['b'].length && changes['b'].every((__i,index) => (__i.length === value['b'][index].length && __i.every((__i,index) => (((__dp31, __dp32) => __dp31 !== null && __dp32 !== null ? __dp31 === __dp32 : __dp31 === __dp32)(__i,value['b'][index][index]))))))) {
       value = test({
         ...value,
         b: changes['b'],

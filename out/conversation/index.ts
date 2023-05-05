@@ -80,7 +80,7 @@ export function compareConversation(__a: Conversation, __b: Conversation) {
 }
 export function updateConversation(value: Conversation, changes: Partial<ConversationInputParams>) {
   if(typeof changes['id'] !== 'undefined') {
-    if(changes['id'] === value['id']) {
+    if(!(changes['id'] === value['id'])) {
       value = Conversation({
         ...value,
         id: changes['id'],
@@ -88,7 +88,7 @@ export function updateConversation(value: Conversation, changes: Partial<Convers
     }
   }
   if(typeof changes['user'] !== 'undefined') {
-    if(compareUser1(changes['user'],value['user'])) {
+    if(!(compareUser1(changes['user'],value['user']))) {
       value = Conversation({
         ...value,
         user: changes['user'],
@@ -164,7 +164,7 @@ export function compareConversations(__a: Conversations, __b: Conversations) {
 }
 export function updateConversations(value: Conversations, changes: Partial<ConversationsInputParams>) {
   if(typeof changes['conversations'] !== 'undefined') {
-    if(changes['conversations'].length === value['conversations'].length && changes['conversations'].every((__i,index) => (compareConversation(__i,value['conversations'][index])))) {
+    if(!(changes['conversations'].length === value['conversations'].length && changes['conversations'].every((__i,index) => (compareConversation(__i,value['conversations'][index]))))) {
       value = Conversations({
         ...value,
         conversations: changes['conversations'],

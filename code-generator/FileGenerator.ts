@@ -727,14 +727,14 @@ export default class FileGenerator extends CodeStream {
           this.write(
             `if(typeof changes['${p.name.value}'] !== 'undefined') {\n`,
             () => {
-              this.write('if(');
+              this.write('if(!(');
               this.#generateComparisonExpression(
                 p.typeExpression,
                 `changes['${p.name.value}']`,
                 `value['${p.name.value}']`,
                 depth
               );
-              this.append(') {\n');
+              this.append(')) {\n');
               this.indentBlock(() => {
                 this.write(
                   `value = ${getCreateObjectFunctionName(node)}({\n`,

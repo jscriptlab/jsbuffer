@@ -53,7 +53,7 @@ export function compareUser(__a: User, __b: User) {
 }
 export function updateUser(value: User, changes: Partial<UserInputParams>) {
   if(typeof changes['firstName'] !== 'undefined') {
-    if(changes['firstName'] === value['firstName']) {
+    if(!(changes['firstName'] === value['firstName'])) {
       value = User({
         ...value,
         firstName: changes['firstName'],

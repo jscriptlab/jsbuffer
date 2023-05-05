@@ -10,6 +10,7 @@ import {
   msg,
   simpleTupleTest,
   compareSimpleTupleTest,
+  updateSimpleTupleTest,
 } from '../out/schema';
 import { Serializer, Deserializer } from '../codec';
 import { TextDecoder, TextEncoder } from 'util';
@@ -106,6 +107,39 @@ suite.test('it should encode tuple', () => {
     })
   );
 });
+
+suite.test(
+  'it should change type with tuple reference only when changes are made',
+  () => {
+    const a1 = simpleTupleTest({
+      a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
+      b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+    });
+    assert.strict.equal(
+      updateSimpleTupleTest(a1, {
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+      }),
+      a1
+    );
+    assert.strict.equal(updateSimpleTupleTest(a1, {}), a1);
+    assert.strict.notEqual(
+      updateSimpleTupleTest(a1, {
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], ''],
+      }),
+      a1
+    );
+    assert.strict.deepEqual(
+      updateSimpleTupleTest(a1, {
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], ''],
+      }),
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], ''],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+      })
+    );
+  }
+);
 
 suite.test('it should compare tuples', () => {
   assert.strict.ok(

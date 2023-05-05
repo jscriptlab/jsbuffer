@@ -54,7 +54,7 @@ export function compareMessage(__a: Message, __b: Message) {
 }
 export function updateMessage(value: Message, changes: Partial<MessageInputParams>) {
   if(typeof changes['id'] !== 'undefined') {
-    if(changes['id'] === value['id']) {
+    if(!(changes['id'] === value['id'])) {
       value = Message({
         ...value,
         id: changes['id'],
@@ -130,7 +130,7 @@ export function compareMessages(__a: Messages, __b: Messages) {
 }
 export function updateMessages(value: Messages, changes: Partial<MessagesInputParams>) {
   if(typeof changes['messages'] !== 'undefined') {
-    if(changes['messages'].length === value['messages'].length && changes['messages'].every((__i,index) => (compareMessage(__i,value['messages'][index])))) {
+    if(!(changes['messages'].length === value['messages'].length && changes['messages'].every((__i,index) => (compareMessage(__i,value['messages'][index]))))) {
       value = Messages({
         ...value,
         messages: changes['messages'],
@@ -211,7 +211,7 @@ export function compareGetMessages(__a: GetMessages, __b: GetMessages) {
 }
 export function updateGetMessages(value: GetMessages, changes: Partial<GetMessagesInputParams>) {
   if(typeof changes['offset'] !== 'undefined') {
-    if(changes['offset'] === value['offset']) {
+    if(!(changes['offset'] === value['offset'])) {
       value = GetMessages({
         ...value,
         offset: changes['offset'],
@@ -219,7 +219,7 @@ export function updateGetMessages(value: GetMessages, changes: Partial<GetMessag
     }
   }
   if(typeof changes['limit'] !== 'undefined') {
-    if(changes['limit'] === value['limit']) {
+    if(!(changes['limit'] === value['limit'])) {
       value = GetMessages({
         ...value,
         limit: changes['limit'],
