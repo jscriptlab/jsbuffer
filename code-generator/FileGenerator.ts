@@ -1295,19 +1295,17 @@ export default class FileGenerator extends CodeStream {
       type;
       if (Array.isArray(type)) {
         const node = this.#resolvedTypeExpressionToDefinition(type);
-        this.#request(resolved);
-        this.write(
-          `${getEncodeFunctionName(node)}(${serializerVarName},${value});\n`
-        );
+        const encodeFunctionName = this.#request({
+          ...resolved,
+          identifier: getEncodeFunctionName(node),
+        });
+        this.write(`${encodeFunctionName}(${serializerVarName},${value});\n`);
       } else {
-        const encodeFunctionName = getEncodeFunctionName(type);
-        this.#requirements.add({
-          identifier: encodeFunctionName,
+        const encodeFunctionName = this.#request({
+          identifier: getEncodeFunctionName(type),
           fileGenerator: resolved.fileGenerator,
         });
-        this.write(
-          `${getEncodeFunctionName(type)}(${serializerVarName},${value});\n`
-        );
+        this.write(`${encodeFunctionName}(${serializerVarName},${value});\n`);
       }
     } else {
       this.write(
