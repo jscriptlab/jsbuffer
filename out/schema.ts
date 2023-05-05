@@ -11,8 +11,7 @@ export interface VoidInputParams {
 }
 export function Void(params: VoidInputParams = {}): Void {
   return {
-    _name: 'schema.Void',
-    ...params
+    _name: 'schema.Void'
   };
 }
 export function encodeVoid(s: ISerializer, _: Void) {
@@ -45,7 +44,7 @@ export interface msgInputParams {
 export function msg(params: msgInputParams): msg {
   return {
     _name: 'schema.msg',
-    ...params
+    data: params['data']
   };
 }
 export function encodeMsg(s: ISerializer, value: msg) {
@@ -142,7 +141,7 @@ export interface UsersInputParams {
 export function Users(params: UsersInputParams): Users {
   return {
     _name: 'schema.Users',
-    ...params
+    users: params['users']
   };
 }
 export function encodeUsers(s: ISerializer, value: Users) {
@@ -207,7 +206,7 @@ export interface GetUserByIdInputParams {
 export function GetUserById(params: GetUserByIdInputParams): GetUserById {
   return {
     _name: 'schema.GetUserById',
-    ...params
+    userId: params['userId']
   };
 }
 export function encodeGetUserById(s: ISerializer, value: GetUserById) {
@@ -258,7 +257,7 @@ export interface PostInputParams {
 export function Post(params: PostInputParams): Post {
   return {
     _name: 'schema.Post',
-    ...params
+    id: params['id']
   };
 }
 export function encodePost(s: ISerializer, value: Post) {
@@ -309,7 +308,7 @@ export interface PostsInputParams {
 export function Posts(params: PostsInputParams): Posts {
   return {
     _name: 'schema.Posts',
-    ...params
+    posts: params['posts']
   };
 }
 export function encodePosts(s: ISerializer, value: Posts) {
@@ -374,7 +373,7 @@ export interface GetPostByIdInputParams {
 export function GetPostById(params: GetPostByIdInputParams): GetPostById {
   return {
     _name: 'schema.GetPostById',
-    ...params
+    postId: params['postId']
   };
 }
 export function encodeGetPostById(s: ISerializer, value: GetPostById) {
@@ -423,8 +422,7 @@ export interface GetConversationsInputParams {
 }
 export function GetConversations(params: GetConversationsInputParams = {}): GetConversations {
   return {
-    _name: 'schema.GetConversations',
-    ...params
+    _name: 'schema.GetConversations'
   };
 }
 export function encodeGetConversations(s: ISerializer, _: GetConversations) {
@@ -458,7 +456,8 @@ export interface CoordinatesInputParams {
 export function Coordinates(params: CoordinatesInputParams): Coordinates {
   return {
     _name: 'schema.Coordinates',
-    ...params
+    latitude: params['latitude'],
+    longitude: params['longitude']
   };
 }
 export function encodeCoordinates(s: ISerializer, value: Coordinates) {
@@ -532,7 +531,13 @@ export interface ShouldSupportSeveralSequentialVectorParamsInputParams {
 export function ShouldSupportSeveralSequentialVectorParams(params: ShouldSupportSeveralSequentialVectorParamsInputParams): ShouldSupportSeveralSequentialVectorParams {
   return {
     _name: 'schema.ShouldSupportSeveralSequentialVectorParams',
-    ...params
+    a: params['a'],
+    b: params['b'],
+    c: params['c'],
+    d: params['d'],
+    e: params['e'],
+    f: params['f'],
+    g: params['g']
   };
 }
 export function encodeShouldSupportSeveralSequentialVectorParams(s: ISerializer, value: ShouldSupportSeveralSequentialVectorParams) {
@@ -843,7 +848,8 @@ export interface simpleTupleTestInputParams {
 export function simpleTupleTest(params: simpleTupleTestInputParams): simpleTupleTest {
   return {
     _name: 'schema.simpleTupleTest',
-    ...params
+    a: params['a'],
+    b: params['b']
   };
 }
 export function encodeSimpleTupleTest(s: ISerializer, value: simpleTupleTest) {
@@ -1049,8 +1055,7 @@ export interface emptyNodeInputParams {
 }
 export function emptyNode(params: emptyNodeInputParams = {}): emptyNode {
   return {
-    _name: 'schema.emptyNode',
-    ...params
+    _name: 'schema.emptyNode'
   };
 }
 export function encodeEmptyNode(s: ISerializer, _: emptyNode) {
@@ -1084,7 +1089,8 @@ export interface userInputParams {
 export function user(params: userInputParams): user {
   return {
     _name: 'schema.user',
-    ...params
+    id: params['id'],
+    name: params['name']
   };
 }
 export function encodeUser(s: ISerializer, value: user) {

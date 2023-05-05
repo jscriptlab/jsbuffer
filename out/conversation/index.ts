@@ -12,7 +12,8 @@ export interface ConversationInputParams {
 export function Conversation(params: ConversationInputParams): Conversation {
   return {
     _name: 'conversation.index.Conversation',
-    ...params
+    id: params['id'],
+    user: params['user']
   };
 }
 export function encodeConversation(s: ISerializer, value: Conversation) {
@@ -82,7 +83,7 @@ export interface ConversationsInputParams {
 export function Conversations(params: ConversationsInputParams): Conversations {
   return {
     _name: 'conversation.index.Conversations',
-    ...params
+    conversations: params['conversations']
   };
 }
 export function encodeConversations(s: ISerializer, value: Conversations) {

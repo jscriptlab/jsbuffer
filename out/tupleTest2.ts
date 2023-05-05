@@ -8,7 +8,9 @@ export interface userInputParams {
 export function user(params: userInputParams): user {
   return {
     _name: 'tupleTest2.user',
-    ...params
+    id: params['id'],
+    firstName: params['firstName'],
+    lastName: params['lastName']
   };
 }
 export function encodeUser(s: ISerializer, value: user) {
@@ -95,7 +97,9 @@ export interface postInputParams {
 export function post(params: postInputParams): post {
   return {
     _name: 'tupleTest2.post',
-    ...params
+    id: params['id'],
+    title: params['title'],
+    comments: params['comments']
   };
 }
 export function encodePost(s: ISerializer, value: post) {
@@ -196,7 +200,9 @@ export interface commentInputParams {
 export function comment(params: commentInputParams): comment {
   return {
     _name: 'tupleTest2.comment',
-    ...params
+    id: params['id'],
+    title: params['title'],
+    contents: params['contents']
   };
 }
 export function encodeComment(s: ISerializer, value: comment) {
@@ -281,7 +287,7 @@ export interface tupleTestInputParams {
 export function tupleTest(params: tupleTestInputParams): tupleTest {
   return {
     _name: 'tupleTest2.tupleTest',
-    ...params
+    data: params['data']
   };
 }
 export function encodeTupleTest(s: ISerializer, value: tupleTest) {

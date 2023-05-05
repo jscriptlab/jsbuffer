@@ -85,7 +85,8 @@ export interface userInputParams {
 export function user(params: userInputParams): user {
   return {
     _name: 'user.user',
-    ...params
+    firstName: params['firstName'],
+    aliases: params['aliases']
   };
 }
 export function encodeUser(s: ISerializer, value: user) {
@@ -165,7 +166,7 @@ export interface userDeletedInputParams {
 export function userDeleted(params: userDeletedInputParams): userDeleted {
   return {
     _name: 'user.userDeleted',
-    ...params
+    deletedAt: params['deletedAt']
   };
 }
 export function encodeUserDeleted(s: ISerializer, value: userDeleted) {
@@ -217,7 +218,8 @@ export interface testInputParams {
 export function test(params: testInputParams): test {
   return {
     _name: 'user.test',
-    ...params
+    user: params['user'],
+    b: params['b']
   };
 }
 export function encodeTest(s: ISerializer, value: test) {

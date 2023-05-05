@@ -6,7 +6,7 @@ export interface UserInputParams {
 export function User(params: UserInputParams): User {
   return {
     _name: 'conversation.secondUser.User',
-    ...params
+    firstName: params['firstName']
   };
 }
 export function encodeUser(s: ISerializer, value: User) {

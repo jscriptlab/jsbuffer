@@ -18,7 +18,7 @@ import {
   getDecodeFunctionName,
   getTypeName,
   getTypeDefinitionOrCallDefinitionNamePropertyValue,
-  getTypeDefinitionOrCallDefinitionObjectCreator,
+  getTypeDefinitionOrCallDefinitionObjectCreator as getCreateObjectFunctionName,
   getEncodeFunctionName,
   getTypeInputParamsInterfaceName,
   getDefaultFunctionName,
@@ -619,7 +619,7 @@ export default class FileGenerator extends CodeStream {
       )}> = {}): ${getTypeName(node)} {\n`,
       () => {
         this.write(
-          `return ${getTypeDefinitionOrCallDefinitionObjectCreator(node)}({\n`,
+          `return ${getCreateObjectFunctionName(node)}({\n`,
           () => {
             for (const p of node.parameters) {
               this.write(
@@ -1530,7 +1530,7 @@ export default class FileGenerator extends CodeStream {
     );
     const defaultAssignment = node.parameters.length ? '' : ' = {}';
     this.write(
-      `export function ${getTypeDefinitionOrCallDefinitionObjectCreator(
+      `export function ${getCreateObjectFunctionName(
         node
       )}(params: ${paramsType}${defaultAssignment}): ${interfaceName} {\n`,
       () => {
@@ -1541,9 +1541,19 @@ export default class FileGenerator extends CodeStream {
               `_name: '${getTypeDefinitionOrCallDefinitionNamePropertyValue(
                 node,
                 this.#removeRootDir(this.#file.path)
-              )}',\n`
+              )}'`
             );
-            this.write('...params\n');
+            if (node.parameters.length) {
+              this.append(',');
+            }
+            this.append('\n');
+            for (const p of node.parameters) {
+              this.write(`${p.name.value}: params['${p.name.value}']`);
+              if (p !== node.parameters[node.parameters.length - 1]) {
+                this.append(',');
+              }
+              this.append('\n');
+            }
           },
           '};\n'
         );

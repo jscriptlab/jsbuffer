@@ -7,7 +7,7 @@ export interface MessageInputParams {
 export function Message(params: MessageInputParams): Message {
   return {
     _name: 'message.Message',
-    ...params
+    id: params['id']
   };
 }
 export function encodeMessage(s: ISerializer, value: Message) {
@@ -58,7 +58,7 @@ export interface MessagesInputParams {
 export function Messages(params: MessagesInputParams): Messages {
   return {
     _name: 'message.Messages',
-    ...params
+    messages: params['messages']
   };
 }
 export function encodeMessages(s: ISerializer, value: Messages) {
@@ -124,7 +124,8 @@ export interface GetMessagesInputParams {
 export function GetMessages(params: GetMessagesInputParams): GetMessages {
   return {
     _name: 'message.GetMessages',
-    ...params
+    offset: params['offset'],
+    limit: params['limit']
   };
 }
 export function encodeGetMessages(s: ISerializer, value: GetMessages) {
