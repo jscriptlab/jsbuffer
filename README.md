@@ -140,7 +140,7 @@ export function userCompare(__a: user, __b: user) {
 
 ### More
 
-To me, the most cool part of jsbuffer, is that you can create all sort of complex type structures and we will resolve and relevant generate functions accordingly:
+To me, the most cool part of jsbuffer, is that you can create all sort of complex type structures and we will resolve and generate the code and files accordingly:
 
 ```
 import {refUser} from "./Ref";
