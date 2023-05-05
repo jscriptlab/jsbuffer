@@ -621,3 +621,98 @@ export function updateTupleTupleTest(value: tupleTupleTest, changes: Partial<tup
   }
   return value;
 }
+export interface superTupleTupleTestInputParams {
+  a: [[[number],number],number];
+}
+export function superTupleTupleTest(params: superTupleTupleTestInputParams): superTupleTupleTest {
+  return {
+    _name: 'tupleTest2.superTupleTupleTest',
+    a: params['a']
+  };
+}
+export function encodeSuperTupleTupleTest(s: ISerializer, value: superTupleTupleTest) {
+  s.writeInt32(-106162167);
+  /**
+   * encoding param: a
+   */
+  const __pv0 = value['a'];
+  {
+    const __t00 = __pv0[0];
+    {
+      {
+        const __t10 = __t00[0];
+        {
+          {
+            const __t20 = __t10[0];
+            {
+              s.writeInt32(__t20);
+            }
+          }
+        }
+        const __t11 = __t00[1];
+        {
+          s.writeInt32(__t11);
+        }
+      }
+    }
+    const __t01 = __pv0[1];
+    {
+      s.writeDouble(__t01);
+    }
+  }
+}
+export function decodeSuperTupleTupleTest(__d: IDeserializer): superTupleTupleTest | null {
+  const __id = __d.readInt32();
+  /**
+   * decode header
+   */
+  if(__id !== -106162167) return null;
+  let a: [[[number],number],number];
+  /**
+   * decoding param: a
+   */
+  let __e1: [[number],number];
+  let __e2: [number];
+  let __e3: number;
+  __e3 = __d.readInt32();
+  __e2 = [__e3];
+  let __e4: number;
+  __e4 = __d.readInt32();
+  __e1 = [__e2,__e4];
+  let __e5: number;
+  __e5 = __d.readDouble();
+  a = [__e1,__e5];
+  return {
+    _name: 'tupleTest2.superTupleTupleTest',
+    a
+  };
+}
+export interface superTupleTupleTest  {
+  _name: 'tupleTest2.superTupleTupleTest';
+  a: [[[number],number],number];
+}
+export function defaultSuperTupleTupleTest(params: Partial<superTupleTupleTestInputParams> = {}): superTupleTupleTest {
+  return superTupleTupleTest({
+    a: [[[0],0],0.0],
+    ...params
+  });
+}
+export function compareSuperTupleTupleTest(__a: superTupleTupleTest, __b: superTupleTupleTest) {
+  return (
+    /**
+     * compare parameter a
+     */
+    /* compare tuple item 0 of type [[number],number] */ ((__a00, __b00) => /* compare tuple item 0 of type [number] */ ((__a10, __b10) => /* compare tuple item 0 of type number */ ((__a20, __b20) => __a20 === __b20)(__a10[0],__b10[0]))(__a00[0],__b00[0]) && /* compare tuple item 1 of type number */ ((__a11, __b11) => __a11 === __b11)(__a00[1],__b00[1]))(__a['a'][0],__b['a'][0]) && /* compare tuple item 1 of type number */ ((__a01, __b01) => __a01 === __b01)(__a['a'][1],__b['a'][1])
+  );
+}
+export function updateSuperTupleTupleTest(value: superTupleTupleTest, changes: Partial<superTupleTupleTestInputParams>) {
+  if(typeof changes['a'] !== 'undefined') {
+    if(!(/* compare tuple item 0 of type [[number],number] */ ((__a00, __b00) => /* compare tuple item 0 of type [number] */ ((__a10, __b10) => /* compare tuple item 0 of type number */ ((__a20, __b20) => __a20 === __b20)(__a10[0],__b10[0]))(__a00[0],__b00[0]) && /* compare tuple item 1 of type number */ ((__a11, __b11) => __a11 === __b11)(__a00[1],__b00[1]))(changes['a'][0],value['a'][0]) && /* compare tuple item 1 of type number */ ((__a01, __b01) => __a01 === __b01)(changes['a'][1],value['a'][1]))) {
+      value = superTupleTupleTest({
+        ...value,
+        a: changes['a'],
+      });
+    }
+  }
+  return value;
+}

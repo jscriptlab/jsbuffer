@@ -12,7 +12,12 @@ import {
   compareSimpleTupleTest,
   updateSimpleTupleTest,
 } from '../out/schema';
-import { tupleTupleTest, updateTupleTupleTest } from '../out/tupleTest2';
+import {
+  defaultSuperTupleTupleTest,
+  tupleTupleTest,
+  updateSuperTupleTupleTest,
+  updateTupleTupleTest,
+} from '../out/tupleTest2';
 import { Serializer, Deserializer } from '../codec';
 import { TextDecoder, TextEncoder } from 'util';
 import assert from 'assert';
@@ -122,6 +127,8 @@ suite.test('it should support tuple inside tuple types', () => {
       a: [[0, 'aaa', [['', 1]]], 0, '', 0.0],
     })
   );
+  const a2 = defaultSuperTupleTupleTest();
+  assert.strict.equal(updateSuperTupleTupleTest(a2, {}), a2);
 });
 
 suite.test(

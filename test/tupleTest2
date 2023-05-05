@@ -22,3 +22,7 @@ type tupleTest {
 type tupleTupleTest{
   tuple<tuple<int,string,vector<tuple<string,int>>>,int,string,double> a;
 }
+
+type superTupleTupleTest{
+  tuple<tuple<tuple<int>,int>,double> a;
+}
