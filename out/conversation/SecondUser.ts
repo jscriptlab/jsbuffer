@@ -9,13 +9,13 @@ export function User(params: UserInputParams): User {
     firstName: params['firstName']
   };
 }
-export function encodeUser(s: ISerializer, value: User) {
-  s.writeInt32(1030058769);
+export function encodeUser(__s: ISerializer, value: User) {
+  __s.writeInt32(1030058769);
   /**
    * encoding param: firstName
    */
   const __pv0 = value['firstName'];
-  s.writeString(__pv0);
+  __s.writeString(__pv0);
 }
 export function decodeUser(__d: IDeserializer): User | null {
   const __id = __d.readInt32();

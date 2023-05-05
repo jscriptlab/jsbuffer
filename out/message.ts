@@ -10,13 +10,13 @@ export function Message(params: MessageInputParams): Message {
     id: params['id']
   };
 }
-export function encodeMessage(s: ISerializer, value: Message) {
-  s.writeInt32(2109340419);
+export function encodeMessage(__s: ISerializer, value: Message) {
+  __s.writeInt32(2109340419);
   /**
    * encoding param: id
    */
   const __pv0 = value['id'];
-  s.writeInt32(__pv0);
+  __s.writeInt32(__pv0);
 }
 export function decodeMessage(__d: IDeserializer): Message | null {
   const __id = __d.readInt32();
@@ -72,17 +72,17 @@ export function Messages(params: MessagesInputParams): Messages {
     messages: params['messages']
   };
 }
-export function encodeMessages(s: ISerializer, value: Messages) {
-  s.writeInt32(1839199230);
+export function encodeMessages(__s: ISerializer, value: Messages) {
+  __s.writeInt32(1839199230);
   /**
    * encoding param: messages
    */
   const __pv0 = value['messages'];
-  const __l0 = __pv0.length;
-  s.writeUint32(__l0);
-  for(let __i0 = 0; __i0 < __l0; __i0++) {
-    const __v__i0 = __pv0[__i0];
-    encodeMessage(s,__v__i0);
+  const __l1 = __pv0.length;
+  __s.writeUint32(__l1);
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    const __v__i1 = __pv0[__i1];
+    encodeMessage(__s,__v__i1);
   }
 }
 export function decodeMessages(__d: IDeserializer): Messages | null {
@@ -148,18 +148,18 @@ export function GetMessages(params: GetMessagesInputParams): GetMessages {
     limit: params['limit']
   };
 }
-export function encodeGetMessages(s: ISerializer, value: GetMessages) {
-  s.writeInt32(-600062912);
+export function encodeGetMessages(__s: ISerializer, value: GetMessages) {
+  __s.writeInt32(-600062912);
   /**
    * encoding param: offset
    */
   const __pv0 = value['offset'];
-  s.writeInt32(__pv0);
+  __s.writeInt32(__pv0);
   /**
    * encoding param: limit
    */
   const __pv1 = value['limit'];
-  s.writeInt32(__pv1);
+  __s.writeInt32(__pv1);
 }
 export function decodeGetMessages(__d: IDeserializer): GetMessages | null {
   const __id = __d.readInt32();

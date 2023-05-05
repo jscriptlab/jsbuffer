@@ -15,8 +15,8 @@ export function Void(_: VoidInputParams = {}): Void {
     _name: 'schema.Void'
   };
 }
-export function encodeVoid(s: ISerializer, _: Void) {
-  s.writeInt32(-1357667663);
+export function encodeVoid(__s: ISerializer, _: Void) {
+  __s.writeInt32(-1357667663);
 }
 export function decodeVoid(__d: IDeserializer): Void | null {
   const __id = __d.readInt32();
@@ -51,14 +51,14 @@ export function msg(params: msgInputParams): msg {
     data: params['data']
   };
 }
-export function encodeMsg(s: ISerializer, value: msg) {
-  s.writeInt32(716170895);
+export function encodeMsg(__s: ISerializer, value: msg) {
+  __s.writeInt32(716170895);
   /**
    * encoding param: data
    */
   const __pv0 = value['data'];
-  s.writeUint32(__pv0.byteLength);
-  s.writeBuffer(__pv0);
+  __s.writeUint32(__pv0.byteLength);
+  __s.writeBuffer(__pv0);
 }
 export function decodeMsg(__d: IDeserializer): msg | null {
   const __id = __d.readInt32();
@@ -106,13 +106,13 @@ export function updateMsg(value: msg, changes: Partial<msgInputParams>) {
   return value;
 }
 export type Result = Users | Posts;
-export function encodeResultTrait(s: ISerializer,value: Result) {
+export function encodeResultTrait(__s: ISerializer,value: Result) {
   switch(value._name) {
     case 'schema.Users':
-      encodeUsers(s,value);
+      encodeUsers(__s,value);
       break;
     case 'schema.Posts':
-      encodePosts(s,value);
+      encodePosts(__s,value);
       break;
   }
 }
@@ -159,17 +159,17 @@ export function Users(params: UsersInputParams): Users {
     users: params['users']
   };
 }
-export function encodeUsers(s: ISerializer, value: Users) {
-  s.writeInt32(2102518628);
+export function encodeUsers(__s: ISerializer, value: Users) {
+  __s.writeInt32(2102518628);
   /**
    * encoding param: users
    */
   const __pv0 = value['users'];
-  const __l0 = __pv0.length;
-  s.writeUint32(__l0);
-  for(let __i0 = 0; __i0 < __l0; __i0++) {
-    const __v__i0 = __pv0[__i0];
-    encodeUserTrait(s,__v__i0);
+  const __l1 = __pv0.length;
+  __s.writeUint32(__l1);
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    const __v__i1 = __pv0[__i1];
+    encodeUserTrait(__s,__v__i1);
   }
 }
 export function decodeUsers(__d: IDeserializer): Users | null {
@@ -233,13 +233,13 @@ export function GetUserById(params: GetUserByIdInputParams): GetUserById {
     userId: params['userId']
   };
 }
-export function encodeGetUserById(s: ISerializer, value: GetUserById) {
-  s.writeInt32(-1984357298);
+export function encodeGetUserById(__s: ISerializer, value: GetUserById) {
+  __s.writeInt32(-1984357298);
   /**
    * encoding param: userId
    */
   const __pv0 = value['userId'];
-  s.writeUint32(__pv0);
+  __s.writeUint32(__pv0);
 }
 export function decodeGetUserById(__d: IDeserializer): GetUserById | null {
   const __id = __d.readInt32();
@@ -295,13 +295,13 @@ export function Post(params: PostInputParams): Post {
     id: params['id']
   };
 }
-export function encodePost(s: ISerializer, value: Post) {
-  s.writeInt32(377172772);
+export function encodePost(__s: ISerializer, value: Post) {
+  __s.writeInt32(377172772);
   /**
    * encoding param: id
    */
   const __pv0 = value['id'];
-  s.writeInt32(__pv0);
+  __s.writeInt32(__pv0);
 }
 export function decodePost(__d: IDeserializer): Post | null {
   const __id = __d.readInt32();
@@ -357,17 +357,17 @@ export function Posts(params: PostsInputParams): Posts {
     posts: params['posts']
   };
 }
-export function encodePosts(s: ISerializer, value: Posts) {
-  s.writeInt32(-1201900047);
+export function encodePosts(__s: ISerializer, value: Posts) {
+  __s.writeInt32(-1201900047);
   /**
    * encoding param: posts
    */
   const __pv0 = value['posts'];
-  const __l0 = __pv0.length;
-  s.writeUint32(__l0);
-  for(let __i0 = 0; __i0 < __l0; __i0++) {
-    const __v__i0 = __pv0[__i0];
-    encodePost(s,__v__i0);
+  const __l1 = __pv0.length;
+  __s.writeUint32(__l1);
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    const __v__i1 = __pv0[__i1];
+    encodePost(__s,__v__i1);
   }
 }
 export function decodePosts(__d: IDeserializer): Posts | null {
@@ -431,13 +431,13 @@ export function GetPostById(params: GetPostByIdInputParams): GetPostById {
     postId: params['postId']
   };
 }
-export function encodeGetPostById(s: ISerializer, value: GetPostById) {
-  s.writeInt32(-1572332129);
+export function encodeGetPostById(__s: ISerializer, value: GetPostById) {
+  __s.writeInt32(-1572332129);
   /**
    * encoding param: postId
    */
   const __pv0 = value['postId'];
-  s.writeUint32(__pv0);
+  __s.writeUint32(__pv0);
 }
 export function decodeGetPostById(__d: IDeserializer): GetPostById | null {
   const __id = __d.readInt32();
@@ -491,8 +491,8 @@ export function GetConversations(_: GetConversationsInputParams = {}): GetConver
     _name: 'schema.GetConversations'
   };
 }
-export function encodeGetConversations(s: ISerializer, _: GetConversations) {
-  s.writeInt32(814848329);
+export function encodeGetConversations(__s: ISerializer, _: GetConversations) {
+  __s.writeInt32(814848329);
 }
 export function decodeGetConversations(__d: IDeserializer): GetConversations | null {
   const __id = __d.readInt32();
@@ -529,18 +529,18 @@ export function Coordinates(params: CoordinatesInputParams): Coordinates {
     longitude: params['longitude']
   };
 }
-export function encodeCoordinates(s: ISerializer, value: Coordinates) {
-  s.writeInt32(1260153754);
+export function encodeCoordinates(__s: ISerializer, value: Coordinates) {
+  __s.writeInt32(1260153754);
   /**
    * encoding param: latitude
    */
   const __pv0 = value['latitude'];
-  s.writeDouble(__pv0);
+  __s.writeDouble(__pv0);
   /**
    * encoding param: longitude
    */
   const __pv1 = value['longitude'];
-  s.writeDouble(__pv1);
+  __s.writeDouble(__pv1);
 }
 export function decodeCoordinates(__d: IDeserializer): Coordinates | null {
   const __id = __d.readInt32();
@@ -628,113 +628,101 @@ export function ShouldSupportSeveralSequentialVectorParams(params: ShouldSupport
     g: params['g']
   };
 }
-export function encodeShouldSupportSeveralSequentialVectorParams(s: ISerializer, value: ShouldSupportSeveralSequentialVectorParams) {
-  s.writeInt32(-992083773);
+export function encodeShouldSupportSeveralSequentialVectorParams(__s: ISerializer, value: ShouldSupportSeveralSequentialVectorParams) {
+  __s.writeInt32(-992083773);
   /**
    * encoding param: a
    */
   const __pv0 = value['a'];
-  const __l0 = __pv0.length;
-  s.writeUint32(__l0);
-  for(let __i0 = 0; __i0 < __l0; __i0++) {
-    const __v__i0 = __pv0[__i0];
-    s.writeInt32(__v__i0);
+  const __l1 = __pv0.length;
+  __s.writeUint32(__l1);
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    const __v__i1 = __pv0[__i1];
+    __s.writeInt32(__v__i1);
   }
   /**
    * encoding param: b
    */
-  const __pv1 = value['b'];
-  const __l1 = __pv1.length;
-  s.writeUint32(__l1);
-  for(let __i1 = 0; __i1 < __l1; __i1++) {
-    const __v__i1 = __pv1[__i1];
-    s.writeDouble(__v__i1);
+  const __pv2 = value['b'];
+  const __l3 = __pv2.length;
+  __s.writeUint32(__l3);
+  for(let __i3 = 0; __i3 < __l3; __i3++) {
+    const __v__i3 = __pv2[__i3];
+    __s.writeDouble(__v__i3);
   }
   /**
    * encoding param: c
    */
-  const __pv2 = value['c'];
-  const __l2 = __pv2.length;
-  s.writeUint32(__l2);
-  for(let __i2 = 0; __i2 < __l2; __i2++) {
-    const __v__i2 = __pv2[__i2];
-    s.writeString(__v__i2);
+  const __pv4 = value['c'];
+  const __l5 = __pv4.length;
+  __s.writeUint32(__l5);
+  for(let __i5 = 0; __i5 < __l5; __i5++) {
+    const __v__i5 = __pv4[__i5];
+    __s.writeString(__v__i5);
   }
   /**
    * encoding param: d
    */
-  const __pv3 = value['d'];
-  const __l3 = __pv3.length;
-  s.writeUint32(__l3);
-  for(let __i3 = 0; __i3 < __l3; __i3++) {
-    const __v__i3 = __pv3[__i3];
-    s.writeFloat(__v__i3);
+  const __pv6 = value['d'];
+  const __l7 = __pv6.length;
+  __s.writeUint32(__l7);
+  for(let __i7 = 0; __i7 < __l7; __i7++) {
+    const __v__i7 = __pv6[__i7];
+    __s.writeFloat(__v__i7);
   }
   /**
    * encoding param: e
    */
-  const __pv4 = value['e'];
-  const __l4 = __pv4.length;
-  s.writeUint32(__l4);
-  for(let __i4 = 0; __i4 < __l4; __i4++) {
-    const __v__i4 = __pv4[__i4];
-    s.writeUint32(__v__i4);
+  const __pv8 = value['e'];
+  const __l9 = __pv8.length;
+  __s.writeUint32(__l9);
+  for(let __i9 = 0; __i9 < __l9; __i9++) {
+    const __v__i9 = __pv8[__i9];
+    __s.writeUint32(__v__i9);
   }
   /**
    * encoding param: f
    */
-  const __pv5 = value['f'];
-  const __l5 = __pv5.length;
-  s.writeUint32(__l5);
-  for(let __i5 = 0; __i5 < __l5; __i5++) {
-    const __v__i5 = __pv5[__i5];
-    if(__v__i5 === null) {
-      s.writeUint8(0);
+  const __pv10 = value['f'];
+  const __l11 = __pv10.length;
+  __s.writeUint32(__l11);
+  for(let __i11 = 0; __i11 < __l11; __i11++) {
+    const __v__i11 = __pv10[__i11];
+    if(__v__i11 === null) {
+      __s.writeUint8(0);
     } else {
-      s.writeUint8(1);
-      const __l7 = __v__i5.length;
-      s.writeUint32(__l7);
-      for(let __i7 = 0; __i7 < __l7; __i7++) {
-        const __v__i7 = __v__i5[__i7];
-        s.writeUint32(__v__i7);
+      __s.writeUint8(1);
+      const __l13 = __v__i11.length;
+      __s.writeUint32(__l13);
+      for(let __i13 = 0; __i13 < __l13; __i13++) {
+        const __v__i13 = __v__i11[__i13];
+        __s.writeUint32(__v__i13);
       }
     }
   }
   /**
    * encoding param: g
    */
-  const __pv6 = value['g'];
-  {
-    const __t60 = __pv6[0];
-    {
-      s.writeInt32(__t60);
-    }
-    const __t61 = __pv6[1];
-    {
-      s.writeFloat(__t61);
-    }
-    const __t62 = __pv6[2];
-    {
-      s.writeDouble(__t62);
-    }
-    const __t63 = __pv6[3];
-    {
-      const __l7 = __t63.length;
-      s.writeUint32(__l7);
-      for(let __i7 = 0; __i7 < __l7; __i7++) {
-        const __v__i7 = __t63[__i7];
-        s.writeUint32(__v__i7);
-      }
-    }
-    const __t64 = __pv6[4];
-    {
-      if(__t64 === null) {
-        s.writeUint8(0);
-      } else {
-        s.writeUint8(1);
-        s.writeString(__t64);
-      }
-    }
+  const __pv14 = value['g'];
+  const __t1515 = __pv14[0];
+  __s.writeInt32(__t1515);
+  const __t1616 = __pv14[1];
+  __s.writeFloat(__t1616);
+  const __t1818 = __pv14[2];
+  __s.writeDouble(__t1818);
+  const __t2121 = __pv14[3];
+  const __l25 = __t2121.length;
+  __s.writeUint32(__l25);
+  for(let __i25 = 0; __i25 < __l25; __i25++) {
+    const __v__i25 = __t2121[__i25];
+    __s.writeUint32(__v__i25);
+  }
+  const __t2626 = __pv14[4];
+  if(__t2626 === null) {
+    __s.writeUint8(0);
+  } else {
+    __s.writeUint8(1);
+    __s.writeString(__t2626);
   }
 }
 export function decodeShouldSupportSeveralSequentialVectorParams(__d: IDeserializer): ShouldSupportSeveralSequentialVectorParams | null {
@@ -971,83 +959,59 @@ export function simpleTupleTest(params: simpleTupleTestInputParams): simpleTuple
     b: params['b']
   };
 }
-export function encodeSimpleTupleTest(s: ISerializer, value: simpleTupleTest) {
-  s.writeInt32(1950454485);
+export function encodeSimpleTupleTest(__s: ISerializer, value: simpleTupleTest) {
+  __s.writeInt32(1950454485);
   /**
    * encoding param: a
    */
   const __pv0 = value['a'];
-  {
-    const __t00 = __pv0[0];
-    {
-      s.writeInt32(__t00);
-    }
-    const __t01 = __pv0[1];
-    {
-      s.writeFloat(__t01);
-    }
-    const __t02 = __pv0[2];
-    {
-      s.writeDouble(__t02);
-    }
-    const __t03 = __pv0[3];
-    {
-      const __l1 = __t03.length;
-      s.writeUint32(__l1);
-      for(let __i1 = 0; __i1 < __l1; __i1++) {
-        const __v__i1 = __t03[__i1];
-        s.writeUint32(__v__i1);
-      }
-    }
-    const __t04 = __pv0[4];
-    {
-      if(__t04 === null) {
-        s.writeUint8(0);
-      } else {
-        s.writeUint8(1);
-        s.writeString(__t04);
-      }
-    }
+  const __t11 = __pv0[0];
+  __s.writeInt32(__t11);
+  const __t22 = __pv0[1];
+  __s.writeFloat(__t22);
+  const __t44 = __pv0[2];
+  __s.writeDouble(__t44);
+  const __t77 = __pv0[3];
+  const __l11 = __t77.length;
+  __s.writeUint32(__l11);
+  for(let __i11 = 0; __i11 < __l11; __i11++) {
+    const __v__i11 = __t77[__i11];
+    __s.writeUint32(__v__i11);
+  }
+  const __t1212 = __pv0[4];
+  if(__t1212 === null) {
+    __s.writeUint8(0);
+  } else {
+    __s.writeUint8(1);
+    __s.writeString(__t1212);
   }
   /**
    * encoding param: b
    */
-  const __pv1 = value['b'];
-  const __l1 = __pv1.length;
-  s.writeUint32(__l1);
-  for(let __i1 = 0; __i1 < __l1; __i1++) {
-    const __v__i1 = __pv1[__i1];
-    {
-      const __t20 = __v__i1[0];
-      {
-        s.writeInt32(__t20);
-      }
-      const __t21 = __v__i1[1];
-      {
-        s.writeFloat(__t21);
-      }
-      const __t22 = __v__i1[2];
-      {
-        s.writeDouble(__t22);
-      }
-      const __t23 = __v__i1[3];
-      {
-        const __l3 = __t23.length;
-        s.writeUint32(__l3);
-        for(let __i3 = 0; __i3 < __l3; __i3++) {
-          const __v__i3 = __t23[__i3];
-          s.writeUint32(__v__i3);
-        }
-      }
-      const __t24 = __v__i1[4];
-      {
-        if(__t24 === null) {
-          s.writeUint8(0);
-        } else {
-          s.writeUint8(1);
-          s.writeString(__t24);
-        }
-      }
+  const __pv18 = value['b'];
+  const __l19 = __pv18.length;
+  __s.writeUint32(__l19);
+  for(let __i19 = 0; __i19 < __l19; __i19++) {
+    const __v__i19 = __pv18[__i19];
+    const __t2020 = __v__i19[0];
+    __s.writeInt32(__t2020);
+    const __t2121 = __v__i19[1];
+    __s.writeFloat(__t2121);
+    const __t2323 = __v__i19[2];
+    __s.writeDouble(__t2323);
+    const __t2626 = __v__i19[3];
+    const __l30 = __t2626.length;
+    __s.writeUint32(__l30);
+    for(let __i30 = 0; __i30 < __l30; __i30++) {
+      const __v__i30 = __t2626[__i30];
+      __s.writeUint32(__v__i30);
+    }
+    const __t3131 = __v__i19[4];
+    if(__t3131 === null) {
+      __s.writeUint8(0);
+    } else {
+      __s.writeUint8(1);
+      __s.writeString(__t3131);
     }
   }
 }
@@ -1166,8 +1130,8 @@ export function emptyNode(_: emptyNodeInputParams = {}): emptyNode {
     _name: 'schema.emptyNode'
   };
 }
-export function encodeEmptyNode(s: ISerializer, _: emptyNode) {
-  s.writeInt32(-1657223713);
+export function encodeEmptyNode(__s: ISerializer, _: emptyNode) {
+  __s.writeInt32(-1657223713);
 }
 export function decodeEmptyNode(__d: IDeserializer): emptyNode | null {
   const __id = __d.readInt32();
@@ -1204,18 +1168,18 @@ export function user(params: userInputParams): user {
     name: params['name']
   };
 }
-export function encodeUser(s: ISerializer, value: user) {
-  s.writeInt32(-399411702);
+export function encodeUser(__s: ISerializer, value: user) {
+  __s.writeInt32(-399411702);
   /**
    * encoding param: id
    */
   const __pv0 = value['id'];
-  s.writeInt32(__pv0);
+  __s.writeInt32(__pv0);
   /**
    * encoding param: name
    */
   const __pv1 = value['name'];
-  s.writeString(__pv1);
+  __s.writeString(__pv1);
 }
 export function decodeUser(__d: IDeserializer): user | null {
   const __id = __d.readInt32();

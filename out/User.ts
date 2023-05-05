@@ -1,13 +1,13 @@
 import {ISerializer} from "./__types__";
 import {IDeserializer} from "./__types__";
 export type User = user | userDeleted;
-export function encodeUserTrait(s: ISerializer,value: User) {
+export function encodeUserTrait(__s: ISerializer,value: User) {
   switch(value._name) {
     case 'user.user':
-      encodeUser(s,value);
+      encodeUser(__s,value);
       break;
     case 'user.userDeleted':
-      encodeUserDeleted(s,value);
+      encodeUserDeleted(__s,value);
       break;
   }
 }
@@ -46,10 +46,10 @@ export function compareUserTrait(__a: User, __b: User) {
   }
 }
 export type Test = test;
-export function encodeTestTrait(s: ISerializer,value: Test) {
+export function encodeTestTrait(__s: ISerializer,value: Test) {
   switch(value._name) {
     case 'user.test':
-      encodeTest(s,value);
+      encodeTest(__s,value);
       break;
   }
 }
@@ -89,22 +89,22 @@ export function user(params: userInputParams): user {
     aliases: params['aliases']
   };
 }
-export function encodeUser(s: ISerializer, value: user) {
-  s.writeInt32(830789580);
+export function encodeUser(__s: ISerializer, value: user) {
+  __s.writeInt32(830789580);
   /**
    * encoding param: firstName
    */
   const __pv0 = value['firstName'];
-  s.writeString(__pv0);
+  __s.writeString(__pv0);
   /**
    * encoding param: aliases
    */
   const __pv1 = value['aliases'];
-  const __l1 = __pv1.length;
-  s.writeUint32(__l1);
-  for(let __i1 = 0; __i1 < __l1; __i1++) {
-    const __v__i1 = __pv1[__i1];
-    s.writeString(__v__i1);
+  const __l2 = __pv1.length;
+  __s.writeUint32(__l2);
+  for(let __i2 = 0; __i2 < __l2; __i2++) {
+    const __v__i2 = __pv1[__i2];
+    __s.writeString(__v__i2);
   }
 }
 export function decodeUser(__d: IDeserializer): user | null {
@@ -186,13 +186,13 @@ export function userDeleted(params: userDeletedInputParams): userDeleted {
     deletedAt: params['deletedAt']
   };
 }
-export function encodeUserDeleted(s: ISerializer, value: userDeleted) {
-  s.writeInt32(-1010206580);
+export function encodeUserDeleted(__s: ISerializer, value: userDeleted) {
+  __s.writeInt32(-1010206580);
   /**
    * encoding param: deletedAt
    */
   const __pv0 = value['deletedAt'];
-  s.writeInt32(__pv0);
+  __s.writeInt32(__pv0);
 }
 export function decodeUserDeleted(__d: IDeserializer): userDeleted | null {
   const __id = __d.readInt32();
@@ -250,30 +250,30 @@ export function test(params: testInputParams): test {
     b: params['b']
   };
 }
-export function encodeTest(s: ISerializer, value: test) {
-  s.writeInt32(-1945733013);
+export function encodeTest(__s: ISerializer, value: test) {
+  __s.writeInt32(-1945733013);
   /**
    * encoding param: user
    */
   const __pv0 = value['user'];
-  encodeUser(s,__pv0);
+  encodeUser(__s,__pv0);
   /**
    * encoding param: b
    */
   const __pv1 = value['b'];
-  const __l1 = __pv1.length;
-  s.writeUint32(__l1);
-  for(let __i1 = 0; __i1 < __l1; __i1++) {
-    const __v__i1 = __pv1[__i1];
-    const __l2 = __v__i1.length;
-    s.writeUint32(__l2);
-    for(let __i2 = 0; __i2 < __l2; __i2++) {
-      const __v__i2 = __v__i1[__i2];
-      if(__v__i2 === null) {
-        s.writeUint8(0);
+  const __l2 = __pv1.length;
+  __s.writeUint32(__l2);
+  for(let __i2 = 0; __i2 < __l2; __i2++) {
+    const __v__i2 = __pv1[__i2];
+    const __l3 = __v__i2.length;
+    __s.writeUint32(__l3);
+    for(let __i3 = 0; __i3 < __l3; __i3++) {
+      const __v__i3 = __v__i2[__i3];
+      if(__v__i3 === null) {
+        __s.writeUint8(0);
       } else {
-        s.writeUint8(1);
-        s.writeString(__v__i2);
+        __s.writeUint8(1);
+        __s.writeString(__v__i3);
       }
     }
   }

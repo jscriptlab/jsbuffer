@@ -17,18 +17,18 @@ export function Conversation(params: ConversationInputParams): Conversation {
     user: params['user']
   };
 }
-export function encodeConversation(s: ISerializer, value: Conversation) {
-  s.writeInt32(-563833943);
+export function encodeConversation(__s: ISerializer, value: Conversation) {
+  __s.writeInt32(-563833943);
   /**
    * encoding param: id
    */
   const __pv0 = value['id'];
-  s.writeInt32(__pv0);
+  __s.writeInt32(__pv0);
   /**
    * encoding param: user
    */
   const __pv1 = value['user'];
-  encodeUser(s,__pv1);
+  encodeUser(__s,__pv1);
 }
 export function decodeConversation(__d: IDeserializer): Conversation | null {
   const __id = __d.readInt32();
@@ -106,17 +106,17 @@ export function Conversations(params: ConversationsInputParams): Conversations {
     conversations: params['conversations']
   };
 }
-export function encodeConversations(s: ISerializer, value: Conversations) {
-  s.writeInt32(-1956221194);
+export function encodeConversations(__s: ISerializer, value: Conversations) {
+  __s.writeInt32(-1956221194);
   /**
    * encoding param: conversations
    */
   const __pv0 = value['conversations'];
-  const __l0 = __pv0.length;
-  s.writeUint32(__l0);
-  for(let __i0 = 0; __i0 < __l0; __i0++) {
-    const __v__i0 = __pv0[__i0];
-    encodeConversation(s,__v__i0);
+  const __l1 = __pv0.length;
+  __s.writeUint32(__l1);
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    const __v__i1 = __pv0[__i1];
+    encodeConversation(__s,__v__i1);
   }
 }
 export function decodeConversations(__d: IDeserializer): Conversations | null {

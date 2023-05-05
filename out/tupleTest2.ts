@@ -13,23 +13,23 @@ export function user(params: userInputParams): user {
     lastName: params['lastName']
   };
 }
-export function encodeUser(s: ISerializer, value: user) {
-  s.writeInt32(-556582279);
+export function encodeUser(__s: ISerializer, value: user) {
+  __s.writeInt32(-556582279);
   /**
    * encoding param: id
    */
   const __pv0 = value['id'];
-  s.writeInt32(__pv0);
+  __s.writeInt32(__pv0);
   /**
    * encoding param: firstName
    */
   const __pv1 = value['firstName'];
-  s.writeString(__pv1);
+  __s.writeString(__pv1);
   /**
    * encoding param: lastName
    */
   const __pv2 = value['lastName'];
-  s.writeString(__pv2);
+  __s.writeString(__pv2);
 }
 export function decodeUser(__d: IDeserializer): user | null {
   const __id = __d.readInt32();
@@ -129,27 +129,27 @@ export function post(params: postInputParams): post {
     comments: params['comments']
   };
 }
-export function encodePost(s: ISerializer, value: post) {
-  s.writeInt32(207786521);
+export function encodePost(__s: ISerializer, value: post) {
+  __s.writeInt32(207786521);
   /**
    * encoding param: id
    */
   const __pv0 = value['id'];
-  s.writeInt32(__pv0);
+  __s.writeInt32(__pv0);
   /**
    * encoding param: title
    */
   const __pv1 = value['title'];
-  s.writeString(__pv1);
+  __s.writeString(__pv1);
   /**
    * encoding param: comments
    */
   const __pv2 = value['comments'];
-  const __l2 = __pv2.length;
-  s.writeUint32(__l2);
-  for(let __i2 = 0; __i2 < __l2; __i2++) {
-    const __v__i2 = __pv2[__i2];
-    encodeComment(s,__v__i2);
+  const __l3 = __pv2.length;
+  __s.writeUint32(__l3);
+  for(let __i3 = 0; __i3 < __l3; __i3++) {
+    const __v__i3 = __pv2[__i3];
+    encodeComment(__s,__v__i3);
   }
 }
 export function decodePost(__d: IDeserializer): post | null {
@@ -257,23 +257,23 @@ export function comment(params: commentInputParams): comment {
     contents: params['contents']
   };
 }
-export function encodeComment(s: ISerializer, value: comment) {
-  s.writeInt32(-78333276);
+export function encodeComment(__s: ISerializer, value: comment) {
+  __s.writeInt32(-78333276);
   /**
    * encoding param: id
    */
   const __pv0 = value['id'];
-  s.writeInt32(__pv0);
+  __s.writeInt32(__pv0);
   /**
    * encoding param: title
    */
   const __pv1 = value['title'];
-  s.writeString(__pv1);
+  __s.writeString(__pv1);
   /**
    * encoding param: contents
    */
   const __pv2 = value['contents'];
-  s.writeString(__pv2);
+  __s.writeString(__pv2);
 }
 export function decodeComment(__d: IDeserializer): comment | null {
   const __id = __d.readInt32();
@@ -369,47 +369,35 @@ export function tupleTest(params: tupleTestInputParams): tupleTest {
     data: params['data']
   };
 }
-export function encodeTupleTest(s: ISerializer, value: tupleTest) {
-  s.writeInt32(-47093845);
+export function encodeTupleTest(__s: ISerializer, value: tupleTest) {
+  __s.writeInt32(-47093845);
   /**
    * encoding param: data
    */
   const __pv0 = value['data'];
-  {
-    const __t00 = __pv0[0];
-    {
-      encodeUser(s,__t00);
-    }
-    const __t01 = __pv0[1];
-    {
-      encodePost(s,__t01);
-    }
-    const __t02 = __pv0[2];
-    {
-      encodeComment(s,__t02);
-    }
-    const __t03 = __pv0[3];
-    {
-      const __l1 = __t03.length;
-      s.writeUint32(__l1);
-      for(let __i1 = 0; __i1 < __l1; __i1++) {
-        const __v__i1 = __t03[__i1];
-        encodeComment(s,__v__i1);
-      }
-    }
-    const __t04 = __pv0[4];
-    {
-      const __l1 = __t04.length;
-      s.writeUint32(__l1);
-      for(let __i1 = 0; __i1 < __l1; __i1++) {
-        const __v__i1 = __t04[__i1];
-        if(__v__i1 === null) {
-          s.writeUint8(0);
-        } else {
-          s.writeUint8(1);
-          encodeComment(s,__v__i1);
-        }
-      }
+  const __t11 = __pv0[0];
+  encodeUser(__s,__t11);
+  const __t22 = __pv0[1];
+  encodePost(__s,__t22);
+  const __t44 = __pv0[2];
+  encodeComment(__s,__t44);
+  const __t77 = __pv0[3];
+  const __l11 = __t77.length;
+  __s.writeUint32(__l11);
+  for(let __i11 = 0; __i11 < __l11; __i11++) {
+    const __v__i11 = __t77[__i11];
+    encodeComment(__s,__v__i11);
+  }
+  const __t1212 = __pv0[4];
+  const __l17 = __t1212.length;
+  __s.writeUint32(__l17);
+  for(let __i17 = 0; __i17 < __l17; __i17++) {
+    const __v__i17 = __t1212[__i17];
+    if(__v__i17 === null) {
+      __s.writeUint8(0);
+    } else {
+      __s.writeUint8(1);
+      encodeComment(__s,__v__i17);
     }
   }
 }
@@ -501,57 +489,33 @@ export function tupleTupleTest(params: tupleTupleTestInputParams): tupleTupleTes
     a: params['a']
   };
 }
-export function encodeTupleTupleTest(s: ISerializer, value: tupleTupleTest) {
-  s.writeInt32(-1368648765);
+export function encodeTupleTupleTest(__s: ISerializer, value: tupleTupleTest) {
+  __s.writeInt32(-1368648765);
   /**
    * encoding param: a
    */
   const __pv0 = value['a'];
-  {
-    const __t00 = __pv0[0];
-    {
-      {
-        const __t10 = __t00[0];
-        {
-          s.writeInt32(__t10);
-        }
-        const __t11 = __t00[1];
-        {
-          s.writeString(__t11);
-        }
-        const __t12 = __t00[2];
-        {
-          const __l2 = __t12.length;
-          s.writeUint32(__l2);
-          for(let __i2 = 0; __i2 < __l2; __i2++) {
-            const __v__i2 = __t12[__i2];
-            {
-              const __t30 = __v__i2[0];
-              {
-                s.writeString(__t30);
-              }
-              const __t31 = __v__i2[1];
-              {
-                s.writeInt32(__t31);
-              }
-            }
-          }
-        }
-      }
-    }
-    const __t01 = __pv0[1];
-    {
-      s.writeInt32(__t01);
-    }
-    const __t02 = __pv0[2];
-    {
-      s.writeString(__t02);
-    }
-    const __t03 = __pv0[3];
-    {
-      s.writeDouble(__t03);
-    }
+  const __t11 = __pv0[0];
+  const __t22 = __t11[0];
+  __s.writeInt32(__t22);
+  const __t33 = __t11[1];
+  __s.writeString(__t33);
+  const __t55 = __t11[2];
+  const __l8 = __t55.length;
+  __s.writeUint32(__l8);
+  for(let __i8 = 0; __i8 < __l8; __i8++) {
+    const __v__i8 = __t55[__i8];
+    const __t99 = __v__i8[0];
+    __s.writeString(__t99);
+    const __t1010 = __v__i8[1];
+    __s.writeInt32(__t1010);
   }
+  const __t1212 = __pv0[1];
+  __s.writeInt32(__t1212);
+  const __t1414 = __pv0[2];
+  __s.writeString(__t1414);
+  const __t1717 = __pv0[3];
+  __s.writeDouble(__t1717);
 }
 export function decodeTupleTupleTest(__d: IDeserializer): tupleTupleTest | null {
   const __id = __d.readInt32();
@@ -630,36 +594,20 @@ export function superTupleTupleTest(params: superTupleTupleTestInputParams): sup
     a: params['a']
   };
 }
-export function encodeSuperTupleTupleTest(s: ISerializer, value: superTupleTupleTest) {
-  s.writeInt32(-106162167);
+export function encodeSuperTupleTupleTest(__s: ISerializer, value: superTupleTupleTest) {
+  __s.writeInt32(-106162167);
   /**
    * encoding param: a
    */
   const __pv0 = value['a'];
-  {
-    const __t00 = __pv0[0];
-    {
-      {
-        const __t10 = __t00[0];
-        {
-          {
-            const __t20 = __t10[0];
-            {
-              s.writeInt32(__t20);
-            }
-          }
-        }
-        const __t11 = __t00[1];
-        {
-          s.writeInt32(__t11);
-        }
-      }
-    }
-    const __t01 = __pv0[1];
-    {
-      s.writeDouble(__t01);
-    }
-  }
+  const __t11 = __pv0[0];
+  const __t22 = __t11[0];
+  const __t33 = __t22[0];
+  __s.writeInt32(__t33);
+  const __t44 = __t11[1];
+  __s.writeInt32(__t44);
+  const __t66 = __pv0[1];
+  __s.writeDouble(__t66);
 }
 export function decodeSuperTupleTupleTest(__d: IDeserializer): superTupleTupleTest | null {
   const __id = __d.readInt32();
