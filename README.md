@@ -133,9 +133,9 @@ export function compareUser(__a: user, __b: user) {
 }
 ```
 
-### More
+### Complex type structures
 
-To me, the most cool part of jsbuffer, is that you can create all sort of complex type structures and we will resolve and generate the code and files accordingly:
+To me, the most cool part of jsbuffer, is that you can create all sort of complex type structures that involve many parts and we will resolve and generate the code and files accordingly:
 
 ```
 import {refUser} from "./Ref";
@@ -157,6 +157,10 @@ type user {
   vector<post> posts;
 }
 ```
+
+## Demo
+
+You can try jsbuffer online in the [online playground](https://js-buffer-viewer-demo-app.herokuapp.com/), still in very early progress, but it works.
 
 ## Installation
 
