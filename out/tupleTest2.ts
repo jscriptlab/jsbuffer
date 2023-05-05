@@ -172,15 +172,13 @@ export function decodePost(__d: IDeserializer): post | null {
   /**
    * decoding param: comments
    */
-  {
-    const iindex2 = __d.readUint32();
-    const oindex2 = new Array(iindex2);
-    comments = oindex2;
-    for(let index2 = 0; index2 < iindex2; index2++) {
-      const __tmp3 = decodeComment(__d);
-      if(__tmp3 === null) return null;
-      oindex2[index2] = __tmp3;
-    }
+  const iindex3 = __d.readUint32();
+  const oindex3 = new Array<comment>(iindex3);
+  comments = oindex3;
+  for(let index3 = 0; index3 < iindex3; index3++) {
+    const __tmp4 = decodeComment(__d);
+    if(__tmp4 === null) return null;
+    oindex3[index3] = __tmp4;
   }
   return {
     _name: 'tupleTest2.post',
@@ -425,57 +423,41 @@ export function decodeTupleTest(__d: IDeserializer): tupleTest | null {
   /**
    * decoding param: data
    */
-  {
-    let e0: user;
-    let e1: post;
-    let e2: comment;
-    let e3: Array<comment>;
-    let e4: Array<comment | null>;
-    {
-      const __tmp0 = decodeUser(__d);
-      if(__tmp0 === null) return null;
-      e0 = __tmp0;
-    }
-    {
-      const __tmp1 = decodePost(__d);
-      if(__tmp1 === null) return null;
-      e1 = __tmp1;
-    }
-    {
-      const __tmp2 = decodeComment(__d);
-      if(__tmp2 === null) return null;
-      e2 = __tmp2;
-    }
-    {
-      {
-        const iindex3 = __d.readUint32();
-        const oindex3 = new Array(iindex3);
-        e3 = oindex3;
-        for(let index3 = 0; index3 < iindex3; index3++) {
-          const __tmp4 = decodeComment(__d);
-          if(__tmp4 === null) return null;
-          oindex3[index3] = __tmp4;
-        }
-      }
-    }
-    {
-      {
-        const iindex4 = __d.readUint32();
-        const oindex4 = new Array(iindex4);
-        e4 = oindex4;
-        for(let index4 = 0; index4 < iindex4; index4++) {
-          if(__d.readUint8() === 1) {
-            const __tmp6 = decodeComment(__d);
-            if(__tmp6 === null) return null;
-            oindex4[index4] = __tmp6;
-          } else {
-            oindex4[index4] = null;
-          }
-        }
-      }
-    }
-    data = [e0,e1,e2,e3,e4];
+  let __e1: user;
+  const __tmp2 = decodeUser(__d);
+  if(__tmp2 === null) return null;
+  __e1 = __tmp2;
+  let __e2: post;
+  const __tmp3 = decodePost(__d);
+  if(__tmp3 === null) return null;
+  __e2 = __tmp3;
+  let __e3: comment;
+  const __tmp4 = decodeComment(__d);
+  if(__tmp4 === null) return null;
+  __e3 = __tmp4;
+  let __e4: Array<comment>;
+  const iindex5 = __d.readUint32();
+  const oindex5 = new Array<comment>(iindex5);
+  __e4 = oindex5;
+  for(let index5 = 0; index5 < iindex5; index5++) {
+    const __tmp6 = decodeComment(__d);
+    if(__tmp6 === null) return null;
+    oindex5[index5] = __tmp6;
   }
+  let __e6: Array<comment | null>;
+  const iindex7 = __d.readUint32();
+  const oindex7 = new Array<comment | null>(iindex7);
+  __e6 = oindex7;
+  for(let index7 = 0; index7 < iindex7; index7++) {
+    if(__d.readUint8() === 1) {
+      const __tmp9 = decodeComment(__d);
+      if(__tmp9 === null) return null;
+      oindex7[index7] = __tmp9;
+    } else {
+      oindex7[index7] = null;
+    }
+  }
+  data = [__e1,__e2,__e3,__e4,__e6];
   return {
     _name: 'tupleTest2.tupleTest',
     data
@@ -505,6 +487,135 @@ export function updateTupleTest(value: tupleTest, changes: Partial<tupleTestInpu
       value = tupleTest({
         ...value,
         data: changes['data'],
+      });
+    }
+  }
+  return value;
+}
+export interface tupleTupleTestInputParams {
+  a: [[number,string,ReadonlyArray<[string,number]>],number,string,number];
+}
+export function tupleTupleTest(params: tupleTupleTestInputParams): tupleTupleTest {
+  return {
+    _name: 'tupleTest2.tupleTupleTest',
+    a: params['a']
+  };
+}
+export function encodeTupleTupleTest(s: ISerializer, value: tupleTupleTest) {
+  s.writeInt32(-1368648765);
+  /**
+   * encoding param: a
+   */
+  const __pv0 = value['a'];
+  {
+    const __t00 = __pv0[0];
+    {
+      {
+        const __t10 = __t00[0];
+        {
+          s.writeInt32(__t10);
+        }
+        const __t11 = __t00[1];
+        {
+          s.writeString(__t11);
+        }
+        const __t12 = __t00[2];
+        {
+          const __l2 = __t12.length;
+          s.writeUint32(__l2);
+          for(let __i2 = 0; __i2 < __l2; __i2++) {
+            const __v__i2 = __t12[__i2];
+            {
+              const __t30 = __v__i2[0];
+              {
+                s.writeString(__t30);
+              }
+              const __t31 = __v__i2[1];
+              {
+                s.writeInt32(__t31);
+              }
+            }
+          }
+        }
+      }
+    }
+    const __t01 = __pv0[1];
+    {
+      s.writeInt32(__t01);
+    }
+    const __t02 = __pv0[2];
+    {
+      s.writeString(__t02);
+    }
+    const __t03 = __pv0[3];
+    {
+      s.writeDouble(__t03);
+    }
+  }
+}
+export function decodeTupleTupleTest(__d: IDeserializer): tupleTupleTest | null {
+  const __id = __d.readInt32();
+  /**
+   * decode header
+   */
+  if(__id !== -1368648765) return null;
+  let a: [[number,string,Array<[string,number]>],number,string,number];
+  /**
+   * decoding param: a
+   */
+  let __e1: [number,string,Array<[string,number]>];
+  let __e2: number;
+  __e2 = __d.readInt32();
+  let __e3: string;
+  __e3 = __d.readString();
+  let __e4: Array<[string,number]>;
+  const iindex5 = __d.readUint32();
+  const oindex5 = new Array<[string,number]>(iindex5);
+  __e4 = oindex5;
+  for(let index5 = 0; index5 < iindex5; index5++) {
+    let __e6: string;
+    __e6 = __d.readString();
+    let __e7: number;
+    __e7 = __d.readInt32();
+    oindex5[index5] = [__e6,__e7];
+  }
+  __e1 = [__e2,__e3,__e4];
+  let __e8: number;
+  __e8 = __d.readInt32();
+  let __e9: string;
+  __e9 = __d.readString();
+  let __e10: number;
+  __e10 = __d.readDouble();
+  a = [__e1,__e8,__e9,__e10];
+  return {
+    _name: 'tupleTest2.tupleTupleTest',
+    a
+  };
+}
+export interface tupleTupleTest  {
+  _name: 'tupleTest2.tupleTupleTest';
+  a: [[number,string,ReadonlyArray<[string,number]>],number,string,number];
+}
+export function defaultTupleTupleTest(params: Partial<tupleTupleTestInputParams> = {}): tupleTupleTest {
+  return tupleTupleTest({
+    a: [[0,"",[]],0,"",0.0],
+    ...params
+  });
+}
+export function compareTupleTupleTest(__a: tupleTupleTest, __b: tupleTupleTest) {
+  return (
+    /**
+     * compare parameter a
+     */
+    /* compare tuple item 0 of type [number,string,ReadonlyArray<[string,number]>] */ ((__a00, __b00) => /* compare tuple item 0 of type number */ ((__a10, __b10) => __a10 === __b10)(__a00[0],__b00[0]) && /* compare tuple item 1 of type string */ ((__a11, __b11) => __a11 === __b11)(__a00[1],__b00[1]) && /* compare tuple item 2 of type ReadonlyArray<[string,number]> */ ((__a12, __b12) => __a12.length === __b12.length && __a12.every((__i,index) => (/* compare tuple item 0 of type string */ ((__a50, __b50) => __a50 === __b50)(__i[0],__b12[index][0]) && /* compare tuple item 1 of type number */ ((__a51, __b51) => __a51 === __b51)(__i[1],__b12[index][1]))))(__a00[2],__b00[2]))(__a['a'][0],__b['a'][0]) && /* compare tuple item 1 of type number */ ((__a01, __b01) => __a01 === __b01)(__a['a'][1],__b['a'][1]) && /* compare tuple item 2 of type string */ ((__a02, __b02) => __a02 === __b02)(__a['a'][2],__b['a'][2]) && /* compare tuple item 3 of type number */ ((__a03, __b03) => __a03 === __b03)(__a['a'][3],__b['a'][3])
+  );
+}
+export function updateTupleTupleTest(value: tupleTupleTest, changes: Partial<tupleTupleTestInputParams>) {
+  if(typeof changes['a'] !== 'undefined') {
+    if(!(/* compare tuple item 0 of type [number,string,ReadonlyArray<[string,number]>] */ ((__a00, __b00) => /* compare tuple item 0 of type number */ ((__a10, __b10) => __a10 === __b10)(__a00[0],__b00[0]) && /* compare tuple item 1 of type string */ ((__a11, __b11) => __a11 === __b11)(__a00[1],__b00[1]) && /* compare tuple item 2 of type ReadonlyArray<[string,number]> */ ((__a12, __b12) => __a12.length === __b12.length && __a12.every((__i,index) => (/* compare tuple item 0 of type string */ ((__a50, __b50) => __a50 === __b50)(__i[0],__b12[index][0]) && /* compare tuple item 1 of type number */ ((__a51, __b51) => __a51 === __b51)(__i[1],__b12[index][1]))))(__a00[2],__b00[2]))(changes['a'][0],value['a'][0]) && /* compare tuple item 1 of type number */ ((__a01, __b01) => __a01 === __b01)(changes['a'][1],value['a'][1]) && /* compare tuple item 2 of type string */ ((__a02, __b02) => __a02 === __b02)(changes['a'][2],value['a'][2]) && /* compare tuple item 3 of type number */ ((__a03, __b03) => __a03 === __b03)(changes['a'][3],value['a'][3]))) {
+      value = tupleTupleTest({
+        ...value,
+        a: changes['a'],
       });
     }
   }

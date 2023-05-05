@@ -122,13 +122,11 @@ export function decodeUser(__d: IDeserializer): user | null {
   /**
    * decoding param: aliases
    */
-  {
-    const iindex1 = __d.readUint32();
-    const oindex1 = new Array(iindex1);
-    aliases = oindex1;
-    for(let index1 = 0; index1 < iindex1; index1++) {
-      oindex1[index1] = __d.readString();
-    }
+  const iindex2 = __d.readUint32();
+  const oindex2 = new Array<string>(iindex2);
+  aliases = oindex2;
+  for(let index2 = 0; index2 < iindex2; index2++) {
+    oindex2[index2] = __d.readString();
   }
   return {
     _name: 'user.user',
@@ -291,28 +289,24 @@ export function decodeTest(__d: IDeserializer): test | null {
   /**
    * decoding param: user
    */
-  const __tmp0 = decodeUser(__d);
-  if(__tmp0 === null) return null;
-  user = __tmp0;
+  const __tmp1 = decodeUser(__d);
+  if(__tmp1 === null) return null;
+  user = __tmp1;
   /**
    * decoding param: b
    */
-  {
-    const iindex1 = __d.readUint32();
-    const oindex1 = new Array(iindex1);
-    b = oindex1;
-    for(let index1 = 0; index1 < iindex1; index1++) {
-      {
-        const iindex2 = __d.readUint32();
-        const oindex2 = new Array(iindex2);
-        oindex1[index1] = oindex2;
-        for(let index2 = 0; index2 < iindex2; index2++) {
-          if(__d.readUint8() === 1) {
-            oindex2[index2] = __d.readString();
-          } else {
-            oindex2[index2] = null;
-          }
-        }
+  const iindex2 = __d.readUint32();
+  const oindex2 = new Array<Array<string | null>>(iindex2);
+  b = oindex2;
+  for(let index2 = 0; index2 < iindex2; index2++) {
+    const iindex3 = __d.readUint32();
+    const oindex3 = new Array<string | null>(iindex3);
+    oindex2[index2] = oindex3;
+    for(let index3 = 0; index3 < iindex3; index3++) {
+      if(__d.readUint8() === 1) {
+        oindex3[index3] = __d.readString();
+      } else {
+        oindex3[index3] = null;
       }
     }
   }

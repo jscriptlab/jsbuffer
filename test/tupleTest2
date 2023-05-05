@@ -18,3 +18,7 @@ type comment {
 type tupleTest {
   tuple<user,post,comment,vector<comment>,vector<optional<comment>>> data;
 }
+
+type tupleTupleTest{
+  tuple<tuple<int,string,vector<tuple<string,int>>>,int,string,double> a;
+}

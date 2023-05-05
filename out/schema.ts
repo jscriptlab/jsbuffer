@@ -182,15 +182,13 @@ export function decodeUsers(__d: IDeserializer): Users | null {
   /**
    * decoding param: users
    */
-  {
-    const iindex0 = __d.readUint32();
-    const oindex0 = new Array(iindex0);
-    users = oindex0;
-    for(let index0 = 0; index0 < iindex0; index0++) {
-      const tmp2 = decodeUserTrait(__d);
-      if(tmp2 === null) return null;
-      oindex0[index0] = tmp2;
-    }
+  const iindex1 = __d.readUint32();
+  const oindex1 = new Array<User>(iindex1);
+  users = oindex1;
+  for(let index1 = 0; index1 < iindex1; index1++) {
+    const tmp3 = decodeUserTrait(__d);
+    if(tmp3 === null) return null;
+    oindex1[index1] = tmp3;
   }
   return {
     _name: 'schema.Users',
@@ -382,15 +380,13 @@ export function decodePosts(__d: IDeserializer): Posts | null {
   /**
    * decoding param: posts
    */
-  {
-    const iindex0 = __d.readUint32();
-    const oindex0 = new Array(iindex0);
-    posts = oindex0;
-    for(let index0 = 0; index0 < iindex0; index0++) {
-      const __tmp1 = decodePost(__d);
-      if(__tmp1 === null) return null;
-      oindex0[index0] = __tmp1;
-    }
+  const iindex1 = __d.readUint32();
+  const oindex1 = new Array<Post>(iindex1);
+  posts = oindex1;
+  for(let index1 = 0; index1 < iindex1; index1++) {
+    const __tmp2 = decodePost(__d);
+    if(__tmp2 === null) return null;
+    oindex1[index1] = __tmp2;
   }
   return {
     _name: 'schema.Posts',
@@ -757,117 +753,89 @@ export function decodeShouldSupportSeveralSequentialVectorParams(__d: IDeseriali
   /**
    * decoding param: a
    */
-  {
-    const iindex0 = __d.readUint32();
-    const oindex0 = new Array(iindex0);
-    a = oindex0;
-    for(let index0 = 0; index0 < iindex0; index0++) {
-      oindex0[index0] = __d.readInt32();
-    }
+  const iindex1 = __d.readUint32();
+  const oindex1 = new Array<number>(iindex1);
+  a = oindex1;
+  for(let index1 = 0; index1 < iindex1; index1++) {
+    oindex1[index1] = __d.readInt32();
   }
   /**
    * decoding param: b
    */
-  {
-    const iindex1 = __d.readUint32();
-    const oindex1 = new Array(iindex1);
-    b = oindex1;
-    for(let index1 = 0; index1 < iindex1; index1++) {
-      oindex1[index1] = __d.readDouble();
-    }
+  const iindex3 = __d.readUint32();
+  const oindex3 = new Array<number>(iindex3);
+  b = oindex3;
+  for(let index3 = 0; index3 < iindex3; index3++) {
+    oindex3[index3] = __d.readDouble();
   }
   /**
    * decoding param: c
    */
-  {
-    const iindex2 = __d.readUint32();
-    const oindex2 = new Array(iindex2);
-    c = oindex2;
-    for(let index2 = 0; index2 < iindex2; index2++) {
-      oindex2[index2] = __d.readString();
-    }
+  const iindex5 = __d.readUint32();
+  const oindex5 = new Array<string>(iindex5);
+  c = oindex5;
+  for(let index5 = 0; index5 < iindex5; index5++) {
+    oindex5[index5] = __d.readString();
   }
   /**
    * decoding param: d
    */
-  {
-    const iindex3 = __d.readUint32();
-    const oindex3 = new Array(iindex3);
-    d = oindex3;
-    for(let index3 = 0; index3 < iindex3; index3++) {
-      oindex3[index3] = __d.readFloat();
-    }
+  const iindex7 = __d.readUint32();
+  const oindex7 = new Array<number>(iindex7);
+  d = oindex7;
+  for(let index7 = 0; index7 < iindex7; index7++) {
+    oindex7[index7] = __d.readFloat();
   }
   /**
    * decoding param: e
    */
-  {
-    const iindex4 = __d.readUint32();
-    const oindex4 = new Array(iindex4);
-    e = oindex4;
-    for(let index4 = 0; index4 < iindex4; index4++) {
-      oindex4[index4] = __d.readUint32();
-    }
+  const iindex9 = __d.readUint32();
+  const oindex9 = new Array<number>(iindex9);
+  e = oindex9;
+  for(let index9 = 0; index9 < iindex9; index9++) {
+    oindex9[index9] = __d.readUint32();
   }
   /**
    * decoding param: f
    */
-  {
-    const iindex5 = __d.readUint32();
-    const oindex5 = new Array(iindex5);
-    f = oindex5;
-    for(let index5 = 0; index5 < iindex5; index5++) {
-      if(__d.readUint8() === 1) {
-        {
-          const iindex7 = __d.readUint32();
-          const oindex7 = new Array(iindex7);
-          oindex5[index5] = oindex7;
-          for(let index7 = 0; index7 < iindex7; index7++) {
-            oindex7[index7] = __d.readUint32();
-          }
-        }
-      } else {
-        oindex5[index5] = null;
+  const iindex11 = __d.readUint32();
+  const oindex11 = new Array<Array<number> | null>(iindex11);
+  f = oindex11;
+  for(let index11 = 0; index11 < iindex11; index11++) {
+    if(__d.readUint8() === 1) {
+      const iindex13 = __d.readUint32();
+      const oindex13 = new Array<number>(iindex13);
+      oindex11[index11] = oindex13;
+      for(let index13 = 0; index13 < iindex13; index13++) {
+        oindex13[index13] = __d.readUint32();
       }
+    } else {
+      oindex11[index11] = null;
     }
   }
   /**
    * decoding param: g
    */
-  {
-    let e0: number;
-    let e1: number;
-    let e2: number;
-    let e3: Array<number>;
-    let e4: string | null;
-    {
-      e0 = __d.readInt32();
-    }
-    {
-      e1 = __d.readFloat();
-    }
-    {
-      e2 = __d.readDouble();
-    }
-    {
-      {
-        const iindex9 = __d.readUint32();
-        const oindex9 = new Array(iindex9);
-        e3 = oindex9;
-        for(let index9 = 0; index9 < iindex9; index9++) {
-          oindex9[index9] = __d.readUint32();
-        }
-      }
-    }
-    {
-      if(__d.readUint8() === 1) {
-        e4 = __d.readString();
-      } else {
-        e4 = null;
-      }
-    }
-    g = [e0,e1,e2,e3,e4];
+  let __e15: number;
+  __e15 = __d.readInt32();
+  let __e16: number;
+  __e16 = __d.readFloat();
+  let __e17: number;
+  __e17 = __d.readDouble();
+  let __e18: Array<number>;
+  const iindex19 = __d.readUint32();
+  const oindex19 = new Array<number>(iindex19);
+  __e18 = oindex19;
+  for(let index19 = 0; index19 < iindex19; index19++) {
+    oindex19[index19] = __d.readUint32();
   }
+  let __e20: string | null;
+  if(__d.readUint8() === 1) {
+    __e20 = __d.readString();
+  } else {
+    __e20 = null;
+  }
+  g = [__e15,__e16,__e17,__e18,__e20];
   return {
     _name: 'schema.ShouldSupportSeveralSequentialVectorParams',
     a,
@@ -1094,83 +1062,53 @@ export function decodeSimpleTupleTest(__d: IDeserializer): simpleTupleTest | nul
   /**
    * decoding param: a
    */
-  {
-    let e0: number;
-    let e1: number;
-    let e2: number;
-    let e3: Array<number>;
-    let e4: string | null;
-    {
-      e0 = __d.readInt32();
-    }
-    {
-      e1 = __d.readFloat();
-    }
-    {
-      e2 = __d.readDouble();
-    }
-    {
-      {
-        const iindex3 = __d.readUint32();
-        const oindex3 = new Array(iindex3);
-        e3 = oindex3;
-        for(let index3 = 0; index3 < iindex3; index3++) {
-          oindex3[index3] = __d.readUint32();
-        }
-      }
-    }
-    {
-      if(__d.readUint8() === 1) {
-        e4 = __d.readString();
-      } else {
-        e4 = null;
-      }
-    }
-    a = [e0,e1,e2,e3,e4];
+  let __e1: number;
+  __e1 = __d.readInt32();
+  let __e2: number;
+  __e2 = __d.readFloat();
+  let __e3: number;
+  __e3 = __d.readDouble();
+  let __e4: Array<number>;
+  const iindex5 = __d.readUint32();
+  const oindex5 = new Array<number>(iindex5);
+  __e4 = oindex5;
+  for(let index5 = 0; index5 < iindex5; index5++) {
+    oindex5[index5] = __d.readUint32();
   }
+  let __e6: string | null;
+  if(__d.readUint8() === 1) {
+    __e6 = __d.readString();
+  } else {
+    __e6 = null;
+  }
+  a = [__e1,__e2,__e3,__e4,__e6];
   /**
    * decoding param: b
    */
-  {
-    const iindex1 = __d.readUint32();
-    const oindex1 = new Array(iindex1);
-    b = oindex1;
-    for(let index1 = 0; index1 < iindex1; index1++) {
-      {
-        let e0: number;
-        let e1: number;
-        let e2: number;
-        let e3: Array<number>;
-        let e4: string | null;
-        {
-          e0 = __d.readInt32();
-        }
-        {
-          e1 = __d.readFloat();
-        }
-        {
-          e2 = __d.readDouble();
-        }
-        {
-          {
-            const iindex5 = __d.readUint32();
-            const oindex5 = new Array(iindex5);
-            e3 = oindex5;
-            for(let index5 = 0; index5 < iindex5; index5++) {
-              oindex5[index5] = __d.readUint32();
-            }
-          }
-        }
-        {
-          if(__d.readUint8() === 1) {
-            e4 = __d.readString();
-          } else {
-            e4 = null;
-          }
-        }
-        oindex1[index1] = [e0,e1,e2,e3,e4];
-      }
+  const iindex9 = __d.readUint32();
+  const oindex9 = new Array<[number,number,number,Array<number>,string | null]>(iindex9);
+  b = oindex9;
+  for(let index9 = 0; index9 < iindex9; index9++) {
+    let __e10: number;
+    __e10 = __d.readInt32();
+    let __e11: number;
+    __e11 = __d.readFloat();
+    let __e12: number;
+    __e12 = __d.readDouble();
+    let __e13: Array<number>;
+    const iindex14 = __d.readUint32();
+    const oindex14 = new Array<number>(iindex14);
+    __e13 = oindex14;
+    for(let index14 = 0; index14 < iindex14; index14++) {
+      oindex14[index14] = __d.readUint32();
     }
+    let __e15: string | null;
+    if(__d.readUint8() === 1) {
+      __e15 = __d.readString();
+    } else {
+      __e15 = null;
+    }
+    oindex9[index9] = [__e10,__e11,__e12,__e13,__e15];
   }
   return {
     _name: 'schema.simpleTupleTest',

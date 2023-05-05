@@ -95,15 +95,13 @@ export function decodeMessages(__d: IDeserializer): Messages | null {
   /**
    * decoding param: messages
    */
-  {
-    const iindex0 = __d.readUint32();
-    const oindex0 = new Array(iindex0);
-    messages = oindex0;
-    for(let index0 = 0; index0 < iindex0; index0++) {
-      const __tmp1 = decodeMessage(__d);
-      if(__tmp1 === null) return null;
-      oindex0[index0] = __tmp1;
-    }
+  const iindex1 = __d.readUint32();
+  const oindex1 = new Array<Message>(iindex1);
+  messages = oindex1;
+  for(let index1 = 0; index1 < iindex1; index1++) {
+    const __tmp2 = decodeMessage(__d);
+    if(__tmp2 === null) return null;
+    oindex1[index1] = __tmp2;
   }
   return {
     _name: 'message.Messages',

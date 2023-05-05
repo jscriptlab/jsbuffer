@@ -1321,7 +1321,7 @@ export default class FileGenerator extends CodeStream {
     exp: NodeTypeExpression,
     value: string,
     depth: number
-  ) {
+  ): number {
     const resolved = this.#resolveTypeExpression(exp);
     if ('generic' in resolved) {
       switch (resolved.generic) {
@@ -1357,7 +1357,7 @@ export default class FileGenerator extends CodeStream {
           this.write(
             'if(__d.readUint8() === 1) {\n',
             () => {
-              this.#generateDecodeTypeExpression(
+              depth = this.#generateDecodeTypeExpression(
                 resolved.expression,
                 value,
                 depth + 1
@@ -1370,74 +1370,44 @@ export default class FileGenerator extends CodeStream {
           });
           this.write('}\n');
           break;
-        case 'tuple':
-          this.write(
-            '{\n',
-            () => {
-              let i = 0;
-              interface ITupleExpressionItem {
-                varName: string;
-                index: number;
-                typeExpression: NodeTypeExpression;
-              }
-              const exps = new Array<ITupleExpressionItem>();
-              for (const typeExpression of resolved.expressions) {
-                const varName = `e${i}`;
-                this.write(
-                  `let ${varName}: ${this.#resolveTypeExpressionToString({
-                    readOnly: false,
-                    typeExpression,
-                  })};\n`
-                );
-                exps.push({
-                  index: i,
-                  varName,
-                  typeExpression,
-                });
-                i++;
-              }
-              for (const { index, varName, typeExpression } of exps) {
-                this.write(
-                  '{\n',
-                  () => {
-                    this.#generateDecodeTypeExpression(
-                      typeExpression,
-                      `${varName}`,
-                      depth + index
-                    );
-                  },
-                  '}\n'
-                );
-              }
-              this.write(
-                `${value} = [${exps.map((exp) => exp.varName).join(',')}];\n`
-              );
-            },
-            '}\n'
-          );
+        case 'tuple': {
+          const varNames = new Array<string>();
+          for (const typeExpression of resolved.expressions) {
+            const varName = `__e${depth}`;
+            this.write(
+              `let ${varName}: ${this.#resolveTypeExpressionToString({
+                readOnly: false,
+                typeExpression,
+              })};\n`
+            );
+            depth = this.#generateDecodeTypeExpression(
+              typeExpression,
+              varName,
+              depth + 1
+            );
+            varNames.push(varName);
+          }
+          this.write(`${value} = [${varNames.join(',')}];\n`);
           break;
+        }
         case 'vector': {
           const i = `index${depth}`;
           const lengthVarName = `i${i}`;
           const outVarName = `o${i}`;
+          this.write(`const ${lengthVarName} = __d.readUint32();\n`);
           this.write(
-            '{\n',
+            `const ${outVarName} = new Array<${this.#resolveTypeExpressionToString(
+              { typeExpression: resolved.expression, readOnly: false }
+            )}>(${lengthVarName});\n`
+          );
+          this.write(`${value} = ${outVarName};\n`);
+          this.write(
+            `for(let ${i} = 0; ${i} < ${lengthVarName}; ${i}++) {\n`,
             () => {
-              this.write(`const ${lengthVarName} = __d.readUint32();\n`);
-              this.write(
-                `const ${outVarName} = new Array(${lengthVarName});\n`
-              );
-              this.write(`${value} = ${outVarName};\n`);
-              this.write(
-                `for(let ${i} = 0; ${i} < ${lengthVarName}; ${i}++) {\n`,
-                () => {
-                  this.#generateDecodeTypeExpression(
-                    resolved.expression,
-                    `${outVarName}[${i}]`,
-                    depth + 1
-                  );
-                },
-                '}\n'
+              depth = this.#generateDecodeTypeExpression(
+                resolved.expression,
+                `${outVarName}[${i}]`,
+                depth + 1
               );
             },
             '}\n'
@@ -1450,7 +1420,7 @@ export default class FileGenerator extends CodeStream {
     } else if ('fileGenerator' in resolved) {
       const type = this.#resolvedTypeExpressionToDefinition(resolved);
 
-      this.#generateDecodeTypeCode(
+      depth = this.#generateDecodeTypeCode(
         type,
         value,
         depth + 1,
@@ -1464,6 +1434,7 @@ export default class FileGenerator extends CodeStream {
       this.write(`if(${tmpVarName} === null) return null;\n`);
       this.write(`${value} = ${tmpVarName};\n`);
     }
+    return depth;
   }
   #generateDecodeTypeCode(
     node: INodeCallDefinition | INodeTypeDefinition | INodeTraitDefinition,
@@ -1482,6 +1453,7 @@ export default class FileGenerator extends CodeStream {
     );
     this.write(`if(${intermediaryValueVarName} === null) return null;\n`);
     this.write(`${value} = ${intermediaryValueVarName};\n`);
+    return depth;
   }
   #getUniqueHeaderString(
     node: INodeTraitDefinition | INodeCallDefinition | INodeTypeDefinition
@@ -1582,8 +1554,11 @@ export default class FileGenerator extends CodeStream {
         let i = 0;
         for (const p of node.parameters) {
           this.#writeMultilineComment(`decoding param: ${p.name.value}`);
-          this.#generateDecodeTypeExpression(p.typeExpression, p.name.value, i);
-          i++;
+          i = this.#generateDecodeTypeExpression(
+            p.typeExpression,
+            p.name.value,
+            i + 1
+          );
         }
         this.write(
           'return {\n',

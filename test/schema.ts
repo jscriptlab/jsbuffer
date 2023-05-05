@@ -12,6 +12,7 @@ import {
   compareSimpleTupleTest,
   updateSimpleTupleTest,
 } from '../out/schema';
+import { tupleTupleTest, updateTupleTupleTest } from '../out/tupleTest2';
 import { Serializer, Deserializer } from '../codec';
 import { TextDecoder, TextEncoder } from 'util';
 import assert from 'assert';
@@ -104,6 +105,21 @@ suite.test('it should encode tuple', () => {
     simpleTupleTest({
       a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
       b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+    })
+  );
+});
+
+suite.test('it should support tuple inside tuple types', () => {
+  const a1 = tupleTupleTest({
+    a: [[0, '', []], 0, '', 0.0],
+  });
+  assert.strict.equal(updateTupleTupleTest(a1, {}), a1);
+  assert.strict.deepEqual(
+    updateTupleTupleTest(a1, {
+      a: [[0, 'aaa', [['', 1]]], 0, '', 0.0],
+    }),
+    tupleTupleTest({
+      a: [[0, 'aaa', [['', 1]]], 0, '', 0.0],
     })
   );
 });

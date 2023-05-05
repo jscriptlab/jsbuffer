@@ -45,9 +45,9 @@ export function decodeConversation(__d: IDeserializer): Conversation | null {
   /**
    * decoding param: user
    */
-  const tmp2 = decodeUser(__d);
-  if(tmp2 === null) return null;
-  user = tmp2;
+  const tmp3 = decodeUser(__d);
+  if(tmp3 === null) return null;
+  user = tmp3;
   return {
     _name: 'conversation.index.Conversation',
     id,
@@ -129,15 +129,13 @@ export function decodeConversations(__d: IDeserializer): Conversations | null {
   /**
    * decoding param: conversations
    */
-  {
-    const iindex0 = __d.readUint32();
-    const oindex0 = new Array(iindex0);
-    conversations = oindex0;
-    for(let index0 = 0; index0 < iindex0; index0++) {
-      const __tmp1 = decodeConversation(__d);
-      if(__tmp1 === null) return null;
-      oindex0[index0] = __tmp1;
-    }
+  const iindex1 = __d.readUint32();
+  const oindex1 = new Array<Conversation>(iindex1);
+  conversations = oindex1;
+  for(let index1 = 0; index1 < iindex1; index1++) {
+    const __tmp2 = decodeConversation(__d);
+    if(__tmp2 === null) return null;
+    oindex1[index1] = __tmp2;
   }
   return {
     _name: 'conversation.index.Conversations',
