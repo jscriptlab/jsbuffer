@@ -71,6 +71,21 @@ export function userDefault(params: Partial<userInputParams> = {}): user {
     ...params
   });
 }
+export function userCompare(__a: user, __b: user) {
+  /**
+   * compare parameter id
+   */
+  if(!(__a['id'] === __b['id'])) return false;
+  /**
+   * compare parameter firstName
+   */
+  if(!(__a['firstName'] === __b['firstName'])) return false;
+  /**
+   * compare parameter lastName
+   */
+  if(!(__a['lastName'] === __b['lastName'])) return false;
+  return true;
+}
 export interface postInputParams {
   id: number;
   title: string;
@@ -156,6 +171,21 @@ export function postDefault(params: Partial<postInputParams> = {}): post {
     ...params
   });
 }
+export function postCompare(__a: post, __b: post) {
+  /**
+   * compare parameter id
+   */
+  if(!(__a['id'] === __b['id'])) return false;
+  /**
+   * compare parameter title
+   */
+  if(!(__a['title'] === __b['title'])) return false;
+  /**
+   * compare parameter comments
+   */
+  if(!(__a['comments'].length === __b['comments'].length && __a['comments'].every((__i,index) => (commentCompare(__i,__b['comments'][index]))))) return false;
+  return true;
+}
 export interface commentInputParams {
   id: number;
   title: string;
@@ -226,6 +256,21 @@ export function commentDefault(params: Partial<commentInputParams> = {}): commen
     contents: "",
     ...params
   });
+}
+export function commentCompare(__a: comment, __b: comment) {
+  /**
+   * compare parameter id
+   */
+  if(!(__a['id'] === __b['id'])) return false;
+  /**
+   * compare parameter title
+   */
+  if(!(__a['title'] === __b['title'])) return false;
+  /**
+   * compare parameter contents
+   */
+  if(!(__a['contents'] === __b['contents'])) return false;
+  return true;
 }
 export interface tupleTestInputParams {
   data: [user,post,comment,ReadonlyArray<comment>,ReadonlyArray<comment | null>];
@@ -355,4 +400,11 @@ export function tupleTestDefault(params: Partial<tupleTestInputParams> = {}): tu
     data: [userDefault(),postDefault(),commentDefault(),[],[]],
     ...params
   });
+}
+export function tupleTestCompare(__a: tupleTest, __b: tupleTest) {
+  /**
+   * compare parameter data
+   */
+  if(!(/* compare tuple item 0 of type user */ ((__a00, __b00) => userCompare(__a00,__b00))(__a['data'][0],__b['data'][0]) && /* compare tuple item 1 of type post */ ((__a01, __b01) => postCompare(__a01,__b01))(__a['data'][1],__b['data'][1]) && /* compare tuple item 2 of type comment */ ((__a02, __b02) => commentCompare(__a02,__b02))(__a['data'][2],__b['data'][2]) && /* compare tuple item 3 of type ReadonlyArray<comment> */ ((__a03, __b03) => __a03.length === __b03.length && __a03.every((__i,index) => (commentCompare(__i,__b03[index]))))(__a['data'][3],__b['data'][3]) && /* compare tuple item 4 of type ReadonlyArray<comment | null> */ ((__a04, __b04) => __a04.length === __b04.length && __a04.every((__i,index) => (((__dp61, __dp62) => __dp61 !== null && __dp62 !== null ? commentCompare(__dp61,__dp62) : __dp61 === __dp62)(__i,__b04[index]))))(__a['data'][4],__b['data'][4]))) return false;
+  return true;
 }

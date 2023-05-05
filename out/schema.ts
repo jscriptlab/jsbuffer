@@ -5,6 +5,7 @@ import {ISerializer} from "./__types__";
 import {IDeserializer} from "./__types__";
 import {encodeUserTrait} from "./User";
 import {decodeUserTrait} from "./User";
+import {UserCompare} from "./User";
 import {IRequest} from "./__types__";
 export interface VoidInputParams {
 }
@@ -34,6 +35,9 @@ export function VoidDefault(params: Partial<VoidInputParams> = {}): Void {
   return Void({
     ...params
   });
+}
+export function VoidCompare(__a: Void, __b: Void) {
+  return true;
 }
 export interface msgInputParams {
   data: Uint8Array;
@@ -79,6 +83,13 @@ export function msgDefault(params: Partial<msgInputParams> = {}): msg {
     ...params
   });
 }
+export function msgCompare(__a: msg, __b: msg) {
+  /**
+   * compare parameter data
+   */
+  if(!(__a['data'].byteLength === __b['data'].byteLength && __a['data'].every((__byte,index) => __b['data'][index] === __byte))) return false;
+  return true;
+}
 export type Result = Users | Posts;
 export function encodeResultTrait(s: ISerializer,value: Result) {
   switch(value._name) {
@@ -113,6 +124,16 @@ export function decodeResultTrait(__d: IDeserializer) {
 }
 export function ResultDefault() {
   return UsersDefault();
+}
+export function ResultCompare(__a: Result, __b: Result) {
+  switch(__a._name) {
+    case 'schema.Users':
+      if(__b._name !== "schema.Users") return false;
+      return UsersCompare(__a,__b);
+    case 'schema.Posts':
+      if(__b._name !== "schema.Posts") return false;
+      return PostsCompare(__a,__b);
+  }
 }
 export interface UsersInputParams {
   users: ReadonlyArray<User>;
@@ -171,6 +192,13 @@ export function UsersDefault(params: Partial<UsersInputParams> = {}): Users {
     ...params
   });
 }
+export function UsersCompare(__a: Users, __b: Users) {
+  /**
+   * compare parameter users
+   */
+  if(!(__a['users'].length === __b['users'].length && __a['users'].every((__i,index) => (UserCompare(__i,__b['users'][index]))))) return false;
+  return true;
+}
 export interface GetUserByIdInputParams {
   userId: number;
 }
@@ -214,6 +242,13 @@ export function GetUserByIdDefault(params: Partial<GetUserByIdInputParams> = {})
     ...params
   });
 }
+export function GetUserByIdCompare(__a: GetUserById, __b: GetUserById) {
+  /**
+   * compare parameter userId
+   */
+  if(!(__a['userId'] === __b['userId'])) return false;
+  return true;
+}
 export interface PostInputParams {
   id: number;
 }
@@ -256,6 +291,13 @@ export function PostDefault(params: Partial<PostInputParams> = {}): Post {
     id: 0,
     ...params
   });
+}
+export function PostCompare(__a: Post, __b: Post) {
+  /**
+   * compare parameter id
+   */
+  if(!(__a['id'] === __b['id'])) return false;
+  return true;
 }
 export interface PostsInputParams {
   posts: ReadonlyArray<Post>;
@@ -314,6 +356,13 @@ export function PostsDefault(params: Partial<PostsInputParams> = {}): Posts {
     ...params
   });
 }
+export function PostsCompare(__a: Posts, __b: Posts) {
+  /**
+   * compare parameter posts
+   */
+  if(!(__a['posts'].length === __b['posts'].length && __a['posts'].every((__i,index) => (PostCompare(__i,__b['posts'][index]))))) return false;
+  return true;
+}
 export interface GetPostByIdInputParams {
   postId: number;
 }
@@ -357,6 +406,13 @@ export function GetPostByIdDefault(params: Partial<GetPostByIdInputParams> = {})
     ...params
   });
 }
+export function GetPostByIdCompare(__a: GetPostById, __b: GetPostById) {
+  /**
+   * compare parameter postId
+   */
+  if(!(__a['postId'] === __b['postId'])) return false;
+  return true;
+}
 export interface GetConversationsInputParams {
 }
 export function GetConversations(params: GetConversationsInputParams = {}): GetConversations {
@@ -385,6 +441,9 @@ export function GetConversationsDefault(params: Partial<GetConversationsInputPar
   return GetConversations({
     ...params
   });
+}
+export function GetConversationsCompare(__a: GetConversations, __b: GetConversations) {
+  return true;
 }
 export interface CoordinatesInputParams {
   latitude: number;
@@ -442,6 +501,17 @@ export function CoordinatesDefault(params: Partial<CoordinatesInputParams> = {})
     longitude: 0.0,
     ...params
   });
+}
+export function CoordinatesCompare(__a: Coordinates, __b: Coordinates) {
+  /**
+   * compare parameter latitude
+   */
+  if(!(__a['latitude'] === __b['latitude'])) return false;
+  /**
+   * compare parameter longitude
+   */
+  if(!(__a['longitude'] === __b['longitude'])) return false;
+  return true;
 }
 export interface ShouldSupportSeveralSequentialVectorParamsInputParams {
   a: ReadonlyArray<number>;
@@ -727,6 +797,37 @@ export function ShouldSupportSeveralSequentialVectorParamsDefault(params: Partia
     ...params
   });
 }
+export function ShouldSupportSeveralSequentialVectorParamsCompare(__a: ShouldSupportSeveralSequentialVectorParams, __b: ShouldSupportSeveralSequentialVectorParams) {
+  /**
+   * compare parameter a
+   */
+  if(!(__a['a'].length === __b['a'].length && __a['a'].every((__i,index) => (__i === __b['a'][index])))) return false;
+  /**
+   * compare parameter b
+   */
+  if(!(__a['b'].length === __b['b'].length && __a['b'].every((__i,index) => (__i === __b['b'][index])))) return false;
+  /**
+   * compare parameter c
+   */
+  if(!(__a['c'].length === __b['c'].length && __a['c'].every((__i,index) => (__i === __b['c'][index])))) return false;
+  /**
+   * compare parameter d
+   */
+  if(!(__a['d'].length === __b['d'].length && __a['d'].every((__i,index) => (__i === __b['d'][index])))) return false;
+  /**
+   * compare parameter e
+   */
+  if(!(__a['e'].length === __b['e'].length && __a['e'].every((__i,index) => (__i === __b['e'][index])))) return false;
+  /**
+   * compare parameter f
+   */
+  if(!(__a['f'].length === __b['f'].length && __a['f'].every((__i,index) => (((__dp61, __dp62) => __dp61 !== null && __dp62 !== null ? __dp61.length === __dp62.length && __dp61.every((__i,index) => (__i === __dp62[index])) : __dp61 === __dp62)(__i,__b['f'][index]))))) return false;
+  /**
+   * compare parameter g
+   */
+  if(!(/* compare tuple item 0 of type number */ ((__a60, __b60) => __a60 === __b60)(__a['g'][0],__b['g'][0]) && /* compare tuple item 1 of type number */ ((__a61, __b61) => __a61 === __b61)(__a['g'][1],__b['g'][1]) && /* compare tuple item 2 of type number */ ((__a62, __b62) => __a62 === __b62)(__a['g'][2],__b['g'][2]) && /* compare tuple item 3 of type ReadonlyArray<number> */ ((__a63, __b63) => __a63.length === __b63.length && __a63.every((__i,index) => (__i === __b63[index])))(__a['g'][3],__b['g'][3]) && /* compare tuple item 4 of type string | null */ ((__a64, __b64) => ((__dp111, __dp112) => __dp111 !== null && __dp112 !== null ? __dp111 === __dp112 : __dp111 === __dp112)(__a64,__b64))(__a['g'][4],__b['g'][4]))) return false;
+  return true;
+}
 export interface simpleTupleTestInputParams {
   a: [number,number,number,ReadonlyArray<number>,string | null];
   b: ReadonlyArray<[number,number,number,ReadonlyArray<number>,string | null]>;
@@ -924,6 +1025,17 @@ export function simpleTupleTestDefault(params: Partial<simpleTupleTestInputParam
     ...params
   });
 }
+export function simpleTupleTestCompare(__a: simpleTupleTest, __b: simpleTupleTest) {
+  /**
+   * compare parameter a
+   */
+  if(!(/* compare tuple item 0 of type number */ ((__a00, __b00) => __a00 === __b00)(__a['a'][0],__b['a'][0]) && /* compare tuple item 1 of type number */ ((__a01, __b01) => __a01 === __b01)(__a['a'][1],__b['a'][1]) && /* compare tuple item 2 of type number */ ((__a02, __b02) => __a02 === __b02)(__a['a'][2],__b['a'][2]) && /* compare tuple item 3 of type ReadonlyArray<number> */ ((__a03, __b03) => __a03.length === __b03.length && __a03.every((__i,index) => (__i === __b03[index])))(__a['a'][3],__b['a'][3]) && /* compare tuple item 4 of type string | null */ ((__a04, __b04) => ((__dp51, __dp52) => __dp51 !== null && __dp52 !== null ? __dp51 === __dp52 : __dp51 === __dp52)(__a04,__b04))(__a['a'][4],__b['a'][4]))) return false;
+  /**
+   * compare parameter b
+   */
+  if(!(__a['b'].length === __b['b'].length && __a['b'].every((__i,index) => (/* compare tuple item 0 of type number */ ((__a20, __b20) => __a20 === __b20)(__i[0],__b['b'][index][0]) && /* compare tuple item 1 of type number */ ((__a21, __b21) => __a21 === __b21)(__i[1],__b['b'][index][1]) && /* compare tuple item 2 of type number */ ((__a22, __b22) => __a22 === __b22)(__i[2],__b['b'][index][2]) && /* compare tuple item 3 of type ReadonlyArray<number> */ ((__a23, __b23) => __a23.length === __b23.length && __a23.every((__i,index) => (__i === __b23[index])))(__i[3],__b['b'][index][3]) && /* compare tuple item 4 of type string | null */ ((__a24, __b24) => ((__dp71, __dp72) => __dp71 !== null && __dp72 !== null ? __dp71 === __dp72 : __dp71 === __dp72)(__a24,__b24))(__i[4],__b['b'][index][4]))))) return false;
+  return true;
+}
 export interface emptyNodeInputParams {
 }
 export function emptyNode(params: emptyNodeInputParams = {}): emptyNode {
@@ -952,4 +1064,75 @@ export function emptyNodeDefault(params: Partial<emptyNodeInputParams> = {}): em
   return emptyNode({
     ...params
   });
+}
+export function emptyNodeCompare(__a: emptyNode, __b: emptyNode) {
+  return true;
+}
+export interface userInputParams {
+  id: number;
+  name: string;
+}
+export function user(params: userInputParams): user {
+  return {
+    _name: 'schema.user',
+    ...params
+  };
+}
+export function encodeUser(s: ISerializer, value: user) {
+  s.writeInt32(-399411702);
+  /**
+   * encoding param: id
+   */
+  const __pv0 = value['id'];
+  s.writeInt32(__pv0);
+  /**
+   * encoding param: name
+   */
+  const __pv1 = value['name'];
+  s.writeString(__pv1);
+}
+export function decodeUser(__d: IDeserializer): user | null {
+  const __id = __d.readInt32();
+  /**
+   * decode header
+   */
+  if(__id !== -399411702) return null;
+  let id: number;
+  let name: string;
+  /**
+   * decoding param: id
+   */
+  id = __d.readInt32();
+  /**
+   * decoding param: name
+   */
+  name = __d.readString();
+  return {
+    _name: 'schema.user',
+    id,
+    name
+  };
+}
+export interface user  {
+  _name: 'schema.user';
+  id: number;
+  name: string;
+}
+export function userDefault(params: Partial<userInputParams> = {}): user {
+  return user({
+    id: 0,
+    name: "",
+    ...params
+  });
+}
+export function userCompare(__a: user, __b: user) {
+  /**
+   * compare parameter id
+   */
+  if(!(__a['id'] === __b['id'])) return false;
+  /**
+   * compare parameter name
+   */
+  if(!(__a['name'] === __b['name'])) return false;
+  return true;
 }

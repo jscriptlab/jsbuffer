@@ -10,6 +10,9 @@ import {decodeGetUserById} from "./schema";
 import {decodeGetPostById} from "./schema";
 import {decodeGetConversations} from "./schema";
 import {GetUserByIdDefault} from "./schema";
+import {GetUserByIdCompare} from "./schema";
+import {GetPostByIdCompare} from "./schema";
+import {GetConversationsCompare} from "./schema";
 export type Request = GetUserById | GetPostById | GetConversations;
 export function encodeRequestTrait(s: ISerializer,value: Request) {
   switch(value._name) {
@@ -53,4 +56,17 @@ export function decodeRequestTrait(__d: IDeserializer) {
 }
 export function RequestDefault() {
   return GetUserByIdDefault();
+}
+export function RequestCompare(__a: Request, __b: Request) {
+  switch(__a._name) {
+    case 'schema.GetUserById':
+      if(__b._name !== "schema.GetUserById") return false;
+      return GetUserByIdCompare(__a,__b);
+    case 'schema.GetPostById':
+      if(__b._name !== "schema.GetPostById") return false;
+      return GetPostByIdCompare(__a,__b);
+    case 'schema.GetConversations':
+      if(__b._name !== "schema.GetConversations") return false;
+      return GetConversationsCompare(__a,__b);
+  }
 }

@@ -9,6 +9,7 @@ import {
   encodeSimpleTupleTest,
   msg,
   simpleTupleTest,
+  simpleTupleTestCompare,
 } from '../out/schema';
 import { Serializer, Deserializer } from '../codec';
 import { TextDecoder, TextEncoder } from 'util';
@@ -103,6 +104,109 @@ suite.test('it should encode tuple', () => {
       a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
       b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
     })
+  );
+});
+
+suite.test('it should compare tuples', () => {
+  assert.strict.ok(
+    simpleTupleTestCompare(
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+      }),
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+      })
+    )
+  );
+  assert.strict.ok(
+    simpleTupleTestCompare(
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa'],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+      }),
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa'],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+      })
+    )
+  );
+  assert.strict.equal(
+    simpleTupleTestCompare(
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa'],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+      }),
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'bbb'],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+      })
+    ),
+    false
+  );
+  assert.strict.equal(
+    simpleTupleTestCompare(
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+      }),
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'bbb'],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+      })
+    ),
+    false
+  );
+  assert.strict.equal(
+    simpleTupleTestCompare(
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
+      }),
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+      })
+    ),
+    false
+  );
+  assert.strict.ok(
+    simpleTupleTestCompare(
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
+      }),
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
+      })
+    )
+  );
+  assert.strict.ok(
+    simpleTupleTestCompare(
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.12345678, [1, 2, 3, 4], null],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
+      }),
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.12345678, [1, 2, 3, 4], null],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
+      })
+    )
+  );
+  assert.strict.equal(
+    simpleTupleTestCompare(
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.12345678, [1, 2, 3, 4], null],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
+      }),
+      simpleTupleTest({
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
+      })
+    ),
+    false
   );
 });
 

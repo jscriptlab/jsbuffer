@@ -27,8 +27,8 @@
   ],
   "scripts": {
     "prepublishOnly": "yarn test && npx tsc -b cli --force",
-    "test": "npx tsc -b test --force && npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
-    "coverage": "npx tsc -b test --force && npx nyc --exclude-node-modules yarn test"
+    "test": "npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
+    "coverage": "npx nyc --exclude-node-modules yarn test"
   },
   "dependencies": {
     "crc": "4.x",

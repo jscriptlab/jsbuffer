@@ -35,6 +35,16 @@ export function decodeUserTrait(__d: IDeserializer) {
 export function UserDefault() {
   return userDefault();
 }
+export function UserCompare(__a: User, __b: User) {
+  switch(__a._name) {
+    case 'user.user':
+      if(__b._name !== "user.user") return false;
+      return userCompare(__a,__b);
+    case 'user.userDeleted':
+      if(__b._name !== "user.userDeleted") return false;
+      return userDeletedCompare(__a,__b);
+  }
+}
 export type Test = test;
 export function encodeTestTrait(s: ISerializer,value: Test) {
   switch(value._name) {
@@ -60,6 +70,13 @@ export function decodeTestTrait(__d: IDeserializer) {
 }
 export function TestDefault() {
   return testDefault();
+}
+export function TestCompare(__a: Test, __b: Test) {
+  switch(__a._name) {
+    case 'user.test':
+      if(__b._name !== "user.test") return false;
+      return testCompare(__a,__b);
+  }
 }
 export interface userInputParams {
   firstName: string;
@@ -130,6 +147,17 @@ export function userDefault(params: Partial<userInputParams> = {}): user {
     ...params
   });
 }
+export function userCompare(__a: user, __b: user) {
+  /**
+   * compare parameter firstName
+   */
+  if(!(__a['firstName'] === __b['firstName'])) return false;
+  /**
+   * compare parameter aliases
+   */
+  if(!(__a['aliases'].length === __b['aliases'].length && __a['aliases'].every((__i,index) => (__i === __b['aliases'][index])))) return false;
+  return true;
+}
 export interface userDeletedInputParams {
   deletedAt: number;
 }
@@ -172,6 +200,13 @@ export function userDeletedDefault(params: Partial<userDeletedInputParams> = {})
     deletedAt: 0,
     ...params
   });
+}
+export function userDeletedCompare(__a: userDeleted, __b: userDeleted) {
+  /**
+   * compare parameter deletedAt
+   */
+  if(!(__a['deletedAt'] === __b['deletedAt'])) return false;
+  return true;
 }
 export interface testInputParams {
   user: user;
@@ -264,4 +299,15 @@ export function testDefault(params: Partial<testInputParams> = {}): test {
     b: [],
     ...params
   });
+}
+export function testCompare(__a: test, __b: test) {
+  /**
+   * compare parameter user
+   */
+  if(!(userCompare(__a['user'],__b['user']))) return false;
+  /**
+   * compare parameter b
+   */
+  if(!(__a['b'].length === __b['b'].length && __a['b'].every((__i,index) => (__i.length === __b['b'][index].length && __i.every((__i,index) => (((__dp31, __dp32) => __dp31 !== null && __dp32 !== null ? __dp31 === __dp32 : __dp31 === __dp32)(__i,__b['b'][index][index]))))))) return false;
+  return true;
 }

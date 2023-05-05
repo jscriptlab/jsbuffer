@@ -43,3 +43,10 @@ export function UserDefault(params: Partial<UserInputParams> = {}): User {
     ...params
   });
 }
+export function UserCompare(__a: User, __b: User) {
+  /**
+   * compare parameter firstName
+   */
+  if(!(__a['firstName'] === __b['firstName'])) return false;
+  return true;
+}

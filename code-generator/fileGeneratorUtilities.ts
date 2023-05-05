@@ -37,6 +37,12 @@ export function getTypeDefinitionOrCallDefinitionNamePropertyValue(
   return `${file.split('/').map(lowerFirst).join('.')}.${node.name.value}`;
 }
 
+export function getCompareFunctionName(
+  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
+) {
+  return `${node.name.value}Compare`;
+}
+
 export function getTypeDefinitionOrCallDefinitionObjectCreator(
   value: INodeTypeDefinition | INodeCallDefinition
 ) {

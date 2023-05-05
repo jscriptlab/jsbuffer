@@ -22,6 +22,7 @@ import {
   getEncodeFunctionName,
   getTypeInputParamsInterfaceName,
   getDefaultFunctionName,
+  getCompareFunctionName,
 } from './fileGeneratorUtilities';
 import crc from 'crc';
 import JavaScriptObjectStringify from './JavaScriptObjectStringify';
@@ -464,7 +465,138 @@ export default class FileGenerator extends CodeStream {
   #root() {
     return this.#parent ?? this;
   }
-  #generateTypeDefinitionOrCallDefaultObjectCreator(
+  #generateDefinitionCompareFunction(
+    node: INodeTypeDefinition | INodeCallDefinition
+  ) {
+    const args = [`__a: ${getTypeName(node)}`, `__b: ${getTypeName(node)}`];
+    this.write(
+      `export function ${getCompareFunctionName(node)}(${args.join(', ')}) {\n`,
+      () => {
+        let depth = 0;
+        for (const p of node.parameters) {
+          this.#writeMultilineComment(`compare parameter ${p.name.value}`);
+          this.write('if(!(');
+          this.#generateComparisonExpression(
+            p.typeExpression,
+            `__a['${p.name.value}']`,
+            `__b['${p.name.value}']`,
+            depth
+          );
+          this.append(')) return false;\n');
+          depth++;
+        }
+        this.write('return true;\n');
+      },
+      '}\n'
+    );
+  }
+  #generateComparisonExpression(
+    expression: NodeTypeExpression,
+    v1: string,
+    v2: string,
+    depth: number
+  ) {
+    const resolved = this.#resolveTypeExpression(expression);
+    if ('generic' in resolved) {
+      switch (resolved.generic) {
+        case 'bytes': {
+          const expressions = [
+            `${v1}.byteLength === ${v2}.byteLength`,
+            `${v1}.every((__byte,index) => ${v2}[index] === __byte)`,
+          ];
+          this.append(expressions.join(' && '));
+          break;
+        }
+        case 'int':
+        case 'uint32':
+        case 'int32':
+        case 'uint8':
+        case 'int8':
+        case 'uint16':
+        case 'int16':
+        case 'float':
+        case 'double':
+        case 'string':
+          this.append(`${v1} === ${v2}`);
+          break;
+        default:
+          throw new UnsupportedGenericExpression(resolved);
+      }
+    } else if ('fileGenerator' in resolved) {
+      const type = this.#resolvedTypeExpressionToDefinition(resolved);
+      this.#request({
+        fileGenerator: resolved.fileGenerator,
+        identifier: getCompareFunctionName(type),
+      });
+      this.append(`${getCompareFunctionName(type)}(${v1},${v2})`);
+    } else if ('template' in resolved) {
+      switch (resolved.template) {
+        case 'optional': {
+          // this.append(`${v1} !== null && ${v2} !== null ? `);
+          const optionalVarName1 = `__dp${depth}1`;
+          const optionalVarName2 = `__dp${depth}2`;
+          this.append(`((${optionalVarName1}, ${optionalVarName2}) => `);
+          this.append(
+            `${optionalVarName1} !== null && ${optionalVarName2} !== null ? `
+          );
+          this.#generateComparisonExpression(
+            resolved.expression,
+            optionalVarName1,
+            optionalVarName2,
+            depth + 1
+          );
+          this.append(` : ${optionalVarName1} === ${optionalVarName2}`);
+          this.append(`)(${v1},${v2})`);
+          break;
+        }
+        case 'vector':
+          this.append(`${v1}.length === ${v2}.length && `);
+          this.append(`${v1}.every((__i,index) => (`);
+          this.#generateComparisonExpression(
+            resolved.expression,
+            '__i',
+            `${v2}[index]`,
+            depth + 1
+          );
+          this.append('))');
+          break;
+        case 'tuple': {
+          const exps = resolved.expressions.map((exp, index) => ({
+            exp,
+            varName1: `__a${depth}${index}`,
+            varName2: `__b${depth}${index}`,
+            index,
+          }));
+          for (const { exp, index, varName1, varName2 } of exps) {
+            this.append(
+              `/* compare tuple item ${index} of type ${this.#resolveTypeExpressionToString(
+                {
+                  typeExpression: exp,
+                  readOnly: true,
+                }
+              )} */ ((${varName1}, ${varName2}) => `
+            );
+            this.#generateComparisonExpression(
+              exp,
+              varName1,
+              varName2,
+              depth + index + 1
+            );
+            this.append(`)(${v1}[${index}],${v2}[${index}])`);
+            if (exp !== resolved.expressions[resolved.expressions.length - 1]) {
+              this.append(' && ');
+            }
+          }
+          break;
+        }
+        default:
+          throw new UnsupportedTemplate(expression);
+      }
+    } else {
+      this.append(`${getCompareFunctionName(resolved)}(${v1},${v2})`);
+    }
+  }
+  #generateDefinitionDefaultObjectCreator(
     node: INodeTypeDefinition | INodeCallDefinition
   ) {
     this.write(
@@ -544,11 +676,12 @@ export default class FileGenerator extends CodeStream {
         break;
       case NodeType.CallDefinition:
       case NodeType.TypeDefinition:
-        this.#generateTypeDefinitionOrCallObjectCreator(node);
-        this.#generateTypeDefinitionOrCallEncoderFunction(node);
-        this.#generateTypeDefinitionOrCallDecoderFunction(node);
-        this.#generateTypeDefinitionOrCallInterface(node);
-        this.#generateTypeDefinitionOrCallDefaultObjectCreator(node);
+        this.#generateDefinitionObjectCreatorFunction(node);
+        this.#generateDefinitionEncoderFunction(node);
+        this.#generateDefinitionDecoderFunction(node);
+        this.#generateDefinitionInterface(node);
+        this.#generateDefinitionDefaultObjectCreator(node);
+        this.#generateDefinitionCompareFunction(node);
         break;
       case NodeType.TraitDefinition: {
         const trait = this.#traits.get(node.name.value);
@@ -574,6 +707,7 @@ export default class FileGenerator extends CodeStream {
         this.#generateEncodeTraitFunction(node, trait.nodes);
         this.#generateDecodeTraitFunction(node, trait.nodes);
         this.#generateTraitDefaultFunction(node, trait.nodes);
+        this.#generateTraitCompareFunction(node, trait.nodes);
         break;
       }
       case NodeType.ImportStatement:
@@ -739,7 +873,7 @@ export default class FileGenerator extends CodeStream {
 
     return id;
   }
-  #generateTypeDefinitionOrCallInterface(
+  #generateDefinitionInterface(
     node: INodeCallDefinition | INodeTypeDefinition
   ) {
     let interfaceExtends = '';
@@ -844,6 +978,51 @@ export default class FileGenerator extends CodeStream {
               this.indentBlock(() => {
                 this.write(`${encodeFunctionName}(s,value);\n`);
                 this.write('break;\n');
+              });
+            }
+          },
+          '}\n'
+        );
+      },
+      '}\n'
+    );
+  }
+  #generateTraitCompareFunction(
+    trait: INodeTraitDefinition,
+    exps: ResolvedTypeExpression[]
+  ) {
+    this.write(
+      `export function ${getCompareFunctionName(trait)}(__a: ${getTypeName(
+        trait
+      )}, __b: ${getTypeName(trait)}) {\n`,
+      () => {
+        this.write(
+          'switch(__a._name) {\n',
+          () => {
+            for (const exp of exps) {
+              const isExternalRequirement = 'fileGenerator' in exp;
+              const fileGenerator = isExternalRequirement
+                ? exp.fileGenerator
+                : this;
+              const def = this.#resolvedTypeExpressionToDefinition(exp);
+              const compareFunctionName = getCompareFunctionName(def);
+              if (isExternalRequirement) {
+                this.#request({
+                  ...exp,
+                  identifier: compareFunctionName,
+                });
+              }
+              const typeStringifiedName =
+                getTypeDefinitionOrCallDefinitionNamePropertyValue(
+                  def,
+                  this.#removeRootDir(fileGenerator.#file.path)
+                );
+              this.write(`case '${typeStringifiedName}':\n`);
+              this.indentBlock(() => {
+                this.write(
+                  `if(__b._name !== "${typeStringifiedName}") return false;\n`
+                );
+                this.write(`return ${compareFunctionName}(__a,__b);\n`);
               });
             }
           },
@@ -1231,7 +1410,7 @@ export default class FileGenerator extends CodeStream {
     view.setUint32(0, n, true);
     return view.getInt32(0, true);
   }
-  #generateTypeDefinitionOrCallEncoderFunction(
+  #generateDefinitionEncoderFunction(
     node: INodeCallDefinition | INodeTypeDefinition
   ) {
     const interfaceName = getTypeName(node);
@@ -1270,7 +1449,7 @@ export default class FileGenerator extends CodeStream {
     }
     this.write(' */\n');
   }
-  #generateTypeDefinitionOrCallDecoderFunction(
+  #generateDefinitionDecoderFunction(
     node: INodeCallDefinition | INodeTypeDefinition
   ) {
     const interfaceName = getTypeName(node);
@@ -1325,7 +1504,7 @@ export default class FileGenerator extends CodeStream {
       '}\n'
     );
   }
-  #generateTypeDefinitionOrCallObjectCreator(
+  #generateDefinitionObjectCreatorFunction(
     node: INodeCallDefinition | INodeTypeDefinition
   ) {
     const interfaceName = getTypeName(node);

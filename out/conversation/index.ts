@@ -4,6 +4,7 @@ import {encodeUser} from "./SecondUser";
 import {IDeserializer} from "./../__types__";
 import {decodeUser} from "./SecondUser";
 import {UserDefault} from "./SecondUser";
+import {UserCompare} from "./SecondUser";
 export interface ConversationInputParams {
   id: number;
   user: User;
@@ -63,6 +64,17 @@ export function ConversationDefault(params: Partial<ConversationInputParams> = {
     ...params
   });
 }
+export function ConversationCompare(__a: Conversation, __b: Conversation) {
+  /**
+   * compare parameter id
+   */
+  if(!(__a['id'] === __b['id'])) return false;
+  /**
+   * compare parameter user
+   */
+  if(!(UserCompare(__a['user'],__b['user']))) return false;
+  return true;
+}
 export interface ConversationsInputParams {
   conversations: ReadonlyArray<Conversation>;
 }
@@ -119,4 +131,11 @@ export function ConversationsDefault(params: Partial<ConversationsInputParams> =
     conversations: [],
     ...params
   });
+}
+export function ConversationsCompare(__a: Conversations, __b: Conversations) {
+  /**
+   * compare parameter conversations
+   */
+  if(!(__a['conversations'].length === __b['conversations'].length && __a['conversations'].every((__i,index) => (ConversationCompare(__i,__b['conversations'][index]))))) return false;
+  return true;
 }
