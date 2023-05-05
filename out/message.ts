@@ -45,11 +45,12 @@ export function MessageDefault(params: Partial<MessageInputParams> = {}): Messag
   });
 }
 export function MessageCompare(__a: Message, __b: Message) {
-  /**
-   * compare parameter id
-   */
-  if(!(__a['id'] === __b['id'])) return false;
-  return true;
+  return (
+    /**
+     * compare parameter id
+     */
+    __a['id'] === __b['id']
+  );
 }
 export interface MessagesInputParams {
   messages: ReadonlyArray<Message>;
@@ -109,11 +110,12 @@ export function MessagesDefault(params: Partial<MessagesInputParams> = {}): Mess
   });
 }
 export function MessagesCompare(__a: Messages, __b: Messages) {
-  /**
-   * compare parameter messages
-   */
-  if(!(__a['messages'].length === __b['messages'].length && __a['messages'].every((__i,index) => (MessageCompare(__i,__b['messages'][index]))))) return false;
-  return true;
+  return (
+    /**
+     * compare parameter messages
+     */
+    __a['messages'].length === __b['messages'].length && __a['messages'].every((__i,index) => (MessageCompare(__i,__b['messages'][index])))
+  );
 }
 export interface GetMessagesInputParams {
   offset: number;
@@ -173,13 +175,14 @@ export function GetMessagesDefault(params: Partial<GetMessagesInputParams> = {})
   });
 }
 export function GetMessagesCompare(__a: GetMessages, __b: GetMessages) {
-  /**
-   * compare parameter offset
-   */
-  if(!(__a['offset'] === __b['offset'])) return false;
-  /**
-   * compare parameter limit
-   */
-  if(!(__a['limit'] === __b['limit'])) return false;
-  return true;
+  return (
+    /**
+     * compare parameter offset
+     */
+    __a['offset'] === __b['offset'] &&
+    /**
+     * compare parameter limit
+     */
+    __a['limit'] === __b['limit']
+  );
 }

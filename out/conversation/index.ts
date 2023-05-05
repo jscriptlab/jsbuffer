@@ -65,15 +65,16 @@ export function ConversationDefault(params: Partial<ConversationInputParams> = {
   });
 }
 export function ConversationCompare(__a: Conversation, __b: Conversation) {
-  /**
-   * compare parameter id
-   */
-  if(!(__a['id'] === __b['id'])) return false;
-  /**
-   * compare parameter user
-   */
-  if(!(UserCompare(__a['user'],__b['user']))) return false;
-  return true;
+  return (
+    /**
+     * compare parameter id
+     */
+    __a['id'] === __b['id'] &&
+    /**
+     * compare parameter user
+     */
+    UserCompare(__a['user'],__b['user'])
+  );
 }
 export interface ConversationsInputParams {
   conversations: ReadonlyArray<Conversation>;
@@ -133,9 +134,10 @@ export function ConversationsDefault(params: Partial<ConversationsInputParams> =
   });
 }
 export function ConversationsCompare(__a: Conversations, __b: Conversations) {
-  /**
-   * compare parameter conversations
-   */
-  if(!(__a['conversations'].length === __b['conversations'].length && __a['conversations'].every((__i,index) => (ConversationCompare(__i,__b['conversations'][index]))))) return false;
-  return true;
+  return (
+    /**
+     * compare parameter conversations
+     */
+    __a['conversations'].length === __b['conversations'].length && __a['conversations'].every((__i,index) => (ConversationCompare(__i,__b['conversations'][index])))
+  );
 }

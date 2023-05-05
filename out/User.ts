@@ -148,15 +148,16 @@ export function userDefault(params: Partial<userInputParams> = {}): user {
   });
 }
 export function userCompare(__a: user, __b: user) {
-  /**
-   * compare parameter firstName
-   */
-  if(!(__a['firstName'] === __b['firstName'])) return false;
-  /**
-   * compare parameter aliases
-   */
-  if(!(__a['aliases'].length === __b['aliases'].length && __a['aliases'].every((__i,index) => (__i === __b['aliases'][index])))) return false;
-  return true;
+  return (
+    /**
+     * compare parameter firstName
+     */
+    __a['firstName'] === __b['firstName'] &&
+    /**
+     * compare parameter aliases
+     */
+    __a['aliases'].length === __b['aliases'].length && __a['aliases'].every((__i,index) => (__i === __b['aliases'][index]))
+  );
 }
 export interface userDeletedInputParams {
   deletedAt: number;
@@ -202,11 +203,12 @@ export function userDeletedDefault(params: Partial<userDeletedInputParams> = {})
   });
 }
 export function userDeletedCompare(__a: userDeleted, __b: userDeleted) {
-  /**
-   * compare parameter deletedAt
-   */
-  if(!(__a['deletedAt'] === __b['deletedAt'])) return false;
-  return true;
+  return (
+    /**
+     * compare parameter deletedAt
+     */
+    __a['deletedAt'] === __b['deletedAt']
+  );
 }
 export interface testInputParams {
   user: user;
@@ -301,13 +303,14 @@ export function testDefault(params: Partial<testInputParams> = {}): test {
   });
 }
 export function testCompare(__a: test, __b: test) {
-  /**
-   * compare parameter user
-   */
-  if(!(userCompare(__a['user'],__b['user']))) return false;
-  /**
-   * compare parameter b
-   */
-  if(!(__a['b'].length === __b['b'].length && __a['b'].every((__i,index) => (__i.length === __b['b'][index].length && __i.every((__i,index) => (((__dp31, __dp32) => __dp31 !== null && __dp32 !== null ? __dp31 === __dp32 : __dp31 === __dp32)(__i,__b['b'][index][index]))))))) return false;
-  return true;
+  return (
+    /**
+     * compare parameter user
+     */
+    userCompare(__a['user'],__b['user']) &&
+    /**
+     * compare parameter b
+     */
+    __a['b'].length === __b['b'].length && __a['b'].every((__i,index) => (__i.length === __b['b'][index].length && __i.every((__i,index) => (((__dp31, __dp32) => __dp31 !== null && __dp32 !== null ? __dp31 === __dp32 : __dp31 === __dp32)(__i,__b['b'][index][index])))))
+  );
 }

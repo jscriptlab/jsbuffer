@@ -472,20 +472,32 @@ export default class FileGenerator extends CodeStream {
     this.write(
       `export function ${getCompareFunctionName(node)}(${args.join(', ')}) {\n`,
       () => {
-        let depth = 0;
-        for (const p of node.parameters) {
-          this.#writeMultilineComment(`compare parameter ${p.name.value}`);
-          this.write('if(!(');
-          this.#generateComparisonExpression(
-            p.typeExpression,
-            `__a['${p.name.value}']`,
-            `__b['${p.name.value}']`,
-            depth
-          );
-          this.append(')) return false;\n');
-          depth++;
+        if (!node.parameters.length) {
+          this.write('return true;\n');
+          return;
         }
-        this.write('return true;\n');
+        let depth = 0;
+        this.write(
+          'return (\n',
+          () => {
+            for (const p of node.parameters) {
+              this.#writeMultilineComment(`compare parameter ${p.name.value}`);
+              this.write('');
+              this.#generateComparisonExpression(
+                p.typeExpression,
+                `__a['${p.name.value}']`,
+                `__b['${p.name.value}']`,
+                depth
+              );
+              if (p !== node.parameters[node.parameters.length - 1]) {
+                this.append(' &&');
+              }
+              this.append('\n');
+              depth++;
+            }
+          },
+          ');\n'
+        );
       },
       '}\n'
     );
