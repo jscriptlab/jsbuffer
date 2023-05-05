@@ -2,9 +2,9 @@
 
 ## Description
 
-jsbuffer is the implementation of a type language. We offer tools for you to:
+jsbuffer is the implementation of a type language. We offer tools for you to generate:
 
-### Automatically generated interfaces
+### TypeScript interfaces
 
 So this:
 
@@ -96,7 +96,7 @@ type user {
 Generate this function:
 
 ```ts
-export function userDefault(params: Partial<userInputParams> = {}): user {
+export function defaultUser(params: Partial<userInputParams> = {}): user {
   return user({
     id: 0,
     name: '',
@@ -119,22 +119,17 @@ type user {
 Generate a _comparison_ function:
 
 ```ts
-export function userCompare(__a: user, __b: user) {
-  /**
-   * compare parameter firstName
-   */
-  if (!(__a['firstName'] === __b['firstName'])) return false;
-  /**
-   * compare parameter aliases
-   */
-  if (
-    !(
-      __a['aliases'].length === __b['aliases'].length &&
-      __a['aliases'].every((__i, index) => __i === __b['aliases'][index])
-    )
-  )
-    return false;
-  return true;
+export function compareUser(__a: user, __b: user) {
+  return (
+    /**
+     * compare parameter id
+     */
+    __a['id'] === __b['id'] &&
+    /**
+     * compare parameter name
+     */
+    __a['name'] === __b['name']
+  );
 }
 ```
 
