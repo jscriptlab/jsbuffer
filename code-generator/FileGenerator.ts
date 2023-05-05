@@ -3,7 +3,6 @@ import ASTGenerator, {
   EOF,
   INodeCallDefinition,
   INodeExportStatement,
-  INodeIdentifier,
   INodeTraitDefinition,
   INodeTypeDefinition,
   NodeType,
@@ -23,6 +22,7 @@ import {
   getTypeInputParamsInterfaceName,
   getDefaultFunctionName,
   getCompareFunctionName,
+  getUpdateFunctionName,
 } from './fileGeneratorUtilities';
 import crc from 'crc';
 import JavaScriptObjectStringify from './JavaScriptObjectStringify';
@@ -164,6 +164,7 @@ export type ResolvedTypeExpression =
 
 export interface IIdentifierRequirement {
   fileGenerator: FileGenerator;
+  alias?: string;
   identifier: string;
 }
 
@@ -184,10 +185,14 @@ export default class FileGenerator extends CodeStream {
     string,
     INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
   >();
-  readonly #identifiers = new Map<
-    string,
-    FileGenerator | INodeTypeDefinition | INodeCallDefinition
-  >();
+  readonly #identifiers = new Map<string, null>();
+  // readonly #identifiers = new Map<
+  //   string,
+  //   | FileGenerator
+  //   | INodeTypeDefinition
+  //   | INodeCallDefinition
+  //   | INodeTraitDefinition
+  // >();
   readonly #definitions = new Map<
     string,
     INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
@@ -204,6 +209,7 @@ export default class FileGenerator extends CodeStream {
   readonly #traits = new Map<string, ITrait>();
   #offset = 0;
   #nodes: Array<ASTGeneratorOutputNode> = [];
+  #aliasUniqueId = 1;
   public constructor(
     file: IFile,
     {
@@ -302,30 +308,50 @@ export default class FileGenerator extends CodeStream {
     return files;
   }
   #request(req: Requirement) {
+    const id = this.#identifiers.get(req.identifier);
+    let out: string;
+    if ('fileGenerator' in req) {
+      if (req.fileGenerator === this) {
+        return req.identifier;
+      }
+      if (typeof id !== 'undefined') {
+        out = `${req.identifier}${this.#aliasUniqueId}`;
+        req = {
+          ...req,
+          alias: out,
+        };
+        this.#aliasUniqueId++;
+      } else {
+        out = req.identifier;
+      }
+    } else {
+      for (const req2 of this.#requirements) {
+        if (!('fileGenerator' in req2)) {
+          if (req2.identifier === req.identifier && req2.path === req.path) {
+            return req.identifier;
+          }
+        }
+      }
+      out = req.identifier;
+    }
+    this.#identifiers.set(out, null);
     this.#requirements.add(req);
+    return out;
   }
   #generateRequirementsCode() {
-    const fileRequirements = new Map<string, Set<string>>();
     for (const r of this.#requirements) {
       const file = this.#resolveFromRootFolder(
         'fileGenerator' in r
           ? this.#removeRootDir(r.fileGenerator.#file.path)
           : r.path
       );
-      let ids = fileRequirements.get(file);
-      if (ids?.has(r.identifier)) {
-        continue;
-      }
-      if (!ids) {
-        ids = new Set();
-        fileRequirements.set(file, ids);
-      }
-      ids.add(r.identifier);
+
       if ('fileGenerator' in r) {
-        if (r.fileGenerator === this) {
-          continue;
-        }
-        this.write(`import {${r.identifier}} from "${file}";\n`);
+        const id =
+          typeof r.alias !== 'undefined'
+            ? `${r.identifier} as ${r.alias}`
+            : r.identifier;
+        this.write(`import {${id}} from "${file}";\n`);
       } else {
         this.write(`import {${r.identifier}} from "${file}";\n`);
       }
@@ -415,6 +441,7 @@ export default class FileGenerator extends CodeStream {
       case NodeType.CallDefinition:
       case NodeType.TypeDefinition:
         this.#definitions.set(node.name.value, node);
+        this.#identifiers.set(getCompareFunctionName(node), null);
         break;
       case NodeType.ExportStatement:
         this.#export(node);
@@ -447,9 +474,9 @@ export default class FileGenerator extends CodeStream {
            */
           await fileGenerator.#preprocess();
         }
+        // FIXME: find a way to remove this and import interface names as needed
         if (node.requirements) {
           for (const r of node.requirements) {
-            this.#ownIdentifier(r, fileGenerator);
             this.#request({
               fileGenerator,
               identifier: r.value,
@@ -536,15 +563,14 @@ export default class FileGenerator extends CodeStream {
       }
     } else if ('fileGenerator' in resolved) {
       const type = this.#resolvedTypeExpressionToDefinition(resolved);
-      this.#request({
+      const compareFunctionName = this.#request({
         fileGenerator: resolved.fileGenerator,
         identifier: getCompareFunctionName(type),
       });
-      this.append(`${getCompareFunctionName(type)}(${v1},${v2})`);
+      this.append(`${compareFunctionName}(${v1},${v2})`);
     } else if ('template' in resolved) {
       switch (resolved.template) {
         case 'optional': {
-          // this.append(`${v1} !== null && ${v2} !== null ? `);
           const optionalVarName1 = `__dp${depth}1`;
           const optionalVarName2 = `__dp${depth}2`;
           this.append(`((${optionalVarName1}, ${optionalVarName2}) => `);
@@ -562,8 +588,12 @@ export default class FileGenerator extends CodeStream {
           break;
         }
         case 'vector':
-          this.append(`${v1}.length === ${v2}.length && `);
-          this.append(`${v1}.every((__i,index) => (`);
+          this.append(
+            [
+              `${v1}.length === ${v2}.length`,
+              `${v1}.every((__i,index) => (`,
+            ].join(' && ')
+          );
           this.#generateComparisonExpression(
             resolved.expression,
             '__i',
@@ -674,12 +704,59 @@ export default class FileGenerator extends CodeStream {
     }
     const type = this.#resolvedTypeExpressionToDefinition(resolved);
     if ('fileGenerator' in resolved) {
-      this.#requirements.add({
+      this.#request({
         identifier: getDefaultFunctionName(type),
         fileGenerator: resolved.fileGenerator,
       });
     }
     return `${getDefaultFunctionName(type)}()`;
+  }
+  #generateDefinitionUpdateFunction(
+    node: INodeCallDefinition | INodeTypeDefinition
+  ) {
+    const changesVarName = node.parameters.length ? 'changes' : '_';
+    this.write(
+      `export function ${getUpdateFunctionName(node)}(value: ${getTypeName(
+        node
+      )}, ${changesVarName}: Partial<${getTypeInputParamsInterfaceName(
+        node
+      )}>) {\n`,
+      () => {
+        let depth = 0;
+        for (const p of node.parameters) {
+          this.write(
+            `if(typeof changes['${p.name.value}'] !== 'undefined') {\n`,
+            () => {
+              this.write('if(');
+              this.#generateComparisonExpression(
+                p.typeExpression,
+                `changes['${p.name.value}']`,
+                `value['${p.name.value}']`,
+                depth
+              );
+              this.append(') {\n');
+              this.indentBlock(() => {
+                this.write(
+                  `value = ${getCreateObjectFunctionName(node)}({\n`,
+                  () => {
+                    this.write('...value,\n');
+                    this.write(
+                      `${p.name.value}: changes['${p.name.value}'],\n`
+                    );
+                  },
+                  '});\n'
+                );
+              });
+              this.write('}\n');
+              depth++;
+            },
+            '}\n'
+          );
+        }
+        this.write('return value;\n');
+      },
+      '}\n'
+    );
   }
   #generateNodeCode(node: ASTGeneratorOutputNode) {
     switch (node.type) {
@@ -694,6 +771,7 @@ export default class FileGenerator extends CodeStream {
         this.#generateDefinitionInterface(node);
         this.#generateDefinitionDefaultObjectCreator(node);
         this.#generateDefinitionCompareFunction(node);
+        this.#generateDefinitionUpdateFunction(node);
         break;
       case NodeType.TraitDefinition: {
         const trait = this.#traits.get(node.name.value);
@@ -735,21 +813,21 @@ export default class FileGenerator extends CodeStream {
     }
     this.#exports.set(exportName, node.value);
   }
-  #ownIdentifier(
-    id: string | INodeIdentifier,
-    value: FileGenerator | INodeTypeDefinition | INodeCallDefinition
-  ) {
-    if (typeof id !== 'string') {
-      id = id.value;
-    }
-    if ('type' in value) {
-      this.#definitions.set(id, value);
-    }
-    if (this.#identifiers.has(id)) {
-      throw new DuplicateScopeIdentifier(value);
-    }
-    this.#identifiers.set(id, value);
-  }
+  // #ownIdentifier(
+  //   id: string | INodeIdentifier,
+  //   value: FileGenerator | INodeTypeDefinition | INodeCallDefinition
+  // ) {
+  //   if (typeof id !== 'string') {
+  //     id = id.value;
+  //   }
+  //   if ('type' in value) {
+  //     this.#definitions.set(id, value);
+  //   }
+  //   if (this.#identifiers.has(id)) {
+  //     throw new DuplicateScopeIdentifier(value);
+  //   }
+  //   this.#identifiers.set(id, null);
+  // }
   #resolveTypeExpressionToString(options: {
     typeExpression: NodeTypeExpression;
     readOnly: boolean;
@@ -868,9 +946,13 @@ export default class FileGenerator extends CodeStream {
         break;
       }
     }
+
+    /**
+     * just confirm that the type exists
+     */
     const id =
       this.#definitions.get(typeExpression.value) ??
-      this.#identifiers.get(typeExpression.value);
+      this.#fileGeneratorFromRequirements(typeExpression.value);
 
     if (!id) {
       throw new UnsupportedTypeExpression(typeExpression);
@@ -884,6 +966,18 @@ export default class FileGenerator extends CodeStream {
     }
 
     return id;
+  }
+  #fileGeneratorFromRequirements(id: string) {
+    for (const r of this.#requirements) {
+      if (
+        'fileGenerator' in r &&
+        r.identifier === id &&
+        r.fileGenerator.#definitions.has(id)
+      ) {
+        return r.fileGenerator;
+      }
+    }
+    return null;
   }
   #generateDefinitionInterface(
     node: INodeCallDefinition | INodeTypeDefinition
@@ -1017,9 +1111,9 @@ export default class FileGenerator extends CodeStream {
                 ? exp.fileGenerator
                 : this;
               const def = this.#resolvedTypeExpressionToDefinition(exp);
-              const compareFunctionName = getCompareFunctionName(def);
+              let compareFunctionName = getCompareFunctionName(def);
               if (isExternalRequirement) {
-                this.#request({
+                compareFunctionName = this.#request({
                   ...exp,
                   identifier: compareFunctionName,
                 });
@@ -1202,9 +1296,7 @@ export default class FileGenerator extends CodeStream {
           throw new UnsupportedTemplate(resolved);
       }
     } else if ('fileGenerator' in resolved) {
-      const type =
-        resolved.fileGenerator.#exports.get(resolved.identifier) ??
-        resolved.fileGenerator.#identifiers.get(resolved.identifier);
+      const type = resolved.fileGenerator.#exports.get(resolved.identifier);
       if (!type || type instanceof FileGenerator) {
         throw new TypeNotFound();
       }
@@ -1529,10 +1621,11 @@ export default class FileGenerator extends CodeStream {
       '}\n'
     );
     const defaultAssignment = node.parameters.length ? '' : ' = {}';
+    const paramsVarName = node.parameters.length ? 'params' : '_';
     this.write(
       `export function ${getCreateObjectFunctionName(
         node
-      )}(params: ${paramsType}${defaultAssignment}): ${interfaceName} {\n`,
+      )}(${paramsVarName}: ${paramsType}${defaultAssignment}): ${interfaceName} {\n`,
       () => {
         this.write(
           'return {\n',

@@ -38,19 +38,30 @@ export interface Message  {
   _name: 'message.Message';
   id: number;
 }
-export function MessageDefault(params: Partial<MessageInputParams> = {}): Message {
+export function defaultMessage(params: Partial<MessageInputParams> = {}): Message {
   return Message({
     id: 0,
     ...params
   });
 }
-export function MessageCompare(__a: Message, __b: Message) {
+export function compareMessage(__a: Message, __b: Message) {
   return (
     /**
      * compare parameter id
      */
     __a['id'] === __b['id']
   );
+}
+export function updateMessage(value: Message, changes: Partial<MessageInputParams>) {
+  if(typeof changes['id'] !== 'undefined') {
+    if(changes['id'] === value['id']) {
+      value = Message({
+        ...value,
+        id: changes['id'],
+      });
+    }
+  }
+  return value;
 }
 export interface MessagesInputParams {
   messages: ReadonlyArray<Message>;
@@ -103,19 +114,30 @@ export interface Messages  {
   _name: 'message.Messages';
   messages: ReadonlyArray<Message>;
 }
-export function MessagesDefault(params: Partial<MessagesInputParams> = {}): Messages {
+export function defaultMessages(params: Partial<MessagesInputParams> = {}): Messages {
   return Messages({
     messages: [],
     ...params
   });
 }
-export function MessagesCompare(__a: Messages, __b: Messages) {
+export function compareMessages(__a: Messages, __b: Messages) {
   return (
     /**
      * compare parameter messages
      */
-    __a['messages'].length === __b['messages'].length && __a['messages'].every((__i,index) => (MessageCompare(__i,__b['messages'][index])))
+    __a['messages'].length === __b['messages'].length && __a['messages'].every((__i,index) => (compareMessage(__i,__b['messages'][index])))
   );
+}
+export function updateMessages(value: Messages, changes: Partial<MessagesInputParams>) {
+  if(typeof changes['messages'] !== 'undefined') {
+    if(changes['messages'].length === value['messages'].length && changes['messages'].every((__i,index) => (compareMessage(__i,value['messages'][index])))) {
+      value = Messages({
+        ...value,
+        messages: changes['messages'],
+      });
+    }
+  }
+  return value;
 }
 export interface GetMessagesInputParams {
   offset: number;
@@ -168,14 +190,14 @@ export interface GetMessages extends IRequest<Messages> {
   offset: number;
   limit: number;
 }
-export function GetMessagesDefault(params: Partial<GetMessagesInputParams> = {}): GetMessages {
+export function defaultGetMessages(params: Partial<GetMessagesInputParams> = {}): GetMessages {
   return GetMessages({
     offset: 0,
     limit: 0,
     ...params
   });
 }
-export function GetMessagesCompare(__a: GetMessages, __b: GetMessages) {
+export function compareGetMessages(__a: GetMessages, __b: GetMessages) {
   return (
     /**
      * compare parameter offset
@@ -186,4 +208,23 @@ export function GetMessagesCompare(__a: GetMessages, __b: GetMessages) {
      */
     __a['limit'] === __b['limit']
   );
+}
+export function updateGetMessages(value: GetMessages, changes: Partial<GetMessagesInputParams>) {
+  if(typeof changes['offset'] !== 'undefined') {
+    if(changes['offset'] === value['offset']) {
+      value = GetMessages({
+        ...value,
+        offset: changes['offset'],
+      });
+    }
+  }
+  if(typeof changes['limit'] !== 'undefined') {
+    if(changes['limit'] === value['limit']) {
+      value = GetMessages({
+        ...value,
+        limit: changes['limit'],
+      });
+    }
+  }
+  return value;
 }

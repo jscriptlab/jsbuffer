@@ -40,7 +40,19 @@ export function getTypeDefinitionOrCallDefinitionNamePropertyValue(
 export function getCompareFunctionName(
   node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
-  return `${node.name.value}Compare`;
+  switch (node.type) {
+    case NodeType.CallDefinition:
+    case NodeType.TypeDefinition:
+      return `compare${upperFirst(node.name.value)}`;
+    case NodeType.TraitDefinition:
+      return `compare${upperFirst(node.name.value)}Trait`;
+  }
+}
+
+export function getUpdateFunctionName(
+  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
+) {
+  return `update${upperFirst(node.name.value)}`;
 }
 
 export function getTypeDefinitionOrCallDefinitionObjectCreator(
@@ -61,9 +73,15 @@ export function getTypeName(
 }
 
 export function getDefaultFunctionName(
-  value: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
+  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
-  return `${value.name.value}Default`;
+  switch (node.type) {
+    case NodeType.CallDefinition:
+    case NodeType.TypeDefinition:
+      return `default${upperFirst(node.name.value)}`;
+    case NodeType.TraitDefinition:
+      return `default${upperFirst(node.name.value)}Trait`;
+  }
 }
 
 export function getTypeInputParamsInterfaceName(

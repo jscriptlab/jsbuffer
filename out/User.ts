@@ -32,17 +32,17 @@ export function decodeUserTrait(__d: IDeserializer) {
   }
   return value;
 }
-export function UserDefault() {
-  return userDefault();
+export function defaultUserTrait() {
+  return defaultUser();
 }
-export function UserCompare(__a: User, __b: User) {
+export function compareUserTrait(__a: User, __b: User) {
   switch(__a._name) {
     case 'user.user':
       if(__b._name !== "user.user") return false;
-      return userCompare(__a,__b);
+      return compareUser(__a,__b);
     case 'user.userDeleted':
       if(__b._name !== "user.userDeleted") return false;
-      return userDeletedCompare(__a,__b);
+      return compareUserDeleted(__a,__b);
   }
 }
 export type Test = test;
@@ -68,14 +68,14 @@ export function decodeTestTrait(__d: IDeserializer) {
   }
   return value;
 }
-export function TestDefault() {
-  return testDefault();
+export function defaultTestTrait() {
+  return defaultTest();
 }
-export function TestCompare(__a: Test, __b: Test) {
+export function compareTestTrait(__a: Test, __b: Test) {
   switch(__a._name) {
     case 'user.test':
       if(__b._name !== "user.test") return false;
-      return testCompare(__a,__b);
+      return compareTest(__a,__b);
   }
 }
 export interface userInputParams {
@@ -141,14 +141,14 @@ export interface user  {
   firstName: string;
   aliases: ReadonlyArray<string>;
 }
-export function userDefault(params: Partial<userInputParams> = {}): user {
+export function defaultUser(params: Partial<userInputParams> = {}): user {
   return user({
     firstName: "",
     aliases: [],
     ...params
   });
 }
-export function userCompare(__a: user, __b: user) {
+export function compareUser(__a: user, __b: user) {
   return (
     /**
      * compare parameter firstName
@@ -159,6 +159,25 @@ export function userCompare(__a: user, __b: user) {
      */
     __a['aliases'].length === __b['aliases'].length && __a['aliases'].every((__i,index) => (__i === __b['aliases'][index]))
   );
+}
+export function updateUser(value: user, changes: Partial<userInputParams>) {
+  if(typeof changes['firstName'] !== 'undefined') {
+    if(changes['firstName'] === value['firstName']) {
+      value = user({
+        ...value,
+        firstName: changes['firstName'],
+      });
+    }
+  }
+  if(typeof changes['aliases'] !== 'undefined') {
+    if(changes['aliases'].length === value['aliases'].length && changes['aliases'].every((__i,index) => (__i === value['aliases'][index]))) {
+      value = user({
+        ...value,
+        aliases: changes['aliases'],
+      });
+    }
+  }
+  return value;
 }
 export interface userDeletedInputParams {
   deletedAt: number;
@@ -197,19 +216,30 @@ export interface userDeleted  {
   _name: 'user.userDeleted';
   deletedAt: number;
 }
-export function userDeletedDefault(params: Partial<userDeletedInputParams> = {}): userDeleted {
+export function defaultUserDeleted(params: Partial<userDeletedInputParams> = {}): userDeleted {
   return userDeleted({
     deletedAt: 0,
     ...params
   });
 }
-export function userDeletedCompare(__a: userDeleted, __b: userDeleted) {
+export function compareUserDeleted(__a: userDeleted, __b: userDeleted) {
   return (
     /**
      * compare parameter deletedAt
      */
     __a['deletedAt'] === __b['deletedAt']
   );
+}
+export function updateUserDeleted(value: userDeleted, changes: Partial<userDeletedInputParams>) {
+  if(typeof changes['deletedAt'] !== 'undefined') {
+    if(changes['deletedAt'] === value['deletedAt']) {
+      value = userDeleted({
+        ...value,
+        deletedAt: changes['deletedAt'],
+      });
+    }
+  }
+  return value;
 }
 export interface testInputParams {
   user: user;
@@ -297,22 +327,41 @@ export interface test  {
   user: user;
   b: ReadonlyArray<ReadonlyArray<string | null>>;
 }
-export function testDefault(params: Partial<testInputParams> = {}): test {
+export function defaultTest(params: Partial<testInputParams> = {}): test {
   return test({
-    user: userDefault(),
+    user: defaultUser(),
     b: [],
     ...params
   });
 }
-export function testCompare(__a: test, __b: test) {
+export function compareTest(__a: test, __b: test) {
   return (
     /**
      * compare parameter user
      */
-    userCompare(__a['user'],__b['user']) &&
+    compareUser(__a['user'],__b['user']) &&
     /**
      * compare parameter b
      */
     __a['b'].length === __b['b'].length && __a['b'].every((__i,index) => (__i.length === __b['b'][index].length && __i.every((__i,index) => (((__dp31, __dp32) => __dp31 !== null && __dp32 !== null ? __dp31 === __dp32 : __dp31 === __dp32)(__i,__b['b'][index][index])))))
   );
+}
+export function updateTest(value: test, changes: Partial<testInputParams>) {
+  if(typeof changes['user'] !== 'undefined') {
+    if(compareUser(changes['user'],value['user'])) {
+      value = test({
+        ...value,
+        user: changes['user'],
+      });
+    }
+  }
+  if(typeof changes['b'] !== 'undefined') {
+    if(changes['b'].length === value['b'].length && changes['b'].every((__i,index) => (__i.length === value['b'][index].length && __i.every((__i,index) => (((__dp31, __dp32) => __dp31 !== null && __dp32 !== null ? __dp31 === __dp32 : __dp31 === __dp32)(__i,value['b'][index][index])))))) {
+      value = test({
+        ...value,
+        b: changes['b'],
+      });
+    }
+  }
+  return value;
 }

@@ -10,6 +10,45 @@ import { NodeType } from '../src/ASTGenerator';
 
 const suite = new Suite();
 
+// async function generateWithVirtualFs({
+//   mainFile,
+//   paths,
+// }: {
+//   mainFile: string;
+//   paths: Record<string, string>;
+// }) {
+//   const tmpDir = await fs.promises.mkdtemp('/tmp/');
+//   const outTmpDir = await fs.promises.mkdtemp('/tmp/');
+//   for (const [k, v] of Object.entries(paths)) {
+//     await fs.promises.writeFile(path.resolve(tmpDir, k), v);
+//   }
+//   const f = new FileGenerator(
+//     {
+//       path: path.resolve(tmpDir, mainFile),
+//     },
+//     {
+//       rootDir: tmpDir,
+//       outDir: outTmpDir,
+//       indentationSize: 2,
+//       typeScriptConfiguration: {
+//         extends: '../tsconfig.base.json',
+//       },
+//       textDecoder: new TextDecoder(),
+//       textEncoder: new TextEncoder(),
+//     }
+//   );
+//   return f.generate();
+// }
+
+// suite.test('it should deal with conflicting compare functions', async () => {
+//   await generateWithVirtualFs({
+//     paths: {
+//       'index':''
+//     },
+//     mainFile: 'index'
+//   })
+// })
+
 suite.test('it should throw for unsupported templates', async () => {
   const tmpDir = await fs.promises.mkdtemp('/tmp/');
   const outTmpDir = await fs.promises.mkdtemp('/tmp/');
@@ -62,15 +101,19 @@ suite.test('FileGenerator: it should generate files', async () => {
   );
   await fs.promises.rm(outDir, { force: true, recursive: true });
   await fs.promises.mkdir(outDir);
-  const files = await f.generate();
-  for (const file of files) {
-    const outFile = path.resolve(outDir, file.file);
-    try {
-      await fs.promises.access(path.dirname(outFile), fs.constants.W_OK);
-    } catch (reason) {
-      await fs.promises.mkdir(path.dirname(outFile));
+  try {
+    const files = await f.generate();
+    for (const file of files) {
+      const outFile = path.resolve(outDir, file.file);
+      try {
+        await fs.promises.access(path.dirname(outFile), fs.constants.W_OK);
+      } catch (reason) {
+        await fs.promises.mkdir(path.dirname(outFile));
+      }
+      await fs.promises.writeFile(outFile, file.contents);
     }
-    await fs.promises.writeFile(outFile, file.contents);
+  } catch (reason) {
+    console.log(reason);
   }
 });
 

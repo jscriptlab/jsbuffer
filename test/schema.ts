@@ -9,7 +9,7 @@ import {
   encodeSimpleTupleTest,
   msg,
   simpleTupleTest,
-  simpleTupleTestCompare,
+  compareSimpleTupleTest,
 } from '../out/schema';
 import { Serializer, Deserializer } from '../codec';
 import { TextDecoder, TextEncoder } from 'util';
@@ -109,7 +109,7 @@ suite.test('it should encode tuple', () => {
 
 suite.test('it should compare tuples', () => {
   assert.strict.ok(
-    simpleTupleTestCompare(
+    compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
         b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
@@ -121,7 +121,7 @@ suite.test('it should compare tuples', () => {
     )
   );
   assert.strict.ok(
-    simpleTupleTestCompare(
+    compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa'],
         b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
@@ -133,7 +133,7 @@ suite.test('it should compare tuples', () => {
     )
   );
   assert.strict.equal(
-    simpleTupleTestCompare(
+    compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa'],
         b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
@@ -146,7 +146,7 @@ suite.test('it should compare tuples', () => {
     false
   );
   assert.strict.equal(
-    simpleTupleTestCompare(
+    compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
         b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
@@ -159,7 +159,7 @@ suite.test('it should compare tuples', () => {
     false
   );
   assert.strict.equal(
-    simpleTupleTestCompare(
+    compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
         b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
@@ -172,7 +172,7 @@ suite.test('it should compare tuples', () => {
     false
   );
   assert.strict.ok(
-    simpleTupleTestCompare(
+    compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
         b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
@@ -184,7 +184,7 @@ suite.test('it should compare tuples', () => {
     )
   );
   assert.strict.ok(
-    simpleTupleTestCompare(
+    compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.12345678, [1, 2, 3, 4], null],
         b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
@@ -196,7 +196,7 @@ suite.test('it should compare tuples', () => {
     )
   );
   assert.strict.equal(
-    simpleTupleTestCompare(
+    compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.12345678, [1, 2, 3, 4], null],
         b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],

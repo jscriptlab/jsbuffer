@@ -5,11 +5,12 @@ import {ISerializer} from "./__types__";
 import {IDeserializer} from "./__types__";
 import {encodeUserTrait} from "./User";
 import {decodeUserTrait} from "./User";
-import {UserCompare} from "./User";
+import {compareUserTrait} from "./User";
+import {compareUserTrait as compareUserTrait1} from "./User";
 import {IRequest} from "./__types__";
 export interface VoidInputParams {
 }
-export function Void(params: VoidInputParams = {}): Void {
+export function Void(_: VoidInputParams = {}): Void {
   return {
     _name: 'schema.Void'
   };
@@ -30,13 +31,16 @@ export function decodeVoid(__d: IDeserializer): Void | null {
 export interface Void  {
   _name: 'schema.Void';
 }
-export function VoidDefault(params: Partial<VoidInputParams> = {}): Void {
+export function defaultVoid(params: Partial<VoidInputParams> = {}): Void {
   return Void({
     ...params
   });
 }
-export function VoidCompare(__a: Void, __b: Void) {
+export function compareVoid(__a: Void, __b: Void) {
   return true;
+}
+export function updateVoid(value: Void, _: Partial<VoidInputParams>) {
+  return value;
 }
 export interface msgInputParams {
   data: Uint8Array;
@@ -76,19 +80,30 @@ export interface msg  {
   _name: 'schema.msg';
   data: Uint8Array;
 }
-export function msgDefault(params: Partial<msgInputParams> = {}): msg {
+export function defaultMsg(params: Partial<msgInputParams> = {}): msg {
   return msg({
     data: new Uint8Array(0),
     ...params
   });
 }
-export function msgCompare(__a: msg, __b: msg) {
+export function compareMsg(__a: msg, __b: msg) {
   return (
     /**
      * compare parameter data
      */
     __a['data'].byteLength === __b['data'].byteLength && __a['data'].every((__byte,index) => __b['data'][index] === __byte)
   );
+}
+export function updateMsg(value: msg, changes: Partial<msgInputParams>) {
+  if(typeof changes['data'] !== 'undefined') {
+    if(changes['data'].byteLength === value['data'].byteLength && changes['data'].every((__byte,index) => value['data'][index] === __byte)) {
+      value = msg({
+        ...value,
+        data: changes['data'],
+      });
+    }
+  }
+  return value;
 }
 export type Result = Users | Posts;
 export function encodeResultTrait(s: ISerializer,value: Result) {
@@ -122,17 +137,17 @@ export function decodeResultTrait(__d: IDeserializer) {
   }
   return value;
 }
-export function ResultDefault() {
-  return UsersDefault();
+export function defaultResultTrait() {
+  return defaultUsers();
 }
-export function ResultCompare(__a: Result, __b: Result) {
+export function compareResultTrait(__a: Result, __b: Result) {
   switch(__a._name) {
     case 'schema.Users':
       if(__b._name !== "schema.Users") return false;
-      return UsersCompare(__a,__b);
+      return compareUsers(__a,__b);
     case 'schema.Posts':
       if(__b._name !== "schema.Posts") return false;
-      return PostsCompare(__a,__b);
+      return comparePosts(__a,__b);
   }
 }
 export interface UsersInputParams {
@@ -186,19 +201,30 @@ export interface Users  {
   _name: 'schema.Users';
   users: ReadonlyArray<User>;
 }
-export function UsersDefault(params: Partial<UsersInputParams> = {}): Users {
+export function defaultUsers(params: Partial<UsersInputParams> = {}): Users {
   return Users({
     users: [],
     ...params
   });
 }
-export function UsersCompare(__a: Users, __b: Users) {
+export function compareUsers(__a: Users, __b: Users) {
   return (
     /**
      * compare parameter users
      */
-    __a['users'].length === __b['users'].length && __a['users'].every((__i,index) => (UserCompare(__i,__b['users'][index])))
+    __a['users'].length === __b['users'].length && __a['users'].every((__i,index) => (compareUserTrait(__i,__b['users'][index])))
   );
+}
+export function updateUsers(value: Users, changes: Partial<UsersInputParams>) {
+  if(typeof changes['users'] !== 'undefined') {
+    if(changes['users'].length === value['users'].length && changes['users'].every((__i,index) => (compareUserTrait1(__i,value['users'][index])))) {
+      value = Users({
+        ...value,
+        users: changes['users'],
+      });
+    }
+  }
+  return value;
 }
 export interface GetUserByIdInputParams {
   userId: number;
@@ -237,19 +263,30 @@ export interface GetUserById extends IRequest<Users> {
   _name: 'schema.GetUserById';
   userId: number;
 }
-export function GetUserByIdDefault(params: Partial<GetUserByIdInputParams> = {}): GetUserById {
+export function defaultGetUserById(params: Partial<GetUserByIdInputParams> = {}): GetUserById {
   return GetUserById({
     userId: 0,
     ...params
   });
 }
-export function GetUserByIdCompare(__a: GetUserById, __b: GetUserById) {
+export function compareGetUserById(__a: GetUserById, __b: GetUserById) {
   return (
     /**
      * compare parameter userId
      */
     __a['userId'] === __b['userId']
   );
+}
+export function updateGetUserById(value: GetUserById, changes: Partial<GetUserByIdInputParams>) {
+  if(typeof changes['userId'] !== 'undefined') {
+    if(changes['userId'] === value['userId']) {
+      value = GetUserById({
+        ...value,
+        userId: changes['userId'],
+      });
+    }
+  }
+  return value;
 }
 export interface PostInputParams {
   id: number;
@@ -288,19 +325,30 @@ export interface Post  {
   _name: 'schema.Post';
   id: number;
 }
-export function PostDefault(params: Partial<PostInputParams> = {}): Post {
+export function defaultPost(params: Partial<PostInputParams> = {}): Post {
   return Post({
     id: 0,
     ...params
   });
 }
-export function PostCompare(__a: Post, __b: Post) {
+export function comparePost(__a: Post, __b: Post) {
   return (
     /**
      * compare parameter id
      */
     __a['id'] === __b['id']
   );
+}
+export function updatePost(value: Post, changes: Partial<PostInputParams>) {
+  if(typeof changes['id'] !== 'undefined') {
+    if(changes['id'] === value['id']) {
+      value = Post({
+        ...value,
+        id: changes['id'],
+      });
+    }
+  }
+  return value;
 }
 export interface PostsInputParams {
   posts: ReadonlyArray<Post>;
@@ -353,19 +401,30 @@ export interface Posts  {
   _name: 'schema.Posts';
   posts: ReadonlyArray<Post>;
 }
-export function PostsDefault(params: Partial<PostsInputParams> = {}): Posts {
+export function defaultPosts(params: Partial<PostsInputParams> = {}): Posts {
   return Posts({
     posts: [],
     ...params
   });
 }
-export function PostsCompare(__a: Posts, __b: Posts) {
+export function comparePosts(__a: Posts, __b: Posts) {
   return (
     /**
      * compare parameter posts
      */
-    __a['posts'].length === __b['posts'].length && __a['posts'].every((__i,index) => (PostCompare(__i,__b['posts'][index])))
+    __a['posts'].length === __b['posts'].length && __a['posts'].every((__i,index) => (comparePost(__i,__b['posts'][index])))
   );
+}
+export function updatePosts(value: Posts, changes: Partial<PostsInputParams>) {
+  if(typeof changes['posts'] !== 'undefined') {
+    if(changes['posts'].length === value['posts'].length && changes['posts'].every((__i,index) => (comparePost(__i,value['posts'][index])))) {
+      value = Posts({
+        ...value,
+        posts: changes['posts'],
+      });
+    }
+  }
+  return value;
 }
 export interface GetPostByIdInputParams {
   postId: number;
@@ -404,13 +463,13 @@ export interface GetPostById extends IRequest<Posts> {
   _name: 'schema.GetPostById';
   postId: number;
 }
-export function GetPostByIdDefault(params: Partial<GetPostByIdInputParams> = {}): GetPostById {
+export function defaultGetPostById(params: Partial<GetPostByIdInputParams> = {}): GetPostById {
   return GetPostById({
     postId: 0,
     ...params
   });
 }
-export function GetPostByIdCompare(__a: GetPostById, __b: GetPostById) {
+export function compareGetPostById(__a: GetPostById, __b: GetPostById) {
   return (
     /**
      * compare parameter postId
@@ -418,9 +477,20 @@ export function GetPostByIdCompare(__a: GetPostById, __b: GetPostById) {
     __a['postId'] === __b['postId']
   );
 }
+export function updateGetPostById(value: GetPostById, changes: Partial<GetPostByIdInputParams>) {
+  if(typeof changes['postId'] !== 'undefined') {
+    if(changes['postId'] === value['postId']) {
+      value = GetPostById({
+        ...value,
+        postId: changes['postId'],
+      });
+    }
+  }
+  return value;
+}
 export interface GetConversationsInputParams {
 }
-export function GetConversations(params: GetConversationsInputParams = {}): GetConversations {
+export function GetConversations(_: GetConversationsInputParams = {}): GetConversations {
   return {
     _name: 'schema.GetConversations'
   };
@@ -441,13 +511,16 @@ export function decodeGetConversations(__d: IDeserializer): GetConversations | n
 export interface GetConversations extends IRequest<Conversations> {
   _name: 'schema.GetConversations';
 }
-export function GetConversationsDefault(params: Partial<GetConversationsInputParams> = {}): GetConversations {
+export function defaultGetConversations(params: Partial<GetConversationsInputParams> = {}): GetConversations {
   return GetConversations({
     ...params
   });
 }
-export function GetConversationsCompare(__a: GetConversations, __b: GetConversations) {
+export function compareGetConversations(__a: GetConversations, __b: GetConversations) {
   return true;
+}
+export function updateGetConversations(value: GetConversations, _: Partial<GetConversationsInputParams>) {
+  return value;
 }
 export interface CoordinatesInputParams {
   latitude: number;
@@ -500,14 +573,14 @@ export interface Coordinates  {
   latitude: number;
   longitude: number;
 }
-export function CoordinatesDefault(params: Partial<CoordinatesInputParams> = {}): Coordinates {
+export function defaultCoordinates(params: Partial<CoordinatesInputParams> = {}): Coordinates {
   return Coordinates({
     latitude: 0.0,
     longitude: 0.0,
     ...params
   });
 }
-export function CoordinatesCompare(__a: Coordinates, __b: Coordinates) {
+export function compareCoordinates(__a: Coordinates, __b: Coordinates) {
   return (
     /**
      * compare parameter latitude
@@ -518,6 +591,25 @@ export function CoordinatesCompare(__a: Coordinates, __b: Coordinates) {
      */
     __a['longitude'] === __b['longitude']
   );
+}
+export function updateCoordinates(value: Coordinates, changes: Partial<CoordinatesInputParams>) {
+  if(typeof changes['latitude'] !== 'undefined') {
+    if(changes['latitude'] === value['latitude']) {
+      value = Coordinates({
+        ...value,
+        latitude: changes['latitude'],
+      });
+    }
+  }
+  if(typeof changes['longitude'] !== 'undefined') {
+    if(changes['longitude'] === value['longitude']) {
+      value = Coordinates({
+        ...value,
+        longitude: changes['longitude'],
+      });
+    }
+  }
+  return value;
 }
 export interface ShouldSupportSeveralSequentialVectorParamsInputParams {
   a: ReadonlyArray<number>;
@@ -797,7 +889,7 @@ export interface ShouldSupportSeveralSequentialVectorParams  {
   f: ReadonlyArray<ReadonlyArray<number> | null>;
   g: [number,number,number,ReadonlyArray<number>,string | null];
 }
-export function ShouldSupportSeveralSequentialVectorParamsDefault(params: Partial<ShouldSupportSeveralSequentialVectorParamsInputParams> = {}): ShouldSupportSeveralSequentialVectorParams {
+export function defaultShouldSupportSeveralSequentialVectorParams(params: Partial<ShouldSupportSeveralSequentialVectorParamsInputParams> = {}): ShouldSupportSeveralSequentialVectorParams {
   return ShouldSupportSeveralSequentialVectorParams({
     a: [],
     b: [],
@@ -809,7 +901,7 @@ export function ShouldSupportSeveralSequentialVectorParamsDefault(params: Partia
     ...params
   });
 }
-export function ShouldSupportSeveralSequentialVectorParamsCompare(__a: ShouldSupportSeveralSequentialVectorParams, __b: ShouldSupportSeveralSequentialVectorParams) {
+export function compareShouldSupportSeveralSequentialVectorParams(__a: ShouldSupportSeveralSequentialVectorParams, __b: ShouldSupportSeveralSequentialVectorParams) {
   return (
     /**
      * compare parameter a
@@ -840,6 +932,65 @@ export function ShouldSupportSeveralSequentialVectorParamsCompare(__a: ShouldSup
      */
     /* compare tuple item 0 of type number */ ((__a60, __b60) => __a60 === __b60)(__a['g'][0],__b['g'][0]) && /* compare tuple item 1 of type number */ ((__a61, __b61) => __a61 === __b61)(__a['g'][1],__b['g'][1]) && /* compare tuple item 2 of type number */ ((__a62, __b62) => __a62 === __b62)(__a['g'][2],__b['g'][2]) && /* compare tuple item 3 of type ReadonlyArray<number> */ ((__a63, __b63) => __a63.length === __b63.length && __a63.every((__i,index) => (__i === __b63[index])))(__a['g'][3],__b['g'][3]) && /* compare tuple item 4 of type string | null */ ((__a64, __b64) => ((__dp111, __dp112) => __dp111 !== null && __dp112 !== null ? __dp111 === __dp112 : __dp111 === __dp112)(__a64,__b64))(__a['g'][4],__b['g'][4])
   );
+}
+export function updateShouldSupportSeveralSequentialVectorParams(value: ShouldSupportSeveralSequentialVectorParams, changes: Partial<ShouldSupportSeveralSequentialVectorParamsInputParams>) {
+  if(typeof changes['a'] !== 'undefined') {
+    if(changes['a'].length === value['a'].length && changes['a'].every((__i,index) => (__i === value['a'][index]))) {
+      value = ShouldSupportSeveralSequentialVectorParams({
+        ...value,
+        a: changes['a'],
+      });
+    }
+  }
+  if(typeof changes['b'] !== 'undefined') {
+    if(changes['b'].length === value['b'].length && changes['b'].every((__i,index) => (__i === value['b'][index]))) {
+      value = ShouldSupportSeveralSequentialVectorParams({
+        ...value,
+        b: changes['b'],
+      });
+    }
+  }
+  if(typeof changes['c'] !== 'undefined') {
+    if(changes['c'].length === value['c'].length && changes['c'].every((__i,index) => (__i === value['c'][index]))) {
+      value = ShouldSupportSeveralSequentialVectorParams({
+        ...value,
+        c: changes['c'],
+      });
+    }
+  }
+  if(typeof changes['d'] !== 'undefined') {
+    if(changes['d'].length === value['d'].length && changes['d'].every((__i,index) => (__i === value['d'][index]))) {
+      value = ShouldSupportSeveralSequentialVectorParams({
+        ...value,
+        d: changes['d'],
+      });
+    }
+  }
+  if(typeof changes['e'] !== 'undefined') {
+    if(changes['e'].length === value['e'].length && changes['e'].every((__i,index) => (__i === value['e'][index]))) {
+      value = ShouldSupportSeveralSequentialVectorParams({
+        ...value,
+        e: changes['e'],
+      });
+    }
+  }
+  if(typeof changes['f'] !== 'undefined') {
+    if(changes['f'].length === value['f'].length && changes['f'].every((__i,index) => (((__dp61, __dp62) => __dp61 !== null && __dp62 !== null ? __dp61.length === __dp62.length && __dp61.every((__i,index) => (__i === __dp62[index])) : __dp61 === __dp62)(__i,value['f'][index])))) {
+      value = ShouldSupportSeveralSequentialVectorParams({
+        ...value,
+        f: changes['f'],
+      });
+    }
+  }
+  if(typeof changes['g'] !== 'undefined') {
+    if(/* compare tuple item 0 of type number */ ((__a60, __b60) => __a60 === __b60)(changes['g'][0],value['g'][0]) && /* compare tuple item 1 of type number */ ((__a61, __b61) => __a61 === __b61)(changes['g'][1],value['g'][1]) && /* compare tuple item 2 of type number */ ((__a62, __b62) => __a62 === __b62)(changes['g'][2],value['g'][2]) && /* compare tuple item 3 of type ReadonlyArray<number> */ ((__a63, __b63) => __a63.length === __b63.length && __a63.every((__i,index) => (__i === __b63[index])))(changes['g'][3],value['g'][3]) && /* compare tuple item 4 of type string | null */ ((__a64, __b64) => ((__dp111, __dp112) => __dp111 !== null && __dp112 !== null ? __dp111 === __dp112 : __dp111 === __dp112)(__a64,__b64))(changes['g'][4],value['g'][4])) {
+      value = ShouldSupportSeveralSequentialVectorParams({
+        ...value,
+        g: changes['g'],
+      });
+    }
+  }
+  return value;
 }
 export interface simpleTupleTestInputParams {
   a: [number,number,number,ReadonlyArray<number>,string | null];
@@ -1032,14 +1183,14 @@ export interface simpleTupleTest  {
   a: [number,number,number,ReadonlyArray<number>,string | null];
   b: ReadonlyArray<[number,number,number,ReadonlyArray<number>,string | null]>;
 }
-export function simpleTupleTestDefault(params: Partial<simpleTupleTestInputParams> = {}): simpleTupleTest {
+export function defaultSimpleTupleTest(params: Partial<simpleTupleTestInputParams> = {}): simpleTupleTest {
   return simpleTupleTest({
     a: [0,0.0,0.0,[],null],
     b: [],
     ...params
   });
 }
-export function simpleTupleTestCompare(__a: simpleTupleTest, __b: simpleTupleTest) {
+export function compareSimpleTupleTest(__a: simpleTupleTest, __b: simpleTupleTest) {
   return (
     /**
      * compare parameter a
@@ -1051,9 +1202,28 @@ export function simpleTupleTestCompare(__a: simpleTupleTest, __b: simpleTupleTes
     __a['b'].length === __b['b'].length && __a['b'].every((__i,index) => (/* compare tuple item 0 of type number */ ((__a20, __b20) => __a20 === __b20)(__i[0],__b['b'][index][0]) && /* compare tuple item 1 of type number */ ((__a21, __b21) => __a21 === __b21)(__i[1],__b['b'][index][1]) && /* compare tuple item 2 of type number */ ((__a22, __b22) => __a22 === __b22)(__i[2],__b['b'][index][2]) && /* compare tuple item 3 of type ReadonlyArray<number> */ ((__a23, __b23) => __a23.length === __b23.length && __a23.every((__i,index) => (__i === __b23[index])))(__i[3],__b['b'][index][3]) && /* compare tuple item 4 of type string | null */ ((__a24, __b24) => ((__dp71, __dp72) => __dp71 !== null && __dp72 !== null ? __dp71 === __dp72 : __dp71 === __dp72)(__a24,__b24))(__i[4],__b['b'][index][4])))
   );
 }
+export function updateSimpleTupleTest(value: simpleTupleTest, changes: Partial<simpleTupleTestInputParams>) {
+  if(typeof changes['a'] !== 'undefined') {
+    if(/* compare tuple item 0 of type number */ ((__a00, __b00) => __a00 === __b00)(changes['a'][0],value['a'][0]) && /* compare tuple item 1 of type number */ ((__a01, __b01) => __a01 === __b01)(changes['a'][1],value['a'][1]) && /* compare tuple item 2 of type number */ ((__a02, __b02) => __a02 === __b02)(changes['a'][2],value['a'][2]) && /* compare tuple item 3 of type ReadonlyArray<number> */ ((__a03, __b03) => __a03.length === __b03.length && __a03.every((__i,index) => (__i === __b03[index])))(changes['a'][3],value['a'][3]) && /* compare tuple item 4 of type string | null */ ((__a04, __b04) => ((__dp51, __dp52) => __dp51 !== null && __dp52 !== null ? __dp51 === __dp52 : __dp51 === __dp52)(__a04,__b04))(changes['a'][4],value['a'][4])) {
+      value = simpleTupleTest({
+        ...value,
+        a: changes['a'],
+      });
+    }
+  }
+  if(typeof changes['b'] !== 'undefined') {
+    if(changes['b'].length === value['b'].length && changes['b'].every((__i,index) => (/* compare tuple item 0 of type number */ ((__a20, __b20) => __a20 === __b20)(__i[0],value['b'][index][0]) && /* compare tuple item 1 of type number */ ((__a21, __b21) => __a21 === __b21)(__i[1],value['b'][index][1]) && /* compare tuple item 2 of type number */ ((__a22, __b22) => __a22 === __b22)(__i[2],value['b'][index][2]) && /* compare tuple item 3 of type ReadonlyArray<number> */ ((__a23, __b23) => __a23.length === __b23.length && __a23.every((__i,index) => (__i === __b23[index])))(__i[3],value['b'][index][3]) && /* compare tuple item 4 of type string | null */ ((__a24, __b24) => ((__dp71, __dp72) => __dp71 !== null && __dp72 !== null ? __dp71 === __dp72 : __dp71 === __dp72)(__a24,__b24))(__i[4],value['b'][index][4])))) {
+      value = simpleTupleTest({
+        ...value,
+        b: changes['b'],
+      });
+    }
+  }
+  return value;
+}
 export interface emptyNodeInputParams {
 }
-export function emptyNode(params: emptyNodeInputParams = {}): emptyNode {
+export function emptyNode(_: emptyNodeInputParams = {}): emptyNode {
   return {
     _name: 'schema.emptyNode'
   };
@@ -1074,13 +1244,16 @@ export function decodeEmptyNode(__d: IDeserializer): emptyNode | null {
 export interface emptyNode  {
   _name: 'schema.emptyNode';
 }
-export function emptyNodeDefault(params: Partial<emptyNodeInputParams> = {}): emptyNode {
+export function defaultEmptyNode(params: Partial<emptyNodeInputParams> = {}): emptyNode {
   return emptyNode({
     ...params
   });
 }
-export function emptyNodeCompare(__a: emptyNode, __b: emptyNode) {
+export function compareEmptyNode(__a: emptyNode, __b: emptyNode) {
   return true;
+}
+export function updateEmptyNode(value: emptyNode, _: Partial<emptyNodeInputParams>) {
+  return value;
 }
 export interface userInputParams {
   id: number;
@@ -1133,14 +1306,14 @@ export interface user  {
   id: number;
   name: string;
 }
-export function userDefault(params: Partial<userInputParams> = {}): user {
+export function defaultUser(params: Partial<userInputParams> = {}): user {
   return user({
     id: 0,
     name: "",
     ...params
   });
 }
-export function userCompare(__a: user, __b: user) {
+export function compareUser(__a: user, __b: user) {
   return (
     /**
      * compare parameter id
@@ -1151,4 +1324,23 @@ export function userCompare(__a: user, __b: user) {
      */
     __a['name'] === __b['name']
   );
+}
+export function updateUser(value: user, changes: Partial<userInputParams>) {
+  if(typeof changes['id'] !== 'undefined') {
+    if(changes['id'] === value['id']) {
+      value = user({
+        ...value,
+        id: changes['id'],
+      });
+    }
+  }
+  if(typeof changes['name'] !== 'undefined') {
+    if(changes['name'] === value['name']) {
+      value = user({
+        ...value,
+        name: changes['name'],
+      });
+    }
+  }
+  return value;
 }

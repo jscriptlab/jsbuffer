@@ -9,10 +9,10 @@ import {IDeserializer} from "./__types__";
 import {decodeGetUserById} from "./schema";
 import {decodeGetPostById} from "./schema";
 import {decodeGetConversations} from "./schema";
-import {GetUserByIdDefault} from "./schema";
-import {GetUserByIdCompare} from "./schema";
-import {GetPostByIdCompare} from "./schema";
-import {GetConversationsCompare} from "./schema";
+import {defaultGetUserById} from "./schema";
+import {compareGetUserById} from "./schema";
+import {compareGetPostById} from "./schema";
+import {compareGetConversations} from "./schema";
 export type Request = GetUserById | GetPostById | GetConversations;
 export function encodeRequestTrait(s: ISerializer,value: Request) {
   switch(value._name) {
@@ -54,19 +54,19 @@ export function decodeRequestTrait(__d: IDeserializer) {
   }
   return value;
 }
-export function RequestDefault() {
-  return GetUserByIdDefault();
+export function defaultRequestTrait() {
+  return defaultGetUserById();
 }
-export function RequestCompare(__a: Request, __b: Request) {
+export function compareRequestTrait(__a: Request, __b: Request) {
   switch(__a._name) {
     case 'schema.GetUserById':
       if(__b._name !== "schema.GetUserById") return false;
-      return GetUserByIdCompare(__a,__b);
+      return compareGetUserById(__a,__b);
     case 'schema.GetPostById':
       if(__b._name !== "schema.GetPostById") return false;
-      return GetPostByIdCompare(__a,__b);
+      return compareGetPostById(__a,__b);
     case 'schema.GetConversations':
       if(__b._name !== "schema.GetConversations") return false;
-      return GetConversationsCompare(__a,__b);
+      return compareGetConversations(__a,__b);
   }
 }

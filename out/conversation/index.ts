@@ -3,8 +3,9 @@ import {ISerializer} from "./../__types__";
 import {encodeUser} from "./SecondUser";
 import {IDeserializer} from "./../__types__";
 import {decodeUser} from "./SecondUser";
-import {UserDefault} from "./SecondUser";
-import {UserCompare} from "./SecondUser";
+import {defaultUser} from "./SecondUser";
+import {compareUser} from "./SecondUser";
+import {compareUser as compareUser1} from "./SecondUser";
 export interface ConversationInputParams {
   id: number;
   user: User;
@@ -58,14 +59,14 @@ export interface Conversation  {
   id: number;
   user: User;
 }
-export function ConversationDefault(params: Partial<ConversationInputParams> = {}): Conversation {
+export function defaultConversation(params: Partial<ConversationInputParams> = {}): Conversation {
   return Conversation({
     id: 0,
-    user: UserDefault(),
+    user: defaultUser(),
     ...params
   });
 }
-export function ConversationCompare(__a: Conversation, __b: Conversation) {
+export function compareConversation(__a: Conversation, __b: Conversation) {
   return (
     /**
      * compare parameter id
@@ -74,8 +75,27 @@ export function ConversationCompare(__a: Conversation, __b: Conversation) {
     /**
      * compare parameter user
      */
-    UserCompare(__a['user'],__b['user'])
+    compareUser(__a['user'],__b['user'])
   );
+}
+export function updateConversation(value: Conversation, changes: Partial<ConversationInputParams>) {
+  if(typeof changes['id'] !== 'undefined') {
+    if(changes['id'] === value['id']) {
+      value = Conversation({
+        ...value,
+        id: changes['id'],
+      });
+    }
+  }
+  if(typeof changes['user'] !== 'undefined') {
+    if(compareUser1(changes['user'],value['user'])) {
+      value = Conversation({
+        ...value,
+        user: changes['user'],
+      });
+    }
+  }
+  return value;
 }
 export interface ConversationsInputParams {
   conversations: ReadonlyArray<Conversation>;
@@ -128,17 +148,28 @@ export interface Conversations  {
   _name: 'conversation.index.Conversations';
   conversations: ReadonlyArray<Conversation>;
 }
-export function ConversationsDefault(params: Partial<ConversationsInputParams> = {}): Conversations {
+export function defaultConversations(params: Partial<ConversationsInputParams> = {}): Conversations {
   return Conversations({
     conversations: [],
     ...params
   });
 }
-export function ConversationsCompare(__a: Conversations, __b: Conversations) {
+export function compareConversations(__a: Conversations, __b: Conversations) {
   return (
     /**
      * compare parameter conversations
      */
-    __a['conversations'].length === __b['conversations'].length && __a['conversations'].every((__i,index) => (ConversationCompare(__i,__b['conversations'][index])))
+    __a['conversations'].length === __b['conversations'].length && __a['conversations'].every((__i,index) => (compareConversation(__i,__b['conversations'][index])))
   );
+}
+export function updateConversations(value: Conversations, changes: Partial<ConversationsInputParams>) {
+  if(typeof changes['conversations'] !== 'undefined') {
+    if(changes['conversations'].length === value['conversations'].length && changes['conversations'].every((__i,index) => (compareConversation(__i,value['conversations'][index])))) {
+      value = Conversations({
+        ...value,
+        conversations: changes['conversations'],
+      });
+    }
+  }
+  return value;
 }

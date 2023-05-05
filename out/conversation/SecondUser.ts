@@ -37,17 +37,28 @@ export interface User  {
   _name: 'conversation.secondUser.User';
   firstName: string;
 }
-export function UserDefault(params: Partial<UserInputParams> = {}): User {
+export function defaultUser(params: Partial<UserInputParams> = {}): User {
   return User({
     firstName: "",
     ...params
   });
 }
-export function UserCompare(__a: User, __b: User) {
+export function compareUser(__a: User, __b: User) {
   return (
     /**
      * compare parameter firstName
      */
     __a['firstName'] === __b['firstName']
   );
+}
+export function updateUser(value: User, changes: Partial<UserInputParams>) {
+  if(typeof changes['firstName'] !== 'undefined') {
+    if(changes['firstName'] === value['firstName']) {
+      value = User({
+        ...value,
+        firstName: changes['firstName'],
+      });
+    }
+  }
+  return value;
 }

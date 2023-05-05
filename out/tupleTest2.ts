@@ -65,7 +65,7 @@ export interface user  {
   firstName: string;
   lastName: string;
 }
-export function userDefault(params: Partial<userInputParams> = {}): user {
+export function defaultUser(params: Partial<userInputParams> = {}): user {
   return user({
     id: 0,
     firstName: "",
@@ -73,7 +73,7 @@ export function userDefault(params: Partial<userInputParams> = {}): user {
     ...params
   });
 }
-export function userCompare(__a: user, __b: user) {
+export function compareUser(__a: user, __b: user) {
   return (
     /**
      * compare parameter id
@@ -88,6 +88,33 @@ export function userCompare(__a: user, __b: user) {
      */
     __a['lastName'] === __b['lastName']
   );
+}
+export function updateUser(value: user, changes: Partial<userInputParams>) {
+  if(typeof changes['id'] !== 'undefined') {
+    if(changes['id'] === value['id']) {
+      value = user({
+        ...value,
+        id: changes['id'],
+      });
+    }
+  }
+  if(typeof changes['firstName'] !== 'undefined') {
+    if(changes['firstName'] === value['firstName']) {
+      value = user({
+        ...value,
+        firstName: changes['firstName'],
+      });
+    }
+  }
+  if(typeof changes['lastName'] !== 'undefined') {
+    if(changes['lastName'] === value['lastName']) {
+      value = user({
+        ...value,
+        lastName: changes['lastName'],
+      });
+    }
+  }
+  return value;
 }
 export interface postInputParams {
   id: number;
@@ -168,7 +195,7 @@ export interface post  {
   title: string;
   comments: ReadonlyArray<comment>;
 }
-export function postDefault(params: Partial<postInputParams> = {}): post {
+export function defaultPost(params: Partial<postInputParams> = {}): post {
   return post({
     id: 0,
     title: "",
@@ -176,7 +203,7 @@ export function postDefault(params: Partial<postInputParams> = {}): post {
     ...params
   });
 }
-export function postCompare(__a: post, __b: post) {
+export function comparePost(__a: post, __b: post) {
   return (
     /**
      * compare parameter id
@@ -189,8 +216,35 @@ export function postCompare(__a: post, __b: post) {
     /**
      * compare parameter comments
      */
-    __a['comments'].length === __b['comments'].length && __a['comments'].every((__i,index) => (commentCompare(__i,__b['comments'][index])))
+    __a['comments'].length === __b['comments'].length && __a['comments'].every((__i,index) => (compareComment(__i,__b['comments'][index])))
   );
+}
+export function updatePost(value: post, changes: Partial<postInputParams>) {
+  if(typeof changes['id'] !== 'undefined') {
+    if(changes['id'] === value['id']) {
+      value = post({
+        ...value,
+        id: changes['id'],
+      });
+    }
+  }
+  if(typeof changes['title'] !== 'undefined') {
+    if(changes['title'] === value['title']) {
+      value = post({
+        ...value,
+        title: changes['title'],
+      });
+    }
+  }
+  if(typeof changes['comments'] !== 'undefined') {
+    if(changes['comments'].length === value['comments'].length && changes['comments'].every((__i,index) => (compareComment(__i,value['comments'][index])))) {
+      value = post({
+        ...value,
+        comments: changes['comments'],
+      });
+    }
+  }
+  return value;
 }
 export interface commentInputParams {
   id: number;
@@ -257,7 +311,7 @@ export interface comment  {
   title: string;
   contents: string;
 }
-export function commentDefault(params: Partial<commentInputParams> = {}): comment {
+export function defaultComment(params: Partial<commentInputParams> = {}): comment {
   return comment({
     id: 0,
     title: "",
@@ -265,7 +319,7 @@ export function commentDefault(params: Partial<commentInputParams> = {}): commen
     ...params
   });
 }
-export function commentCompare(__a: comment, __b: comment) {
+export function compareComment(__a: comment, __b: comment) {
   return (
     /**
      * compare parameter id
@@ -280,6 +334,33 @@ export function commentCompare(__a: comment, __b: comment) {
      */
     __a['contents'] === __b['contents']
   );
+}
+export function updateComment(value: comment, changes: Partial<commentInputParams>) {
+  if(typeof changes['id'] !== 'undefined') {
+    if(changes['id'] === value['id']) {
+      value = comment({
+        ...value,
+        id: changes['id'],
+      });
+    }
+  }
+  if(typeof changes['title'] !== 'undefined') {
+    if(changes['title'] === value['title']) {
+      value = comment({
+        ...value,
+        title: changes['title'],
+      });
+    }
+  }
+  if(typeof changes['contents'] !== 'undefined') {
+    if(changes['contents'] === value['contents']) {
+      value = comment({
+        ...value,
+        contents: changes['contents'],
+      });
+    }
+  }
+  return value;
 }
 export interface tupleTestInputParams {
   data: [user,post,comment,ReadonlyArray<comment>,ReadonlyArray<comment | null>];
@@ -404,17 +485,28 @@ export interface tupleTest  {
   _name: 'tupleTest2.tupleTest';
   data: [user,post,comment,ReadonlyArray<comment>,ReadonlyArray<comment | null>];
 }
-export function tupleTestDefault(params: Partial<tupleTestInputParams> = {}): tupleTest {
+export function defaultTupleTest(params: Partial<tupleTestInputParams> = {}): tupleTest {
   return tupleTest({
-    data: [userDefault(),postDefault(),commentDefault(),[],[]],
+    data: [defaultUser(),defaultPost(),defaultComment(),[],[]],
     ...params
   });
 }
-export function tupleTestCompare(__a: tupleTest, __b: tupleTest) {
+export function compareTupleTest(__a: tupleTest, __b: tupleTest) {
   return (
     /**
      * compare parameter data
      */
-    /* compare tuple item 0 of type user */ ((__a00, __b00) => userCompare(__a00,__b00))(__a['data'][0],__b['data'][0]) && /* compare tuple item 1 of type post */ ((__a01, __b01) => postCompare(__a01,__b01))(__a['data'][1],__b['data'][1]) && /* compare tuple item 2 of type comment */ ((__a02, __b02) => commentCompare(__a02,__b02))(__a['data'][2],__b['data'][2]) && /* compare tuple item 3 of type ReadonlyArray<comment> */ ((__a03, __b03) => __a03.length === __b03.length && __a03.every((__i,index) => (commentCompare(__i,__b03[index]))))(__a['data'][3],__b['data'][3]) && /* compare tuple item 4 of type ReadonlyArray<comment | null> */ ((__a04, __b04) => __a04.length === __b04.length && __a04.every((__i,index) => (((__dp61, __dp62) => __dp61 !== null && __dp62 !== null ? commentCompare(__dp61,__dp62) : __dp61 === __dp62)(__i,__b04[index]))))(__a['data'][4],__b['data'][4])
+    /* compare tuple item 0 of type user */ ((__a00, __b00) => compareUser(__a00,__b00))(__a['data'][0],__b['data'][0]) && /* compare tuple item 1 of type post */ ((__a01, __b01) => comparePost(__a01,__b01))(__a['data'][1],__b['data'][1]) && /* compare tuple item 2 of type comment */ ((__a02, __b02) => compareComment(__a02,__b02))(__a['data'][2],__b['data'][2]) && /* compare tuple item 3 of type ReadonlyArray<comment> */ ((__a03, __b03) => __a03.length === __b03.length && __a03.every((__i,index) => (compareComment(__i,__b03[index]))))(__a['data'][3],__b['data'][3]) && /* compare tuple item 4 of type ReadonlyArray<comment | null> */ ((__a04, __b04) => __a04.length === __b04.length && __a04.every((__i,index) => (((__dp61, __dp62) => __dp61 !== null && __dp62 !== null ? compareComment(__dp61,__dp62) : __dp61 === __dp62)(__i,__b04[index]))))(__a['data'][4],__b['data'][4])
   );
+}
+export function updateTupleTest(value: tupleTest, changes: Partial<tupleTestInputParams>) {
+  if(typeof changes['data'] !== 'undefined') {
+    if(/* compare tuple item 0 of type user */ ((__a00, __b00) => compareUser(__a00,__b00))(changes['data'][0],value['data'][0]) && /* compare tuple item 1 of type post */ ((__a01, __b01) => comparePost(__a01,__b01))(changes['data'][1],value['data'][1]) && /* compare tuple item 2 of type comment */ ((__a02, __b02) => compareComment(__a02,__b02))(changes['data'][2],value['data'][2]) && /* compare tuple item 3 of type ReadonlyArray<comment> */ ((__a03, __b03) => __a03.length === __b03.length && __a03.every((__i,index) => (compareComment(__i,__b03[index]))))(changes['data'][3],value['data'][3]) && /* compare tuple item 4 of type ReadonlyArray<comment | null> */ ((__a04, __b04) => __a04.length === __b04.length && __a04.every((__i,index) => (((__dp61, __dp62) => __dp61 !== null && __dp62 !== null ? compareComment(__dp61,__dp62) : __dp61 === __dp62)(__i,__b04[index]))))(changes['data'][4],value['data'][4])) {
+      value = tupleTest({
+        ...value,
+        data: changes['data'],
+      });
+    }
+  }
+  return value;
 }
