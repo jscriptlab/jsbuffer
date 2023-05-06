@@ -5,26 +5,22 @@ import path from 'path';
 import { FileGenerator } from '../code-generator';
 import fs from 'fs';
 import { TextDecoder, TextEncoder } from 'util';
+import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
 
 (async () => {
   const args = Array.from(process.argv).slice(2);
-  let outDir = 'schema';
   let mainFile: string | null = null;
-  let tsExtends: string | null = null;
+  const tsExtends = getNamedArgument(args, '--extends', getString);
+  const indentationSize =
+    getNamedArgument(args, '--indentation-size', getInteger) ?? 4;
+  let outDir =
+    getNamedArgument(args, '-o', getString) ??
+    getNamedArgument(args, '--output', getString) ??
+    'schema';
+
   for (let i = 0; i < args.length; i++) {
     const arg = args[0];
     switch (arg) {
-      case '--extends':
-        args.shift();
-        tsExtends = args.shift() ?? null;
-        break;
-      case '-o': {
-        args.shift();
-        const maybeOutDir = args.shift();
-        assert.strict.ok(typeof maybeOutDir === 'string');
-        outDir = maybeOutDir;
-        break;
-      }
       default: {
         if (arg.startsWith('-')) {
           throw new Error(`invalid argument: ${arg}`);
@@ -72,7 +68,7 @@ import { TextDecoder, TextEncoder } from 'util';
       rootDir: path.dirname(mainFile),
       typeScriptConfiguration,
       outDir,
-      indentationSize: 4,
+      indentationSize,
     }
   );
   for (const file of await generator.generate()) {
