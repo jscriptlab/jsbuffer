@@ -10,6 +10,7 @@
         "./message.ts",
         "./Request.ts",
         "./tupleTest2.ts",
+        "./testUpdateFunction.ts",
         "./schema.ts",
         "./__types__.ts"
     ],

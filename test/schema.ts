@@ -18,11 +18,13 @@ import {
   updateSuperTupleTupleTest,
   updateTupleTupleTest,
 } from '../out/tupleTest2';
+import { A, defaultTest, test, updateTest } from '../out/testUpdateFunction';
 import { Serializer, Deserializer } from '../codec';
 import { TextDecoder, TextEncoder } from 'util';
 import assert from 'assert';
 import crypto from 'crypto';
 import { decodeRequestTrait, encodeRequestTrait } from '../out/Request';
+import { C } from '../out/testUpdateFunction';
 
 const suite = new Suite();
 
@@ -266,5 +268,37 @@ suite.test('it should compare tuples', () => {
     false
   );
 });
+
+suite.test(
+  'it should update types with parameters that are using trait types',
+  () => {
+    const a1 = defaultTest();
+    assert.strict.equal(
+      updateTest(a1, {
+        traitParam: A({
+          a: 0,
+        }),
+      }),
+      a1
+    );
+    const a2 = test({
+      traitParam: A({
+        a: 1,
+      }),
+    });
+    assert.strict.deepEqual(
+      updateTest(a2, {
+        traitParam: C({
+          a: 2.5,
+        }),
+      }),
+      test({
+        traitParam: C({
+          a: 2.5,
+        }),
+      })
+    );
+  }
+);
 
 export default suite;

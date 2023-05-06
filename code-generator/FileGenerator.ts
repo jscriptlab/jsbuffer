@@ -9,7 +9,7 @@ import ASTGenerator, {
   NodeTypeExpression,
 } from '../src/ASTGenerator';
 import CodeStream from 'textstreamjs';
-import fs from 'fs';
+import fs, { read } from 'fs';
 import path from 'path';
 import Tokenizer, { ITextDecoder, ITextEncoder } from '../src/Tokenizer';
 import Exception from '../exception/Exception';
@@ -882,10 +882,13 @@ export default class FileGenerator extends CodeStream {
             typeExpression: resolved.expression,
           })}>`;
       }
-    } else if ('fileGenerator' in resolved) {
-      return resolved.identifier;
     }
-    return resolved.name.value;
+    const name =
+      'fileGenerator' in resolved ? resolved.identifier : resolved.name.value;
+    if (readOnly) {
+      return `Readonly<${name}>`;
+    }
+    return name;
   }
   #resolveTypeExpression(
     typeExpression: NodeTypeExpression
@@ -1289,10 +1292,9 @@ export default class FileGenerator extends CodeStream {
       }
     } else if ('fileGenerator' in resolved) {
       const type = resolved.fileGenerator.#exports.get(resolved.identifier);
-      if (!type || type instanceof FileGenerator) {
+      if (!type) {
         throw new TypeNotFound();
       }
-      type;
       if (Array.isArray(type)) {
         const node = this.#resolvedTypeExpressionToDefinition(type);
         const encodeFunctionName = this.#request({
