@@ -1,0 +1,13 @@
+import { A } from "./testTraitOnParamTrait";
+
+type A0 {
+  A value;
+}
+
+type A1 {
+  A value;
+}
+
+type A2 {
+  A value;
+}

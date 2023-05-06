@@ -43,7 +43,7 @@ export function defaultUser(params: Partial<UserInputParams> = {}): User {
     ...params
   });
 }
-export function compareUser(__a: User, __b: User) {
+export function compareUser(__a: User, __b: User): boolean {
   return (
     /**
      * compare parameter firstName

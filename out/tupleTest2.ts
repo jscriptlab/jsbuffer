@@ -73,7 +73,7 @@ export function defaultUser(params: Partial<userInputParams> = {}): user {
     ...params
   });
 }
-export function compareUser(__a: user, __b: user) {
+export function compareUser(__a: user, __b: user): boolean {
   return (
     /**
      * compare parameter id
@@ -201,7 +201,7 @@ export function defaultPost(params: Partial<postInputParams> = {}): post {
     ...params
   });
 }
-export function comparePost(__a: post, __b: post) {
+export function comparePost(__a: post, __b: post): boolean {
   return (
     /**
      * compare parameter id
@@ -317,7 +317,7 @@ export function defaultComment(params: Partial<commentInputParams> = {}): commen
     ...params
   });
 }
-export function compareComment(__a: comment, __b: comment) {
+export function compareComment(__a: comment, __b: comment): boolean {
   return (
     /**
      * compare parameter id
@@ -461,7 +461,7 @@ export function defaultTupleTest(params: Partial<tupleTestInputParams> = {}): tu
     ...params
   });
 }
-export function compareTupleTest(__a: tupleTest, __b: tupleTest) {
+export function compareTupleTest(__a: tupleTest, __b: tupleTest): boolean {
   return (
     /**
      * compare parameter data
@@ -566,7 +566,7 @@ export function defaultTupleTupleTest(params: Partial<tupleTupleTestInputParams>
     ...params
   });
 }
-export function compareTupleTupleTest(__a: tupleTupleTest, __b: tupleTupleTest) {
+export function compareTupleTupleTest(__a: tupleTupleTest, __b: tupleTupleTest): boolean {
   return (
     /**
      * compare parameter a
@@ -645,7 +645,7 @@ export function defaultSuperTupleTupleTest(params: Partial<superTupleTupleTestIn
     ...params
   });
 }
-export function compareSuperTupleTupleTest(__a: superTupleTupleTest, __b: superTupleTupleTest) {
+export function compareSuperTupleTupleTest(__a: superTupleTupleTest, __b: superTupleTupleTest): boolean {
   return (
     /**
      * compare parameter a

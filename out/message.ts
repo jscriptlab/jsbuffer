@@ -44,7 +44,7 @@ export function defaultMessage(params: Partial<MessageInputParams> = {}): Messag
     ...params
   });
 }
-export function compareMessage(__a: Message, __b: Message) {
+export function compareMessage(__a: Message, __b: Message): boolean {
   return (
     /**
      * compare parameter id
@@ -118,7 +118,7 @@ export function defaultMessages(params: Partial<MessagesInputParams> = {}): Mess
     ...params
   });
 }
-export function compareMessages(__a: Messages, __b: Messages) {
+export function compareMessages(__a: Messages, __b: Messages): boolean {
   return (
     /**
      * compare parameter messages
@@ -195,7 +195,7 @@ export function defaultGetMessages(params: Partial<GetMessagesInputParams> = {})
     ...params
   });
 }
-export function compareGetMessages(__a: GetMessages, __b: GetMessages) {
+export function compareGetMessages(__a: GetMessages, __b: GetMessages): boolean {
   return (
     /**
      * compare parameter offset

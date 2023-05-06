@@ -5,6 +5,7 @@ import { Request } from "./Request";
 import "./tupleTest2";
 import "./testLong";
 import "./testUpdateFunction";
+import "./testTraitOnParam";
 
 type Void {
 

@@ -66,7 +66,7 @@ export function defaultConversation(params: Partial<ConversationInputParams> = {
     ...params
   });
 }
-export function compareConversation(__a: Conversation, __b: Conversation) {
+export function compareConversation(__a: Conversation, __b: Conversation): boolean {
   return (
     /**
      * compare parameter id
@@ -152,7 +152,7 @@ export function defaultConversations(params: Partial<ConversationsInputParams> =
     ...params
   });
 }
-export function compareConversations(__a: Conversations, __b: Conversations) {
+export function compareConversations(__a: Conversations, __b: Conversations): boolean {
   return (
     /**
      * compare parameter conversations

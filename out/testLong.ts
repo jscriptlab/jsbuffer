@@ -43,7 +43,7 @@ export function defaultA(params: Partial<AInputParams> = {}): A {
     ...params
   });
 }
-export function compareA(__a: A, __b: A) {
+export function compareA(__a: A, __b: A): boolean {
   return (
     /**
      * compare parameter a
@@ -105,7 +105,7 @@ export function defaultB(params: Partial<BInputParams> = {}): B {
     ...params
   });
 }
-export function compareB(__a: B, __b: B) {
+export function compareB(__a: B, __b: B): boolean {
   return (
     /**
      * compare parameter a
@@ -197,7 +197,7 @@ export function defaultC(params: Partial<CInputParams> = {}): C {
     ...params
   });
 }
-export function compareC(__a: C, __b: C) {
+export function compareC(__a: C, __b: C): boolean {
   return (
     /**
      * compare parameter a

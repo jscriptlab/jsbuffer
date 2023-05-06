@@ -146,7 +146,7 @@ export function defaultUser(params: Partial<userInputParams> = {}): user {
     ...params
   });
 }
-export function compareUser(__a: user, __b: user) {
+export function compareUser(__a: user, __b: user): boolean {
   return (
     /**
      * compare parameter firstName
@@ -220,7 +220,7 @@ export function defaultUserDeleted(params: Partial<userDeletedInputParams> = {})
     ...params
   });
 }
-export function compareUserDeleted(__a: userDeleted, __b: userDeleted) {
+export function compareUserDeleted(__a: userDeleted, __b: userDeleted): boolean {
   return (
     /**
      * compare parameter deletedAt
@@ -328,7 +328,7 @@ export function defaultTest(params: Partial<testInputParams> = {}): test {
     ...params
   });
 }
-export function compareTest(__a: test, __b: test) {
+export function compareTest(__a: test, __b: test): boolean {
   return (
     /**
      * compare parameter user

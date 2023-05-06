@@ -12,6 +12,8 @@
         "./tupleTest2.ts",
         "./testLong.ts",
         "./testUpdateFunction.ts",
+        "./testTraitOnParam.ts",
+        "./testTraitOnParamTrait.ts",
         "./schema.ts",
         "./__types__.ts"
     ],

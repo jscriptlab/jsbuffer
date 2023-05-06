@@ -1463,9 +1463,8 @@ export default class FileGenerator extends CodeStream {
     depth: number,
     fileGenerator: FileGenerator
   ) {
-    const decodeFunctionName = getDecodeFunctionName(node);
-    this.#requirements.add({
-      identifier: decodeFunctionName,
+    const decodeFunctionName = this.#request({
+      identifier: getDecodeFunctionName(node),
       fileGenerator,
     });
     const intermediaryValueVarName = `tmp${depth}`;

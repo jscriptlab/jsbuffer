@@ -36,7 +36,7 @@ export function defaultVoid(params: Partial<VoidInputParams> = {}): Void {
     ...params
   });
 }
-export function compareVoid(__a: Void, __b: Void) {
+export function compareVoid(__a: Void, __b: Void): boolean {
   return true;
 }
 export function updateVoid(value: Void, _: Partial<VoidInputParams>) {
@@ -86,7 +86,7 @@ export function defaultMsg(params: Partial<msgInputParams> = {}): msg {
     ...params
   });
 }
-export function compareMsg(__a: msg, __b: msg) {
+export function compareMsg(__a: msg, __b: msg): boolean {
   return (
     /**
      * compare parameter data
@@ -205,7 +205,7 @@ export function defaultUsers(params: Partial<UsersInputParams> = {}): Users {
     ...params
   });
 }
-export function compareUsers(__a: Users, __b: Users) {
+export function compareUsers(__a: Users, __b: Users): boolean {
   return (
     /**
      * compare parameter users
@@ -267,7 +267,7 @@ export function defaultGetUserById(params: Partial<GetUserByIdInputParams> = {})
     ...params
   });
 }
-export function compareGetUserById(__a: GetUserById, __b: GetUserById) {
+export function compareGetUserById(__a: GetUserById, __b: GetUserById): boolean {
   return (
     /**
      * compare parameter userId
@@ -329,7 +329,7 @@ export function defaultPost(params: Partial<PostInputParams> = {}): Post {
     ...params
   });
 }
-export function comparePost(__a: Post, __b: Post) {
+export function comparePost(__a: Post, __b: Post): boolean {
   return (
     /**
      * compare parameter id
@@ -403,7 +403,7 @@ export function defaultPosts(params: Partial<PostsInputParams> = {}): Posts {
     ...params
   });
 }
-export function comparePosts(__a: Posts, __b: Posts) {
+export function comparePosts(__a: Posts, __b: Posts): boolean {
   return (
     /**
      * compare parameter posts
@@ -465,7 +465,7 @@ export function defaultGetPostById(params: Partial<GetPostByIdInputParams> = {})
     ...params
   });
 }
-export function compareGetPostById(__a: GetPostById, __b: GetPostById) {
+export function compareGetPostById(__a: GetPostById, __b: GetPostById): boolean {
   return (
     /**
      * compare parameter postId
@@ -512,7 +512,7 @@ export function defaultGetConversations(params: Partial<GetConversationsInputPar
     ...params
   });
 }
-export function compareGetConversations(__a: GetConversations, __b: GetConversations) {
+export function compareGetConversations(__a: GetConversations, __b: GetConversations): boolean {
   return true;
 }
 export function updateGetConversations(value: GetConversations, _: Partial<GetConversationsInputParams>) {
@@ -576,7 +576,7 @@ export function defaultCoordinates(params: Partial<CoordinatesInputParams> = {})
     ...params
   });
 }
-export function compareCoordinates(__a: Coordinates, __b: Coordinates) {
+export function compareCoordinates(__a: Coordinates, __b: Coordinates): boolean {
   return (
     /**
      * compare parameter latitude
@@ -857,7 +857,7 @@ export function defaultShouldSupportSeveralSequentialVectorParams(params: Partia
     ...params
   });
 }
-export function compareShouldSupportSeveralSequentialVectorParams(__a: ShouldSupportSeveralSequentialVectorParams, __b: ShouldSupportSeveralSequentialVectorParams) {
+export function compareShouldSupportSeveralSequentialVectorParams(__a: ShouldSupportSeveralSequentialVectorParams, __b: ShouldSupportSeveralSequentialVectorParams): boolean {
   return (
     /**
      * compare parameter a
@@ -1092,7 +1092,7 @@ export function defaultSimpleTupleTest(params: Partial<simpleTupleTestInputParam
     ...params
   });
 }
-export function compareSimpleTupleTest(__a: simpleTupleTest, __b: simpleTupleTest) {
+export function compareSimpleTupleTest(__a: simpleTupleTest, __b: simpleTupleTest): boolean {
   return (
     /**
      * compare parameter a
@@ -1151,7 +1151,7 @@ export function defaultEmptyNode(params: Partial<emptyNodeInputParams> = {}): em
     ...params
   });
 }
-export function compareEmptyNode(__a: emptyNode, __b: emptyNode) {
+export function compareEmptyNode(__a: emptyNode, __b: emptyNode): boolean {
   return true;
 }
 export function updateEmptyNode(value: emptyNode, _: Partial<emptyNodeInputParams>) {
@@ -1215,7 +1215,7 @@ export function defaultUser(params: Partial<userInputParams> = {}): user {
     ...params
   });
 }
-export function compareUser(__a: user, __b: user) {
+export function compareUser(__a: user, __b: user): boolean {
   return (
     /**
      * compare parameter id
