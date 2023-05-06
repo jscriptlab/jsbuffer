@@ -1,1 +1,5 @@
 out
+test
+src/**/*.js
+codec/**/*.js
+code-generator/**/*.js

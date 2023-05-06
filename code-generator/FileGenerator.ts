@@ -9,7 +9,7 @@ import ASTGenerator, {
   NodeTypeExpression,
 } from '../src/ASTGenerator';
 import CodeStream from 'textstreamjs';
-import fs, { read } from 'fs';
+import fs from 'fs';
 import path from 'path';
 import Tokenizer, { ITextDecoder, ITextEncoder } from '../src/Tokenizer';
 import Exception from '../exception/Exception';
