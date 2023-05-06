@@ -160,7 +160,7 @@ type user {
 
 ## Demo
 
-You can try jsbuffer online in the [online playground](https://js-buffer-viewer-demo-app.herokuapp.com/), still in very early progress, but it works.
+You can try jsbuffer online in the [online playground](https://jsbufferviewerdemo-app.onrender.com/), still in very early progress, but it works.
 
 ## Installation
 
