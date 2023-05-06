@@ -496,7 +496,9 @@ export default class FileGenerator extends CodeStream {
   ) {
     const args = [`__a: ${getTypeName(node)}`, `__b: ${getTypeName(node)}`];
     this.write(
-      `export function ${getCompareFunctionName(node)}(${args.join(', ')}) {\n`,
+      `export function ${getCompareFunctionName(node)}(${args.join(
+        ', '
+      )}): boolean {\n`,
       () => {
         if (!node.parameters.length) {
           this.write('return true;\n');
