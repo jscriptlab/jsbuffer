@@ -301,4 +301,59 @@ suite.test(
   }
 );
 
+suite.test(
+  'it should encode types with parameters using long generic type',
+  async () => {
+    const { A, B, C, encodeA, encodeB, encodeC, decodeA, decodeB, decodeC } =
+      await import('../out/testLong');
+    const s = new Serializer({
+      textEncoder: new TextEncoder(),
+    });
+    encodeA(
+      s,
+      A({
+        a: '-100000000',
+      })
+    );
+    encodeB(
+      s,
+      B({
+        a: '10000',
+      })
+    );
+    encodeC(
+      s,
+      C({
+        a: '-100000000',
+        b: '10000',
+        c: -200000,
+      })
+    );
+    const d = new Deserializer({
+      buffer: s.view(),
+      textDecoder: new TextDecoder(),
+    });
+    assert.strict.deepEqual(
+      decodeA(d),
+      A({
+        a: '-100000000',
+      })
+    );
+    assert.strict.deepEqual(
+      decodeB(d),
+      B({
+        a: '10000',
+      })
+    );
+    assert.strict.deepEqual(
+      decodeC(d),
+      C({
+        a: '-100000000',
+        b: '10000',
+        c: -200000,
+      })
+    );
+  }
+);
+
 export default suite;

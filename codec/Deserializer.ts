@@ -1,3 +1,5 @@
+import Long from 'long';
+
 export default class Deserializer {
   readonly #textDecoder;
   readonly #dataView;
@@ -26,7 +28,13 @@ export default class Deserializer {
     );
   }
   public rewindInt32() {
-    this.#rewind(Uint32Array.BYTES_PER_ELEMENT);
+    this.#rewind(4);
+  }
+  public readUnsignedLong() {
+    return this.#readLong(true);
+  }
+  public readSignedLong() {
+    return this.#readLong(false);
   }
   public readUint8() {
     this.#ensureAvailableByteLength(1);
@@ -97,6 +105,12 @@ export default class Deserializer {
         `expected ${requiredByteLength} more bytes, but got only ${remaining} bytes left`
       );
     }
+  }
+  #readLong(unsigned: boolean) {
+    return Long.fromBytesLE(
+      Array.from(this.readBuffer(8)),
+      unsigned
+    ).toString();
   }
   #rewind(byteLength: number) {
     if (this.#readOffset - byteLength < 0) {

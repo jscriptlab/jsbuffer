@@ -1,3 +1,5 @@
+import Long from 'long';
+
 export default class Serializer {
   readonly #tailByteLength;
   readonly #textEncoder;
@@ -16,6 +18,12 @@ export default class Serializer {
     this.#textEncoder = textEncoder;
     this.#tailByteLength = tailByteLength;
     this.#arrayBuffer = new ArrayBuffer(this.#tailByteLength);
+  }
+  public writeSignedLong(value: string) {
+    this.#writeLong(value, false);
+  }
+  public writeUnsignedLong(value: string) {
+    this.#writeLong(value, true);
   }
   public view() {
     return new Uint8Array(this.#arrayBuffer, 0, this.#writeOffset);
@@ -96,5 +104,10 @@ export default class Serializer {
     const newArrayBuffer = new ArrayBuffer(newByteLength);
     new Uint8Array(newArrayBuffer).set(this.#view());
     this.#arrayBuffer = newArrayBuffer;
+  }
+  #writeLong(value: string, unsigned: boolean) {
+    this.writeBuffer(
+      new Uint8Array(Long.fromString(value, unsigned).toBytesLE())
+    );
   }
 }

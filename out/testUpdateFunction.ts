@@ -1,6 +1,6 @@
 import {ISerializer} from "./__types__";
 import {IDeserializer} from "./__types__";
-export type E = A | B | C | D;
+export type E = Readonly<A> | Readonly<B> | Readonly<C> | Readonly<D>;
 export function encodeETrait(__s: ISerializer,value: E) {
   switch(value._name) {
     case 'testUpdateFunction.A':
@@ -318,7 +318,7 @@ export function updateD(value: D, changes: Partial<DInputParams>) {
   return value;
 }
 export interface testInputParams {
-  traitParam: E;
+  traitParam: Readonly<E>;
 }
 export function test(params: testInputParams): test {
   return {
@@ -327,7 +327,7 @@ export function test(params: testInputParams): test {
   };
 }
 export function encodeTest(__s: ISerializer, value: test) {
-  __s.writeInt32(2020744111);
+  __s.writeInt32(1877955998);
   /**
    * encoding param: traitParam
    */
@@ -339,7 +339,7 @@ export function decodeTest(__d: IDeserializer): test | null {
   /**
    * decode header
    */
-  if(__id !== 2020744111) return null;
+  if(__id !== 1877955998) return null;
   let traitParam: E;
   /**
    * decoding param: traitParam
@@ -354,7 +354,7 @@ export function decodeTest(__d: IDeserializer): test | null {
 }
 export interface test  {
   _name: 'testUpdateFunction.test';
-  traitParam: E;
+  traitParam: Readonly<E>;
 }
 export function defaultTest(params: Partial<testInputParams> = {}): test {
   return test({

@@ -8,7 +8,7 @@ import {compareUser} from "./SecondUser";
 import {compareUser as compareUser1} from "./SecondUser";
 export interface ConversationInputParams {
   id: number;
-  user: User;
+  user: Readonly<User>;
 }
 export function Conversation(params: ConversationInputParams): Conversation {
   return {
@@ -18,7 +18,7 @@ export function Conversation(params: ConversationInputParams): Conversation {
   };
 }
 export function encodeConversation(__s: ISerializer, value: Conversation) {
-  __s.writeInt32(-563833943);
+  __s.writeInt32(-56318669);
   /**
    * encoding param: id
    */
@@ -35,7 +35,7 @@ export function decodeConversation(__d: IDeserializer): Conversation | null {
   /**
    * decode header
    */
-  if(__id !== -563833943) return null;
+  if(__id !== -56318669) return null;
   let id: number;
   let user: User;
   /**
@@ -57,7 +57,7 @@ export function decodeConversation(__d: IDeserializer): Conversation | null {
 export interface Conversation  {
   _name: 'conversation.index.Conversation';
   id: number;
-  user: User;
+  user: Readonly<User>;
 }
 export function defaultConversation(params: Partial<ConversationInputParams> = {}): Conversation {
   return Conversation({
@@ -98,7 +98,7 @@ export function updateConversation(value: Conversation, changes: Partial<Convers
   return value;
 }
 export interface ConversationsInputParams {
-  conversations: ReadonlyArray<Conversation>;
+  conversations: ReadonlyArray<Readonly<Conversation>>;
 }
 export function Conversations(params: ConversationsInputParams): Conversations {
   return {
@@ -107,7 +107,7 @@ export function Conversations(params: ConversationsInputParams): Conversations {
   };
 }
 export function encodeConversations(__s: ISerializer, value: Conversations) {
-  __s.writeInt32(-1956221194);
+  __s.writeInt32(-1554155458);
   /**
    * encoding param: conversations
    */
@@ -124,7 +124,7 @@ export function decodeConversations(__d: IDeserializer): Conversations | null {
   /**
    * decode header
    */
-  if(__id !== -1956221194) return null;
+  if(__id !== -1554155458) return null;
   let conversations: Array<Conversation>;
   /**
    * decoding param: conversations
@@ -144,7 +144,7 @@ export function decodeConversations(__d: IDeserializer): Conversations | null {
 }
 export interface Conversations  {
   _name: 'conversation.index.Conversations';
-  conversations: ReadonlyArray<Conversation>;
+  conversations: ReadonlyArray<Readonly<Conversation>>;
 }
 export function defaultConversations(params: Partial<ConversationsInputParams> = {}): Conversations {
   return Conversations({

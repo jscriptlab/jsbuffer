@@ -1,6 +1,6 @@
 import {ISerializer} from "./__types__";
 import {IDeserializer} from "./__types__";
-export type User = user | userDeleted;
+export type User = Readonly<user> | Readonly<userDeleted>;
 export function encodeUserTrait(__s: ISerializer,value: User) {
   switch(value._name) {
     case 'user.user':
@@ -45,7 +45,7 @@ export function compareUserTrait(__a: User, __b: User) {
       return compareUserDeleted(__a,__b);
   }
 }
-export type Test = test;
+export type Test = Readonly<test>;
 export function encodeTestTrait(__s: ISerializer,value: Test) {
   switch(value._name) {
     case 'user.test':
@@ -58,7 +58,7 @@ export function decodeTestTrait(__d: IDeserializer) {
   __d.rewindInt32();
   let value: test;
   switch(__id) {
-    case -1945733013: {
+    case -784129413: {
       const tmp = decodeTest(__d);
       if(tmp === null) return null;
       value = tmp;
@@ -240,7 +240,7 @@ export function updateUserDeleted(value: userDeleted, changes: Partial<userDelet
   return value;
 }
 export interface testInputParams {
-  user: user;
+  user: Readonly<user>;
   b: ReadonlyArray<ReadonlyArray<string | null>>;
 }
 export function test(params: testInputParams): test {
@@ -251,7 +251,7 @@ export function test(params: testInputParams): test {
   };
 }
 export function encodeTest(__s: ISerializer, value: test) {
-  __s.writeInt32(-1945733013);
+  __s.writeInt32(-784129413);
   /**
    * encoding param: user
    */
@@ -283,7 +283,7 @@ export function decodeTest(__d: IDeserializer): test | null {
   /**
    * decode header
    */
-  if(__id !== -1945733013) return null;
+  if(__id !== -784129413) return null;
   let user: user;
   let b: Array<Array<string | null>>;
   /**
@@ -318,7 +318,7 @@ export function decodeTest(__d: IDeserializer): test | null {
 }
 export interface test  {
   _name: 'user.test';
-  user: user;
+  user: Readonly<user>;
   b: ReadonlyArray<ReadonlyArray<string | null>>;
 }
 export function defaultTest(params: Partial<testInputParams> = {}): test {

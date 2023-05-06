@@ -13,7 +13,7 @@ import {defaultGetUserById} from "./schema";
 import {compareGetUserById} from "./schema";
 import {compareGetPostById} from "./schema";
 import {compareGetConversations} from "./schema";
-export type Request = GetUserById | GetPostById | GetConversations;
+export type Request = Readonly<GetUserById> | Readonly<GetPostById> | Readonly<GetConversations>;
 export function encodeRequestTrait(__s: ISerializer,value: Request) {
   switch(value._name) {
     case 'schema.GetUserById':

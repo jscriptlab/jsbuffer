@@ -144,7 +144,9 @@ export type ResolvedTypeExpression =
         | 'float'
         | 'double'
         | 'string'
-        | 'bytes';
+        | 'bytes'
+        | 'long'
+        | 'ulong';
     }
   | {
       template: 'vector';
@@ -186,13 +188,6 @@ export default class FileGenerator extends CodeStream {
     INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
   >();
   readonly #identifiers = new Map<string, null>();
-  // readonly #identifiers = new Map<
-  //   string,
-  //   | FileGenerator
-  //   | INodeTypeDefinition
-  //   | INodeCallDefinition
-  //   | INodeTraitDefinition
-  // >();
   readonly #definitions = new Map<
     string,
     INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
@@ -403,6 +398,8 @@ export default class FileGenerator extends CodeStream {
         this.write('writeBuffer(value: Uint8Array): void;\n');
         this.write('writeUint32(value: number): void;\n');
         this.write('writeString(value: string): void;\n');
+        this.write('writeSignedLong(value: string): void;\n');
+        this.write('writeUnsignedLong(value: string): void;\n');
         this.write('writeInt32(value: number): void;\n');
         this.write('writeDouble(value: number): void;\n');
         this.write('writeFloat(value: number): void;\n');
@@ -416,6 +413,8 @@ export default class FileGenerator extends CodeStream {
         this.write('readBuffer(length: number): Uint8Array;\n');
         this.write('readUint32(): number;\n');
         this.write('readString(): string;\n');
+        this.write('readSignedLong(): string;\n');
+        this.write('readUnsignedLong(): string;\n');
         this.write('readInt32(): number;\n');
         this.write('readDouble(): number;\n');
         this.write('readFloat(): number;\n');
@@ -556,6 +555,8 @@ export default class FileGenerator extends CodeStream {
         case 'float':
         case 'double':
         case 'string':
+        case 'long':
+        case 'ulong':
           this.append(`${v1} === ${v2}`);
           break;
         default:
@@ -676,6 +677,9 @@ export default class FileGenerator extends CodeStream {
       switch (resolved.generic) {
         case 'bytes':
           return 'new Uint8Array(0)';
+        case 'long':
+        case 'ulong':
+          return '"0"';
         case 'float':
         case 'double':
           return '0.0';
@@ -856,6 +860,8 @@ export default class FileGenerator extends CodeStream {
         case 'int16':
           return 'number';
         case 'string':
+        case 'long':
+        case 'ulong':
           return 'string';
         case 'bytes':
           return 'Uint8Array';
@@ -942,6 +948,8 @@ export default class FileGenerator extends CodeStream {
           case 'int16':
           case 'string':
           case 'bytes':
+          case 'long':
+          case 'ulong':
             return {
               generic: typeExpression.value,
             };
@@ -1217,6 +1225,12 @@ export default class FileGenerator extends CodeStream {
         case 'int16':
           this.write(`${serializerVarName}.writeInt16(${value});\n`);
           break;
+        case 'long':
+          this.write(`${serializerVarName}.writeSignedLong(${value});\n`);
+          break;
+        case 'ulong':
+          this.write(`${serializerVarName}.writeUnsignedLong(${value});\n`);
+          break;
         case 'string':
           this.write(`${serializerVarName}.writeString(${value});\n`);
           break;
@@ -1339,6 +1353,12 @@ export default class FileGenerator extends CodeStream {
           break;
         case 'string':
           this.write(`${value} = __d.readString();\n`);
+          break;
+        case 'long':
+          this.write(`${value} = __d.readSignedLong();\n`);
+          break;
+        case 'ulong':
+          this.write(`${value} = __d.readUnsignedLong();\n`);
           break;
         case 'float':
           this.write(`${value} = __d.readFloat();\n`);

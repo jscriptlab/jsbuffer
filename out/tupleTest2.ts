@@ -119,7 +119,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
 export interface postInputParams {
   id: number;
   title: string;
-  comments: ReadonlyArray<comment>;
+  comments: ReadonlyArray<Readonly<comment>>;
 }
 export function post(params: postInputParams): post {
   return {
@@ -130,7 +130,7 @@ export function post(params: postInputParams): post {
   };
 }
 export function encodePost(__s: ISerializer, value: post) {
-  __s.writeInt32(207786521);
+  __s.writeInt32(-936279126);
   /**
    * encoding param: id
    */
@@ -157,7 +157,7 @@ export function decodePost(__d: IDeserializer): post | null {
   /**
    * decode header
    */
-  if(__id !== 207786521) return null;
+  if(__id !== -936279126) return null;
   let id: number;
   let title: string;
   let comments: Array<comment>;
@@ -191,7 +191,7 @@ export interface post  {
   _name: 'tupleTest2.post';
   id: number;
   title: string;
-  comments: ReadonlyArray<comment>;
+  comments: ReadonlyArray<Readonly<comment>>;
 }
 export function defaultPost(params: Partial<postInputParams> = {}): post {
   return post({
@@ -361,7 +361,7 @@ export function updateComment(value: comment, changes: Partial<commentInputParam
   return value;
 }
 export interface tupleTestInputParams {
-  data: [user,post,comment,ReadonlyArray<comment>,ReadonlyArray<comment | null>];
+  data: [Readonly<user>,Readonly<post>,Readonly<comment>,ReadonlyArray<Readonly<comment>>,ReadonlyArray<Readonly<comment> | null>];
 }
 export function tupleTest(params: tupleTestInputParams): tupleTest {
   return {
@@ -370,7 +370,7 @@ export function tupleTest(params: tupleTestInputParams): tupleTest {
   };
 }
 export function encodeTupleTest(__s: ISerializer, value: tupleTest) {
-  __s.writeInt32(-47093845);
+  __s.writeInt32(-1611262607);
   /**
    * encoding param: data
    */
@@ -406,7 +406,7 @@ export function decodeTupleTest(__d: IDeserializer): tupleTest | null {
   /**
    * decode header
    */
-  if(__id !== -47093845) return null;
+  if(__id !== -1611262607) return null;
   let data: [user,post,comment,Array<comment>,Array<comment | null>];
   /**
    * decoding param: data
@@ -453,7 +453,7 @@ export function decodeTupleTest(__d: IDeserializer): tupleTest | null {
 }
 export interface tupleTest  {
   _name: 'tupleTest2.tupleTest';
-  data: [user,post,comment,ReadonlyArray<comment>,ReadonlyArray<comment | null>];
+  data: [Readonly<user>,Readonly<post>,Readonly<comment>,ReadonlyArray<Readonly<comment>>,ReadonlyArray<Readonly<comment> | null>];
 }
 export function defaultTupleTest(params: Partial<tupleTestInputParams> = {}): tupleTest {
   return tupleTest({
@@ -466,12 +466,12 @@ export function compareTupleTest(__a: tupleTest, __b: tupleTest) {
     /**
      * compare parameter data
      */
-    /* compare tuple item 0 of type user */ ((__a00, __b00) => compareUser(__a00,__b00))(__a['data'][0],__b['data'][0]) && /* compare tuple item 1 of type post */ ((__a01, __b01) => comparePost(__a01,__b01))(__a['data'][1],__b['data'][1]) && /* compare tuple item 2 of type comment */ ((__a02, __b02) => compareComment(__a02,__b02))(__a['data'][2],__b['data'][2]) && /* compare tuple item 3 of type ReadonlyArray<comment> */ ((__a03, __b03) => __a03.length === __b03.length && __a03.every((__i,index) => (compareComment(__i,__b03[index]))))(__a['data'][3],__b['data'][3]) && /* compare tuple item 4 of type ReadonlyArray<comment | null> */ ((__a04, __b04) => __a04.length === __b04.length && __a04.every((__i,index) => (((__dp61, __dp62) => __dp61 !== null && __dp62 !== null ? compareComment(__dp61,__dp62) : __dp61 === __dp62)(__i,__b04[index]))))(__a['data'][4],__b['data'][4])
+    /* compare tuple item 0 of type Readonly<user> */ ((__a00, __b00) => compareUser(__a00,__b00))(__a['data'][0],__b['data'][0]) && /* compare tuple item 1 of type Readonly<post> */ ((__a01, __b01) => comparePost(__a01,__b01))(__a['data'][1],__b['data'][1]) && /* compare tuple item 2 of type Readonly<comment> */ ((__a02, __b02) => compareComment(__a02,__b02))(__a['data'][2],__b['data'][2]) && /* compare tuple item 3 of type ReadonlyArray<Readonly<comment>> */ ((__a03, __b03) => __a03.length === __b03.length && __a03.every((__i,index) => (compareComment(__i,__b03[index]))))(__a['data'][3],__b['data'][3]) && /* compare tuple item 4 of type ReadonlyArray<Readonly<comment> | null> */ ((__a04, __b04) => __a04.length === __b04.length && __a04.every((__i,index) => (((__dp61, __dp62) => __dp61 !== null && __dp62 !== null ? compareComment(__dp61,__dp62) : __dp61 === __dp62)(__i,__b04[index]))))(__a['data'][4],__b['data'][4])
   );
 }
 export function updateTupleTest(value: tupleTest, changes: Partial<tupleTestInputParams>) {
   if(typeof changes['data'] !== 'undefined') {
-    if(!(/* compare tuple item 0 of type user */ ((__a00, __b00) => compareUser(__a00,__b00))(changes['data'][0],value['data'][0]) && /* compare tuple item 1 of type post */ ((__a01, __b01) => comparePost(__a01,__b01))(changes['data'][1],value['data'][1]) && /* compare tuple item 2 of type comment */ ((__a02, __b02) => compareComment(__a02,__b02))(changes['data'][2],value['data'][2]) && /* compare tuple item 3 of type ReadonlyArray<comment> */ ((__a03, __b03) => __a03.length === __b03.length && __a03.every((__i,index) => (compareComment(__i,__b03[index]))))(changes['data'][3],value['data'][3]) && /* compare tuple item 4 of type ReadonlyArray<comment | null> */ ((__a04, __b04) => __a04.length === __b04.length && __a04.every((__i,index) => (((__dp61, __dp62) => __dp61 !== null && __dp62 !== null ? compareComment(__dp61,__dp62) : __dp61 === __dp62)(__i,__b04[index]))))(changes['data'][4],value['data'][4]))) {
+    if(!(/* compare tuple item 0 of type Readonly<user> */ ((__a00, __b00) => compareUser(__a00,__b00))(changes['data'][0],value['data'][0]) && /* compare tuple item 1 of type Readonly<post> */ ((__a01, __b01) => comparePost(__a01,__b01))(changes['data'][1],value['data'][1]) && /* compare tuple item 2 of type Readonly<comment> */ ((__a02, __b02) => compareComment(__a02,__b02))(changes['data'][2],value['data'][2]) && /* compare tuple item 3 of type ReadonlyArray<Readonly<comment>> */ ((__a03, __b03) => __a03.length === __b03.length && __a03.every((__i,index) => (compareComment(__i,__b03[index]))))(changes['data'][3],value['data'][3]) && /* compare tuple item 4 of type ReadonlyArray<Readonly<comment> | null> */ ((__a04, __b04) => __a04.length === __b04.length && __a04.every((__i,index) => (((__dp61, __dp62) => __dp61 !== null && __dp62 !== null ? compareComment(__dp61,__dp62) : __dp61 === __dp62)(__i,__b04[index]))))(changes['data'][4],value['data'][4]))) {
       value = tupleTest({
         ...value,
         data: changes['data'],

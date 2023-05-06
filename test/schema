@@ -3,6 +3,7 @@ import { Conversations } from "./conversation/index";
 import "./message";
 import { Request } from "./Request";
 import "./tupleTest2";
+import "./testLong";
 import "./testUpdateFunction";
 
 type Void {

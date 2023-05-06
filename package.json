@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "crc": "4.x",
+    "long": "5.x",
     "textstreamjs": "0.x"
   }
 }

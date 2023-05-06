@@ -105,7 +105,7 @@ export function updateMsg(value: msg, changes: Partial<msgInputParams>) {
   }
   return value;
 }
-export type Result = Users | Posts;
+export type Result = Readonly<Users> | Readonly<Posts>;
 export function encodeResultTrait(__s: ISerializer,value: Result) {
   switch(value._name) {
     case 'schema.Users':
@@ -121,13 +121,13 @@ export function decodeResultTrait(__d: IDeserializer) {
   __d.rewindInt32();
   let value: Users | Posts;
   switch(__id) {
-    case 2102518628: {
+    case 594466339: {
       const tmp = decodeUsers(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
-    case -1201900047: {
+    case -1199678677: {
       const tmp = decodePosts(__d);
       if(tmp === null) return null;
       value = tmp;
@@ -151,7 +151,7 @@ export function compareResultTrait(__a: Result, __b: Result) {
   }
 }
 export interface UsersInputParams {
-  users: ReadonlyArray<User>;
+  users: ReadonlyArray<Readonly<User>>;
 }
 export function Users(params: UsersInputParams): Users {
   return {
@@ -160,7 +160,7 @@ export function Users(params: UsersInputParams): Users {
   };
 }
 export function encodeUsers(__s: ISerializer, value: Users) {
-  __s.writeInt32(2102518628);
+  __s.writeInt32(594466339);
   /**
    * encoding param: users
    */
@@ -177,7 +177,7 @@ export function decodeUsers(__d: IDeserializer): Users | null {
   /**
    * decode header
    */
-  if(__id !== 2102518628) return null;
+  if(__id !== 594466339) return null;
   let users: Array<User>;
   /**
    * decoding param: users
@@ -197,7 +197,7 @@ export function decodeUsers(__d: IDeserializer): Users | null {
 }
 export interface Users  {
   _name: 'schema.Users';
-  users: ReadonlyArray<User>;
+  users: ReadonlyArray<Readonly<User>>;
 }
 export function defaultUsers(params: Partial<UsersInputParams> = {}): Users {
   return Users({
@@ -257,7 +257,7 @@ export function decodeGetUserById(__d: IDeserializer): GetUserById | null {
     userId
   };
 }
-export interface GetUserById extends IRequest<Users> {
+export interface GetUserById extends IRequest<Readonly<Users>> {
   _name: 'schema.GetUserById';
   userId: number;
 }
@@ -349,7 +349,7 @@ export function updatePost(value: Post, changes: Partial<PostInputParams>) {
   return value;
 }
 export interface PostsInputParams {
-  posts: ReadonlyArray<Post>;
+  posts: ReadonlyArray<Readonly<Post>>;
 }
 export function Posts(params: PostsInputParams): Posts {
   return {
@@ -358,7 +358,7 @@ export function Posts(params: PostsInputParams): Posts {
   };
 }
 export function encodePosts(__s: ISerializer, value: Posts) {
-  __s.writeInt32(-1201900047);
+  __s.writeInt32(-1199678677);
   /**
    * encoding param: posts
    */
@@ -375,7 +375,7 @@ export function decodePosts(__d: IDeserializer): Posts | null {
   /**
    * decode header
    */
-  if(__id !== -1201900047) return null;
+  if(__id !== -1199678677) return null;
   let posts: Array<Post>;
   /**
    * decoding param: posts
@@ -395,7 +395,7 @@ export function decodePosts(__d: IDeserializer): Posts | null {
 }
 export interface Posts  {
   _name: 'schema.Posts';
-  posts: ReadonlyArray<Post>;
+  posts: ReadonlyArray<Readonly<Post>>;
 }
 export function defaultPosts(params: Partial<PostsInputParams> = {}): Posts {
   return Posts({
@@ -455,7 +455,7 @@ export function decodeGetPostById(__d: IDeserializer): GetPostById | null {
     postId
   };
 }
-export interface GetPostById extends IRequest<Posts> {
+export interface GetPostById extends IRequest<Readonly<Posts>> {
   _name: 'schema.GetPostById';
   postId: number;
 }
@@ -504,7 +504,7 @@ export function decodeGetConversations(__d: IDeserializer): GetConversations | n
     _name: 'schema.GetConversations',
   };
 }
-export interface GetConversations extends IRequest<Conversations> {
+export interface GetConversations extends IRequest<Readonly<Conversations>> {
   _name: 'schema.GetConversations';
 }
 export function defaultGetConversations(params: Partial<GetConversationsInputParams> = {}): GetConversations {

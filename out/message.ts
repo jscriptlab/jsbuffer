@@ -64,7 +64,7 @@ export function updateMessage(value: Message, changes: Partial<MessageInputParam
   return value;
 }
 export interface MessagesInputParams {
-  messages: ReadonlyArray<Message>;
+  messages: ReadonlyArray<Readonly<Message>>;
 }
 export function Messages(params: MessagesInputParams): Messages {
   return {
@@ -73,7 +73,7 @@ export function Messages(params: MessagesInputParams): Messages {
   };
 }
 export function encodeMessages(__s: ISerializer, value: Messages) {
-  __s.writeInt32(1839199230);
+  __s.writeInt32(1332590988);
   /**
    * encoding param: messages
    */
@@ -90,7 +90,7 @@ export function decodeMessages(__d: IDeserializer): Messages | null {
   /**
    * decode header
    */
-  if(__id !== 1839199230) return null;
+  if(__id !== 1332590988) return null;
   let messages: Array<Message>;
   /**
    * decoding param: messages
@@ -110,7 +110,7 @@ export function decodeMessages(__d: IDeserializer): Messages | null {
 }
 export interface Messages  {
   _name: 'message.Messages';
-  messages: ReadonlyArray<Message>;
+  messages: ReadonlyArray<Readonly<Message>>;
 }
 export function defaultMessages(params: Partial<MessagesInputParams> = {}): Messages {
   return Messages({
@@ -183,7 +183,7 @@ export function decodeGetMessages(__d: IDeserializer): GetMessages | null {
     limit
   };
 }
-export interface GetMessages extends IRequest<Messages> {
+export interface GetMessages extends IRequest<Readonly<Messages>> {
   _name: 'message.GetMessages';
   offset: number;
   limit: number;
