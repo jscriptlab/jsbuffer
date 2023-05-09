@@ -1246,3 +1246,64 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
   }
   return value;
 }
+export interface supportNullTerminatedStringInputParams {
+  value: string;
+}
+export function supportNullTerminatedString(params: supportNullTerminatedStringInputParams): supportNullTerminatedString {
+  return {
+    _name: 'schema.supportNullTerminatedString',
+    value: params['value']
+  };
+}
+export function encodeSupportNullTerminatedString(__s: ISerializer, value: supportNullTerminatedString) {
+  __s.writeInt32(-1975570504);
+  /**
+   * encoding param: value
+   */
+  const __pv0 = value['value'];
+}
+export function decodeSupportNullTerminatedString(__d: IDeserializer): supportNullTerminatedString | null {
+  const __id = __d.readInt32();
+  /**
+   * decode header
+   */
+  if(__id !== -1975570504) return null;
+  let value: string;
+  /**
+   * decoding param: value
+   */
+  value = __d.readNullTerminatedString();
+  return {
+    _name: 'schema.supportNullTerminatedString',
+    value
+  };
+}
+export interface supportNullTerminatedString  {
+  _name: 'schema.supportNullTerminatedString';
+  value: string;
+}
+export function defaultSupportNullTerminatedString(params: Partial<supportNullTerminatedStringInputParams> = {}): supportNullTerminatedString {
+  return supportNullTerminatedString({
+    value: "",
+    ...params
+  });
+}
+export function compareSupportNullTerminatedString(__a: supportNullTerminatedString, __b: supportNullTerminatedString): boolean {
+  return (
+    /**
+     * compare parameter value
+     */
+    __a['value'] === __b['value']
+  );
+}
+export function updateSupportNullTerminatedString(value: supportNullTerminatedString, changes: Partial<supportNullTerminatedStringInputParams>) {
+  if(typeof changes['value'] !== 'undefined') {
+    if(!(changes['value'] === value['value'])) {
+      value = supportNullTerminatedString({
+        ...value,
+        value: changes['value'],
+      });
+    }
+  }
+  return value;
+}

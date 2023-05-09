@@ -25,6 +25,7 @@ import {
   getUpdateFunctionName,
 } from './fileGeneratorUtilities';
 import crc from 'crc';
+import GenericName from './GenericName';
 import JavaScriptObjectStringify from './JavaScriptObjectStringify';
 
 export interface IFile {
@@ -133,20 +134,7 @@ export type ResolvedTypeExpression =
   | INodeCallDefinition
   | INodeTraitDefinition
   | {
-      generic:
-        | 'int'
-        | 'uint32'
-        | 'int32'
-        | 'uint8'
-        | 'int8'
-        | 'uint16'
-        | 'int16'
-        | 'float'
-        | 'double'
-        | 'string'
-        | 'bytes'
-        | 'long'
-        | 'ulong';
+      generic: GenericName;
     }
   | {
       template: 'vector';
@@ -398,6 +386,7 @@ export default class FileGenerator extends CodeStream {
         this.write('writeBuffer(value: Uint8Array): void;\n');
         this.write('writeUint32(value: number): void;\n');
         this.write('writeString(value: string): void;\n');
+        this.write('writeNullTerminatedString(value: string): void;\n');
         this.write('writeSignedLong(value: string): void;\n');
         this.write('writeUnsignedLong(value: string): void;\n');
         this.write('writeInt32(value: number): void;\n');
@@ -413,6 +402,7 @@ export default class FileGenerator extends CodeStream {
         this.write('readBuffer(length: number): Uint8Array;\n');
         this.write('readUint32(): number;\n');
         this.write('readString(): string;\n');
+        this.write('readNullTerminatedString(): string;\n');
         this.write('readSignedLong(): string;\n');
         this.write('readUnsignedLong(): string;\n');
         this.write('readInt32(): number;\n');
@@ -547,18 +537,19 @@ export default class FileGenerator extends CodeStream {
           this.append(expressions.join(' && '));
           break;
         }
-        case 'int':
-        case 'uint32':
-        case 'int32':
-        case 'uint8':
-        case 'int8':
-        case 'uint16':
-        case 'int16':
-        case 'float':
-        case 'double':
-        case 'string':
-        case 'long':
-        case 'ulong':
+        case GenericName.Integer:
+        case GenericName.Uint32:
+        case GenericName.Int32:
+        case GenericName.Uint8:
+        case GenericName.Int8:
+        case GenericName.Uint16:
+        case GenericName.Int16:
+        case GenericName.Float:
+        case GenericName.Double:
+        case GenericName.String:
+        case GenericName.Long:
+        case GenericName.UnsignedLong:
+        case GenericName.NullTerminatedString:
           this.append(`${v1} === ${v2}`);
           break;
         default:
@@ -677,23 +668,24 @@ export default class FileGenerator extends CodeStream {
   ): string {
     if ('generic' in resolved) {
       switch (resolved.generic) {
-        case 'bytes':
+        case GenericName.Bytes:
           return 'new Uint8Array(0)';
-        case 'long':
-        case 'ulong':
+        case GenericName.Long:
+        case GenericName.UnsignedLong:
           return '"0"';
-        case 'float':
-        case 'double':
+        case GenericName.Float:
+        case GenericName.Double:
           return '0.0';
-        case 'int':
-        case 'uint32':
-        case 'int32':
-        case 'uint16':
-        case 'int16':
-        case 'uint8':
-        case 'int8':
+        case GenericName.Integer:
+        case GenericName.Uint32:
+        case GenericName.Int32:
+        case GenericName.Int16:
+        case GenericName.Uint16:
+        case GenericName.Uint8:
+        case GenericName.Int8:
           return '0';
-        case 'string':
+        case GenericName.String:
+        case GenericName.NullTerminatedString:
           return '""';
       }
     } else if ('template' in resolved) {
@@ -836,21 +828,22 @@ export default class FileGenerator extends CodeStream {
     const { resolvedTypeExpression: resolved, readOnly } = options;
     if ('generic' in resolved) {
       switch (resolved.generic) {
-        case 'int':
-        case 'uint32':
-        case 'int32':
-        case 'uint8':
-        case 'int8':
-        case 'float':
-        case 'double':
-        case 'uint16':
-        case 'int16':
+        case GenericName.Integer:
+        case GenericName.Uint32:
+        case GenericName.Int32:
+        case GenericName.Uint8:
+        case GenericName.Int8:
+        case GenericName.Float:
+        case GenericName.Double:
+        case GenericName.Uint16:
+        case GenericName.Int16:
           return 'number';
-        case 'string':
-        case 'long':
-        case 'ulong':
+        case GenericName.String:
+        case GenericName.NullTerminatedString:
+        case GenericName.Long:
+        case GenericName.UnsignedLong:
           return 'string';
-        case 'bytes':
+        case GenericName.Bytes:
           return 'Uint8Array';
       }
     } else if ('template' in resolved) {
@@ -924,19 +917,20 @@ export default class FileGenerator extends CodeStream {
         }
       case NodeType.Identifier: {
         switch (typeExpression.value) {
-          case 'int':
-          case 'uint32':
-          case 'int32':
-          case 'uint8':
-          case 'int8':
-          case 'float':
-          case 'double':
-          case 'uint16':
-          case 'int16':
-          case 'string':
-          case 'bytes':
-          case 'long':
-          case 'ulong':
+          case GenericName.Integer:
+          case GenericName.Uint32:
+          case GenericName.Int32:
+          case GenericName.Uint8:
+          case GenericName.Int8:
+          case GenericName.Float:
+          case GenericName.Double:
+          case GenericName.Uint16:
+          case GenericName.Int16:
+          case GenericName.String:
+          case GenericName.NullTerminatedString:
+          case GenericName.Bytes:
+          case GenericName.Long:
+          case GenericName.UnsignedLong:
             return {
               generic: typeExpression.value,
             };
@@ -1325,35 +1319,38 @@ export default class FileGenerator extends CodeStream {
     const resolved = this.#resolveTypeExpression(exp);
     if ('generic' in resolved) {
       switch (resolved.generic) {
-        case 'int':
-        case 'int32':
+        case GenericName.Int32:
+        case GenericName.Integer:
           this.write(`${value} = __d.readInt32();\n`);
           break;
-        case 'uint32':
+        case GenericName.Uint32:
           this.write(`${value} = __d.readUint32();\n`);
           break;
-        case 'uint16':
+        case GenericName.Uint16:
           this.write(`${value} = __d.readUint16();\n`);
           break;
-        case 'int16':
+        case GenericName.Int16:
           this.write(`${value} = __d.readInt16();\n`);
           break;
-        case 'string':
+        case GenericName.String:
           this.write(`${value} = __d.readString();\n`);
           break;
-        case 'long':
+        case GenericName.NullTerminatedString:
+          this.write(`${value} = __d.readNullTerminatedString();\n`);
+          break;
+        case GenericName.Long:
           this.write(`${value} = __d.readSignedLong();\n`);
           break;
-        case 'ulong':
+        case GenericName.UnsignedLong:
           this.write(`${value} = __d.readUnsignedLong();\n`);
           break;
-        case 'float':
+        case GenericName.Float:
           this.write(`${value} = __d.readFloat();\n`);
           break;
-        case 'double':
+        case GenericName.Double:
           this.write(`${value} = __d.readDouble();\n`);
           break;
-        case 'bytes':
+        case GenericName.Bytes:
           this.write(`${value} = __d.readBuffer(__d.readUint32());\n`);
           break;
       }

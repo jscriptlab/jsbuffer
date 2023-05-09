@@ -4,15 +4,20 @@ import Serializer, { ITextEncoder } from './Serializer';
 export default class Codec {
   readonly #serializer;
   readonly #textDecoder;
+  readonly #littleEndian;
   public constructor({
     textEncoder,
     textDecoder,
+    littleEndian = true,
   }: {
     textEncoder: ITextEncoder;
     textDecoder: ITextDecoder;
+    littleEndian?: boolean;
   }) {
+    this.#littleEndian = littleEndian;
     this.#serializer = new Serializer({
       textEncoder,
+      littleEndian,
     });
     this.#textDecoder = textDecoder;
   }
@@ -32,6 +37,7 @@ export default class Codec {
     buffer: Uint8Array
   ): T | null {
     const d = new Deserializer({
+      littleEndian: this.#littleEndian,
       buffer,
       textDecoder: this.#textDecoder,
     });

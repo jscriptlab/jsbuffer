@@ -66,3 +66,7 @@ type user {
   int id;
   string name;
 }
+
+type supportNullTerminatedString{
+  null_terminated_string value;
+}

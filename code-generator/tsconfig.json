@@ -2,6 +2,7 @@
   "extends": "../tsconfig.base.json",
   "include": [
     "index.ts",
+    "GenericName.ts",
     "FileGenerator.ts",
     "JavaScriptObjectStringify.ts",
     "typeUtilities.ts",

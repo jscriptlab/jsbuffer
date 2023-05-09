@@ -31,8 +31,9 @@
     "lint:eslint": "npx eslint --fix src code-generator codec",
     "lint:prettier": "npx prettier --write \"src/**/*.ts\" \"code-generator/**/*.ts\" \"codec/**/*.ts\"",
     "lint": "yarn run lint:eslint && yarn run lint:prettier",
-    "test:fix": "npx tsc -b code-generator --force && yarn run test:code-generator",
-    "prepublishOnly": "yarn run lint && yarn coverage && npx tsc -b cli --force",
+    "cli": "TS_NODE_PROJECT=cli/tsconfig.json npx ts-node cli",
+    "schema": "yarn run cli test/schema -o out --extends tsconfig.base.json --indentation-size 2",
+    "prepublishOnly": "yarn run lint && yarn coverage && yarn run schema && npx tsc -b cli --force",
     "test": "TS_NODE_PROJECT=test/tsconfig.json npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
     "test:code-generator": "npx sarg --bail --require ts-node/register test/FileGenerator.ts && npx tsc -b out --force",
     "test:coverage": "npx nyc yarn test"

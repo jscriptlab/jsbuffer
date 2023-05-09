@@ -7,19 +7,23 @@ export interface ITextEncoder {
 export interface ISerializerOptions {
   tailByteLength?: number;
   textEncoder: ITextEncoder;
+  littleEndian?: boolean;
 }
 
 export default class Serializer {
   readonly #tailByteLength;
   readonly #textEncoder;
+  readonly #littleEndian;
   #arrayBuffer;
   #writeOffset;
   public constructor({
     textEncoder,
+    littleEndian = true,
     tailByteLength = 1024 * 1024 * 2,
   }: ISerializerOptions) {
     this.#writeOffset = 0;
     this.#textEncoder = textEncoder;
+    this.#littleEndian = littleEndian;
     this.#tailByteLength = tailByteLength;
     this.#arrayBuffer = new ArrayBuffer(this.#tailByteLength);
   }
@@ -49,12 +53,12 @@ export default class Serializer {
   }
   public writeUint32(value: number): void {
     this.#allocate(4);
-    this.#dataView().setUint32(this.#writeOffset, value, true);
+    this.#dataView().setUint32(this.#writeOffset, value, this.#littleEndian);
     this.#writeOffset += 4;
   }
   public writeUint16(value: number): void {
     this.#allocate(2);
-    this.#dataView().setUint16(this.#writeOffset, value, true);
+    this.#dataView().setUint16(this.#writeOffset, value, this.#littleEndian);
     this.#writeOffset += 2;
   }
   public writeString(value: string): void {
@@ -70,22 +74,29 @@ export default class Serializer {
   }
   public writeInt32(value: number): void {
     this.#allocate(4);
-    this.#dataView().setInt32(this.#writeOffset, value, true);
+    this.#dataView().setInt32(this.#writeOffset, value, this.#littleEndian);
     this.#writeOffset += 4;
   }
   public writeInt16(value: number): void {
     this.#allocate(2);
-    this.#dataView().setInt16(this.#writeOffset, value, true);
+    this.#dataView().setInt16(this.#writeOffset, value, this.#littleEndian);
     this.#writeOffset += 2;
   }
   public writeDouble(value: number): void {
     this.#allocate(8);
-    this.#dataView().setFloat64(this.#writeOffset, value, true);
+    this.#dataView().setFloat64(this.#writeOffset, value, this.#littleEndian);
     this.#writeOffset += 8;
+  }
+  public writeNullTerminatedString(value: string) {
+    const encoded = this.#textEncoder.encode(value);
+    const finalBuffer = new Uint8Array(encoded.byteLength + 1);
+    finalBuffer.set(encoded);
+    finalBuffer[finalBuffer.byteLength - 1] = 0;
+    this.writeBuffer(finalBuffer);
   }
   public writeFloat(value: number): void {
     this.#allocate(4);
-    this.#dataView().setFloat32(this.#writeOffset, value, true);
+    this.#dataView().setFloat32(this.#writeOffset, value, this.#littleEndian);
     this.#writeOffset += 4;
   }
   public rewind() {

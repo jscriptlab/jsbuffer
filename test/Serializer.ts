@@ -2,6 +2,7 @@ import { Suite } from 'sarg';
 import { Deserializer, Serializer } from '../codec';
 import { TextEncoder } from 'util';
 import assert from 'assert';
+import fruitList from './fruit-list.json';
 
 const suite = new Suite();
 
@@ -154,6 +155,40 @@ suite.test('it should write string', () => {
     d.readString(),
     '😀😃😄😁😆😅😂🤣🥲🥹😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝'
   );
+});
+
+suite.test('it should write string 2', () => {
+  const s = new Serializer({
+    textEncoder: new TextEncoder(),
+  });
+  for (const list of fruitList.data) {
+    for (const value of list) {
+      s.writeString(value);
+      s.writeNullTerminatedString(value);
+    }
+  }
+  const d = new Deserializer({
+    buffer: s.view(),
+    textDecoder: new TextDecoder(),
+  });
+  for (const list of fruitList.data) {
+    for (const value of list) {
+      assert.strict.equal(d.readString(), value);
+      assert.strict.equal(d.readNullTerminatedString(), value);
+    }
+  }
+});
+
+suite.test('it should write null-terminated string', () => {
+  const s = new Serializer({
+    textEncoder: new TextEncoder(),
+  });
+  s.writeNullTerminatedString('aaaaaaaa');
+  const d = new Deserializer({
+    buffer: s.view(),
+    textDecoder: new TextDecoder(),
+  });
+  assert.strict.equal(d.readNullTerminatedString(), 'aaaaaaaa');
 });
 
 export default suite;

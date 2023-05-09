@@ -4,6 +4,7 @@ export interface ISerializer {
   writeBuffer(value: Uint8Array): void;
   writeUint32(value: number): void;
   writeString(value: string): void;
+  writeNullTerminatedString(value: string): void;
   writeSignedLong(value: string): void;
   writeUnsignedLong(value: string): void;
   writeInt32(value: number): void;
@@ -15,6 +16,7 @@ export interface IDeserializer {
   readBuffer(length: number): Uint8Array;
   readUint32(): number;
   readString(): string;
+  readNullTerminatedString(): string;
   readSignedLong(): string;
   readUnsignedLong(): string;
   readInt32(): number;

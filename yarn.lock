@@ -694,9 +694,9 @@ clean-stack@^2.0.0:
   integrity sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==
 
 cli-argument-helper@0.x:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/cli-argument-helper/-/cli-argument-helper-0.0.6.tgz#c81400c623cb4ff7162c321a2fb9c59a203416c4"
-  integrity sha512-EDmIe5ErRyBvPW5dUKKqI2jDYiOlrwx4USDtWz9ERmDqewSj8YdhXLvuPo7oUQSkKbb4aFgTnk7LkGgPoHDtkQ==
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/cli-argument-helper/-/cli-argument-helper-0.0.8.tgz#64be199c93609f91b38517ca00d95021bd82827b"
+  integrity sha512-LeJLmEkUNXVfFpaxpll5VAQJHph2+QYMPE6445fLbe3YG89ckRp88yjdQ62hTpTCzQFBjg/opy6wbnYSgK1gxA==
 
 cliui@^6.0.0:
   version "6.0.0"
