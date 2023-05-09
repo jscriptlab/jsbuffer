@@ -1,4 +1,4 @@
-import { getArgument } from 'cli-argument-helper';
+import { getNamedArgument, getString } from 'cli-argument-helper';
 import { Deserializer, Serializer } from '../codec';
 import crypto from 'crypto';
 import perf_hooks from 'perf_hooks';
@@ -101,17 +101,21 @@ async function measureNullTerminatedString() {
 
 (async () => {
   const args = Array.from(process.argv);
-  if (getArgument(args, '--measure-c-string') !== null) {
-    const obs = new perf_hooks.PerformanceObserver((items) => {
-      for (const item of items.getEntries()) {
-        console.log('%s: %d ms', item.name, item.duration);
-      }
-      performance.clearMarks();
-    });
-    obs.observe({ type: 'measure' });
+  const measurementFeatureName = getNamedArgument(args, '--measure', getString);
+  switch (measurementFeatureName) {
+    case 'null-terminated-string': {
+      const obs = new perf_hooks.PerformanceObserver((items) => {
+        for (const item of items.getEntries()) {
+          console.log('%s: %d ms', item.name, item.duration);
+        }
+        performance.clearMarks();
+      });
+      obs.observe({ type: 'measure' });
 
-    await measureNullTerminatedString();
-    await measureEncodingListOfStrings();
+      await measureNullTerminatedString();
+      await measureEncodingListOfStrings();
+      break;
+    }
   }
 })().catch((reason) => {
   console.error(reason);
