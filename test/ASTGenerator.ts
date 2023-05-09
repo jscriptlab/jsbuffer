@@ -2,7 +2,7 @@ import { Suite } from 'sarg';
 import Tokenizer from '../src/Tokenizer';
 import path from 'path';
 import fs from 'fs';
-import ASTGenerator from '../src/ASTGenerator';
+import ASTGenerator, { UnexpectedPunctuatorName } from '../src/ASTGenerator';
 import assert from 'assert';
 
 const suite = new Suite();
@@ -33,7 +33,7 @@ suite.test(
     assert.strict.throws(() => {
       new ASTGenerator(
         new Tokenizer({
-          contents: new TextEncoder().encode('import 1'),
+          contents: new TextEncoder().encode('import ;'),
           textEncoder: new TextEncoder(),
           textDecoder: new TextDecoder(),
         })
@@ -43,6 +43,52 @@ suite.test(
     });
   }
 );
+suite.test(
+  'ASTGenerator: it should handle errors in case of weird token types export statement',
+  () => {
+    assert.strict.throws(() => {
+      new ASTGenerator(
+        new Tokenizer({
+          contents: new TextEncoder().encode('export ;'),
+          textEncoder: new TextEncoder(),
+          textDecoder: new TextDecoder(),
+        })
+          .tokenize()
+          .tokens()
+      ).generate();
+    });
+  }
+);
+
+import { expect } from 'chai';
+
+suite.test('ASTGenerator: it should throw UnexpectedPunctuatorName', () => {
+  assert.strict.throws(() => {
+    new ASTGenerator(
+      new Tokenizer({
+        contents: new TextEncoder().encode('trait x ;'),
+        textEncoder: new TextEncoder(),
+        textDecoder: new TextDecoder(),
+      })
+        .tokenize()
+        .tokens()
+    ).generate();
+  });
+});
+
+suite.test('ASTGenerator: it should throw UnexpectedKeywordName', () => {
+  assert.strict.throws(() => {
+    new ASTGenerator(
+      new Tokenizer({
+        contents: new TextEncoder().encode('export {'),
+        textEncoder: new TextEncoder(),
+        textDecoder: new TextDecoder(),
+      })
+        .tokenize()
+        .tokens()
+    ).generate();
+  });
+});
 
 suite.test(
   'ASTGenerator##expectKeyword: it should call #expectKeyword after export',
