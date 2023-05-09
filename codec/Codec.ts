@@ -29,6 +29,7 @@ export default class Codec {
     encode: (s: Serializer, value: T) => void,
     value: T
   ): Uint8Array {
+    this.#serializer.rewind();
     encode(this.#serializer, value);
     return this.#serializer.view();
   }
