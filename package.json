@@ -33,7 +33,8 @@
     "lint": "yarn run lint:eslint && yarn run lint:prettier",
     "cli": "TS_NODE_PROJECT=cli/tsconfig.json npx ts-node cli",
     "schema": "yarn run cli test/schema -o out --extends tsconfig.base.json --indentation-size 2",
-    "prepublishOnly": "yarn run lint && yarn test:coverage && yarn run schema && npx tsc -b cli --force",
+    "build": "npx tsc -b cli code-generator codec src --force",
+    "prepublishOnly": "yarn run lint && yarn test:coverage && yarn run schema && yarn run build",
     "test": "TS_NODE_PROJECT=test/tsconfig.json npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
     "test:code-generator": "npx sarg --bail --require ts-node/register test/FileGenerator.ts && npx tsc -b out --force",
     "test:coverage": "npx nyc yarn test"
