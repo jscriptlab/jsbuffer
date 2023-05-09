@@ -19,6 +19,8 @@ export interface IToken {
 export enum TokenType {
   Keyword,
   Identifier,
+  SingleLineComment,
+  MultiLineComment,
   LiteralString,
   LiteralNumber,
   Punctuator,
@@ -42,6 +44,8 @@ export default class Tokenizer {
   readonly #contents;
   readonly #textEncoder;
   readonly #textDecoder;
+  readonly #tokens = new Array<IToken>();
+  readonly #comments = new Array<IToken>();
   readonly #keywords = ['call', 'from', 'trait', 'import', 'type', 'export'];
   #offset;
   #lineNumber;
@@ -56,11 +60,20 @@ export default class Tokenizer {
     this.#textEncoder = textEncoder;
     this.#textDecoder = textDecoder;
   }
+  public tokens(): ReadonlyArray<IToken> {
+    return this.#tokens;
+  }
+  public comments(): ReadonlyArray<IToken> {
+    return this.#comments;
+  }
   public tokenize() {
-    const tokens = new Array<IToken>();
+    const tokens = this.#tokens;
+    const comments = this.#comments;
     while (!this.#eof()) {
       const ch = this.#currentCharacter();
-      if (Character.isIdentifierStart(ch)) {
+      if (this.#peek('//')) {
+        comments.push(this.#readSingleLineComment());
+      } else if (Character.isIdentifierStart(ch)) {
         const id = this.#readIdentifier();
         const isKeyword = this.#keywords.includes(id.value);
         if (isKeyword) {
@@ -91,7 +104,7 @@ export default class Tokenizer {
         }
       }
     }
-    return tokens;
+    return this;
   }
   #readLiteralString(): IToken {
     // skip string start and get offset after string token
@@ -156,6 +169,30 @@ export default class Tokenizer {
     }
     return ch;
   }
+  #readSingleLineComment(): IToken {
+    // skip //
+    this.#offset += 2;
+    const startOffset = this.#offset;
+    while (!this.#eof() && !Character.isLineBreak(this.#currentCharacter())) {
+      this.#offset++;
+    }
+    return {
+      type: TokenType.MultiLineComment,
+      value: this.#textDecoder.decode(
+        this.#contents.subarray(startOffset, this.#offset)
+      ),
+      position: {
+        lineNumber: {
+          start: this.#lineNumber,
+          end: this.#lineNumber,
+        },
+        offset: {
+          start: startOffset,
+          end: this.#offset,
+        },
+      },
+    };
+  }
   #readIdentifier(): IToken {
     const startOffset = this.#offset;
     while (
@@ -181,17 +218,17 @@ export default class Tokenizer {
       },
     };
   }
-
   #peek(value: string) {
     if (!value.length) {
       return false;
     }
     const encoded = this.#textEncoder.encode(value);
-    if (this.#remaining().byteLength < encoded.byteLength) {
+    const contents = this.#remaining();
+    if (contents.byteLength < encoded.byteLength) {
       return false;
     }
     for (let i = 0; i < encoded.byteLength; i++) {
-      if (encoded[i] !== this.#remaining()[i]) return false;
+      if (encoded[i] !== contents[i]) return false;
     }
     return true;
   }

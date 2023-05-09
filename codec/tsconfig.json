@@ -1,4 +1,10 @@
 {
-  "include": ["Serializer.ts", "index.ts", "Deserializer.ts"],
+  "include": [
+    "Codec.ts",
+    "Serializer.ts",
+    "utilities.ts",
+    "index.ts",
+    "Deserializer.ts"
+  ],
   "extends": "../tsconfig.base.json"
 }

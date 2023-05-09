@@ -31,9 +31,9 @@
     "lint": "yarn run lint:eslint && yarn run lint:prettier",
     "test:fix": "npx tsc -b code-generator --force && yarn run test:code-generator",
     "prepublishOnly": "yarn run lint && yarn coverage && npx tsc -b cli --force",
-    "test": "npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
+    "test": "TS_NODE_PROJECT=test/tsconfig.json npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
     "test:code-generator": "npx sarg --bail --require ts-node/register test/FileGenerator.ts && npx tsc -b out --force",
-    "coverage": "npx nyc --exclude-node-modules yarn test"
+    "test:coverage": "npx nyc yarn test"
   },
   "dependencies": {
     "cli-argument-helper": "0.x",

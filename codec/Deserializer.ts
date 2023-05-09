@@ -1,5 +1,9 @@
 import Long from 'long';
 
+export interface ITextDecoder {
+  decode(value: Uint8Array): string;
+}
+
 export default class Deserializer {
   readonly #textDecoder;
   readonly #dataView;
@@ -10,9 +14,7 @@ export default class Deserializer {
     textDecoder,
   }: {
     buffer: Uint8Array;
-    textDecoder: {
-      decode(value: Uint8Array): string;
-    };
+    textDecoder: ITextDecoder;
   }) {
     this.#readOffset = 0;
     this.#textDecoder = textDecoder;

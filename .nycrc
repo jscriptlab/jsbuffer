@@ -1,3 +1,5 @@
 {
-  "extends":"@istanbuljs/nyc-config-typescript"
+  "extends": "@istanbuljs/nyc-config-typescript",
+  "extension": [".ts"],
+  "include": ["test/**/*.ts", "src/**/*.ts", "exception/**/*.ts"]
 }

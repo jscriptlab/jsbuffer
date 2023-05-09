@@ -19,4 +19,12 @@ suite.test('Tokenizer: it should tokenize files', async () => {
   }
 });
 
+suite.test('Tokenizer: it should comments', async () => {
+  new Tokenizer({
+    contents: new TextEncoder().encode(['// a', 'type A {}'].join('\n')),
+    textEncoder: new TextEncoder(),
+    textDecoder: new TextDecoder(),
+  }).tokenize();
+});
+
 export default suite;

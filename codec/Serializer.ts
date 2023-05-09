@@ -1,5 +1,14 @@
 import Long from 'long';
 
+export interface ITextEncoder {
+  encode(value: string): Uint8Array;
+}
+
+export interface ISerializerOptions {
+  tailByteLength?: number;
+  textEncoder: ITextEncoder;
+}
+
 export default class Serializer {
   readonly #tailByteLength;
   readonly #textEncoder;
@@ -8,12 +17,7 @@ export default class Serializer {
   public constructor({
     textEncoder,
     tailByteLength = 1024 * 1024 * 2,
-  }: {
-    tailByteLength?: number;
-    textEncoder: {
-      encode(value: string): Uint8Array;
-    };
-  }) {
+  }: ISerializerOptions) {
     this.#writeOffset = 0;
     this.#textEncoder = textEncoder;
     this.#tailByteLength = tailByteLength;

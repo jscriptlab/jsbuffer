@@ -2,9 +2,6 @@ export default class Character {
   static isLineBreak(ch: number) {
     return ch === 13 || ch === 10;
   }
-  static isCommentStart(ch: number) {
-    return ch === 47;
-  }
   static isIdentifierPart(ch: number) {
     return this.isIdentifierStart(ch) || this.isIntegerPart(ch);
   }

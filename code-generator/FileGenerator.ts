@@ -240,7 +240,7 @@ export default class FileGenerator extends CodeStream {
       textEncoder: this.#textEncoder,
       contents: await fs.promises.readFile(this.#file.path),
     });
-    this.#nodes = new ASTGenerator(tokenizer.tokenize()).generate();
+    this.#nodes = new ASTGenerator(tokenizer.tokenize().tokens()).generate();
     for (const node of this.#nodes) {
       await this.#preprocessNode(node);
     }
@@ -819,21 +819,6 @@ export default class FileGenerator extends CodeStream {
     }
     this.#exports.set(exportName, node.value);
   }
-  // #ownIdentifier(
-  //   id: string | INodeIdentifier,
-  //   value: FileGenerator | INodeTypeDefinition | INodeCallDefinition
-  // ) {
-  //   if (typeof id !== 'string') {
-  //     id = id.value;
-  //   }
-  //   if ('type' in value) {
-  //     this.#definitions.set(id, value);
-  //   }
-  //   if (this.#identifiers.has(id)) {
-  //     throw new DuplicateScopeIdentifier(value);
-  //   }
-  //   this.#identifiers.set(id, null);
-  // }
   #resolveTypeExpressionToString(options: {
     typeExpression: NodeTypeExpression;
     readOnly: boolean;
