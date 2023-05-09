@@ -2,19 +2,60 @@ import { getArgument } from 'cli-argument-helper';
 import { Deserializer, Serializer } from '../codec';
 import crypto from 'crypto';
 import perf_hooks from 'perf_hooks';
+import {
+  decodeNormalStringList,
+  decodeNullTerminatedStringList,
+  encodeNormalStringList,
+  encodeNullTerminatedStringList,
+  normalStringList,
+  nullTerminatedStringList,
+} from '../out/schema';
 
-async function measureNullTerminatedString() {
-  const obs = new perf_hooks.PerformanceObserver((items) => {
-    for (const item of items.getEntries()) {
-      console.log('%s: %d ms', item.name, item.duration);
-    }
-    performance.clearMarks();
-  });
-  obs.observe({ type: 'measure' });
-
+async function measureEncodingListOfStrings() {
   const s = new Serializer({
     textEncoder: new TextEncoder(),
   });
+
+  const hugeStringList = new Array<string>(10000);
+
+  for (let i = 0; i < hugeStringList.length; i++) {
+    hugeStringList[i] = crypto.randomBytes(1000).toString('hex');
+  }
+
+  encodeNormalStringList(
+    s,
+    normalStringList({
+      value: hugeStringList,
+    })
+  );
+  encodeNullTerminatedStringList(
+    s,
+    nullTerminatedStringList({
+      value: hugeStringList,
+    })
+  );
+  const d = new Deserializer({
+    buffer: s.view(),
+    textDecoder: new TextDecoder(),
+  });
+
+  perf_hooks.performance.mark('normalStringList');
+  decodeNormalStringList(d);
+  perf_hooks.performance.measure('normalStringList to now', 'normalStringList');
+
+  perf_hooks.performance.mark('nullTerminatedStringList');
+  decodeNullTerminatedStringList(d);
+  perf_hooks.performance.measure(
+    'nullTerminatedStringList to now',
+    'nullTerminatedStringList'
+  );
+}
+
+async function measureNullTerminatedString() {
+  const s = new Serializer({
+    textEncoder: new TextEncoder(),
+  });
+
   const inputs = [
     crypto.randomBytes(100000),
     crypto.randomBytes(256),
@@ -61,7 +102,16 @@ async function measureNullTerminatedString() {
 (async () => {
   const args = Array.from(process.argv);
   if (getArgument(args, '--measure-c-string') !== null) {
+    const obs = new perf_hooks.PerformanceObserver((items) => {
+      for (const item of items.getEntries()) {
+        console.log('%s: %d ms', item.name, item.duration);
+      }
+      performance.clearMarks();
+    });
+    obs.observe({ type: 'measure' });
+
     await measureNullTerminatedString();
+    await measureEncodingListOfStrings();
   }
 })().catch((reason) => {
   console.error(reason);

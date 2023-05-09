@@ -70,3 +70,11 @@ type user {
 type supportNullTerminatedString{
   null_terminated_string value;
 }
+
+type nullTerminatedStringList {
+  vector<null_terminated_string> value;
+}
+
+type normalStringList {
+  vector<string> value;
+}

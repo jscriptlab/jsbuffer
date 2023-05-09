@@ -1261,6 +1261,7 @@ export function encodeSupportNullTerminatedString(__s: ISerializer, value: suppo
    * encoding param: value
    */
   const __pv0 = value['value'];
+  __s.writeNullTerminatedString(__pv0);
 }
 export function decodeSupportNullTerminatedString(__d: IDeserializer): supportNullTerminatedString | null {
   const __id = __d.readInt32();
@@ -1300,6 +1301,150 @@ export function updateSupportNullTerminatedString(value: supportNullTerminatedSt
   if(typeof changes['value'] !== 'undefined') {
     if(!(changes['value'] === value['value'])) {
       value = supportNullTerminatedString({
+        ...value,
+        value: changes['value'],
+      });
+    }
+  }
+  return value;
+}
+export interface nullTerminatedStringListInputParams {
+  value: ReadonlyArray<string>;
+}
+export function nullTerminatedStringList(params: nullTerminatedStringListInputParams): nullTerminatedStringList {
+  return {
+    _name: 'schema.nullTerminatedStringList',
+    value: params['value']
+  };
+}
+export function encodeNullTerminatedStringList(__s: ISerializer, value: nullTerminatedStringList) {
+  __s.writeInt32(2084234152);
+  /**
+   * encoding param: value
+   */
+  const __pv0 = value['value'];
+  const __l1 = __pv0.length;
+  __s.writeUint32(__l1);
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    const __v__i1 = __pv0[__i1];
+    __s.writeNullTerminatedString(__v__i1);
+  }
+}
+export function decodeNullTerminatedStringList(__d: IDeserializer): nullTerminatedStringList | null {
+  const __id = __d.readInt32();
+  /**
+   * decode header
+   */
+  if(__id !== 2084234152) return null;
+  let value: Array<string>;
+  /**
+   * decoding param: value
+   */
+  const iindex1 = __d.readUint32();
+  const oindex1 = new Array<string>(iindex1);
+  value = oindex1;
+  for(let index1 = 0; index1 < iindex1; index1++) {
+    oindex1[index1] = __d.readNullTerminatedString();
+  }
+  return {
+    _name: 'schema.nullTerminatedStringList',
+    value
+  };
+}
+export interface nullTerminatedStringList  {
+  _name: 'schema.nullTerminatedStringList';
+  value: ReadonlyArray<string>;
+}
+export function defaultNullTerminatedStringList(params: Partial<nullTerminatedStringListInputParams> = {}): nullTerminatedStringList {
+  return nullTerminatedStringList({
+    value: [],
+    ...params
+  });
+}
+export function compareNullTerminatedStringList(__a: nullTerminatedStringList, __b: nullTerminatedStringList): boolean {
+  return (
+    /**
+     * compare parameter value
+     */
+    __a['value'].length === __b['value'].length && __a['value'].every((__i,index) => (__i === __b['value'][index]))
+  );
+}
+export function updateNullTerminatedStringList(value: nullTerminatedStringList, changes: Partial<nullTerminatedStringListInputParams>) {
+  if(typeof changes['value'] !== 'undefined') {
+    if(!(changes['value'].length === value['value'].length && changes['value'].every((__i,index) => (__i === value['value'][index])))) {
+      value = nullTerminatedStringList({
+        ...value,
+        value: changes['value'],
+      });
+    }
+  }
+  return value;
+}
+export interface normalStringListInputParams {
+  value: ReadonlyArray<string>;
+}
+export function normalStringList(params: normalStringListInputParams): normalStringList {
+  return {
+    _name: 'schema.normalStringList',
+    value: params['value']
+  };
+}
+export function encodeNormalStringList(__s: ISerializer, value: normalStringList) {
+  __s.writeInt32(75642925);
+  /**
+   * encoding param: value
+   */
+  const __pv0 = value['value'];
+  const __l1 = __pv0.length;
+  __s.writeUint32(__l1);
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    const __v__i1 = __pv0[__i1];
+    __s.writeString(__v__i1);
+  }
+}
+export function decodeNormalStringList(__d: IDeserializer): normalStringList | null {
+  const __id = __d.readInt32();
+  /**
+   * decode header
+   */
+  if(__id !== 75642925) return null;
+  let value: Array<string>;
+  /**
+   * decoding param: value
+   */
+  const iindex1 = __d.readUint32();
+  const oindex1 = new Array<string>(iindex1);
+  value = oindex1;
+  for(let index1 = 0; index1 < iindex1; index1++) {
+    oindex1[index1] = __d.readString();
+  }
+  return {
+    _name: 'schema.normalStringList',
+    value
+  };
+}
+export interface normalStringList  {
+  _name: 'schema.normalStringList';
+  value: ReadonlyArray<string>;
+}
+export function defaultNormalStringList(params: Partial<normalStringListInputParams> = {}): normalStringList {
+  return normalStringList({
+    value: [],
+    ...params
+  });
+}
+export function compareNormalStringList(__a: normalStringList, __b: normalStringList): boolean {
+  return (
+    /**
+     * compare parameter value
+     */
+    __a['value'].length === __b['value'].length && __a['value'].every((__i,index) => (__i === __b['value'][index]))
+  );
+}
+export function updateNormalStringList(value: normalStringList, changes: Partial<normalStringListInputParams>) {
+  if(typeof changes['value'] !== 'undefined') {
+    if(!(changes['value'].length === value['value'].length && changes['value'].every((__i,index) => (__i === value['value'][index])))) {
+      value = normalStringList({
         ...value,
         value: changes['value'],
       });

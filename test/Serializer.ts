@@ -190,5 +190,26 @@ suite.test('it should write null-terminated string', () => {
   });
   assert.strict.equal(d.readNullTerminatedString(), 'aaaaaaaa');
 });
+suite.test('it should write sequence of null-terminated strings', () => {
+  const s = new Serializer({
+    textEncoder: new TextEncoder(),
+  });
+  s.writeNullTerminatedString('');
+  s.writeInt32(-10);
+  s.writeNullTerminatedString('a');
+  s.writeInt32(-25);
+  s.writeNullTerminatedString('b');
+  s.writeNullTerminatedString('aaaaaaaa');
+  const d = new Deserializer({
+    buffer: s.view(),
+    textDecoder: new TextDecoder(),
+  });
+  assert.strict.equal(d.readNullTerminatedString(), '');
+  assert.strict.equal(d.readInt32(), -10);
+  assert.strict.equal(d.readNullTerminatedString(), 'a');
+  assert.strict.equal(d.readInt32(), -25);
+  assert.strict.equal(d.readNullTerminatedString(), 'b');
+  assert.strict.equal(d.readNullTerminatedString(), 'aaaaaaaa');
+});
 
 export default suite;

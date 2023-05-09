@@ -1193,35 +1193,40 @@ export default class FileGenerator extends CodeStream {
     const serializerVarName = '__s';
     if ('generic' in resolved) {
       switch (resolved.generic) {
-        case 'int':
-        case 'int32':
+        case GenericName.Integer:
+        case GenericName.Int32:
           this.write(`${serializerVarName}.writeInt32(${value});\n`);
           break;
-        case 'uint32':
+        case GenericName.Uint32:
           this.write(`${serializerVarName}.writeUint32(${value});\n`);
           break;
-        case 'uint16':
+        case GenericName.Uint16:
           this.write(`${serializerVarName}.writeUint16(${value});\n`);
           break;
-        case 'int16':
+        case GenericName.Int16:
           this.write(`${serializerVarName}.writeInt16(${value});\n`);
           break;
-        case 'long':
+        case GenericName.Long:
           this.write(`${serializerVarName}.writeSignedLong(${value});\n`);
           break;
-        case 'ulong':
+        case GenericName.UnsignedLong:
           this.write(`${serializerVarName}.writeUnsignedLong(${value});\n`);
           break;
-        case 'string':
+        case GenericName.String:
           this.write(`${serializerVarName}.writeString(${value});\n`);
           break;
-        case 'float':
+        case GenericName.NullTerminatedString:
+          this.write(
+            `${serializerVarName}.writeNullTerminatedString(${value});\n`
+          );
+          break;
+        case GenericName.Float:
           this.write(`${serializerVarName}.writeFloat(${value});\n`);
           break;
-        case 'double':
+        case GenericName.Double:
           this.write(`${serializerVarName}.writeDouble(${value});\n`);
           break;
-        case 'bytes':
+        case GenericName.Bytes:
           this.write(
             `${serializerVarName}.writeUint32(${value}.byteLength);\n`
           );
