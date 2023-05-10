@@ -3,6 +3,7 @@
   "include": [
     "Tokenizer.ts",
     "Serializer.ts",
+    "Codec.ts",
     "Deserializer.ts",
     "stringUtilities.ts",
     "schema.ts",

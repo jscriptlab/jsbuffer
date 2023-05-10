@@ -3,5 +3,10 @@
   "all": true,
   "check-coverage": true,
   "extension": [".ts"],
-  "include": ["test/**/*.ts", "src/**/*.ts", "exception/**/*.ts"]
+  "include": [
+    "test/**/*.ts",
+    "src/**/*.ts",
+    "codec/**/*.ts",
+    "exception/**/*.ts"
+  ]
 }
