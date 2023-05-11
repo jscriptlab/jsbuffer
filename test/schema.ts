@@ -25,6 +25,10 @@ import {
   defaultTestMap3,
   defaultTestMap2,
   decodeTestMap3,
+  testSet,
+  compareTestSet,
+  encodeTestSet,
+  decodeTestSet,
 } from '../out/schema';
 import {
   defaultSuperTupleTupleTest,
@@ -101,6 +105,57 @@ suite.test('it should compare types with map template as parameters', () => {
         ]),
       })
     )
+  );
+});
+
+suite.test('it should compare types with set<t> has a param type', () => {
+  assert.strict.ok(
+    compareTestSet(
+      testSet({
+        a: new Set(['a', 'b', 'c']),
+        b: new Set([1, 2, 3, 4]),
+      }),
+      testSet({
+        a: new Set(['a', 'b', 'c']),
+        b: new Set([1, 2, 3, 4]),
+      })
+    )
+  );
+  assert.strict.equal(
+    compareTestSet(
+      testSet({
+        a: new Set(['a', 'b', 'c']),
+        b: new Set([1, 2, 3, 4]),
+      }),
+      testSet({
+        a: new Set(['a', 'b', 'd']),
+        b: new Set([1, 2, 3, 4]),
+      })
+    ),
+    false
+  );
+});
+
+suite.test('it should encode/decode types with set<t> has a param type', () => {
+  const codec = new Codec({
+    textDecoder: new TextDecoder(),
+    textEncoder: new TextEncoder(),
+  });
+  assert.strict.deepEqual(
+    codec.decode(
+      decodeTestSet,
+      codec.encode(
+        encodeTestSet,
+        testSet({
+          a: new Set(['a', 'b', 'c']),
+          b: new Set([1, 2, 3, 4]),
+        })
+      )
+    ),
+    testSet({
+      a: new Set(['a', 'b', 'c']),
+      b: new Set([1, 2, 3, 4]),
+    })
   );
 });
 

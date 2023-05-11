@@ -20,6 +20,17 @@ type testMap3 {
   map<testMap2,string> a;
 }
 
+type testSet {
+  set<string> a;
+  set<int> b;
+}
+
+type testSet2 {
+  set<string> a;
+  set<map<string,string>> b;
+  set<tuple<int,int>> c;
+}
+
 type Void {
 
 }

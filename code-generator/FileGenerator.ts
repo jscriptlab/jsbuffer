@@ -137,7 +137,7 @@ export type ResolvedTypeExpression =
       generic: GenericName;
     }
   | {
-      template: 'vector';
+      template: 'vector' | 'set';
       expression: NodeTypeExpression;
       type: ResolvedTypeExpression;
     }
@@ -627,7 +627,7 @@ export default class FileGenerator extends CodeStream {
               `${v1}.every((__i,index) => (`,
             ].join(' && ')
           );
-          this.#generateComparisonExpression(
+          depth = this.#generateComparisonExpression(
             resolved.expression,
             '__i',
             `${v2}[index]`,
@@ -635,6 +635,33 @@ export default class FileGenerator extends CodeStream {
           );
           this.append('))');
           break;
+        case 'set': {
+          const aVarName = `__a${depth}`;
+          const bVarName = `__b${depth}`;
+          const itemVarName = `__it${depth}`;
+          const itemIndexVarName = `__i${depth}`;
+          this.append('(');
+          (() => {
+            this.append(`(${aVarName},${bVarName}) => (`);
+            (() => {
+              this.append(
+                `${aVarName}.every((${itemVarName},${itemIndexVarName}) => (`
+              );
+              (() => {
+                depth = this.#generateComparisonExpression(
+                  resolved.expression,
+                  itemVarName,
+                  `${bVarName}[${itemIndexVarName}]`,
+                  depth + 1
+                );
+              })();
+              this.append('))');
+            })();
+            this.append(')');
+          })();
+          this.append(`)(Array.from(${v1}),Array.from(${v2}))`);
+          break;
+        }
         case 'tuple': {
           const exps = resolved.expressions.map((exp, index) => ({
             exp,
@@ -651,7 +678,7 @@ export default class FileGenerator extends CodeStream {
                 }
               )} */ ((${varName1}, ${varName2}) => `
             );
-            this.#generateComparisonExpression(
+            depth = this.#generateComparisonExpression(
               exp,
               varName1,
               varName2,
@@ -731,7 +758,18 @@ export default class FileGenerator extends CodeStream {
     } else if ('template' in resolved) {
       switch (resolved.template) {
         case 'map':
-          return 'new Map()';
+          return `new Map<${this.#resolveTypeExpressionToString({
+            typeExpression: resolved.key.expression,
+            readOnly: false,
+          })}, ${this.#resolveTypeExpressionToString({
+            typeExpression: resolved.value.expression,
+            readOnly: false,
+          })}>()`;
+        case 'set':
+          return `new Set<${this.#resolveTypeExpressionToString({
+            typeExpression: resolved.expression,
+            readOnly: false,
+          })}>()`;
         case 'optional':
           return 'null';
         case 'tuple':
@@ -768,11 +806,11 @@ export default class FileGenerator extends CodeStream {
             `if(typeof changes['${p.name.value}'] !== 'undefined') {\n`,
             () => {
               this.write('if(!(');
-              this.#generateComparisonExpression(
+              depth = this.#generateComparisonExpression(
                 p.typeExpression,
                 `changes['${p.name.value}']`,
                 `value['${p.name.value}']`,
-                depth
+                depth + 1
               );
               this.append(')) {\n');
               this.indentBlock(() => {
@@ -788,7 +826,6 @@ export default class FileGenerator extends CodeStream {
                 );
               });
               this.write('}\n');
-              depth++;
             },
             '}\n'
           );
@@ -920,6 +957,13 @@ export default class FileGenerator extends CodeStream {
             ...options,
             typeExpression: resolved.expression,
           })}>`;
+        case 'set':
+          return `${
+            readOnly ? 'ReadonlySet' : 'Set'
+          }<${this.#resolveTypeExpressionToString({
+            ...options,
+            typeExpression: resolved.expression,
+          })}>`;
       }
     }
     const name =
@@ -971,15 +1015,16 @@ export default class FileGenerator extends CodeStream {
               },
             };
           }
+          case 'set':
           case 'vector': {
-            const vectorType = typeExpression.templateArguments[0];
-            if (typeof vectorType === 'undefined') {
+            const setOrVectorType = typeExpression.templateArguments[0];
+            if (typeof setOrVectorType === 'undefined') {
               throw new InvalidTemplateArgumentCount(typeExpression);
             }
             return {
-              template: 'vector',
-              expression: vectorType,
-              type: this.#resolveTypeExpression(vectorType),
+              template: typeExpression.name.value,
+              expression: setOrVectorType,
+              type: this.#resolveTypeExpression(setOrVectorType),
             };
           }
           default:
@@ -1343,6 +1388,24 @@ export default class FileGenerator extends CodeStream {
           );
           break;
         }
+        case 'set': {
+          const valueVarName = `__v${depth}`;
+          const lengthVarName = `__l${depth}`;
+          this.write(`const ${lengthVarName} = ${value}.size;\n`);
+          this.write(`${serializerVarName}.writeUint32(${lengthVarName});\n`);
+          this.write(
+            `for(const ${valueVarName} of ${value}) {\n`,
+            () => {
+              depth = this.#generateEncodeTypeExpression(
+                resolved.expression,
+                valueVarName,
+                depth + 1
+              );
+            },
+            '}\n'
+          );
+          break;
+        }
         case 'map': {
           const k = `__k${depth}`;
           const v = `__v${depth}`;
@@ -1488,6 +1551,38 @@ export default class FileGenerator extends CodeStream {
             varNames.push(varName);
           }
           this.write(`${value} = [${varNames.join(',')}];\n`);
+          break;
+        }
+        case 'set': {
+          const i = `__i${depth}`;
+          const lengthVarName = `__l${depth}`;
+          const outVarName = `__o${depth}`;
+          const tmpVarName = `__tmp${depth}`;
+          this.write(
+            `let ${tmpVarName}: ${this.#resolveTypeExpressionToString({
+              typeExpression: resolved.expression,
+              readOnly: false,
+            })};\n`
+          );
+          this.write(`const ${lengthVarName} = __d.readUint32();\n`);
+          this.write(
+            `const ${outVarName} = new Set<${this.#resolveTypeExpressionToString(
+              { typeExpression: resolved.expression, readOnly: false }
+            )}>();\n`
+          );
+          this.write(`${value} = ${outVarName};\n`);
+          this.write(
+            `for(let ${i} = 0; ${i} < ${lengthVarName}; ${i}++) {\n`,
+            () => {
+              depth = this.#generateDecodeTypeExpression(
+                resolved.expression,
+                tmpVarName,
+                depth + 1
+              );
+              this.write(`${outVarName}.add(${tmpVarName});\n`);
+            },
+            '}\n'
+          );
           break;
         }
         case 'vector': {
