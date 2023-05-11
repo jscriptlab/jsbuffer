@@ -296,6 +296,24 @@ type user {
 }
 ```
 
+## Data types
+
+- `set<t>`
+- `map<k,v>`
+- `vector<t>`
+- `tuple<a,b,c,d,e,f,...>`
+- `null_terminated_string`
+- `string`
+- `int`
+- `int32`
+- `uint32`
+- `ulong`
+- `long`
+- `int16`
+- `uint16`
+- `int8`
+- `uint8`
+
 ## Demo
 
 You can try jsbuffer online in the [online playground](https://jsbufferviewerdemo-app.onrender.com/), still in very early progress, but it works.
