@@ -351,7 +351,7 @@ suite.test('it should encode types with buffers in it', () => {
   const s = new Serializer({
     textEncoder: new TextEncoder(),
   });
-  const data = crypto.webcrypto.getRandomValues(new Uint8Array(1000));
+  const data = crypto.randomBytes(1000);
   encodeMsg(
     s,
     msg({
