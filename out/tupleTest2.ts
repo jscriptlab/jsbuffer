@@ -172,13 +172,13 @@ export function decodePost(__d: IDeserializer): post | null {
   /**
    * decoding param: comments
    */
-  const iindex3 = __d.readUint32();
-  const oindex3 = new Array<comment>(iindex3);
-  comments = oindex3;
-  for(let index3 = 0; index3 < iindex3; index3++) {
+  const __l3 = __d.readUint32();
+  const __o3 = new Array<comment>(__l3);
+  comments = __o3;
+  for(let __i3 = 0; __i3 < __l3; __i3++) {
     const __tmp4 = decodeComment(__d);
     if(__tmp4 === null) return null;
-    oindex3[index3] = __tmp4;
+    __o3[__i3] = __tmp4;
   }
   return {
     _name: 'tupleTest2.post',
@@ -375,24 +375,24 @@ export function encodeTupleTest(__s: ISerializer, value: tupleTest) {
    * encoding param: data
    */
   const __pv0 = value['data'];
-  const __t11 = __pv0[0];
-  encodeUser(__s,__t11);
-  const __t22 = __pv0[1];
-  encodePost(__s,__t22);
-  const __t44 = __pv0[2];
-  encodeComment(__s,__t44);
-  const __t77 = __pv0[3];
-  const __l11 = __t77.length;
+  const __t1 = __pv0[0];
+  encodeUser(__s,__t1);
+  const __t2 = __pv0[1];
+  encodePost(__s,__t2);
+  const __t4 = __pv0[2];
+  encodeComment(__s,__t4);
+  const __t7 = __pv0[3];
+  const __l11 = __t7.length;
   __s.writeUint32(__l11);
   for(let __i11 = 0; __i11 < __l11; __i11++) {
-    const __v__i11 = __t77[__i11];
+    const __v__i11 = __t7[__i11];
     encodeComment(__s,__v__i11);
   }
-  const __t1212 = __pv0[4];
-  const __l17 = __t1212.length;
+  const __t12 = __pv0[4];
+  const __l17 = __t12.length;
   __s.writeUint32(__l17);
   for(let __i17 = 0; __i17 < __l17; __i17++) {
-    const __v__i17 = __t1212[__i17];
+    const __v__i17 = __t12[__i17];
     if(__v__i17 === null) {
       __s.writeUint8(0);
     } else {
@@ -424,25 +424,25 @@ export function decodeTupleTest(__d: IDeserializer): tupleTest | null {
   if(__tmp4 === null) return null;
   __e3 = __tmp4;
   let __e4: Array<comment>;
-  const iindex5 = __d.readUint32();
-  const oindex5 = new Array<comment>(iindex5);
-  __e4 = oindex5;
-  for(let index5 = 0; index5 < iindex5; index5++) {
+  const __l5 = __d.readUint32();
+  const __o5 = new Array<comment>(__l5);
+  __e4 = __o5;
+  for(let __i5 = 0; __i5 < __l5; __i5++) {
     const __tmp6 = decodeComment(__d);
     if(__tmp6 === null) return null;
-    oindex5[index5] = __tmp6;
+    __o5[__i5] = __tmp6;
   }
   let __e6: Array<comment | null>;
-  const iindex7 = __d.readUint32();
-  const oindex7 = new Array<comment | null>(iindex7);
-  __e6 = oindex7;
-  for(let index7 = 0; index7 < iindex7; index7++) {
+  const __l7 = __d.readUint32();
+  const __o7 = new Array<comment | null>(__l7);
+  __e6 = __o7;
+  for(let __i7 = 0; __i7 < __l7; __i7++) {
     if(__d.readUint8() === 1) {
       const __tmp9 = decodeComment(__d);
       if(__tmp9 === null) return null;
-      oindex7[index7] = __tmp9;
+      __o7[__i7] = __tmp9;
     } else {
-      oindex7[index7] = null;
+      __o7[__i7] = null;
     }
   }
   data = [__e1,__e2,__e3,__e4,__e6];
@@ -495,27 +495,27 @@ export function encodeTupleTupleTest(__s: ISerializer, value: tupleTupleTest) {
    * encoding param: a
    */
   const __pv0 = value['a'];
-  const __t11 = __pv0[0];
-  const __t22 = __t11[0];
-  __s.writeInt32(__t22);
-  const __t33 = __t11[1];
-  __s.writeString(__t33);
-  const __t55 = __t11[2];
-  const __l8 = __t55.length;
+  const __t1 = __pv0[0];
+  const __t2 = __t1[0];
+  __s.writeInt32(__t2);
+  const __t3 = __t1[1];
+  __s.writeString(__t3);
+  const __t5 = __t1[2];
+  const __l8 = __t5.length;
   __s.writeUint32(__l8);
   for(let __i8 = 0; __i8 < __l8; __i8++) {
-    const __v__i8 = __t55[__i8];
-    const __t99 = __v__i8[0];
-    __s.writeString(__t99);
-    const __t1010 = __v__i8[1];
-    __s.writeInt32(__t1010);
+    const __v__i8 = __t5[__i8];
+    const __t9 = __v__i8[0];
+    __s.writeString(__t9);
+    const __t10 = __v__i8[1];
+    __s.writeInt32(__t10);
   }
-  const __t1212 = __pv0[1];
-  __s.writeInt32(__t1212);
-  const __t1414 = __pv0[2];
-  __s.writeString(__t1414);
-  const __t1717 = __pv0[3];
-  __s.writeDouble(__t1717);
+  const __t12 = __pv0[1];
+  __s.writeInt32(__t12);
+  const __t14 = __pv0[2];
+  __s.writeString(__t14);
+  const __t17 = __pv0[3];
+  __s.writeDouble(__t17);
 }
 export function decodeTupleTupleTest(__d: IDeserializer): tupleTupleTest | null {
   const __id = __d.readInt32();
@@ -533,15 +533,15 @@ export function decodeTupleTupleTest(__d: IDeserializer): tupleTupleTest | null 
   let __e3: string;
   __e3 = __d.readString();
   let __e4: Array<[string,number]>;
-  const iindex5 = __d.readUint32();
-  const oindex5 = new Array<[string,number]>(iindex5);
-  __e4 = oindex5;
-  for(let index5 = 0; index5 < iindex5; index5++) {
+  const __l5 = __d.readUint32();
+  const __o5 = new Array<[string,number]>(__l5);
+  __e4 = __o5;
+  for(let __i5 = 0; __i5 < __l5; __i5++) {
     let __e6: string;
     __e6 = __d.readString();
     let __e7: number;
     __e7 = __d.readInt32();
-    oindex5[index5] = [__e6,__e7];
+    __o5[__i5] = [__e6,__e7];
   }
   __e1 = [__e2,__e3,__e4];
   let __e8: number;
@@ -600,14 +600,14 @@ export function encodeSuperTupleTupleTest(__s: ISerializer, value: superTupleTup
    * encoding param: a
    */
   const __pv0 = value['a'];
-  const __t11 = __pv0[0];
-  const __t22 = __t11[0];
-  const __t33 = __t22[0];
-  __s.writeInt32(__t33);
-  const __t44 = __t11[1];
-  __s.writeInt32(__t44);
-  const __t66 = __pv0[1];
-  __s.writeDouble(__t66);
+  const __t1 = __pv0[0];
+  const __t2 = __t1[0];
+  const __t3 = __t2[0];
+  __s.writeInt32(__t3);
+  const __t4 = __t1[1];
+  __s.writeInt32(__t4);
+  const __t6 = __pv0[1];
+  __s.writeDouble(__t6);
 }
 export function decodeSuperTupleTupleTest(__d: IDeserializer): superTupleTupleTest | null {
   const __id = __d.readInt32();

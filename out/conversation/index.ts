@@ -129,13 +129,13 @@ export function decodeConversations(__d: IDeserializer): Conversations | null {
   /**
    * decoding param: conversations
    */
-  const iindex1 = __d.readUint32();
-  const oindex1 = new Array<Conversation>(iindex1);
-  conversations = oindex1;
-  for(let index1 = 0; index1 < iindex1; index1++) {
+  const __l1 = __d.readUint32();
+  const __o1 = new Array<Conversation>(__l1);
+  conversations = __o1;
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
     const __tmp2 = decodeConversation(__d);
     if(__tmp2 === null) return null;
-    oindex1[index1] = __tmp2;
+    __o1[__i1] = __tmp2;
   }
   return {
     _name: 'conversation.index.Conversations',

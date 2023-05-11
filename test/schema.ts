@@ -11,6 +11,20 @@ import {
   simpleTupleTest,
   compareSimpleTupleTest,
   updateSimpleTupleTest,
+  testMap,
+  encodeTestMap,
+  decodeTestMap,
+  compareTestMap,
+  compareTestMap2,
+  testMap2,
+  encodeTestMap2,
+  decodeTestMap2,
+  updateTestMap2,
+  encodeTestMap3,
+  testMap3,
+  defaultTestMap3,
+  defaultTestMap2,
+  decodeTestMap3,
 } from '../out/schema';
 import {
   defaultSuperTupleTupleTest,
@@ -19,7 +33,7 @@ import {
   updateTupleTupleTest,
 } from '../out/tupleTest2';
 import { A, defaultTest, test, updateTest } from '../out/testUpdateFunction';
-import { Serializer, Deserializer } from '../codec';
+import { Serializer, Deserializer, Codec } from '../codec';
 import { TextDecoder, TextEncoder } from 'util';
 import assert from 'assert';
 import crypto from 'crypto';
@@ -39,6 +53,222 @@ suite.test('it should encode Request trait', () => {
   });
   assert.strict.deepEqual(decodeRequestTrait(d), GetConversations({}));
 });
+
+suite.test('it should encode map', () => {
+  const codec = new Codec({
+    textDecoder: new TextDecoder(),
+    textEncoder: new TextEncoder(),
+  });
+  assert.strict.deepEqual(
+    codec.decode(
+      decodeTestMap,
+      codec.encode(
+        encodeTestMap,
+        testMap({
+          a: new Map([
+            ['a', '1'],
+            ['b', '2'],
+            ['c', '3'],
+          ]),
+        })
+      )
+    ),
+    testMap({
+      a: new Map([
+        ['a', '1'],
+        ['b', '2'],
+        ['c', '3'],
+      ]),
+    })
+  );
+});
+
+suite.test('it should compare types with map template as parameters', () => {
+  assert.strict.ok(
+    compareTestMap(
+      testMap({
+        a: new Map([
+          ['a', '1'],
+          ['b', '2'],
+          ['c', '3'],
+        ]),
+      }),
+      testMap({
+        a: new Map([
+          ['a', '1'],
+          ['b', '2'],
+          ['c', '3'],
+        ]),
+      })
+    )
+  );
+});
+
+suite.test(
+  "it should allow maps using object types even if they're not reliable",
+  () => {
+    const codec = new Codec({
+      textDecoder: new TextDecoder(),
+      textEncoder: new TextEncoder(),
+    });
+    assert.strict.deepEqual(
+      codec.decode(
+        decodeTestMap3,
+        codec.encode(
+          encodeTestMap3,
+          testMap3({
+            a: new Map([
+              [defaultTestMap2(), 'a'],
+
+              [
+                testMap2({
+                  a: new Map([
+                    ['a', '1'],
+                    ['b', '2'],
+                    ['c', '3'],
+                  ]),
+                  b: new Map([['a', ['', new Map([[1, 2]])]]]),
+                }),
+                'b',
+              ],
+            ]),
+          })
+        )
+      ),
+      testMap3({
+        a: new Map([
+          [defaultTestMap2(), 'a'],
+
+          [
+            testMap2({
+              a: new Map([
+                ['a', '1'],
+                ['b', '2'],
+                ['c', '3'],
+              ]),
+              b: new Map([['a', ['', new Map([[1, 2]])]]]),
+            }),
+            'b',
+          ],
+        ]),
+      })
+    );
+  }
+);
+
+suite.test(
+  'it should compare types with complex map template as parameters',
+  () => {
+    assert.strict.ok(
+      compareTestMap2(
+        testMap2({
+          a: new Map([
+            ['a', '1'],
+            ['b', '2'],
+            ['c', '3'],
+          ]),
+          b: new Map([['a', ['', new Map([[1, 2]])]]]),
+        }),
+        testMap2({
+          a: new Map([
+            ['a', '1'],
+            ['b', '2'],
+            ['c', '3'],
+          ]),
+          b: new Map([['a', ['', new Map([[1, 2]])]]]),
+        })
+      )
+    );
+  }
+);
+
+suite.test(
+  'it should should keep reference if no changes are requested even if the type is using complex type',
+  () => {
+    const a1 = testMap2({
+      a: new Map([
+        ['a', '1'],
+        ['b', '2'],
+        ['c', '3'],
+      ]),
+      b: new Map([['a', ['', new Map([[1, 2]])]]]),
+    });
+    assert.strict.equal(updateTestMap2(a1, {}), a1);
+    assert.strict.equal(
+      updateTestMap2(a1, {
+        b: new Map([['a', ['', new Map([[1, 2]])]]]),
+      }),
+      a1
+    );
+  }
+);
+
+suite.test(
+  'it should should change the reference if no changes are requested even if the type is using complex type',
+  () => {
+    const a1 = testMap2({
+      a: new Map([
+        ['a', '1'],
+        ['b', '2'],
+        ['c', '3'],
+      ]),
+      b: new Map([['a', ['', new Map([[1, 2]])]]]),
+    });
+    assert.strict.notEqual(
+      updateTestMap2(a1, {
+        b: new Map([['a', ['', new Map([[1, 3]])]]]),
+      }),
+      a1
+    );
+    assert.strict.deepEqual(
+      updateTestMap2(a1, {
+        b: new Map([['a', ['', new Map([[1, 3]])]]]),
+      }),
+      testMap2({
+        a: new Map([
+          ['a', '1'],
+          ['b', '2'],
+          ['c', '3'],
+        ]),
+        b: new Map([['a', ['', new Map([[1, 3]])]]]),
+      })
+    );
+  }
+);
+
+suite.test(
+  'it should encode/decode types with complex map template as parameters',
+  () => {
+    const codec = new Codec({
+      textDecoder: new TextDecoder(),
+      textEncoder: new TextEncoder(),
+    });
+    assert.strict.deepEqual(
+      codec.decode(
+        decodeTestMap2,
+        codec.encode(
+          encodeTestMap2,
+          testMap2({
+            a: new Map([
+              ['a', '1'],
+              ['b', '2'],
+              ['c', '3'],
+            ]),
+            b: new Map([['a', ['', new Map([[1, 2]])]]]),
+          })
+        )
+      ),
+      testMap2({
+        a: new Map([
+          ['a', '1'],
+          ['b', '2'],
+          ['c', '3'],
+        ]),
+        b: new Map([['a', ['', new Map([[1, 2]])]]]),
+      })
+    );
+  }
+);
 
 suite.test('it should encode get post by id call', () => {
   const s = new Serializer({

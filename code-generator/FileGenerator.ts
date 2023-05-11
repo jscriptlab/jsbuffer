@@ -150,6 +150,17 @@ export type ResolvedTypeExpression =
       template: 'tuple';
       expressions: ReadonlyArray<NodeTypeExpression>;
       types: ResolvedTypeExpression[];
+    }
+  | {
+      template: 'map';
+      key: {
+        expression: NodeTypeExpression;
+        resolved: ResolvedTypeExpression;
+      };
+      value: {
+        expression: NodeTypeExpression;
+        resolved: ResolvedTypeExpression;
+      };
     };
 
 export interface IIdentifierRequirement {
@@ -529,7 +540,7 @@ export default class FileGenerator extends CodeStream {
     const resolved = this.#resolveTypeExpression(expression);
     if ('generic' in resolved) {
       switch (resolved.generic) {
-        case 'bytes': {
+        case GenericName.Bytes: {
           const expressions = [
             `${v1}.byteLength === ${v2}.byteLength`,
             `${v1}.every((__byte,index) => ${v2}[index] === __byte)`,
@@ -571,7 +582,7 @@ export default class FileGenerator extends CodeStream {
           this.append(
             `${optionalVarName1} !== null && ${optionalVarName2} !== null ? `
           );
-          this.#generateComparisonExpression(
+          depth = this.#generateComparisonExpression(
             resolved.expression,
             optionalVarName1,
             optionalVarName2,
@@ -579,6 +590,34 @@ export default class FileGenerator extends CodeStream {
           );
           this.append(` : ${optionalVarName1} === ${optionalVarName2}`);
           this.append(`)(${v1},${v2})`);
+          break;
+        }
+        case 'map': {
+          this.append('((l1,l2) => (');
+          (() => {
+            this.append('l1.every(');
+            (() => {
+              this.append('([k1,v1],i) => (');
+              (() => {
+                depth = this.#generateComparisonExpression(
+                  resolved.key.expression,
+                  'k1',
+                  'l2[i][0]',
+                  depth + 1
+                );
+                this.append(' && ');
+                depth = this.#generateComparisonExpression(
+                  resolved.value.expression,
+                  'v1',
+                  'l2[i][1]',
+                  depth + 1
+                );
+              })();
+              this.append(')');
+            })();
+            this.append(')');
+          })();
+          this.append(`))(Array.from(${v1}),Array.from(${v2}))`);
           break;
         }
         case 'vector':
@@ -631,6 +670,7 @@ export default class FileGenerator extends CodeStream {
     } else {
       this.append(`${getCompareFunctionName(resolved)}(${v1},${v2})`);
     }
+    return depth;
   }
   #generateDefinitionDefaultObjectCreator(
     node: INodeTypeDefinition | INodeCallDefinition
@@ -690,6 +730,8 @@ export default class FileGenerator extends CodeStream {
       }
     } else if ('template' in resolved) {
       switch (resolved.template) {
+        case 'map':
+          return 'new Map()';
         case 'optional':
           return 'null';
         case 'tuple':
@@ -853,6 +895,17 @@ export default class FileGenerator extends CodeStream {
             ...options,
             typeExpression: resolved.expression,
           })} | null`;
+        case 'map': {
+          const k = this.#resolveTypeExpressionToString({
+            ...options,
+            typeExpression: resolved.key.expression,
+          });
+          const v = this.#resolveTypeExpressionToString({
+            ...options,
+            typeExpression: resolved.value.expression,
+          });
+          return `${readOnly ? 'ReadonlyMap' : 'Map'}<${k}, ${v}>`;
+        }
         case 'tuple':
           return `[${resolved.expressions.map((t) =>
             this.#resolveTypeExpressionToString({
@@ -899,6 +952,23 @@ export default class FileGenerator extends CodeStream {
               template: 'optional',
               expression: optionalType,
               type: this.#resolveTypeExpression(optionalType),
+            };
+          }
+          case 'map': {
+            const [key, value] = typeExpression.templateArguments;
+            if (typeof key === 'undefined' || typeof value === 'undefined') {
+              throw new InvalidTemplateArgumentCount(typeExpression);
+            }
+            return {
+              template: 'map',
+              key: {
+                resolved: this.#resolveTypeExpression(key),
+                expression: key,
+              },
+              value: {
+                resolved: this.#resolveTypeExpression(value),
+                expression: value,
+              },
             };
           }
           case 'vector': {
@@ -1273,10 +1343,32 @@ export default class FileGenerator extends CodeStream {
           );
           break;
         }
+        case 'map': {
+          const k = `__k${depth}`;
+          const v = `__v${depth}`;
+          this.write(`__s.writeUint32(${value}.size);\n`);
+          this.write(
+            `for(const [${k},${v}] of ${value}) {\n`,
+            () => {
+              depth = this.#generateEncodeTypeExpression(
+                resolved.key.expression,
+                k,
+                depth + 1
+              );
+              depth = this.#generateEncodeTypeExpression(
+                resolved.value.expression,
+                v,
+                depth + 1
+              );
+            },
+            '}\n'
+          );
+          break;
+        }
         case 'tuple': {
           let i = 0;
           for (const exp of resolved.expressions) {
-            const valueVarName = `__t${depth}${depth}`;
+            const valueVarName = `__t${depth}`;
             this.write(`const ${valueVarName} = ${value}[${i}];\n`);
             depth = this.#generateEncodeTypeExpression(
               exp,
@@ -1399,9 +1491,9 @@ export default class FileGenerator extends CodeStream {
           break;
         }
         case 'vector': {
-          const i = `index${depth}`;
-          const lengthVarName = `i${i}`;
-          const outVarName = `o${i}`;
+          const i = `__i${depth}`;
+          const lengthVarName = `__l${depth}`;
+          const outVarName = `__o${depth}`;
           this.write(`const ${lengthVarName} = __d.readUint32();\n`);
           this.write(
             `const ${outVarName} = new Array<${this.#resolveTypeExpressionToString(
@@ -1416,6 +1508,48 @@ export default class FileGenerator extends CodeStream {
                 resolved.expression,
                 `${outVarName}[${i}]`,
                 depth + 1
+              );
+            },
+            '}\n'
+          );
+          break;
+        }
+        case 'map': {
+          const i = `__i${depth}`;
+          const lengthVarName = `__l${depth}`;
+          const outVarName = `__o${depth}`;
+          this.write(`const ${lengthVarName} = __d.readUint32();\n`);
+          const keyTypeName = this.#resolveTypeExpressionToString({
+            typeExpression: resolved.key.expression,
+            readOnly: false,
+          });
+          const valueTypeName = this.#resolveTypeExpressionToString({
+            typeExpression: resolved.value.expression,
+            readOnly: false,
+          });
+          this.write(
+            `const ${outVarName} = new Map<${keyTypeName}, ${valueTypeName}>();\n`
+          );
+          this.write(`${value} = ${outVarName};\n`);
+          const keyVarName = `__k${depth}`;
+          const valueVarName = `__v${depth}`;
+          this.write(`let ${keyVarName}: ${keyTypeName};\n`);
+          this.write(`let ${valueVarName}: ${valueTypeName};\n`);
+          this.write(
+            `for(let ${i} = 0; ${i} < ${lengthVarName}; ${i}++) {\n`,
+            () => {
+              depth = this.#generateDecodeTypeExpression(
+                resolved.key.expression,
+                keyVarName,
+                depth + 1
+              );
+              depth = this.#generateDecodeTypeExpression(
+                resolved.value.expression,
+                valueVarName,
+                depth + 1
+              );
+              this.write(
+                `${outVarName}.set(${keyVarName}, ${valueVarName});\n`
               );
             },
             '}\n'

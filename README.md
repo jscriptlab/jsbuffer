@@ -133,6 +133,144 @@ export function compareUser(__a: user, __b: user) {
 }
 ```
 
+### Update functions
+
+Generated update functions uses the deep comparison expressions to make sure the reference of the input object is never changed, if there is no change in the `changes` argument even if you're using complex objects. To give you an example, let's say you have the following type definition:
+
+```
+type testMap2 {
+  map<optional<string>,string> a;
+  map<optional<string>,tuple<string,map<int,int>>> b;
+}
+```
+
+The code generator will create an update function with the following signature:
+
+```ts
+function updateTestMap2(
+  value: testMap2,
+  changes: Partial<testMap2InputParams>
+): testMap2;
+```
+
+<!--
+The code generator will create an update function like the following:
+
+```ts
+export function updateTestMap2(
+  value: testMap2,
+  changes: Partial<testMap2InputParams>
+) {
+  if (typeof changes['a'] !== 'undefined') {
+    if (
+      !((l1, l2) =>
+        l1.every(
+          ([k1, v1], i) =>
+            ((__dp11, __dp12) =>
+              __dp11 !== null && __dp12 !== null
+                ? __dp11 === __dp12
+                : __dp11 === __dp12)(k1, l2[i][0]) && v1 === l2[i][1]
+        ))(Array.from(changes['a']), Array.from(value['a']))
+    ) {
+      value = testMap2({
+        ...value,
+        a: changes['a'],
+      });
+    }
+  }
+  if (typeof changes['b'] !== 'undefined') {
+    if (
+      !((l1, l2) =>
+        l1.every(
+          ([k1, v1], i) =>
+            ((__dp21, __dp22) =>
+              __dp21 !== null && __dp22 !== null
+                ? __dp21 === __dp22
+                : __dp21 === __dp22)(k1, l2[i][0]) &&
+            /* compare tuple item 0 of type string */ ((__a40, __b40) =>
+              __a40 === __b40)(v1[0], l2[i][1][0]) &&
+            /* compare tuple item 1 of type ReadonlyMap<number, number> */ ((
+              __a41,
+              __b41
+            ) =>
+              ((l1, l2) =>
+                l1.every(([k1, v1], i) => k1 === l2[i][0] && v1 === l2[i][1]))(
+                Array.from(__a41),
+                Array.from(__b41)
+              ))(v1[1], l2[i][1][1])
+        ))(Array.from(changes['b']), Array.from(value['b']))
+    ) {
+      value = testMap2({
+        ...value,
+        b: changes['b'],
+      });
+    }
+  }
+  return value;
+}
+``` -->
+
+So the following test case would pass without errors:
+
+```ts
+import assert from 'assert';
+import { testMap2, updateTestMap2 } from '../out/schema';
+
+const a1 = testMap2({
+  a: new Map([
+    ['a', '1'],
+    ['b', '2'],
+    ['c', '3'],
+  ]),
+  b: new Map([['a', ['', new Map([[1, 2]])]]]),
+});
+
+assert.strict.equal(updateTestMap2(a1, {}), a1);
+assert.strict.equal(
+  updateTestMap2(a1, {
+    b: new Map([['a', ['', new Map([[1, 2]])]]]),
+  }),
+  a1
+);
+assert.strict.notEqual(
+  updateTestMap2(a1, {
+    b: new Map([['a', ['', new Map([[1, 3]])]]]),
+  }),
+  a1
+);
+assert.strict.deepEqual(
+  updateTestMap2(a1, {
+    b: new Map([['a', ['', new Map([[1, 3]])]]]),
+  }),
+  testMap2({
+    a: new Map([
+      ['a', '1'],
+      ['b', '2'],
+      ['c', '3'],
+    ]),
+    b: new Map([['a', ['', new Map([[1, 3]])]]]),
+  })
+);
+```
+
+### Traits
+
+```
+trait User {}
+type user : User {
+  ulong id;
+}
+type userDeleted : User {
+  ulong deletedAt;
+}
+```
+
+Becomes this:
+
+```ts
+export type User = userDeleted | user;
+```
+
 ### Complex type structures
 
 To me, the most cool part of jsbuffer, is that you can create all sort of complex type structures that involve many parts and we will resolve and generate the code and files accordingly:

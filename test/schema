@@ -7,6 +7,19 @@ import "./testLong";
 import "./testUpdateFunction";
 import "./testTraitOnParam";
 
+type testMap{
+  map<string,string> a;
+}
+
+type testMap2 {
+  map<optional<string>,string> a;
+  map<optional<string>,tuple<string,map<int,int>>> b;
+}
+
+type testMap3 {
+  map<testMap2,string> a;
+}
+
 type Void {
 
 }

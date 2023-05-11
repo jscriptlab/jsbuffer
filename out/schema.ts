@@ -8,6 +8,311 @@ import {decodeUserTrait} from "./User";
 import {compareUserTrait} from "./User";
 import {compareUserTrait as compareUserTrait1} from "./User";
 import {IRequest} from "./__types__";
+export interface testMapInputParams {
+  a: ReadonlyMap<string, string>;
+}
+export function testMap(params: testMapInputParams): testMap {
+  return {
+    _name: 'schema.testMap',
+    a: params['a']
+  };
+}
+export function encodeTestMap(__s: ISerializer, value: testMap) {
+  __s.writeInt32(538583618);
+  /**
+   * encoding param: a
+   */
+  const __pv0 = value['a'];
+  __s.writeUint32(__pv0.size);
+  for(const [__k1,__v1] of __pv0) {
+    __s.writeString(__k1);
+    __s.writeString(__v1);
+  }
+}
+export function decodeTestMap(__d: IDeserializer): testMap | null {
+  const __id = __d.readInt32();
+  /**
+   * decode header
+   */
+  if(__id !== 538583618) return null;
+  let a: Map<string, string>;
+  /**
+   * decoding param: a
+   */
+  const __l1 = __d.readUint32();
+  const __o1 = new Map<string, string>();
+  a = __o1;
+  let __k1: string;
+  let __v1: string;
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    __k1 = __d.readString();
+    __v1 = __d.readString();
+    __o1.set(__k1, __v1);
+  }
+  return {
+    _name: 'schema.testMap',
+    a
+  };
+}
+export interface testMap  {
+  _name: 'schema.testMap';
+  a: ReadonlyMap<string, string>;
+}
+export function defaultTestMap(params: Partial<testMapInputParams> = {}): testMap {
+  return testMap({
+    a: new Map(),
+    ...params
+  });
+}
+export function compareTestMap(__a: testMap, __b: testMap): boolean {
+  return (
+    /**
+     * compare parameter a
+     */
+    ((l1,l2) => (l1.every(([k1,v1],i) => (k1 === l2[i][0] && v1 === l2[i][1]))))(Array.from(__a['a']),Array.from(__b['a']))
+  );
+}
+export function updateTestMap(value: testMap, changes: Partial<testMapInputParams>) {
+  if(typeof changes['a'] !== 'undefined') {
+    if(!(((l1,l2) => (l1.every(([k1,v1],i) => (k1 === l2[i][0] && v1 === l2[i][1]))))(Array.from(changes['a']),Array.from(value['a'])))) {
+      value = testMap({
+        ...value,
+        a: changes['a'],
+      });
+    }
+  }
+  return value;
+}
+export interface testMap2InputParams {
+  a: ReadonlyMap<string | null, string>;
+  b: ReadonlyMap<string | null, [string,ReadonlyMap<number, number>]>;
+}
+export function testMap2(params: testMap2InputParams): testMap2 {
+  return {
+    _name: 'schema.testMap2',
+    a: params['a'],
+    b: params['b']
+  };
+}
+export function encodeTestMap2(__s: ISerializer, value: testMap2) {
+  __s.writeInt32(929931693);
+  /**
+   * encoding param: a
+   */
+  const __pv0 = value['a'];
+  __s.writeUint32(__pv0.size);
+  for(const [__k1,__v1] of __pv0) {
+    if(__k1 === null) {
+      __s.writeUint8(0);
+    } else {
+      __s.writeUint8(1);
+      __s.writeString(__k1);
+    }
+    __s.writeString(__v1);
+  }
+  /**
+   * encoding param: b
+   */
+  const __pv4 = value['b'];
+  __s.writeUint32(__pv4.size);
+  for(const [__k5,__v5] of __pv4) {
+    if(__k5 === null) {
+      __s.writeUint8(0);
+    } else {
+      __s.writeUint8(1);
+      __s.writeString(__k5);
+    }
+    const __t8 = __v5[0];
+    __s.writeString(__t8);
+    const __t9 = __v5[1];
+    __s.writeUint32(__t9.size);
+    for(const [__k11,__v11] of __t9) {
+      __s.writeInt32(__k11);
+      __s.writeInt32(__v11);
+    }
+  }
+}
+export function decodeTestMap2(__d: IDeserializer): testMap2 | null {
+  const __id = __d.readInt32();
+  /**
+   * decode header
+   */
+  if(__id !== 929931693) return null;
+  let a: Map<string | null, string>;
+  let b: Map<string | null, [string,Map<number, number>]>;
+  /**
+   * decoding param: a
+   */
+  const __l1 = __d.readUint32();
+  const __o1 = new Map<string | null, string>();
+  a = __o1;
+  let __k1: string | null;
+  let __v1: string;
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    if(__d.readUint8() === 1) {
+      __k1 = __d.readString();
+    } else {
+      __k1 = null;
+    }
+    __v1 = __d.readString();
+    __o1.set(__k1, __v1);
+  }
+  /**
+   * decoding param: b
+   */
+  const __l5 = __d.readUint32();
+  const __o5 = new Map<string | null, [string,Map<number, number>]>();
+  b = __o5;
+  let __k5: string | null;
+  let __v5: [string,Map<number, number>];
+  for(let __i5 = 0; __i5 < __l5; __i5++) {
+    if(__d.readUint8() === 1) {
+      __k5 = __d.readString();
+    } else {
+      __k5 = null;
+    }
+    let __e8: string;
+    __e8 = __d.readString();
+    let __e9: Map<number, number>;
+    const __l10 = __d.readUint32();
+    const __o10 = new Map<number, number>();
+    __e9 = __o10;
+    let __k10: number;
+    let __v10: number;
+    for(let __i10 = 0; __i10 < __l10; __i10++) {
+      __k10 = __d.readInt32();
+      __v10 = __d.readInt32();
+      __o10.set(__k10, __v10);
+    }
+    __v5 = [__e8,__e9];
+    __o5.set(__k5, __v5);
+  }
+  return {
+    _name: 'schema.testMap2',
+    a,
+    b
+  };
+}
+export interface testMap2  {
+  _name: 'schema.testMap2';
+  a: ReadonlyMap<string | null, string>;
+  b: ReadonlyMap<string | null, [string,ReadonlyMap<number, number>]>;
+}
+export function defaultTestMap2(params: Partial<testMap2InputParams> = {}): testMap2 {
+  return testMap2({
+    a: new Map(),
+    b: new Map(),
+    ...params
+  });
+}
+export function compareTestMap2(__a: testMap2, __b: testMap2): boolean {
+  return (
+    /**
+     * compare parameter a
+     */
+    ((l1,l2) => (l1.every(([k1,v1],i) => (((__dp11, __dp12) => __dp11 !== null && __dp12 !== null ? __dp11 === __dp12 : __dp11 === __dp12)(k1,l2[i][0]) && v1 === l2[i][1]))))(Array.from(__a['a']),Array.from(__b['a'])) &&
+    /**
+     * compare parameter b
+     */
+    ((l1,l2) => (l1.every(([k1,v1],i) => (((__dp21, __dp22) => __dp21 !== null && __dp22 !== null ? __dp21 === __dp22 : __dp21 === __dp22)(k1,l2[i][0]) && /* compare tuple item 0 of type string */ ((__a40, __b40) => __a40 === __b40)(v1[0],l2[i][1][0]) && /* compare tuple item 1 of type ReadonlyMap<number, number> */ ((__a41, __b41) => ((l1,l2) => (l1.every(([k1,v1],i) => (k1 === l2[i][0] && v1 === l2[i][1]))))(Array.from(__a41),Array.from(__b41)))(v1[1],l2[i][1][1])))))(Array.from(__a['b']),Array.from(__b['b']))
+  );
+}
+export function updateTestMap2(value: testMap2, changes: Partial<testMap2InputParams>) {
+  if(typeof changes['a'] !== 'undefined') {
+    if(!(((l1,l2) => (l1.every(([k1,v1],i) => (((__dp11, __dp12) => __dp11 !== null && __dp12 !== null ? __dp11 === __dp12 : __dp11 === __dp12)(k1,l2[i][0]) && v1 === l2[i][1]))))(Array.from(changes['a']),Array.from(value['a'])))) {
+      value = testMap2({
+        ...value,
+        a: changes['a'],
+      });
+    }
+  }
+  if(typeof changes['b'] !== 'undefined') {
+    if(!(((l1,l2) => (l1.every(([k1,v1],i) => (((__dp21, __dp22) => __dp21 !== null && __dp22 !== null ? __dp21 === __dp22 : __dp21 === __dp22)(k1,l2[i][0]) && /* compare tuple item 0 of type string */ ((__a40, __b40) => __a40 === __b40)(v1[0],l2[i][1][0]) && /* compare tuple item 1 of type ReadonlyMap<number, number> */ ((__a41, __b41) => ((l1,l2) => (l1.every(([k1,v1],i) => (k1 === l2[i][0] && v1 === l2[i][1]))))(Array.from(__a41),Array.from(__b41)))(v1[1],l2[i][1][1])))))(Array.from(changes['b']),Array.from(value['b'])))) {
+      value = testMap2({
+        ...value,
+        b: changes['b'],
+      });
+    }
+  }
+  return value;
+}
+export interface testMap3InputParams {
+  a: ReadonlyMap<Readonly<testMap2>, string>;
+}
+export function testMap3(params: testMap3InputParams): testMap3 {
+  return {
+    _name: 'schema.testMap3',
+    a: params['a']
+  };
+}
+export function encodeTestMap3(__s: ISerializer, value: testMap3) {
+  __s.writeInt32(-874850907);
+  /**
+   * encoding param: a
+   */
+  const __pv0 = value['a'];
+  __s.writeUint32(__pv0.size);
+  for(const [__k1,__v1] of __pv0) {
+    encodeTestMap2(__s,__k1);
+    __s.writeString(__v1);
+  }
+}
+export function decodeTestMap3(__d: IDeserializer): testMap3 | null {
+  const __id = __d.readInt32();
+  /**
+   * decode header
+   */
+  if(__id !== -874850907) return null;
+  let a: Map<testMap2, string>;
+  /**
+   * decoding param: a
+   */
+  const __l1 = __d.readUint32();
+  const __o1 = new Map<testMap2, string>();
+  a = __o1;
+  let __k1: testMap2;
+  let __v1: string;
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    const __tmp2 = decodeTestMap2(__d);
+    if(__tmp2 === null) return null;
+    __k1 = __tmp2;
+    __v1 = __d.readString();
+    __o1.set(__k1, __v1);
+  }
+  return {
+    _name: 'schema.testMap3',
+    a
+  };
+}
+export interface testMap3  {
+  _name: 'schema.testMap3';
+  a: ReadonlyMap<Readonly<testMap2>, string>;
+}
+export function defaultTestMap3(params: Partial<testMap3InputParams> = {}): testMap3 {
+  return testMap3({
+    a: new Map(),
+    ...params
+  });
+}
+export function compareTestMap3(__a: testMap3, __b: testMap3): boolean {
+  return (
+    /**
+     * compare parameter a
+     */
+    ((l1,l2) => (l1.every(([k1,v1],i) => (compareTestMap2(k1,l2[i][0]) && v1 === l2[i][1]))))(Array.from(__a['a']),Array.from(__b['a']))
+  );
+}
+export function updateTestMap3(value: testMap3, changes: Partial<testMap3InputParams>) {
+  if(typeof changes['a'] !== 'undefined') {
+    if(!(((l1,l2) => (l1.every(([k1,v1],i) => (compareTestMap2(k1,l2[i][0]) && v1 === l2[i][1]))))(Array.from(changes['a']),Array.from(value['a'])))) {
+      value = testMap3({
+        ...value,
+        a: changes['a'],
+      });
+    }
+  }
+  return value;
+}
 export interface VoidInputParams {
 }
 export function Void(_: VoidInputParams = {}): Void {
@@ -182,13 +487,13 @@ export function decodeUsers(__d: IDeserializer): Users | null {
   /**
    * decoding param: users
    */
-  const iindex1 = __d.readUint32();
-  const oindex1 = new Array<User>(iindex1);
-  users = oindex1;
-  for(let index1 = 0; index1 < iindex1; index1++) {
+  const __l1 = __d.readUint32();
+  const __o1 = new Array<User>(__l1);
+  users = __o1;
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
     const tmp3 = decodeUserTrait(__d);
     if(tmp3 === null) return null;
-    oindex1[index1] = tmp3;
+    __o1[__i1] = tmp3;
   }
   return {
     _name: 'schema.Users',
@@ -380,13 +685,13 @@ export function decodePosts(__d: IDeserializer): Posts | null {
   /**
    * decoding param: posts
    */
-  const iindex1 = __d.readUint32();
-  const oindex1 = new Array<Post>(iindex1);
-  posts = oindex1;
-  for(let index1 = 0; index1 < iindex1; index1++) {
+  const __l1 = __d.readUint32();
+  const __o1 = new Array<Post>(__l1);
+  posts = __o1;
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
     const __tmp2 = decodePost(__d);
     if(__tmp2 === null) return null;
-    oindex1[index1] = __tmp2;
+    __o1[__i1] = __tmp2;
   }
   return {
     _name: 'schema.Posts',
@@ -704,25 +1009,25 @@ export function encodeShouldSupportSeveralSequentialVectorParams(__s: ISerialize
    * encoding param: g
    */
   const __pv14 = value['g'];
-  const __t1515 = __pv14[0];
-  __s.writeInt32(__t1515);
-  const __t1616 = __pv14[1];
-  __s.writeFloat(__t1616);
-  const __t1818 = __pv14[2];
-  __s.writeDouble(__t1818);
-  const __t2121 = __pv14[3];
-  const __l25 = __t2121.length;
+  const __t15 = __pv14[0];
+  __s.writeInt32(__t15);
+  const __t16 = __pv14[1];
+  __s.writeFloat(__t16);
+  const __t18 = __pv14[2];
+  __s.writeDouble(__t18);
+  const __t21 = __pv14[3];
+  const __l25 = __t21.length;
   __s.writeUint32(__l25);
   for(let __i25 = 0; __i25 < __l25; __i25++) {
-    const __v__i25 = __t2121[__i25];
+    const __v__i25 = __t21[__i25];
     __s.writeUint32(__v__i25);
   }
-  const __t2626 = __pv14[4];
-  if(__t2626 === null) {
+  const __t26 = __pv14[4];
+  if(__t26 === null) {
     __s.writeUint8(0);
   } else {
     __s.writeUint8(1);
-    __s.writeString(__t2626);
+    __s.writeString(__t26);
   }
 }
 export function decodeShouldSupportSeveralSequentialVectorParams(__d: IDeserializer): ShouldSupportSeveralSequentialVectorParams | null {
@@ -741,64 +1046,64 @@ export function decodeShouldSupportSeveralSequentialVectorParams(__d: IDeseriali
   /**
    * decoding param: a
    */
-  const iindex1 = __d.readUint32();
-  const oindex1 = new Array<number>(iindex1);
-  a = oindex1;
-  for(let index1 = 0; index1 < iindex1; index1++) {
-    oindex1[index1] = __d.readInt32();
+  const __l1 = __d.readUint32();
+  const __o1 = new Array<number>(__l1);
+  a = __o1;
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    __o1[__i1] = __d.readInt32();
   }
   /**
    * decoding param: b
    */
-  const iindex3 = __d.readUint32();
-  const oindex3 = new Array<number>(iindex3);
-  b = oindex3;
-  for(let index3 = 0; index3 < iindex3; index3++) {
-    oindex3[index3] = __d.readDouble();
+  const __l3 = __d.readUint32();
+  const __o3 = new Array<number>(__l3);
+  b = __o3;
+  for(let __i3 = 0; __i3 < __l3; __i3++) {
+    __o3[__i3] = __d.readDouble();
   }
   /**
    * decoding param: c
    */
-  const iindex5 = __d.readUint32();
-  const oindex5 = new Array<string>(iindex5);
-  c = oindex5;
-  for(let index5 = 0; index5 < iindex5; index5++) {
-    oindex5[index5] = __d.readString();
+  const __l5 = __d.readUint32();
+  const __o5 = new Array<string>(__l5);
+  c = __o5;
+  for(let __i5 = 0; __i5 < __l5; __i5++) {
+    __o5[__i5] = __d.readString();
   }
   /**
    * decoding param: d
    */
-  const iindex7 = __d.readUint32();
-  const oindex7 = new Array<number>(iindex7);
-  d = oindex7;
-  for(let index7 = 0; index7 < iindex7; index7++) {
-    oindex7[index7] = __d.readFloat();
+  const __l7 = __d.readUint32();
+  const __o7 = new Array<number>(__l7);
+  d = __o7;
+  for(let __i7 = 0; __i7 < __l7; __i7++) {
+    __o7[__i7] = __d.readFloat();
   }
   /**
    * decoding param: e
    */
-  const iindex9 = __d.readUint32();
-  const oindex9 = new Array<number>(iindex9);
-  e = oindex9;
-  for(let index9 = 0; index9 < iindex9; index9++) {
-    oindex9[index9] = __d.readUint32();
+  const __l9 = __d.readUint32();
+  const __o9 = new Array<number>(__l9);
+  e = __o9;
+  for(let __i9 = 0; __i9 < __l9; __i9++) {
+    __o9[__i9] = __d.readUint32();
   }
   /**
    * decoding param: f
    */
-  const iindex11 = __d.readUint32();
-  const oindex11 = new Array<Array<number> | null>(iindex11);
-  f = oindex11;
-  for(let index11 = 0; index11 < iindex11; index11++) {
+  const __l11 = __d.readUint32();
+  const __o11 = new Array<Array<number> | null>(__l11);
+  f = __o11;
+  for(let __i11 = 0; __i11 < __l11; __i11++) {
     if(__d.readUint8() === 1) {
-      const iindex13 = __d.readUint32();
-      const oindex13 = new Array<number>(iindex13);
-      oindex11[index11] = oindex13;
-      for(let index13 = 0; index13 < iindex13; index13++) {
-        oindex13[index13] = __d.readUint32();
+      const __l13 = __d.readUint32();
+      const __o13 = new Array<number>(__l13);
+      __o11[__i11] = __o13;
+      for(let __i13 = 0; __i13 < __l13; __i13++) {
+        __o13[__i13] = __d.readUint32();
       }
     } else {
-      oindex11[index11] = null;
+      __o11[__i11] = null;
     }
   }
   /**
@@ -811,11 +1116,11 @@ export function decodeShouldSupportSeveralSequentialVectorParams(__d: IDeseriali
   let __e17: number;
   __e17 = __d.readDouble();
   let __e18: Array<number>;
-  const iindex19 = __d.readUint32();
-  const oindex19 = new Array<number>(iindex19);
-  __e18 = oindex19;
-  for(let index19 = 0; index19 < iindex19; index19++) {
-    oindex19[index19] = __d.readUint32();
+  const __l19 = __d.readUint32();
+  const __o19 = new Array<number>(__l19);
+  __e18 = __o19;
+  for(let __i19 = 0; __i19 < __l19; __i19++) {
+    __o19[__i19] = __d.readUint32();
   }
   let __e20: string | null;
   if(__d.readUint8() === 1) {
@@ -965,25 +1270,25 @@ export function encodeSimpleTupleTest(__s: ISerializer, value: simpleTupleTest) 
    * encoding param: a
    */
   const __pv0 = value['a'];
-  const __t11 = __pv0[0];
-  __s.writeInt32(__t11);
-  const __t22 = __pv0[1];
-  __s.writeFloat(__t22);
-  const __t44 = __pv0[2];
-  __s.writeDouble(__t44);
-  const __t77 = __pv0[3];
-  const __l11 = __t77.length;
+  const __t1 = __pv0[0];
+  __s.writeInt32(__t1);
+  const __t2 = __pv0[1];
+  __s.writeFloat(__t2);
+  const __t4 = __pv0[2];
+  __s.writeDouble(__t4);
+  const __t7 = __pv0[3];
+  const __l11 = __t7.length;
   __s.writeUint32(__l11);
   for(let __i11 = 0; __i11 < __l11; __i11++) {
-    const __v__i11 = __t77[__i11];
+    const __v__i11 = __t7[__i11];
     __s.writeUint32(__v__i11);
   }
-  const __t1212 = __pv0[4];
-  if(__t1212 === null) {
+  const __t12 = __pv0[4];
+  if(__t12 === null) {
     __s.writeUint8(0);
   } else {
     __s.writeUint8(1);
-    __s.writeString(__t1212);
+    __s.writeString(__t12);
   }
   /**
    * encoding param: b
@@ -993,25 +1298,25 @@ export function encodeSimpleTupleTest(__s: ISerializer, value: simpleTupleTest) 
   __s.writeUint32(__l19);
   for(let __i19 = 0; __i19 < __l19; __i19++) {
     const __v__i19 = __pv18[__i19];
-    const __t2020 = __v__i19[0];
-    __s.writeInt32(__t2020);
-    const __t2121 = __v__i19[1];
-    __s.writeFloat(__t2121);
-    const __t2323 = __v__i19[2];
-    __s.writeDouble(__t2323);
-    const __t2626 = __v__i19[3];
-    const __l30 = __t2626.length;
+    const __t20 = __v__i19[0];
+    __s.writeInt32(__t20);
+    const __t21 = __v__i19[1];
+    __s.writeFloat(__t21);
+    const __t23 = __v__i19[2];
+    __s.writeDouble(__t23);
+    const __t26 = __v__i19[3];
+    const __l30 = __t26.length;
     __s.writeUint32(__l30);
     for(let __i30 = 0; __i30 < __l30; __i30++) {
-      const __v__i30 = __t2626[__i30];
+      const __v__i30 = __t26[__i30];
       __s.writeUint32(__v__i30);
     }
-    const __t3131 = __v__i19[4];
-    if(__t3131 === null) {
+    const __t31 = __v__i19[4];
+    if(__t31 === null) {
       __s.writeUint8(0);
     } else {
       __s.writeUint8(1);
-      __s.writeString(__t3131);
+      __s.writeString(__t31);
     }
   }
 }
@@ -1033,11 +1338,11 @@ export function decodeSimpleTupleTest(__d: IDeserializer): simpleTupleTest | nul
   let __e3: number;
   __e3 = __d.readDouble();
   let __e4: Array<number>;
-  const iindex5 = __d.readUint32();
-  const oindex5 = new Array<number>(iindex5);
-  __e4 = oindex5;
-  for(let index5 = 0; index5 < iindex5; index5++) {
-    oindex5[index5] = __d.readUint32();
+  const __l5 = __d.readUint32();
+  const __o5 = new Array<number>(__l5);
+  __e4 = __o5;
+  for(let __i5 = 0; __i5 < __l5; __i5++) {
+    __o5[__i5] = __d.readUint32();
   }
   let __e6: string | null;
   if(__d.readUint8() === 1) {
@@ -1049,10 +1354,10 @@ export function decodeSimpleTupleTest(__d: IDeserializer): simpleTupleTest | nul
   /**
    * decoding param: b
    */
-  const iindex9 = __d.readUint32();
-  const oindex9 = new Array<[number,number,number,Array<number>,string | null]>(iindex9);
-  b = oindex9;
-  for(let index9 = 0; index9 < iindex9; index9++) {
+  const __l9 = __d.readUint32();
+  const __o9 = new Array<[number,number,number,Array<number>,string | null]>(__l9);
+  b = __o9;
+  for(let __i9 = 0; __i9 < __l9; __i9++) {
     let __e10: number;
     __e10 = __d.readInt32();
     let __e11: number;
@@ -1060,11 +1365,11 @@ export function decodeSimpleTupleTest(__d: IDeserializer): simpleTupleTest | nul
     let __e12: number;
     __e12 = __d.readDouble();
     let __e13: Array<number>;
-    const iindex14 = __d.readUint32();
-    const oindex14 = new Array<number>(iindex14);
-    __e13 = oindex14;
-    for(let index14 = 0; index14 < iindex14; index14++) {
-      oindex14[index14] = __d.readUint32();
+    const __l14 = __d.readUint32();
+    const __o14 = new Array<number>(__l14);
+    __e13 = __o14;
+    for(let __i14 = 0; __i14 < __l14; __i14++) {
+      __o14[__i14] = __d.readUint32();
     }
     let __e15: string | null;
     if(__d.readUint8() === 1) {
@@ -1072,7 +1377,7 @@ export function decodeSimpleTupleTest(__d: IDeserializer): simpleTupleTest | nul
     } else {
       __e15 = null;
     }
-    oindex9[index9] = [__e10,__e11,__e12,__e13,__e15];
+    __o9[__i9] = [__e10,__e11,__e12,__e13,__e15];
   }
   return {
     _name: 'schema.simpleTupleTest',
@@ -1340,11 +1645,11 @@ export function decodeNullTerminatedStringList(__d: IDeserializer): nullTerminat
   /**
    * decoding param: value
    */
-  const iindex1 = __d.readUint32();
-  const oindex1 = new Array<string>(iindex1);
-  value = oindex1;
-  for(let index1 = 0; index1 < iindex1; index1++) {
-    oindex1[index1] = __d.readNullTerminatedString();
+  const __l1 = __d.readUint32();
+  const __o1 = new Array<string>(__l1);
+  value = __o1;
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    __o1[__i1] = __d.readNullTerminatedString();
   }
   return {
     _name: 'schema.nullTerminatedStringList',
@@ -1412,11 +1717,11 @@ export function decodeNormalStringList(__d: IDeserializer): normalStringList | n
   /**
    * decoding param: value
    */
-  const iindex1 = __d.readUint32();
-  const oindex1 = new Array<string>(iindex1);
-  value = oindex1;
-  for(let index1 = 0; index1 < iindex1; index1++) {
-    oindex1[index1] = __d.readString();
+  const __l1 = __d.readUint32();
+  const __o1 = new Array<string>(__l1);
+  value = __o1;
+  for(let __i1 = 0; __i1 < __l1; __i1++) {
+    __o1[__i1] = __d.readString();
   }
   return {
     _name: 'schema.normalStringList',

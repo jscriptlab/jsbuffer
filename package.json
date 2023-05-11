@@ -42,6 +42,7 @@
   "dependencies": {
     "cli-argument-helper": "0.x",
     "crc": "4.x",
+    "jsbi": "4.x",
     "long": "5.x",
     "textstreamjs": "0.x"
   }
