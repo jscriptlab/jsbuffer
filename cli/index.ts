@@ -10,6 +10,11 @@ import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
 (async () => {
   const args = Array.from(process.argv).slice(2);
   let mainFile: string | null = null;
+  const uniqueNamePropertyName = getNamedArgument(
+    args,
+    '--unique-name-property-name',
+    getString
+  );
   const tsExtends = getNamedArgument(args, '--extends', getString);
   const indentationSize =
     getNamedArgument(args, '--indentation-size', getInteger) ?? 4;
@@ -35,7 +40,6 @@ import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
   }
   mainFile = path.resolve(process.cwd(), mainFile);
   outDir = path.resolve(process.cwd(), outDir);
-  console.log(outDir, mainFile);
   /**
    * make sure out dir is writable and it exists
    */
@@ -48,7 +52,6 @@ import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
   /**
    * make sure main file is a file and it is readable
    */
-  console.log(mainFile);
   await fs.promises.access(mainFile, fs.constants.R_OK);
   assert.strict.ok((await fs.promises.stat(mainFile)).isFile());
   let typeScriptConfiguration: Record<string, unknown> = {};
@@ -65,6 +68,7 @@ import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
     {
       textDecoder: new TextDecoder(),
       textEncoder: new TextEncoder(),
+      uniqueNamePropertyName,
       rootDir: path.dirname(mainFile),
       typeScriptConfiguration,
       outDir,

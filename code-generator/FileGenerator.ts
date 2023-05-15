@@ -1175,7 +1175,7 @@ export default class FileGenerator extends CodeStream {
       )}(__s: ISerializer,value: ${getTypeName(trait)}) {\n`,
       () => {
         this.write(
-          'switch(value.${this.#uniqueNamePropertyName}) {\n',
+          `switch(value.${this.#uniqueNamePropertyName}) {\n`,
           () => {
             for (const exp of exps) {
               const isExternalRequirement = 'fileGenerator' in exp;
@@ -1218,7 +1218,7 @@ export default class FileGenerator extends CodeStream {
       )}) {\n`,
       () => {
         this.write(
-          'switch(__a.${this.#uniqueNamePropertyName}) {\n',
+          `switch(__a.${this.#uniqueNamePropertyName}) {\n`,
           () => {
             for (const exp of exps) {
               const isExternalRequirement = 'fileGenerator' in exp;
