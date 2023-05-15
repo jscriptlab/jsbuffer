@@ -123,6 +123,7 @@ export interface IFileGeneratorOptions {
   typeScriptConfiguration?: Record<string, unknown>;
   textEncoder: ITextEncoder;
   root?: FileGenerator | null;
+  uniqueNamePropertyName?: string | null;
 }
 
 export type ResolvedTypeExpression =
@@ -201,6 +202,7 @@ export default class FileGenerator extends CodeStream {
   readonly #fileGenerators = new Map<string, FileGenerator>();
   readonly #parent;
   readonly #traits = new Map<string, ITrait>();
+  readonly #uniqueNamePropertyName;
   #offset = 0;
   #nodes: Array<ASTGeneratorOutputNode> = [];
   #aliasUniqueId = 1;
@@ -209,6 +211,7 @@ export default class FileGenerator extends CodeStream {
     {
       textDecoder,
       textEncoder,
+      uniqueNamePropertyName = null,
       indentationSize,
       rootDir,
       outDir,
@@ -222,6 +225,7 @@ export default class FileGenerator extends CodeStream {
     this.#file = file;
     this.#parent = parent;
     this.#outDir = outDir;
+    this.#uniqueNamePropertyName = uniqueNamePropertyName ?? '_name';
     this.#rootDir = rootDir;
     this.#indentationSize = indentationSize;
     this.#textEncoder = textEncoder;
@@ -461,6 +465,7 @@ export default class FileGenerator extends CodeStream {
             },
             {
               root: root,
+              uniqueNamePropertyName: root.#uniqueNamePropertyName,
               indentationSize: this.#indentationSize,
               rootDir: this.#rootDir,
               outDir: this.#outDir,
@@ -1103,7 +1108,9 @@ export default class FileGenerator extends CodeStream {
       `export interface ${node.name.value} ${interfaceExtends} {\n`,
       () => {
         this.write(
-          `_name: '${getTypeDefinitionOrCallDefinitionNamePropertyValue(
+          `${
+            this.#uniqueNamePropertyName
+          }: '${getTypeDefinitionOrCallDefinitionNamePropertyValue(
             node,
             this.#removeRootDir(this.#file.path)
           )}';\n`
@@ -1168,7 +1175,7 @@ export default class FileGenerator extends CodeStream {
       )}(__s: ISerializer,value: ${getTypeName(trait)}) {\n`,
       () => {
         this.write(
-          'switch(value._name) {\n',
+          'switch(value.${this.#uniqueNamePropertyName}) {\n',
           () => {
             for (const exp of exps) {
               const isExternalRequirement = 'fileGenerator' in exp;
@@ -1211,7 +1218,7 @@ export default class FileGenerator extends CodeStream {
       )}) {\n`,
       () => {
         this.write(
-          'switch(__a._name) {\n',
+          'switch(__a.${this.#uniqueNamePropertyName}) {\n',
           () => {
             for (const exp of exps) {
               const isExternalRequirement = 'fileGenerator' in exp;
@@ -1234,7 +1241,9 @@ export default class FileGenerator extends CodeStream {
               this.write(`case '${typeStringifiedName}':\n`);
               this.indentBlock(() => {
                 this.write(
-                  `if(__b._name !== "${typeStringifiedName}") return false;\n`
+                  `if(__b.${
+                    this.#uniqueNamePropertyName
+                  } !== "${typeStringifiedName}") return false;\n`
                 );
                 this.write(`return ${compareFunctionName}(__a,__b);\n`);
               });
@@ -1799,7 +1808,9 @@ export default class FileGenerator extends CodeStream {
           'return {\n',
           () => {
             this.write(
-              `_name: '${getTypeDefinitionOrCallDefinitionNamePropertyValue(
+              `${
+                this.#uniqueNamePropertyName
+              }: '${getTypeDefinitionOrCallDefinitionNamePropertyValue(
                 node,
                 this.#removeRootDir(this.#file.path)
               )}',\n`
@@ -1841,7 +1852,9 @@ export default class FileGenerator extends CodeStream {
           'return {\n',
           () => {
             this.write(
-              `_name: '${getTypeDefinitionOrCallDefinitionNamePropertyValue(
+              `${
+                this.#uniqueNamePropertyName
+              }: '${getTypeDefinitionOrCallDefinitionNamePropertyValue(
                 node,
                 this.#removeRootDir(this.#file.path)
               )}'`
