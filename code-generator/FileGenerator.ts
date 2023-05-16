@@ -124,7 +124,10 @@ export interface IFileGeneratorOptions {
   textEncoder: ITextEncoder;
   root?: FileGenerator | null;
   uniqueNamePropertyName?: string | null;
-  outFolders?: Map<string, string> | null;
+  externalModules?: {
+    nodeModulesFolder: string;
+    outFolders: Map<string, string>;
+  } | null;
   isExternalModule?: boolean | null;
 }
 
@@ -237,7 +240,7 @@ export default class FileGenerator extends CodeStream {
   readonly #parent;
   readonly #traits = new Map<string, ITrait>();
   readonly #uniqueNamePropertyName;
-  readonly #outFolders;
+  readonly #externalModules;
   /**
    * modules that come from node_modules
    */
@@ -248,7 +251,7 @@ export default class FileGenerator extends CodeStream {
   public constructor(
     file: IFile,
     {
-      outFolders: outDirectories,
+      externalModules,
       textDecoder,
       textEncoder,
       uniqueNamePropertyName = null,
@@ -263,7 +266,7 @@ export default class FileGenerator extends CodeStream {
     super(undefined, {
       indentationSize,
     });
-    this.#outFolders = outDirectories ?? new Map();
+    this.#externalModules = externalModules ?? null;
     this.#file = file;
     this.#parent = parent;
     this.#outDir = outDir;
@@ -386,9 +389,15 @@ export default class FileGenerator extends CodeStream {
     for (const r of this.#requirements) {
       let requirementPath: string;
       if ('fileGenerator' in r) {
+        if (this.#externalModules === null) {
+          throw new Exception(
+            'failed to parse node_modules import ' +
+              'because externalModules property was not set'
+          );
+        }
         if (r.fileGenerator.#isExternalModule) {
           requirementPath = parseMaybeNodeModulesImport({
-            outFolders: this.#outFolders,
+            outFolders: this.#externalModules.outFolders,
             currentFilePath: r.fileGenerator.#file.path,
           });
         } else {
@@ -512,9 +521,21 @@ export default class FileGenerator extends CodeStream {
       case NodeType.ImportStatement: {
         const modulePath = node.from.value;
         const isExternalModule = !modulePath.startsWith('.');
-        const inputFile = isExternalModule
-          ? path.resolve(this.#rootDir, `node_modules/${modulePath}`)
-          : path.resolve(path.dirname(this.#file.path), modulePath);
+        let inputFile: string;
+        if (isExternalModule) {
+          if (this.#externalModules === null) {
+            throw new Exception(
+              'For external modules to be imported, you need ' +
+                'to specify `externalModules` property'
+            );
+          }
+          inputFile = path.resolve(
+            this.#externalModules.nodeModulesFolder,
+            modulePath
+          );
+        } else {
+          inputFile = path.resolve(path.dirname(this.#file.path), modulePath);
+        }
         const root = this.#root();
         let fileGenerator = root.#fileGenerators.get(inputFile);
         if (!fileGenerator) {

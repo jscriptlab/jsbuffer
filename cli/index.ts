@@ -15,6 +15,9 @@ import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
     '--unique-name-property-name',
     getString
   );
+  const nodeModulesFolder =
+    getNamedArgument(args, '--node-modules-folder', getString) ??
+    path.resolve(process.cwd(), 'node_modules');
   const tsExtends = getNamedArgument(args, '--extends', getString);
   const indentationSize =
     getNamedArgument(args, '--indentation-size', getInteger) ?? 4;
@@ -32,7 +35,7 @@ import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
       const [k, v] = outFolder.split(':');
       if (typeof k === 'undefined' || typeof v === 'undefined') {
         throw new Error(
-          '--external format is: --external module_name:__compiled__'
+          'usage of --external argument is: --external module_name:out_folder'
         );
       }
       outFolders.set(k, v);
@@ -82,7 +85,11 @@ import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
       path: mainFile,
     },
     {
-      outFolders,
+      externalModules: {
+        outFolders,
+        nodeModulesFolder,
+      },
+
       textDecoder: new TextDecoder(),
       textEncoder: new TextEncoder(),
       uniqueNamePropertyName,
