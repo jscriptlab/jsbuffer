@@ -546,6 +546,7 @@ export default class FileGenerator extends CodeStream {
             {
               root: root,
               isExternalModule,
+              externalModules: this.#externalModules,
               uniqueNamePropertyName: root.#uniqueNamePropertyName,
               indentationSize: this.#indentationSize,
               rootDir: this.#rootDir,
