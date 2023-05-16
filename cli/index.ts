@@ -31,9 +31,11 @@ import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
     if (outFolder) {
       const [k, v] = outFolder.split(':');
       if (typeof k === 'undefined' || typeof v === 'undefined') {
-        throw new Error('--external format is: --external ./a:__compiled__');
+        throw new Error(
+          '--external format is: --external module_name:__compiled__'
+        );
       }
-      outFolders.set(path.resolve(process.cwd(), k), v);
+      outFolders.set(k, v);
     }
   } while (outFolder !== null);
 
