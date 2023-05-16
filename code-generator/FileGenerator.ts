@@ -124,6 +124,8 @@ export interface IFileGeneratorOptions {
   textEncoder: ITextEncoder;
   root?: FileGenerator | null;
   uniqueNamePropertyName?: string | null;
+  outFolders?: Map<string, string> | null;
+  isExternalModule?: boolean | null;
 }
 
 export type ResolvedTypeExpression =
@@ -181,6 +183,38 @@ export interface ITrait {
   name: string;
   nodes: ResolvedTypeExpression[];
 }
+
+function parseMaybeNodeModulesImport({
+  currentFilePath = '',
+  outFolders,
+}: {
+  currentFilePath: string;
+  outFolders: ReadonlyMap<string, string>;
+}) {
+  const match = '/node_modules/';
+  const n = currentFilePath.indexOf(match);
+  if (n === -1) {
+    throw new Exception('Not a node_modules import');
+  }
+  const moduleRootDir = currentFilePath.substring(0, n + match.length);
+  const desiredModulePath = currentFilePath.substring(n + match.length);
+  let startIndex = 1;
+  const slices = desiredModulePath.split('/');
+  if (desiredModulePath.startsWith('@')) {
+    startIndex = 2;
+  }
+  const finalRootDir = path.join(moduleRootDir, ...slices.slice(0, startIndex));
+  const outFolder = outFolders.get(slices.slice(0, startIndex).join('/'));
+  if (!outFolder) {
+    throw new Exception(
+      `failed to find an out directory for module: ${slices
+        .slice(0, startIndex)
+        .join('/')}`
+    );
+  }
+  return path.join(finalRootDir, outFolder, ...slices.slice(startIndex));
+}
+
 export default class FileGenerator extends CodeStream {
   readonly #file;
   readonly #exports = new Map<
@@ -203,18 +237,25 @@ export default class FileGenerator extends CodeStream {
   readonly #parent;
   readonly #traits = new Map<string, ITrait>();
   readonly #uniqueNamePropertyName;
+  readonly #outFolders;
+  /**
+   * modules that come from node_modules
+   */
+  readonly #isExternalModule;
   #offset = 0;
   #nodes: Array<ASTGeneratorOutputNode> = [];
   #aliasUniqueId = 1;
   public constructor(
     file: IFile,
     {
+      outFolders: outDirectories,
       textDecoder,
       textEncoder,
       uniqueNamePropertyName = null,
       indentationSize,
       rootDir,
       outDir,
+      isExternalModule = false,
       root: parent = null,
       typeScriptConfiguration,
     }: IFileGeneratorOptions
@@ -222,9 +263,11 @@ export default class FileGenerator extends CodeStream {
     super(undefined, {
       indentationSize,
     });
+    this.#outFolders = outDirectories ?? new Map();
     this.#file = file;
     this.#parent = parent;
     this.#outDir = outDir;
+    this.#isExternalModule = isExternalModule;
     this.#uniqueNamePropertyName = uniqueNamePropertyName ?? '_name';
     this.#rootDir = rootDir;
     this.#indentationSize = indentationSize;
@@ -282,6 +325,9 @@ export default class FileGenerator extends CodeStream {
   #generateFiles() {
     const files = new Array<IOutputFile>();
     for (const f of [...this.#fileGenerators.values(), this]) {
+      if (f.#isExternalModule) {
+        continue;
+      }
       f.#generateFinalCode();
       let contents = f.value();
       f.#generateRequirementsCode();
@@ -338,11 +384,21 @@ export default class FileGenerator extends CodeStream {
   }
   #generateRequirementsCode() {
     for (const r of this.#requirements) {
-      const file = this.#resolveFromRootFolder(
-        'fileGenerator' in r
-          ? this.#removeRootDir(r.fileGenerator.#file.path)
-          : r.path
-      );
+      let requirementPath: string;
+      if ('fileGenerator' in r) {
+        if (r.fileGenerator.#isExternalModule) {
+          requirementPath = parseMaybeNodeModulesImport({
+            outFolders: this.#outFolders,
+            currentFilePath: r.fileGenerator.#file.path,
+          });
+        } else {
+          requirementPath = this.#removeRootDir(r.fileGenerator.#file.path);
+        }
+      } else {
+        requirementPath = r.path;
+      }
+
+      const file = this.#resolveFromRootFolder(requirementPath);
 
       if ('fileGenerator' in r) {
         const id =
@@ -380,10 +436,12 @@ export default class FileGenerator extends CodeStream {
     };
   }
   #resolveFromRootFolder(file: string) {
+    const finalImportedFile = this.#removeRootDir(this.#file.path);
+    if (file.includes('node_modules')) {
+      return path.relative(this.#file.path, file);
+    }
     return `./${path.relative(
-      path.dirname(
-        path.join(this.#outDir, this.#removeRootDir(this.#file.path))
-      ),
+      path.dirname(path.join(this.#outDir, finalImportedFile)),
       path.join(this.#outDir, file)
     )}`;
   }
@@ -452,10 +510,11 @@ export default class FileGenerator extends CodeStream {
         await this.#preprocessNode(node.value);
         break;
       case NodeType.ImportStatement: {
-        const inputFile = path.resolve(
-          path.dirname(this.#file.path),
-          node.from.value
-        );
+        const modulePath = node.from.value;
+        const isExternalModule = !modulePath.startsWith('.');
+        const inputFile = isExternalModule
+          ? path.resolve(this.#rootDir, `node_modules/${modulePath}`)
+          : path.resolve(path.dirname(this.#file.path), modulePath);
         const root = this.#root();
         let fileGenerator = root.#fileGenerators.get(inputFile);
         if (!fileGenerator) {
@@ -465,6 +524,7 @@ export default class FileGenerator extends CodeStream {
             },
             {
               root: root,
+              isExternalModule,
               uniqueNamePropertyName: root.#uniqueNamePropertyName,
               indentationSize: this.#indentationSize,
               rootDir: this.#rootDir,
