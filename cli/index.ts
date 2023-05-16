@@ -23,6 +23,20 @@ import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
     getNamedArgument(args, '--output', getString) ??
     'schema';
 
+  let outFolder: string | null = null;
+  const outFolders = new Map<string, string>();
+
+  do {
+    outFolder = getNamedArgument(args, '--external', getString);
+    if (outFolder) {
+      const [k, v] = outFolder.split(':');
+      if (typeof k === 'undefined' || typeof v === 'undefined') {
+        throw new Error('--external format is: --external ./a:__compiled__');
+      }
+      outFolders.set(path.resolve(process.cwd(), k), v);
+    }
+  } while (outFolder !== null);
+
   for (let i = 0; i < args.length; i++) {
     const arg = args[0];
     switch (arg) {
@@ -66,6 +80,7 @@ import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
       path: mainFile,
     },
     {
+      outFolders,
       textDecoder: new TextDecoder(),
       textEncoder: new TextEncoder(),
       uniqueNamePropertyName,
