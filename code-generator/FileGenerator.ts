@@ -647,6 +647,7 @@ export default class FileGenerator extends CodeStream {
         case GenericName.String:
         case GenericName.Long:
         case GenericName.UnsignedLong:
+        case GenericName.Boolean:
         case GenericName.NullTerminatedString:
           this.append(`${v1} === ${v2}`);
           break;
@@ -824,6 +825,8 @@ export default class FileGenerator extends CodeStream {
       switch (resolved.generic) {
         case GenericName.Bytes:
           return 'new Uint8Array(0)';
+        case GenericName.Boolean:
+          return 'false';
         case GenericName.Long:
         case GenericName.UnsignedLong:
           return '"0"';
@@ -994,6 +997,8 @@ export default class FileGenerator extends CodeStream {
     const { resolvedTypeExpression: resolved, readOnly } = options;
     if ('generic' in resolved) {
       switch (resolved.generic) {
+        case GenericName.Boolean:
+          return 'boolean';
         case GenericName.Integer:
         case GenericName.Uint32:
         case GenericName.Int32:
@@ -1128,6 +1133,7 @@ export default class FileGenerator extends CodeStream {
           case GenericName.Double:
           case GenericName.Uint16:
           case GenericName.Int16:
+          case GenericName.Boolean:
           case GenericName.String:
           case GenericName.NullTerminatedString:
           case GenericName.Bytes:
@@ -1426,6 +1432,11 @@ export default class FileGenerator extends CodeStream {
             `${serializerVarName}.writeNullTerminatedString(${value});\n`
           );
           break;
+        case GenericName.Boolean:
+          this.write(
+            `${serializerVarName}.writeUint8(${value} === true ? 1 : 0);\n`
+          );
+          break;
         case GenericName.Float:
           this.write(`${serializerVarName}.writeFloat(${value});\n`);
           break;
@@ -1588,6 +1599,9 @@ export default class FileGenerator extends CodeStream {
           break;
         case GenericName.NullTerminatedString:
           this.write(`${value} = __d.readNullTerminatedString();\n`);
+          break;
+        case GenericName.Boolean:
+          this.write(`${value} = __d.readUint8() === 1;\n`);
           break;
         case GenericName.Long:
           this.write(`${value} = __d.readSignedLong();\n`);

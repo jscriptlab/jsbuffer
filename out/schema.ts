@@ -2037,3 +2037,83 @@ export function updateNormalStringList(value: normalStringList, changes: Partial
   }
   return value;
 }
+export interface boolAndTupleInputParams {
+  sorryIJustLoveTuples: [boolean,boolean,[boolean,boolean]];
+}
+export function boolAndTuple(params: boolAndTupleInputParams): boolAndTuple {
+  return {
+    _name: 'schema.boolAndTuple',
+    sorryIJustLoveTuples: params['sorryIJustLoveTuples']
+  };
+}
+export function encodeBoolAndTuple(__s: ISerializer, value: boolAndTuple) {
+  __s.writeInt32(1412094097);
+  /**
+   * encoding param: sorryIJustLoveTuples
+   */
+  const __pv0 = value['sorryIJustLoveTuples'];
+  const __t1 = __pv0[0];
+  __s.writeUint8(__t1 === true ? 1 : 0);
+  const __t2 = __pv0[1];
+  __s.writeUint8(__t2 === true ? 1 : 0);
+  const __t4 = __pv0[2];
+  const __t7 = __t4[0];
+  __s.writeUint8(__t7 === true ? 1 : 0);
+  const __t8 = __t4[1];
+  __s.writeUint8(__t8 === true ? 1 : 0);
+}
+export function decodeBoolAndTuple(__d: IDeserializer): boolAndTuple | null {
+  const __id = __d.readInt32();
+  /**
+   * decode header
+   */
+  if(__id !== 1412094097) return null;
+  let sorryIJustLoveTuples: [boolean,boolean,[boolean,boolean]];
+  /**
+   * decoding param: sorryIJustLoveTuples
+   */
+  let __e1: boolean;
+  __e1 = __d.readUint8() === 1;
+  let __e2: boolean;
+  __e2 = __d.readUint8() === 1;
+  let __e3: [boolean,boolean];
+  let __e4: boolean;
+  __e4 = __d.readUint8() === 1;
+  let __e5: boolean;
+  __e5 = __d.readUint8() === 1;
+  __e3 = [__e4,__e5];
+  sorryIJustLoveTuples = [__e1,__e2,__e3];
+  return {
+    _name: 'schema.boolAndTuple',
+    sorryIJustLoveTuples
+  };
+}
+export interface boolAndTuple  {
+  _name: 'schema.boolAndTuple';
+  sorryIJustLoveTuples: [boolean,boolean,[boolean,boolean]];
+}
+export function defaultBoolAndTuple(params: Partial<boolAndTupleInputParams> = {}): boolAndTuple {
+  return boolAndTuple({
+    sorryIJustLoveTuples: [false,false,[false,false]],
+    ...params
+  });
+}
+export function compareBoolAndTuple(__a: boolAndTuple, __b: boolAndTuple): boolean {
+  return (
+    /**
+     * compare parameter sorryIJustLoveTuples
+     */
+    /* compare tuple item 0 of type boolean */ ((__a00, __b00) => __a00 === __b00)(__a['sorryIJustLoveTuples'][0],__b['sorryIJustLoveTuples'][0]) && /* compare tuple item 1 of type boolean */ ((__a01, __b01) => __a01 === __b01)(__a['sorryIJustLoveTuples'][1],__b['sorryIJustLoveTuples'][1]) && /* compare tuple item 2 of type [boolean,boolean] */ ((__a02, __b02) => /* compare tuple item 0 of type boolean */ ((__a60, __b60) => __a60 === __b60)(__a02[0],__b02[0]) && /* compare tuple item 1 of type boolean */ ((__a61, __b61) => __a61 === __b61)(__a02[1],__b02[1]))(__a['sorryIJustLoveTuples'][2],__b['sorryIJustLoveTuples'][2])
+  );
+}
+export function updateBoolAndTuple(value: boolAndTuple, changes: Partial<boolAndTupleInputParams>) {
+  if(typeof changes['sorryIJustLoveTuples'] !== 'undefined') {
+    if(!(/* compare tuple item 0 of type boolean */ ((__a10, __b10) => __a10 === __b10)(changes['sorryIJustLoveTuples'][0],value['sorryIJustLoveTuples'][0]) && /* compare tuple item 1 of type boolean */ ((__a11, __b11) => __a11 === __b11)(changes['sorryIJustLoveTuples'][1],value['sorryIJustLoveTuples'][1]) && /* compare tuple item 2 of type [boolean,boolean] */ ((__a12, __b12) => /* compare tuple item 0 of type boolean */ ((__a70, __b70) => __a70 === __b70)(__a12[0],__b12[0]) && /* compare tuple item 1 of type boolean */ ((__a71, __b71) => __a71 === __b71)(__a12[1],__b12[1]))(changes['sorryIJustLoveTuples'][2],value['sorryIJustLoveTuples'][2]))) {
+      value = boolAndTuple({
+        ...value,
+        sorryIJustLoveTuples: changes['sorryIJustLoveTuples'],
+      });
+    }
+  }
+  return value;
+}

@@ -3,6 +3,7 @@ enum GenericName {
   Long = 'long',
   UnsignedLong = 'ulong',
   Float = 'float',
+  Boolean = 'bool',
   Double = 'double',
   /**
    * shortcut to int32

@@ -102,3 +102,7 @@ type nullTerminatedStringList {
 type normalStringList {
   vector<string> value;
 }
+
+type boolAndTuple {
+  tuple<bool, bool, tuple<bool,bool>> sorryIJustLoveTuples;
+}
