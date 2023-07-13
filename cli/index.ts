@@ -5,7 +5,12 @@ import path from 'path';
 import { FileGenerator } from '../code-generator';
 import fs from 'fs';
 import { TextDecoder, TextEncoder } from 'util';
-import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
+import {
+  getArgument,
+  getInteger,
+  getNamedArgument,
+  getString,
+} from 'cli-argument-helper';
 
 (async () => {
   const args = Array.from(process.argv).slice(2);
@@ -25,6 +30,7 @@ import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
     getNamedArgument(args, '-o', getString) ??
     getNamedArgument(args, '--output', getString) ??
     'schema';
+  const noTypeScriptConfig = getArgument(args, '--no-ts-config') !== null;
 
   let outFolder: string | null = null;
   const outFolders = new Map<string, string>();
@@ -73,12 +79,16 @@ import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
    */
   await fs.promises.access(mainFile, fs.constants.R_OK);
   assert.strict.ok((await fs.promises.stat(mainFile)).isFile());
-  let typeScriptConfiguration: Record<string, unknown> = {};
-  if (tsExtends !== null) {
-    typeScriptConfiguration = {
-      ...typeScriptConfiguration,
-      extends: path.relative(outDir, path.resolve(process.cwd(), tsExtends)),
-    };
+  let typeScriptConfiguration: Record<string, unknown> | null = {};
+  if (noTypeScriptConfig) {
+    typeScriptConfiguration = null;
+  } else {
+    if (tsExtends !== null) {
+      typeScriptConfiguration = {
+        ...typeScriptConfiguration,
+        extends: path.relative(outDir, path.resolve(process.cwd(), tsExtends)),
+      };
+    }
   }
   const generator = new FileGenerator(
     {
@@ -89,18 +99,19 @@ import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
         outFolders,
         nodeModulesFolder,
       },
-
+      root: null,
       textDecoder: new TextDecoder(),
       textEncoder: new TextEncoder(),
       uniqueNamePropertyName,
-      rootDir: path.dirname(mainFile),
+      compilerOptions: {
+        rootDir: path.dirname(mainFile),
+      },
       typeScriptConfiguration,
-      outDir,
       indentationSize,
     }
   );
   for (const file of await generator.generate()) {
-    const outFile = path.resolve(outDir, file.file);
+    const outFile = path.resolve(outDir, file.path);
     try {
       await fs.promises.access(path.dirname(outFile), fs.constants.W_OK);
     } catch (reason) {

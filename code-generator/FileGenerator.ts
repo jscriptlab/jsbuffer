@@ -130,7 +130,7 @@ export type IdentifierImport =
 export interface IFileGeneratorOptions {
   indentationSize: number;
   textDecoder: ITextDecoder;
-  typeScriptConfiguration?: Record<string, unknown>;
+  typeScriptConfiguration?: Record<string, unknown> | null;
   textEncoder: ITextEncoder;
   root: FileGenerator | null;
   uniqueNamePropertyName?: string | null;
@@ -249,7 +249,6 @@ export default class FileGenerator extends CodeStream {
   readonly #isExternalModule;
   #offset = 0;
   #nodes: Array<ASTGeneratorOutputNode> = [];
-  #aliasUniqueId = 1;
   public constructor(
     file: IFile,
     {
@@ -281,7 +280,8 @@ export default class FileGenerator extends CodeStream {
   public async generate() {
     await this.#preprocess();
     this.#fillTraits();
-    return this.#generateFiles();
+    const files = this.#generateFiles();
+    return files;
   }
   async #preprocess() {
     const tokenizer = new Tokenizer({
@@ -436,14 +436,16 @@ export default class FileGenerator extends CodeStream {
     }
     files.push(this.#generateTypesFile());
 
-    files.push(
-      this.#generateTypeScriptConfigurationFile({
-        compilerOptions: {
-          noUncheckedIndexedAccess: false,
-        },
-        include: files.map((f) => f.path).filter((t) => t.endsWith('.ts')),
-      })
-    );
+    if (this.#typeScriptConfiguration !== null) {
+      files.push(
+        this.#generateTypeScriptConfigurationFile({
+          compilerOptions: {
+            noUncheckedIndexedAccess: false,
+          },
+          include: files.map((f) => f.path).filter((t) => t.endsWith('.ts')),
+        })
+      );
+    }
     return files;
   }
   #removeRootDirOrFail(value: string) {
@@ -611,22 +613,11 @@ export default class FileGenerator extends CodeStream {
         break;
       case NodeType.ImportStatement: {
         const modulePath = node.from.value;
-        const isExternalModule = false;
-        // let inputFile: string;
-        // if (isExternalModule) {
-        //   if (this.#externalModules === null) {
-        //     throw new Exception(
-        //       'For external modules to be imported, you need ' +
-        //         'to specify `externalModules` property'
-        //     );
-        //   }
-        //   inputFile = path.resolve(
-        //     this.#externalModules.nodeModulesFolder,
-        //     modulePath
-        //   );
-        // } else {
-        //   inputFile = path.resolve(path.dirname(this.#file.path), modulePath);
-        // }
+
+        if (!modulePath.startsWith('.')) {
+          debugger;
+        }
+
         const inputFile = path.resolve(
           path.dirname(this.#file.path),
           modulePath

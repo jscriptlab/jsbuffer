@@ -3,6 +3,8 @@ import { FileGenerator } from '../code-generator';
 import path from 'path';
 import fs from 'fs';
 import inspector from 'inspector';
+import { spawn } from 'child-process-utilities';
+import Exception from '../exception/Exception';
 
 async function generateSchema() {
   const compilerOptions = {
@@ -38,20 +40,33 @@ async function generateSchema() {
     }
     await fs.promises.writeFile(finalFilePath, f.contents);
   }
-
-  console.log('ok');
 }
 
 (async () => {
-  const args = Array.from(process.argv);
+  const args = process.argv.slice(2);
   const inspect = getArgument(args, '--inspect');
   const shouldGenerateSchema = getArgument(args, '--generate-schema');
+  const shouldRunTests = getArgument(args, '--test');
   if (inspect) {
     inspector.open(undefined, undefined, true);
+  }
+  if (shouldRunTests) {
+    await spawn(
+      'npx',
+      ['sarg', '--require', 'ts-node/register', 'test/**/*.ts'],
+      {
+        stdio: 'inherit',
+        cwd: path.dirname(__dirname),
+      }
+    ).wait();
   }
   if (shouldGenerateSchema) {
     await generateSchema();
   }
+  for (const arg of args) {
+    throw new Exception(`Invalid argument: ${arg}`);
+  }
+  console.log('ok');
 })().catch((reason) => {
   console.error(reason);
   process.exitCode = 1;

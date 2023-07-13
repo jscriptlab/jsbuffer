@@ -1,7 +1,8 @@
 import path from 'path';
 import fs from 'fs';
-import glob from 'glob';
+import * as glob from 'glob';
 import { FileGenerator } from '../code-generator';
+import { spawn } from 'child-process-utilities';
 
 export async function generateWithVirtualFs({
   mainFile,
@@ -39,7 +40,8 @@ export async function generateWithVirtualFs({
       path: path.resolve(rootDir, mainFile),
     },
     {
-      // rootDir: rootDir,
+      compilerOptions: { rootDir },
+      root: null,
       // outDir: outDir,
       ...additionalFileGeneratorOptions,
       indentationSize: 2,
@@ -55,7 +57,7 @@ export async function generateWithVirtualFs({
   const compileTypeScriptProject = async () => {
     await spawn('npx', ['tsc'], {
       cwd: outDir,
-    });
+    }).wait();
     return {
       tgzFiles: glob.sync(path.resolve(rootDir, '*.tgz')),
     };
@@ -78,7 +80,7 @@ export async function generateWithVirtualFs({
    */
   await spawn('npm', ['install', '--save-dev', 'typescript@5.x'], {
     cwd: rootDir,
-  });
+  }).wait();
   if (packageInfo) {
     /**
      * create package.json
@@ -91,7 +93,7 @@ export async function generateWithVirtualFs({
   const pack = () =>
     spawn('npm', ['pack'], {
       cwd: rootDir,
-    });
+    }).wait();
   return {
     test,
     pack,
