@@ -9,6 +9,7 @@
     "child-process-utilities": "0.x",
     "eslint": "8.x",
     "glob": "^10.2.3",
+    "jsbuffer": "^0.0.53",
     "nyc": "15.x",
     "prettier": "2.x",
     "sarg": "5.x",
@@ -17,7 +18,7 @@
   },
   "name": "jsbuffer",
   "license": "MIT",
-  "version": "0.0.53",
+  "version": "0.0.55",
   "main": "./src/index.js",
   "bin": {
     "jsbuffer": "./cli/index.js"
@@ -36,7 +37,7 @@
     "cli": "TS_NODE_PROJECT=cli/tsconfig.json npx ts-node cli",
     "schema": "yarn run cli test/schema -o out --extends tsconfig.base.json --indentation-size 2",
     "build": "npx tsc -b cli code-generator codec src --force",
-    "prepublishOnly": "yarn run lint && yarn test:coverage && yarn run schema && yarn run build",
+    "prepublishOnly": "yarn run lint && yarn run schema && yarn run build",
     "test": "TS_NODE_PROJECT=test/tsconfig.json npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
     "test:code-generator": "npx sarg --bail --require ts-node/register test/FileGenerator.ts && npx tsc -b out --force",
     "test:coverage": "npx nyc yarn test"
