@@ -1,5 +1,5 @@
-import {ISerializer} from "./__types__";
-import {IDeserializer} from "./__types__";
+import { ISerializer } from "./__types__";
+import { IDeserializer } from "./__types__";
 export type User = Readonly<user> | Readonly<userDeleted>;
 export function encodeUserTrait(__s: ISerializer,value: User) {
   switch(value._name) {
@@ -16,13 +16,13 @@ export function decodeUserTrait(__d: IDeserializer) {
   __d.rewindInt32();
   let value: user | userDeleted;
   switch(__id) {
-    case 830789580: {
+    case -515673338: {
       const tmp = decodeUser(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
-    case -1010206580: {
+    case -1712567218: {
       const tmp = decodeUserDeleted(__d);
       if(tmp === null) return null;
       value = tmp;
@@ -58,7 +58,7 @@ export function decodeTestTrait(__d: IDeserializer) {
   __d.rewindInt32();
   let value: test;
   switch(__id) {
-    case -784129413: {
+    case -1294512646: {
       const tmp = decodeTest(__d);
       if(tmp === null) return null;
       value = tmp;
@@ -90,7 +90,7 @@ export function user(params: userInputParams): user {
   };
 }
 export function encodeUser(__s: ISerializer, value: user) {
-  __s.writeInt32(830789580);
+  __s.writeInt32(-515673338);
   /**
    * encoding param: firstName
    */
@@ -112,7 +112,7 @@ export function decodeUser(__d: IDeserializer): user | null {
   /**
    * decode header
    */
-  if(__id !== 830789580) return null;
+  if(__id !== -515673338) return null;
   let firstName: string;
   let aliases: Array<string>;
   /**
@@ -187,7 +187,7 @@ export function userDeleted(params: userDeletedInputParams): userDeleted {
   };
 }
 export function encodeUserDeleted(__s: ISerializer, value: userDeleted) {
-  __s.writeInt32(-1010206580);
+  __s.writeInt32(-1712567218);
   /**
    * encoding param: deletedAt
    */
@@ -199,7 +199,7 @@ export function decodeUserDeleted(__d: IDeserializer): userDeleted | null {
   /**
    * decode header
    */
-  if(__id !== -1010206580) return null;
+  if(__id !== -1712567218) return null;
   let deletedAt: number;
   /**
    * decoding param: deletedAt
@@ -251,7 +251,7 @@ export function test(params: testInputParams): test {
   };
 }
 export function encodeTest(__s: ISerializer, value: test) {
-  __s.writeInt32(-784129413);
+  __s.writeInt32(-1294512646);
   /**
    * encoding param: user
    */
@@ -283,7 +283,7 @@ export function decodeTest(__d: IDeserializer): test | null {
   /**
    * decode header
    */
-  if(__id !== -784129413) return null;
+  if(__id !== -1294512646) return null;
   let user: user;
   let b: Array<Array<string | null>>;
   /**

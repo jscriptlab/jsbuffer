@@ -18,6 +18,7 @@
   },
   "references": [
     { "path": "../codec" },
+    { "path": "../helpers" },
     { "path": "../out" },
     { "path": "../src" },
     {

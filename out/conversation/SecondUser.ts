@@ -1,5 +1,5 @@
-import {ISerializer} from "./../__types__";
-import {IDeserializer} from "./../__types__";
+import { ISerializer } from "../__types__";
+import { IDeserializer } from "../__types__";
 export interface UserInputParams {
   firstName: string;
 }
@@ -10,7 +10,7 @@ export function User(params: UserInputParams): User {
   };
 }
 export function encodeUser(__s: ISerializer, value: User) {
-  __s.writeInt32(1030058769);
+  __s.writeInt32(-54755335);
   /**
    * encoding param: firstName
    */
@@ -22,7 +22,7 @@ export function decodeUser(__d: IDeserializer): User | null {
   /**
    * decode header
    */
-  if(__id !== 1030058769) return null;
+  if(__id !== -54755335) return null;
   let firstName: string;
   /**
    * decoding param: firstName

@@ -1,5 +1,5 @@
-import {ISerializer} from "./__types__";
-import {IDeserializer} from "./__types__";
+import { ISerializer } from "./__types__";
+import { IDeserializer } from "./__types__";
 export interface userInputParams {
   id: number;
   firstName: string;
@@ -14,7 +14,7 @@ export function user(params: userInputParams): user {
   };
 }
 export function encodeUser(__s: ISerializer, value: user) {
-  __s.writeInt32(-556582279);
+  __s.writeInt32(-1856063849);
   /**
    * encoding param: id
    */
@@ -36,7 +36,7 @@ export function decodeUser(__d: IDeserializer): user | null {
   /**
    * decode header
    */
-  if(__id !== -556582279) return null;
+  if(__id !== -1856063849) return null;
   let id: number;
   let firstName: string;
   let lastName: string;
@@ -130,7 +130,7 @@ export function post(params: postInputParams): post {
   };
 }
 export function encodePost(__s: ISerializer, value: post) {
-  __s.writeInt32(-936279126);
+  __s.writeInt32(-1859591648);
   /**
    * encoding param: id
    */
@@ -157,7 +157,7 @@ export function decodePost(__d: IDeserializer): post | null {
   /**
    * decode header
    */
-  if(__id !== -936279126) return null;
+  if(__id !== -1859591648) return null;
   let id: number;
   let title: string;
   let comments: Array<comment>;
@@ -258,7 +258,7 @@ export function comment(params: commentInputParams): comment {
   };
 }
 export function encodeComment(__s: ISerializer, value: comment) {
-  __s.writeInt32(-78333276);
+  __s.writeInt32(1545039771);
   /**
    * encoding param: id
    */
@@ -280,7 +280,7 @@ export function decodeComment(__d: IDeserializer): comment | null {
   /**
    * decode header
    */
-  if(__id !== -78333276) return null;
+  if(__id !== 1545039771) return null;
   let id: number;
   let title: string;
   let contents: string;
@@ -370,7 +370,7 @@ export function tupleTest(params: tupleTestInputParams): tupleTest {
   };
 }
 export function encodeTupleTest(__s: ISerializer, value: tupleTest) {
-  __s.writeInt32(-1611262607);
+  __s.writeInt32(-245918342);
   /**
    * encoding param: data
    */
@@ -406,7 +406,7 @@ export function decodeTupleTest(__d: IDeserializer): tupleTest | null {
   /**
    * decode header
    */
-  if(__id !== -1611262607) return null;
+  if(__id !== -245918342) return null;
   let data: [user,post,comment,Array<comment>,Array<comment | null>];
   /**
    * decoding param: data
@@ -490,7 +490,7 @@ export function tupleTupleTest(params: tupleTupleTestInputParams): tupleTupleTes
   };
 }
 export function encodeTupleTupleTest(__s: ISerializer, value: tupleTupleTest) {
-  __s.writeInt32(-1368648765);
+  __s.writeInt32(-1761980562);
   /**
    * encoding param: a
    */
@@ -522,7 +522,7 @@ export function decodeTupleTupleTest(__d: IDeserializer): tupleTupleTest | null 
   /**
    * decode header
    */
-  if(__id !== -1368648765) return null;
+  if(__id !== -1761980562) return null;
   let a: [[number,string,Array<[string,number]>],number,string,number];
   /**
    * decoding param: a
@@ -595,7 +595,7 @@ export function superTupleTupleTest(params: superTupleTupleTestInputParams): sup
   };
 }
 export function encodeSuperTupleTupleTest(__s: ISerializer, value: superTupleTupleTest) {
-  __s.writeInt32(-106162167);
+  __s.writeInt32(645409346);
   /**
    * encoding param: a
    */
@@ -614,7 +614,7 @@ export function decodeSuperTupleTupleTest(__d: IDeserializer): superTupleTupleTe
   /**
    * decode header
    */
-  if(__id !== -106162167) return null;
+  if(__id !== 645409346) return null;
   let a: [[[number],number],number];
   /**
    * decoding param: a

@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "types": ["node"]
+  },
+  "references": [{ "path": "../code-generator" }],
+  "extends": "../tsconfig.base.json"
+}
