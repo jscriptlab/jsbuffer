@@ -7,9 +7,21 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "Generate Test Schema",
       "program": "${workspaceFolder}/scripts",
       "args": ["--generate-schema"],
+      "env": {
+        "NODE_OPTIONS": "--require ts-node/register",
+        "TS_NODE_TRANSPILE_ONLY": "1",
+        "TS_NODE_PROJECT": "${workspaceFolder}/scripts/tsconfig.json"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Test",
+      "program": "${workspaceFolder}/scripts",
+      "args": ["--test"],
       "env": {
         "NODE_OPTIONS": "--require ts-node/register",
         "TS_NODE_TRANSPILE_ONLY": "1",
