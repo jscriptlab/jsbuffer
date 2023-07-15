@@ -39,7 +39,6 @@
     "build": "npx tsc -b cli code-generator codec src --force",
     "prepublishOnly": "yarn run lint && yarn run schema && yarn run build",
     "test": "TS_NODE_PROJECT=test/tsconfig.json npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
-    "test:code-generator": "npx sarg --bail --require ts-node/register test/FileGenerator.ts && npx tsc -b out --force",
     "test:coverage": "npx nyc yarn test"
   },
   "dependencies": {
