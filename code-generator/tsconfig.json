@@ -3,12 +3,14 @@
   "include": [
     "index.ts",
     "GenericName.ts",
+    "schema/**/*.ts",
     "FileGenerator.ts",
     "JavaScriptObjectStringify.ts",
     "typeUtilities.ts",
     "fileGeneratorUtilities.ts",
     "stringUtilities.ts"
   ],
+  "exclude": ["**/*.d.ts"],
   "compilerOptions": {
     "types": ["node"]
   },

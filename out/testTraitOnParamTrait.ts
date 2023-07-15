@@ -1,5 +1,5 @@
-import {ISerializer} from "./__types__";
-import {IDeserializer} from "./__types__";
+import { ISerializer } from "./__types__";
+import { IDeserializer } from "./__types__";
 export type A = Readonly<B> | Readonly<C> | Readonly<D>;
 export function encodeATrait(__s: ISerializer,value: A) {
   switch(value._name) {
@@ -19,19 +19,19 @@ export function decodeATrait(__d: IDeserializer) {
   __d.rewindInt32();
   let value: B | C | D;
   switch(__id) {
-    case -1936889602: {
+    case 625921672: {
       const tmp = decodeB(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
-    case 1666122688: {
+    case -896752202: {
       const tmp = decodeC(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
-    case -2121066311: {
+    case 676380367: {
       const tmp = decodeD(__d);
       if(tmp === null) return null;
       value = tmp;
@@ -67,7 +67,7 @@ export function B(params: BInputParams): B {
   };
 }
 export function encodeB(__s: ISerializer, value: B) {
-  __s.writeInt32(-1936889602);
+  __s.writeInt32(625921672);
   /**
    * encoding param: a
    */
@@ -79,7 +79,7 @@ export function decodeB(__d: IDeserializer): B | null {
   /**
    * decode header
    */
-  if(__id !== -1936889602) return null;
+  if(__id !== 625921672) return null;
   let a: number;
   /**
    * decoding param: a
@@ -129,7 +129,7 @@ export function C(params: CInputParams): C {
   };
 }
 export function encodeC(__s: ISerializer, value: C) {
-  __s.writeInt32(1666122688);
+  __s.writeInt32(-896752202);
   /**
    * encoding param: a
    */
@@ -141,7 +141,7 @@ export function decodeC(__d: IDeserializer): C | null {
   /**
    * decode header
    */
-  if(__id !== 1666122688) return null;
+  if(__id !== -896752202) return null;
   let a: number;
   /**
    * decoding param: a
@@ -191,7 +191,7 @@ export function D(params: DInputParams): D {
   };
 }
 export function encodeD(__s: ISerializer, value: D) {
-  __s.writeInt32(-2121066311);
+  __s.writeInt32(676380367);
   /**
    * encoding param: a
    */
@@ -203,7 +203,7 @@ export function decodeD(__d: IDeserializer): D | null {
   /**
    * decode header
    */
-  if(__id !== -2121066311) return null;
+  if(__id !== 676380367) return null;
   let a: number;
   /**
    * decoding param: a

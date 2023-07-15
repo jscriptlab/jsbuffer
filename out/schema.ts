@@ -1,13 +1,11 @@
-import {User} from "./User";
-import {Conversations} from "./conversation/index";
-import {Request} from "./Request";
-import {ISerializer} from "./__types__";
-import {IDeserializer} from "./__types__";
-import {encodeUserTrait} from "./User";
-import {decodeUserTrait} from "./User";
-import {compareUserTrait} from "./User";
-import {compareUserTrait as compareUserTrait1} from "./User";
-import {IRequest} from "./__types__";
+import { User } from "./User";
+import { Conversations } from "./conversation/index";
+import { ISerializer } from "./__types__";
+import { IDeserializer } from "./__types__";
+import { encodeUserTrait } from "./User";
+import { decodeUserTrait } from "./User";
+import { compareUserTrait } from "./User";
+import { IRequest } from "./__types__";
 export interface testMapInputParams {
   a: ReadonlyMap<string, string>;
 }
@@ -18,7 +16,7 @@ export function testMap(params: testMapInputParams): testMap {
   };
 }
 export function encodeTestMap(__s: ISerializer, value: testMap) {
-  __s.writeInt32(538583618);
+  __s.writeInt32(-348036888);
   /**
    * encoding param: a
    */
@@ -34,7 +32,7 @@ export function decodeTestMap(__d: IDeserializer): testMap | null {
   /**
    * decode header
    */
-  if(__id !== 538583618) return null;
+  if(__id !== -348036888) return null;
   let a: Map<string, string>;
   /**
    * decoding param: a
@@ -95,7 +93,7 @@ export function testMap2(params: testMap2InputParams): testMap2 {
   };
 }
 export function encodeTestMap2(__s: ISerializer, value: testMap2) {
-  __s.writeInt32(929931693);
+  __s.writeInt32(1403508807);
   /**
    * encoding param: a
    */
@@ -137,7 +135,7 @@ export function decodeTestMap2(__d: IDeserializer): testMap2 | null {
   /**
    * decode header
    */
-  if(__id !== 929931693) return null;
+  if(__id !== 1403508807) return null;
   let a: Map<string | null, string>;
   let b: Map<string | null, [string,Map<number, number>]>;
   /**
@@ -246,7 +244,7 @@ export function testMap3(params: testMap3InputParams): testMap3 {
   };
 }
 export function encodeTestMap3(__s: ISerializer, value: testMap3) {
-  __s.writeInt32(-874850907);
+  __s.writeInt32(-148926955);
   /**
    * encoding param: a
    */
@@ -262,7 +260,7 @@ export function decodeTestMap3(__d: IDeserializer): testMap3 | null {
   /**
    * decode header
    */
-  if(__id !== -874850907) return null;
+  if(__id !== -148926955) return null;
   let a: Map<testMap2, string>;
   /**
    * decoding param: a
@@ -325,7 +323,7 @@ export function testSet(params: testSetInputParams): testSet {
   };
 }
 export function encodeTestSet(__s: ISerializer, value: testSet) {
-  __s.writeInt32(866975412);
+  __s.writeInt32(479279236);
   /**
    * encoding param: a
    */
@@ -350,7 +348,7 @@ export function decodeTestSet(__d: IDeserializer): testSet | null {
   /**
    * decode header
    */
-  if(__id !== 866975412) return null;
+  if(__id !== 479279236) return null;
   let a: Set<string>;
   let b: Set<number>;
   /**
@@ -438,7 +436,7 @@ export function testSet2(params: testSet2InputParams): testSet2 {
   };
 }
 export function encodeTestSet2(__s: ISerializer, value: testSet2) {
-  __s.writeInt32(-1158385585);
+  __s.writeInt32(780831394);
   /**
    * encoding param: a
    */
@@ -479,7 +477,7 @@ export function decodeTestSet2(__d: IDeserializer): testSet2 | null {
   /**
    * decode header
    */
-  if(__id !== -1158385585) return null;
+  if(__id !== 780831394) return null;
   let a: Set<string>;
   let b: Set<Map<string, string>>;
   let c: Set<[number,number]>;
@@ -601,14 +599,14 @@ export function Void(_: VoidInputParams = {}): Void {
   };
 }
 export function encodeVoid(__s: ISerializer, _: Void) {
-  __s.writeInt32(-1357667663);
+  __s.writeInt32(1554016157);
 }
 export function decodeVoid(__d: IDeserializer): Void | null {
   const __id = __d.readInt32();
   /**
    * decode header
    */
-  if(__id !== -1357667663) return null;
+  if(__id !== 1554016157) return null;
   return {
     _name: 'schema.Void',
   };
@@ -637,7 +635,7 @@ export function msg(params: msgInputParams): msg {
   };
 }
 export function encodeMsg(__s: ISerializer, value: msg) {
-  __s.writeInt32(716170895);
+  __s.writeInt32(-21503775);
   /**
    * encoding param: data
    */
@@ -650,7 +648,7 @@ export function decodeMsg(__d: IDeserializer): msg | null {
   /**
    * decode header
    */
-  if(__id !== 716170895) return null;
+  if(__id !== -21503775) return null;
   let data: Uint8Array;
   /**
    * decoding param: data
@@ -706,13 +704,13 @@ export function decodeResultTrait(__d: IDeserializer) {
   __d.rewindInt32();
   let value: Users | Posts;
   switch(__id) {
-    case 594466339: {
+    case -134915150: {
       const tmp = decodeUsers(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
-    case -1199678677: {
+    case -2079347816: {
       const tmp = decodePosts(__d);
       if(tmp === null) return null;
       value = tmp;
@@ -745,7 +743,7 @@ export function Users(params: UsersInputParams): Users {
   };
 }
 export function encodeUsers(__s: ISerializer, value: Users) {
-  __s.writeInt32(594466339);
+  __s.writeInt32(-134915150);
   /**
    * encoding param: users
    */
@@ -762,7 +760,7 @@ export function decodeUsers(__d: IDeserializer): Users | null {
   /**
    * decode header
    */
-  if(__id !== 594466339) return null;
+  if(__id !== -134915150) return null;
   let users: Array<User>;
   /**
    * decoding param: users
@@ -800,7 +798,7 @@ export function compareUsers(__a: Users, __b: Users): boolean {
 }
 export function updateUsers(value: Users, changes: Partial<UsersInputParams>) {
   if(typeof changes['users'] !== 'undefined') {
-    if(!(changes['users'].length === value['users'].length && changes['users'].every((__i,index) => (compareUserTrait1(__i,value['users'][index]))))) {
+    if(!(changes['users'].length === value['users'].length && changes['users'].every((__i,index) => (compareUserTrait(__i,value['users'][index]))))) {
       value = Users({
         ...value,
         users: changes['users'],
@@ -819,7 +817,7 @@ export function GetUserById(params: GetUserByIdInputParams): GetUserById {
   };
 }
 export function encodeGetUserById(__s: ISerializer, value: GetUserById) {
-  __s.writeInt32(-1984357298);
+  __s.writeInt32(-509540977);
   /**
    * encoding param: userId
    */
@@ -831,7 +829,7 @@ export function decodeGetUserById(__d: IDeserializer): GetUserById | null {
   /**
    * decode header
    */
-  if(__id !== -1984357298) return null;
+  if(__id !== -509540977) return null;
   let userId: number;
   /**
    * decoding param: userId
@@ -881,7 +879,7 @@ export function Post(params: PostInputParams): Post {
   };
 }
 export function encodePost(__s: ISerializer, value: Post) {
-  __s.writeInt32(377172772);
+  __s.writeInt32(-5915329);
   /**
    * encoding param: id
    */
@@ -893,7 +891,7 @@ export function decodePost(__d: IDeserializer): Post | null {
   /**
    * decode header
    */
-  if(__id !== 377172772) return null;
+  if(__id !== -5915329) return null;
   let id: number;
   /**
    * decoding param: id
@@ -943,7 +941,7 @@ export function Posts(params: PostsInputParams): Posts {
   };
 }
 export function encodePosts(__s: ISerializer, value: Posts) {
-  __s.writeInt32(-1199678677);
+  __s.writeInt32(-2079347816);
   /**
    * encoding param: posts
    */
@@ -960,7 +958,7 @@ export function decodePosts(__d: IDeserializer): Posts | null {
   /**
    * decode header
    */
-  if(__id !== -1199678677) return null;
+  if(__id !== -2079347816) return null;
   let posts: Array<Post>;
   /**
    * decoding param: posts
@@ -1017,7 +1015,7 @@ export function GetPostById(params: GetPostByIdInputParams): GetPostById {
   };
 }
 export function encodeGetPostById(__s: ISerializer, value: GetPostById) {
-  __s.writeInt32(-1572332129);
+  __s.writeInt32(1475680092);
   /**
    * encoding param: postId
    */
@@ -1029,7 +1027,7 @@ export function decodeGetPostById(__d: IDeserializer): GetPostById | null {
   /**
    * decode header
    */
-  if(__id !== -1572332129) return null;
+  if(__id !== 1475680092) return null;
   let postId: number;
   /**
    * decoding param: postId
@@ -1077,14 +1075,14 @@ export function GetConversations(_: GetConversationsInputParams = {}): GetConver
   };
 }
 export function encodeGetConversations(__s: ISerializer, _: GetConversations) {
-  __s.writeInt32(814848329);
+  __s.writeInt32(1250914260);
 }
 export function decodeGetConversations(__d: IDeserializer): GetConversations | null {
   const __id = __d.readInt32();
   /**
    * decode header
    */
-  if(__id !== 814848329) return null;
+  if(__id !== 1250914260) return null;
   return {
     _name: 'schema.GetConversations',
   };
@@ -1115,7 +1113,7 @@ export function Coordinates(params: CoordinatesInputParams): Coordinates {
   };
 }
 export function encodeCoordinates(__s: ISerializer, value: Coordinates) {
-  __s.writeInt32(1260153754);
+  __s.writeInt32(525914086);
   /**
    * encoding param: latitude
    */
@@ -1132,7 +1130,7 @@ export function decodeCoordinates(__d: IDeserializer): Coordinates | null {
   /**
    * decode header
    */
-  if(__id !== 1260153754) return null;
+  if(__id !== 525914086) return null;
   let latitude: number;
   let longitude: number;
   /**
@@ -1214,7 +1212,7 @@ export function ShouldSupportSeveralSequentialVectorParams(params: ShouldSupport
   };
 }
 export function encodeShouldSupportSeveralSequentialVectorParams(__s: ISerializer, value: ShouldSupportSeveralSequentialVectorParams) {
-  __s.writeInt32(-992083773);
+  __s.writeInt32(1149162669);
   /**
    * encoding param: a
    */
@@ -1315,7 +1313,7 @@ export function decodeShouldSupportSeveralSequentialVectorParams(__d: IDeseriali
   /**
    * decode header
    */
-  if(__id !== -992083773) return null;
+  if(__id !== 1149162669) return null;
   let a: Array<number>;
   let b: Array<number>;
   let c: Array<string>;
@@ -1545,7 +1543,7 @@ export function simpleTupleTest(params: simpleTupleTestInputParams): simpleTuple
   };
 }
 export function encodeSimpleTupleTest(__s: ISerializer, value: simpleTupleTest) {
-  __s.writeInt32(1950454485);
+  __s.writeInt32(-974195761);
   /**
    * encoding param: a
    */
@@ -1605,7 +1603,7 @@ export function decodeSimpleTupleTest(__d: IDeserializer): simpleTupleTest | nul
   /**
    * decode header
    */
-  if(__id !== 1950454485) return null;
+  if(__id !== -974195761) return null;
   let a: [number,number,number,Array<number>,string | null];
   let b: Array<[number,number,number,Array<number>,string | null]>;
   /**
@@ -1716,14 +1714,14 @@ export function emptyNode(_: emptyNodeInputParams = {}): emptyNode {
   };
 }
 export function encodeEmptyNode(__s: ISerializer, _: emptyNode) {
-  __s.writeInt32(-1657223713);
+  __s.writeInt32(538176473);
 }
 export function decodeEmptyNode(__d: IDeserializer): emptyNode | null {
   const __id = __d.readInt32();
   /**
    * decode header
    */
-  if(__id !== -1657223713) return null;
+  if(__id !== 538176473) return null;
   return {
     _name: 'schema.emptyNode',
   };
@@ -1754,7 +1752,7 @@ export function user(params: userInputParams): user {
   };
 }
 export function encodeUser(__s: ISerializer, value: user) {
-  __s.writeInt32(-399411702);
+  __s.writeInt32(473502249);
   /**
    * encoding param: id
    */
@@ -1771,7 +1769,7 @@ export function decodeUser(__d: IDeserializer): user | null {
   /**
    * decode header
    */
-  if(__id !== -399411702) return null;
+  if(__id !== 473502249) return null;
   let id: number;
   let name: string;
   /**
@@ -1841,7 +1839,7 @@ export function supportNullTerminatedString(params: supportNullTerminatedStringI
   };
 }
 export function encodeSupportNullTerminatedString(__s: ISerializer, value: supportNullTerminatedString) {
-  __s.writeInt32(-1975570504);
+  __s.writeInt32(-1686209173);
   /**
    * encoding param: value
    */
@@ -1853,7 +1851,7 @@ export function decodeSupportNullTerminatedString(__d: IDeserializer): supportNu
   /**
    * decode header
    */
-  if(__id !== -1975570504) return null;
+  if(__id !== -1686209173) return null;
   let value: string;
   /**
    * decoding param: value
@@ -1903,7 +1901,7 @@ export function nullTerminatedStringList(params: nullTerminatedStringListInputPa
   };
 }
 export function encodeNullTerminatedStringList(__s: ISerializer, value: nullTerminatedStringList) {
-  __s.writeInt32(2084234152);
+  __s.writeInt32(141023207);
   /**
    * encoding param: value
    */
@@ -1920,7 +1918,7 @@ export function decodeNullTerminatedStringList(__d: IDeserializer): nullTerminat
   /**
    * decode header
    */
-  if(__id !== 2084234152) return null;
+  if(__id !== 141023207) return null;
   let value: Array<string>;
   /**
    * decoding param: value
@@ -1975,7 +1973,7 @@ export function normalStringList(params: normalStringListInputParams): normalStr
   };
 }
 export function encodeNormalStringList(__s: ISerializer, value: normalStringList) {
-  __s.writeInt32(75642925);
+  __s.writeInt32(1917159365);
   /**
    * encoding param: value
    */
@@ -1992,7 +1990,7 @@ export function decodeNormalStringList(__d: IDeserializer): normalStringList | n
   /**
    * decode header
    */
-  if(__id !== 75642925) return null;
+  if(__id !== 1917159365) return null;
   let value: Array<string>;
   /**
    * decoding param: value
@@ -2047,7 +2045,7 @@ export function boolAndTuple(params: boolAndTupleInputParams): boolAndTuple {
   };
 }
 export function encodeBoolAndTuple(__s: ISerializer, value: boolAndTuple) {
-  __s.writeInt32(1412094097);
+  __s.writeInt32(559659931);
   /**
    * encoding param: sorryIJustLoveTuples
    */
@@ -2067,7 +2065,7 @@ export function decodeBoolAndTuple(__d: IDeserializer): boolAndTuple | null {
   /**
    * decode header
    */
-  if(__id !== 1412094097) return null;
+  if(__id !== 559659931) return null;
   let sorryIJustLoveTuples: [boolean,boolean,[boolean,boolean]];
   /**
    * decoding param: sorryIJustLoveTuples

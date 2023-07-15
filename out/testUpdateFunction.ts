@@ -1,5 +1,5 @@
-import {ISerializer} from "./__types__";
-import {IDeserializer} from "./__types__";
+import { ISerializer } from "./__types__";
+import { IDeserializer } from "./__types__";
 export type E = Readonly<A> | Readonly<B> | Readonly<C> | Readonly<D>;
 export function encodeETrait(__s: ISerializer,value: E) {
   switch(value._name) {
@@ -22,25 +22,25 @@ export function decodeETrait(__d: IDeserializer) {
   __d.rewindInt32();
   let value: A | B | C | D;
   switch(__id) {
-    case 79225826: {
+    case -53039136: {
       const tmp = decodeA(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
-    case -408816356: {
+    case 533707038: {
       const tmp = decodeB(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
-    case 5059551: {
+    case -131891235: {
       const tmp = decodeC(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
-    case -493803354: {
+    case 452945060: {
       const tmp = decodeD(__d);
       if(tmp === null) return null;
       value = tmp;
@@ -79,7 +79,7 @@ export function A(params: AInputParams): A {
   };
 }
 export function encodeA(__s: ISerializer, value: A) {
-  __s.writeInt32(79225826);
+  __s.writeInt32(-53039136);
   /**
    * encoding param: a
    */
@@ -91,7 +91,7 @@ export function decodeA(__d: IDeserializer): A | null {
   /**
    * decode header
    */
-  if(__id !== 79225826) return null;
+  if(__id !== -53039136) return null;
   let a: number;
   /**
    * decoding param: a
@@ -141,7 +141,7 @@ export function B(params: BInputParams): B {
   };
 }
 export function encodeB(__s: ISerializer, value: B) {
-  __s.writeInt32(-408816356);
+  __s.writeInt32(533707038);
   /**
    * encoding param: a
    */
@@ -153,7 +153,7 @@ export function decodeB(__d: IDeserializer): B | null {
   /**
    * decode header
    */
-  if(__id !== -408816356) return null;
+  if(__id !== 533707038) return null;
   let a: string;
   /**
    * decoding param: a
@@ -203,7 +203,7 @@ export function C(params: CInputParams): C {
   };
 }
 export function encodeC(__s: ISerializer, value: C) {
-  __s.writeInt32(5059551);
+  __s.writeInt32(-131891235);
   /**
    * encoding param: a
    */
@@ -215,7 +215,7 @@ export function decodeC(__d: IDeserializer): C | null {
   /**
    * decode header
    */
-  if(__id !== 5059551) return null;
+  if(__id !== -131891235) return null;
   let a: number;
   /**
    * decoding param: a
@@ -265,7 +265,7 @@ export function D(params: DInputParams): D {
   };
 }
 export function encodeD(__s: ISerializer, value: D) {
-  __s.writeInt32(-493803354);
+  __s.writeInt32(452945060);
   /**
    * encoding param: a
    */
@@ -277,7 +277,7 @@ export function decodeD(__d: IDeserializer): D | null {
   /**
    * decode header
    */
-  if(__id !== -493803354) return null;
+  if(__id !== 452945060) return null;
   let a: number;
   /**
    * decoding param: a
@@ -327,7 +327,7 @@ export function test(params: testInputParams): test {
   };
 }
 export function encodeTest(__s: ISerializer, value: test) {
-  __s.writeInt32(1877955998);
+  __s.writeInt32(738393700);
   /**
    * encoding param: traitParam
    */
@@ -339,7 +339,7 @@ export function decodeTest(__d: IDeserializer): test | null {
   /**
    * decode header
    */
-  if(__id !== 1877955998) return null;
+  if(__id !== 738393700) return null;
   let traitParam: E;
   /**
    * decoding param: traitParam

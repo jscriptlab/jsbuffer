@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
-    "types": ["node"],
-    "noUnusedLocals": false,
-    "noUncheckedIndexedAccess": false
+    "types": ["node"]
   },
-  "references": [{ "path": "../codec" }, { "path": "../out" }],
+  "references": [
+    { "path": "../codec" },
+    {
+      "path": "../code-generator"
+    }
+  ],
   "extends": "../tsconfig.base.json"
 }

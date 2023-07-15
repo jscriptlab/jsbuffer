@@ -1,18 +1,18 @@
-import {GetUserById} from "./schema";
-import {GetPostById} from "./schema";
-import {GetConversations} from "./schema";
-import {ISerializer} from "./__types__";
-import {encodeGetUserById} from "./schema";
-import {encodeGetPostById} from "./schema";
-import {encodeGetConversations} from "./schema";
-import {IDeserializer} from "./__types__";
-import {decodeGetUserById} from "./schema";
-import {decodeGetPostById} from "./schema";
-import {decodeGetConversations} from "./schema";
-import {defaultGetUserById} from "./schema";
-import {compareGetUserById} from "./schema";
-import {compareGetPostById} from "./schema";
-import {compareGetConversations} from "./schema";
+import { GetUserById } from "./schema";
+import { GetPostById } from "./schema";
+import { GetConversations } from "./schema";
+import { ISerializer } from "./__types__";
+import { encodeGetUserById } from "./schema";
+import { encodeGetPostById } from "./schema";
+import { encodeGetConversations } from "./schema";
+import { IDeserializer } from "./__types__";
+import { decodeGetUserById } from "./schema";
+import { decodeGetPostById } from "./schema";
+import { decodeGetConversations } from "./schema";
+import { defaultGetUserById } from "./schema";
+import { compareGetUserById } from "./schema";
+import { compareGetPostById } from "./schema";
+import { compareGetConversations } from "./schema";
 export type Request = Readonly<GetUserById> | Readonly<GetPostById> | Readonly<GetConversations>;
 export function encodeRequestTrait(__s: ISerializer,value: Request) {
   switch(value._name) {
@@ -32,19 +32,19 @@ export function decodeRequestTrait(__d: IDeserializer) {
   __d.rewindInt32();
   let value: GetUserById | GetPostById | GetConversations;
   switch(__id) {
-    case -1984357298: {
+    case -509540977: {
       const tmp = decodeGetUserById(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
-    case -1572332129: {
+    case 1475680092: {
       const tmp = decodeGetPostById(__d);
       if(tmp === null) return null;
       value = tmp;
       break;
     }
-    case 814848329: {
+    case 1250914260: {
       const tmp = decodeGetConversations(__d);
       if(tmp === null) return null;
       value = tmp;

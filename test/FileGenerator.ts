@@ -1,140 +1,120 @@
 import { Suite } from 'sarg';
-import FileGenerator, {
-  IFileGeneratorOptions,
-} from '../code-generator/FileGenerator';
-import path from 'path';
-import * as glob from 'glob';
-import fs from 'fs';
-import { TextEncoder, TextDecoder } from 'util';
 import assert from 'assert';
+import { generateWithVirtualFs } from '../helpers';
+import { Exception, spawn } from 'child-process-utilities';
 
 const suite = new Suite();
 
-async function spawn(
-  cmd: string,
-  args: string[] = [],
-  options: import('child_process').SpawnOptionsWithoutStdio = {}
-) {
-  console.log('$ %s %s', cmd, args.join(' '));
-  const child_process = await import('child_process');
-  await new Promise<void>((resolve, reject) => {
-    child_process
-      .spawn(cmd, args, {
-        stdio: 'inherit',
-        ...options,
+function checkException(fn: () => Promise<void>) {
+  return async () => {
+    try {
+      await fn();
+    } catch (reason) {
+      console.log(reason);
+      if (reason instanceof Exception) {
+        console.log(reason, reason.constructor);
+      }
+      throw reason;
+    }
+  };
+}
+
+suite.test(
+  'it should allow importing external schemas in a cascading format',
+  checkException(async () => {
+    const module1 = await (
+      await generateWithVirtualFs({
+        packageInfo: {
+          name: 'a',
+          version: '0.0.1',
+        },
+        paths: {
+          'schema/main': ['export type A { int id; }'].join('\n'),
+        },
+        mainFile: 'schema/main',
       })
-      .on('exit', (code) => {
-        if (code === 0) {
-          resolve();
-        } else {
-          reject(new Error(`process exited with: ${code}`));
-        }
-      });
-  });
-}
+    ).test();
 
-async function generateWithVirtualFs({
-  mainFile,
-  paths,
-  packageInfo,
-  additionalFileGeneratorOptions = {},
-}: {
-  mainFile: string;
-  packageInfo?: {
-    name: string;
-    version: string;
-  };
-  additionalFileGeneratorOptions?: Partial<{
-    externalModules: Partial<{
-      outFolders: Map<string, string>;
-      nodeModulesFolder: string;
-    }>;
-  }>;
-  paths: Record<string, string>;
-}) {
-  const rootDir = await fs.promises.mkdtemp('/tmp/');
-  const outDir = path.resolve(rootDir, '__compiled__');
-
-  await fs.promises.mkdir(outDir);
-
-  for (const [k, v] of Object.entries(paths)) {
-    const resolvedFilePath = path.resolve(rootDir, k);
-    await fs.promises.mkdir(path.dirname(resolvedFilePath), {
-      recursive: true,
-    });
-    await fs.promises.writeFile(resolvedFilePath, v);
-  }
-  const fileGenerator = new FileGenerator(
-    {
-      path: path.resolve(rootDir, mainFile),
-    },
-    {
-      rootDir: rootDir,
-      outDir: outDir,
-      indentationSize: 2,
-      textDecoder: new TextDecoder(),
-      textEncoder: new TextEncoder(),
-      ...additionalFileGeneratorOptions,
-      externalModules: {
-        outFolders: new Map(),
-        nodeModulesFolder: path.resolve(rootDir, 'node_modules'),
-        ...(additionalFileGeneratorOptions.externalModules ?? {}),
+    const module2 = await generateWithVirtualFs({
+      packageInfo: {
+        name: 'b',
+        version: '0.0.1',
       },
-    }
-  );
-  const compileTypeScriptProject = async () => {
-    await spawn('npx', ['tsc'], {
-      cwd: outDir,
+      paths: {
+        'schema/main': [
+          'import { A } from "a/schema/main";',
+          'export type B {A id;}',
+        ].join('\n'),
+      },
+      mainFile: 'schema/main',
     });
-    return {
-      tgzFiles: glob.sync(path.resolve(rootDir, '*.tgz')),
-    };
-  };
-  const generateAndCreateFiles = async () => {
-    for (const f of await fileGenerator.generate()) {
-      const resolvedFilePath = path.resolve(outDir, f.file);
-      await fs.promises.mkdir(path.dirname(resolvedFilePath), {
-        recursive: true,
-      });
-      await fs.promises.writeFile(resolvedFilePath, f.contents);
-    }
-  };
-  const test = async () => {
-    await generateAndCreateFiles();
-    await compileTypeScriptProject();
-  };
-  /**
-   * install typescript
-   */
-  await spawn('npm', ['install', '--save-dev', 'typescript@5.x'], {
-    cwd: rootDir,
-  });
-  if (packageInfo) {
-    /**
-     * create package.json
-     */
-    await fs.promises.writeFile(
-      path.resolve(rootDir, 'package.json'),
-      JSON.stringify(packageInfo, null, 4)
-    );
-  }
-  const pack = () =>
-    spawn('npm', ['pack'], {
-      cwd: rootDir,
+
+    await spawn('npm', ['install', ...module1.tgzFiles], {
+      cwd: module2.rootDir,
+    }).wait();
+
+    const { tgzFiles } = await module2.test();
+
+    const module3 = await generateWithVirtualFs({
+      packageInfo: {
+        name: 'c',
+        version: '0.0.1',
+      },
+      paths: {
+        'schema/main': [
+          'import { B } from "b/schema/main";',
+          'export type C { int id; B b; }',
+        ].join('\n'),
+      },
+      mainFile: 'schema/main',
     });
-  return {
-    test,
-    pack,
-    /**
-     * generate files using FileGenerator class
-     */
-    generateAndCreateFiles,
-    compileTypeScriptProject,
-    fileGenerator,
-    rootDir: rootDir,
-    outDir: outDir,
-  };
-}
+
+    await spawn('npm', ['install', ...tgzFiles], {
+      cwd: module3.rootDir,
+    }).wait();
+
+    await module3.test();
+  })
+);
+
+suite.test(
+  'it should allow importing external schemas when file is being imported from inside a folder',
+  checkException(async () => {
+    const externalModule = await generateWithVirtualFs({
+      packageInfo: {
+        name: 'v',
+        version: '0.0.1',
+      },
+      paths: {
+        'schema/a': 'export type A { int id1; }',
+        'schema/b': 'export type B { int id2; }',
+        'schema/main': ['import "./a";', 'import "./b";'].join('\n'),
+      },
+      mainFile: 'schema/main',
+    });
+
+    const { tgzFiles: externalModuleTgzFiles } = await externalModule.test();
+
+    const virtualProject = await generateWithVirtualFs({
+      paths: {
+        'src/index': [
+          'import { A } from "v/schema/a";',
+          'import { B } from "v/schema/b";',
+          ['type C {', 'A a;', 'B b;', '}'].join('\n'),
+        ].join('\n'),
+      },
+      mainFile: 'src/index',
+    });
+
+    assert.strict.ok(externalModuleTgzFiles.length > 0);
+
+    await spawn('npm', ['install', '--save', ...externalModuleTgzFiles], {
+      cwd: virtualProject.rootDir,
+    }).wait();
+
+    await virtualProject.test();
+  })
+);
 
 suite.test(
   'it should allow namespaced node_modules external schemas even if schema source files come from inside a folder',
@@ -142,7 +122,6 @@ suite.test(
     const externalModule = await generateWithVirtualFs({
       packageInfo: {
         name: '@a/v',
-        version: '0.0.1',
       },
       paths: {
         'schema/users/User': 'export type User { int id; }',
@@ -157,10 +136,7 @@ suite.test(
       mainFile: 'schema/main',
     });
 
-    await externalModule.generateAndCreateFiles();
-    await externalModule.pack();
-    const { tgzFiles: externalModuleTgzFiles } =
-      await externalModule.compileTypeScriptProject();
+    const { tgzFiles: externalModuleTgzFiles } = await externalModule.test();
 
     const virtualProject = await generateWithVirtualFs({
       paths: {
@@ -171,11 +147,6 @@ suite.test(
           ['type C {', 'User user;', 'A a;', 'B b;', '}'].join('\n'),
         ].join('\n'),
       },
-      additionalFileGeneratorOptions: {
-        externalModules: {
-          outFolders: new Map([['@a/v', '__compiled__']]),
-        },
-      },
       mainFile: 'schema/src/index',
     });
 
@@ -183,79 +154,9 @@ suite.test(
 
     await spawn('npm', ['install', '--save', ...externalModuleTgzFiles], {
       cwd: virtualProject.rootDir,
-    });
+    }).wait();
 
-    await virtualProject.generateAndCreateFiles();
-    await virtualProject.compileTypeScriptProject();
-
-    await spawn(
-      'npx',
-      [
-        'ts-node',
-        path.resolve(__dirname, '../cli'),
-        path.resolve(virtualProject.rootDir, 'schema/src/index'),
-        '-o',
-        virtualProject.outDir,
-        '--external',
-        '@a/v:__compiled__',
-        '--node-modules-folder',
-        path.resolve(virtualProject.rootDir, 'node_modules'),
-      ],
-      {
-        env: {
-          ...process.env,
-          TS_NODE_PROJECT: path.resolve(__dirname, '../cli/tsconfig.json'),
-        },
-      }
-    );
-  }
-);
-
-suite.test(
-  'it should allow importing external schemas when file is being imported from inside a folder',
-  async () => {
-    const externalModule = await generateWithVirtualFs({
-      packageInfo: {
-        name: 'v',
-        version: '0.0.1',
-      },
-      paths: {
-        'schema/a': 'export type A { int id1; }',
-        'schema/b': 'export type B { int id2; }',
-        'schema/main': ['import "./a";', 'import "./b";'].join('\n'),
-      },
-      mainFile: 'schema/main',
-    });
-
-    await externalModule.generateAndCreateFiles();
-    await externalModule.pack();
-    const { tgzFiles: externalModuleTgzFiles } =
-      await externalModule.compileTypeScriptProject();
-
-    const virtualProject = await generateWithVirtualFs({
-      paths: {
-        'src/index': [
-          'import { A } from "v/schema/a";',
-          'import { B } from "v/schema/b";',
-          ['type C {', 'A a;', 'B b;', '}'].join('\n'),
-        ].join('\n'),
-      },
-      additionalFileGeneratorOptions: {
-        externalModules: {
-          outFolders: new Map([['v', '__compiled__']]),
-        },
-      },
-      mainFile: 'src/index',
-    });
-
-    assert.strict.ok(externalModuleTgzFiles.length > 0);
-
-    await spawn('npm', ['install', '--save', ...externalModuleTgzFiles], {
-      cwd: virtualProject.rootDir,
-    });
-
-    await virtualProject.generateAndCreateFiles();
-    await virtualProject.compileTypeScriptProject();
+    await virtualProject.test();
   }
 );
 
@@ -265,7 +166,6 @@ suite.test(
     const externalModule = await generateWithVirtualFs({
       packageInfo: {
         name: '@a/v',
-        version: '0.0.1',
       },
       paths: {
         'users/User': 'export type User { int id; }',
@@ -278,10 +178,7 @@ suite.test(
       mainFile: 'main',
     });
 
-    await externalModule.generateAndCreateFiles();
-    await externalModule.pack();
-    const { tgzFiles: externalModuleTgzFiles } =
-      await externalModule.compileTypeScriptProject();
+    const { tgzFiles: externalModuleTgzFiles } = await externalModule.test();
 
     const virtualProject = await generateWithVirtualFs({
       paths: {
@@ -292,11 +189,6 @@ suite.test(
           ['type C {', 'User user;', 'A a;', 'B b;', '}'].join('\n'),
         ].join('\n'),
       },
-      additionalFileGeneratorOptions: {
-        externalModules: {
-          outFolders: new Map([['@a/v', '__compiled__']]),
-        },
-      },
       mainFile: 'index',
     });
 
@@ -304,31 +196,9 @@ suite.test(
 
     await spawn('npm', ['install', '--save', ...externalModuleTgzFiles], {
       cwd: virtualProject.rootDir,
-    });
+    }).wait();
 
-    await virtualProject.generateAndCreateFiles();
-    await virtualProject.compileTypeScriptProject();
-
-    await spawn(
-      'npx',
-      [
-        'ts-node',
-        path.resolve(__dirname, '../cli'),
-        path.resolve(virtualProject.rootDir, 'index'),
-        '-o',
-        virtualProject.outDir,
-        '--external',
-        '@a/v:__compiled__',
-        '--node-modules-folder',
-        path.resolve(virtualProject.rootDir, 'node_modules'),
-      ],
-      {
-        env: {
-          ...process.env,
-          TS_NODE_PROJECT: path.resolve(__dirname, '../cli/tsconfig.json'),
-        },
-      }
-    );
+    await virtualProject.test();
   }
 );
 
@@ -346,10 +216,7 @@ suite.test('it should allow importing external schemas', async () => {
     mainFile: 'main',
   });
 
-  await externalModule.generateAndCreateFiles();
-  await externalModule.pack();
-  const { tgzFiles: externalModuleTgzFiles } =
-    await externalModule.compileTypeScriptProject();
+  const { tgzFiles: externalModuleTgzFiles } = await externalModule.test();
 
   const virtualProject = await generateWithVirtualFs({
     paths: {
@@ -359,11 +226,6 @@ suite.test('it should allow importing external schemas', async () => {
         ['type C {', 'A a;', 'B b;', '}'].join('\n'),
       ].join('\n'),
     },
-    additionalFileGeneratorOptions: {
-      externalModules: {
-        outFolders: new Map([['v', '__compiled__']]),
-      },
-    },
     mainFile: 'index',
   });
 
@@ -371,10 +233,9 @@ suite.test('it should allow importing external schemas', async () => {
 
   await spawn('npm', ['install', '--save', ...externalModuleTgzFiles], {
     cwd: virtualProject.rootDir,
-  });
+  }).wait();
 
-  await virtualProject.generateAndCreateFiles();
-  await virtualProject.compileTypeScriptProject();
+  await virtualProject.test();
 });
 
 suite.test('it should not allow importing of unexported traits', async () => {

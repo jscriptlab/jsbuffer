@@ -1,11 +1,10 @@
-import {User} from "./SecondUser";
-import {ISerializer} from "./../__types__";
-import {encodeUser} from "./SecondUser";
-import {IDeserializer} from "./../__types__";
-import {decodeUser} from "./SecondUser";
-import {defaultUser} from "./SecondUser";
-import {compareUser} from "./SecondUser";
-import {compareUser as compareUser1} from "./SecondUser";
+import { User } from "./SecondUser";
+import { ISerializer } from "../__types__";
+import { encodeUser } from "./SecondUser";
+import { IDeserializer } from "../__types__";
+import { decodeUser } from "./SecondUser";
+import { defaultUser } from "./SecondUser";
+import { compareUser } from "./SecondUser";
 export interface ConversationInputParams {
   id: number;
   user: Readonly<User>;
@@ -18,7 +17,7 @@ export function Conversation(params: ConversationInputParams): Conversation {
   };
 }
 export function encodeConversation(__s: ISerializer, value: Conversation) {
-  __s.writeInt32(-56318669);
+  __s.writeInt32(1980512603);
   /**
    * encoding param: id
    */
@@ -35,7 +34,7 @@ export function decodeConversation(__d: IDeserializer): Conversation | null {
   /**
    * decode header
    */
-  if(__id !== -56318669) return null;
+  if(__id !== 1980512603) return null;
   let id: number;
   let user: User;
   /**
@@ -88,7 +87,7 @@ export function updateConversation(value: Conversation, changes: Partial<Convers
     }
   }
   if(typeof changes['user'] !== 'undefined') {
-    if(!(compareUser1(changes['user'],value['user']))) {
+    if(!(compareUser(changes['user'],value['user']))) {
       value = Conversation({
         ...value,
         user: changes['user'],
@@ -107,7 +106,7 @@ export function Conversations(params: ConversationsInputParams): Conversations {
   };
 }
 export function encodeConversations(__s: ISerializer, value: Conversations) {
-  __s.writeInt32(-1554155458);
+  __s.writeInt32(724720969);
   /**
    * encoding param: conversations
    */
@@ -124,7 +123,7 @@ export function decodeConversations(__d: IDeserializer): Conversations | null {
   /**
    * decode header
    */
-  if(__id !== -1554155458) return null;
+  if(__id !== 724720969) return null;
   let conversations: Array<Conversation>;
   /**
    * decoding param: conversations

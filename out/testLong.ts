@@ -1,5 +1,5 @@
-import {ISerializer} from "./__types__";
-import {IDeserializer} from "./__types__";
+import { ISerializer } from "./__types__";
+import { IDeserializer } from "./__types__";
 export interface AInputParams {
   a: string;
 }
@@ -10,7 +10,7 @@ export function A(params: AInputParams): A {
   };
 }
 export function encodeA(__s: ISerializer, value: A) {
-  __s.writeInt32(-1822565385);
+  __s.writeInt32(846132148);
   /**
    * encoding param: a
    */
@@ -22,7 +22,7 @@ export function decodeA(__d: IDeserializer): A | null {
   /**
    * decode header
    */
-  if(__id !== -1822565385) return null;
+  if(__id !== 846132148) return null;
   let a: string;
   /**
    * decoding param: a
@@ -72,7 +72,7 @@ export function B(params: BInputParams): B {
   };
 }
 export function encodeB(__s: ISerializer, value: B) {
-  __s.writeInt32(2020237556);
+  __s.writeInt32(-648460105);
   /**
    * encoding param: a
    */
@@ -84,7 +84,7 @@ export function decodeB(__d: IDeserializer): B | null {
   /**
    * decode header
    */
-  if(__id !== 2020237556) return null;
+  if(__id !== -648460105) return null;
   let a: string;
   /**
    * decoding param: a
@@ -138,7 +138,7 @@ export function C(params: CInputParams): C {
   };
 }
 export function encodeC(__s: ISerializer, value: C) {
-  __s.writeInt32(642173373);
+  __s.writeInt32(2139729828);
   /**
    * encoding param: a
    */
@@ -160,7 +160,7 @@ export function decodeC(__d: IDeserializer): C | null {
   /**
    * decode header
    */
-  if(__id !== 642173373) return null;
+  if(__id !== 2139729828) return null;
   let a: string;
   let b: string;
   let c: number;
