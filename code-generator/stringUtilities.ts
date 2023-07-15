@@ -5,3 +5,10 @@ export function upperFirst(value: string) {
 export function lowerFirst(value: string) {
   return `${value[0]?.toLowerCase()}${value.substring(1)}`;
 }
+
+export function enforceLocalImport(value: string) {
+  if (!value.startsWith('.')) {
+    return `./${value}`;
+  }
+  return value;
+}

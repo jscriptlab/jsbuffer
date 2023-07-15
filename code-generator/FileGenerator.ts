@@ -27,6 +27,7 @@ import {
 import crc from 'crc';
 import GenericName from './GenericName';
 import JavaScriptObjectStringify from './JavaScriptObjectStringify';
+import { enforceLocalImport } from './stringUtilities';
 
 export interface IFile {
   path: string;
@@ -226,6 +227,7 @@ export interface IConfiguration {
 
 export interface IExternalModule {
   configFile: string;
+  nodeModulesFolderPath: string;
   configuration: IConfiguration;
 }
 
@@ -371,32 +373,14 @@ export default class FileGenerator extends CodeStream {
         throw new Exception('No valid data on jsbufferconfig.json');
       }
       externalModule = {
+        nodeModulesFolderPath,
         configFile,
         configuration: parsedConfig,
       };
-      // inputFile = path.resolve(
-      //   path.resolve(path.dirname(configFile), externalModule.outDir),
-      //   originalSourceFile.replace(
-      //     new RegExp(`^${path.dirname(configFile)}/?`),
-      //     ''
-      //   )
-      // );
     } else {
       externalModule = null;
       inputFile = path.resolve(path.dirname(this.#file.path), modulePath);
     }
-
-    // let fileExists = false;
-
-    // /**
-    //  * make sure input file is accessible and readable
-    //  */
-    // try {
-    //   await fs.promises.access(inputFile, fs.constants.R_OK);
-    //   fileExists = true;
-    // } catch (reason) {
-    //   fileExists = false;
-    // }
 
     if (
       externalModule === null &&
@@ -621,14 +605,15 @@ export default class FileGenerator extends CodeStream {
     for (const i of this.#imports) {
       let finalPath: string;
       if ('target' in i) {
-        finalPath = path.relative(
-          path.dirname(this.#removeRootDirOrFail(this.#file.path)),
-          i.path
+        finalPath = enforceLocalImport(
+          path.relative(
+            path.dirname(this.#removeRootDirOrFail(this.#file.path)),
+            i.path
+          )
         );
       } else {
         const { externalModule, inputFile } =
           await this.#resolveModulePathToAbsolutePath(i.path);
-        // let finalInputFile = inputFile;
         if (externalModule) {
           const externalSchemaRootFolder = path.dirname(
             externalModule.configFile
@@ -641,16 +626,15 @@ export default class FileGenerator extends CodeStream {
             externalSchemaOutDir,
             inputFile.replace(new RegExp(`^${externalSchemaRootFolder}/?`), '')
           );
-          finalPath = path.relative(
-            path.dirname(this.#outFileAbsolutePath()),
-            finalInputFile
+          finalPath = finalInputFile.replace(
+            new RegExp(`^${externalModule.nodeModulesFolderPath}/?`),
+            ''
           );
         } else {
-          finalPath = path.relative(path.dirname(this.#file.path), inputFile);
+          finalPath = enforceLocalImport(
+            path.relative(path.dirname(this.#file.path), inputFile)
+          );
         }
-      }
-      if (!finalPath.startsWith('.')) {
-        finalPath = `./${finalPath}`;
       }
       this.write(`import { ${i.identifier}`);
       if (i.alias) {
@@ -661,12 +645,12 @@ export default class FileGenerator extends CodeStream {
       this.append('";\n');
     }
   }
-  #outFileAbsolutePath() {
-    return path.resolve(
-      this.#compilerOptionsOrFail().outDir,
-      this.#removeRootDirOrFail(this.#file.path)
-    );
-  }
+  // #outFileAbsolutePath() {
+  //   return path.resolve(
+  //     this.#compilerOptionsOrFail().outDir,
+  //     this.#removeRootDirOrFail(this.#file.path)
+  //   );
+  // }
   #generateFinalCode() {
     /**
      * generate code for all nodes
