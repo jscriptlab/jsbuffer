@@ -9,7 +9,7 @@
     "child-process-utilities": "0.x",
     "eslint": "8.x",
     "glob": "^10.2.3",
-    "jsbuffer": "^0.0.53",
+    "jsbuffer": "0.x",
     "nyc": "15.x",
     "prettier": "2.x",
     "sarg": "5.x",

@@ -701,9 +701,9 @@ check-error@^1.0.2:
   integrity sha512-BrgHpW9NURQgzoNyjfq0Wu6VFO6D7IZEmJNdtgNqpzGG8RuNFHt2jQxWlAs4HMe119chBnv+34syEZtc6IhLtA==
 
 child-process-utilities@0.x:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/child-process-utilities/-/child-process-utilities-0.0.6.tgz#5d527d5b99dd8d80239cfa319722d06e4c9e1cb4"
-  integrity sha512-z11n/L7VHh3/ZSFL330MjdaUCbBoiOy7hb2xCgd+54lwI0xVxQGTvZQsycNdNvR5/4PDfDOoFbb2AL8baYw53Q==
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/child-process-utilities/-/child-process-utilities-0.0.10.tgz#8d58cff772acd51352240c5335556de47de12dc9"
+  integrity sha512-ulusRomJC2t0ycQJfweymvXz8iT7N+juRsbXCBf+gM9JBijiT8aBcOpnjy+QexvqoOcPfkFB6K4H5a0cQhX0qw==
 
 chokidar@3.x:
   version "3.5.3"
@@ -1431,10 +1431,10 @@ jsbi@4.x:
   resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-4.3.0.tgz#b54ee074fb6fcbc00619559305c8f7e912b04741"
   integrity sha512-SnZNcinB4RIcnEyZqFPdGPVgrg2AcnykiBy0sHVJQKHYeaLUvi3Exj+iaPpLnFVkDPZIV4U0yvgC9/R4uEAZ9g==
 
-jsbuffer@^0.0.53:
-  version "0.0.53"
-  resolved "https://registry.yarnpkg.com/jsbuffer/-/jsbuffer-0.0.53.tgz#f25555766fb1df7c873ef054a681a5189605fbef"
-  integrity sha512-gFbyV/4yEl/kQWPETT3EoweOebGGz6ymsioX0u8CqS4KyasSN5ormTBe86fnoH/Hr7zWmCrN8/cDBgh9XkDYhg==
+jsbuffer@0.x:
+  version "0.0.59"
+  resolved "https://registry.yarnpkg.com/jsbuffer/-/jsbuffer-0.0.59.tgz#099ed3e1449fe47317a59eaef049336fff7fad72"
+  integrity sha512-cAQKqAv043UO2U9onqCgl5/LTeURvhHPdSakTkcSS7zGD2CvjniteM18RxMkDXAJrc1DSQEserRcCkxkcbiNug==
   dependencies:
     cli-argument-helper "0.x"
     crc "4.x"
