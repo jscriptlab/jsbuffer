@@ -141,7 +141,7 @@ export interface IFileGeneratorOptions {
   textEncoder: ITextEncoder;
   root: FileGenerator | null;
   uniqueNamePropertyName?: string | null;
-  externalModule?: {} | null;
+  externalModule?: IExternalModule | null;
   compilerOptions: ICompilerOptions | null;
 }
 
@@ -517,44 +517,18 @@ export default class FileGenerator extends CodeStream {
       }
       files.push(this.#generateTypeScriptConfigurationFile(config));
     }
-    // files.push(this.#generateBuildConfigFile());
     return files;
   }
-  // #generateBuildConfigFile() {
-  //   this.#serializer.rewind();
-  //   const compilerOptions = this.#compilerOptionsOrFail();
-  //   const jsbufferConfigFileName = 'jsbufferconfig.json';
-  //   let mainFile = path.basename(this.#file.path);
-  //   if (mainFile.startsWith('.')) {
-  //     mainFile = `./${mainFile}`;
-  //   }
-  //   const config = schemaConfigVersion1({
-  //     outDir: path.relative(
-  //       path.resolve(compilerOptions.rootDir, jsbufferConfigFileName),
-  //       compilerOptions.outDir
-  //     ),
-  //     mainFile,
-  //   });
-  //   encodeSchemaConfigTrait(this.#serializer, config);
-  //   return {
-  //     path: jsbufferConfigFileName,
-  //     contents: this.#serializer.view(),
-  //   };
-  // }
   #removeRootDirOrFail(value: string) {
     const compilerOptions = this.#compilerOptionsOrFail();
     const rootDirRegExp = this.#rootDirRegularExpression();
     if (!rootDirRegExp.test(value)) {
       throw new Exception(
-        `Path does not include root dir at the beginning: ${compilerOptions.rootDir}`
+        `Path does not include root dir (${compilerOptions.rootDir}) at the beginning: ${value}`
       );
     }
     return value.replace(rootDirRegExp, '');
   }
-  // #maybeRemoveRootDir(value: string) {
-  //   const rootDirRegExp = this.#rootDirRegularExpression();
-  //   return value.replace(rootDirRegExp, '');
-  // }
   #rootDirRegularExpression() {
     const compilerOptions = this.#compilerOptionsOrFail();
     return new RegExp(`^${compilerOptions.rootDir}/?`);
@@ -612,8 +586,9 @@ export default class FileGenerator extends CodeStream {
           )
         );
       } else {
-        const { externalModule, inputFile } =
-          await this.#resolveModulePathToAbsolutePath(i.path);
+        // const { externalModule, inputFile } =
+        //   await this.#resolveModulePathToAbsolutePath(i.path);
+        const externalModule = i.fileGenerator.#externalModule;
         if (externalModule) {
           const externalSchemaRootFolder = path.dirname(
             externalModule.configFile
@@ -624,7 +599,10 @@ export default class FileGenerator extends CodeStream {
           );
           const finalInputFile = path.resolve(
             externalSchemaOutDir,
-            inputFile.replace(new RegExp(`^${externalSchemaRootFolder}/?`), '')
+            i.fileGenerator.#file.path.replace(
+              new RegExp(`^${externalSchemaRootFolder}/?`),
+              ''
+            )
           );
           finalPath = finalInputFile.replace(
             new RegExp(`^${externalModule.nodeModulesFolderPath}/?`),
@@ -632,7 +610,7 @@ export default class FileGenerator extends CodeStream {
           );
         } else {
           finalPath = enforceLocalImport(
-            path.relative(path.dirname(this.#file.path), inputFile)
+            path.relative(path.dirname(this.#file.path), i.path)
           );
         }
       }

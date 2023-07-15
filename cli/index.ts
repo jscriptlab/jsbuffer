@@ -11,18 +11,15 @@ import {
   getNamedArgument,
   getString,
 } from 'cli-argument-helper';
+import Exception from '../exception/Exception';
 
 (async () => {
   const args = Array.from(process.argv).slice(2);
-  let mainFile: string | null = null;
   const uniqueNamePropertyName = getNamedArgument(
     args,
     '--unique-name-property-name',
     getString
   );
-  const nodeModulesFolder =
-    getNamedArgument(args, '--node-modules-folder', getString) ??
-    path.resolve(process.cwd(), 'node_modules');
   const tsExtends = getNamedArgument(args, '--extends', getString);
   const indentationSize =
     getNamedArgument(args, '--indentation-size', getInteger) ?? 4;
@@ -32,37 +29,15 @@ import {
     'schema';
   const noTypeScriptConfig = getArgument(args, '--no-ts-config') !== null;
 
-  let outFolder: string | null = null;
-  const outFolders = new Map<string, string>();
+  /**
+   * get main file from whatever is left from arguments
+   */
+  let mainFile = args.shift();
 
-  do {
-    outFolder = getNamedArgument(args, '--external', getString);
-    if (outFolder) {
-      const [k, v] = outFolder.split(':');
-      if (typeof k === 'undefined' || typeof v === 'undefined') {
-        throw new Error(
-          'usage of --external argument is: --external module_name:out_folder'
-        );
-      }
-      outFolders.set(k, v);
-    }
-  } while (outFolder !== null);
-
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[0];
-    switch (arg) {
-      default: {
-        if (arg.startsWith('-')) {
-          throw new Error(`invalid argument: ${arg}`);
-        }
-        args.shift();
-        mainFile = arg;
-      }
-    }
-  }
-  if (mainFile === null) {
+  if (!mainFile) {
     throw new Error('at least one main file should be defined');
   }
+
   mainFile = path.resolve(process.cwd(), mainFile);
   outDir = path.resolve(process.cwd(), outDir);
   /**
@@ -79,6 +54,10 @@ import {
    */
   await fs.promises.access(mainFile, fs.constants.R_OK);
   assert.strict.ok((await fs.promises.stat(mainFile)).isFile());
+
+  /**
+   * set up typescript configuration according to what's in the command-line
+   */
   let typeScriptConfiguration: Record<string, unknown> | null = {};
   if (noTypeScriptConfig) {
     typeScriptConfiguration = null;
@@ -90,34 +69,49 @@ import {
       };
     }
   }
+
+  const rootDir = path.dirname(mainFile);
+
+  const compilerOptions = {
+    outDir,
+    rootDir,
+  };
+
   const generator = new FileGenerator(
     {
       path: mainFile,
     },
     {
-      externalModules: {
-        outFolders,
-        nodeModulesFolder,
-      },
       root: null,
       textDecoder: new TextDecoder(),
       textEncoder: new TextEncoder(),
       uniqueNamePropertyName,
-      compilerOptions: {
-        rootDir: path.dirname(mainFile),
-      },
+      compilerOptions,
       typeScriptConfiguration,
       indentationSize,
     }
   );
-  for (const file of await generator.generate()) {
-    const outFile = path.resolve(outDir, file.path);
-    try {
-      await fs.promises.access(path.dirname(outFile), fs.constants.W_OK);
-    } catch (reason) {
-      await fs.promises.mkdir(path.dirname(outFile));
+
+  await fs.promises.writeFile(
+    path.resolve(path.dirname(mainFile), 'jsbufferconfig.json'),
+    JSON.stringify(
+      {
+        outDir: path.relative(rootDir, outDir),
+        mainFile: path.relative(rootDir, mainFile),
+      },
+      null,
+      indentationSize
+    )
+  );
+
+  try {
+    await generator.generate();
+  } catch (reason) {
+    if (reason instanceof Exception) {
+      throw new Error(`Failed to generate files with error: ${reason.what}`);
     }
-    await fs.promises.writeFile(outFile, file.contents);
+    console.error('Received unexpected error instance: %o', reason);
+    throw reason;
   }
 })().catch((reason) => {
   console.error(reason);
