@@ -1432,9 +1432,9 @@ jsbi@4.x:
   integrity sha512-SnZNcinB4RIcnEyZqFPdGPVgrg2AcnykiBy0sHVJQKHYeaLUvi3Exj+iaPpLnFVkDPZIV4U0yvgC9/R4uEAZ9g==
 
 jsbuffer@0.x:
-  version "0.0.59"
-  resolved "https://registry.yarnpkg.com/jsbuffer/-/jsbuffer-0.0.59.tgz#099ed3e1449fe47317a59eaef049336fff7fad72"
-  integrity sha512-cAQKqAv043UO2U9onqCgl5/LTeURvhHPdSakTkcSS7zGD2CvjniteM18RxMkDXAJrc1DSQEserRcCkxkcbiNug==
+  version "0.0.60"
+  resolved "https://registry.yarnpkg.com/jsbuffer/-/jsbuffer-0.0.60.tgz#8cb91b7ceda20af7e9b856985b76f9192a2981df"
+  integrity sha512-Bi3V/NqIj5BpNg9r0r0G1tTCjd/cOVr+Xkuw6EbFCfVPF9nBiQbq9Pga6BqOp4nXwryiv6dbwUyRJK7n8K2O3g==
   dependencies:
     cli-argument-helper "0.x"
     crc "4.x"
