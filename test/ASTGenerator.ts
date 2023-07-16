@@ -2,7 +2,7 @@ import { Suite } from 'sarg';
 import Tokenizer from '../src/Tokenizer';
 import path from 'path';
 import fs from 'fs';
-import ASTGenerator, { UnexpectedPunctuatorName } from '../src/ASTGenerator';
+import ASTGenerator, { UnexpectedToken } from '../src/ASTGenerator';
 import assert from 'assert';
 
 const suite = new Suite();
@@ -19,6 +19,35 @@ suite.test('ASTGenerator: it should tokenize files', async () => {
   new ASTGenerator(
     new Tokenizer({
       contents: await fs.promises.readFile(path.resolve(__dirname, 'User')),
+      textEncoder: new TextEncoder(),
+      textDecoder: new TextDecoder(),
+    })
+      .tokenize()
+      .tokens()
+  ).generate();
+});
+
+suite.test(
+  'ASTGenerator: it should throw UnexpectedToken in case an unexpected token is find in the main iteration',
+  () => {
+    assert.strict.throws(() => {
+      new ASTGenerator(
+        new Tokenizer({
+          contents: new TextEncoder().encode('a'),
+          textEncoder: new TextEncoder(),
+          textDecoder: new TextDecoder(),
+        })
+          .tokenize()
+          .tokens()
+      ).generate();
+    }, UnexpectedToken);
+  }
+);
+
+suite.test('ASTGenerator: it should read call statement', () => {
+  new ASTGenerator(
+    new Tokenizer({
+      contents: new TextEncoder().encode('type y {} call X => y { int b; }'),
       textEncoder: new TextEncoder(),
       textDecoder: new TextDecoder(),
     })
