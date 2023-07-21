@@ -21,7 +21,7 @@ function generateTestSchemaFilesCode({
 }) {
   const cs = new CodeStream();
   cs.write(
-    'function randomValuesFromMetadata(metadata) {',
+    'function randomValuesFromMetadata(metadata, typeModuleResult = null) {',
     () => {
       cs.write('const result = new Map();\n');
       cs.write(
@@ -32,22 +32,33 @@ function generateTestSchemaFilesCode({
           cs.write(
             'switch(paramType.type) {\n',
             () => {
+              cs.write('case "internalType":\n');
               cs.write('case "externalType":\n');
               cs.indentBlock(() => {
                 cs.write(
-                  'const externalType = require(paramType.relativePath);\n'
+                  'if(paramType.type === "externalType") {\n',
+                  () => {
+                    cs.write(
+                      'typeModuleResult = require(paramType.relativePath);\n'
+                    );
+                  },
+                  '} else {\n'
+                );
+                cs.indentBlock(() => {
+                  cs.write('assert.strict.ok(typeModuleResult !== null);\n');
+                });
+                cs.write('}\n');
+                cs.write(
+                  'const outMetadata = typeModuleResult[`${paramType.name}Metadata`];\n'
                 );
                 cs.write(
-                  'const externalTypeMetadata = externalType[`${paramType.name}Metadata`];\n'
+                  'const defaultFn = typeModuleResult[`default${paramType.name}`];\n'
                 );
                 cs.write(
-                  'const defaultFn = externalType[`default${paramType.name}`];\n'
+                  "assert.strict.ok(typeof outMetadata !== 'undefined' && typeof defaultFn === 'function');\n"
                 );
                 cs.write(
-                  "assert.strict.ok(typeof externalTypeMetadata !== 'undefined' && typeof defaultFn === 'function');\n"
-                );
-                cs.write(
-                  'testValue = defaultFn(Object.fromEntries(randomValuesFromMetadata(externalTypeMetadata)));\n'
+                  'testValue = defaultFn(Object.fromEntries(randomValuesFromMetadata(outMetadata, typeModuleResult)));\n'
                 );
                 cs.write('break;\n');
               });
@@ -240,7 +251,7 @@ function generateTestSchemaFilesCode({
               'if(metadata) {\n',
               () => {
                 cs.write(
-                  'for(const [k,v] of randomValuesFromMetadata(metadata)) {\n',
+                  'for(const [k,v] of randomValuesFromMetadata(metadata, value)) {\n',
                   () => {
                     cs.write(
                       "console.log('\ttesting update of param: %s', k);"
