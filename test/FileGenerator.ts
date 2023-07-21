@@ -21,6 +21,33 @@ function checkException(fn: () => Promise<void>) {
 }
 
 suite.test(
+  'it should test all sorts of generic parameters',
+  checkException(async () => {
+    await (
+      await generateWithVirtualFs({
+        packageInfo: {
+          name: 'test-schema',
+        },
+        paths: {
+          main: [
+            'export type A {',
+            'int a;',
+            'string b;',
+            'uint32 c;',
+            'long d;',
+            'ulong e;',
+            'int f;',
+            'null_terminated_string aaa;',
+            '}',
+          ].join('\n'),
+        },
+        mainFile: 'main',
+      })
+    ).test();
+  })
+);
+
+suite.test(
   'it should allow two imports of the same file coming from different files',
   checkException(async () => {
     const createImport = (a: string) => `import { ${a} } from "./${a}";`;
