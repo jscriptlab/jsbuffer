@@ -1,17 +1,29 @@
-import { ISerializer } from "./__types__";
-import { IDeserializer } from "./__types__";
-import { IRequest } from "./__types__";
+import { ISerializer } from './__types__';
+import { IDeserializer } from './__types__';
+import { IRequest } from './__types__';
+export const MessageMetadata = {
+  name: 'Message',
+  params: [
+    {
+      name: 'id',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+  ],
+};
 export interface MessageInputParams {
   id: number;
 }
 export function Message(params: MessageInputParams): Message {
   return {
     _name: 'message.Message',
-    id: params['id']
+    id: params['id'],
   };
 }
 export function encodeMessage(__s: ISerializer, value: Message) {
-  __s.writeInt32(-1080831240);
+  __s.writeInt32(-1731107621);
   /**
    * encoding param: id
    */
@@ -23,7 +35,7 @@ export function decodeMessage(__d: IDeserializer): Message | null {
   /**
    * decode header
    */
-  if(__id !== -1080831240) return null;
+  if (__id !== -1731107621) return null;
   let id: number;
   /**
    * decoding param: id
@@ -31,17 +43,19 @@ export function decodeMessage(__d: IDeserializer): Message | null {
   id = __d.readInt32();
   return {
     _name: 'message.Message',
-    id
+    id,
   };
 }
-export interface Message  {
+export interface Message {
   _name: 'message.Message';
   id: number;
 }
-export function defaultMessage(params: Partial<MessageInputParams> = {}): Message {
+export function defaultMessage(
+  params: Partial<MessageInputParams> = {}
+): Message {
   return Message({
     id: 0,
-    ...params
+    ...params,
   });
 }
 export function compareMessage(__a: Message, __b: Message): boolean {
@@ -52,9 +66,12 @@ export function compareMessage(__a: Message, __b: Message): boolean {
     __a['id'] === __b['id']
   );
 }
-export function updateMessage(value: Message, changes: Partial<MessageInputParams>) {
-  if(typeof changes['id'] !== 'undefined') {
-    if(!(changes['id'] === value['id'])) {
+export function updateMessage(
+  value: Message,
+  changes: Partial<MessageInputParams>
+) {
+  if (typeof changes['id'] !== 'undefined') {
+    if (!(changes['id'] === value['id'])) {
       value = Message({
         ...value,
         id: changes['id'],
@@ -63,26 +80,47 @@ export function updateMessage(value: Message, changes: Partial<MessageInputParam
   }
   return value;
 }
+export const MessagesMetadata = {
+  name: 'Messages',
+  params: [
+    {
+      name: 'messages',
+      type: {
+        type: 'template',
+        name: 'vector',
+        params: [
+          {
+            value: {
+              type: 'internalType',
+              kind: 'type',
+              name: 'Message',
+            },
+          },
+        ],
+      },
+    },
+  ],
+};
 export interface MessagesInputParams {
   messages: ReadonlyArray<Readonly<Message>>;
 }
 export function Messages(params: MessagesInputParams): Messages {
   return {
     _name: 'message.Messages',
-    messages: params['messages']
+    messages: params['messages'],
   };
 }
 export function encodeMessages(__s: ISerializer, value: Messages) {
-  __s.writeInt32(913893699);
+  __s.writeInt32(1419827675);
   /**
    * encoding param: messages
    */
   const __pv0 = value['messages'];
   const __l1 = __pv0.length;
   __s.writeUint32(__l1);
-  for(let __i1 = 0; __i1 < __l1; __i1++) {
+  for (let __i1 = 0; __i1 < __l1; __i1++) {
     const __v__i1 = __pv0[__i1];
-    encodeMessage(__s,__v__i1);
+    encodeMessage(__s, __v__i1);
   }
 }
 export function decodeMessages(__d: IDeserializer): Messages | null {
@@ -90,7 +128,7 @@ export function decodeMessages(__d: IDeserializer): Messages | null {
   /**
    * decode header
    */
-  if(__id !== 913893699) return null;
+  if (__id !== 1419827675) return null;
   let messages: Array<Message>;
   /**
    * decoding param: messages
@@ -98,24 +136,26 @@ export function decodeMessages(__d: IDeserializer): Messages | null {
   const __l1 = __d.readUint32();
   const __o1 = new Array<Message>(__l1);
   messages = __o1;
-  for(let __i1 = 0; __i1 < __l1; __i1++) {
+  for (let __i1 = 0; __i1 < __l1; __i1++) {
     const __tmp2 = decodeMessage(__d);
-    if(__tmp2 === null) return null;
+    if (__tmp2 === null) return null;
     __o1[__i1] = __tmp2;
   }
   return {
     _name: 'message.Messages',
-    messages
+    messages,
   };
 }
-export interface Messages  {
+export interface Messages {
   _name: 'message.Messages';
   messages: ReadonlyArray<Readonly<Message>>;
 }
-export function defaultMessages(params: Partial<MessagesInputParams> = {}): Messages {
+export function defaultMessages(
+  params: Partial<MessagesInputParams> = {}
+): Messages {
   return Messages({
     messages: [],
-    ...params
+    ...params,
   });
 }
 export function compareMessages(__a: Messages, __b: Messages): boolean {
@@ -123,12 +163,25 @@ export function compareMessages(__a: Messages, __b: Messages): boolean {
     /**
      * compare parameter messages
      */
-    __a['messages'].length === __b['messages'].length && __a['messages'].every((__i,index) => (compareMessage(__i,__b['messages'][index])))
+    __a['messages'].length === __b['messages'].length &&
+    __a['messages'].every((__i, index) =>
+      compareMessage(__i, __b['messages'][index])
+    )
   );
 }
-export function updateMessages(value: Messages, changes: Partial<MessagesInputParams>) {
-  if(typeof changes['messages'] !== 'undefined') {
-    if(!(changes['messages'].length === value['messages'].length && changes['messages'].every((__i,index) => (compareMessage(__i,value['messages'][index]))))) {
+export function updateMessages(
+  value: Messages,
+  changes: Partial<MessagesInputParams>
+) {
+  if (typeof changes['messages'] !== 'undefined') {
+    if (
+      !(
+        changes['messages'].length === value['messages'].length &&
+        changes['messages'].every((__i, index) =>
+          compareMessage(__i, value['messages'][index])
+        )
+      )
+    ) {
       value = Messages({
         ...value,
         messages: changes['messages'],
@@ -137,6 +190,25 @@ export function updateMessages(value: Messages, changes: Partial<MessagesInputPa
   }
   return value;
 }
+export const GetMessagesMetadata = {
+  name: 'GetMessages',
+  params: [
+    {
+      name: 'offset',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+    {
+      name: 'limit',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+  ],
+};
 export interface GetMessagesInputParams {
   offset: number;
   limit: number;
@@ -145,11 +217,11 @@ export function GetMessages(params: GetMessagesInputParams): GetMessages {
   return {
     _name: 'message.GetMessages',
     offset: params['offset'],
-    limit: params['limit']
+    limit: params['limit'],
   };
 }
 export function encodeGetMessages(__s: ISerializer, value: GetMessages) {
-  __s.writeInt32(-1134858848);
+  __s.writeInt32(1394938243);
   /**
    * encoding param: offset
    */
@@ -166,7 +238,7 @@ export function decodeGetMessages(__d: IDeserializer): GetMessages | null {
   /**
    * decode header
    */
-  if(__id !== -1134858848) return null;
+  if (__id !== 1394938243) return null;
   let offset: number;
   let limit: number;
   /**
@@ -180,7 +252,7 @@ export function decodeGetMessages(__d: IDeserializer): GetMessages | null {
   return {
     _name: 'message.GetMessages',
     offset,
-    limit
+    limit,
   };
 }
 export interface GetMessages extends IRequest<Readonly<Messages>> {
@@ -188,14 +260,19 @@ export interface GetMessages extends IRequest<Readonly<Messages>> {
   offset: number;
   limit: number;
 }
-export function defaultGetMessages(params: Partial<GetMessagesInputParams> = {}): GetMessages {
+export function defaultGetMessages(
+  params: Partial<GetMessagesInputParams> = {}
+): GetMessages {
   return GetMessages({
     offset: 0,
     limit: 0,
-    ...params
+    ...params,
   });
 }
-export function compareGetMessages(__a: GetMessages, __b: GetMessages): boolean {
+export function compareGetMessages(
+  __a: GetMessages,
+  __b: GetMessages
+): boolean {
   return (
     /**
      * compare parameter offset
@@ -207,17 +284,20 @@ export function compareGetMessages(__a: GetMessages, __b: GetMessages): boolean 
     __a['limit'] === __b['limit']
   );
 }
-export function updateGetMessages(value: GetMessages, changes: Partial<GetMessagesInputParams>) {
-  if(typeof changes['offset'] !== 'undefined') {
-    if(!(changes['offset'] === value['offset'])) {
+export function updateGetMessages(
+  value: GetMessages,
+  changes: Partial<GetMessagesInputParams>
+) {
+  if (typeof changes['offset'] !== 'undefined') {
+    if (!(changes['offset'] === value['offset'])) {
       value = GetMessages({
         ...value,
         offset: changes['offset'],
       });
     }
   }
-  if(typeof changes['limit'] !== 'undefined') {
-    if(!(changes['limit'] === value['limit'])) {
+  if (typeof changes['limit'] !== 'undefined') {
+    if (!(changes['limit'] === value['limit'])) {
       value = GetMessages({
         ...value,
         limit: changes['limit'],

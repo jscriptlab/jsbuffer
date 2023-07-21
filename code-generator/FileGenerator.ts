@@ -141,8 +141,8 @@ export interface IFileGeneratorOptions {
   textEncoder: ITextEncoder;
   root: FileGenerator | null;
   uniqueNamePropertyName?: string | null;
-  externalModule?: IExternalModule | null;
-  compilerOptions: ICompilerOptions | null;
+  externalModule?: boolean | null;
+  compilerOptions: ICompilerOptions;
 }
 
 export interface ICompilerOptions {
@@ -252,24 +252,25 @@ export default class FileGenerator extends CodeStream {
     FileGenerator,
     {
       identifiers: Set<string>;
+      externalModule: boolean;
       fileGenerator: FileGenerator;
     }
   >();
   readonly #fileGenerators = new Map<string, FileGenerator>();
   readonly #parent;
   readonly #traits = new Map<string, ITrait>();
-  readonly #uniqueNamePropertyName;
+  readonly #uniqueNamePropertyName: string;
   readonly #externalModule;
   #offset = 0;
   #nodes: Array<ASTGeneratorOutputNode> = [];
   public constructor(
     file: IFile,
     {
-      externalModule,
+      externalModule = false,
       textDecoder,
       textEncoder,
       compilerOptions,
-      uniqueNamePropertyName = null,
+      uniqueNamePropertyName,
       indentationSize,
       root: parent = null,
       typeScriptConfiguration,
@@ -279,7 +280,7 @@ export default class FileGenerator extends CodeStream {
       indentationSize,
     });
     this.#compilerOptions = compilerOptions;
-    this.#externalModule = externalModule ?? null;
+    this.#externalModule = externalModule;
     this.#file = file;
     this.#parent = parent;
     this.#uniqueNamePropertyName = uniqueNamePropertyName ?? '_name';
@@ -290,17 +291,62 @@ export default class FileGenerator extends CodeStream {
   }
   public async generate() {
     await this.#preprocess();
-    this.#fillTraits();
     const files = await this.#generateFiles();
     for (const f of files) {
       const resolvedFilePath = path.resolve(
-        this.#compilerOptionsOrFail().outDir,
+        this.#compilerOptions.outDir,
         f.path
       );
       await fs.promises.mkdir(path.dirname(resolvedFilePath), {
         recursive: true,
       });
       await fs.promises.writeFile(resolvedFilePath, f.contents);
+    }
+  }
+  async #processExternalSchemaImports(node: ASTGeneratorOutputNode) {
+    const root = this.#root();
+    const defaultOptions = {
+      root,
+      textDecoder: this.#textDecoder,
+      indentationSize: this.#indentationSize,
+      textEncoder: this.#textEncoder,
+    };
+    const fileGenerators = root.#fileGenerators;
+    switch (node.type) {
+      case NodeType.ImportStatement: {
+        const { externalModule } = await this.#resolveModulePathToAbsolutePath(
+          node.from.value
+        );
+        if (externalModule) {
+          const rootDir = path.dirname(externalModule.configFile);
+          const mainFile = path.resolve(
+            rootDir,
+            externalModule.configuration.mainFile
+          );
+          const compilerOptions = {
+            outDir: path.resolve(rootDir, externalModule.configuration.outDir),
+            rootDir,
+          };
+          let mainFileGenerator = fileGenerators.get(mainFile);
+          if (!mainFileGenerator) {
+            mainFileGenerator = new FileGenerator(
+              {
+                path: mainFile,
+              },
+              {
+                // TODO: maybe set root to null, and leave each external module to resolve it's own dependencies accordingly, then we'd have to look into the main schema file generator for the desired file generator
+                ...defaultOptions,
+                externalModule: true,
+                // TODO: maybe get it from `jsbufferconfig.json` file
+                uniqueNamePropertyName: root.#uniqueNamePropertyName,
+                compilerOptions,
+              }
+            );
+            fileGenerators.set(mainFile, mainFileGenerator);
+          }
+        }
+        break;
+      }
     }
   }
   async #preprocess() {
@@ -311,14 +357,37 @@ export default class FileGenerator extends CodeStream {
     });
     this.#nodes = new ASTGenerator(tokenizer.tokenize().tokens()).generate();
     for (const node of this.#nodes) {
+      await this.#processExternalSchemaImports(node);
+    }
+    /**
+     * preprocess all external schemas
+     */
+    for (const fileGenerator of this.#fileGenerators.values()) {
+      if (fileGenerator.#externalModule) {
+        await fileGenerator.#preprocess();
+      }
+    }
+    for (const node of this.#nodes) {
       await this.#updateOriginalImportsAndSetDefinitions(node);
     }
     for (const node of this.#nodes) {
       this.#updateImportsBasedOnUsage(node);
     }
-    for (const node of this.#nodes) {
-      await this.#preprocessNode(node);
+    /**
+     * preprocess all available file generators available
+     */
+    for (const fileGenerator of this.#fileGenerators.values()) {
+      if (!fileGenerator.#externalModule) {
+        await fileGenerator.#preprocess();
+      }
     }
+    for (const node of this.#nodes) {
+      await this.#setExportsAndValidateImports(node);
+    }
+    /**
+     * fill the traits for this file generator
+     */
+    this.#fillTraits();
   }
   #updateImportsBasedOnUsage(node: ASTGeneratorOutputNode) {
     switch (node.type) {
@@ -344,7 +413,7 @@ export default class FileGenerator extends CodeStream {
     let externalModule: IExternalModule | null;
     let inputFile: string;
 
-    const compilerOptions = this.#compilerOptionsOrFail();
+    const compilerOptions = this.#compilerOptions;
 
     if (!modulePath.startsWith('.')) {
       const nodeModulesFolderPath = await this.#findClosestNodeModules(
@@ -407,20 +476,28 @@ export default class FileGenerator extends CodeStream {
         const { inputFile, externalModule } =
           await this.#resolveModulePathToAbsolutePath(node.from.value);
         const root = this.#root();
+        const defaultOptions = {
+          indentationSize: this.#indentationSize,
+          textDecoder: this.#textDecoder,
+          textEncoder: this.#textEncoder,
+          root,
+        };
         let fileGenerator = root.#fileGenerators.get(inputFile);
         if (!fileGenerator) {
+          if (externalModule) {
+            throw new Exception(
+              `Could not find "${inputFile}" file generator for external schema with config file at: ${externalModule.configFile}`
+            );
+          }
           fileGenerator = new FileGenerator(
             {
               path: inputFile,
             },
             {
-              root,
-              externalModule,
-              uniqueNamePropertyName: root.#uniqueNamePropertyName,
-              indentationSize: this.#indentationSize,
-              textDecoder: this.#textDecoder,
-              textEncoder: this.#textEncoder,
-              compilerOptions: null,
+              ...defaultOptions,
+              compilerOptions: this.#compilerOptions,
+              // TODO: check if this makes sense
+              externalModule: this.#externalModule,
             }
           );
           root.#fileGenerators.set(inputFile, fileGenerator);
@@ -429,6 +506,7 @@ export default class FileGenerator extends CodeStream {
         if (!originalImport) {
           originalImport = {
             identifiers: new Set(),
+            externalModule: externalModule !== null,
             fileGenerator,
           };
           this.#originalImports.set(fileGenerator, originalImport);
@@ -477,22 +555,19 @@ export default class FileGenerator extends CodeStream {
         }
       }
     }
-    for (const fileGenerator of this.#fileGenerators.values()) {
-      fileGenerator.#fillTraits();
-    }
   }
   async #generateFiles() {
     const files = new Array<IOutputFile>();
     for (const f of [...this.#fileGenerators.values(), this]) {
-      if (f.#externalModule !== null) {
+      if (f.#externalModule) {
         continue;
       }
       f.#generateFinalCode();
       let contents = f.value();
-      await f.#generateRequirementsCode();
+      f.#generateRequirementsCode();
       contents = `${f.value()}${contents}`;
       files.push({
-        path: `${f.#removeRootDirOrFail(f.#file.path)}.ts`,
+        path: `${f.#removeRootDir(f.#file.path)}.ts`,
         contents,
       });
     }
@@ -519,19 +594,19 @@ export default class FileGenerator extends CodeStream {
     }
     return files;
   }
-  #removeRootDirOrFail(value: string) {
-    const compilerOptions = this.#compilerOptionsOrFail();
+  #removeRootDir(value: string) {
     const rootDirRegExp = this.#rootDirRegularExpression();
     if (!rootDirRegExp.test(value)) {
       throw new Exception(
-        `Path does not include root dir (${compilerOptions.rootDir}) at the beginning: ${value}`
+        `Path does not include root dir (${
+          this.#root().#compilerOptions.rootDir
+        }) at the beginning: ${value}`
       );
     }
     return value.replace(rootDirRegExp, '');
   }
   #rootDirRegularExpression() {
-    const compilerOptions = this.#compilerOptionsOrFail();
-    return new RegExp(`^${compilerOptions.rootDir}/?`);
+    return new RegExp(`^${this.#root().#compilerOptions.rootDir}/?`);
   }
   #import(req: InputRequirement): string {
     const id = req.identifier;
@@ -575,44 +650,62 @@ export default class FileGenerator extends CodeStream {
     this.#identifiers.set(id, null);
     return id;
   }
-  async #generateRequirementsCode() {
+  /**
+   * resolves "/a/b/c/node_modules/@a/b" to "@a/b" and local imports
+   *  (imports within the root dir, but outside of the node_modules folder) to relative paths
+   * @param originalFileGenerator file generator that is importing this absolute path
+   * @param absolutePath absolute path of the source file
+   * @returns resolved import path
+   */
+  #sourceImportToOutDirImport(
+    originalFileGenerator: FileGenerator,
+    absolutePath: string
+  ) {
+    let finalPath: string;
+
+    if (this.#externalModule) {
+      const compilerOptions = this.#compilerOptions;
+      const externalSchemaRootFolder = compilerOptions.rootDir;
+      const nodeModulesFolderPath = compilerOptions.rootDir.substring(
+        0,
+        compilerOptions.rootDir.lastIndexOf('node_modules') +
+          'node_modules'.length
+      );
+      const externalSchemaOutDir = path.resolve(
+        externalSchemaRootFolder,
+        compilerOptions.outDir
+      );
+      const finalInputFile = path.resolve(
+        externalSchemaOutDir,
+        this.#file.path.replace(
+          new RegExp(`^${externalSchemaRootFolder}/?`),
+          ''
+        )
+      );
+      finalPath = finalInputFile.replace(
+        new RegExp(`^${nodeModulesFolderPath}/?`),
+        ''
+      );
+    } else {
+      finalPath = enforceLocalImport(
+        path.relative(
+          path.dirname(originalFileGenerator.#file.path),
+          absolutePath
+        )
+      );
+    }
+    return finalPath;
+  }
+  #generateRequirementsCode() {
     for (const i of this.#imports) {
       let finalPath: string;
       if ('target' in i) {
-        finalPath = enforceLocalImport(
-          path.relative(
-            path.dirname(this.#removeRootDirOrFail(this.#file.path)),
-            i.path
-          )
+        finalPath = this.#sourceImportToOutDirImport(
+          this,
+          path.resolve(this.#compilerOptions.rootDir, i.path)
         );
       } else {
-        // const { externalModule, inputFile } =
-        //   await this.#resolveModulePathToAbsolutePath(i.path);
-        const externalModule = i.fileGenerator.#externalModule;
-        if (externalModule) {
-          const externalSchemaRootFolder = path.dirname(
-            externalModule.configFile
-          );
-          const externalSchemaOutDir = path.resolve(
-            externalSchemaRootFolder,
-            externalModule.configuration.outDir
-          );
-          const finalInputFile = path.resolve(
-            externalSchemaOutDir,
-            i.fileGenerator.#file.path.replace(
-              new RegExp(`^${externalSchemaRootFolder}/?`),
-              ''
-            )
-          );
-          finalPath = finalInputFile.replace(
-            new RegExp(`^${externalModule.nodeModulesFolderPath}/?`),
-            ''
-          );
-        } else {
-          finalPath = enforceLocalImport(
-            path.relative(path.dirname(this.#file.path), i.path)
-          );
-        }
+        finalPath = i.fileGenerator.#sourceImportToOutDirImport(this, i.path);
       }
       this.write(`import { ${i.identifier}`);
       if (i.alias) {
@@ -729,7 +822,7 @@ export default class FileGenerator extends CodeStream {
   async #findClosestNodeModules(startingDir: string): Promise<string | null> {
     return this.#fileClosestFileOrFolder(startingDir, 'node_modules');
   }
-  async #preprocessNode(node: ASTGeneratorOutputNode) {
+  async #setExportsAndValidateImports(node: ASTGeneratorOutputNode) {
     switch (node.type) {
       case NodeType.CallDefinition:
       case NodeType.TypeDefinition:
@@ -737,8 +830,9 @@ export default class FileGenerator extends CodeStream {
         break;
       case NodeType.ExportStatement:
         this.#export(node);
-        await this.#preprocessNode(node.value);
+        await this.#setExportsAndValidateImports(node.value);
         break;
+      // TODO: maybe remove this switch case, since it's just checking if the imported file has a file generator for it
       case NodeType.ImportStatement: {
         const { inputFile } = await this.#resolveModulePathToAbsolutePath(
           node.from.value
@@ -750,28 +844,11 @@ export default class FileGenerator extends CodeStream {
             `File generator not previously created for file: ${inputFile}`
           );
         }
-        /**
-         * preprocess file generator
-         */
-        await fileGenerator.#preprocess();
         break;
       }
       default:
         throw new ASTNodePreprocessingFailure(node);
     }
-  }
-  #compilerOptionsOrFail() {
-    let compilerOptions = this.#compilerOptions;
-
-    if (!compilerOptions) {
-      compilerOptions = this.#root().#compilerOptions;
-    }
-
-    if (!compilerOptions) {
-      throw new Exception('Failed to find compiler options');
-    }
-
-    return compilerOptions;
   }
   #root() {
     return this.#parent ?? this;
@@ -1120,6 +1197,149 @@ export default class FileGenerator extends CodeStream {
       '}\n'
     );
   }
+  #generateExportTypeMetadataInformation(
+    node: INodeCallDefinition | INodeTypeDefinition
+  ) {
+    this.write(
+      `export const ${node.name.value}Metadata = {\n`,
+      () => {
+        this.write(`name: "${node.name.value}",\n`);
+        this.write(
+          'params: [\n',
+          () => {
+            for (const param of node.parameters) {
+              const resolvedType = this.#resolveTypeExpression(
+                param.typeExpression
+              );
+              this.write(
+                '{\n',
+                () => {
+                  this.write(`name: "${param.name.value}",\n`);
+                  this.write(
+                    'type: {\n',
+                    () => {
+                      this.#generateResolvedTypeMetadata(resolvedType);
+                    },
+                    '}\n'
+                  );
+                },
+                '},\n'
+              );
+            }
+          },
+          ']\n'
+        );
+      },
+      '};\n'
+    );
+  }
+  #generateResolvedTypeMetadata(resolvedType: ResolvedType) {
+    if ('generic' in resolvedType) {
+      this.write('type: "generic",\n');
+      this.write(`value: "${resolvedType.generic}"`);
+    } else if ('template' in resolvedType) {
+      this.write('type: "template",\n');
+      this.write(`name: "${resolvedType.template}",\n`);
+      this.write(
+        'params: [\n',
+        () => {
+          this.write(
+            '{\n',
+            () => {
+              switch (resolvedType.template) {
+                default:
+                  throw new Exception(
+                    // @ts-expect-error `template` property should not exist since we have tried all template types
+                    `Failed to generate metadata for template: ${resolvedType.template}`
+                  );
+                case 'optional':
+                case 'set':
+                case 'vector':
+                  this.write(
+                    'value: {\n',
+                    () => {
+                      this.#generateResolvedTypeMetadata(resolvedType.type);
+                    },
+                    '}\n'
+                  );
+                  break;
+                case 'tuple':
+                  this.write(
+                    'args: [\n',
+                    () => {
+                      for (const resolvedTupleType of resolvedType.types) {
+                        this.write(
+                          '{\n',
+                          () => {
+                            this.#generateResolvedTypeMetadata(
+                              resolvedTupleType
+                            );
+                          },
+                          '},\n'
+                        );
+                      }
+                    },
+                    ']\n'
+                  );
+                  break;
+                case 'map':
+                  for (const [name, value] of new Map([
+                    ['key', resolvedType.key],
+                    ['value', resolvedType.value],
+                  ])) {
+                    this.write(
+                      `${name}: {\n`,
+                      () => {
+                        this.#generateResolvedTypeMetadata(value.resolved);
+                      },
+                      '},\n'
+                    );
+                  }
+                  break;
+              }
+            },
+            '}\n'
+          );
+        },
+        ']\n'
+      );
+    } else if ('fileGenerator' in resolvedType) {
+      this.write(`name: "${resolvedType.identifier}",\n`);
+      this.write('type: "externalType",\n');
+      this.write(
+        `relativePath: "${resolvedType.fileGenerator.#sourceImportToOutDirImport(
+          this,
+          resolvedType.fileGenerator.#file.path
+        )}"\n`
+      );
+    } else {
+      this.write('type: "internalType",\n');
+      let kind: string;
+      switch (resolvedType.type) {
+        case NodeType.CallDefinition:
+          kind = 'call';
+          this.write(
+            'returnType: {\n',
+            () => {
+              this.#generateResolvedTypeMetadata(
+                this.#resolveTypeExpression(resolvedType.returnType)
+              );
+            },
+            '},\n'
+          );
+          break;
+        case NodeType.TraitDefinition:
+          kind = 'trait';
+          break;
+        case NodeType.TypeDefinition:
+          kind = 'type';
+          break;
+      }
+      this.write(`kind: "${kind}",\n`);
+      this.write(`name: "${resolvedType.name.value}"\n`);
+    }
+    this.append(',\n');
+  }
   #generateNodeCode(node: ASTGeneratorOutputNode) {
     switch (node.type) {
       case NodeType.ExportStatement:
@@ -1127,6 +1347,7 @@ export default class FileGenerator extends CodeStream {
         break;
       case NodeType.CallDefinition:
       case NodeType.TypeDefinition:
+        this.#generateExportTypeMetadataInformation(node);
         this.#generateDefinitionObjectCreatorFunction(node);
         this.#generateDefinitionEncodeFunction(node);
         this.#generateDefinitionDecodeFunction(node);
@@ -1154,6 +1375,23 @@ export default class FileGenerator extends CodeStream {
               })
             )
             .join(' | ')};\n`
+        );
+        this.write(
+          `export const ${node.name.value}Files = [\n`,
+          () => {
+            const relativePathSet = new Set();
+            for (const node of trait.nodes) {
+              if ('fileGenerator' in node) {
+                relativePathSet.add(
+                  path.relative(this.#file.path, node.fileGenerator.#file.path)
+                );
+              }
+            }
+            for (const relativePath of relativePathSet) {
+              this.write(`"${relativePath}",\n`);
+            }
+          },
+          '];\n'
         );
 
         this.#generateEncodeTraitFunction(node, trait.nodes);
@@ -1409,7 +1647,7 @@ export default class FileGenerator extends CodeStream {
   ) {
     return getTypeDefinitionOrCallDefinitionNamePropertyValue(
       node,
-      this.#removeRootDirOrFail(this.#file.path)
+      this.#removeRootDir(this.#file.path)
     );
   }
   #resolvedTypeExpressionToDefinition(exp: ResolvedType) {
@@ -1499,6 +1737,23 @@ export default class FileGenerator extends CodeStream {
       '}\n'
     );
   }
+  #compareFunctionNameAndDefinitionFromResolvedType(exp: ResolvedType) {
+    const isExternalRequirement = 'fileGenerator' in exp;
+    const definition = this.#resolvedTypeExpressionToDefinition(exp);
+    const fileGenerator = isExternalRequirement ? exp.fileGenerator : this;
+    let compareFunctionName = getCompareFunctionName(definition);
+    if (isExternalRequirement) {
+      compareFunctionName = this.#import({
+        ...exp,
+        identifier: compareFunctionName,
+      });
+    }
+    return {
+      fileGenerator,
+      definition,
+      compareFunctionName,
+    };
+  }
   #generateTraitCompareFunction(
     trait: INodeTraitDefinition,
     exps: ResolvedType[]
@@ -1509,25 +1764,30 @@ export default class FileGenerator extends CodeStream {
         ', '
       )}) {\n`,
       () => {
+        const [firstExp] = exps;
+        if (exps.length === 1) {
+          if (typeof firstExp === 'undefined') {
+            throw new Exception(
+              'firstExp was undefined, but `exps` length was 1'
+            );
+          }
+          this.write(
+            `return ${
+              this.#compareFunctionNameAndDefinitionFromResolvedType(firstExp)
+                .compareFunctionName
+            }(__a, __b);\n`
+          );
+          return;
+        }
         this.write(
           `switch(__a.${this.#uniqueNamePropertyName}) {\n`,
           () => {
             for (const exp of exps) {
-              const isExternalRequirement = 'fileGenerator' in exp;
-              const fileGenerator = isExternalRequirement
-                ? exp.fileGenerator
-                : this;
-              const def = this.#resolvedTypeExpressionToDefinition(exp);
-              let compareFunctionName = getCompareFunctionName(def);
-              if (isExternalRequirement) {
-                compareFunctionName = this.#import({
-                  ...exp,
-                  identifier: compareFunctionName,
-                });
-              }
+              const { fileGenerator, compareFunctionName, definition } =
+                this.#compareFunctionNameAndDefinitionFromResolvedType(exp);
               const typeStringifiedName =
                 fileGenerator.#getTypeDefinitionOrCallDefinitionNamePropertyValue(
-                  def
+                  definition
                 );
               this.write(`case '${typeStringifiedName}':\n`);
               this.indentBlock(() => {
@@ -2003,7 +2263,9 @@ export default class FileGenerator extends CodeStream {
   #getUniqueHeaderString(
     node: INodeTraitDefinition | INodeCallDefinition | INodeTypeDefinition
   ) {
-    const values = [`${this.#file.path}/${node.name.value}`];
+    const values = [
+      `${this.#removeRootDir(this.#file.path)}/${node.name.value}`,
+    ];
     if (node.type === NodeType.CallDefinition) {
       const resolvedTypeExpression = this.#resolveTypeExpression(
         node.returnType

@@ -2,6 +2,7 @@ import { Suite } from 'sarg';
 import assert from 'assert';
 import { generateWithVirtualFs } from '../helpers';
 import { Exception, spawn } from 'child-process-utilities';
+import CodeStream from 'textstreamjs';
 
 const suite = new Suite();
 
@@ -18,6 +19,176 @@ function checkException(fn: () => Promise<void>) {
     }
   };
 }
+
+suite.test(
+  'it should test all sorts of generic parameters',
+  checkException(async () => {
+    await (
+      await generateWithVirtualFs({
+        packageInfo: {
+          name: 'test-schema',
+        },
+        paths: {
+          main: [
+            'export type A {',
+            'int a;',
+            'string b;',
+            'uint32 c;',
+            'long d;',
+            'ulong e;',
+            'int f;',
+            'null_terminated_string aaa;',
+            '}',
+          ].join('\n'),
+        },
+        mainFile: 'main',
+      })
+    ).test();
+  })
+);
+
+suite.test(
+  'it should allow two imports of the same file coming from different files',
+  checkException(async () => {
+    const createImport = (a: string) => `import { ${a} } from "./${a}";`;
+    await (
+      await generateWithVirtualFs({
+        packageInfo: {
+          name: 'shared-schema',
+        },
+        paths: {
+          Void: 'export type Void {}',
+          Request: ['export trait Request {}'].join('\n'),
+          a: [
+            createImport('Request'),
+            createImport('Void'),
+            'export call a : Request => Void {}',
+          ].join('\n'),
+          b: [
+            createImport('Request'),
+            createImport('Void'),
+            'export call b : Request => Void {}',
+          ].join('\n'),
+          main: ['import "./a";', 'import "./a";'].join('\n'),
+        },
+        mainFile: 'main',
+      })
+    ).test();
+  })
+);
+
+suite.test(
+  'it should allow importing external schemas when file is being imported from inside a folder',
+  checkException(async () => {
+    const externalModule = await generateWithVirtualFs({
+      packageInfo: {
+        name: 'v',
+        version: '0.0.1',
+      },
+      paths: {
+        'schema/a': 'export type A { int id1; }',
+        'schema/b': 'export type B { int id2; }',
+        'schema/main': ['import "./a";', 'import "./b";'].join('\n'),
+      },
+      mainFile: 'schema/main',
+    });
+
+    const { tgzFiles: externalModuleTgzFiles } = await externalModule.test();
+
+    const virtualProject = await generateWithVirtualFs({
+      paths: {
+        'src/index': [
+          'import { A } from "v/schema/a";',
+          'import { B } from "v/schema/b";',
+          ['type C {', 'A a;', 'B b;', '}'].join('\n'),
+        ].join('\n'),
+      },
+      mainFile: 'src/index',
+    });
+
+    assert.strict.ok(externalModuleTgzFiles.length > 0);
+
+    await virtualProject.installPackages(externalModuleTgzFiles);
+
+    await virtualProject.test();
+  })
+);
+
+suite.test(
+  'it should resolve the following external schemas scenario: C uses A, B; A, B uses Shared',
+  checkException(async () => {
+    const sharedSchema = await (
+      await generateWithVirtualFs({
+        packageInfo: {
+          name: 'shared-schema',
+        },
+        paths: {
+          main: ['export type Shared { int id; string value; }'].join('\n'),
+        },
+        mainFile: 'main',
+      })
+    ).test();
+    const [moduleA, moduleB] = await Promise.all(
+      [
+        generateWithVirtualFs({
+          packageInfo: {
+            name: 'a-schema',
+          },
+          paths: {
+            main: [
+              'import { Shared } from "shared-schema/main";',
+              'export type A { Shared value; }',
+            ].join('\n'),
+          },
+          mainFile: 'main',
+        }),
+        generateWithVirtualFs({
+          packageInfo: {
+            name: 'b-schema',
+          },
+          paths: {
+            main: [
+              'import { Shared } from "shared-schema/main";',
+              'export type B { Shared value; }',
+            ].join('\n'),
+          },
+          mainFile: 'main',
+        }),
+      ].map(async (m) => {
+        await (await m).installPackages(sharedSchema.tgzFiles);
+        return m;
+      })
+    );
+
+    const testSchemaCode = new CodeStream();
+    testSchemaCode.write(
+      "const { defaultC } = require('./__compiled__/main');\n"
+    );
+    testSchemaCode.write("const assert = require('assert');\n");
+    testSchemaCode.write('assert.strict.deepEqual(defaultC(),defaultC());\n');
+
+    const moduleC = await generateWithVirtualFs({
+      packageInfo: {
+        name: 'c-schema',
+      },
+      paths: {
+        main: [
+          'import { B } from "b-schema/main";',
+          'import { A } from "a-schema/main";',
+          'export type C { B bValue; A aValue; }',
+        ].join('\n'),
+        'test.js': testSchemaCode.value(),
+      },
+      runScript: 'test.js',
+      mainFile: 'main',
+    });
+
+    await moduleC.installPackages((await moduleB.test()).tgzFiles);
+    await moduleC.installPackages((await moduleA.test()).tgzFiles);
+
+    await moduleC.test();
+  })
+);
 
 suite.test(
   'it should allow importing external schemas in a cascading format',
@@ -74,45 +245,6 @@ suite.test(
     }).wait();
 
     await module3.test();
-  })
-);
-
-suite.test(
-  'it should allow importing external schemas when file is being imported from inside a folder',
-  checkException(async () => {
-    const externalModule = await generateWithVirtualFs({
-      packageInfo: {
-        name: 'v',
-        version: '0.0.1',
-      },
-      paths: {
-        'schema/a': 'export type A { int id1; }',
-        'schema/b': 'export type B { int id2; }',
-        'schema/main': ['import "./a";', 'import "./b";'].join('\n'),
-      },
-      mainFile: 'schema/main',
-    });
-
-    const { tgzFiles: externalModuleTgzFiles } = await externalModule.test();
-
-    const virtualProject = await generateWithVirtualFs({
-      paths: {
-        'src/index': [
-          'import { A } from "v/schema/a";',
-          'import { B } from "v/schema/b";',
-          ['type C {', 'A a;', 'B b;', '}'].join('\n'),
-        ].join('\n'),
-      },
-      mainFile: 'src/index',
-    });
-
-    assert.strict.ok(externalModuleTgzFiles.length > 0);
-
-    await spawn('npm', ['install', '--save', ...externalModuleTgzFiles], {
-      cwd: virtualProject.rootDir,
-    }).wait();
-
-    await virtualProject.test();
   })
 );
 
