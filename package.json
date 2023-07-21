@@ -37,7 +37,7 @@
     "cli": "npx ts-node --project cli/tsconfig.json cli",
     "schema": "yarn run cli test/schema -o out --extends tsconfig.base.json --indentation-size 2",
     "build": "npx tsc -b cli code-generator codec src --force",
-    "prepublishOnly": "yarn run lint && yarn run schema && yarn run build",
+    "prepublishOnly": "yarn run schema && yarn run build && yarn run lint && yarn run test",
     "test": "TS_NODE_PROJECT=test/tsconfig.json npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
     "test:coverage": "npx nyc yarn test"
   },
