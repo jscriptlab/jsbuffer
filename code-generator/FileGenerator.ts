@@ -1239,10 +1239,67 @@ export default class FileGenerator extends CodeStream {
       this.write(`value: "${resolvedType.generic}"`);
     } else if ('template' in resolvedType) {
       this.write('type: "template",\n');
+      this.write(`name: "${resolvedType.template}",\n`);
       this.write(
         'params: [\n',
         () => {
-          this.#generateResolvedTypeMetadata(resolvedType);
+          this.write(
+            '{\n',
+            () => {
+              switch (resolvedType.template) {
+                default:
+                  throw new Exception(
+                    // @ts-expect-error `template` property should not exist since we have tried all template types
+                    `Failed to generate metadata for template: ${resolvedType.template}`
+                  );
+                case 'optional':
+                case 'set':
+                case 'vector':
+                  this.write(
+                    'value: {\n',
+                    () => {
+                      this.#generateResolvedTypeMetadata(resolvedType.type);
+                    },
+                    '}\n'
+                  );
+                  break;
+                case 'tuple':
+                  this.write(
+                    'args: [\n',
+                    () => {
+                      for (const resolvedTupleType of resolvedType.types) {
+                        this.write(
+                          '{\n',
+                          () => {
+                            this.#generateResolvedTypeMetadata(
+                              resolvedTupleType
+                            );
+                          },
+                          '},\n'
+                        );
+                      }
+                    },
+                    ']\n'
+                  );
+                  break;
+                case 'map':
+                  for (const [name, value] of new Map([
+                    ['key', resolvedType.key],
+                    ['value', resolvedType.value],
+                  ])) {
+                    this.write(
+                      `${name}: {\n`,
+                      () => {
+                        this.#generateResolvedTypeMetadata(value.resolved);
+                      },
+                      '},\n'
+                    );
+                  }
+                  break;
+              }
+            },
+            '}\n'
+          );
         },
         ']\n'
       );
