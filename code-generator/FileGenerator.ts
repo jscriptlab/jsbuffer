@@ -1575,6 +1575,23 @@ export default class FileGenerator extends CodeStream {
       '}\n'
     );
   }
+  #compareFunctionNameAndDefinitionFromResolvedType(exp: ResolvedType) {
+    const isExternalRequirement = 'fileGenerator' in exp;
+    const definition = this.#resolvedTypeExpressionToDefinition(exp);
+    const fileGenerator = isExternalRequirement ? exp.fileGenerator : this;
+    let compareFunctionName = getCompareFunctionName(definition);
+    if (isExternalRequirement) {
+      compareFunctionName = this.#import({
+        ...exp,
+        identifier: compareFunctionName,
+      });
+    }
+    return {
+      fileGenerator,
+      definition,
+      compareFunctionName,
+    };
+  }
   #generateTraitCompareFunction(
     trait: INodeTraitDefinition,
     exps: ResolvedType[]
@@ -1585,25 +1602,30 @@ export default class FileGenerator extends CodeStream {
         ', '
       )}) {\n`,
       () => {
+        const [firstExp] = exps;
+        if (exps.length === 1) {
+          if (typeof firstExp === 'undefined') {
+            throw new Exception(
+              'firstExp was undefined, but `exps` length was 1'
+            );
+          }
+          this.write(
+            `return ${
+              this.#compareFunctionNameAndDefinitionFromResolvedType(firstExp)
+                .compareFunctionName
+            }(__a, __b);\n`
+          );
+          return;
+        }
         this.write(
           `switch(__a.${this.#uniqueNamePropertyName}) {\n`,
           () => {
             for (const exp of exps) {
-              const isExternalRequirement = 'fileGenerator' in exp;
-              const fileGenerator = isExternalRequirement
-                ? exp.fileGenerator
-                : this;
-              const def = this.#resolvedTypeExpressionToDefinition(exp);
-              let compareFunctionName = getCompareFunctionName(def);
-              if (isExternalRequirement) {
-                compareFunctionName = this.#import({
-                  ...exp,
-                  identifier: compareFunctionName,
-                });
-              }
+              const { fileGenerator, compareFunctionName, definition } =
+                this.#compareFunctionNameAndDefinitionFromResolvedType(exp);
               const typeStringifiedName =
                 fileGenerator.#getTypeDefinitionOrCallDefinitionNamePropertyValue(
-                  def
+                  definition
                 );
               this.write(`case '${typeStringifiedName}':\n`);
               this.indentBlock(() => {
