@@ -1196,6 +1196,92 @@ export default class FileGenerator extends CodeStream {
       '}\n'
     );
   }
+  #generateExportTypeMetadataInformation(
+    node: INodeCallDefinition | INodeTypeDefinition
+  ) {
+    this.write(
+      `export const ${node.name.value}Metadata = {\n`,
+      () => {
+        this.write(`name: "${node.name.value}",\n`);
+        this.write(
+          'params: [\n',
+          () => {
+            for (const param of node.parameters) {
+              const resolvedType = this.#resolveTypeExpression(
+                param.typeExpression
+              );
+              this.write(
+                '{\n',
+                () => {
+                  this.write(`name: "${param.name.value}",\n`);
+                  this.write(
+                    'type: {\n',
+                    () => {
+                      this.#generateResolvedTypeMetadata(resolvedType);
+                    },
+                    '}\n'
+                  );
+                },
+                '},\n'
+              );
+            }
+          },
+          ']\n'
+        );
+      },
+      '};\n'
+    );
+  }
+  #generateResolvedTypeMetadata(resolvedType: ResolvedType) {
+    if ('generic' in resolvedType) {
+      this.write('type: "generic",\n');
+      this.write(`value: "${resolvedType.generic}"`);
+    } else if ('template' in resolvedType) {
+      this.write('type: "template",\n');
+      this.write(
+        'params: [\n',
+        () => {
+          this.#generateResolvedTypeMetadata(resolvedType);
+        },
+        ']\n'
+      );
+    } else if ('fileGenerator' in resolvedType) {
+      this.write(`name: "${resolvedType.identifier}",\n`);
+      this.write('type: "externalType",\n');
+      this.write(
+        `relativePath: "${resolvedType.fileGenerator.#sourceImportToOutDirImport(
+          this,
+          resolvedType.fileGenerator.#file.path
+        )}"\n`
+      );
+    } else {
+      this.write('type: "internalType",\n');
+      let kind: string;
+      switch (resolvedType.type) {
+        case NodeType.CallDefinition:
+          kind = 'call';
+          this.write(
+            'returnType: {\n',
+            () => {
+              this.#generateResolvedTypeMetadata(
+                this.#resolveTypeExpression(resolvedType.returnType)
+              );
+            },
+            '},\n'
+          );
+          break;
+        case NodeType.TraitDefinition:
+          kind = 'trait';
+          break;
+        case NodeType.TypeDefinition:
+          kind = 'type';
+          break;
+      }
+      this.write(`kind: "${kind}",\n`);
+      this.write(`name: "${resolvedType.name.value}"\n`);
+    }
+    this.append(',\n');
+  }
   #generateNodeCode(node: ASTGeneratorOutputNode) {
     switch (node.type) {
       case NodeType.ExportStatement:
@@ -1203,6 +1289,7 @@ export default class FileGenerator extends CodeStream {
         break;
       case NodeType.CallDefinition:
       case NodeType.TypeDefinition:
+        this.#generateExportTypeMetadataInformation(node);
         this.#generateDefinitionObjectCreatorFunction(node);
         this.#generateDefinitionEncodeFunction(node);
         this.#generateDefinitionDecodeFunction(node);
