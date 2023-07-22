@@ -88,15 +88,11 @@ export const MessagesMetadata = {
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              type: 'internalType',
-              kind: 'type',
-              name: 'Message',
-            },
-          },
-        ],
+        value: {
+          type: 'internalType',
+          kind: 'type',
+          name: 'Message',
+        },
       },
     },
   ],

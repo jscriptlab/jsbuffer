@@ -164,15 +164,11 @@ export const postMetadata = {
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              type: 'internalType',
-              kind: 'type',
-              name: 'comment',
-            },
-          },
-        ],
+        value: {
+          type: 'internalType',
+          kind: 'type',
+          name: 'comment',
+        },
       },
     },
   ],
@@ -470,59 +466,43 @@ export const tupleTestMetadata = {
       type: {
         type: 'template',
         name: 'tuple',
-        params: [
+        args: [
           {
-            args: [
-              {
-                type: 'internalType',
-                kind: 'type',
-                name: 'user',
-              },
-              {
-                type: 'internalType',
-                kind: 'type',
-                name: 'post',
-              },
-              {
+            type: 'internalType',
+            kind: 'type',
+            name: 'user',
+          },
+          {
+            type: 'internalType',
+            kind: 'type',
+            name: 'post',
+          },
+          {
+            type: 'internalType',
+            kind: 'type',
+            name: 'comment',
+          },
+          {
+            type: 'template',
+            name: 'vector',
+            value: {
+              type: 'internalType',
+              kind: 'type',
+              name: 'comment',
+            },
+          },
+          {
+            type: 'template',
+            name: 'vector',
+            value: {
+              type: 'template',
+              name: 'optional',
+              value: {
                 type: 'internalType',
                 kind: 'type',
                 name: 'comment',
               },
-              {
-                type: 'template',
-                name: 'vector',
-                params: [
-                  {
-                    value: {
-                      type: 'internalType',
-                      kind: 'type',
-                      name: 'comment',
-                    },
-                  },
-                ],
-              },
-              {
-                type: 'template',
-                name: 'vector',
-                params: [
-                  {
-                    value: {
-                      type: 'template',
-                      name: 'optional',
-                      params: [
-                        {
-                          value: {
-                            type: 'internalType',
-                            kind: 'type',
-                            name: 'comment',
-                          },
-                        },
-                      ],
-                    },
-                  },
-                ],
-              },
-            ],
+            },
           },
         ],
       },
@@ -737,53 +717,11 @@ export const tupleTupleTestMetadata = {
       type: {
         type: 'template',
         name: 'tuple',
-        params: [
+        args: [
           {
+            type: 'template',
+            name: 'tuple',
             args: [
-              {
-                type: 'template',
-                name: 'tuple',
-                params: [
-                  {
-                    args: [
-                      {
-                        type: 'generic',
-                        value: 'int',
-                      },
-                      {
-                        type: 'generic',
-                        value: 'string',
-                      },
-                      {
-                        type: 'template',
-                        name: 'vector',
-                        params: [
-                          {
-                            value: {
-                              type: 'template',
-                              name: 'tuple',
-                              params: [
-                                {
-                                  args: [
-                                    {
-                                      type: 'generic',
-                                      value: 'string',
-                                    },
-                                    {
-                                      type: 'generic',
-                                      value: 'int',
-                                    },
-                                  ],
-                                },
-                              ],
-                            },
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              },
               {
                 type: 'generic',
                 value: 'int',
@@ -793,10 +731,36 @@ export const tupleTupleTestMetadata = {
                 value: 'string',
               },
               {
-                type: 'generic',
-                value: 'double',
+                type: 'template',
+                name: 'vector',
+                value: {
+                  type: 'template',
+                  name: 'tuple',
+                  args: [
+                    {
+                      type: 'generic',
+                      value: 'string',
+                    },
+                    {
+                      type: 'generic',
+                      value: 'int',
+                    },
+                  ],
+                },
               },
             ],
+          },
+          {
+            type: 'generic',
+            value: 'int',
+          },
+          {
+            type: 'generic',
+            value: 'string',
+          },
+          {
+            type: 'generic',
+            value: 'double',
           },
         ],
       },
@@ -991,42 +955,30 @@ export const superTupleTupleTestMetadata = {
       type: {
         type: 'template',
         name: 'tuple',
-        params: [
+        args: [
           {
+            type: 'template',
+            name: 'tuple',
             args: [
               {
                 type: 'template',
                 name: 'tuple',
-                params: [
+                args: [
                   {
-                    args: [
-                      {
-                        type: 'template',
-                        name: 'tuple',
-                        params: [
-                          {
-                            args: [
-                              {
-                                type: 'generic',
-                                value: 'int',
-                              },
-                            ],
-                          },
-                        ],
-                      },
-                      {
-                        type: 'generic',
-                        value: 'int',
-                      },
-                    ],
+                    type: 'generic',
+                    value: 'int',
                   },
                 ],
               },
               {
                 type: 'generic',
-                value: 'double',
+                value: 'int',
               },
             ],
+          },
+          {
+            type: 'generic',
+            value: 'double',
           },
         ],
       },

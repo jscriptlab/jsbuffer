@@ -1236,7 +1236,7 @@ export default class FileGenerator extends CodeStream {
   #generateResolvedTypeMetadata(resolvedType: ResolvedType) {
     if ('generic' in resolvedType) {
       this.write('type: "generic",\n');
-      this.write(`value: "${resolvedType.generic}"`);
+      this.write(`value: "${resolvedType.generic}"\n`);
     } else if ('template' in resolvedType) {
       this.write('type: "template",\n');
       this.write(`name: "${resolvedType.template}",\n`);
@@ -1274,20 +1274,27 @@ export default class FileGenerator extends CodeStream {
             ']\n'
           );
           break;
-        case 'map':
-          for (const [name, value] of new Map([
+        case 'map': {
+          const items = [
             ['key', resolvedType.key],
             ['value', resolvedType.value],
-          ])) {
+          ] as const;
+          for (const item of items) {
+            const [name, value] = item;
             this.write(
               `${name}: {\n`,
               () => {
                 this.#generateResolvedTypeMetadata(value.resolved);
               },
-              '},\n'
+              '}'
             );
+            if (item !== items[items.length - 1]) {
+              this.append(',');
+            }
+            this.append('\n');
           }
           break;
+        }
       }
     } else if ('fileGenerator' in resolvedType) {
       this.write(`name: "${resolvedType.identifier}",\n`);
@@ -1324,7 +1331,6 @@ export default class FileGenerator extends CodeStream {
       this.write(`kind: "${kind}",\n`);
       this.write(`name: "${resolvedType.name.value}"\n`);
     }
-    this.append(',\n');
   }
   #generateNodeCode(node: ASTGeneratorOutputNode) {
     switch (node.type) {
