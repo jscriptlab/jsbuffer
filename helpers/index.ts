@@ -21,122 +21,168 @@ function generateTestSchemaFilesCode({
 }) {
   const cs = new CodeStream();
   cs.write(
+    'function randomValuesFromGenericParamMetadataType(paramType) {\n',
+    () => {
+      cs.write('let testValue;\n');
+      cs.write(
+        'switch(paramType.value) {\n',
+        () => {
+          cs.write('default:\n');
+          cs.indentBlock(() => {
+            cs.write(
+              'throw new Error(`Unhandled generic value: ${paramType.value}`);\n'
+            );
+          });
+          for (const x of [
+            {
+              type: ['int', 'int32'],
+              value: () => 'crypto.randomFillSync(new Int32Array(1))[0]',
+            },
+            {
+              type: ['uint32'],
+              value: () => 'crypto.randomFillSync(new Uint32Array(1))[0]',
+            },
+            {
+              type: ['string', 'null_terminated_string'],
+              value: () => '`"${crypto.randomBytes(64).toString(\'base64\')}"`',
+            },
+            {
+              type: 'double',
+              value: () => 'crypto.randomFillSync(new Float64Array(1))[0]',
+            },
+            {
+              type: 'float',
+              value: () => 'crypto.randomFillSync(new Float32Array(1))[0]',
+            },
+            {
+              type: 'long',
+              value: () =>
+                '`"${crypto.randomFillSync(new BigInt64Array(1))[0]}"`',
+            },
+            {
+              type: 'ulong',
+              value: () =>
+                '`"${crypto.randomFillSync(new BigUint64Array(1))[0]}"`',
+            },
+          ]) {
+            let { type: types } = x;
+            if (!Array.isArray(types)) {
+              types = [types];
+            }
+            for (const t of types) {
+              cs.write(`case "${t}":\n`);
+              cs.indentBlock(() => {
+                cs.write(`testValue = ${x.value()};\n`);
+                cs.write('break;\n');
+              });
+            }
+          }
+        },
+        '}\n'
+      );
+      cs.write('return testValue;\n');
+    },
+    '}\n'
+  );
+  cs.write(
+    'function randomValuesFromParamMetadataType(paramType, typeModuleResult) {\n',
+    () => {
+      cs.write('let testValue;\n');
+      cs.write(
+        'switch(paramType.type) {\n',
+        () => {
+          cs.write('case "template":\n');
+          cs.indentBlock(() => {
+            cs.write(
+              'switch(paramType.name) {\n',
+              () => {
+                for (const n of ['vector', 'set', 'optional']) {
+                  cs.write(`case "${n}":\n`);
+                  cs.indentBlock(() => {
+                    cs.write(
+                      'testValue = randomValuesFromParamMetadataType(paramType.value, typeModuleResult);\n'
+                    );
+                    cs.write('break;\n');
+                  });
+                }
+                cs.write('case "tuple":\n');
+                cs.indentBlock(() => {
+                  cs.write(
+                    'testValue = paramType.args.map(arg => randomValuesFromParamMetadataType(arg, typeModuleResult));\n'
+                  );
+                  cs.write('break;\n');
+                });
+                cs.write('default:\n');
+                cs.indentBlock(() => {
+                  cs.write(
+                    'throw new Error(`Unsupported template: ${paramType.name}`);'
+                  );
+                });
+              },
+              '}\n'
+            );
+            cs.write('break;\n');
+          });
+          cs.write('case "internalType":\n');
+          cs.write('case "externalType":\n');
+          cs.indentBlock(() => {
+            cs.write(
+              'if(paramType.type === "externalType") {\n',
+              () => {
+                cs.write(
+                  'typeModuleResult = require(paramType.relativePath);\n'
+                );
+              },
+              '} else {\n'
+            );
+            cs.indentBlock(() => {
+              cs.write('assert.strict.ok(typeModuleResult !== null);\n');
+            });
+            cs.write('}\n');
+            cs.write(
+              'const outMetadata = typeModuleResult[`${paramType.name}Metadata`];\n'
+            );
+            cs.write(
+              'const defaultFn = typeModuleResult[`default${paramType.name}`];\n'
+            );
+            cs.write(
+              "assert.strict.ok(typeof outMetadata !== 'undefined' && typeof defaultFn === 'function');\n"
+            );
+            cs.write(
+              'testValue = defaultFn(Object.fromEntries(randomValuesFromMetadata(outMetadata, typeModuleResult)));\n'
+            );
+            cs.write('break;\n');
+          });
+          cs.write('case "generic":\n');
+          cs.indentBlock(() => {
+            cs.write(
+              'testValue = randomValuesFromGenericParamMetadataType(paramType);\n'
+            );
+            cs.write('break;\n');
+          });
+          cs.write('default:\n');
+          cs.indentBlock(() => {
+            cs.write(
+              'throw new Error(`Unhandled param type: ${paramType.type}`);\n'
+            );
+          });
+        },
+        '}\n'
+      );
+      cs.write('return testValue;\n');
+    },
+    '}\n'
+  );
+  cs.write(
     'function randomValuesFromMetadata(metadata, typeModuleResult = null) {',
     () => {
       cs.write('const result = new Map();\n');
       cs.write(
         'for(const paramMetadata of metadata.params) {\n',
         () => {
-          cs.write('let testValue;\n');
           cs.write('const paramType = paramMetadata.type;\n');
           cs.write(
-            'switch(paramType.type) {\n',
-            () => {
-              cs.write('case "internalType":\n');
-              cs.write('case "externalType":\n');
-              cs.indentBlock(() => {
-                cs.write(
-                  'if(paramType.type === "externalType") {\n',
-                  () => {
-                    cs.write(
-                      'typeModuleResult = require(paramType.relativePath);\n'
-                    );
-                  },
-                  '} else {\n'
-                );
-                cs.indentBlock(() => {
-                  cs.write('assert.strict.ok(typeModuleResult !== null);\n');
-                });
-                cs.write('}\n');
-                cs.write(
-                  'const outMetadata = typeModuleResult[`${paramType.name}Metadata`];\n'
-                );
-                cs.write(
-                  'const defaultFn = typeModuleResult[`default${paramType.name}`];\n'
-                );
-                cs.write(
-                  "assert.strict.ok(typeof outMetadata !== 'undefined' && typeof defaultFn === 'function');\n"
-                );
-                cs.write(
-                  'testValue = defaultFn(Object.fromEntries(randomValuesFromMetadata(outMetadata, typeModuleResult)));\n'
-                );
-                cs.write('break;\n');
-              });
-              cs.write('case "generic":\n');
-              cs.indentBlock(() => {
-                cs.write(
-                  'switch(paramType.value) {\n',
-                  () => {
-                    cs.write('default:\n');
-                    cs.indentBlock(() => {
-                      cs.write(
-                        'throw new Error(`Unhandled generic type for param "${paramMetadata.name}": ${paramType.value}`);\n'
-                      );
-                    });
-                    for (const x of [
-                      {
-                        type: ['int', 'int32'],
-                        value: () =>
-                          crypto.randomFillSync(new Int32Array(1))[0],
-                      },
-                      {
-                        type: ['uint', 'uint32'],
-                        value: () =>
-                          crypto.randomFillSync(new Uint32Array(1))[0],
-                      },
-                      {
-                        type: ['string', 'null_terminated_string'],
-                        value: () =>
-                          `"${crypto.randomBytes(64).toString('base64')}"`,
-                      },
-                      {
-                        type: 'double',
-                        value: () =>
-                          crypto.randomFillSync(new Float64Array(1))[0],
-                      },
-                      {
-                        type: 'float',
-                        value: () =>
-                          crypto.randomFillSync(new Float32Array(1))[0],
-                      },
-                      {
-                        type: 'long',
-                        value: () =>
-                          `"${crypto.randomFillSync(new BigInt64Array(1))[0]}"`,
-                      },
-                      {
-                        type: 'ulong',
-                        value: () =>
-                          `"${
-                            crypto.randomFillSync(new BigUint64Array(1))[0]
-                          }"`,
-                      },
-                    ]) {
-                      let { type: types } = x;
-                      if (!Array.isArray(types)) {
-                        types = [types];
-                      }
-                      for (const t of types) {
-                        cs.write(`case "${t}":\n`);
-                        cs.indentBlock(() => {
-                          cs.write(`testValue = ${x.value()};\n`);
-                          cs.write('break;\n');
-                        });
-                      }
-                    }
-                  },
-                  '}\n'
-                );
-                cs.write('break;\n');
-              });
-              cs.write('default:\n');
-              cs.indentBlock(() => {
-                cs.write(
-                  'throw new Error(`Unsupported type on param "${paramMetadata.name}": ${paramMetadata.type.type}`);\n'
-                );
-              });
-            },
-            '}\n'
+            'const testValue = randomValuesFromParamMetadataType(paramType, typeModuleResult);\n'
           );
           cs.write('result.set(paramMetadata.name,testValue);\n');
         },
@@ -167,6 +213,7 @@ function generateTestSchemaFilesCode({
     cs.write(`const ${value} = value[${value}Key];\n`);
   };
   cs.write("const assert = require('assert');\n");
+  cs.write("const crypto = require('crypto');\n");
   cs.write("const {Serializer,Deserializer} = require('jsbuffer/codec');\n");
   cs.write(
     'const s = new Serializer({\n',

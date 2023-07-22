@@ -28,7 +28,9 @@ suite.test('it should be able to test deep types', async () => {
       },
       paths: {
         main: [
-          'export type F { int value; }',
+          'export type H { int value; tuple<int,int> value2; }',
+          'export type G { vector<H> value; }',
+          'export type F { G value; }',
           'export type E { F value; }',
           'export type D { E value; }',
           'export type C { D value; }',
