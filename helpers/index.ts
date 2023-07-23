@@ -45,7 +45,7 @@ function generateTestSchemaFilesCode({
             },
             {
               type: ['string', 'null_terminated_string'],
-              value: () => '`"${crypto.randomBytes(64).toString(\'base64\')}"`',
+              value: () => "`${crypto.randomBytes(64).toString('base64')}`",
             },
             {
               type: 'double',
