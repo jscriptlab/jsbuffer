@@ -4,7 +4,6 @@ import { IRequest } from './__types__';
 export const MessageMetadata = {
   name: 'Message',
   id: -1731107621,
-
   params: [
     {
       name: 'id',
