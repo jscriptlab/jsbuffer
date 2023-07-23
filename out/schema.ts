@@ -8,6 +8,7 @@ import { compareUserTrait } from './User';
 import { IRequest } from './__types__';
 export const testMapMetadata = {
   name: 'testMap',
+  id: 1326441943,
   params: [
     {
       name: 'a',
@@ -117,6 +118,7 @@ export function updateTestMap(
 }
 export const testMap2Metadata = {
   name: 'testMap2',
+  id: -42313774,
   params: [
     {
       name: 'a',
@@ -390,6 +392,7 @@ export function updateTestMap2(
 }
 export const testMap3Metadata = {
   name: 'testMap3',
+  id: 263728261,
   params: [
     {
       name: 'a',
@@ -397,6 +400,7 @@ export const testMap3Metadata = {
         type: 'template',
         name: 'map',
         key: {
+          id: -42313774,
           type: 'internalType',
           kind: 'type',
           name: 'testMap2',
@@ -501,6 +505,7 @@ export function updateTestMap3(
 }
 export const testSetMetadata = {
   name: 'testSet',
+  id: 1426622717,
   params: [
     {
       name: 'a',
@@ -660,6 +665,7 @@ export function updateTestSet(
 }
 export const testSet2Metadata = {
   name: 'testSet2',
+  id: 1091514709,
   params: [
     {
       name: 'a',
@@ -930,6 +936,7 @@ export function updateTestSet2(
 }
 export const VoidMetadata = {
   name: 'Void',
+  id: 189644707,
   params: [],
 };
 export interface VoidInputParams {}
@@ -967,6 +974,7 @@ export function updateVoid(value: Void, _: Partial<VoidInputParams>) {
 }
 export const msgMetadata = {
   name: 'msg',
+  id: -1103074928,
   params: [
     {
       name: 'data',
@@ -1097,6 +1105,7 @@ export function compareResultTrait(__a: Result, __b: Result) {
 }
 export const UsersMetadata = {
   name: 'Users',
+  id: 1801329960,
   params: [
     {
       name: 'users',
@@ -1105,7 +1114,9 @@ export const UsersMetadata = {
         name: 'vector',
         value: {
           name: 'User',
+          id: '738416594',
           type: 'externalType',
+          externalModule: false,
           relativePath: './User',
         },
       },
@@ -1198,6 +1209,7 @@ export function updateUsers(value: Users, changes: Partial<UsersInputParams>) {
 }
 export const GetUserByIdMetadata = {
   name: 'GetUserById',
+  id: -2021730434,
   params: [
     {
       name: 'userId',
@@ -1280,6 +1292,7 @@ export function updateGetUserById(
 }
 export const PostMetadata = {
   name: 'Post',
+  id: 901140138,
   params: [
     {
       name: 'id',
@@ -1354,6 +1367,7 @@ export function updatePost(value: Post, changes: Partial<PostInputParams>) {
 }
 export const PostsMetadata = {
   name: 'Posts',
+  id: 413461762,
   params: [
     {
       name: 'posts',
@@ -1361,6 +1375,7 @@ export const PostsMetadata = {
         type: 'template',
         name: 'vector',
         value: {
+          id: 901140138,
           type: 'internalType',
           kind: 'type',
           name: 'Post',
@@ -1453,6 +1468,7 @@ export function updatePosts(value: Posts, changes: Partial<PostsInputParams>) {
 }
 export const GetPostByIdMetadata = {
   name: 'GetPostById',
+  id: -1279409050,
   params: [
     {
       name: 'postId',
@@ -1535,6 +1551,7 @@ export function updateGetPostById(
 }
 export const GetConversationsMetadata = {
   name: 'GetConversations',
+  id: -416881,
   params: [],
 };
 export interface GetConversationsInputParams {}
@@ -1584,6 +1601,7 @@ export function updateGetConversations(
 }
 export const CoordinatesMetadata = {
   name: 'Coordinates',
+  id: -2145804928,
   params: [
     {
       name: 'latitude',
@@ -1700,6 +1718,7 @@ export function updateCoordinates(
 }
 export const ShouldSupportSeveralSequentialVectorParamsMetadata = {
   name: 'ShouldSupportSeveralSequentialVectorParams',
+  id: -2007546384,
   params: [
     {
       name: 'a',
@@ -2266,6 +2285,7 @@ export function updateShouldSupportSeveralSequentialVectorParams(
 }
 export const simpleTupleTestMetadata = {
   name: 'simpleTupleTest',
+  id: 546242333,
   params: [
     {
       name: 'a',
@@ -2644,6 +2664,7 @@ export function updateSimpleTupleTest(
 }
 export const emptyNodeMetadata = {
   name: 'emptyNode',
+  id: -1994197976,
   params: [],
 };
 export interface emptyNodeInputParams {}
@@ -2686,6 +2707,7 @@ export function updateEmptyNode(
 }
 export const userMetadata = {
   name: 'user',
+  id: 136841399,
   params: [
     {
       name: 'id',
@@ -2794,6 +2816,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
 }
 export const supportNullTerminatedStringMetadata = {
   name: 'supportNullTerminatedString',
+  id: -1360902719,
   params: [
     {
       name: 'value',
@@ -2883,6 +2906,7 @@ export function updateSupportNullTerminatedString(
 }
 export const nullTerminatedStringListMetadata = {
   name: 'nullTerminatedStringList',
+  id: -1953588325,
   params: [
     {
       name: 'value',
@@ -2992,6 +3016,7 @@ export function updateNullTerminatedStringList(
 }
 export const normalStringListMetadata = {
   name: 'normalStringList',
+  id: -1964890795,
   params: [
     {
       name: 'value',
@@ -3101,6 +3126,7 @@ export function updateNormalStringList(
 }
 export const boolAndTupleMetadata = {
   name: 'boolAndTuple',
+  id: -789978949,
   params: [
     {
       name: 'sorryIJustLoveTuples',

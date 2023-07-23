@@ -2,6 +2,7 @@ import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
 export const AMetadata = {
   name: 'A',
+  id: -1688212411,
   params: [
     {
       name: 'a',
@@ -76,6 +77,7 @@ export function updateA(value: A, changes: Partial<AInputParams>) {
 }
 export const BMetadata = {
   name: 'B',
+  id: 1885886278,
   params: [
     {
       name: 'a',
@@ -150,6 +152,7 @@ export function updateB(value: B, changes: Partial<BInputParams>) {
 }
 export const CMetadata = {
   name: 'C',
+  id: -523698750,
   params: [
     {
       name: 'a',

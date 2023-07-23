@@ -2,6 +2,7 @@ import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
 export const userMetadata = {
   name: 'user',
+  id: 1638498929,
   params: [
     {
       name: 'id',
@@ -144,6 +145,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
 }
 export const postMetadata = {
   name: 'post',
+  id: -937937285,
   params: [
     {
       name: 'id',
@@ -165,6 +167,7 @@ export const postMetadata = {
         type: 'template',
         name: 'vector',
         value: {
+          id: 1770739505,
           type: 'internalType',
           kind: 'type',
           name: 'comment',
@@ -313,6 +316,7 @@ export function updatePost(value: post, changes: Partial<postInputParams>) {
 }
 export const commentMetadata = {
   name: 'comment',
+  id: 1770739505,
   params: [
     {
       name: 'id',
@@ -460,6 +464,7 @@ export function updateComment(
 }
 export const tupleTestMetadata = {
   name: 'tupleTest',
+  id: -166074495,
   params: [
     {
       name: 'data',
@@ -468,16 +473,19 @@ export const tupleTestMetadata = {
         name: 'tuple',
         args: [
           {
+            id: 1638498929,
             type: 'internalType',
             kind: 'type',
             name: 'user',
           },
           {
+            id: -937937285,
             type: 'internalType',
             kind: 'type',
             name: 'post',
           },
           {
+            id: 1770739505,
             type: 'internalType',
             kind: 'type',
             name: 'comment',
@@ -486,6 +494,7 @@ export const tupleTestMetadata = {
             type: 'template',
             name: 'vector',
             value: {
+              id: 1770739505,
               type: 'internalType',
               kind: 'type',
               name: 'comment',
@@ -498,6 +507,7 @@ export const tupleTestMetadata = {
               type: 'template',
               name: 'optional',
               value: {
+                id: 1770739505,
                 type: 'internalType',
                 kind: 'type',
                 name: 'comment',
@@ -711,6 +721,7 @@ export function updateTupleTest(
 }
 export const tupleTupleTestMetadata = {
   name: 'tupleTupleTest',
+  id: 1504918786,
   params: [
     {
       name: 'a',
@@ -949,6 +960,7 @@ export function updateTupleTupleTest(
 }
 export const superTupleTupleTestMetadata = {
   name: 'superTupleTupleTest',
+  id: 1329952558,
   params: [
     {
       name: 'a',

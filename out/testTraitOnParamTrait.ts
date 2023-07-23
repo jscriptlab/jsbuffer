@@ -61,6 +61,7 @@ export function compareATrait(__a: A, __b: A) {
 }
 export const BMetadata = {
   name: 'B',
+  id: 543394260,
   params: [
     {
       name: 'a',
@@ -135,6 +136,7 @@ export function updateB(value: B, changes: Partial<BInputParams>) {
 }
 export const CMetadata = {
   name: 'C',
+  id: -811474198,
   params: [
     {
       name: 'a',
@@ -209,6 +211,7 @@ export function updateC(value: C, changes: Partial<CInputParams>) {
 }
 export const DMetadata = {
   name: 'D',
+  id: 763230611,
   params: [
     {
       name: 'a',

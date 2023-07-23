@@ -7,12 +7,15 @@ import { defaultATrait } from './testTraitOnParamTrait';
 import { compareATrait } from './testTraitOnParamTrait';
 export const A0Metadata = {
   name: 'A0',
+  id: -1244603213,
   params: [
     {
       name: 'value',
       type: {
         name: 'A',
+        id: '-945659736',
         type: 'externalType',
+        externalModule: false,
         relativePath: './testTraitOnParamTrait',
       },
     },
@@ -84,12 +87,15 @@ export function updateA0(value: A0, changes: Partial<A0InputParams>) {
 }
 export const A1Metadata = {
   name: 'A1',
+  id: -2001668861,
   params: [
     {
       name: 'value',
       type: {
         name: 'A',
+        id: '-945659736',
         type: 'externalType',
+        externalModule: false,
         relativePath: './testTraitOnParamTrait',
       },
     },
@@ -161,12 +167,15 @@ export function updateA1(value: A1, changes: Partial<A1InputParams>) {
 }
 export const A2Metadata = {
   name: 'A2',
+  id: -820998189,
   params: [
     {
       name: 'value',
       type: {
         name: 'A',
+        id: '-945659736',
         type: 'externalType',
+        externalModule: false,
         relativePath: './testTraitOnParamTrait',
       },
     },
