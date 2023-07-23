@@ -272,6 +272,13 @@ function generateTestSchemaFilesCode({
                   "s.writeString(crypto.randomBytes(1000).toString('hex'));\n"
                 ),
             },
+            {
+              types: ['null_terminated_string'],
+              write: () =>
+                cs.write(
+                  "s.writeNullTerminatedString(crypto.randomBytes(1000).toString('hex'));\n"
+                ),
+            },
           ]) {
             for (const t of types) {
               cs.write(`case "${t}":\n`);
