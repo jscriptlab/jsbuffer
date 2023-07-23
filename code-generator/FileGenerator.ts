@@ -1204,6 +1204,7 @@ export default class FileGenerator extends CodeStream {
       `export const ${node.name.value}Metadata = {\n`,
       () => {
         this.write(`name: "${node.name.value}",\n`);
+        this.write(`id: ${this.#getUniqueHeader(node)},\n`);
         this.write(
           'params: [\n',
           () => {
@@ -1297,8 +1298,17 @@ export default class FileGenerator extends CodeStream {
         }
       }
     } else if ('fileGenerator' in resolvedType) {
+      const definition = this.#resolvedTypeExpressionToDefinition(resolvedType);
       this.write(`name: "${resolvedType.identifier}",\n`);
+      this.write(
+        `id: "${resolvedType.fileGenerator.#getUniqueHeader(definition)}",\n`
+      );
       this.write('type: "externalType",\n');
+      this.write(
+        `externalModule: ${
+          resolvedType.fileGenerator.#externalModule ? 'true' : 'false'
+        },\n`
+      );
       this.write(
         `relativePath: "${resolvedType.fileGenerator.#sourceImportToOutDirImport(
           this,
@@ -1306,6 +1316,7 @@ export default class FileGenerator extends CodeStream {
         )}"\n`
       );
     } else {
+      this.write(`id: ${this.#getUniqueHeader(resolvedType)},\n`);
       this.write('type: "internalType",\n');
       let kind: string;
       switch (resolvedType.type) {
