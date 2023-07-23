@@ -45,7 +45,7 @@ function generateTestSchemaFilesCode({
             },
             {
               type: ['string', 'null_terminated_string'],
-              value: () => '`"${crypto.randomBytes(64).toString(\'base64\')}"`',
+              value: () => "`${crypto.randomBytes(64).toString('base64')}`",
             },
             {
               type: 'double',
@@ -270,6 +270,13 @@ function generateTestSchemaFilesCode({
               write: () =>
                 cs.write(
                   "s.writeString(crypto.randomBytes(1000).toString('hex'));\n"
+                ),
+            },
+            {
+              types: ['null_terminated_string'],
+              write: () =>
+                cs.write(
+                  "s.writeNullTerminatedString(crypto.randomBytes(1000).toString('hex'));\n"
                 ),
             },
           ]) {

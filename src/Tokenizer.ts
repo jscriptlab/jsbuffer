@@ -1,3 +1,4 @@
+import Exception from '../exception/Exception';
 import Character from './Character';
 
 export interface ITokenPosition {
@@ -96,7 +97,7 @@ export default class Tokenizer {
         if (punctuator) {
           tokens.push(punctuator);
         } else {
-          throw new Error(
+          throw new Exception(
             `unexpected ${String.fromCharCode(ch)} at line number ${
               this.#lineNumber + 1
             }`
@@ -114,7 +115,7 @@ export default class Tokenizer {
       !Character.isStringLiteralStart(this.#currentCharacter())
     ) {
       if (Character.isLineBreak(this.#currentCharacter())) {
-        throw new Error('line break before end of string');
+        throw new Exception('line break before end of string');
       } else {
         this.#offset++;
       }
@@ -165,7 +166,7 @@ export default class Tokenizer {
   #currentCharacter() {
     const ch = this.#contents[this.#offset];
     if (typeof ch === 'undefined') {
-      throw new Error('EOF');
+      throw new Exception('EOF');
     }
     return ch;
   }

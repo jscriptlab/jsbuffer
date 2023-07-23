@@ -1427,9 +1427,9 @@ jsbi@4.x:
   integrity sha512-SnZNcinB4RIcnEyZqFPdGPVgrg2AcnykiBy0sHVJQKHYeaLUvi3Exj+iaPpLnFVkDPZIV4U0yvgC9/R4uEAZ9g==
 
 jsbuffer@0.x:
-  version "0.0.62"
-  resolved "https://registry.yarnpkg.com/jsbuffer/-/jsbuffer-0.0.62.tgz#c5a5713110907dc9e0210c37098e85cdd2e219ff"
-  integrity sha512-XGk/BylvMSIn3EfQckih/tmvjf8f1wPnA/91nCEgiQKh64B3vtlOSrxKWzcakOJSK7Dbn6Yk+CHB47fC7W9vKQ==
+  version "0.0.72"
+  resolved "https://registry.yarnpkg.com/jsbuffer/-/jsbuffer-0.0.72.tgz#424124ac221712d7a17a708b12002998c9f0d700"
+  integrity sha512-Yf9IdqxiOjmxWbSZIh3eeJVvKqCkwvrwpU5LyykozfheN+FM1XmHV9KnrFB6EEAOjPDaHhr7F8bHPvN+zvZFTg==
   dependencies:
     cli-argument-helper "0.x"
     crc "4.x"
@@ -1921,6 +1921,7 @@ sprintf-js@~1.0.2:
   integrity sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0, string-width@^4.2.0:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
