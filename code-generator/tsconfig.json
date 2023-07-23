@@ -8,7 +8,9 @@
     "JavaScriptObjectStringify.ts",
     "typeUtilities.ts",
     "fileGeneratorUtilities.ts",
-    "stringUtilities.ts"
+    "stringUtilities.ts",
+    "helpers.ts",
+    "CodeGenerator.ts"
   ],
   "exclude": ["**/*.d.ts"],
   "compilerOptions": {

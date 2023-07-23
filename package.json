@@ -18,7 +18,7 @@
   },
   "name": "jsbuffer",
   "license": "MIT",
-  "version": "0.0.63",
+  "version": "0.0.66",
   "main": "./src/index.js",
   "bin": {
     "jsbuffer": "./cli/index.js"
@@ -32,12 +32,12 @@
   ],
   "scripts": {
     "lint:eslint": "npx eslint --fix src code-generator codec",
-    "lint:prettier": "npx prettier --write \"src/**/*.ts\" \"code-generator/**/*.ts\" \"codec/**/*.ts\"",
+    "lint:prettier": "npx prettier --write \"out/**/*.ts\" \"src/**/*.ts\" \"code-generator/**/*.ts\" \"codec/**/*.ts\"",
     "lint": "yarn run lint:eslint && yarn run lint:prettier",
-    "cli": "TS_NODE_PROJECT=cli/tsconfig.json npx ts-node cli",
+    "cli": "npx ts-node --project cli/tsconfig.json cli",
     "schema": "yarn run cli test/schema -o out --extends tsconfig.base.json --indentation-size 2",
     "build": "npx tsc -b cli code-generator codec src --force",
-    "prepublishOnly": "yarn run lint && yarn run schema && yarn run build",
+    "prepublishOnly": "yarn run schema && yarn run build && yarn run lint && yarn run test",
     "test": "TS_NODE_PROJECT=test/tsconfig.json npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
     "test:coverage": "npx nyc yarn test"
   },

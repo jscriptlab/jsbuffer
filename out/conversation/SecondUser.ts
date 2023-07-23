@@ -1,16 +1,28 @@
-import { ISerializer } from "../__types__";
-import { IDeserializer } from "../__types__";
+import { ISerializer } from '../__types__';
+import { IDeserializer } from '../__types__';
+export const UserMetadata = {
+  name: 'User',
+  params: [
+    {
+      name: 'firstName',
+      type: {
+        type: 'generic',
+        value: 'string',
+      },
+    },
+  ],
+};
 export interface UserInputParams {
   firstName: string;
 }
 export function User(params: UserInputParams): User {
   return {
     _name: 'conversation.secondUser.User',
-    firstName: params['firstName']
+    firstName: params['firstName'],
   };
 }
 export function encodeUser(__s: ISerializer, value: User) {
-  __s.writeInt32(-54755335);
+  __s.writeInt32(1249778753);
   /**
    * encoding param: firstName
    */
@@ -22,7 +34,7 @@ export function decodeUser(__d: IDeserializer): User | null {
   /**
    * decode header
    */
-  if(__id !== -54755335) return null;
+  if (__id !== 1249778753) return null;
   let firstName: string;
   /**
    * decoding param: firstName
@@ -30,17 +42,17 @@ export function decodeUser(__d: IDeserializer): User | null {
   firstName = __d.readString();
   return {
     _name: 'conversation.secondUser.User',
-    firstName
+    firstName,
   };
 }
-export interface User  {
+export interface User {
   _name: 'conversation.secondUser.User';
   firstName: string;
 }
 export function defaultUser(params: Partial<UserInputParams> = {}): User {
   return User({
-    firstName: "",
-    ...params
+    firstName: '',
+    ...params,
   });
 }
 export function compareUser(__a: User, __b: User): boolean {
@@ -52,8 +64,8 @@ export function compareUser(__a: User, __b: User): boolean {
   );
 }
 export function updateUser(value: User, changes: Partial<UserInputParams>) {
-  if(typeof changes['firstName'] !== 'undefined') {
-    if(!(changes['firstName'] === value['firstName'])) {
+  if (typeof changes['firstName'] !== 'undefined') {
+    if (!(changes['firstName'] === value['firstName'])) {
       value = User({
         ...value,
         firstName: changes['firstName'],

@@ -1,19 +1,20 @@
-import { ISerializer } from "./__types__";
-import { IDeserializer } from "./__types__";
+import { ISerializer } from './__types__';
+import { IDeserializer } from './__types__';
 export type E = Readonly<A> | Readonly<B> | Readonly<C> | Readonly<D>;
-export function encodeETrait(__s: ISerializer,value: E) {
-  switch(value._name) {
+export const EFiles = [''];
+export function encodeETrait(__s: ISerializer, value: E) {
+  switch (value._name) {
     case 'testUpdateFunction.A':
-      encodeA(__s,value);
+      encodeA(__s, value);
       break;
     case 'testUpdateFunction.B':
-      encodeB(__s,value);
+      encodeB(__s, value);
       break;
     case 'testUpdateFunction.C':
-      encodeC(__s,value);
+      encodeC(__s, value);
       break;
     case 'testUpdateFunction.D':
-      encodeD(__s,value);
+      encodeD(__s, value);
       break;
   }
 }
@@ -21,32 +22,33 @@ export function decodeETrait(__d: IDeserializer) {
   const __id = __d.readInt32();
   __d.rewindInt32();
   let value: A | B | C | D;
-  switch(__id) {
-    case -53039136: {
+  switch (__id) {
+    case -344653639: {
       const tmp = decodeA(__d);
-      if(tmp === null) return null;
+      if (tmp === null) return null;
       value = tmp;
       break;
     }
-    case 533707038: {
+    case 141301319: {
       const tmp = decodeB(__d);
-      if(tmp === null) return null;
+      if (tmp === null) return null;
       value = tmp;
       break;
     }
-    case -131891235: {
+    case -276770684: {
       const tmp = decodeC(__d);
-      if(tmp === null) return null;
+      if (tmp === null) return null;
       value = tmp;
       break;
     }
-    case 452945060: {
+    case 224185341: {
       const tmp = decodeD(__d);
-      if(tmp === null) return null;
+      if (tmp === null) return null;
       value = tmp;
       break;
     }
-    default: return null;
+    default:
+      return null;
   }
   return value;
 }
@@ -54,32 +56,44 @@ export function defaultETrait() {
   return defaultA();
 }
 export function compareETrait(__a: E, __b: E) {
-  switch(__a._name) {
+  switch (__a._name) {
     case 'testUpdateFunction.A':
-      if(__b._name !== "testUpdateFunction.A") return false;
-      return compareA(__a,__b);
+      if (__b._name !== 'testUpdateFunction.A') return false;
+      return compareA(__a, __b);
     case 'testUpdateFunction.B':
-      if(__b._name !== "testUpdateFunction.B") return false;
-      return compareB(__a,__b);
+      if (__b._name !== 'testUpdateFunction.B') return false;
+      return compareB(__a, __b);
     case 'testUpdateFunction.C':
-      if(__b._name !== "testUpdateFunction.C") return false;
-      return compareC(__a,__b);
+      if (__b._name !== 'testUpdateFunction.C') return false;
+      return compareC(__a, __b);
     case 'testUpdateFunction.D':
-      if(__b._name !== "testUpdateFunction.D") return false;
-      return compareD(__a,__b);
+      if (__b._name !== 'testUpdateFunction.D') return false;
+      return compareD(__a, __b);
   }
 }
+export const AMetadata = {
+  name: 'A',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+  ],
+};
 export interface AInputParams {
   a: number;
 }
 export function A(params: AInputParams): A {
   return {
     _name: 'testUpdateFunction.A',
-    a: params['a']
+    a: params['a'],
   };
 }
 export function encodeA(__s: ISerializer, value: A) {
-  __s.writeInt32(-53039136);
+  __s.writeInt32(-344653639);
   /**
    * encoding param: a
    */
@@ -91,7 +105,7 @@ export function decodeA(__d: IDeserializer): A | null {
   /**
    * decode header
    */
-  if(__id !== -53039136) return null;
+  if (__id !== -344653639) return null;
   let a: number;
   /**
    * decoding param: a
@@ -99,17 +113,17 @@ export function decodeA(__d: IDeserializer): A | null {
   a = __d.readInt32();
   return {
     _name: 'testUpdateFunction.A',
-    a
+    a,
   };
 }
-export interface A  {
+export interface A {
   _name: 'testUpdateFunction.A';
   a: number;
 }
 export function defaultA(params: Partial<AInputParams> = {}): A {
   return A({
     a: 0,
-    ...params
+    ...params,
   });
 }
 export function compareA(__a: A, __b: A): boolean {
@@ -121,8 +135,8 @@ export function compareA(__a: A, __b: A): boolean {
   );
 }
 export function updateA(value: A, changes: Partial<AInputParams>) {
-  if(typeof changes['a'] !== 'undefined') {
-    if(!(changes['a'] === value['a'])) {
+  if (typeof changes['a'] !== 'undefined') {
+    if (!(changes['a'] === value['a'])) {
       value = A({
         ...value,
         a: changes['a'],
@@ -131,17 +145,29 @@ export function updateA(value: A, changes: Partial<AInputParams>) {
   }
   return value;
 }
+export const BMetadata = {
+  name: 'B',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'generic',
+        value: 'string',
+      },
+    },
+  ],
+};
 export interface BInputParams {
   a: string;
 }
 export function B(params: BInputParams): B {
   return {
     _name: 'testUpdateFunction.B',
-    a: params['a']
+    a: params['a'],
   };
 }
 export function encodeB(__s: ISerializer, value: B) {
-  __s.writeInt32(533707038);
+  __s.writeInt32(141301319);
   /**
    * encoding param: a
    */
@@ -153,7 +179,7 @@ export function decodeB(__d: IDeserializer): B | null {
   /**
    * decode header
    */
-  if(__id !== 533707038) return null;
+  if (__id !== 141301319) return null;
   let a: string;
   /**
    * decoding param: a
@@ -161,17 +187,17 @@ export function decodeB(__d: IDeserializer): B | null {
   a = __d.readString();
   return {
     _name: 'testUpdateFunction.B',
-    a
+    a,
   };
 }
-export interface B  {
+export interface B {
   _name: 'testUpdateFunction.B';
   a: string;
 }
 export function defaultB(params: Partial<BInputParams> = {}): B {
   return B({
-    a: "",
-    ...params
+    a: '',
+    ...params,
   });
 }
 export function compareB(__a: B, __b: B): boolean {
@@ -183,8 +209,8 @@ export function compareB(__a: B, __b: B): boolean {
   );
 }
 export function updateB(value: B, changes: Partial<BInputParams>) {
-  if(typeof changes['a'] !== 'undefined') {
-    if(!(changes['a'] === value['a'])) {
+  if (typeof changes['a'] !== 'undefined') {
+    if (!(changes['a'] === value['a'])) {
       value = B({
         ...value,
         a: changes['a'],
@@ -193,17 +219,29 @@ export function updateB(value: B, changes: Partial<BInputParams>) {
   }
   return value;
 }
+export const CMetadata = {
+  name: 'C',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'generic',
+        value: 'double',
+      },
+    },
+  ],
+};
 export interface CInputParams {
   a: number;
 }
 export function C(params: CInputParams): C {
   return {
     _name: 'testUpdateFunction.C',
-    a: params['a']
+    a: params['a'],
   };
 }
 export function encodeC(__s: ISerializer, value: C) {
-  __s.writeInt32(-131891235);
+  __s.writeInt32(-276770684);
   /**
    * encoding param: a
    */
@@ -215,7 +253,7 @@ export function decodeC(__d: IDeserializer): C | null {
   /**
    * decode header
    */
-  if(__id !== -131891235) return null;
+  if (__id !== -276770684) return null;
   let a: number;
   /**
    * decoding param: a
@@ -223,17 +261,17 @@ export function decodeC(__d: IDeserializer): C | null {
   a = __d.readDouble();
   return {
     _name: 'testUpdateFunction.C',
-    a
+    a,
   };
 }
-export interface C  {
+export interface C {
   _name: 'testUpdateFunction.C';
   a: number;
 }
 export function defaultC(params: Partial<CInputParams> = {}): C {
   return C({
     a: 0.0,
-    ...params
+    ...params,
   });
 }
 export function compareC(__a: C, __b: C): boolean {
@@ -245,8 +283,8 @@ export function compareC(__a: C, __b: C): boolean {
   );
 }
 export function updateC(value: C, changes: Partial<CInputParams>) {
-  if(typeof changes['a'] !== 'undefined') {
-    if(!(changes['a'] === value['a'])) {
+  if (typeof changes['a'] !== 'undefined') {
+    if (!(changes['a'] === value['a'])) {
       value = C({
         ...value,
         a: changes['a'],
@@ -255,17 +293,29 @@ export function updateC(value: C, changes: Partial<CInputParams>) {
   }
   return value;
 }
+export const DMetadata = {
+  name: 'D',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'generic',
+        value: 'float',
+      },
+    },
+  ],
+};
 export interface DInputParams {
   a: number;
 }
 export function D(params: DInputParams): D {
   return {
     _name: 'testUpdateFunction.D',
-    a: params['a']
+    a: params['a'],
   };
 }
 export function encodeD(__s: ISerializer, value: D) {
-  __s.writeInt32(452945060);
+  __s.writeInt32(224185341);
   /**
    * encoding param: a
    */
@@ -277,7 +327,7 @@ export function decodeD(__d: IDeserializer): D | null {
   /**
    * decode header
    */
-  if(__id !== 452945060) return null;
+  if (__id !== 224185341) return null;
   let a: number;
   /**
    * decoding param: a
@@ -285,17 +335,17 @@ export function decodeD(__d: IDeserializer): D | null {
   a = __d.readFloat();
   return {
     _name: 'testUpdateFunction.D',
-    a
+    a,
   };
 }
-export interface D  {
+export interface D {
   _name: 'testUpdateFunction.D';
   a: number;
 }
 export function defaultD(params: Partial<DInputParams> = {}): D {
   return D({
     a: 0.0,
-    ...params
+    ...params,
   });
 }
 export function compareD(__a: D, __b: D): boolean {
@@ -307,8 +357,8 @@ export function compareD(__a: D, __b: D): boolean {
   );
 }
 export function updateD(value: D, changes: Partial<DInputParams>) {
-  if(typeof changes['a'] !== 'undefined') {
-    if(!(changes['a'] === value['a'])) {
+  if (typeof changes['a'] !== 'undefined') {
+    if (!(changes['a'] === value['a'])) {
       value = D({
         ...value,
         a: changes['a'],
@@ -317,49 +367,62 @@ export function updateD(value: D, changes: Partial<DInputParams>) {
   }
   return value;
 }
+export const testMetadata = {
+  name: 'test',
+  params: [
+    {
+      name: 'traitParam',
+      type: {
+        type: 'internalType',
+        kind: 'trait',
+        name: 'E',
+      },
+    },
+  ],
+};
 export interface testInputParams {
   traitParam: Readonly<E>;
 }
 export function test(params: testInputParams): test {
   return {
     _name: 'testUpdateFunction.test',
-    traitParam: params['traitParam']
+    traitParam: params['traitParam'],
   };
 }
 export function encodeTest(__s: ISerializer, value: test) {
-  __s.writeInt32(738393700);
+  __s.writeInt32(1011101560);
   /**
    * encoding param: traitParam
    */
   const __pv0 = value['traitParam'];
-  encodeETrait(__s,__pv0);
+  encodeETrait(__s, __pv0);
 }
 export function decodeTest(__d: IDeserializer): test | null {
   const __id = __d.readInt32();
   /**
    * decode header
    */
-  if(__id !== 738393700) return null;
+  if (__id !== 1011101560) return null;
   let traitParam: E;
   /**
    * decoding param: traitParam
    */
   const __tmp1 = decodeETrait(__d);
-  if(__tmp1 === null) return null;
+  if (__tmp1 === null) return null;
   traitParam = __tmp1;
   return {
     _name: 'testUpdateFunction.test',
-    traitParam
+    traitParam,
   };
 }
-export interface test  {
+export interface test {
   _name: 'testUpdateFunction.test';
   traitParam: Readonly<E>;
 }
 export function defaultTest(params: Partial<testInputParams> = {}): test {
   return test({
     traitParam: defaultETrait(),
-    ...params
+    ...params,
   });
 }
 export function compareTest(__a: test, __b: test): boolean {
@@ -367,12 +430,12 @@ export function compareTest(__a: test, __b: test): boolean {
     /**
      * compare parameter traitParam
      */
-    compareETrait(__a['traitParam'],__b['traitParam'])
+    compareETrait(__a['traitParam'], __b['traitParam'])
   );
 }
 export function updateTest(value: test, changes: Partial<testInputParams>) {
-  if(typeof changes['traitParam'] !== 'undefined') {
-    if(!(compareETrait(changes['traitParam'],value['traitParam']))) {
+  if (typeof changes['traitParam'] !== 'undefined') {
+    if (!compareETrait(changes['traitParam'], value['traitParam'])) {
       value = test({
         ...value,
         traitParam: changes['traitParam'],
