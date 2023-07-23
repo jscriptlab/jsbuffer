@@ -541,7 +541,6 @@ function generateTestSchemaFilesCode({
           () => {
             getFn('defaultFn', 'default');
             getFn('compareFn', 'compare');
-            getFn('encodeFn', 'encode');
             getFn('decodeFn', 'decode');
             getFn('updateFn', 'update');
             cs.write("console.log('\t-- %s',suffix);\n");
@@ -570,6 +569,52 @@ function generateTestSchemaFilesCode({
                 cs.write(
                   'testCodec({importPath, exports: value, metadata, value});\n'
                 );
+                // test encode functions
+                {
+                  getFn('encodeFn', 'encode');
+                  cs.write(
+                    "assert.strict.ok(typeof encodeFn === 'function');\n"
+                  );
+                  for (const { expression } of [
+                    {
+                      expression: 'defaultFn()',
+                    },
+                    {
+                      expression:
+                        'defaultFn(Object.fromEntries(randomValuesFromMetadata(importPath, metadata, value)))',
+                    },
+                  ]) {
+                    cs.write(
+                      '{\n',
+                      () => {
+                        cs.write(`const exp = ${expression};\n`);
+                        cs.write('s.rewind();\n');
+                        cs.write('encodeFn(s, exp);\n');
+                        createDeserializer('d', 's');
+                        cs.write('assert.strict.deepEqual(decodeFn(d),exp);\n');
+                      },
+                      '}\n'
+                    );
+                  }
+                  /**
+                   * it should be able to decode type with invalid header
+                   */
+                  cs.write(
+                    '{\n',
+                    () => {
+                      cs.write('s.rewind();\n');
+                      cs.write('encodeFn(s, defaultFn());\n');
+                      createDeserializer('d', 's');
+                      cs.write('s.rewind();\n');
+                      cs.write('s.writeInt32(d.readInt32() + 1);\n');
+                      createDeserializer('d2', 's');
+                      cs.write('assert.strict.equal(decodeFn(d2),null);\n');
+                    },
+                    '}\n'
+                  );
+                  // TODO: the Deserializer can throw errors, so it's even better if we can remove that and allow the deserializer to simply return null if we get anything unexpected whatsoever
+                  // TODO: check for exceptions when decoding parameters stuff or anything that can throw inside a predicate
+                }
                 cs.write(
                   'for(const [k,v] of randomValuesFromMetadata(importPath, metadata, value)) {\n',
                   () => {
@@ -628,32 +673,6 @@ function generateTestSchemaFilesCode({
             );
             cs.write("assert.strict.ok(typeof defaultFn === 'function');\n");
             cs.write('const v1 = defaultFn();\n');
-            // test encode functions
-            {
-              cs.write("assert.strict.ok(typeof encodeFn === 'function');\n");
-              cs.write('s.rewind();\n');
-              cs.write('encodeFn(s, defaultFn());\n');
-              createDeserializer('d', 's');
-              cs.write('assert.strict.deepEqual(decodeFn(d),defaultFn());\n');
-              /**
-               * it should be able to decode type with invalid header
-               */
-              cs.write(
-                '{\n',
-                () => {
-                  cs.write('s.rewind();\n');
-                  cs.write('encodeFn(s, defaultFn());\n');
-                  createDeserializer('d', 's');
-                  cs.write('s.rewind();\n');
-                  cs.write('s.writeInt32(d.readInt32() + 1);\n');
-                  createDeserializer('d2', 's');
-                  cs.write('assert.strict.equal(decodeFn(d2),null);\n');
-                },
-                '}\n'
-              );
-              // TODO: the Deserializer can throw errors, so it's even better if we can remove that and allow the deserializer to simply return null if we get anything unexpected whatsoever
-              // TODO: check for exceptions when decoding parameters stuff or anything that can throw inside a predicate
-            }
             // TODO: this would assume, types cannot end with `Trait`. This is at risking of not testing the updateFn function
             /**
              * test defaultFn
