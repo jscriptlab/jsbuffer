@@ -1198,38 +1198,53 @@ export default class FileGenerator extends CodeStream {
     );
   }
   #generateExportTypeMetadataInformation(
-    node: INodeCallDefinition | INodeTypeDefinition
+    node: INodeCallDefinition | INodeTypeDefinition | INodeTraitDefinition
   ) {
     this.write(
       `export const ${node.name.value}Metadata = {\n`,
       () => {
         this.write(`name: "${node.name.value}",\n`);
         this.write(`id: ${this.#getUniqueHeader(node)},\n`);
-        this.write(
-          'params: [\n',
-          () => {
-            for (const param of node.parameters) {
-              const resolvedType = this.#resolveTypeExpression(
-                param.typeExpression
-              );
-              this.write(
-                '{\n',
-                () => {
-                  this.write(`name: "${param.name.value}",\n`);
-                  this.write(
-                    'type: {\n',
-                    () => {
-                      this.#generateResolvedTypeMetadata(resolvedType);
-                    },
-                    '}\n'
-                  );
-                },
-                '},\n'
-              );
-            }
-          },
-          ']\n'
-        );
+        let kind: string;
+        switch (node.type) {
+          case NodeType.CallDefinition:
+            kind = 'call';
+            break;
+          case NodeType.TraitDefinition:
+            kind = 'trait';
+            break;
+          case NodeType.TypeDefinition:
+            kind = 'type';
+            break;
+        }
+        this.write(`kind: "${kind}",\n`);
+        if ('parameters' in node) {
+          this.write(
+            'params: [\n',
+            () => {
+              for (const param of node.parameters) {
+                const resolvedType = this.#resolveTypeExpression(
+                  param.typeExpression
+                );
+                this.write(
+                  '{\n',
+                  () => {
+                    this.write(`name: "${param.name.value}",\n`);
+                    this.write(
+                      'type: {\n',
+                      () => {
+                        this.#generateResolvedTypeMetadata(resolvedType);
+                      },
+                      '}\n'
+                    );
+                  },
+                  '},\n'
+                );
+              }
+            },
+            ']\n'
+          );
+        }
       },
       '};\n'
     );
@@ -1379,24 +1394,7 @@ export default class FileGenerator extends CodeStream {
             )
             .join(' | ')};\n`
         );
-        this.write(
-          `export const ${node.name.value}Files = [\n`,
-          () => {
-            const relativePathSet = new Set();
-            for (const node of trait.nodes) {
-              if ('fileGenerator' in node) {
-                relativePathSet.add(
-                  path.relative(this.#file.path, node.fileGenerator.#file.path)
-                );
-              }
-            }
-            for (const relativePath of relativePathSet) {
-              this.write(`"${relativePath}",\n`);
-            }
-          },
-          '];\n'
-        );
-
+        this.#generateExportTypeMetadataInformation(node);
         this.#generateEncodeTraitFunction(node, trait.nodes);
         this.#generateDecodeTraitFunction(node, trait.nodes);
         this.#generateTraitDefaultFunction(node, trait.nodes);

@@ -20,6 +20,36 @@ function checkException(fn: () => Promise<void>) {
   };
 }
 
+suite.test(
+  'it should allow two imports of the same file coming from different files',
+  checkException(async () => {
+    const createImport = (a: string) => `import { ${a} } from "./${a}";`;
+    await (
+      await generateWithVirtualFs({
+        packageInfo: {
+          name: 'shared-schema',
+        },
+        paths: {
+          Void: 'export type Void {}',
+          Request: ['export trait Request {}'].join('\n'),
+          a: [
+            createImport('Request'),
+            createImport('Void'),
+            'export call a : Request => Void {}',
+          ].join('\n'),
+          b: [
+            createImport('Request'),
+            createImport('Void'),
+            'export call b : Request => Void {}',
+          ].join('\n'),
+          main: ['import "./a";', 'import "./a";'].join('\n'),
+        },
+        mainFile: 'main',
+      })
+    ).test();
+  })
+);
+
 suite.test('it should be able to test long types', async () => {
   await (
     await generateWithVirtualFs({
@@ -185,36 +215,6 @@ suite.test(
             'null_terminated_string aaa;',
             '}',
           ].join('\n'),
-        },
-        mainFile: 'main',
-      })
-    ).test();
-  })
-);
-
-suite.test(
-  'it should allow two imports of the same file coming from different files',
-  checkException(async () => {
-    const createImport = (a: string) => `import { ${a} } from "./${a}";`;
-    await (
-      await generateWithVirtualFs({
-        packageInfo: {
-          name: 'shared-schema',
-        },
-        paths: {
-          Void: 'export type Void {}',
-          Request: ['export trait Request {}'].join('\n'),
-          a: [
-            createImport('Request'),
-            createImport('Void'),
-            'export call a : Request => Void {}',
-          ].join('\n'),
-          b: [
-            createImport('Request'),
-            createImport('Void'),
-            'export call b : Request => Void {}',
-          ].join('\n'),
-          main: ['import "./a";', 'import "./a";'].join('\n'),
         },
         mainFile: 'main',
       })

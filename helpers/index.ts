@@ -10,7 +10,7 @@ import assert from 'assert';
 type FunctionPrefix = 'default' | 'update' | 'compare' | 'encode' | 'decode';
 
 function getPrefixRegularExpression(prefix: FunctionPrefix) {
-  return `/${prefix}([A-Z0-9]+)/`;
+  return `/${prefix}([A-Z0-9a-z_]+)/`;
 }
 
 function generateTestSchemaFilesCode({
@@ -404,6 +404,7 @@ function generateTestSchemaFilesCode({
       cs.write('const encodeFn = exports[`encode${metadata.name}`];\n');
       cs.write('const decodeFn = exports[`decode${metadata.name}`];\n');
       cs.write('const { params } = metadata;\n');
+      cs.write('if(!params) return;\n');
       cs.write(
         'for(let i = 0; i < params.length; i++) {\n',
         () => {
@@ -519,11 +520,19 @@ function generateTestSchemaFilesCode({
                   );
                   cs.write('if(name && name[1]) {\n');
                   cs.indentBlock(() => {
-                    cs.write('let names = functionNames.get(name[1]);\n');
+                    cs.write('let suffix = name[1];\n');
+                    cs.write(
+                      'if(/Trait$/.test(suffix)) {\n',
+                      () => {
+                        cs.write("suffix = suffix.replace(/Trait$/,'');\n");
+                      },
+                      '}\n'
+                    );
+                    cs.write('let names = functionNames.get(suffix);\n');
                     cs.write('if(!names) {\n');
                     cs.indentBlock(() => {
                       cs.write('names = [];\n');
-                      cs.write('functionNames.set(name[1],names);\n');
+                      cs.write('functionNames.set(suffix,names);\n');
                     });
                     cs.write('}\n');
                     cs.write('names.push(k);\n');
@@ -575,27 +584,44 @@ function generateTestSchemaFilesCode({
                   cs.write(
                     "assert.strict.ok(typeof encodeFn === 'function');\n"
                   );
-                  for (const { expression } of [
-                    {
-                      expression: 'defaultFn()',
+                  cs.write(
+                    "if(metadata.kind === 'trait') {\n",
+                    () => {
+                      cs.write('s.rewind();\n');
+                      cs.write('encodeFn(s, defaultFn());\n');
+                      createDeserializer('d', 's');
+                      cs.write(
+                        'assert.strict.deepEqual(decodeFn(d),defaultFn());\n'
+                      );
                     },
-                    {
-                      expression:
-                        'defaultFn(Object.fromEntries(randomValuesFromMetadata(importPath, metadata, value)))',
-                    },
-                  ]) {
-                    cs.write(
-                      '{\n',
-                      () => {
-                        cs.write(`const exp = ${expression};\n`);
-                        cs.write('s.rewind();\n');
-                        cs.write('encodeFn(s, exp);\n');
-                        createDeserializer('d', 's');
-                        cs.write('assert.strict.deepEqual(decodeFn(d),exp);\n');
+                    '} else {'
+                  );
+                  cs.indentBlock(() => {
+                    for (const { expression } of [
+                      {
+                        expression: 'defaultFn()',
                       },
-                      '}\n'
-                    );
-                  }
+                      {
+                        expression:
+                          'defaultFn(Object.fromEntries(randomValuesFromMetadata(importPath, metadata, value)))',
+                      },
+                    ]) {
+                      cs.write(
+                        '{\n',
+                        () => {
+                          cs.write(`const exp = ${expression};\n`);
+                          cs.write('s.rewind();\n');
+                          cs.write('encodeFn(s, exp);\n');
+                          createDeserializer('d', 's');
+                          cs.write(
+                            'assert.strict.deepEqual(decodeFn(d),exp);\n'
+                          );
+                        },
+                        '}\n'
+                      );
+                    }
+                  });
+                  cs.write('}\n');
                   /**
                    * it should be able to decode type with invalid header
                    */
@@ -616,7 +642,7 @@ function generateTestSchemaFilesCode({
                   // TODO: check for exceptions when decoding parameters stuff or anything that can throw inside a predicate
                 }
                 cs.write(
-                  'for(const [k,v] of randomValuesFromMetadata(importPath, metadata, value)) {\n',
+                  "for(const [k,v] of (metadata.kind === 'trait' ? [] : randomValuesFromMetadata(importPath, metadata, value))) {\n",
                   () => {
                     {
                       cs.write(
