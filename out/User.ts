@@ -1,7 +1,11 @@
 import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
 export type User = Readonly<user> | Readonly<userDeleted>;
-export const UserFiles = [''];
+export const UserMetadata = {
+  name: 'User',
+  id: 738416594,
+  kind: 'trait',
+};
 export function encodeUserTrait(__s: ISerializer, value: User) {
   switch (value._name) {
     case 'user.user':
@@ -48,7 +52,11 @@ export function compareUserTrait(__a: User, __b: User) {
   }
 }
 export type Test = Readonly<test>;
-export const TestFiles = [''];
+export const TestMetadata = {
+  name: 'Test',
+  id: 2045771671,
+  kind: 'trait',
+};
 export function encodeTestTrait(__s: ISerializer, value: Test) {
   switch (value._name) {
     case 'user.test':
@@ -81,6 +89,7 @@ export function compareTestTrait(__a: Test, __b: Test) {
 export const userMetadata = {
   name: 'user',
   id: -2086976610,
+  kind: 'type',
   params: [
     {
       name: 'firstName',
@@ -212,6 +221,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
 export const userDeletedMetadata = {
   name: 'userDeleted',
   id: 1001160586,
+  kind: 'type',
   params: [
     {
       name: 'deletedAt',
@@ -295,6 +305,7 @@ export function updateUserDeleted(
 export const testMetadata = {
   name: 'test',
   id: -834825061,
+  kind: 'type',
   params: [
     {
       name: 'user',

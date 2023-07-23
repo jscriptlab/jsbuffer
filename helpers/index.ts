@@ -649,7 +649,7 @@ function generateTestSchemaFilesCode({
                         "console.log('\ttesting compare of param: %s', k);\n"
                       );
                       cs.write(
-                        'assert.strict.equal(compareFn(',
+                        'assert.strict.equal(compareFn(\n',
                         () => {
                           cs.write('updateFn(defaultFn(),{[k]: v}),\n');
                           cs.write('defaultFn()\n');
@@ -657,7 +657,7 @@ function generateTestSchemaFilesCode({
                         '),false);\n'
                       );
                       cs.write(
-                        'assert.strict.equal(compareFn(',
+                        'assert.strict.equal(compareFn(\n',
                         () => {
                           cs.write('updateFn(defaultFn(),{[k]: v}),\n');
                           cs.write('updateFn(defaultFn(),{[k]: v})\n');

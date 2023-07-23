@@ -8,6 +8,7 @@ import { compareATrait } from './testTraitOnParamTrait';
 export const A0Metadata = {
   name: 'A0',
   id: -1244603213,
+  kind: 'type',
   params: [
     {
       name: 'value',
@@ -88,6 +89,7 @@ export function updateA0(value: A0, changes: Partial<A0InputParams>) {
 export const A1Metadata = {
   name: 'A1',
   id: -2001668861,
+  kind: 'type',
   params: [
     {
       name: 'value',
@@ -168,6 +170,7 @@ export function updateA1(value: A1, changes: Partial<A1InputParams>) {
 export const A2Metadata = {
   name: 'A2',
   id: -820998189,
+  kind: 'type',
   params: [
     {
       name: 'value',

@@ -3,6 +3,7 @@ import { IDeserializer } from './__types__';
 export const userMetadata = {
   name: 'user',
   id: 1638498929,
+  kind: 'type',
   params: [
     {
       name: 'id',
@@ -146,6 +147,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
 export const postMetadata = {
   name: 'post',
   id: -937937285,
+  kind: 'type',
   params: [
     {
       name: 'id',
@@ -317,6 +319,7 @@ export function updatePost(value: post, changes: Partial<postInputParams>) {
 export const commentMetadata = {
   name: 'comment',
   id: 1770739505,
+  kind: 'type',
   params: [
     {
       name: 'id',
@@ -465,6 +468,7 @@ export function updateComment(
 export const tupleTestMetadata = {
   name: 'tupleTest',
   id: -166074495,
+  kind: 'type',
   params: [
     {
       name: 'data',
@@ -722,6 +726,7 @@ export function updateTupleTest(
 export const tupleTupleTestMetadata = {
   name: 'tupleTupleTest',
   id: 1504918786,
+  kind: 'type',
   params: [
     {
       name: 'a',
@@ -961,6 +966,7 @@ export function updateTupleTupleTest(
 export const superTupleTupleTestMetadata = {
   name: 'superTupleTupleTest',
   id: 1329952558,
+  kind: 'type',
   params: [
     {
       name: 'a',

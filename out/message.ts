@@ -4,6 +4,7 @@ import { IRequest } from './__types__';
 export const MessageMetadata = {
   name: 'Message',
   id: -1731107621,
+  kind: 'type',
   params: [
     {
       name: 'id',
@@ -84,6 +85,7 @@ export function updateMessage(
 export const MessagesMetadata = {
   name: 'Messages',
   id: 1419827675,
+  kind: 'type',
   params: [
     {
       name: 'messages',
@@ -192,6 +194,7 @@ export function updateMessages(
 export const GetMessagesMetadata = {
   name: 'GetMessages',
   id: 1394938243,
+  kind: 'call',
   params: [
     {
       name: 'offset',

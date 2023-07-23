@@ -3,6 +3,7 @@ import { IDeserializer } from '../__types__';
 export const UserMetadata = {
   name: 'User',
   id: 1249778753,
+  kind: 'type',
   params: [
     {
       name: 'firstName',
