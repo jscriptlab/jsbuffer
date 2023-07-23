@@ -93,10 +93,14 @@ export const userMetadata = {
       type: {
         type: 'template',
         name: 'vector',
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
+        params: [
+          {
+            value: {
+              type: 'generic',
+              value: 'string',
+            },
+          },
+        ],
       },
     },
   ],
@@ -306,18 +310,30 @@ export const testMetadata = {
       type: {
         type: 'template',
         name: 'vector',
-        value: {
-          type: 'template',
-          name: 'vector',
-          value: {
-            type: 'template',
-            name: 'optional',
+        params: [
+          {
             value: {
-              type: 'generic',
-              value: 'string',
+              type: 'template',
+              name: 'vector',
+              params: [
+                {
+                  value: {
+                    type: 'template',
+                    name: 'optional',
+                    params: [
+                      {
+                        value: {
+                          type: 'generic',
+                          value: 'string',
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
             },
           },
-        },
+        ],
       },
     },
   ],

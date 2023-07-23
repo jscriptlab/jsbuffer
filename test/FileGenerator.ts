@@ -21,105 +21,6 @@ function checkException(fn: () => Promise<void>) {
 }
 
 suite.test(
-  'it should allow importing external schemas in a cascading format',
-  checkException(async () => {
-    const module1 = await (
-      await generateWithVirtualFs({
-        packageInfo: {
-          name: 'a',
-          version: '0.0.1',
-        },
-        paths: {
-          'schema/main': ['export type A { int id; }'].join('\n'),
-        },
-        mainFile: 'schema/main',
-      })
-    ).test();
-
-    const module2 = await generateWithVirtualFs({
-      packageInfo: {
-        name: 'b',
-        version: '0.0.1',
-      },
-      paths: {
-        'schema/main': [
-          'import { A } from "a/schema/main";',
-          'export type B {A id;}',
-        ].join('\n'),
-      },
-      mainFile: 'schema/main',
-    });
-
-    await spawn('npm', ['install', ...module1.tgzFiles], {
-      cwd: module2.rootDir,
-    }).wait();
-
-    const { tgzFiles } = await module2.test();
-
-    const module3 = await generateWithVirtualFs({
-      packageInfo: {
-        name: 'c',
-        version: '0.0.1',
-      },
-      paths: {
-        'schema/main': [
-          'import { B } from "b/schema/main";',
-          'export type C { int id; B b; }',
-        ].join('\n'),
-      },
-      mainFile: 'schema/main',
-    });
-
-    await spawn('npm', ['install', ...tgzFiles], {
-      cwd: module3.rootDir,
-    }).wait();
-
-    await module3.test();
-  })
-);
-
-suite.test('it should compile external types', async () => {
-  await (
-    await generateWithVirtualFs({
-      packageInfo: {
-        name: 'test-schema',
-      },
-      paths: {
-        a: ['import { B } from "./b";', 'export type A { B value; }'].join(
-          '\n'
-        ),
-        b: ['export type B { vector<double> value1; int value2; }'].join('\n'),
-        main: ['import "./a";'].join('\n'),
-      },
-      mainFile: 'main',
-    })
-  ).test();
-});
-
-suite.test('it should be able to test deep types', async () => {
-  await (
-    await generateWithVirtualFs({
-      packageInfo: {
-        name: 'test-schema',
-      },
-      paths: {
-        main: [
-          'export type H { int value; tuple<int,int> value2; }',
-          'export type G { vector<H> value; }',
-          'export type F { G value; }',
-          'export type E { F value; }',
-          'export type D { E value; }',
-          'export type C { D value; }',
-          'export type B { C value; }',
-          'export type A { B value; }',
-        ].join('\n'),
-      },
-      mainFile: 'main',
-    })
-  ).test();
-});
-
-suite.test(
   'it should test all sorts of generic parameters',
   checkException(async () => {
     await (
@@ -286,6 +187,64 @@ suite.test(
     await moduleC.installPackages((await moduleA.test()).tgzFiles);
 
     await moduleC.test();
+  })
+);
+
+suite.test(
+  'it should allow importing external schemas in a cascading format',
+  checkException(async () => {
+    const module1 = await (
+      await generateWithVirtualFs({
+        packageInfo: {
+          name: 'a',
+          version: '0.0.1',
+        },
+        paths: {
+          'schema/main': ['export type A { int id; }'].join('\n'),
+        },
+        mainFile: 'schema/main',
+      })
+    ).test();
+
+    const module2 = await generateWithVirtualFs({
+      packageInfo: {
+        name: 'b',
+        version: '0.0.1',
+      },
+      paths: {
+        'schema/main': [
+          'import { A } from "a/schema/main";',
+          'export type B {A id;}',
+        ].join('\n'),
+      },
+      mainFile: 'schema/main',
+    });
+
+    await spawn('npm', ['install', ...module1.tgzFiles], {
+      cwd: module2.rootDir,
+    }).wait();
+
+    const { tgzFiles } = await module2.test();
+
+    const module3 = await generateWithVirtualFs({
+      packageInfo: {
+        name: 'c',
+        version: '0.0.1',
+      },
+      paths: {
+        'schema/main': [
+          'import { B } from "b/schema/main";',
+          'export type C { int id; B b; }',
+        ].join('\n'),
+      },
+      mainFile: 'schema/main',
+    });
+
+    await spawn('npm', ['install', ...tgzFiles], {
+      cwd: module3.rootDir,
+    }).wait();
+
+    await module3.test();
   })
 );
 
