@@ -18,7 +18,7 @@
   },
   "name": "jsbuffer",
   "license": "MIT",
-  "version": "0.0.66",
+  "version": "0.0.69",
   "main": "./src/index.js",
   "bin": {
     "jsbuffer": "./cli/index.js"

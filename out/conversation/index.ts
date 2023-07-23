@@ -132,15 +132,11 @@ export const ConversationsMetadata = {
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              type: 'internalType',
-              kind: 'type',
-              name: 'Conversation',
-            },
-          },
-        ],
+        value: {
+          type: 'internalType',
+          kind: 'type',
+          name: 'Conversation',
+        },
       },
     },
   ],
