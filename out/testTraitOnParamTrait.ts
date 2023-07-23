@@ -1,7 +1,11 @@
 import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
 export type A = Readonly<B> | Readonly<C> | Readonly<D>;
-export const AFiles = [''];
+export const AMetadata = {
+  name: 'A',
+  id: -945659736,
+  kind: 'trait',
+};
 export function encodeATrait(__s: ISerializer, value: A) {
   switch (value._name) {
     case 'testTraitOnParamTrait.B':
@@ -62,6 +66,7 @@ export function compareATrait(__a: A, __b: A) {
 export const BMetadata = {
   name: 'B',
   id: 543394260,
+  kind: 'type',
   params: [
     {
       name: 'a',
@@ -137,6 +142,7 @@ export function updateB(value: B, changes: Partial<BInputParams>) {
 export const CMetadata = {
   name: 'C',
   id: -811474198,
+  kind: 'type',
   params: [
     {
       name: 'a',
@@ -212,6 +218,7 @@ export function updateC(value: C, changes: Partial<CInputParams>) {
 export const DMetadata = {
   name: 'D',
   id: 763230611,
+  kind: 'type',
   params: [
     {
       name: 'a',

@@ -21,6 +21,105 @@ function checkException(fn: () => Promise<void>) {
 }
 
 suite.test(
+  'it should allow two imports of the same file coming from different files',
+  checkException(async () => {
+    const createImport = (a: string) => `import { ${a} } from "./${a}";`;
+    await (
+      await generateWithVirtualFs({
+        packageInfo: {
+          name: 'shared-schema',
+        },
+        paths: {
+          Void: 'export type Void {}',
+          Request: ['export trait Request {}'].join('\n'),
+          a: [
+            createImport('Request'),
+            createImport('Void'),
+            'export call a : Request => Void {}',
+          ].join('\n'),
+          b: [
+            createImport('Request'),
+            createImport('Void'),
+            'export call b : Request => Void {}',
+          ].join('\n'),
+          main: ['import "./a";', 'import "./a";'].join('\n'),
+        },
+        mainFile: 'main',
+      })
+    ).test();
+  })
+);
+
+suite.test('it should be able to test long types', async () => {
+  await (
+    await generateWithVirtualFs({
+      packageInfo: {
+        name: 'test-schema',
+      },
+      paths: {
+        main: [
+          'export type G { tuple<long,ulong,long> haha; }',
+          'export type F { G value; }',
+          'export type E { F value; }',
+          'export type D { E value; }',
+          'export type C { D value; }',
+          'export type B { C value; }',
+          'export type A { B value; }',
+        ].join('\n'),
+      },
+      mainFile: 'main',
+    })
+  ).test();
+});
+
+suite.test('it should be able to test deep types', async () => {
+  await (
+    await generateWithVirtualFs({
+      packageInfo: {
+        name: 'test-schema',
+      },
+      paths: {
+        main: [
+          'export type H { int value; tuple<int,int> value2; }',
+          'export type G { vector<H> value; }',
+          'export type F { G value; }',
+          'export type E { F value; }',
+          'export type D { E value; }',
+          'export type C { D value; }',
+          'export type B { C value; }',
+          'export type A { B value; }',
+        ].join('\n'),
+      },
+      mainFile: 'main',
+    })
+  ).test();
+});
+
+suite.test(
+  'it should work with multiple types and complex templates',
+  async () => {
+    const params = new Map([
+      ['tuple<string,vector<int>,int,double,float>', 'x'],
+    ]);
+    await (
+      await generateWithVirtualFs({
+        packageInfo: {
+          name: 'test-schema',
+        },
+        paths: {
+          main: [
+            `export type A { ${Array.from(params)
+              .map(([k, v]) => `${k} ${v};`)
+              .join(' ')} }`,
+          ].join('\n'),
+        },
+        mainFile: 'main',
+      })
+    ).test();
+  }
+);
+
+suite.test(
   'it should allow importing external schemas in a cascading format',
   checkException(async () => {
     const module1 = await (
@@ -96,29 +195,6 @@ suite.test('it should compile external types', async () => {
   ).test();
 });
 
-suite.test('it should be able to test deep types', async () => {
-  await (
-    await generateWithVirtualFs({
-      packageInfo: {
-        name: 'test-schema',
-      },
-      paths: {
-        main: [
-          'export type H { int value; tuple<int,int> value2; }',
-          'export type G { vector<H> value; }',
-          'export type F { G value; }',
-          'export type E { F value; }',
-          'export type D { E value; }',
-          'export type C { D value; }',
-          'export type B { C value; }',
-          'export type A { B value; }',
-        ].join('\n'),
-      },
-      mainFile: 'main',
-    })
-  ).test();
-});
-
 suite.test(
   'it should test all sorts of generic parameters',
   checkException(async () => {
@@ -139,36 +215,6 @@ suite.test(
             'null_terminated_string aaa;',
             '}',
           ].join('\n'),
-        },
-        mainFile: 'main',
-      })
-    ).test();
-  })
-);
-
-suite.test(
-  'it should allow two imports of the same file coming from different files',
-  checkException(async () => {
-    const createImport = (a: string) => `import { ${a} } from "./${a}";`;
-    await (
-      await generateWithVirtualFs({
-        packageInfo: {
-          name: 'shared-schema',
-        },
-        paths: {
-          Void: 'export type Void {}',
-          Request: ['export trait Request {}'].join('\n'),
-          a: [
-            createImport('Request'),
-            createImport('Void'),
-            'export call a : Request => Void {}',
-          ].join('\n'),
-          b: [
-            createImport('Request'),
-            createImport('Void'),
-            'export call b : Request => Void {}',
-          ].join('\n'),
-          main: ['import "./a";', 'import "./a";'].join('\n'),
         },
         mainFile: 'main',
       })

@@ -8,6 +8,7 @@ import { compareUser } from './SecondUser';
 export const ConversationMetadata = {
   name: 'Conversation',
   id: 1288012364,
+  kind: 'type',
   params: [
     {
       name: 'id',
@@ -130,6 +131,7 @@ export function updateConversation(
 export const ConversationsMetadata = {
   name: 'Conversations',
   id: -1572302470,
+  kind: 'type',
   params: [
     {
       name: 'conversations',

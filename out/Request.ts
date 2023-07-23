@@ -17,7 +17,11 @@ export type Request =
   | Readonly<GetUserById>
   | Readonly<GetPostById>
   | Readonly<GetConversations>;
-export const RequestFiles = ['../schema'];
+export const RequestMetadata = {
+  name: 'Request',
+  id: -90477734,
+  kind: 'trait',
+};
 export function encodeRequestTrait(__s: ISerializer, value: Request) {
   switch (value._name) {
     case 'schema.GetUserById':
