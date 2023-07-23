@@ -693,7 +693,9 @@ export async function generateWithVirtualFs({
     await fs.promises.access(tmpFolder, fs.constants.W_OK | fs.constants.R_OK);
     assert.strict.ok((await fs.promises.stat(tmpFolder)).isDirectory());
   } catch (reason) {
-    await fs.promises.mkdir(tmpFolder);
+    await fs.promises.mkdir(tmpFolder, {
+      recursive: true,
+    });
   }
   const rootDir = await fs.promises.mkdtemp(
     path.resolve(tmpFolder, 'jsbuffer-')
