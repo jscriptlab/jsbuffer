@@ -8,24 +8,21 @@ import { compareUserTrait } from './User';
 import { IRequest } from './__types__';
 export const testMapMetadata = {
   name: 'testMap',
+  id: 1326441943,
   params: [
     {
       name: 'a',
       type: {
         type: 'template',
         name: 'map',
-        params: [
-          {
-            key: {
-              type: 'generic',
-              value: 'string',
-            },
-            value: {
-              type: 'generic',
-              value: 'string',
-            },
-          },
-        ],
+        key: {
+          type: 'generic',
+          value: 'string',
+        },
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
       },
     },
   ],
@@ -121,32 +118,25 @@ export function updateTestMap(
 }
 export const testMap2Metadata = {
   name: 'testMap2',
+  id: -42313774,
   params: [
     {
       name: 'a',
       type: {
         type: 'template',
         name: 'map',
-        params: [
-          {
-            key: {
-              type: 'template',
-              name: 'optional',
-              params: [
-                {
-                  value: {
-                    type: 'generic',
-                    value: 'string',
-                  },
-                },
-              ],
-            },
-            value: {
-              type: 'generic',
-              value: 'string',
-            },
+        key: {
+          type: 'template',
+          name: 'optional',
+          value: {
+            type: 'generic',
+            value: 'string',
           },
-        ],
+        },
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
       },
     },
     {
@@ -154,52 +144,36 @@ export const testMap2Metadata = {
       type: {
         type: 'template',
         name: 'map',
-        params: [
-          {
-            key: {
-              type: 'template',
-              name: 'optional',
-              params: [
-                {
-                  value: {
-                    type: 'generic',
-                    value: 'string',
-                  },
-                },
-              ],
-            },
-            value: {
-              type: 'template',
-              name: 'tuple',
-              params: [
-                {
-                  args: [
-                    {
-                      type: 'generic',
-                      value: 'string',
-                    },
-                    {
-                      type: 'template',
-                      name: 'map',
-                      params: [
-                        {
-                          key: {
-                            type: 'generic',
-                            value: 'int',
-                          },
-                          value: {
-                            type: 'generic',
-                            value: 'int',
-                          },
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
+        key: {
+          type: 'template',
+          name: 'optional',
+          value: {
+            type: 'generic',
+            value: 'string',
           },
-        ],
+        },
+        value: {
+          type: 'template',
+          name: 'tuple',
+          args: [
+            {
+              type: 'generic',
+              value: 'string',
+            },
+            {
+              type: 'template',
+              name: 'map',
+              key: {
+                type: 'generic',
+                value: 'int',
+              },
+              value: {
+                type: 'generic',
+                value: 'int',
+              },
+            },
+          ],
+        },
       },
     },
   ],
@@ -418,25 +392,23 @@ export function updateTestMap2(
 }
 export const testMap3Metadata = {
   name: 'testMap3',
+  id: 263728261,
   params: [
     {
       name: 'a',
       type: {
         type: 'template',
         name: 'map',
-        params: [
-          {
-            key: {
-              type: 'internalType',
-              kind: 'type',
-              name: 'testMap2',
-            },
-            value: {
-              type: 'generic',
-              value: 'string',
-            },
-          },
-        ],
+        key: {
+          id: -42313774,
+          type: 'internalType',
+          kind: 'type',
+          name: 'testMap2',
+        },
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
       },
     },
   ],
@@ -533,20 +505,17 @@ export function updateTestMap3(
 }
 export const testSetMetadata = {
   name: 'testSet',
+  id: 1426622717,
   params: [
     {
       name: 'a',
       type: {
         type: 'template',
         name: 'set',
-        params: [
-          {
-            value: {
-              type: 'generic',
-              value: 'string',
-            },
-          },
-        ],
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
       },
     },
     {
@@ -554,14 +523,10 @@ export const testSetMetadata = {
       type: {
         type: 'template',
         name: 'set',
-        params: [
-          {
-            value: {
-              type: 'generic',
-              value: 'int',
-            },
-          },
-        ],
+        value: {
+          type: 'generic',
+          value: 'int',
+        },
       },
     },
   ],
@@ -700,20 +665,17 @@ export function updateTestSet(
 }
 export const testSet2Metadata = {
   name: 'testSet2',
+  id: 1091514709,
   params: [
     {
       name: 'a',
       type: {
         type: 'template',
         name: 'set',
-        params: [
-          {
-            value: {
-              type: 'generic',
-              value: 'string',
-            },
-          },
-        ],
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
       },
     },
     {
@@ -721,26 +683,18 @@ export const testSet2Metadata = {
       type: {
         type: 'template',
         name: 'set',
-        params: [
-          {
-            value: {
-              type: 'template',
-              name: 'map',
-              params: [
-                {
-                  key: {
-                    type: 'generic',
-                    value: 'string',
-                  },
-                  value: {
-                    type: 'generic',
-                    value: 'string',
-                  },
-                },
-              ],
-            },
+        value: {
+          type: 'template',
+          name: 'map',
+          key: {
+            type: 'generic',
+            value: 'string',
           },
-        ],
+          value: {
+            type: 'generic',
+            value: 'string',
+          },
+        },
       },
     },
     {
@@ -748,28 +702,20 @@ export const testSet2Metadata = {
       type: {
         type: 'template',
         name: 'set',
-        params: [
-          {
-            value: {
-              type: 'template',
-              name: 'tuple',
-              params: [
-                {
-                  args: [
-                    {
-                      type: 'generic',
-                      value: 'int',
-                    },
-                    {
-                      type: 'generic',
-                      value: 'int',
-                    },
-                  ],
-                },
-              ],
+        value: {
+          type: 'template',
+          name: 'tuple',
+          args: [
+            {
+              type: 'generic',
+              value: 'int',
             },
-          },
-        ],
+            {
+              type: 'generic',
+              value: 'int',
+            },
+          ],
+        },
       },
     },
   ],
@@ -990,6 +936,7 @@ export function updateTestSet2(
 }
 export const VoidMetadata = {
   name: 'Void',
+  id: 189644707,
   params: [],
 };
 export interface VoidInputParams {}
@@ -1027,6 +974,7 @@ export function updateVoid(value: Void, _: Partial<VoidInputParams>) {
 }
 export const msgMetadata = {
   name: 'msg',
+  id: -1103074928,
   params: [
     {
       name: 'data',
@@ -1157,21 +1105,20 @@ export function compareResultTrait(__a: Result, __b: Result) {
 }
 export const UsersMetadata = {
   name: 'Users',
+  id: 1801329960,
   params: [
     {
       name: 'users',
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              name: 'User',
-              type: 'externalType',
-              relativePath: './User',
-            },
-          },
-        ],
+        value: {
+          name: 'User',
+          id: '738416594',
+          type: 'externalType',
+          externalModule: false,
+          relativePath: './User',
+        },
       },
     },
   ],
@@ -1262,6 +1209,7 @@ export function updateUsers(value: Users, changes: Partial<UsersInputParams>) {
 }
 export const GetUserByIdMetadata = {
   name: 'GetUserById',
+  id: -2021730434,
   params: [
     {
       name: 'userId',
@@ -1344,6 +1292,7 @@ export function updateGetUserById(
 }
 export const PostMetadata = {
   name: 'Post',
+  id: 901140138,
   params: [
     {
       name: 'id',
@@ -1418,21 +1367,19 @@ export function updatePost(value: Post, changes: Partial<PostInputParams>) {
 }
 export const PostsMetadata = {
   name: 'Posts',
+  id: 413461762,
   params: [
     {
       name: 'posts',
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              type: 'internalType',
-              kind: 'type',
-              name: 'Post',
-            },
-          },
-        ],
+        value: {
+          id: 901140138,
+          type: 'internalType',
+          kind: 'type',
+          name: 'Post',
+        },
       },
     },
   ],
@@ -1521,6 +1468,7 @@ export function updatePosts(value: Posts, changes: Partial<PostsInputParams>) {
 }
 export const GetPostByIdMetadata = {
   name: 'GetPostById',
+  id: -1279409050,
   params: [
     {
       name: 'postId',
@@ -1603,6 +1551,7 @@ export function updateGetPostById(
 }
 export const GetConversationsMetadata = {
   name: 'GetConversations',
+  id: -416881,
   params: [],
 };
 export interface GetConversationsInputParams {}
@@ -1652,6 +1601,7 @@ export function updateGetConversations(
 }
 export const CoordinatesMetadata = {
   name: 'Coordinates',
+  id: -2145804928,
   params: [
     {
       name: 'latitude',
@@ -1768,20 +1718,17 @@ export function updateCoordinates(
 }
 export const ShouldSupportSeveralSequentialVectorParamsMetadata = {
   name: 'ShouldSupportSeveralSequentialVectorParams',
+  id: -2007546384,
   params: [
     {
       name: 'a',
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              type: 'generic',
-              value: 'int',
-            },
-          },
-        ],
+        value: {
+          type: 'generic',
+          value: 'int',
+        },
       },
     },
     {
@@ -1789,14 +1736,10 @@ export const ShouldSupportSeveralSequentialVectorParamsMetadata = {
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              type: 'generic',
-              value: 'double',
-            },
-          },
-        ],
+        value: {
+          type: 'generic',
+          value: 'double',
+        },
       },
     },
     {
@@ -1804,14 +1747,10 @@ export const ShouldSupportSeveralSequentialVectorParamsMetadata = {
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              type: 'generic',
-              value: 'string',
-            },
-          },
-        ],
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
       },
     },
     {
@@ -1819,14 +1758,10 @@ export const ShouldSupportSeveralSequentialVectorParamsMetadata = {
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              type: 'generic',
-              value: 'float',
-            },
-          },
-        ],
+        value: {
+          type: 'generic',
+          value: 'float',
+        },
       },
     },
     {
@@ -1834,14 +1769,10 @@ export const ShouldSupportSeveralSequentialVectorParamsMetadata = {
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              type: 'generic',
-              value: 'uint32',
-            },
-          },
-        ],
+        value: {
+          type: 'generic',
+          value: 'uint32',
+        },
       },
     },
     {
@@ -1849,30 +1780,18 @@ export const ShouldSupportSeveralSequentialVectorParamsMetadata = {
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
+        value: {
+          type: 'template',
+          name: 'optional',
+          value: {
+            type: 'template',
+            name: 'vector',
             value: {
-              type: 'template',
-              name: 'optional',
-              params: [
-                {
-                  value: {
-                    type: 'template',
-                    name: 'vector',
-                    params: [
-                      {
-                        value: {
-                          type: 'generic',
-                          value: 'uint32',
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
+              type: 'generic',
+              value: 'uint32',
             },
           },
-        ],
+        },
       },
     },
     {
@@ -1880,46 +1799,34 @@ export const ShouldSupportSeveralSequentialVectorParamsMetadata = {
       type: {
         type: 'template',
         name: 'tuple',
-        params: [
+        args: [
           {
-            args: [
-              {
-                type: 'generic',
-                value: 'int',
-              },
-              {
-                type: 'generic',
-                value: 'float',
-              },
-              {
-                type: 'generic',
-                value: 'double',
-              },
-              {
-                type: 'template',
-                name: 'vector',
-                params: [
-                  {
-                    value: {
-                      type: 'generic',
-                      value: 'uint32',
-                    },
-                  },
-                ],
-              },
-              {
-                type: 'template',
-                name: 'optional',
-                params: [
-                  {
-                    value: {
-                      type: 'generic',
-                      value: 'string',
-                    },
-                  },
-                ],
-              },
-            ],
+            type: 'generic',
+            value: 'int',
+          },
+          {
+            type: 'generic',
+            value: 'float',
+          },
+          {
+            type: 'generic',
+            value: 'double',
+          },
+          {
+            type: 'template',
+            name: 'vector',
+            value: {
+              type: 'generic',
+              value: 'uint32',
+            },
+          },
+          {
+            type: 'template',
+            name: 'optional',
+            value: {
+              type: 'generic',
+              value: 'string',
+            },
           },
         ],
       },
@@ -2378,52 +2285,41 @@ export function updateShouldSupportSeveralSequentialVectorParams(
 }
 export const simpleTupleTestMetadata = {
   name: 'simpleTupleTest',
+  id: 546242333,
   params: [
     {
       name: 'a',
       type: {
         type: 'template',
         name: 'tuple',
-        params: [
+        args: [
           {
-            args: [
-              {
-                type: 'generic',
-                value: 'int',
-              },
-              {
-                type: 'generic',
-                value: 'float',
-              },
-              {
-                type: 'generic',
-                value: 'double',
-              },
-              {
-                type: 'template',
-                name: 'vector',
-                params: [
-                  {
-                    value: {
-                      type: 'generic',
-                      value: 'uint32',
-                    },
-                  },
-                ],
-              },
-              {
-                type: 'template',
-                name: 'optional',
-                params: [
-                  {
-                    value: {
-                      type: 'generic',
-                      value: 'string',
-                    },
-                  },
-                ],
-              },
-            ],
+            type: 'generic',
+            value: 'int',
+          },
+          {
+            type: 'generic',
+            value: 'float',
+          },
+          {
+            type: 'generic',
+            value: 'double',
+          },
+          {
+            type: 'template',
+            name: 'vector',
+            value: {
+              type: 'generic',
+              value: 'uint32',
+            },
+          },
+          {
+            type: 'template',
+            name: 'optional',
+            value: {
+              type: 'generic',
+              value: 'string',
+            },
           },
         ],
       },
@@ -2433,56 +2329,40 @@ export const simpleTupleTestMetadata = {
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              type: 'template',
-              name: 'tuple',
-              params: [
-                {
-                  args: [
-                    {
-                      type: 'generic',
-                      value: 'int',
-                    },
-                    {
-                      type: 'generic',
-                      value: 'float',
-                    },
-                    {
-                      type: 'generic',
-                      value: 'double',
-                    },
-                    {
-                      type: 'template',
-                      name: 'vector',
-                      params: [
-                        {
-                          value: {
-                            type: 'generic',
-                            value: 'uint32',
-                          },
-                        },
-                      ],
-                    },
-                    {
-                      type: 'template',
-                      name: 'optional',
-                      params: [
-                        {
-                          value: {
-                            type: 'generic',
-                            value: 'string',
-                          },
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
+        value: {
+          type: 'template',
+          name: 'tuple',
+          args: [
+            {
+              type: 'generic',
+              value: 'int',
             },
-          },
-        ],
+            {
+              type: 'generic',
+              value: 'float',
+            },
+            {
+              type: 'generic',
+              value: 'double',
+            },
+            {
+              type: 'template',
+              name: 'vector',
+              value: {
+                type: 'generic',
+                value: 'uint32',
+              },
+            },
+            {
+              type: 'template',
+              name: 'optional',
+              value: {
+                type: 'generic',
+                value: 'string',
+              },
+            },
+          ],
+        },
       },
     },
   ],
@@ -2784,6 +2664,7 @@ export function updateSimpleTupleTest(
 }
 export const emptyNodeMetadata = {
   name: 'emptyNode',
+  id: -1994197976,
   params: [],
 };
 export interface emptyNodeInputParams {}
@@ -2826,6 +2707,7 @@ export function updateEmptyNode(
 }
 export const userMetadata = {
   name: 'user',
+  id: 136841399,
   params: [
     {
       name: 'id',
@@ -2934,6 +2816,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
 }
 export const supportNullTerminatedStringMetadata = {
   name: 'supportNullTerminatedString',
+  id: -1360902719,
   params: [
     {
       name: 'value',
@@ -3023,20 +2906,17 @@ export function updateSupportNullTerminatedString(
 }
 export const nullTerminatedStringListMetadata = {
   name: 'nullTerminatedStringList',
+  id: -1953588325,
   params: [
     {
       name: 'value',
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              type: 'generic',
-              value: 'null_terminated_string',
-            },
-          },
-        ],
+        value: {
+          type: 'generic',
+          value: 'null_terminated_string',
+        },
       },
     },
   ],
@@ -3136,20 +3016,17 @@ export function updateNullTerminatedStringList(
 }
 export const normalStringListMetadata = {
   name: 'normalStringList',
+  id: -1964890795,
   params: [
     {
       name: 'value',
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              type: 'generic',
-              value: 'string',
-            },
-          },
-        ],
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
       },
     },
   ],
@@ -3249,14 +3126,25 @@ export function updateNormalStringList(
 }
 export const boolAndTupleMetadata = {
   name: 'boolAndTuple',
+  id: -789978949,
   params: [
     {
       name: 'sorryIJustLoveTuples',
       type: {
         type: 'template',
         name: 'tuple',
-        params: [
+        args: [
           {
+            type: 'generic',
+            value: 'bool',
+          },
+          {
+            type: 'generic',
+            value: 'bool',
+          },
+          {
+            type: 'template',
+            name: 'tuple',
             args: [
               {
                 type: 'generic',
@@ -3265,24 +3153,6 @@ export const boolAndTupleMetadata = {
               {
                 type: 'generic',
                 value: 'bool',
-              },
-              {
-                type: 'template',
-                name: 'tuple',
-                params: [
-                  {
-                    args: [
-                      {
-                        type: 'generic',
-                        value: 'bool',
-                      },
-                      {
-                        type: 'generic',
-                        value: 'bool',
-                      },
-                    ],
-                  },
-                ],
               },
             ],
           },

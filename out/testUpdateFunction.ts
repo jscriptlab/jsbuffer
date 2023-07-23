@@ -73,6 +73,7 @@ export function compareETrait(__a: E, __b: E) {
 }
 export const AMetadata = {
   name: 'A',
+  id: -344653639,
   params: [
     {
       name: 'a',
@@ -147,6 +148,7 @@ export function updateA(value: A, changes: Partial<AInputParams>) {
 }
 export const BMetadata = {
   name: 'B',
+  id: 141301319,
   params: [
     {
       name: 'a',
@@ -221,6 +223,7 @@ export function updateB(value: B, changes: Partial<BInputParams>) {
 }
 export const CMetadata = {
   name: 'C',
+  id: -276770684,
   params: [
     {
       name: 'a',
@@ -295,6 +298,7 @@ export function updateC(value: C, changes: Partial<CInputParams>) {
 }
 export const DMetadata = {
   name: 'D',
+  id: 224185341,
   params: [
     {
       name: 'a',
@@ -369,10 +373,12 @@ export function updateD(value: D, changes: Partial<DInputParams>) {
 }
 export const testMetadata = {
   name: 'test',
+  id: 1011101560,
   params: [
     {
       name: 'traitParam',
       type: {
+        id: 2091979600,
         type: 'internalType',
         kind: 'trait',
         name: 'E',

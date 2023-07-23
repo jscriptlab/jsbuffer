@@ -3,6 +3,7 @@ import { IDeserializer } from './__types__';
 import { IRequest } from './__types__';
 export const MessageMetadata = {
   name: 'Message',
+  id: -1731107621,
   params: [
     {
       name: 'id',
@@ -82,21 +83,19 @@ export function updateMessage(
 }
 export const MessagesMetadata = {
   name: 'Messages',
+  id: 1419827675,
   params: [
     {
       name: 'messages',
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              type: 'internalType',
-              kind: 'type',
-              name: 'Message',
-            },
-          },
-        ],
+        value: {
+          id: -1731107621,
+          type: 'internalType',
+          kind: 'type',
+          name: 'Message',
+        },
       },
     },
   ],
@@ -192,6 +191,7 @@ export function updateMessages(
 }
 export const GetMessagesMetadata = {
   name: 'GetMessages',
+  id: 1394938243,
   params: [
     {
       name: 'offset',

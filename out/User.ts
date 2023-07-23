@@ -80,6 +80,7 @@ export function compareTestTrait(__a: Test, __b: Test) {
 }
 export const userMetadata = {
   name: 'user',
+  id: -2086976610,
   params: [
     {
       name: 'firstName',
@@ -93,14 +94,10 @@ export const userMetadata = {
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              type: 'generic',
-              value: 'string',
-            },
-          },
-        ],
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
       },
     },
   ],
@@ -214,6 +211,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
 }
 export const userDeletedMetadata = {
   name: 'userDeleted',
+  id: 1001160586,
   params: [
     {
       name: 'deletedAt',
@@ -296,10 +294,12 @@ export function updateUserDeleted(
 }
 export const testMetadata = {
   name: 'test',
+  id: -834825061,
   params: [
     {
       name: 'user',
       type: {
+        id: -2086976610,
         type: 'internalType',
         kind: 'type',
         name: 'user',
@@ -310,30 +310,18 @@ export const testMetadata = {
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
+        value: {
+          type: 'template',
+          name: 'vector',
+          value: {
+            type: 'template',
+            name: 'optional',
             value: {
-              type: 'template',
-              name: 'vector',
-              params: [
-                {
-                  value: {
-                    type: 'template',
-                    name: 'optional',
-                    params: [
-                      {
-                        value: {
-                          type: 'generic',
-                          value: 'string',
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
+              type: 'generic',
+              value: 'string',
             },
           },
-        ],
+        },
       },
     },
   ],

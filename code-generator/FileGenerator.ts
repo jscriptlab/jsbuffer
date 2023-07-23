@@ -1204,6 +1204,7 @@ export default class FileGenerator extends CodeStream {
       `export const ${node.name.value}Metadata = {\n`,
       () => {
         this.write(`name: "${node.name.value}",\n`);
+        this.write(`id: ${this.#getUniqueHeader(node)},\n`);
         this.write(
           'params: [\n',
           () => {
@@ -1236,76 +1237,78 @@ export default class FileGenerator extends CodeStream {
   #generateResolvedTypeMetadata(resolvedType: ResolvedType) {
     if ('generic' in resolvedType) {
       this.write('type: "generic",\n');
-      this.write(`value: "${resolvedType.generic}"`);
+      this.write(`value: "${resolvedType.generic}"\n`);
     } else if ('template' in resolvedType) {
       this.write('type: "template",\n');
       this.write(`name: "${resolvedType.template}",\n`);
-      this.write(
-        'params: [\n',
-        () => {
+      switch (resolvedType.template) {
+        default:
+          throw new Exception(
+            // @ts-expect-error `template` property should not exist since we have tried all template types
+            `Failed to generate metadata for template: ${resolvedType.template}`
+          );
+        case 'optional':
+        case 'set':
+        case 'vector':
           this.write(
-            '{\n',
+            'value: {\n',
             () => {
-              switch (resolvedType.template) {
-                default:
-                  throw new Exception(
-                    // @ts-expect-error `template` property should not exist since we have tried all template types
-                    `Failed to generate metadata for template: ${resolvedType.template}`
-                  );
-                case 'optional':
-                case 'set':
-                case 'vector':
-                  this.write(
-                    'value: {\n',
-                    () => {
-                      this.#generateResolvedTypeMetadata(resolvedType.type);
-                    },
-                    '}\n'
-                  );
-                  break;
-                case 'tuple':
-                  this.write(
-                    'args: [\n',
-                    () => {
-                      for (const resolvedTupleType of resolvedType.types) {
-                        this.write(
-                          '{\n',
-                          () => {
-                            this.#generateResolvedTypeMetadata(
-                              resolvedTupleType
-                            );
-                          },
-                          '},\n'
-                        );
-                      }
-                    },
-                    ']\n'
-                  );
-                  break;
-                case 'map':
-                  for (const [name, value] of new Map([
-                    ['key', resolvedType.key],
-                    ['value', resolvedType.value],
-                  ])) {
-                    this.write(
-                      `${name}: {\n`,
-                      () => {
-                        this.#generateResolvedTypeMetadata(value.resolved);
-                      },
-                      '},\n'
-                    );
-                  }
-                  break;
-              }
+              this.#generateResolvedTypeMetadata(resolvedType.type);
             },
             '}\n'
           );
-        },
-        ']\n'
-      );
+          break;
+        case 'tuple':
+          this.write(
+            'args: [\n',
+            () => {
+              for (const resolvedTupleType of resolvedType.types) {
+                this.write(
+                  '{\n',
+                  () => {
+                    this.#generateResolvedTypeMetadata(resolvedTupleType);
+                  },
+                  '},\n'
+                );
+              }
+            },
+            ']\n'
+          );
+          break;
+        case 'map': {
+          const items = [
+            ['key', resolvedType.key],
+            ['value', resolvedType.value],
+          ] as const;
+          for (const item of items) {
+            const [name, value] = item;
+            this.write(
+              `${name}: {\n`,
+              () => {
+                this.#generateResolvedTypeMetadata(value.resolved);
+              },
+              '}'
+            );
+            if (item !== items[items.length - 1]) {
+              this.append(',');
+            }
+            this.append('\n');
+          }
+          break;
+        }
+      }
     } else if ('fileGenerator' in resolvedType) {
+      const definition = this.#resolvedTypeExpressionToDefinition(resolvedType);
       this.write(`name: "${resolvedType.identifier}",\n`);
+      this.write(
+        `id: "${resolvedType.fileGenerator.#getUniqueHeader(definition)}",\n`
+      );
       this.write('type: "externalType",\n');
+      this.write(
+        `externalModule: ${
+          resolvedType.fileGenerator.#externalModule ? 'true' : 'false'
+        },\n`
+      );
       this.write(
         `relativePath: "${resolvedType.fileGenerator.#sourceImportToOutDirImport(
           this,
@@ -1313,6 +1316,7 @@ export default class FileGenerator extends CodeStream {
         )}"\n`
       );
     } else {
+      this.write(`id: ${this.#getUniqueHeader(resolvedType)},\n`);
       this.write('type: "internalType",\n');
       let kind: string;
       switch (resolvedType.type) {
@@ -1338,7 +1342,6 @@ export default class FileGenerator extends CodeStream {
       this.write(`kind: "${kind}",\n`);
       this.write(`name: "${resolvedType.name.value}"\n`);
     }
-    this.append(',\n');
   }
   #generateNodeCode(node: ASTGeneratorOutputNode) {
     switch (node.type) {

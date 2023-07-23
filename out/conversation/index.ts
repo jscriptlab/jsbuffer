@@ -7,6 +7,7 @@ import { defaultUser } from './SecondUser';
 import { compareUser } from './SecondUser';
 export const ConversationMetadata = {
   name: 'Conversation',
+  id: 1288012364,
   params: [
     {
       name: 'id',
@@ -19,7 +20,9 @@ export const ConversationMetadata = {
       name: 'user',
       type: {
         name: 'User',
+        id: '1249778753',
         type: 'externalType',
+        externalModule: false,
         relativePath: './SecondUser',
       },
     },
@@ -126,21 +129,19 @@ export function updateConversation(
 }
 export const ConversationsMetadata = {
   name: 'Conversations',
+  id: -1572302470,
   params: [
     {
       name: 'conversations',
       type: {
         type: 'template',
         name: 'vector',
-        params: [
-          {
-            value: {
-              type: 'internalType',
-              kind: 'type',
-              name: 'Conversation',
-            },
-          },
-        ],
+        value: {
+          id: 1288012364,
+          type: 'internalType',
+          kind: 'type',
+          name: 'Conversation',
+        },
       },
     },
   ],
