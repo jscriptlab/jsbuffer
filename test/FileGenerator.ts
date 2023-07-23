@@ -20,6 +20,28 @@ function checkException(fn: () => Promise<void>) {
   };
 }
 
+suite.test('it should be able to test long types', async () => {
+  await (
+    await generateWithVirtualFs({
+      packageInfo: {
+        name: 'test-schema',
+      },
+      paths: {
+        main: [
+          'export type G { tuple<long,ulong,long> haha; }',
+          'export type F { G value; }',
+          'export type E { F value; }',
+          'export type D { E value; }',
+          'export type C { D value; }',
+          'export type B { C value; }',
+          'export type A { B value; }',
+        ].join('\n'),
+      },
+      mainFile: 'main',
+    })
+  ).test();
+});
+
 suite.test('it should be able to test deep types', async () => {
   await (
     await generateWithVirtualFs({

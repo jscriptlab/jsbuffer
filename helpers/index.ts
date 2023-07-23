@@ -58,12 +58,12 @@ function generateTestSchemaFilesCode({
             {
               type: 'long',
               value: () =>
-                '`"${crypto.randomFillSync(new BigInt64Array(1))[0]}"`',
+                '`${crypto.randomFillSync(new BigInt64Array(1))[0]}`',
             },
             {
               type: 'ulong',
               value: () =>
-                '`"${crypto.randomFillSync(new BigUint64Array(1))[0]}"`',
+                '`${crypto.randomFillSync(new BigUint64Array(1))[0]}`',
             },
           ]) {
             let { type: types } = x;
