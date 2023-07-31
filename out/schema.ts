@@ -2,14 +2,63 @@ import { User } from './User';
 import { Conversations } from './conversation/index';
 import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
+import JSBI from 'jsbi';
+import { isUserTrait } from './User';
 import { encodeUserTrait } from './User';
 import { decodeUserTrait } from './User';
 import { compareUserTrait } from './User';
 import { IRequest } from './__types__';
+export function isTestMap(value: unknown): value is testMap {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.testMap'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        __v0 instanceof Map &&
+        Array.from(__v0).every(
+          ([k, v]) => typeof k === 'string' && typeof v === 'string'
+        ))(value['a'])
+    )
+  )
+    return false;
+  return true;
+}
 export const testMapMetadata = {
   name: 'testMap',
   id: 1326441943,
   kind: 'type',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'template',
+        name: 'map',
+        key: {
+          type: 'generic',
+          value: 'string',
+        },
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
+      },
+    },
+  ],
+};
+export const testMapMetadataV2 = {
+  kind: 'type',
+  id: 1326441943,
+  globalName: 'schema.testMap',
+  name: 'testMap',
   params: [
     {
       name: 'a',
@@ -117,6 +166,74 @@ export function updateTestMap(
   }
   return value;
 }
+export function isTestMap2(value: unknown): value is testMap2 {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.testMap2'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        __v0 instanceof Map &&
+        Array.from(__v0).every(
+          ([k, v]) =>
+            k !== null &&
+            ((x) => typeof x === 'string')(k) &&
+            typeof v === 'string'
+        ))(value['a'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'b' in value &&
+      ((__v1) =>
+        __v1 instanceof Map &&
+        Array.from(__v1).every(
+          ([k, v]) =>
+            k !== null &&
+            ((x) => typeof x === 'string')(k) &&
+            Array.isArray(v) &&
+            v.length === 2 &&
+            ((a) => typeof a === 'string')(v[0]) &&
+            ((a) =>
+              a instanceof Map &&
+              Array.from(a).every(
+                ([k, v]) =>
+                  typeof k === 'number' &&
+                  JSBI.equal(JSBI.BigInt(k), JSBI.BigInt(k)) &&
+                  JSBI.greaterThanOrEqual(
+                    JSBI.BigInt(k),
+                    JSBI.BigInt('-2147483648')
+                  ) &&
+                  JSBI.lessThanOrEqual(
+                    JSBI.BigInt(k),
+                    JSBI.BigInt('2147483647')
+                  ) &&
+                  typeof v === 'number' &&
+                  JSBI.equal(JSBI.BigInt(v), JSBI.BigInt(v)) &&
+                  JSBI.greaterThanOrEqual(
+                    JSBI.BigInt(v),
+                    JSBI.BigInt('-2147483648')
+                  ) &&
+                  JSBI.lessThanOrEqual(
+                    JSBI.BigInt(v),
+                    JSBI.BigInt('2147483647')
+                  )
+              ))(v[1])
+        ))(value['b'])
+    )
+  )
+    return false;
+  return true;
+}
 export const testMap2Metadata = {
   name: 'testMap2',
   id: -42313774,
@@ -149,6 +266,70 @@ export const testMap2Metadata = {
         key: {
           type: 'template',
           name: 'optional',
+          value: {
+            type: 'generic',
+            value: 'string',
+          },
+        },
+        value: {
+          type: 'template',
+          name: 'tuple',
+          args: [
+            {
+              type: 'generic',
+              value: 'string',
+            },
+            {
+              type: 'template',
+              name: 'map',
+              key: {
+                type: 'generic',
+                value: 'int',
+              },
+              value: {
+                type: 'generic',
+                value: 'int',
+              },
+            },
+          ],
+        },
+      },
+    },
+  ],
+};
+export const testMap2MetadataV2 = {
+  kind: 'type',
+  id: -42313774,
+  globalName: 'schema.testMap2',
+  name: 'testMap2',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'template',
+        name: 'map',
+        key: {
+          type: 'template',
+          template: 'optional',
+          value: {
+            type: 'generic',
+            value: 'string',
+          },
+        },
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
+      },
+    },
+    {
+      name: 'b',
+      type: {
+        type: 'template',
+        name: 'map',
+        key: {
+          type: 'template',
+          template: 'optional',
           value: {
             type: 'generic',
             value: 'string',
@@ -392,6 +573,30 @@ export function updateTestMap2(
   }
   return value;
 }
+export function isTestMap3(value: unknown): value is testMap3 {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.testMap3'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        __v0 instanceof Map &&
+        Array.from(__v0).every(
+          ([k, v]) => isTestMap2(k) && typeof v === 'string'
+        ))(value['a'])
+    )
+  )
+    return false;
+  return true;
+}
 export const testMap3Metadata = {
   name: 'testMap3',
   id: 263728261,
@@ -407,6 +612,29 @@ export const testMap3Metadata = {
           type: 'internalType',
           kind: 'type',
           name: 'testMap2',
+        },
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
+      },
+    },
+  ],
+};
+export const testMap3MetadataV2 = {
+  kind: 'type',
+  id: 263728261,
+  globalName: 'schema.testMap3',
+  name: 'testMap3',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'template',
+        name: 'map',
+        key: {
+          type: 'internalType',
+          interfaceName: 'testMap2',
         },
         value: {
           type: 'generic',
@@ -506,6 +734,46 @@ export function updateTestMap3(
   }
   return value;
 }
+export function isTestSet(value: unknown): value is testSet {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.testSet'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        (Array.isArray(__v0) || __v0 instanceof Set) &&
+        Array.from(__v0).every((p) => typeof p === 'string'))(value['a'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'b' in value &&
+      ((__v1) =>
+        (Array.isArray(__v1) || __v1 instanceof Set) &&
+        Array.from(__v1).every(
+          (p) =>
+            typeof p === 'number' &&
+            JSBI.equal(JSBI.BigInt(p), JSBI.BigInt(p)) &&
+            JSBI.greaterThanOrEqual(
+              JSBI.BigInt(p),
+              JSBI.BigInt('-2147483648')
+            ) &&
+            JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('2147483647'))
+        ))(value['b'])
+    )
+  )
+    return false;
+  return true;
+}
 export const testSetMetadata = {
   name: 'testSet',
   id: 1426622717,
@@ -527,6 +795,36 @@ export const testSetMetadata = {
       type: {
         type: 'template',
         name: 'set',
+        value: {
+          type: 'generic',
+          value: 'int',
+        },
+      },
+    },
+  ],
+};
+export const testSetMetadataV2 = {
+  kind: 'type',
+  id: 1426622717,
+  globalName: 'schema.testSet',
+  name: 'testSet',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'template',
+        template: 'set',
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
+      },
+    },
+    {
+      name: 'b',
+      type: {
+        type: 'template',
+        template: 'set',
         value: {
           type: 'generic',
           value: 'int',
@@ -667,6 +965,76 @@ export function updateTestSet(
   }
   return value;
 }
+export function isTestSet2(value: unknown): value is testSet2 {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.testSet2'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        (Array.isArray(__v0) || __v0 instanceof Set) &&
+        Array.from(__v0).every((p) => typeof p === 'string'))(value['a'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'b' in value &&
+      ((__v1) =>
+        (Array.isArray(__v1) || __v1 instanceof Set) &&
+        Array.from(__v1).every(
+          (p) =>
+            p instanceof Map &&
+            Array.from(p).every(
+              ([k, v]) => typeof k === 'string' && typeof v === 'string'
+            )
+        ))(value['b'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'c' in value &&
+      ((__v2) =>
+        (Array.isArray(__v2) || __v2 instanceof Set) &&
+        Array.from(__v2).every(
+          (p) =>
+            Array.isArray(p) &&
+            p.length === 2 &&
+            ((a) =>
+              typeof a === 'number' &&
+              JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
+              JSBI.greaterThanOrEqual(
+                JSBI.BigInt(a),
+                JSBI.BigInt('-2147483648')
+              ) &&
+              JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
+              p[0]
+            ) &&
+            ((a) =>
+              typeof a === 'number' &&
+              JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
+              JSBI.greaterThanOrEqual(
+                JSBI.BigInt(a),
+                JSBI.BigInt('-2147483648')
+              ) &&
+              JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
+              p[1]
+            )
+        ))(value['c'])
+    )
+  )
+    return false;
+  return true;
+}
 export const testSet2Metadata = {
   name: 'testSet2',
   id: 1091514709,
@@ -707,6 +1075,65 @@ export const testSet2Metadata = {
       type: {
         type: 'template',
         name: 'set',
+        value: {
+          type: 'template',
+          name: 'tuple',
+          args: [
+            {
+              type: 'generic',
+              value: 'int',
+            },
+            {
+              type: 'generic',
+              value: 'int',
+            },
+          ],
+        },
+      },
+    },
+  ],
+};
+export const testSet2MetadataV2 = {
+  kind: 'type',
+  id: 1091514709,
+  globalName: 'schema.testSet2',
+  name: 'testSet2',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'template',
+        template: 'set',
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
+      },
+    },
+    {
+      name: 'b',
+      type: {
+        type: 'template',
+        template: 'set',
+        value: {
+          type: 'template',
+          name: 'map',
+          key: {
+            type: 'generic',
+            value: 'string',
+          },
+          value: {
+            type: 'generic',
+            value: 'string',
+          },
+        },
+      },
+    },
+    {
+      name: 'c',
+      type: {
+        type: 'template',
+        template: 'set',
         value: {
           type: 'template',
           name: 'tuple',
@@ -939,10 +1366,30 @@ export function updateTestSet2(
   }
   return value;
 }
+export function isVoid(value: unknown): value is Void {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.Void'
+    )
+  )
+    return false;
+  return true;
+}
 export const VoidMetadata = {
   name: 'Void',
   id: 189644707,
   kind: 'type',
+  params: [],
+};
+export const VoidMetadataV2 = {
+  kind: 'type',
+  id: 189644707,
+  globalName: 'schema.Void',
+  name: 'Void',
   params: [],
 };
 export interface VoidInputParams {}
@@ -978,10 +1425,42 @@ export function compareVoid(__a: Void, __b: Void): boolean {
 export function updateVoid(value: Void, _: Partial<VoidInputParams>) {
   return value;
 }
+export function isMsg(value: unknown): value is msg {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.msg'
+    )
+  )
+    return false;
+  if (
+    !('data' in value && ((__v0) => __v0 instanceof Uint8Array)(value['data']))
+  )
+    return false;
+  return true;
+}
 export const msgMetadata = {
   name: 'msg',
   id: -1103074928,
   kind: 'type',
+  params: [
+    {
+      name: 'data',
+      type: {
+        type: 'generic',
+        value: 'bytes',
+      },
+    },
+  ],
+};
+export const msgMetadataV2 = {
+  kind: 'type',
+  id: -1103074928,
+  globalName: 'schema.msg',
+  name: 'msg',
   params: [
     {
       name: 'data',
@@ -1064,10 +1543,31 @@ export function updateMsg(value: msg, changes: Partial<msgInputParams>) {
   return value;
 }
 export type Result = Readonly<Users> | Readonly<Posts>;
+export function isResultTrait(value: unknown): value is Result {
+  if (isUsers(value)) return true;
+  if (isPosts(value)) return true;
+  return false;
+}
 export const ResultMetadata = {
   name: 'Result',
   id: -1480344996,
   kind: 'trait',
+};
+export const ResultMetadataV2 = {
+  kind: 'trait',
+  name: 'Result',
+  nodes: [
+    {
+      type: 'externalType',
+      name: 'Users',
+      relativePath: './schema',
+    },
+    {
+      type: 'externalType',
+      name: 'Posts',
+      relativePath: './schema',
+    },
+  ],
 };
 export function encodeResultTrait(__s: ISerializer, value: Result) {
   switch (value._name) {
@@ -1114,6 +1614,28 @@ export function compareResultTrait(__a: Result, __b: Result) {
       return comparePosts(__a, __b);
   }
 }
+export function isUsers(value: unknown): value is Users {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.Users'
+    )
+  )
+    return false;
+  if (
+    !(
+      'users' in value &&
+      ((__v0) =>
+        (Array.isArray(__v0) || __v0 instanceof Set) &&
+        Array.from(__v0).every((p) => isUserTrait(p)))(value['users'])
+    )
+  )
+    return false;
+  return true;
+}
 export const UsersMetadata = {
   name: 'Users',
   id: 1801329960,
@@ -1129,6 +1651,26 @@ export const UsersMetadata = {
           id: '738416594',
           type: 'externalType',
           externalModule: false,
+          relativePath: './User',
+        },
+      },
+    },
+  ],
+};
+export const UsersMetadataV2 = {
+  kind: 'type',
+  id: 1801329960,
+  globalName: 'schema.Users',
+  name: 'Users',
+  params: [
+    {
+      name: 'users',
+      type: {
+        type: 'template',
+        template: 'vector',
+        value: {
+          type: 'externalType',
+          name: 'User',
           relativePath: './User',
         },
       },
@@ -1219,10 +1761,51 @@ export function updateUsers(value: Users, changes: Partial<UsersInputParams>) {
   }
   return value;
 }
+export function isGetUserById(value: unknown): value is GetUserById {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.GetUserById'
+    )
+  )
+    return false;
+  if (
+    !(
+      'userId' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('0')) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('4294967295')))(
+        value['userId']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export const GetUserByIdMetadata = {
   name: 'GetUserById',
   id: -2021730434,
   kind: 'call',
+  params: [
+    {
+      name: 'userId',
+      type: {
+        type: 'generic',
+        value: 'uint32',
+      },
+    },
+  ],
+};
+export const GetUserByIdMetadataV2 = {
+  kind: 'call',
+  id: -2021730434,
+  globalName: 'schema.GetUserById',
+  name: 'GetUserById',
   params: [
     {
       name: 'userId',
@@ -1303,10 +1886,54 @@ export function updateGetUserById(
   }
   return value;
 }
+export function isPost(value: unknown): value is Post {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.Post'
+    )
+  )
+    return false;
+  if (
+    !(
+      'id' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['id']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export const PostMetadata = {
   name: 'Post',
   id: 901140138,
   kind: 'type',
+  params: [
+    {
+      name: 'id',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+  ],
+};
+export const PostMetadataV2 = {
+  kind: 'type',
+  id: 901140138,
+  globalName: 'schema.Post',
+  name: 'Post',
   params: [
     {
       name: 'id',
@@ -1379,6 +2006,28 @@ export function updatePost(value: Post, changes: Partial<PostInputParams>) {
   }
   return value;
 }
+export function isPosts(value: unknown): value is Posts {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.Posts'
+    )
+  )
+    return false;
+  if (
+    !(
+      'posts' in value &&
+      ((__v0) =>
+        (Array.isArray(__v0) || __v0 instanceof Set) &&
+        Array.from(__v0).every((p) => isPost(p)))(value['posts'])
+    )
+  )
+    return false;
+  return true;
+}
 export const PostsMetadata = {
   name: 'Posts',
   id: 413461762,
@@ -1394,6 +2043,25 @@ export const PostsMetadata = {
           type: 'internalType',
           kind: 'type',
           name: 'Post',
+        },
+      },
+    },
+  ],
+};
+export const PostsMetadataV2 = {
+  kind: 'type',
+  id: 413461762,
+  globalName: 'schema.Posts',
+  name: 'Posts',
+  params: [
+    {
+      name: 'posts',
+      type: {
+        type: 'template',
+        template: 'vector',
+        value: {
+          type: 'internalType',
+          interfaceName: 'Post',
         },
       },
     },
@@ -1481,10 +2149,51 @@ export function updatePosts(value: Posts, changes: Partial<PostsInputParams>) {
   }
   return value;
 }
+export function isGetPostById(value: unknown): value is GetPostById {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.GetPostById'
+    )
+  )
+    return false;
+  if (
+    !(
+      'postId' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('0')) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('4294967295')))(
+        value['postId']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export const GetPostByIdMetadata = {
   name: 'GetPostById',
   id: -1279409050,
   kind: 'call',
+  params: [
+    {
+      name: 'postId',
+      type: {
+        type: 'generic',
+        value: 'uint32',
+      },
+    },
+  ],
+};
+export const GetPostByIdMetadataV2 = {
+  kind: 'call',
+  id: -1279409050,
+  globalName: 'schema.GetPostById',
+  name: 'GetPostById',
   params: [
     {
       name: 'postId',
@@ -1565,10 +2274,30 @@ export function updateGetPostById(
   }
   return value;
 }
+export function isGetConversations(value: unknown): value is GetConversations {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.GetConversations'
+    )
+  )
+    return false;
+  return true;
+}
 export const GetConversationsMetadata = {
   name: 'GetConversations',
   id: -416881,
   kind: 'call',
+  params: [],
+};
+export const GetConversationsMetadataV2 = {
+  kind: 'call',
+  id: -416881,
+  globalName: 'schema.GetConversations',
+  name: 'GetConversations',
   params: [],
 };
 export interface GetConversationsInputParams {}
@@ -1616,10 +2345,59 @@ export function updateGetConversations(
 ) {
   return value;
 }
+export function isCoordinates(value: unknown): value is Coordinates {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.Coordinates'
+    )
+  )
+    return false;
+  if (
+    !(
+      'latitude' in value &&
+      ((__v0) => typeof __v0 === 'number')(value['latitude'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'longitude' in value &&
+      ((__v1) => typeof __v1 === 'number')(value['longitude'])
+    )
+  )
+    return false;
+  return true;
+}
 export const CoordinatesMetadata = {
   name: 'Coordinates',
   id: -2145804928,
   kind: 'type',
+  params: [
+    {
+      name: 'latitude',
+      type: {
+        type: 'generic',
+        value: 'double',
+      },
+    },
+    {
+      name: 'longitude',
+      type: {
+        type: 'generic',
+        value: 'double',
+      },
+    },
+  ],
+};
+export const CoordinatesMetadataV2 = {
+  kind: 'type',
+  id: -2145804928,
+  globalName: 'schema.Coordinates',
+  name: 'Coordinates',
   params: [
     {
       name: 'latitude',
@@ -1734,6 +2512,135 @@ export function updateCoordinates(
   }
   return value;
 }
+export function isShouldSupportSeveralSequentialVectorParams(
+  value: unknown
+): value is ShouldSupportSeveralSequentialVectorParams {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.ShouldSupportSeveralSequentialVectorParams'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        (Array.isArray(__v0) || __v0 instanceof Set) &&
+        Array.from(__v0).every(
+          (p) =>
+            typeof p === 'number' &&
+            JSBI.equal(JSBI.BigInt(p), JSBI.BigInt(p)) &&
+            JSBI.greaterThanOrEqual(
+              JSBI.BigInt(p),
+              JSBI.BigInt('-2147483648')
+            ) &&
+            JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('2147483647'))
+        ))(value['a'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'b' in value &&
+      ((__v1) =>
+        (Array.isArray(__v1) || __v1 instanceof Set) &&
+        Array.from(__v1).every((p) => typeof p === 'number'))(value['b'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'c' in value &&
+      ((__v2) =>
+        (Array.isArray(__v2) || __v2 instanceof Set) &&
+        Array.from(__v2).every((p) => typeof p === 'string'))(value['c'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'd' in value &&
+      ((__v3) =>
+        (Array.isArray(__v3) || __v3 instanceof Set) &&
+        Array.from(__v3).every((p) => typeof p === 'number'))(value['d'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'e' in value &&
+      ((__v4) =>
+        (Array.isArray(__v4) || __v4 instanceof Set) &&
+        Array.from(__v4).every(
+          (p) =>
+            typeof p === 'number' &&
+            JSBI.equal(JSBI.BigInt(p), JSBI.BigInt(p)) &&
+            JSBI.greaterThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('0')) &&
+            JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('4294967295'))
+        ))(value['e'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'f' in value &&
+      ((__v5) =>
+        (Array.isArray(__v5) || __v5 instanceof Set) &&
+        Array.from(__v5).every(
+          (p) =>
+            p !== null &&
+            ((x) =>
+              (Array.isArray(x) || x instanceof Set) &&
+              Array.from(x).every(
+                (p) =>
+                  typeof p === 'number' &&
+                  JSBI.equal(JSBI.BigInt(p), JSBI.BigInt(p)) &&
+                  JSBI.greaterThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('0')) &&
+                  JSBI.lessThanOrEqual(
+                    JSBI.BigInt(p),
+                    JSBI.BigInt('4294967295')
+                  )
+              ))(p)
+        ))(value['f'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'g' in value &&
+      ((__v6) =>
+        Array.isArray(__v6) &&
+        __v6.length === 5 &&
+        ((a) =>
+          typeof a === 'number' &&
+          JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
+          JSBI.greaterThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('-2147483648')) &&
+          JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
+          __v6[0]
+        ) &&
+        ((a) => typeof a === 'number')(__v6[1]) &&
+        ((a) => typeof a === 'number')(__v6[2]) &&
+        ((a) =>
+          (Array.isArray(a) || a instanceof Set) &&
+          Array.from(a).every(
+            (p) =>
+              typeof p === 'number' &&
+              JSBI.equal(JSBI.BigInt(p), JSBI.BigInt(p)) &&
+              JSBI.greaterThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('0')) &&
+              JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('4294967295'))
+          ))(__v6[3]) &&
+        ((a) => a !== null && ((x) => typeof x === 'string')(a))(__v6[4]))(
+        value['g']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export const ShouldSupportSeveralSequentialVectorParamsMetadata = {
   name: 'ShouldSupportSeveralSequentialVectorParams',
   id: -2007546384,
@@ -1842,6 +2749,125 @@ export const ShouldSupportSeveralSequentialVectorParamsMetadata = {
           {
             type: 'template',
             name: 'optional',
+            value: {
+              type: 'generic',
+              value: 'string',
+            },
+          },
+        ],
+      },
+    },
+  ],
+};
+export const ShouldSupportSeveralSequentialVectorParamsMetadataV2 = {
+  kind: 'type',
+  id: -2007546384,
+  globalName: 'schema.ShouldSupportSeveralSequentialVectorParams',
+  name: 'ShouldSupportSeveralSequentialVectorParams',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'template',
+        template: 'vector',
+        value: {
+          type: 'generic',
+          value: 'int',
+        },
+      },
+    },
+    {
+      name: 'b',
+      type: {
+        type: 'template',
+        template: 'vector',
+        value: {
+          type: 'generic',
+          value: 'double',
+        },
+      },
+    },
+    {
+      name: 'c',
+      type: {
+        type: 'template',
+        template: 'vector',
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
+      },
+    },
+    {
+      name: 'd',
+      type: {
+        type: 'template',
+        template: 'vector',
+        value: {
+          type: 'generic',
+          value: 'float',
+        },
+      },
+    },
+    {
+      name: 'e',
+      type: {
+        type: 'template',
+        template: 'vector',
+        value: {
+          type: 'generic',
+          value: 'uint32',
+        },
+      },
+    },
+    {
+      name: 'f',
+      type: {
+        type: 'template',
+        template: 'vector',
+        value: {
+          type: 'template',
+          template: 'optional',
+          value: {
+            type: 'template',
+            template: 'vector',
+            value: {
+              type: 'generic',
+              value: 'uint32',
+            },
+          },
+        },
+      },
+    },
+    {
+      name: 'g',
+      type: {
+        type: 'template',
+        name: 'tuple',
+        args: [
+          {
+            type: 'generic',
+            value: 'int',
+          },
+          {
+            type: 'generic',
+            value: 'float',
+          },
+          {
+            type: 'generic',
+            value: 'double',
+          },
+          {
+            type: 'template',
+            template: 'vector',
+            value: {
+              type: 'generic',
+              value: 'uint32',
+            },
+          },
+          {
+            type: 'template',
+            template: 'optional',
             value: {
               type: 'generic',
               value: 'string',
@@ -2302,6 +3328,87 @@ export function updateShouldSupportSeveralSequentialVectorParams(
   }
   return value;
 }
+export function isSimpleTupleTest(value: unknown): value is simpleTupleTest {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.simpleTupleTest'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        Array.isArray(__v0) &&
+        __v0.length === 5 &&
+        ((a) =>
+          typeof a === 'number' &&
+          JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
+          JSBI.greaterThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('-2147483648')) &&
+          JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
+          __v0[0]
+        ) &&
+        ((a) => typeof a === 'number')(__v0[1]) &&
+        ((a) => typeof a === 'number')(__v0[2]) &&
+        ((a) =>
+          (Array.isArray(a) || a instanceof Set) &&
+          Array.from(a).every(
+            (p) =>
+              typeof p === 'number' &&
+              JSBI.equal(JSBI.BigInt(p), JSBI.BigInt(p)) &&
+              JSBI.greaterThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('0')) &&
+              JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('4294967295'))
+          ))(__v0[3]) &&
+        ((a) => a !== null && ((x) => typeof x === 'string')(a))(__v0[4]))(
+        value['a']
+      )
+    )
+  )
+    return false;
+  if (
+    !(
+      'b' in value &&
+      ((__v1) =>
+        (Array.isArray(__v1) || __v1 instanceof Set) &&
+        Array.from(__v1).every(
+          (p) =>
+            Array.isArray(p) &&
+            p.length === 5 &&
+            ((a) =>
+              typeof a === 'number' &&
+              JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
+              JSBI.greaterThanOrEqual(
+                JSBI.BigInt(a),
+                JSBI.BigInt('-2147483648')
+              ) &&
+              JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
+              p[0]
+            ) &&
+            ((a) => typeof a === 'number')(p[1]) &&
+            ((a) => typeof a === 'number')(p[2]) &&
+            ((a) =>
+              (Array.isArray(a) || a instanceof Set) &&
+              Array.from(a).every(
+                (p) =>
+                  typeof p === 'number' &&
+                  JSBI.equal(JSBI.BigInt(p), JSBI.BigInt(p)) &&
+                  JSBI.greaterThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('0')) &&
+                  JSBI.lessThanOrEqual(
+                    JSBI.BigInt(p),
+                    JSBI.BigInt('4294967295')
+                  )
+              ))(p[3]) &&
+            ((a) => a !== null && ((x) => typeof x === 'string')(a))(p[4])
+        ))(value['b'])
+    )
+  )
+    return false;
+  return true;
+}
 export const simpleTupleTestMetadata = {
   name: 'simpleTupleTest',
   id: 546242333,
@@ -2376,6 +3483,92 @@ export const simpleTupleTestMetadata = {
             {
               type: 'template',
               name: 'optional',
+              value: {
+                type: 'generic',
+                value: 'string',
+              },
+            },
+          ],
+        },
+      },
+    },
+  ],
+};
+export const simpleTupleTestMetadataV2 = {
+  kind: 'type',
+  id: 546242333,
+  globalName: 'schema.simpleTupleTest',
+  name: 'simpleTupleTest',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'template',
+        name: 'tuple',
+        args: [
+          {
+            type: 'generic',
+            value: 'int',
+          },
+          {
+            type: 'generic',
+            value: 'float',
+          },
+          {
+            type: 'generic',
+            value: 'double',
+          },
+          {
+            type: 'template',
+            template: 'vector',
+            value: {
+              type: 'generic',
+              value: 'uint32',
+            },
+          },
+          {
+            type: 'template',
+            template: 'optional',
+            value: {
+              type: 'generic',
+              value: 'string',
+            },
+          },
+        ],
+      },
+    },
+    {
+      name: 'b',
+      type: {
+        type: 'template',
+        template: 'vector',
+        value: {
+          type: 'template',
+          name: 'tuple',
+          args: [
+            {
+              type: 'generic',
+              value: 'int',
+            },
+            {
+              type: 'generic',
+              value: 'float',
+            },
+            {
+              type: 'generic',
+              value: 'double',
+            },
+            {
+              type: 'template',
+              template: 'vector',
+              value: {
+                type: 'generic',
+                value: 'uint32',
+              },
+            },
+            {
+              type: 'template',
+              template: 'optional',
               value: {
                 type: 'generic',
                 value: 'string',
@@ -2682,10 +3875,30 @@ export function updateSimpleTupleTest(
   }
   return value;
 }
+export function isEmptyNode(value: unknown): value is emptyNode {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.emptyNode'
+    )
+  )
+    return false;
+  return true;
+}
 export const emptyNodeMetadata = {
   name: 'emptyNode',
   id: -1994197976,
   kind: 'type',
+  params: [],
+};
+export const emptyNodeMetadataV2 = {
+  kind: 'type',
+  id: -1994197976,
+  globalName: 'schema.emptyNode',
+  name: 'emptyNode',
   params: [],
 };
 export interface emptyNodeInputParams {}
@@ -2726,10 +3939,63 @@ export function updateEmptyNode(
 ) {
   return value;
 }
+export function isUser(value: unknown): value is user {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.user'
+    )
+  )
+    return false;
+  if (
+    !(
+      'id' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['id']
+      )
+    )
+  )
+    return false;
+  if (!('name' in value && ((__v1) => typeof __v1 === 'string')(value['name'])))
+    return false;
+  return true;
+}
 export const userMetadata = {
   name: 'user',
   id: 136841399,
   kind: 'type',
+  params: [
+    {
+      name: 'id',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+    {
+      name: 'name',
+      type: {
+        type: 'generic',
+        value: 'string',
+      },
+    },
+  ],
+};
+export const userMetadataV2 = {
+  kind: 'type',
+  id: 136841399,
+  globalName: 'schema.user',
+  name: 'user',
   params: [
     {
       name: 'id',
@@ -2836,10 +4102,44 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
   }
   return value;
 }
+export function isSupportNullTerminatedString(
+  value: unknown
+): value is supportNullTerminatedString {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.supportNullTerminatedString'
+    )
+  )
+    return false;
+  if (
+    !('value' in value && ((__v0) => typeof __v0 === 'string')(value['value']))
+  )
+    return false;
+  return true;
+}
 export const supportNullTerminatedStringMetadata = {
   name: 'supportNullTerminatedString',
   id: -1360902719,
   kind: 'type',
+  params: [
+    {
+      name: 'value',
+      type: {
+        type: 'generic',
+        value: 'null_terminated_string',
+      },
+    },
+  ],
+};
+export const supportNullTerminatedStringMetadataV2 = {
+  kind: 'type',
+  id: -1360902719,
+  globalName: 'schema.supportNullTerminatedString',
+  name: 'supportNullTerminatedString',
   params: [
     {
       name: 'value',
@@ -2927,6 +4227,30 @@ export function updateSupportNullTerminatedString(
   }
   return value;
 }
+export function isNullTerminatedStringList(
+  value: unknown
+): value is nullTerminatedStringList {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.nullTerminatedStringList'
+    )
+  )
+    return false;
+  if (
+    !(
+      'value' in value &&
+      ((__v0) =>
+        (Array.isArray(__v0) || __v0 instanceof Set) &&
+        Array.from(__v0).every((p) => typeof p === 'string'))(value['value'])
+    )
+  )
+    return false;
+  return true;
+}
 export const nullTerminatedStringListMetadata = {
   name: 'nullTerminatedStringList',
   id: -1953588325,
@@ -2937,6 +4261,25 @@ export const nullTerminatedStringListMetadata = {
       type: {
         type: 'template',
         name: 'vector',
+        value: {
+          type: 'generic',
+          value: 'null_terminated_string',
+        },
+      },
+    },
+  ],
+};
+export const nullTerminatedStringListMetadataV2 = {
+  kind: 'type',
+  id: -1953588325,
+  globalName: 'schema.nullTerminatedStringList',
+  name: 'nullTerminatedStringList',
+  params: [
+    {
+      name: 'value',
+      type: {
+        type: 'template',
+        template: 'vector',
         value: {
           type: 'generic',
           value: 'null_terminated_string',
@@ -3038,6 +4381,28 @@ export function updateNullTerminatedStringList(
   }
   return value;
 }
+export function isNormalStringList(value: unknown): value is normalStringList {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.normalStringList'
+    )
+  )
+    return false;
+  if (
+    !(
+      'value' in value &&
+      ((__v0) =>
+        (Array.isArray(__v0) || __v0 instanceof Set) &&
+        Array.from(__v0).every((p) => typeof p === 'string'))(value['value'])
+    )
+  )
+    return false;
+  return true;
+}
 export const normalStringListMetadata = {
   name: 'normalStringList',
   id: -1964890795,
@@ -3048,6 +4413,25 @@ export const normalStringListMetadata = {
       type: {
         type: 'template',
         name: 'vector',
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
+      },
+    },
+  ],
+};
+export const normalStringListMetadataV2 = {
+  kind: 'type',
+  id: -1964890795,
+  globalName: 'schema.normalStringList',
+  name: 'normalStringList',
+  params: [
+    {
+      name: 'value',
+      type: {
+        type: 'template',
+        template: 'vector',
         value: {
           type: 'generic',
           value: 'string',
@@ -3149,10 +4533,80 @@ export function updateNormalStringList(
   }
   return value;
 }
+export function isBoolAndTuple(value: unknown): value is boolAndTuple {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.boolAndTuple'
+    )
+  )
+    return false;
+  if (
+    !(
+      'sorryIJustLoveTuples' in value &&
+      ((__v0) =>
+        Array.isArray(__v0) &&
+        __v0.length === 3 &&
+        ((a) => typeof a === 'boolean')(__v0[0]) &&
+        ((a) => typeof a === 'boolean')(__v0[1]) &&
+        ((a) =>
+          Array.isArray(a) &&
+          a.length === 2 &&
+          ((a) => typeof a === 'boolean')(a[0]) &&
+          ((a) => typeof a === 'boolean')(a[1]))(__v0[2]))(
+        value['sorryIJustLoveTuples']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export const boolAndTupleMetadata = {
   name: 'boolAndTuple',
   id: -789978949,
   kind: 'type',
+  params: [
+    {
+      name: 'sorryIJustLoveTuples',
+      type: {
+        type: 'template',
+        name: 'tuple',
+        args: [
+          {
+            type: 'generic',
+            value: 'bool',
+          },
+          {
+            type: 'generic',
+            value: 'bool',
+          },
+          {
+            type: 'template',
+            name: 'tuple',
+            args: [
+              {
+                type: 'generic',
+                value: 'bool',
+              },
+              {
+                type: 'generic',
+                value: 'bool',
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+};
+export const boolAndTupleMetadataV2 = {
+  kind: 'type',
+  id: -789978949,
+  globalName: 'schema.boolAndTuple',
+  name: 'boolAndTuple',
   params: [
     {
       name: 'sorryIJustLoveTuples',
@@ -3317,3 +4771,28 @@ export function updateBoolAndTuple(
   }
   return value;
 }
+export const __metadataObjects__ = [
+  testMapMetadataV2,
+  testMap2MetadataV2,
+  testMap3MetadataV2,
+  testSetMetadataV2,
+  testSet2MetadataV2,
+  VoidMetadataV2,
+  msgMetadataV2,
+  ResultMetadataV2,
+  UsersMetadataV2,
+  GetUserByIdMetadataV2,
+  PostMetadataV2,
+  PostsMetadataV2,
+  GetPostByIdMetadataV2,
+  GetConversationsMetadataV2,
+  CoordinatesMetadataV2,
+  ShouldSupportSeveralSequentialVectorParamsMetadataV2,
+  simpleTupleTestMetadataV2,
+  emptyNodeMetadataV2,
+  userMetadataV2,
+  supportNullTerminatedStringMetadataV2,
+  nullTerminatedStringListMetadataV2,
+  normalStringListMetadataV2,
+  boolAndTupleMetadataV2,
+];

@@ -1,3 +1,4 @@
+import JSBI from 'jsbi';
 import {
   INodeCallDefinition,
   INodeTraitDefinition,
@@ -55,6 +56,28 @@ export function getUpdateFunctionName(
   return `update${upperFirst(node.name.value)}`;
 }
 
+export function integerRangeFromBits({
+  bits,
+  signed,
+}: {
+  bits: number;
+  signed: boolean;
+}): [JSBI, JSBI] {
+  const lastBitIndex = JSBI.BigInt(bits - 1);
+  const two = JSBI.BigInt(2);
+  const zero = JSBI.BigInt(0);
+  const negativeTwo = JSBI.BigInt(-2);
+  const one = JSBI.BigInt(1);
+  const maxRange = JSBI.exponentiate(two, lastBitIndex);
+  if (signed) {
+    return [
+      JSBI.exponentiate(negativeTwo, lastBitIndex),
+      JSBI.subtract(maxRange, one),
+    ];
+  }
+  return [zero, JSBI.subtract(JSBI.multiply(maxRange, two), one)];
+}
+
 export function getTypeDefinitionOrCallDefinitionObjectCreator(
   value: INodeTypeDefinition | INodeCallDefinition
 ) {
@@ -64,6 +87,18 @@ export function getTypeDefinitionOrCallDefinitionObjectCreator(
     case NodeType.TypeDefinition:
       return value.name.value;
   }
+}
+
+export function getValidateDefinitionFunctionName(
+  value: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
+) {
+  let out = `is${upperFirst(value.name.value)}`;
+  switch (value.type) {
+    case NodeType.TraitDefinition:
+      out = `${out}Trait`;
+      break;
+  }
+  return out;
 }
 
 export function getTypeName(

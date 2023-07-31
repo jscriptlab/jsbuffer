@@ -1,9 +1,44 @@
 import { ISerializer } from '../__types__';
 import { IDeserializer } from '../__types__';
+export function isUser(value: unknown): value is User {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'conversation.secondUser.User'
+    )
+  )
+    return false;
+  if (
+    !(
+      'firstName' in value &&
+      ((__v0) => typeof __v0 === 'string')(value['firstName'])
+    )
+  )
+    return false;
+  return true;
+}
 export const UserMetadata = {
   name: 'User',
   id: 1249778753,
   kind: 'type',
+  params: [
+    {
+      name: 'firstName',
+      type: {
+        type: 'generic',
+        value: 'string',
+      },
+    },
+  ],
+};
+export const UserMetadataV2 = {
+  kind: 'type',
+  id: 1249778753,
+  globalName: 'conversation.secondUser.User',
+  name: 'User',
   params: [
     {
       name: 'firstName',
@@ -76,3 +111,4 @@ export function updateUser(value: User, changes: Partial<UserInputParams>) {
   }
   return value;
 }
+export const __metadataObjects__ = [UserMetadataV2];

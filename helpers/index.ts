@@ -7,7 +7,13 @@ import { spawn } from 'child-process-utilities';
 import CodeStream from 'textstreamjs';
 import assert from 'assert';
 
-type FunctionPrefix = 'default' | 'update' | 'compare' | 'encode' | 'decode';
+type FunctionPrefix =
+  | 'is'
+  | 'default'
+  | 'update'
+  | 'compare'
+  | 'encode'
+  | 'decode';
 
 function getPrefixRegularExpression(prefix: FunctionPrefix) {
   return `/${prefix}([A-Z0-9a-z_]+)/`;
@@ -22,7 +28,7 @@ function generateTestSchemaFilesCode({
 }) {
   const cs = new CodeStream();
   cs.write(
-    'function randomValuesFromGenericParamMetadataType(paramType) {\n',
+    'function randomValuesFromGenericParamMetadataType({paramType}) {\n',
     () => {
       cs.write('let testValue;\n');
       cs.write(
@@ -42,6 +48,22 @@ function generateTestSchemaFilesCode({
             {
               type: ['uint32'],
               value: () => 'crypto.randomFillSync(new Uint32Array(1))[0]',
+            },
+            {
+              type: ['uint16'],
+              value: () => 'crypto.randomFillSync(new Uint16Array(1))[0]',
+            },
+            {
+              type: ['int16'],
+              value: () => 'crypto.randomFillSync(new Int16Array(1))[0]',
+            },
+            {
+              type: ['uint8'],
+              value: () => 'crypto.randomFillSync(new Uint8Array(1))[0]',
+            },
+            {
+              type: ['int8'],
+              value: () => 'crypto.randomFillSync(new Int8Array(1))[0]',
             },
             {
               type: ['string', 'null_terminated_string'],
@@ -192,7 +214,7 @@ function generateTestSchemaFilesCode({
           cs.write('case "generic":\n');
           cs.indentBlock(() => {
             cs.write(
-              'testValue = randomValuesFromGenericParamMetadataType(paramType);\n'
+              'testValue = randomValuesFromGenericParamMetadataType({ paramType });\n'
             );
             cs.write('break;\n');
           });
@@ -498,8 +520,10 @@ function generateTestSchemaFilesCode({
     },
     '});\n'
   );
+  cs.write('let importPath;\n');
   for (const f of files) {
     const importPath = path.relative(rootDir, f);
+    cs.write(`importPath = "${path.resolve(rootDir, f)}";\n`);
     cs.write(
       '{\n',
       () => {
@@ -514,6 +538,7 @@ function generateTestSchemaFilesCode({
               'decode',
               'update',
               'compare',
+              'is',
               'encode',
             ];
             for (const prefix of prefixes) {
@@ -552,13 +577,64 @@ function generateTestSchemaFilesCode({
           },
           '}\n'
         );
+        for (const [functionName, method] of [
+          ['upperFirst', 'toUpperCase'],
+          ['lowerFirst', 'toLowerCase'],
+        ]) {
+          cs.write(
+            `function ${functionName}(value) {\n`,
+            () => {
+              cs.write(
+                `return \`\${(value[0]).${method}()}\${value.substring(1)}\`;\n`
+              );
+            },
+            '}\n'
+          );
+        }
         cs.write(
           'for(const [suffix,names] of functionNames) {\n',
           () => {
+            cs.write(
+              'const metadata = (\n',
+              () => {
+                cs.write(
+                  'value[`${suffix}Metadata`] ?? value[`${lowerFirst(suffix)}Metadata`]\n'
+                );
+              },
+              ');\n'
+            );
             getFn('defaultFn', 'default');
             getFn('compareFn', 'compare');
             getFn('decodeFn', 'decode');
             getFn('updateFn', 'update');
+            getFn('isFn', 'is');
+            cs.write(
+              "assert.strict.ok(typeof metadata === 'object' && metadata !== null);\n"
+            );
+            cs.write('assert.strict.ok(!isFn({}));\n');
+            cs.write(
+              'if(Object.keys(defaultFn()).length === 1) assert.strict.ok(\n',
+              () => {
+                cs.write('isFn({_name: defaultFn()._name})\n');
+              },
+              ');\n'
+            );
+            cs.write('assert.strict.ok(isFn(defaultFn()));\n');
+            cs.write("if(metadata.kind !== 'trait')\n");
+            cs.indentBlock(() => {
+              cs.write('for(let i = 0; i < 10; i++)\n');
+              cs.indentBlock(() => {
+                cs.write(
+                  'assert.strict.ok(\n',
+                  () => {
+                    cs.write(
+                      'isFn(defaultFn(Object.fromEntries(randomValuesFromMetadata(importPath, metadata, value))))'
+                    );
+                  },
+                  ');\n'
+                );
+              });
+            });
             cs.write("console.log('\t-- %s',suffix);\n");
             cs.write(
               'if(updateFn){\n',
@@ -577,11 +653,9 @@ function generateTestSchemaFilesCode({
               },
               '}\n'
             );
-            cs.write('const metadata = value[`${suffix}Metadata`];\n');
             cs.write(
               'if(metadata) {\n',
               () => {
-                cs.write(`const importPath = "${path.resolve(rootDir, f)}";\n`);
                 cs.write(
                   'testCodec({importPath, exports: value, metadata, value});\n'
                 );
@@ -853,6 +927,7 @@ export async function generateWithVirtualFs({
       textEncoder: new TextEncoder(),
       typeScriptConfiguration: {
         compilerOptions: {
+          esModuleInterop: true,
           strict: true,
           declaration: true,
           target: 'ESNext',

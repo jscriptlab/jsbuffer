@@ -3,7 +3,7 @@ import Exception from '../exception/Exception';
 
 export class ValueStringifyFailure extends Exception {
   public constructor(public readonly value: unknown) {
-    super();
+    super(`Failed to stringify value: ${value} (type is ${typeof value})`);
   }
 }
 
@@ -16,6 +16,22 @@ function isArray(value: unknown): value is ReadonlyArray<unknown> {
 }
 
 export default class JavaScriptObjectStringify extends CodeStream {
+  readonly #quoteObjectParameterNames: boolean;
+  public constructor(
+    parent: CodeStream | undefined,
+    {
+      indentationSize,
+      quoteObjectParameterNames = true,
+    }: {
+      indentationSize: number;
+      quoteObjectParameterNames?: boolean;
+    }
+  ) {
+    super(parent, {
+      indentationSize,
+    });
+    this.#quoteObjectParameterNames = quoteObjectParameterNames;
+  }
   public stringify(value?: unknown) {
     if (isObject(value)) {
       const map = new Map(Object.entries(value));
@@ -24,7 +40,7 @@ export default class JavaScriptObjectStringify extends CodeStream {
         const items = Array.from(map);
         for (const item of items) {
           const [k, v] = item;
-          this.write(`"${k}": `);
+          this.write(`${this.#paramName(k)}: `);
           this.stringify(v);
           if (item !== items[items.length - 1]) {
             this.append(',');
@@ -54,8 +70,16 @@ export default class JavaScriptObjectStringify extends CodeStream {
       this.append('undefined');
     } else if (value === null) {
       this.append('null');
+    } else if (typeof value === 'number') {
+      this.append(`${value}`);
     } else {
       throw new ValueStringifyFailure(value);
     }
+  }
+  #paramName(value: string) {
+    if (this.#quoteObjectParameterNames) {
+      value = `"${value}"`;
+    }
+    return value;
   }
 }

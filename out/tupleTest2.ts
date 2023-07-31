@@ -1,9 +1,82 @@
+import JSBI from 'jsbi';
 import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
+export function isUser(value: unknown): value is user {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'tupleTest2.user'
+    )
+  )
+    return false;
+  if (
+    !(
+      'id' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['id']
+      )
+    )
+  )
+    return false;
+  if (
+    !(
+      'firstName' in value &&
+      ((__v1) => typeof __v1 === 'string')(value['firstName'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'lastName' in value &&
+      ((__v2) => typeof __v2 === 'string')(value['lastName'])
+    )
+  )
+    return false;
+  return true;
+}
 export const userMetadata = {
   name: 'user',
   id: 1638498929,
   kind: 'type',
+  params: [
+    {
+      name: 'id',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+    {
+      name: 'firstName',
+      type: {
+        type: 'generic',
+        value: 'string',
+      },
+    },
+    {
+      name: 'lastName',
+      type: {
+        type: 'generic',
+        value: 'string',
+      },
+    },
+  ],
+};
+export const userMetadataV2 = {
+  kind: 'type',
+  id: 1638498929,
+  globalName: 'tupleTest2.user',
+  name: 'user',
   params: [
     {
       name: 'id',
@@ -144,6 +217,48 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
   }
   return value;
 }
+export function isPost(value: unknown): value is post {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'tupleTest2.post'
+    )
+  )
+    return false;
+  if (
+    !(
+      'id' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['id']
+      )
+    )
+  )
+    return false;
+  if (
+    !('title' in value && ((__v1) => typeof __v1 === 'string')(value['title']))
+  )
+    return false;
+  if (
+    !(
+      'comments' in value &&
+      ((__v2) =>
+        (Array.isArray(__v2) || __v2 instanceof Set) &&
+        Array.from(__v2).every((p) => isComment(p)))(value['comments'])
+    )
+  )
+    return false;
+  return true;
+}
 export const postMetadata = {
   name: 'post',
   id: -937937285,
@@ -173,6 +288,39 @@ export const postMetadata = {
           type: 'internalType',
           kind: 'type',
           name: 'comment',
+        },
+      },
+    },
+  ],
+};
+export const postMetadataV2 = {
+  kind: 'type',
+  id: -937937285,
+  globalName: 'tupleTest2.post',
+  name: 'post',
+  params: [
+    {
+      name: 'id',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+    {
+      name: 'title',
+      type: {
+        type: 'generic',
+        value: 'string',
+      },
+    },
+    {
+      name: 'comments',
+      type: {
+        type: 'template',
+        template: 'vector',
+        value: {
+          type: 'internalType',
+          interfaceName: 'comment',
         },
       },
     },
@@ -316,10 +464,79 @@ export function updatePost(value: post, changes: Partial<postInputParams>) {
   }
   return value;
 }
+export function isComment(value: unknown): value is comment {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'tupleTest2.comment'
+    )
+  )
+    return false;
+  if (
+    !(
+      'id' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['id']
+      )
+    )
+  )
+    return false;
+  if (
+    !('title' in value && ((__v1) => typeof __v1 === 'string')(value['title']))
+  )
+    return false;
+  if (
+    !(
+      'contents' in value &&
+      ((__v2) => typeof __v2 === 'string')(value['contents'])
+    )
+  )
+    return false;
+  return true;
+}
 export const commentMetadata = {
   name: 'comment',
   id: 1770739505,
   kind: 'type',
+  params: [
+    {
+      name: 'id',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+    {
+      name: 'title',
+      type: {
+        type: 'generic',
+        value: 'string',
+      },
+    },
+    {
+      name: 'contents',
+      type: {
+        type: 'generic',
+        value: 'string',
+      },
+    },
+  ],
+};
+export const commentMetadataV2 = {
+  kind: 'type',
+  id: 1770739505,
+  globalName: 'tupleTest2.comment',
+  name: 'comment',
   params: [
     {
       name: 'id',
@@ -465,6 +682,39 @@ export function updateComment(
   }
   return value;
 }
+export function isTupleTest(value: unknown): value is tupleTest {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'tupleTest2.tupleTest'
+    )
+  )
+    return false;
+  if (
+    !(
+      'data' in value &&
+      ((__v0) =>
+        Array.isArray(__v0) &&
+        __v0.length === 5 &&
+        ((a) => isUser(a))(__v0[0]) &&
+        ((a) => isPost(a))(__v0[1]) &&
+        ((a) => isComment(a))(__v0[2]) &&
+        ((a) =>
+          (Array.isArray(a) || a instanceof Set) &&
+          Array.from(a).every((p) => isComment(p)))(__v0[3]) &&
+        ((a) =>
+          (Array.isArray(a) || a instanceof Set) &&
+          Array.from(a).every((p) => p !== null && ((x) => isComment(x))(p)))(
+          __v0[4]
+        ))(value['data'])
+    )
+  )
+    return false;
+  return true;
+}
 export const tupleTestMetadata = {
   name: 'tupleTest',
   id: -166074495,
@@ -515,6 +765,55 @@ export const tupleTestMetadata = {
                 type: 'internalType',
                 kind: 'type',
                 name: 'comment',
+              },
+            },
+          },
+        ],
+      },
+    },
+  ],
+};
+export const tupleTestMetadataV2 = {
+  kind: 'type',
+  id: -166074495,
+  globalName: 'tupleTest2.tupleTest',
+  name: 'tupleTest',
+  params: [
+    {
+      name: 'data',
+      type: {
+        type: 'template',
+        name: 'tuple',
+        args: [
+          {
+            type: 'internalType',
+            interfaceName: 'user',
+          },
+          {
+            type: 'internalType',
+            interfaceName: 'post',
+          },
+          {
+            type: 'internalType',
+            interfaceName: 'comment',
+          },
+          {
+            type: 'template',
+            template: 'vector',
+            value: {
+              type: 'internalType',
+              interfaceName: 'comment',
+            },
+          },
+          {
+            type: 'template',
+            template: 'vector',
+            value: {
+              type: 'template',
+              template: 'optional',
+              value: {
+                type: 'internalType',
+                interfaceName: 'comment',
               },
             },
           },
@@ -723,6 +1022,70 @@ export function updateTupleTest(
   }
   return value;
 }
+export function isTupleTupleTest(value: unknown): value is tupleTupleTest {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'tupleTest2.tupleTupleTest'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        Array.isArray(__v0) &&
+        __v0.length === 4 &&
+        ((a) =>
+          Array.isArray(a) &&
+          a.length === 3 &&
+          ((a) =>
+            typeof a === 'number' &&
+            JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
+            JSBI.greaterThanOrEqual(
+              JSBI.BigInt(a),
+              JSBI.BigInt('-2147483648')
+            ) &&
+            JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
+            a[0]
+          ) &&
+          ((a) => typeof a === 'string')(a[1]) &&
+          ((a) =>
+            (Array.isArray(a) || a instanceof Set) &&
+            Array.from(a).every(
+              (p) =>
+                Array.isArray(p) &&
+                p.length === 2 &&
+                ((a) => typeof a === 'string')(p[0]) &&
+                ((a) =>
+                  typeof a === 'number' &&
+                  JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
+                  JSBI.greaterThanOrEqual(
+                    JSBI.BigInt(a),
+                    JSBI.BigInt('-2147483648')
+                  ) &&
+                  JSBI.lessThanOrEqual(
+                    JSBI.BigInt(a),
+                    JSBI.BigInt('2147483647')
+                  ))(p[1])
+            ))(a[2]))(__v0[0]) &&
+        ((a) =>
+          typeof a === 'number' &&
+          JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
+          JSBI.greaterThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('-2147483648')) &&
+          JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
+          __v0[1]
+        ) &&
+        ((a) => typeof a === 'string')(__v0[2]) &&
+        ((a) => typeof a === 'number')(__v0[3]))(value['a'])
+    )
+  )
+    return false;
+  return true;
+}
 export const tupleTupleTestMetadata = {
   name: 'tupleTupleTest',
   id: 1504918786,
@@ -749,6 +1112,67 @@ export const tupleTupleTestMetadata = {
               {
                 type: 'template',
                 name: 'vector',
+                value: {
+                  type: 'template',
+                  name: 'tuple',
+                  args: [
+                    {
+                      type: 'generic',
+                      value: 'string',
+                    },
+                    {
+                      type: 'generic',
+                      value: 'int',
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+          {
+            type: 'generic',
+            value: 'int',
+          },
+          {
+            type: 'generic',
+            value: 'string',
+          },
+          {
+            type: 'generic',
+            value: 'double',
+          },
+        ],
+      },
+    },
+  ],
+};
+export const tupleTupleTestMetadataV2 = {
+  kind: 'type',
+  id: 1504918786,
+  globalName: 'tupleTest2.tupleTupleTest',
+  name: 'tupleTupleTest',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'template',
+        name: 'tuple',
+        args: [
+          {
+            type: 'template',
+            name: 'tuple',
+            args: [
+              {
+                type: 'generic',
+                value: 'int',
+              },
+              {
+                type: 'generic',
+                value: 'string',
+              },
+              {
+                type: 'template',
+                template: 'vector',
                 value: {
                   type: 'template',
                   name: 'tuple',
@@ -963,10 +1387,102 @@ export function updateTupleTupleTest(
   }
   return value;
 }
+export function isSuperTupleTupleTest(
+  value: unknown
+): value is superTupleTupleTest {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'tupleTest2.superTupleTupleTest'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        Array.isArray(__v0) &&
+        __v0.length === 2 &&
+        ((a) =>
+          Array.isArray(a) &&
+          a.length === 2 &&
+          ((a) =>
+            Array.isArray(a) &&
+            a.length === 1 &&
+            ((a) =>
+              typeof a === 'number' &&
+              JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
+              JSBI.greaterThanOrEqual(
+                JSBI.BigInt(a),
+                JSBI.BigInt('-2147483648')
+              ) &&
+              JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
+              a[0]
+            ))(a[0]) &&
+          ((a) =>
+            typeof a === 'number' &&
+            JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
+            JSBI.greaterThanOrEqual(
+              JSBI.BigInt(a),
+              JSBI.BigInt('-2147483648')
+            ) &&
+            JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
+            a[1]
+          ))(__v0[0]) &&
+        ((a) => typeof a === 'number')(__v0[1]))(value['a'])
+    )
+  )
+    return false;
+  return true;
+}
 export const superTupleTupleTestMetadata = {
   name: 'superTupleTupleTest',
   id: 1329952558,
   kind: 'type',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'template',
+        name: 'tuple',
+        args: [
+          {
+            type: 'template',
+            name: 'tuple',
+            args: [
+              {
+                type: 'template',
+                name: 'tuple',
+                args: [
+                  {
+                    type: 'generic',
+                    value: 'int',
+                  },
+                ],
+              },
+              {
+                type: 'generic',
+                value: 'int',
+              },
+            ],
+          },
+          {
+            type: 'generic',
+            value: 'double',
+          },
+        ],
+      },
+    },
+  ],
+};
+export const superTupleTupleTestMetadataV2 = {
+  kind: 'type',
+  id: 1329952558,
+  globalName: 'tupleTest2.superTupleTupleTest',
+  name: 'superTupleTupleTest',
   params: [
     {
       name: 'a',
@@ -1120,3 +1636,11 @@ export function updateSuperTupleTupleTest(
   }
   return value;
 }
+export const __metadataObjects__ = [
+  userMetadataV2,
+  postMetadataV2,
+  commentMetadataV2,
+  tupleTestMetadataV2,
+  tupleTupleTestMetadataV2,
+  superTupleTupleTestMetadataV2,
+];

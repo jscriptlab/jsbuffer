@@ -1,10 +1,55 @@
+import JSBI from 'jsbi';
 import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
 import { IRequest } from './__types__';
+export function isMessage(value: unknown): value is Message {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'message.Message'
+    )
+  )
+    return false;
+  if (
+    !(
+      'id' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['id']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export const MessageMetadata = {
   name: 'Message',
   id: -1731107621,
   kind: 'type',
+  params: [
+    {
+      name: 'id',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+  ],
+};
+export const MessageMetadataV2 = {
+  kind: 'type',
+  id: -1731107621,
+  globalName: 'message.Message',
+  name: 'Message',
   params: [
     {
       name: 'id',
@@ -82,6 +127,28 @@ export function updateMessage(
   }
   return value;
 }
+export function isMessages(value: unknown): value is Messages {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'message.Messages'
+    )
+  )
+    return false;
+  if (
+    !(
+      'messages' in value &&
+      ((__v0) =>
+        (Array.isArray(__v0) || __v0 instanceof Set) &&
+        Array.from(__v0).every((p) => isMessage(p)))(value['messages'])
+    )
+  )
+    return false;
+  return true;
+}
 export const MessagesMetadata = {
   name: 'Messages',
   id: 1419827675,
@@ -97,6 +164,25 @@ export const MessagesMetadata = {
           type: 'internalType',
           kind: 'type',
           name: 'Message',
+        },
+      },
+    },
+  ],
+};
+export const MessagesMetadataV2 = {
+  kind: 'type',
+  id: 1419827675,
+  globalName: 'message.Messages',
+  name: 'Messages',
+  params: [
+    {
+      name: 'messages',
+      type: {
+        type: 'template',
+        template: 'vector',
+        value: {
+          type: 'internalType',
+          interfaceName: 'Message',
         },
       },
     },
@@ -191,10 +277,77 @@ export function updateMessages(
   }
   return value;
 }
+export function isGetMessages(value: unknown): value is GetMessages {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'message.GetMessages'
+    )
+  )
+    return false;
+  if (
+    !(
+      'offset' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['offset']
+      )
+    )
+  )
+    return false;
+  if (
+    !(
+      'limit' in value &&
+      ((__v1) =>
+        typeof __v1 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v1), JSBI.BigInt(__v1)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v1),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v1), JSBI.BigInt('2147483647')))(
+        value['limit']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export const GetMessagesMetadata = {
   name: 'GetMessages',
   id: 1394938243,
   kind: 'call',
+  params: [
+    {
+      name: 'offset',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+    {
+      name: 'limit',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+  ],
+};
+export const GetMessagesMetadataV2 = {
+  kind: 'call',
+  id: 1394938243,
+  globalName: 'message.GetMessages',
+  name: 'GetMessages',
   params: [
     {
       name: 'offset',
@@ -309,3 +462,8 @@ export function updateGetMessages(
   }
   return value;
 }
+export const __metadataObjects__ = [
+  MessageMetadataV2,
+  MessagesMetadataV2,
+  GetMessagesMetadataV2,
+];

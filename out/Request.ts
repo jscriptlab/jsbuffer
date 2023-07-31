@@ -1,6 +1,9 @@
 import { GetUserById } from './schema';
 import { GetPostById } from './schema';
 import { GetConversations } from './schema';
+import { isGetUserById } from './schema';
+import { isGetPostById } from './schema';
+import { isGetConversations } from './schema';
 import { ISerializer } from './__types__';
 import { encodeGetUserById } from './schema';
 import { encodeGetPostById } from './schema';
@@ -17,10 +20,37 @@ export type Request =
   | Readonly<GetUserById>
   | Readonly<GetPostById>
   | Readonly<GetConversations>;
+export function isRequestTrait(value: unknown): value is Request {
+  if (isGetUserById(value)) return true;
+  if (isGetPostById(value)) return true;
+  if (isGetConversations(value)) return true;
+  return false;
+}
 export const RequestMetadata = {
   name: 'Request',
   id: -90477734,
   kind: 'trait',
+};
+export const RequestMetadataV2 = {
+  kind: 'trait',
+  name: 'Request',
+  nodes: [
+    {
+      type: 'externalType',
+      name: 'GetUserById',
+      relativePath: './schema',
+    },
+    {
+      type: 'externalType',
+      name: 'GetPostById',
+      relativePath: './schema',
+    },
+    {
+      type: 'externalType',
+      name: 'GetConversations',
+      relativePath: './schema',
+    },
+  ],
 };
 export function encodeRequestTrait(__s: ISerializer, value: Request) {
   switch (value._name) {
@@ -79,3 +109,4 @@ export function compareRequestTrait(__a: Request, __b: Request) {
       return compareGetConversations(__a, __b);
   }
 }
+export const __metadataObjects__ = [RequestMetadataV2];

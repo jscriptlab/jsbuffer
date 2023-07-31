@@ -1,10 +1,26 @@
 import { A } from './testTraitOnParamTrait';
+import { isATrait } from './testTraitOnParamTrait';
 import { ISerializer } from './__types__';
 import { encodeATrait } from './testTraitOnParamTrait';
 import { IDeserializer } from './__types__';
 import { decodeATrait } from './testTraitOnParamTrait';
 import { defaultATrait } from './testTraitOnParamTrait';
 import { compareATrait } from './testTraitOnParamTrait';
+export function isA0(value: unknown): value is A0 {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'testTraitOnParam.A0'
+    )
+  )
+    return false;
+  if (!('value' in value && ((__v0) => isATrait(__v0))(value['value'])))
+    return false;
+  return true;
+}
 export const A0Metadata = {
   name: 'A0',
   id: -1244603213,
@@ -17,6 +33,22 @@ export const A0Metadata = {
         id: '-945659736',
         type: 'externalType',
         externalModule: false,
+        relativePath: './testTraitOnParamTrait',
+      },
+    },
+  ],
+};
+export const A0MetadataV2 = {
+  kind: 'type',
+  id: -1244603213,
+  globalName: 'testTraitOnParam.A0',
+  name: 'A0',
+  params: [
+    {
+      name: 'value',
+      type: {
+        type: 'externalType',
+        name: 'A',
         relativePath: './testTraitOnParamTrait',
       },
     },
@@ -86,6 +118,21 @@ export function updateA0(value: A0, changes: Partial<A0InputParams>) {
   }
   return value;
 }
+export function isA1(value: unknown): value is A1 {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'testTraitOnParam.A1'
+    )
+  )
+    return false;
+  if (!('value' in value && ((__v0) => isATrait(__v0))(value['value'])))
+    return false;
+  return true;
+}
 export const A1Metadata = {
   name: 'A1',
   id: -2001668861,
@@ -98,6 +145,22 @@ export const A1Metadata = {
         id: '-945659736',
         type: 'externalType',
         externalModule: false,
+        relativePath: './testTraitOnParamTrait',
+      },
+    },
+  ],
+};
+export const A1MetadataV2 = {
+  kind: 'type',
+  id: -2001668861,
+  globalName: 'testTraitOnParam.A1',
+  name: 'A1',
+  params: [
+    {
+      name: 'value',
+      type: {
+        type: 'externalType',
+        name: 'A',
         relativePath: './testTraitOnParamTrait',
       },
     },
@@ -167,6 +230,21 @@ export function updateA1(value: A1, changes: Partial<A1InputParams>) {
   }
   return value;
 }
+export function isA2(value: unknown): value is A2 {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'testTraitOnParam.A2'
+    )
+  )
+    return false;
+  if (!('value' in value && ((__v0) => isATrait(__v0))(value['value'])))
+    return false;
+  return true;
+}
 export const A2Metadata = {
   name: 'A2',
   id: -820998189,
@@ -179,6 +257,22 @@ export const A2Metadata = {
         id: '-945659736',
         type: 'externalType',
         externalModule: false,
+        relativePath: './testTraitOnParamTrait',
+      },
+    },
+  ],
+};
+export const A2MetadataV2 = {
+  kind: 'type',
+  id: -820998189,
+  globalName: 'testTraitOnParam.A2',
+  name: 'A2',
+  params: [
+    {
+      name: 'value',
+      type: {
+        type: 'externalType',
+        name: 'A',
         relativePath: './testTraitOnParamTrait',
       },
     },
@@ -248,3 +342,4 @@ export function updateA2(value: A2, changes: Partial<A2InputParams>) {
   }
   return value;
 }
+export const __metadataObjects__ = [A0MetadataV2, A1MetadataV2, A2MetadataV2];

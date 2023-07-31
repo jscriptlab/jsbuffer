@@ -1,10 +1,38 @@
 import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
+import JSBI from 'jsbi';
 export type A = Readonly<B> | Readonly<C> | Readonly<D>;
+export function isATrait(value: unknown): value is A {
+  if (isB(value)) return true;
+  if (isC(value)) return true;
+  if (isD(value)) return true;
+  return false;
+}
 export const AMetadata = {
   name: 'A',
   id: -945659736,
   kind: 'trait',
+};
+export const AMetadataV2 = {
+  kind: 'trait',
+  name: 'A',
+  nodes: [
+    {
+      type: 'externalType',
+      name: 'B',
+      relativePath: './testTraitOnParamTrait',
+    },
+    {
+      type: 'externalType',
+      name: 'C',
+      relativePath: './testTraitOnParamTrait',
+    },
+    {
+      type: 'externalType',
+      name: 'D',
+      relativePath: './testTraitOnParamTrait',
+    },
+  ],
 };
 export function encodeATrait(__s: ISerializer, value: A) {
   switch (value._name) {
@@ -63,10 +91,54 @@ export function compareATrait(__a: A, __b: A) {
       return compareD(__a, __b);
   }
 }
+export function isB(value: unknown): value is B {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'testTraitOnParamTrait.B'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['a']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export const BMetadata = {
   name: 'B',
   id: 543394260,
   kind: 'type',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+  ],
+};
+export const BMetadataV2 = {
+  kind: 'type',
+  id: 543394260,
+  globalName: 'testTraitOnParamTrait.B',
+  name: 'B',
   params: [
     {
       name: 'a',
@@ -139,10 +211,54 @@ export function updateB(value: B, changes: Partial<BInputParams>) {
   }
   return value;
 }
+export function isC(value: unknown): value is C {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'testTraitOnParamTrait.C'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['a']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export const CMetadata = {
   name: 'C',
   id: -811474198,
   kind: 'type',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+  ],
+};
+export const CMetadataV2 = {
+  kind: 'type',
+  id: -811474198,
+  globalName: 'testTraitOnParamTrait.C',
+  name: 'C',
   params: [
     {
       name: 'a',
@@ -215,10 +331,54 @@ export function updateC(value: C, changes: Partial<CInputParams>) {
   }
   return value;
 }
+export function isD(value: unknown): value is D {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'testTraitOnParamTrait.D'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['a']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export const DMetadata = {
   name: 'D',
   id: 763230611,
   kind: 'type',
+  params: [
+    {
+      name: 'a',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+  ],
+};
+export const DMetadataV2 = {
+  kind: 'type',
+  id: 763230611,
+  globalName: 'testTraitOnParamTrait.D',
+  name: 'D',
   params: [
     {
       name: 'a',
@@ -291,3 +451,9 @@ export function updateD(value: D, changes: Partial<DInputParams>) {
   }
   return value;
 }
+export const __metadataObjects__ = [
+  AMetadataV2,
+  BMetadataV2,
+  CMetadataV2,
+  DMetadataV2,
+];

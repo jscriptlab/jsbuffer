@@ -1,10 +1,32 @@
 import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
+import JSBI from 'jsbi';
 export type User = Readonly<user> | Readonly<userDeleted>;
+export function isUserTrait(value: unknown): value is User {
+  if (isUser(value)) return true;
+  if (isUserDeleted(value)) return true;
+  return false;
+}
 export const UserMetadata = {
   name: 'User',
   id: 738416594,
   kind: 'trait',
+};
+export const UserMetadataV2 = {
+  kind: 'trait',
+  name: 'User',
+  nodes: [
+    {
+      type: 'externalType',
+      name: 'user',
+      relativePath: './User',
+    },
+    {
+      type: 'externalType',
+      name: 'userDeleted',
+      relativePath: './User',
+    },
+  ],
 };
 export function encodeUserTrait(__s: ISerializer, value: User) {
   switch (value._name) {
@@ -52,10 +74,25 @@ export function compareUserTrait(__a: User, __b: User) {
   }
 }
 export type Test = Readonly<test>;
+export function isTestTrait(value: unknown): value is Test {
+  if (isTest(value)) return true;
+  return false;
+}
 export const TestMetadata = {
   name: 'Test',
   id: 2045771671,
   kind: 'trait',
+};
+export const TestMetadataV2 = {
+  kind: 'trait',
+  name: 'Test',
+  nodes: [
+    {
+      type: 'externalType',
+      name: 'test',
+      relativePath: './User',
+    },
+  ],
 };
 export function encodeTestTrait(__s: ISerializer, value: Test) {
   switch (value._name) {
@@ -86,6 +123,35 @@ export function defaultTestTrait() {
 export function compareTestTrait(__a: Test, __b: Test) {
   return compareTest(__a, __b);
 }
+export function isUser(value: unknown): value is user {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'user.user'
+    )
+  )
+    return false;
+  if (
+    !(
+      'firstName' in value &&
+      ((__v0) => typeof __v0 === 'string')(value['firstName'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'aliases' in value &&
+      ((__v1) =>
+        (Array.isArray(__v1) || __v1 instanceof Set) &&
+        Array.from(__v1).every((p) => typeof p === 'string'))(value['aliases'])
+    )
+  )
+    return false;
+  return true;
+}
 export const userMetadata = {
   name: 'user',
   id: -2086976610,
@@ -103,6 +169,32 @@ export const userMetadata = {
       type: {
         type: 'template',
         name: 'vector',
+        value: {
+          type: 'generic',
+          value: 'string',
+        },
+      },
+    },
+  ],
+};
+export const userMetadataV2 = {
+  kind: 'type',
+  id: -2086976610,
+  globalName: 'user.user',
+  name: 'user',
+  params: [
+    {
+      name: 'firstName',
+      type: {
+        type: 'generic',
+        value: 'string',
+      },
+    },
+    {
+      name: 'aliases',
+      type: {
+        type: 'template',
+        template: 'vector',
         value: {
           type: 'generic',
           value: 'string',
@@ -218,10 +310,54 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
   }
   return value;
 }
+export function isUserDeleted(value: unknown): value is userDeleted {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'user.userDeleted'
+    )
+  )
+    return false;
+  if (
+    !(
+      'deletedAt' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['deletedAt']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export const userDeletedMetadata = {
   name: 'userDeleted',
   id: 1001160586,
   kind: 'type',
+  params: [
+    {
+      name: 'deletedAt',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+  ],
+};
+export const userDeletedMetadataV2 = {
+  kind: 'type',
+  id: 1001160586,
+  globalName: 'user.userDeleted',
+  name: 'userDeleted',
   params: [
     {
       name: 'deletedAt',
@@ -302,6 +438,36 @@ export function updateUserDeleted(
   }
   return value;
 }
+export function isTest(value: unknown): value is test {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'user.test'
+    )
+  )
+    return false;
+  if (!('user' in value && ((__v0) => isUser(__v0))(value['user'])))
+    return false;
+  if (
+    !(
+      'b' in value &&
+      ((__v1) =>
+        (Array.isArray(__v1) || __v1 instanceof Set) &&
+        Array.from(__v1).every(
+          (p) =>
+            (Array.isArray(p) || p instanceof Set) &&
+            Array.from(p).every(
+              (p) => p !== null && ((x) => typeof x === 'string')(p)
+            )
+        ))(value['b'])
+    )
+  )
+    return false;
+  return true;
+}
 export const testMetadata = {
   name: 'test',
   id: -834825061,
@@ -327,6 +493,40 @@ export const testMetadata = {
           value: {
             type: 'template',
             name: 'optional',
+            value: {
+              type: 'generic',
+              value: 'string',
+            },
+          },
+        },
+      },
+    },
+  ],
+};
+export const testMetadataV2 = {
+  kind: 'type',
+  id: -834825061,
+  globalName: 'user.test',
+  name: 'test',
+  params: [
+    {
+      name: 'user',
+      type: {
+        type: 'internalType',
+        interfaceName: 'user',
+      },
+    },
+    {
+      name: 'b',
+      type: {
+        type: 'template',
+        template: 'vector',
+        value: {
+          type: 'template',
+          template: 'vector',
+          value: {
+            type: 'template',
+            template: 'optional',
             value: {
               type: 'generic',
               value: 'string',
@@ -481,3 +681,10 @@ export function updateTest(value: test, changes: Partial<testInputParams>) {
   }
   return value;
 }
+export const __metadataObjects__ = [
+  UserMetadataV2,
+  TestMetadataV2,
+  userMetadataV2,
+  userDeletedMetadataV2,
+  testMetadataV2,
+];

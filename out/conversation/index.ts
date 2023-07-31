@@ -1,10 +1,43 @@
 import { User } from './SecondUser';
+import JSBI from 'jsbi';
+import { isUser } from './SecondUser';
 import { ISerializer } from '../__types__';
 import { encodeUser } from './SecondUser';
 import { IDeserializer } from '../__types__';
 import { decodeUser } from './SecondUser';
 import { defaultUser } from './SecondUser';
 import { compareUser } from './SecondUser';
+export function isConversation(value: unknown): value is Conversation {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'conversation.index.Conversation'
+    )
+  )
+    return false;
+  if (
+    !(
+      'id' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['id']
+      )
+    )
+  )
+    return false;
+  if (!('user' in value && ((__v1) => isUser(__v1))(value['user'])))
+    return false;
+  return true;
+}
 export const ConversationMetadata = {
   name: 'Conversation',
   id: 1288012364,
@@ -24,6 +57,29 @@ export const ConversationMetadata = {
         id: '1249778753',
         type: 'externalType',
         externalModule: false,
+        relativePath: './SecondUser',
+      },
+    },
+  ],
+};
+export const ConversationMetadataV2 = {
+  kind: 'type',
+  id: 1288012364,
+  globalName: 'conversation.index.Conversation',
+  name: 'Conversation',
+  params: [
+    {
+      name: 'id',
+      type: {
+        type: 'generic',
+        value: 'int',
+      },
+    },
+    {
+      name: 'user',
+      type: {
+        type: 'externalType',
+        name: 'User',
         relativePath: './SecondUser',
       },
     },
@@ -128,6 +184,30 @@ export function updateConversation(
   }
   return value;
 }
+export function isConversations(value: unknown): value is Conversations {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'conversation.index.Conversations'
+    )
+  )
+    return false;
+  if (
+    !(
+      'conversations' in value &&
+      ((__v0) =>
+        (Array.isArray(__v0) || __v0 instanceof Set) &&
+        Array.from(__v0).every((p) => isConversation(p)))(
+        value['conversations']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export const ConversationsMetadata = {
   name: 'Conversations',
   id: -1572302470,
@@ -143,6 +223,25 @@ export const ConversationsMetadata = {
           type: 'internalType',
           kind: 'type',
           name: 'Conversation',
+        },
+      },
+    },
+  ],
+};
+export const ConversationsMetadataV2 = {
+  kind: 'type',
+  id: -1572302470,
+  globalName: 'conversation.index.Conversations',
+  name: 'Conversations',
+  params: [
+    {
+      name: 'conversations',
+      type: {
+        type: 'template',
+        template: 'vector',
+        value: {
+          type: 'internalType',
+          interfaceName: 'Conversation',
         },
       },
     },
@@ -240,3 +339,7 @@ export function updateConversations(
   }
   return value;
 }
+export const __metadataObjects__ = [
+  ConversationMetadataV2,
+  ConversationsMetadataV2,
+];
