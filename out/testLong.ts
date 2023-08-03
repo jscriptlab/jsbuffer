@@ -1,6 +1,10 @@
 import JSBI from 'jsbi';
 import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
+export interface A {
+  _name: 'testLong.A';
+  a: string;
+}
 export function isA(value: unknown): value is A {
   if (
     !(
@@ -31,35 +35,6 @@ export function isA(value: unknown): value is A {
     return false;
   return true;
 }
-export const AMetadata = {
-  name: 'A',
-  id: -1688212411,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'long',
-      },
-    },
-  ],
-};
-export const AMetadataV2 = {
-  kind: 'type',
-  id: -1688212411,
-  globalName: 'testLong.A',
-  name: 'A',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'long',
-      },
-    },
-  ],
-};
 export interface AInputParams {
   a: string;
 }
@@ -93,10 +68,6 @@ export function decodeA(__d: IDeserializer): A | null {
     a,
   };
 }
-export interface A {
-  _name: 'testLong.A';
-  a: string;
-}
 export function defaultA(params: Partial<AInputParams> = {}): A {
   return A({
     a: '0',
@@ -121,6 +92,10 @@ export function updateA(value: A, changes: Partial<AInputParams>) {
     }
   }
   return value;
+}
+export interface B {
+  _name: 'testLong.B';
+  a: string;
 }
 export function isB(value: unknown): value is B {
   if (
@@ -149,35 +124,6 @@ export function isB(value: unknown): value is B {
     return false;
   return true;
 }
-export const BMetadata = {
-  name: 'B',
-  id: 1885886278,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'ulong',
-      },
-    },
-  ],
-};
-export const BMetadataV2 = {
-  kind: 'type',
-  id: 1885886278,
-  globalName: 'testLong.B',
-  name: 'B',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'ulong',
-      },
-    },
-  ],
-};
 export interface BInputParams {
   a: string;
 }
@@ -211,10 +157,6 @@ export function decodeB(__d: IDeserializer): B | null {
     a,
   };
 }
-export interface B {
-  _name: 'testLong.B';
-  a: string;
-}
 export function defaultB(params: Partial<BInputParams> = {}): B {
   return B({
     a: '0',
@@ -239,6 +181,12 @@ export function updateB(value: B, changes: Partial<BInputParams>) {
     }
   }
   return value;
+}
+export interface C {
+  _name: 'testLong.C';
+  a: string;
+  b: string;
+  c: number;
 }
 export function isC(value: unknown): value is C {
   if (
@@ -300,63 +248,6 @@ export function isC(value: unknown): value is C {
     return false;
   return true;
 }
-export const CMetadata = {
-  name: 'C',
-  id: -523698750,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'long',
-      },
-    },
-    {
-      name: 'b',
-      type: {
-        type: 'generic',
-        value: 'ulong',
-      },
-    },
-    {
-      name: 'c',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
-export const CMetadataV2 = {
-  kind: 'type',
-  id: -523698750,
-  globalName: 'testLong.C',
-  name: 'C',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'long',
-      },
-    },
-    {
-      name: 'b',
-      type: {
-        type: 'generic',
-        value: 'ulong',
-      },
-    },
-    {
-      name: 'c',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
 export interface CInputParams {
   a: string;
   b: string;
@@ -416,12 +307,6 @@ export function decodeC(__d: IDeserializer): C | null {
     c,
   };
 }
-export interface C {
-  _name: 'testLong.C';
-  a: string;
-  b: string;
-  c: number;
-}
 export function defaultC(params: Partial<CInputParams> = {}): C {
   return C({
     a: '0',
@@ -473,4 +358,3 @@ export function updateC(value: C, changes: Partial<CInputParams>) {
   }
   return value;
 }
-export const __metadataObjects__ = [AMetadataV2, BMetadataV2, CMetadataV2];

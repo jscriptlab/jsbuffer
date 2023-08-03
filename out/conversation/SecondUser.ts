@@ -1,5 +1,9 @@
 import { ISerializer } from '../__types__';
 import { IDeserializer } from '../__types__';
+export interface User {
+  _name: 'conversation.secondUser.User';
+  firstName: string;
+}
 export function isUser(value: unknown): value is User {
   if (
     !(
@@ -20,35 +24,6 @@ export function isUser(value: unknown): value is User {
     return false;
   return true;
 }
-export const UserMetadata = {
-  name: 'User',
-  id: 1249778753,
-  kind: 'type',
-  params: [
-    {
-      name: 'firstName',
-      type: {
-        type: 'generic',
-        value: 'string',
-      },
-    },
-  ],
-};
-export const UserMetadataV2 = {
-  kind: 'type',
-  id: 1249778753,
-  globalName: 'conversation.secondUser.User',
-  name: 'User',
-  params: [
-    {
-      name: 'firstName',
-      type: {
-        type: 'generic',
-        value: 'string',
-      },
-    },
-  ],
-};
 export interface UserInputParams {
   firstName: string;
 }
@@ -82,10 +57,6 @@ export function decodeUser(__d: IDeserializer): User | null {
     firstName,
   };
 }
-export interface User {
-  _name: 'conversation.secondUser.User';
-  firstName: string;
-}
 export function defaultUser(params: Partial<UserInputParams> = {}): User {
   return User({
     firstName: '',
@@ -111,4 +82,3 @@ export function updateUser(value: User, changes: Partial<UserInputParams>) {
   }
   return value;
 }
-export const __metadataObjects__ = [UserMetadataV2];

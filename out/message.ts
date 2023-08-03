@@ -2,6 +2,10 @@ import JSBI from 'jsbi';
 import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
 import { IRequest } from './__types__';
+export interface Message {
+  _name: 'message.Message';
+  id: number;
+}
 export function isMessage(value: unknown): value is Message {
   if (
     !(
@@ -31,35 +35,6 @@ export function isMessage(value: unknown): value is Message {
     return false;
   return true;
 }
-export const MessageMetadata = {
-  name: 'Message',
-  id: -1731107621,
-  kind: 'type',
-  params: [
-    {
-      name: 'id',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
-export const MessageMetadataV2 = {
-  kind: 'type',
-  id: -1731107621,
-  globalName: 'message.Message',
-  name: 'Message',
-  params: [
-    {
-      name: 'id',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
 export interface MessageInputParams {
   id: number;
 }
@@ -93,10 +68,6 @@ export function decodeMessage(__d: IDeserializer): Message | null {
     id,
   };
 }
-export interface Message {
-  _name: 'message.Message';
-  id: number;
-}
 export function defaultMessage(
   params: Partial<MessageInputParams> = {}
 ): Message {
@@ -127,6 +98,10 @@ export function updateMessage(
   }
   return value;
 }
+export interface Messages {
+  _name: 'message.Messages';
+  messages: ReadonlyArray<Readonly<Message>>;
+}
 export function isMessages(value: unknown): value is Messages {
   if (
     !(
@@ -149,45 +124,6 @@ export function isMessages(value: unknown): value is Messages {
     return false;
   return true;
 }
-export const MessagesMetadata = {
-  name: 'Messages',
-  id: 1419827675,
-  kind: 'type',
-  params: [
-    {
-      name: 'messages',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          id: -1731107621,
-          type: 'internalType',
-          kind: 'type',
-          name: 'Message',
-        },
-      },
-    },
-  ],
-};
-export const MessagesMetadataV2 = {
-  kind: 'type',
-  id: 1419827675,
-  globalName: 'message.Messages',
-  name: 'Messages',
-  params: [
-    {
-      name: 'messages',
-      type: {
-        type: 'template',
-        template: 'vector',
-        value: {
-          type: 'internalType',
-          interfaceName: 'Message',
-        },
-      },
-    },
-  ],
-};
 export interface MessagesInputParams {
   messages: ReadonlyArray<Readonly<Message>>;
 }
@@ -205,9 +141,8 @@ export function encodeMessages(__s: ISerializer, value: Messages) {
   const __pv0 = value['messages'];
   const __l1 = __pv0.length;
   __s.writeUint32(__l1);
-  for (let __i1 = 0; __i1 < __l1; __i1++) {
-    const __v__i1 = __pv0[__i1];
-    encodeMessage(__s, __v__i1);
+  for (const __item1 of __pv0) {
+    encodeMessage(__s, __item1);
   }
 }
 export function decodeMessages(__d: IDeserializer): Messages | null {
@@ -233,10 +168,6 @@ export function decodeMessages(__d: IDeserializer): Messages | null {
     messages,
   };
 }
-export interface Messages {
-  _name: 'message.Messages';
-  messages: ReadonlyArray<Readonly<Message>>;
-}
 export function defaultMessages(
   params: Partial<MessagesInputParams> = {}
 ): Messages {
@@ -251,8 +182,15 @@ export function compareMessages(__a: Messages, __b: Messages): boolean {
      * compare parameter messages
      */
     __a['messages'].length === __b['messages'].length &&
-    __a['messages'].every((__i, index) =>
-      compareMessage(__i, __b['messages'][index])
+    Array.from(__a['messages']).every((__originalItem0, __index0) =>
+      typeof __originalItem0 === 'undefined'
+        ? false
+        : ((__item0) =>
+            typeof __item0 === 'undefined'
+              ? false
+              : compareMessage(__originalItem0, __item0))(
+            Array.from(__b['messages'])[__index0]
+          )
     )
   );
 }
@@ -264,8 +202,15 @@ export function updateMessages(
     if (
       !(
         changes['messages'].length === value['messages'].length &&
-        changes['messages'].every((__i, index) =>
-          compareMessage(__i, value['messages'][index])
+        Array.from(changes['messages']).every((__originalItem1, __index1) =>
+          typeof __originalItem1 === 'undefined'
+            ? false
+            : ((__item1) =>
+                typeof __item1 === 'undefined'
+                  ? false
+                  : compareMessage(__originalItem1, __item1))(
+                Array.from(value['messages'])[__index1]
+              )
         )
       )
     ) {
@@ -276,6 +221,11 @@ export function updateMessages(
     }
   }
   return value;
+}
+export interface GetMessages extends IRequest<Readonly<Messages>> {
+  _name: 'message.GetMessages';
+  offset: number;
+  limit: number;
 }
 export function isGetMessages(value: unknown): value is GetMessages {
   if (
@@ -322,49 +272,6 @@ export function isGetMessages(value: unknown): value is GetMessages {
     return false;
   return true;
 }
-export const GetMessagesMetadata = {
-  name: 'GetMessages',
-  id: 1394938243,
-  kind: 'call',
-  params: [
-    {
-      name: 'offset',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-    {
-      name: 'limit',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
-export const GetMessagesMetadataV2 = {
-  kind: 'call',
-  id: 1394938243,
-  globalName: 'message.GetMessages',
-  name: 'GetMessages',
-  params: [
-    {
-      name: 'offset',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-    {
-      name: 'limit',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
 export interface GetMessagesInputParams {
   offset: number;
   limit: number;
@@ -410,11 +317,6 @@ export function decodeGetMessages(__d: IDeserializer): GetMessages | null {
     offset,
     limit,
   };
-}
-export interface GetMessages extends IRequest<Readonly<Messages>> {
-  _name: 'message.GetMessages';
-  offset: number;
-  limit: number;
 }
 export function defaultGetMessages(
   params: Partial<GetMessagesInputParams> = {}
@@ -462,8 +364,3 @@ export function updateGetMessages(
   }
   return value;
 }
-export const __metadataObjects__ = [
-  MessageMetadataV2,
-  MessagesMetadataV2,
-  GetMessagesMetadataV2,
-];

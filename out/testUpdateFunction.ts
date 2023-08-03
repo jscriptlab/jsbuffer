@@ -9,37 +9,6 @@ export function isETrait(value: unknown): value is E {
   if (isD(value)) return true;
   return false;
 }
-export const EMetadata = {
-  name: 'E',
-  id: 2091979600,
-  kind: 'trait',
-};
-export const EMetadataV2 = {
-  kind: 'trait',
-  name: 'E',
-  nodes: [
-    {
-      type: 'externalType',
-      name: 'A',
-      relativePath: './testUpdateFunction',
-    },
-    {
-      type: 'externalType',
-      name: 'B',
-      relativePath: './testUpdateFunction',
-    },
-    {
-      type: 'externalType',
-      name: 'C',
-      relativePath: './testUpdateFunction',
-    },
-    {
-      type: 'externalType',
-      name: 'D',
-      relativePath: './testUpdateFunction',
-    },
-  ],
-};
 export function encodeETrait(__s: ISerializer, value: E) {
   switch (value._name) {
     case 'testUpdateFunction.A':
@@ -109,6 +78,10 @@ export function compareETrait(__a: E, __b: E) {
       return compareD(__a, __b);
   }
 }
+export interface A {
+  _name: 'testUpdateFunction.A';
+  a: number;
+}
 export function isA(value: unknown): value is A {
   if (
     !(
@@ -138,35 +111,6 @@ export function isA(value: unknown): value is A {
     return false;
   return true;
 }
-export const AMetadata = {
-  name: 'A',
-  id: -344653639,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
-export const AMetadataV2 = {
-  kind: 'type',
-  id: -344653639,
-  globalName: 'testUpdateFunction.A',
-  name: 'A',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
 export interface AInputParams {
   a: number;
 }
@@ -200,10 +144,6 @@ export function decodeA(__d: IDeserializer): A | null {
     a,
   };
 }
-export interface A {
-  _name: 'testUpdateFunction.A';
-  a: number;
-}
 export function defaultA(params: Partial<AInputParams> = {}): A {
   return A({
     a: 0,
@@ -229,6 +169,10 @@ export function updateA(value: A, changes: Partial<AInputParams>) {
   }
   return value;
 }
+export interface B {
+  _name: 'testUpdateFunction.B';
+  a: string;
+}
 export function isB(value: unknown): value is B {
   if (
     !(
@@ -244,35 +188,6 @@ export function isB(value: unknown): value is B {
     return false;
   return true;
 }
-export const BMetadata = {
-  name: 'B',
-  id: 141301319,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'string',
-      },
-    },
-  ],
-};
-export const BMetadataV2 = {
-  kind: 'type',
-  id: 141301319,
-  globalName: 'testUpdateFunction.B',
-  name: 'B',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'string',
-      },
-    },
-  ],
-};
 export interface BInputParams {
   a: string;
 }
@@ -306,10 +221,6 @@ export function decodeB(__d: IDeserializer): B | null {
     a,
   };
 }
-export interface B {
-  _name: 'testUpdateFunction.B';
-  a: string;
-}
 export function defaultB(params: Partial<BInputParams> = {}): B {
   return B({
     a: '',
@@ -335,6 +246,10 @@ export function updateB(value: B, changes: Partial<BInputParams>) {
   }
   return value;
 }
+export interface C {
+  _name: 'testUpdateFunction.C';
+  a: number;
+}
 export function isC(value: unknown): value is C {
   if (
     !(
@@ -350,35 +265,6 @@ export function isC(value: unknown): value is C {
     return false;
   return true;
 }
-export const CMetadata = {
-  name: 'C',
-  id: -276770684,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'double',
-      },
-    },
-  ],
-};
-export const CMetadataV2 = {
-  kind: 'type',
-  id: -276770684,
-  globalName: 'testUpdateFunction.C',
-  name: 'C',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'double',
-      },
-    },
-  ],
-};
 export interface CInputParams {
   a: number;
 }
@@ -412,10 +298,6 @@ export function decodeC(__d: IDeserializer): C | null {
     a,
   };
 }
-export interface C {
-  _name: 'testUpdateFunction.C';
-  a: number;
-}
 export function defaultC(params: Partial<CInputParams> = {}): C {
   return C({
     a: 0.0,
@@ -441,6 +323,10 @@ export function updateC(value: C, changes: Partial<CInputParams>) {
   }
   return value;
 }
+export interface D {
+  _name: 'testUpdateFunction.D';
+  a: number;
+}
 export function isD(value: unknown): value is D {
   if (
     !(
@@ -456,35 +342,6 @@ export function isD(value: unknown): value is D {
     return false;
   return true;
 }
-export const DMetadata = {
-  name: 'D',
-  id: 224185341,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'float',
-      },
-    },
-  ],
-};
-export const DMetadataV2 = {
-  kind: 'type',
-  id: 224185341,
-  globalName: 'testUpdateFunction.D',
-  name: 'D',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'float',
-      },
-    },
-  ],
-};
 export interface DInputParams {
   a: number;
 }
@@ -518,10 +375,6 @@ export function decodeD(__d: IDeserializer): D | null {
     a,
   };
 }
-export interface D {
-  _name: 'testUpdateFunction.D';
-  a: number;
-}
 export function defaultD(params: Partial<DInputParams> = {}): D {
   return D({
     a: 0.0,
@@ -547,6 +400,10 @@ export function updateD(value: D, changes: Partial<DInputParams>) {
   }
   return value;
 }
+export interface test {
+  _name: 'testUpdateFunction.test';
+  traitParam: Readonly<E>;
+}
 export function isTest(value: unknown): value is test {
   if (
     !(
@@ -564,37 +421,6 @@ export function isTest(value: unknown): value is test {
     return false;
   return true;
 }
-export const testMetadata = {
-  name: 'test',
-  id: 1011101560,
-  kind: 'type',
-  params: [
-    {
-      name: 'traitParam',
-      type: {
-        id: 2091979600,
-        type: 'internalType',
-        kind: 'trait',
-        name: 'E',
-      },
-    },
-  ],
-};
-export const testMetadataV2 = {
-  kind: 'type',
-  id: 1011101560,
-  globalName: 'testUpdateFunction.test',
-  name: 'test',
-  params: [
-    {
-      name: 'traitParam',
-      type: {
-        type: 'internalType',
-        interfaceName: 'E',
-      },
-    },
-  ],
-};
 export interface testInputParams {
   traitParam: Readonly<E>;
 }
@@ -630,10 +456,6 @@ export function decodeTest(__d: IDeserializer): test | null {
     traitParam,
   };
 }
-export interface test {
-  _name: 'testUpdateFunction.test';
-  traitParam: Readonly<E>;
-}
 export function defaultTest(params: Partial<testInputParams> = {}): test {
   return test({
     traitParam: defaultETrait(),
@@ -659,11 +481,3 @@ export function updateTest(value: test, changes: Partial<testInputParams>) {
   }
   return value;
 }
-export const __metadataObjects__ = [
-  EMetadataV2,
-  AMetadataV2,
-  BMetadataV2,
-  CMetadataV2,
-  DMetadataV2,
-  testMetadataV2,
-];

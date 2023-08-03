@@ -6,6 +6,10 @@ import { IDeserializer } from './__types__';
 import { decodeATrait } from './testTraitOnParamTrait';
 import { defaultATrait } from './testTraitOnParamTrait';
 import { compareATrait } from './testTraitOnParamTrait';
+export interface A0 {
+  _name: 'testTraitOnParam.A0';
+  value: Readonly<A>;
+}
 export function isA0(value: unknown): value is A0 {
   if (
     !(
@@ -21,39 +25,6 @@ export function isA0(value: unknown): value is A0 {
     return false;
   return true;
 }
-export const A0Metadata = {
-  name: 'A0',
-  id: -1244603213,
-  kind: 'type',
-  params: [
-    {
-      name: 'value',
-      type: {
-        name: 'A',
-        id: '-945659736',
-        type: 'externalType',
-        externalModule: false,
-        relativePath: './testTraitOnParamTrait',
-      },
-    },
-  ],
-};
-export const A0MetadataV2 = {
-  kind: 'type',
-  id: -1244603213,
-  globalName: 'testTraitOnParam.A0',
-  name: 'A0',
-  params: [
-    {
-      name: 'value',
-      type: {
-        type: 'externalType',
-        name: 'A',
-        relativePath: './testTraitOnParamTrait',
-      },
-    },
-  ],
-};
 export interface A0InputParams {
   value: Readonly<A>;
 }
@@ -89,10 +60,6 @@ export function decodeA0(__d: IDeserializer): A0 | null {
     value,
   };
 }
-export interface A0 {
-  _name: 'testTraitOnParam.A0';
-  value: Readonly<A>;
-}
 export function defaultA0(params: Partial<A0InputParams> = {}): A0 {
   return A0({
     value: defaultATrait(),
@@ -118,6 +85,10 @@ export function updateA0(value: A0, changes: Partial<A0InputParams>) {
   }
   return value;
 }
+export interface A1 {
+  _name: 'testTraitOnParam.A1';
+  value: Readonly<A>;
+}
 export function isA1(value: unknown): value is A1 {
   if (
     !(
@@ -133,39 +104,6 @@ export function isA1(value: unknown): value is A1 {
     return false;
   return true;
 }
-export const A1Metadata = {
-  name: 'A1',
-  id: -2001668861,
-  kind: 'type',
-  params: [
-    {
-      name: 'value',
-      type: {
-        name: 'A',
-        id: '-945659736',
-        type: 'externalType',
-        externalModule: false,
-        relativePath: './testTraitOnParamTrait',
-      },
-    },
-  ],
-};
-export const A1MetadataV2 = {
-  kind: 'type',
-  id: -2001668861,
-  globalName: 'testTraitOnParam.A1',
-  name: 'A1',
-  params: [
-    {
-      name: 'value',
-      type: {
-        type: 'externalType',
-        name: 'A',
-        relativePath: './testTraitOnParamTrait',
-      },
-    },
-  ],
-};
 export interface A1InputParams {
   value: Readonly<A>;
 }
@@ -201,10 +139,6 @@ export function decodeA1(__d: IDeserializer): A1 | null {
     value,
   };
 }
-export interface A1 {
-  _name: 'testTraitOnParam.A1';
-  value: Readonly<A>;
-}
 export function defaultA1(params: Partial<A1InputParams> = {}): A1 {
   return A1({
     value: defaultATrait(),
@@ -230,6 +164,10 @@ export function updateA1(value: A1, changes: Partial<A1InputParams>) {
   }
   return value;
 }
+export interface A2 {
+  _name: 'testTraitOnParam.A2';
+  value: Readonly<A>;
+}
 export function isA2(value: unknown): value is A2 {
   if (
     !(
@@ -245,39 +183,6 @@ export function isA2(value: unknown): value is A2 {
     return false;
   return true;
 }
-export const A2Metadata = {
-  name: 'A2',
-  id: -820998189,
-  kind: 'type',
-  params: [
-    {
-      name: 'value',
-      type: {
-        name: 'A',
-        id: '-945659736',
-        type: 'externalType',
-        externalModule: false,
-        relativePath: './testTraitOnParamTrait',
-      },
-    },
-  ],
-};
-export const A2MetadataV2 = {
-  kind: 'type',
-  id: -820998189,
-  globalName: 'testTraitOnParam.A2',
-  name: 'A2',
-  params: [
-    {
-      name: 'value',
-      type: {
-        type: 'externalType',
-        name: 'A',
-        relativePath: './testTraitOnParamTrait',
-      },
-    },
-  ],
-};
 export interface A2InputParams {
   value: Readonly<A>;
 }
@@ -313,10 +218,6 @@ export function decodeA2(__d: IDeserializer): A2 | null {
     value,
   };
 }
-export interface A2 {
-  _name: 'testTraitOnParam.A2';
-  value: Readonly<A>;
-}
 export function defaultA2(params: Partial<A2InputParams> = {}): A2 {
   return A2({
     value: defaultATrait(),
@@ -342,4 +243,3 @@ export function updateA2(value: A2, changes: Partial<A2InputParams>) {
   }
   return value;
 }
-export const __metadataObjects__ = [A0MetadataV2, A1MetadataV2, A2MetadataV2];

@@ -7,6 +7,11 @@ import { IDeserializer } from '../__types__';
 import { decodeUser } from './SecondUser';
 import { defaultUser } from './SecondUser';
 import { compareUser } from './SecondUser';
+export interface Conversation {
+  _name: 'conversation.index.Conversation';
+  id: number;
+  user: Readonly<User>;
+}
 export function isConversation(value: unknown): value is Conversation {
   if (
     !(
@@ -38,53 +43,6 @@ export function isConversation(value: unknown): value is Conversation {
     return false;
   return true;
 }
-export const ConversationMetadata = {
-  name: 'Conversation',
-  id: 1288012364,
-  kind: 'type',
-  params: [
-    {
-      name: 'id',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-    {
-      name: 'user',
-      type: {
-        name: 'User',
-        id: '1249778753',
-        type: 'externalType',
-        externalModule: false,
-        relativePath: './SecondUser',
-      },
-    },
-  ],
-};
-export const ConversationMetadataV2 = {
-  kind: 'type',
-  id: 1288012364,
-  globalName: 'conversation.index.Conversation',
-  name: 'Conversation',
-  params: [
-    {
-      name: 'id',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-    {
-      name: 'user',
-      type: {
-        type: 'externalType',
-        name: 'User',
-        relativePath: './SecondUser',
-      },
-    },
-  ],
-};
 export interface ConversationInputParams {
   id: number;
   user: Readonly<User>;
@@ -133,11 +91,6 @@ export function decodeConversation(__d: IDeserializer): Conversation | null {
     user,
   };
 }
-export interface Conversation {
-  _name: 'conversation.index.Conversation';
-  id: number;
-  user: Readonly<User>;
-}
 export function defaultConversation(
   params: Partial<ConversationInputParams> = {}
 ): Conversation {
@@ -184,6 +137,10 @@ export function updateConversation(
   }
   return value;
 }
+export interface Conversations {
+  _name: 'conversation.index.Conversations';
+  conversations: ReadonlyArray<Readonly<Conversation>>;
+}
 export function isConversations(value: unknown): value is Conversations {
   if (
     !(
@@ -208,45 +165,6 @@ export function isConversations(value: unknown): value is Conversations {
     return false;
   return true;
 }
-export const ConversationsMetadata = {
-  name: 'Conversations',
-  id: -1572302470,
-  kind: 'type',
-  params: [
-    {
-      name: 'conversations',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          id: 1288012364,
-          type: 'internalType',
-          kind: 'type',
-          name: 'Conversation',
-        },
-      },
-    },
-  ],
-};
-export const ConversationsMetadataV2 = {
-  kind: 'type',
-  id: -1572302470,
-  globalName: 'conversation.index.Conversations',
-  name: 'Conversations',
-  params: [
-    {
-      name: 'conversations',
-      type: {
-        type: 'template',
-        template: 'vector',
-        value: {
-          type: 'internalType',
-          interfaceName: 'Conversation',
-        },
-      },
-    },
-  ],
-};
 export interface ConversationsInputParams {
   conversations: ReadonlyArray<Readonly<Conversation>>;
 }
@@ -264,9 +182,8 @@ export function encodeConversations(__s: ISerializer, value: Conversations) {
   const __pv0 = value['conversations'];
   const __l1 = __pv0.length;
   __s.writeUint32(__l1);
-  for (let __i1 = 0; __i1 < __l1; __i1++) {
-    const __v__i1 = __pv0[__i1];
-    encodeConversation(__s, __v__i1);
+  for (const __item1 of __pv0) {
+    encodeConversation(__s, __item1);
   }
 }
 export function decodeConversations(__d: IDeserializer): Conversations | null {
@@ -292,10 +209,6 @@ export function decodeConversations(__d: IDeserializer): Conversations | null {
     conversations,
   };
 }
-export interface Conversations {
-  _name: 'conversation.index.Conversations';
-  conversations: ReadonlyArray<Readonly<Conversation>>;
-}
 export function defaultConversations(
   params: Partial<ConversationsInputParams> = {}
 ): Conversations {
@@ -313,8 +226,15 @@ export function compareConversations(
      * compare parameter conversations
      */
     __a['conversations'].length === __b['conversations'].length &&
-    __a['conversations'].every((__i, index) =>
-      compareConversation(__i, __b['conversations'][index])
+    Array.from(__a['conversations']).every((__originalItem0, __index0) =>
+      typeof __originalItem0 === 'undefined'
+        ? false
+        : ((__item0) =>
+            typeof __item0 === 'undefined'
+              ? false
+              : compareConversation(__originalItem0, __item0))(
+            Array.from(__b['conversations'])[__index0]
+          )
     )
   );
 }
@@ -326,8 +246,16 @@ export function updateConversations(
     if (
       !(
         changes['conversations'].length === value['conversations'].length &&
-        changes['conversations'].every((__i, index) =>
-          compareConversation(__i, value['conversations'][index])
+        Array.from(changes['conversations']).every(
+          (__originalItem1, __index1) =>
+            typeof __originalItem1 === 'undefined'
+              ? false
+              : ((__item1) =>
+                  typeof __item1 === 'undefined'
+                    ? false
+                    : compareConversation(__originalItem1, __item1))(
+                  Array.from(value['conversations'])[__index1]
+                )
         )
       )
     ) {
@@ -339,7 +267,3 @@ export function updateConversations(
   }
   return value;
 }
-export const __metadataObjects__ = [
-  ConversationMetadataV2,
-  ConversationsMetadataV2,
-];

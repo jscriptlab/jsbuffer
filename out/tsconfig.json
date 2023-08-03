@@ -1,7 +1,5 @@
 {
-  "compilerOptions": {
-    "noUncheckedIndexedAccess": false
-  },
+  "compilerOptions": {},
   "include": [
     "User.ts",
     "conversation/index.ts",

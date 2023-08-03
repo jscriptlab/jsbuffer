@@ -1,0 +1,72 @@
+{
+  "Message": {
+    "kind": "type",
+    "id": -1731107621,
+    "globalName": "message.Message",
+    "name": "Message",
+    "params": [{ "name": "id", "type": { "type": "generic", "value": "int" } }]
+  },
+  "Messages": {
+    "kind": "type",
+    "id": 1419827675,
+    "globalName": "message.Messages",
+    "name": "Messages",
+    "params": [
+      {
+        "name": "messages",
+        "type": {
+          "type": "template",
+          "template": "vector",
+          "value": { "type": "internalType", "interfaceName": "Message" }
+        }
+      }
+    ]
+  },
+  "GetMessages": {
+    "kind": "call",
+    "id": 1394938243,
+    "globalName": "message.GetMessages",
+    "name": "GetMessages",
+    "params": [
+      { "name": "offset", "type": { "type": "generic", "value": "int" } },
+      { "name": "limit", "type": { "type": "generic", "value": "int" } }
+    ]
+  },
+  "__all": [
+    {
+      "kind": "type",
+      "id": -1731107621,
+      "globalName": "message.Message",
+      "name": "Message",
+      "params": [
+        { "name": "id", "type": { "type": "generic", "value": "int" } }
+      ]
+    },
+    {
+      "kind": "type",
+      "id": 1419827675,
+      "globalName": "message.Messages",
+      "name": "Messages",
+      "params": [
+        {
+          "name": "messages",
+          "type": {
+            "type": "template",
+            "template": "vector",
+            "value": { "type": "internalType", "interfaceName": "Message" }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "call",
+      "id": 1394938243,
+      "globalName": "message.GetMessages",
+      "name": "GetMessages",
+      "params": [
+        { "name": "offset", "type": { "type": "generic", "value": "int" } },
+        { "name": "limit", "type": { "type": "generic", "value": "int" } }
+      ]
+    }
+  ]
+}

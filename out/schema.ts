@@ -8,6 +8,10 @@ import { encodeUserTrait } from './User';
 import { decodeUserTrait } from './User';
 import { compareUserTrait } from './User';
 import { IRequest } from './__types__';
+export interface testMap {
+  _name: 'schema.testMap';
+  a: ReadonlyMap<string, string>;
+}
 export function isTestMap(value: unknown): value is testMap {
   if (
     !(
@@ -32,51 +36,6 @@ export function isTestMap(value: unknown): value is testMap {
     return false;
   return true;
 }
-export const testMapMetadata = {
-  name: 'testMap',
-  id: 1326441943,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'template',
-        name: 'map',
-        key: {
-          type: 'generic',
-          value: 'string',
-        },
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
-      },
-    },
-  ],
-};
-export const testMapMetadataV2 = {
-  kind: 'type',
-  id: 1326441943,
-  globalName: 'schema.testMap',
-  name: 'testMap',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'template',
-        name: 'map',
-        key: {
-          type: 'generic',
-          value: 'string',
-        },
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
-      },
-    },
-  ],
-};
 export interface testMapInputParams {
   a: ReadonlyMap<string, string>;
 }
@@ -123,10 +82,6 @@ export function decodeTestMap(__d: IDeserializer): testMap | null {
     a,
   };
 }
-export interface testMap {
-  _name: 'schema.testMap';
-  a: ReadonlyMap<string, string>;
-}
 export function defaultTestMap(
   params: Partial<testMapInputParams> = {}
 ): testMap {
@@ -140,10 +95,13 @@ export function compareTestMap(__a: testMap, __b: testMap): boolean {
     /**
      * compare parameter a
      */
-    ((l1, l2) => l1.every(([k1, v1], i) => k1 === l2[i][0] && v1 === l2[i][1]))(
-      Array.from(__a['a']),
-      Array.from(__b['a'])
-    )
+    ((l1, l2) =>
+      l1.every(([k1, v1], i) =>
+        ((__v20) =>
+          typeof __v20 === 'undefined'
+            ? false
+            : k1 === __v20[0] && v1 === __v20[1])(l2[i])
+      ))(Array.from(__a['a']), Array.from(__b['a']))
   );
 }
 export function updateTestMap(
@@ -153,10 +111,12 @@ export function updateTestMap(
   if (typeof changes['a'] !== 'undefined') {
     if (
       !((l1, l2) =>
-        l1.every(([k1, v1], i) => k1 === l2[i][0] && v1 === l2[i][1]))(
-        Array.from(changes['a']),
-        Array.from(value['a'])
-      )
+        l1.every(([k1, v1], i) =>
+          ((__v21) =>
+            typeof __v21 === 'undefined'
+              ? false
+              : k1 === __v21[0] && v1 === __v21[1])(l2[i])
+        ))(Array.from(changes['a']), Array.from(value['a']))
     ) {
       value = testMap({
         ...value,
@@ -165,6 +125,11 @@ export function updateTestMap(
     }
   }
   return value;
+}
+export interface testMap2 {
+  _name: 'schema.testMap2';
+  a: ReadonlyMap<string | null, string>;
+  b: ReadonlyMap<string | null, [string, ReadonlyMap<number, number>]>;
 }
 export function isTestMap2(value: unknown): value is testMap2 {
   if (
@@ -182,11 +147,10 @@ export function isTestMap2(value: unknown): value is testMap2 {
       'a' in value &&
       ((__v0) =>
         __v0 instanceof Map &&
-        Array.from(__v0).every(
-          ([k, v]) =>
-            k !== null &&
-            ((x) => typeof x === 'string')(k) &&
-            typeof v === 'string'
+        Array.from(__v0).every(([k, v]) =>
+          k === null
+            ? true
+            : ((x) => typeof x === 'string')(k) && typeof v === 'string'
         ))(value['a'])
     )
   )
@@ -194,173 +158,46 @@ export function isTestMap2(value: unknown): value is testMap2 {
   if (
     !(
       'b' in value &&
-      ((__v1) =>
-        __v1 instanceof Map &&
-        Array.from(__v1).every(
-          ([k, v]) =>
-            k !== null &&
-            ((x) => typeof x === 'string')(k) &&
-            Array.isArray(v) &&
-            v.length === 2 &&
-            ((a) => typeof a === 'string')(v[0]) &&
-            ((a) =>
-              a instanceof Map &&
-              Array.from(a).every(
-                ([k, v]) =>
-                  typeof k === 'number' &&
-                  JSBI.equal(JSBI.BigInt(k), JSBI.BigInt(k)) &&
-                  JSBI.greaterThanOrEqual(
-                    JSBI.BigInt(k),
-                    JSBI.BigInt('-2147483648')
-                  ) &&
-                  JSBI.lessThanOrEqual(
-                    JSBI.BigInt(k),
-                    JSBI.BigInt('2147483647')
-                  ) &&
-                  typeof v === 'number' &&
-                  JSBI.equal(JSBI.BigInt(v), JSBI.BigInt(v)) &&
-                  JSBI.greaterThanOrEqual(
-                    JSBI.BigInt(v),
-                    JSBI.BigInt('-2147483648')
-                  ) &&
-                  JSBI.lessThanOrEqual(
-                    JSBI.BigInt(v),
-                    JSBI.BigInt('2147483647')
-                  )
-              ))(v[1])
+      ((__v4) =>
+        __v4 instanceof Map &&
+        Array.from(__v4).every(([k, v]) =>
+          k === null
+            ? true
+            : ((x) => typeof x === 'string')(k) &&
+              Array.isArray(v) &&
+              v.length === 2 &&
+              ((a) => typeof a === 'string')(v[0]) &&
+              ((a) =>
+                a instanceof Map &&
+                Array.from(a).every(
+                  ([k, v]) =>
+                    typeof k === 'number' &&
+                    JSBI.equal(JSBI.BigInt(k), JSBI.BigInt(k)) &&
+                    JSBI.greaterThanOrEqual(
+                      JSBI.BigInt(k),
+                      JSBI.BigInt('-2147483648')
+                    ) &&
+                    JSBI.lessThanOrEqual(
+                      JSBI.BigInt(k),
+                      JSBI.BigInt('2147483647')
+                    ) &&
+                    typeof v === 'number' &&
+                    JSBI.equal(JSBI.BigInt(v), JSBI.BigInt(v)) &&
+                    JSBI.greaterThanOrEqual(
+                      JSBI.BigInt(v),
+                      JSBI.BigInt('-2147483648')
+                    ) &&
+                    JSBI.lessThanOrEqual(
+                      JSBI.BigInt(v),
+                      JSBI.BigInt('2147483647')
+                    )
+                ))(v[1])
         ))(value['b'])
     )
   )
     return false;
   return true;
 }
-export const testMap2Metadata = {
-  name: 'testMap2',
-  id: -42313774,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'template',
-        name: 'map',
-        key: {
-          type: 'template',
-          name: 'optional',
-          value: {
-            type: 'generic',
-            value: 'string',
-          },
-        },
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
-      },
-    },
-    {
-      name: 'b',
-      type: {
-        type: 'template',
-        name: 'map',
-        key: {
-          type: 'template',
-          name: 'optional',
-          value: {
-            type: 'generic',
-            value: 'string',
-          },
-        },
-        value: {
-          type: 'template',
-          name: 'tuple',
-          args: [
-            {
-              type: 'generic',
-              value: 'string',
-            },
-            {
-              type: 'template',
-              name: 'map',
-              key: {
-                type: 'generic',
-                value: 'int',
-              },
-              value: {
-                type: 'generic',
-                value: 'int',
-              },
-            },
-          ],
-        },
-      },
-    },
-  ],
-};
-export const testMap2MetadataV2 = {
-  kind: 'type',
-  id: -42313774,
-  globalName: 'schema.testMap2',
-  name: 'testMap2',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'template',
-        name: 'map',
-        key: {
-          type: 'template',
-          template: 'optional',
-          value: {
-            type: 'generic',
-            value: 'string',
-          },
-        },
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
-      },
-    },
-    {
-      name: 'b',
-      type: {
-        type: 'template',
-        name: 'map',
-        key: {
-          type: 'template',
-          template: 'optional',
-          value: {
-            type: 'generic',
-            value: 'string',
-          },
-        },
-        value: {
-          type: 'template',
-          name: 'tuple',
-          args: [
-            {
-              type: 'generic',
-              value: 'string',
-            },
-            {
-              type: 'template',
-              name: 'map',
-              key: {
-                type: 'generic',
-                value: 'int',
-              },
-              value: {
-                type: 'generic',
-                value: 'int',
-              },
-            },
-          ],
-        },
-      },
-    },
-  ],
-};
 export interface testMap2InputParams {
   a: ReadonlyMap<string | null, string>;
   b: ReadonlyMap<string | null, [string, ReadonlyMap<number, number>]>;
@@ -471,11 +308,6 @@ export function decodeTestMap2(__d: IDeserializer): testMap2 | null {
     b,
   };
 }
-export interface testMap2 {
-  _name: 'schema.testMap2';
-  a: ReadonlyMap<string | null, string>;
-  b: ReadonlyMap<string | null, [string, ReadonlyMap<number, number>]>;
-}
 export function defaultTestMap2(
   params: Partial<testMap2InputParams> = {}
 ): testMap2 {
@@ -491,34 +323,43 @@ export function compareTestMap2(__a: testMap2, __b: testMap2): boolean {
      * compare parameter a
      */
     ((l1, l2) =>
-      l1.every(
-        ([k1, v1], i) =>
-          ((__dp11, __dp12) =>
-            __dp11 !== null && __dp12 !== null
-              ? __dp11 === __dp12
-              : __dp11 === __dp12)(k1, l2[i][0]) && v1 === l2[i][1]
+      l1.every(([k1, v1], i) =>
+        ((__v20) =>
+          typeof __v20 === 'undefined'
+            ? false
+            : ((__dp11, __dp12) =>
+                __dp11 !== null && __dp12 !== null
+                  ? __dp11 === __dp12
+                  : __dp11 === __dp12)(k1, __v20[0]) && v1 === __v20[1])(l2[i])
       ))(Array.from(__a['a']), Array.from(__b['a'])) &&
     /**
      * compare parameter b
      */
     ((l1, l2) =>
-      l1.every(
-        ([k1, v1], i) =>
-          ((__dp21, __dp22) =>
-            __dp21 !== null && __dp22 !== null
-              ? __dp21 === __dp22
-              : __dp21 === __dp22)(k1, l2[i][0]) &&
-          /* compare tuple item 0 of type string */ ((__a40, __b40) =>
-            __a40 === __b40)(v1[0], l2[i][1][0]) &&
-          /* compare tuple item 1 of type ReadonlyMap<number, number> */ ((
-            __a41,
-            __b41
-          ) =>
-            ((l1, l2) =>
-              l1.every(([k1, v1], i) => k1 === l2[i][0] && v1 === l2[i][1]))(
-              Array.from(__a41),
-              Array.from(__b41)
-            ))(v1[1], l2[i][1][1])
+      l1.every(([k1, v1], i) =>
+        ((__v21) =>
+          typeof __v21 === 'undefined'
+            ? false
+            : ((__dp21, __dp22) =>
+                __dp21 !== null && __dp22 !== null
+                  ? __dp21 === __dp22
+                  : __dp21 === __dp22)(k1, __v21[0]) &&
+              /* compare tuple item 0 of type string */ ((__a40, __b40) =>
+                __a40 === __b40)(v1[0], __v21[1][0]) &&
+              /* compare tuple item 1 of type ReadonlyMap<number, number> */ ((
+                __a41,
+                __b41
+              ) =>
+                ((l1, l2) =>
+                  l1.every(([k1, v1], i) =>
+                    ((__v27) =>
+                      typeof __v27 === 'undefined'
+                        ? false
+                        : k1 === __v27[0] && v1 === __v27[1])(l2[i])
+                  ))(Array.from(__a41), Array.from(__b41)))(
+                v1[1],
+                __v21[1][1]
+              ))(l2[i])
       ))(Array.from(__a['b']), Array.from(__b['b']))
   );
 }
@@ -529,12 +370,16 @@ export function updateTestMap2(
   if (typeof changes['a'] !== 'undefined') {
     if (
       !((l1, l2) =>
-        l1.every(
-          ([k1, v1], i) =>
-            ((__dp21, __dp22) =>
-              __dp21 !== null && __dp22 !== null
-                ? __dp21 === __dp22
-                : __dp21 === __dp22)(k1, l2[i][0]) && v1 === l2[i][1]
+        l1.every(([k1, v1], i) =>
+          ((__v21) =>
+            typeof __v21 === 'undefined'
+              ? false
+              : ((__dp21, __dp22) =>
+                  __dp21 !== null && __dp22 !== null
+                    ? __dp21 === __dp22
+                    : __dp21 === __dp22)(k1, __v21[0]) && v1 === __v21[1])(
+            l2[i]
+          )
         ))(Array.from(changes['a']), Array.from(value['a']))
     ) {
       value = testMap2({
@@ -546,23 +391,30 @@ export function updateTestMap2(
   if (typeof changes['b'] !== 'undefined') {
     if (
       !((l1, l2) =>
-        l1.every(
-          ([k1, v1], i) =>
-            ((__dp61, __dp62) =>
-              __dp61 !== null && __dp62 !== null
-                ? __dp61 === __dp62
-                : __dp61 === __dp62)(k1, l2[i][0]) &&
-            /* compare tuple item 0 of type string */ ((__a80, __b80) =>
-              __a80 === __b80)(v1[0], l2[i][1][0]) &&
-            /* compare tuple item 1 of type ReadonlyMap<number, number> */ ((
-              __a81,
-              __b81
-            ) =>
-              ((l1, l2) =>
-                l1.every(([k1, v1], i) => k1 === l2[i][0] && v1 === l2[i][1]))(
-                Array.from(__a81),
-                Array.from(__b81)
-              ))(v1[1], l2[i][1][1])
+        l1.every(([k1, v1], i) =>
+          ((__v25) =>
+            typeof __v25 === 'undefined'
+              ? false
+              : ((__dp61, __dp62) =>
+                  __dp61 !== null && __dp62 !== null
+                    ? __dp61 === __dp62
+                    : __dp61 === __dp62)(k1, __v25[0]) &&
+                /* compare tuple item 0 of type string */ ((__a80, __b80) =>
+                  __a80 === __b80)(v1[0], __v25[1][0]) &&
+                /* compare tuple item 1 of type ReadonlyMap<number, number> */ ((
+                  __a81,
+                  __b81
+                ) =>
+                  ((l1, l2) =>
+                    l1.every(([k1, v1], i) =>
+                      ((__v211) =>
+                        typeof __v211 === 'undefined'
+                          ? false
+                          : k1 === __v211[0] && v1 === __v211[1])(l2[i])
+                    ))(Array.from(__a81), Array.from(__b81)))(
+                  v1[1],
+                  __v25[1][1]
+                ))(l2[i])
         ))(Array.from(changes['b']), Array.from(value['b']))
     ) {
       value = testMap2({
@@ -572,6 +424,10 @@ export function updateTestMap2(
     }
   }
   return value;
+}
+export interface testMap3 {
+  _name: 'schema.testMap3';
+  a: ReadonlyMap<Readonly<testMap2>, string>;
 }
 export function isTestMap3(value: unknown): value is testMap3 {
   if (
@@ -597,53 +453,6 @@ export function isTestMap3(value: unknown): value is testMap3 {
     return false;
   return true;
 }
-export const testMap3Metadata = {
-  name: 'testMap3',
-  id: 263728261,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'template',
-        name: 'map',
-        key: {
-          id: -42313774,
-          type: 'internalType',
-          kind: 'type',
-          name: 'testMap2',
-        },
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
-      },
-    },
-  ],
-};
-export const testMap3MetadataV2 = {
-  kind: 'type',
-  id: 263728261,
-  globalName: 'schema.testMap3',
-  name: 'testMap3',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'template',
-        name: 'map',
-        key: {
-          type: 'internalType',
-          interfaceName: 'testMap2',
-        },
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
-      },
-    },
-  ],
-};
 export interface testMap3InputParams {
   a: ReadonlyMap<Readonly<testMap2>, string>;
 }
@@ -692,10 +501,6 @@ export function decodeTestMap3(__d: IDeserializer): testMap3 | null {
     a,
   };
 }
-export interface testMap3 {
-  _name: 'schema.testMap3';
-  a: ReadonlyMap<Readonly<testMap2>, string>;
-}
 export function defaultTestMap3(
   params: Partial<testMap3InputParams> = {}
 ): testMap3 {
@@ -710,8 +515,11 @@ export function compareTestMap3(__a: testMap3, __b: testMap3): boolean {
      * compare parameter a
      */
     ((l1, l2) =>
-      l1.every(
-        ([k1, v1], i) => compareTestMap2(k1, l2[i][0]) && v1 === l2[i][1]
+      l1.every(([k1, v1], i) =>
+        ((__v20) =>
+          typeof __v20 === 'undefined'
+            ? false
+            : compareTestMap2(k1, __v20[0]) && v1 === __v20[1])(l2[i])
       ))(Array.from(__a['a']), Array.from(__b['a']))
   );
 }
@@ -722,8 +530,11 @@ export function updateTestMap3(
   if (typeof changes['a'] !== 'undefined') {
     if (
       !((l1, l2) =>
-        l1.every(
-          ([k1, v1], i) => compareTestMap2(k1, l2[i][0]) && v1 === l2[i][1]
+        l1.every(([k1, v1], i) =>
+          ((__v21) =>
+            typeof __v21 === 'undefined'
+              ? false
+              : compareTestMap2(k1, __v21[0]) && v1 === __v21[1])(l2[i])
         ))(Array.from(changes['a']), Array.from(value['a']))
     ) {
       value = testMap3({
@@ -733,6 +544,11 @@ export function updateTestMap3(
     }
   }
   return value;
+}
+export interface testSet {
+  _name: 'schema.testSet';
+  a: ReadonlySet<string>;
+  b: ReadonlySet<number>;
 }
 export function isTestSet(value: unknown): value is testSet {
   if (
@@ -774,65 +590,6 @@ export function isTestSet(value: unknown): value is testSet {
     return false;
   return true;
 }
-export const testSetMetadata = {
-  name: 'testSet',
-  id: 1426622717,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'template',
-        name: 'set',
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
-      },
-    },
-    {
-      name: 'b',
-      type: {
-        type: 'template',
-        name: 'set',
-        value: {
-          type: 'generic',
-          value: 'int',
-        },
-      },
-    },
-  ],
-};
-export const testSetMetadataV2 = {
-  kind: 'type',
-  id: 1426622717,
-  globalName: 'schema.testSet',
-  name: 'testSet',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'template',
-        template: 'set',
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
-      },
-    },
-    {
-      name: 'b',
-      type: {
-        type: 'template',
-        template: 'set',
-        value: {
-          type: 'generic',
-          value: 'int',
-        },
-      },
-    },
-  ],
-};
 export interface testSetInputParams {
   a: ReadonlySet<string>;
   b: ReadonlySet<number>;
@@ -901,11 +658,6 @@ export function decodeTestSet(__d: IDeserializer): testSet | null {
     b,
   };
 }
-export interface testSet {
-  _name: 'schema.testSet';
-  a: ReadonlySet<string>;
-  b: ReadonlySet<number>;
-}
 export function defaultTestSet(
   params: Partial<testSetInputParams> = {}
 ): testSet {
@@ -920,16 +672,26 @@ export function compareTestSet(__a: testSet, __b: testSet): boolean {
     /**
      * compare parameter a
      */
-    ((__a0, __b0) => __a0.every((__it0, __i0) => __it0 === __b0[__i0]))(
-      Array.from(__a['a']),
-      Array.from(__b['a'])
+    __a['a'].size === __b['a'].size &&
+    Array.from(__a['a']).every((__originalItem0, __index0) =>
+      typeof __originalItem0 === 'undefined'
+        ? false
+        : ((__item0) =>
+            typeof __item0 === 'undefined'
+              ? false
+              : __originalItem0 === __item0)(Array.from(__b['a'])[__index0])
     ) &&
     /**
      * compare parameter b
      */
-    ((__a1, __b1) => __a1.every((__it1, __i1) => __it1 === __b1[__i1]))(
-      Array.from(__a['b']),
-      Array.from(__b['b'])
+    __a['b'].size === __b['b'].size &&
+    Array.from(__a['b']).every((__originalItem1, __index1) =>
+      typeof __originalItem1 === 'undefined'
+        ? false
+        : ((__item1) =>
+            typeof __item1 === 'undefined'
+              ? false
+              : __originalItem1 === __item1)(Array.from(__b['b'])[__index1])
     )
   );
 }
@@ -939,9 +701,18 @@ export function updateTestSet(
 ) {
   if (typeof changes['a'] !== 'undefined') {
     if (
-      !((__a1, __b1) => __a1.every((__it1, __i1) => __it1 === __b1[__i1]))(
-        Array.from(changes['a']),
-        Array.from(value['a'])
+      !(
+        changes['a'].size === value['a'].size &&
+        Array.from(changes['a']).every((__originalItem1, __index1) =>
+          typeof __originalItem1 === 'undefined'
+            ? false
+            : ((__item1) =>
+                typeof __item1 === 'undefined'
+                  ? false
+                  : __originalItem1 === __item1)(
+                Array.from(value['a'])[__index1]
+              )
+        )
       )
     ) {
       value = testSet({
@@ -952,9 +723,18 @@ export function updateTestSet(
   }
   if (typeof changes['b'] !== 'undefined') {
     if (
-      !((__a3, __b3) => __a3.every((__it3, __i3) => __it3 === __b3[__i3]))(
-        Array.from(changes['b']),
-        Array.from(value['b'])
+      !(
+        changes['b'].size === value['b'].size &&
+        Array.from(changes['b']).every((__originalItem3, __index3) =>
+          typeof __originalItem3 === 'undefined'
+            ? false
+            : ((__item3) =>
+                typeof __item3 === 'undefined'
+                  ? false
+                  : __originalItem3 === __item3)(
+                Array.from(value['b'])[__index3]
+              )
+        )
       )
     ) {
       value = testSet({
@@ -964,6 +744,12 @@ export function updateTestSet(
     }
   }
   return value;
+}
+export interface testSet2 {
+  _name: 'schema.testSet2';
+  a: ReadonlySet<string>;
+  b: ReadonlySet<ReadonlyMap<string, string>>;
+  c: ReadonlySet<[number, number]>;
 }
 export function isTestSet2(value: unknown): value is testSet2 {
   if (
@@ -1035,123 +821,6 @@ export function isTestSet2(value: unknown): value is testSet2 {
     return false;
   return true;
 }
-export const testSet2Metadata = {
-  name: 'testSet2',
-  id: 1091514709,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'template',
-        name: 'set',
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
-      },
-    },
-    {
-      name: 'b',
-      type: {
-        type: 'template',
-        name: 'set',
-        value: {
-          type: 'template',
-          name: 'map',
-          key: {
-            type: 'generic',
-            value: 'string',
-          },
-          value: {
-            type: 'generic',
-            value: 'string',
-          },
-        },
-      },
-    },
-    {
-      name: 'c',
-      type: {
-        type: 'template',
-        name: 'set',
-        value: {
-          type: 'template',
-          name: 'tuple',
-          args: [
-            {
-              type: 'generic',
-              value: 'int',
-            },
-            {
-              type: 'generic',
-              value: 'int',
-            },
-          ],
-        },
-      },
-    },
-  ],
-};
-export const testSet2MetadataV2 = {
-  kind: 'type',
-  id: 1091514709,
-  globalName: 'schema.testSet2',
-  name: 'testSet2',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'template',
-        template: 'set',
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
-      },
-    },
-    {
-      name: 'b',
-      type: {
-        type: 'template',
-        template: 'set',
-        value: {
-          type: 'template',
-          name: 'map',
-          key: {
-            type: 'generic',
-            value: 'string',
-          },
-          value: {
-            type: 'generic',
-            value: 'string',
-          },
-        },
-      },
-    },
-    {
-      name: 'c',
-      type: {
-        type: 'template',
-        template: 'set',
-        value: {
-          type: 'template',
-          name: 'tuple',
-          args: [
-            {
-              type: 'generic',
-              value: 'int',
-            },
-            {
-              type: 'generic',
-              value: 'int',
-            },
-          ],
-        },
-      },
-    },
-  ],
-};
 export interface testSet2InputParams {
   a: ReadonlySet<string>;
   b: ReadonlySet<ReadonlyMap<string, string>>;
@@ -1264,12 +933,6 @@ export function decodeTestSet2(__d: IDeserializer): testSet2 | null {
     c,
   };
 }
-export interface testSet2 {
-  _name: 'schema.testSet2';
-  a: ReadonlySet<string>;
-  b: ReadonlySet<ReadonlyMap<string, string>>;
-  c: ReadonlySet<[number, number]>;
-}
 export function defaultTestSet2(
   params: Partial<testSet2InputParams> = {}
 ): testSet2 {
@@ -1285,32 +948,52 @@ export function compareTestSet2(__a: testSet2, __b: testSet2): boolean {
     /**
      * compare parameter a
      */
-    ((__a0, __b0) => __a0.every((__it0, __i0) => __it0 === __b0[__i0]))(
-      Array.from(__a['a']),
-      Array.from(__b['a'])
+    __a['a'].size === __b['a'].size &&
+    Array.from(__a['a']).every((__originalItem0, __index0) =>
+      typeof __originalItem0 === 'undefined'
+        ? false
+        : ((__item0) =>
+            typeof __item0 === 'undefined'
+              ? false
+              : __originalItem0 === __item0)(Array.from(__b['a'])[__index0])
     ) &&
     /**
      * compare parameter b
      */
-    ((__a1, __b1) =>
-      __a1.every((__it1, __i1) =>
-        ((l1, l2) =>
-          l1.every(([k1, v1], i) => k1 === l2[i][0] && v1 === l2[i][1]))(
-          Array.from(__it1),
-          Array.from(__b1[__i1])
-        )
-      ))(Array.from(__a['b']), Array.from(__b['b'])) &&
+    __a['b'].size === __b['b'].size &&
+    Array.from(__a['b']).every((__originalItem1, __index1) =>
+      typeof __originalItem1 === 'undefined'
+        ? false
+        : ((__item1) =>
+            typeof __item1 === 'undefined'
+              ? false
+              : ((l1, l2) =>
+                  l1.every(([k1, v1], i) =>
+                    ((__v22) =>
+                      typeof __v22 === 'undefined'
+                        ? false
+                        : k1 === __v22[0] && v1 === __v22[1])(l2[i])
+                  ))(Array.from(__originalItem1), Array.from(__item1)))(
+            Array.from(__b['b'])[__index1]
+          )
+    ) &&
     /**
      * compare parameter c
      */
-    ((__a2, __b2) =>
-      __a2.every(
-        (__it2, __i2) =>
-          /* compare tuple item 0 of type number */ ((__a30, __b30) =>
-            __a30 === __b30)(__it2[0], __b2[__i2][0]) &&
-          /* compare tuple item 1 of type number */ ((__a31, __b31) =>
-            __a31 === __b31)(__it2[1], __b2[__i2][1])
-      ))(Array.from(__a['c']), Array.from(__b['c']))
+    __a['c'].size === __b['c'].size &&
+    Array.from(__a['c']).every((__originalItem2, __index2) =>
+      typeof __originalItem2 === 'undefined'
+        ? false
+        : ((__item2) =>
+            typeof __item2 === 'undefined'
+              ? false
+              : /* compare tuple item 0 of type number */ ((__a30, __b30) =>
+                  __a30 === __b30)(__originalItem2[0], __item2[0]) &&
+                /* compare tuple item 1 of type number */ ((__a31, __b31) =>
+                  __a31 === __b31)(__originalItem2[1], __item2[1]))(
+            Array.from(__b['c'])[__index2]
+          )
+    )
   );
 }
 export function updateTestSet2(
@@ -1319,9 +1002,18 @@ export function updateTestSet2(
 ) {
   if (typeof changes['a'] !== 'undefined') {
     if (
-      !((__a1, __b1) => __a1.every((__it1, __i1) => __it1 === __b1[__i1]))(
-        Array.from(changes['a']),
-        Array.from(value['a'])
+      !(
+        changes['a'].size === value['a'].size &&
+        Array.from(changes['a']).every((__originalItem1, __index1) =>
+          typeof __originalItem1 === 'undefined'
+            ? false
+            : ((__item1) =>
+                typeof __item1 === 'undefined'
+                  ? false
+                  : __originalItem1 === __item1)(
+                Array.from(value['a'])[__index1]
+              )
+        )
       )
     ) {
       value = testSet2({
@@ -1332,14 +1024,25 @@ export function updateTestSet2(
   }
   if (typeof changes['b'] !== 'undefined') {
     if (
-      !((__a3, __b3) =>
-        __a3.every((__it3, __i3) =>
-          ((l1, l2) =>
-            l1.every(([k1, v1], i) => k1 === l2[i][0] && v1 === l2[i][1]))(
-            Array.from(__it3),
-            Array.from(__b3[__i3])
-          )
-        ))(Array.from(changes['b']), Array.from(value['b']))
+      !(
+        changes['b'].size === value['b'].size &&
+        Array.from(changes['b']).every((__originalItem3, __index3) =>
+          typeof __originalItem3 === 'undefined'
+            ? false
+            : ((__item3) =>
+                typeof __item3 === 'undefined'
+                  ? false
+                  : ((l1, l2) =>
+                      l1.every(([k1, v1], i) =>
+                        ((__v24) =>
+                          typeof __v24 === 'undefined'
+                            ? false
+                            : k1 === __v24[0] && v1 === __v24[1])(l2[i])
+                      ))(Array.from(__originalItem3), Array.from(__item3)))(
+                Array.from(value['b'])[__index3]
+              )
+        )
+      )
     ) {
       value = testSet2({
         ...value,
@@ -1349,14 +1052,22 @@ export function updateTestSet2(
   }
   if (typeof changes['c'] !== 'undefined') {
     if (
-      !((__a7, __b7) =>
-        __a7.every(
-          (__it7, __i7) =>
-            /* compare tuple item 0 of type number */ ((__a80, __b80) =>
-              __a80 === __b80)(__it7[0], __b7[__i7][0]) &&
-            /* compare tuple item 1 of type number */ ((__a81, __b81) =>
-              __a81 === __b81)(__it7[1], __b7[__i7][1])
-        ))(Array.from(changes['c']), Array.from(value['c']))
+      !(
+        changes['c'].size === value['c'].size &&
+        Array.from(changes['c']).every((__originalItem7, __index7) =>
+          typeof __originalItem7 === 'undefined'
+            ? false
+            : ((__item7) =>
+                typeof __item7 === 'undefined'
+                  ? false
+                  : /* compare tuple item 0 of type number */ ((__a80, __b80) =>
+                      __a80 === __b80)(__originalItem7[0], __item7[0]) &&
+                    /* compare tuple item 1 of type number */ ((__a81, __b81) =>
+                      __a81 === __b81)(__originalItem7[1], __item7[1]))(
+                Array.from(value['c'])[__index7]
+              )
+        )
+      )
     ) {
       value = testSet2({
         ...value,
@@ -1365,6 +1076,9 @@ export function updateTestSet2(
     }
   }
   return value;
+}
+export interface Void {
+  _name: 'schema.Void';
 }
 export function isVoid(value: unknown): value is Void {
   if (
@@ -1379,19 +1093,6 @@ export function isVoid(value: unknown): value is Void {
     return false;
   return true;
 }
-export const VoidMetadata = {
-  name: 'Void',
-  id: 189644707,
-  kind: 'type',
-  params: [],
-};
-export const VoidMetadataV2 = {
-  kind: 'type',
-  id: 189644707,
-  globalName: 'schema.Void',
-  name: 'Void',
-  params: [],
-};
 export interface VoidInputParams {}
 export function Void(_: VoidInputParams = {}): Void {
   return {
@@ -1411,9 +1112,6 @@ export function decodeVoid(__d: IDeserializer): Void | null {
     _name: 'schema.Void',
   };
 }
-export interface Void {
-  _name: 'schema.Void';
-}
 export function defaultVoid(params: Partial<VoidInputParams> = {}): Void {
   return Void({
     ...params,
@@ -1424,6 +1122,10 @@ export function compareVoid(__a: Void, __b: Void): boolean {
 }
 export function updateVoid(value: Void, _: Partial<VoidInputParams>) {
   return value;
+}
+export interface msg {
+  _name: 'schema.msg';
+  data: Uint8Array;
 }
 export function isMsg(value: unknown): value is msg {
   if (
@@ -1442,35 +1144,6 @@ export function isMsg(value: unknown): value is msg {
     return false;
   return true;
 }
-export const msgMetadata = {
-  name: 'msg',
-  id: -1103074928,
-  kind: 'type',
-  params: [
-    {
-      name: 'data',
-      type: {
-        type: 'generic',
-        value: 'bytes',
-      },
-    },
-  ],
-};
-export const msgMetadataV2 = {
-  kind: 'type',
-  id: -1103074928,
-  globalName: 'schema.msg',
-  name: 'msg',
-  params: [
-    {
-      name: 'data',
-      type: {
-        type: 'generic',
-        value: 'bytes',
-      },
-    },
-  ],
-};
 export interface msgInputParams {
   data: Uint8Array;
 }
@@ -1504,10 +1177,6 @@ export function decodeMsg(__d: IDeserializer): msg | null {
     _name: 'schema.msg',
     data,
   };
-}
-export interface msg {
-  _name: 'schema.msg';
-  data: Uint8Array;
 }
 export function defaultMsg(params: Partial<msgInputParams> = {}): msg {
   return msg({
@@ -1548,27 +1217,6 @@ export function isResultTrait(value: unknown): value is Result {
   if (isPosts(value)) return true;
   return false;
 }
-export const ResultMetadata = {
-  name: 'Result',
-  id: -1480344996,
-  kind: 'trait',
-};
-export const ResultMetadataV2 = {
-  kind: 'trait',
-  name: 'Result',
-  nodes: [
-    {
-      type: 'externalType',
-      name: 'Users',
-      relativePath: './schema',
-    },
-    {
-      type: 'externalType',
-      name: 'Posts',
-      relativePath: './schema',
-    },
-  ],
-};
 export function encodeResultTrait(__s: ISerializer, value: Result) {
   switch (value._name) {
     case 'schema.Users':
@@ -1614,6 +1262,10 @@ export function compareResultTrait(__a: Result, __b: Result) {
       return comparePosts(__a, __b);
   }
 }
+export interface Users {
+  _name: 'schema.Users';
+  users: ReadonlyArray<Readonly<User>>;
+}
 export function isUsers(value: unknown): value is Users {
   if (
     !(
@@ -1636,47 +1288,6 @@ export function isUsers(value: unknown): value is Users {
     return false;
   return true;
 }
-export const UsersMetadata = {
-  name: 'Users',
-  id: 1801329960,
-  kind: 'type',
-  params: [
-    {
-      name: 'users',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          name: 'User',
-          id: '738416594',
-          type: 'externalType',
-          externalModule: false,
-          relativePath: './User',
-        },
-      },
-    },
-  ],
-};
-export const UsersMetadataV2 = {
-  kind: 'type',
-  id: 1801329960,
-  globalName: 'schema.Users',
-  name: 'Users',
-  params: [
-    {
-      name: 'users',
-      type: {
-        type: 'template',
-        template: 'vector',
-        value: {
-          type: 'externalType',
-          name: 'User',
-          relativePath: './User',
-        },
-      },
-    },
-  ],
-};
 export interface UsersInputParams {
   users: ReadonlyArray<Readonly<User>>;
 }
@@ -1694,9 +1305,8 @@ export function encodeUsers(__s: ISerializer, value: Users) {
   const __pv0 = value['users'];
   const __l1 = __pv0.length;
   __s.writeUint32(__l1);
-  for (let __i1 = 0; __i1 < __l1; __i1++) {
-    const __v__i1 = __pv0[__i1];
-    encodeUserTrait(__s, __v__i1);
+  for (const __item1 of __pv0) {
+    encodeUserTrait(__s, __item1);
   }
 }
 export function decodeUsers(__d: IDeserializer): Users | null {
@@ -1722,10 +1332,6 @@ export function decodeUsers(__d: IDeserializer): Users | null {
     users,
   };
 }
-export interface Users {
-  _name: 'schema.Users';
-  users: ReadonlyArray<Readonly<User>>;
-}
 export function defaultUsers(params: Partial<UsersInputParams> = {}): Users {
   return Users({
     users: [],
@@ -1738,8 +1344,15 @@ export function compareUsers(__a: Users, __b: Users): boolean {
      * compare parameter users
      */
     __a['users'].length === __b['users'].length &&
-    __a['users'].every((__i, index) =>
-      compareUserTrait(__i, __b['users'][index])
+    Array.from(__a['users']).every((__originalItem0, __index0) =>
+      typeof __originalItem0 === 'undefined'
+        ? false
+        : ((__item0) =>
+            typeof __item0 === 'undefined'
+              ? false
+              : compareUserTrait(__originalItem0, __item0))(
+            Array.from(__b['users'])[__index0]
+          )
     )
   );
 }
@@ -1748,8 +1361,15 @@ export function updateUsers(value: Users, changes: Partial<UsersInputParams>) {
     if (
       !(
         changes['users'].length === value['users'].length &&
-        changes['users'].every((__i, index) =>
-          compareUserTrait(__i, value['users'][index])
+        Array.from(changes['users']).every((__originalItem1, __index1) =>
+          typeof __originalItem1 === 'undefined'
+            ? false
+            : ((__item1) =>
+                typeof __item1 === 'undefined'
+                  ? false
+                  : compareUserTrait(__originalItem1, __item1))(
+                Array.from(value['users'])[__index1]
+              )
         )
       )
     ) {
@@ -1760,6 +1380,10 @@ export function updateUsers(value: Users, changes: Partial<UsersInputParams>) {
     }
   }
   return value;
+}
+export interface GetUserById extends IRequest<Readonly<Users>> {
+  _name: 'schema.GetUserById';
+  userId: number;
 }
 export function isGetUserById(value: unknown): value is GetUserById {
   if (
@@ -1787,35 +1411,6 @@ export function isGetUserById(value: unknown): value is GetUserById {
     return false;
   return true;
 }
-export const GetUserByIdMetadata = {
-  name: 'GetUserById',
-  id: -2021730434,
-  kind: 'call',
-  params: [
-    {
-      name: 'userId',
-      type: {
-        type: 'generic',
-        value: 'uint32',
-      },
-    },
-  ],
-};
-export const GetUserByIdMetadataV2 = {
-  kind: 'call',
-  id: -2021730434,
-  globalName: 'schema.GetUserById',
-  name: 'GetUserById',
-  params: [
-    {
-      name: 'userId',
-      type: {
-        type: 'generic',
-        value: 'uint32',
-      },
-    },
-  ],
-};
 export interface GetUserByIdInputParams {
   userId: number;
 }
@@ -1848,10 +1443,6 @@ export function decodeGetUserById(__d: IDeserializer): GetUserById | null {
     _name: 'schema.GetUserById',
     userId,
   };
-}
-export interface GetUserById extends IRequest<Readonly<Users>> {
-  _name: 'schema.GetUserById';
-  userId: number;
 }
 export function defaultGetUserById(
   params: Partial<GetUserByIdInputParams> = {}
@@ -1886,6 +1477,10 @@ export function updateGetUserById(
   }
   return value;
 }
+export interface Post {
+  _name: 'schema.Post';
+  id: number;
+}
 export function isPost(value: unknown): value is Post {
   if (
     !(
@@ -1915,35 +1510,6 @@ export function isPost(value: unknown): value is Post {
     return false;
   return true;
 }
-export const PostMetadata = {
-  name: 'Post',
-  id: 901140138,
-  kind: 'type',
-  params: [
-    {
-      name: 'id',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
-export const PostMetadataV2 = {
-  kind: 'type',
-  id: 901140138,
-  globalName: 'schema.Post',
-  name: 'Post',
-  params: [
-    {
-      name: 'id',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
 export interface PostInputParams {
   id: number;
 }
@@ -1977,10 +1543,6 @@ export function decodePost(__d: IDeserializer): Post | null {
     id,
   };
 }
-export interface Post {
-  _name: 'schema.Post';
-  id: number;
-}
 export function defaultPost(params: Partial<PostInputParams> = {}): Post {
   return Post({
     id: 0,
@@ -2006,6 +1568,10 @@ export function updatePost(value: Post, changes: Partial<PostInputParams>) {
   }
   return value;
 }
+export interface Posts {
+  _name: 'schema.Posts';
+  posts: ReadonlyArray<Readonly<Post>>;
+}
 export function isPosts(value: unknown): value is Posts {
   if (
     !(
@@ -2028,45 +1594,6 @@ export function isPosts(value: unknown): value is Posts {
     return false;
   return true;
 }
-export const PostsMetadata = {
-  name: 'Posts',
-  id: 413461762,
-  kind: 'type',
-  params: [
-    {
-      name: 'posts',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          id: 901140138,
-          type: 'internalType',
-          kind: 'type',
-          name: 'Post',
-        },
-      },
-    },
-  ],
-};
-export const PostsMetadataV2 = {
-  kind: 'type',
-  id: 413461762,
-  globalName: 'schema.Posts',
-  name: 'Posts',
-  params: [
-    {
-      name: 'posts',
-      type: {
-        type: 'template',
-        template: 'vector',
-        value: {
-          type: 'internalType',
-          interfaceName: 'Post',
-        },
-      },
-    },
-  ],
-};
 export interface PostsInputParams {
   posts: ReadonlyArray<Readonly<Post>>;
 }
@@ -2084,9 +1611,8 @@ export function encodePosts(__s: ISerializer, value: Posts) {
   const __pv0 = value['posts'];
   const __l1 = __pv0.length;
   __s.writeUint32(__l1);
-  for (let __i1 = 0; __i1 < __l1; __i1++) {
-    const __v__i1 = __pv0[__i1];
-    encodePost(__s, __v__i1);
+  for (const __item1 of __pv0) {
+    encodePost(__s, __item1);
   }
 }
 export function decodePosts(__d: IDeserializer): Posts | null {
@@ -2112,10 +1638,6 @@ export function decodePosts(__d: IDeserializer): Posts | null {
     posts,
   };
 }
-export interface Posts {
-  _name: 'schema.Posts';
-  posts: ReadonlyArray<Readonly<Post>>;
-}
 export function defaultPosts(params: Partial<PostsInputParams> = {}): Posts {
   return Posts({
     posts: [],
@@ -2128,7 +1650,16 @@ export function comparePosts(__a: Posts, __b: Posts): boolean {
      * compare parameter posts
      */
     __a['posts'].length === __b['posts'].length &&
-    __a['posts'].every((__i, index) => comparePost(__i, __b['posts'][index]))
+    Array.from(__a['posts']).every((__originalItem0, __index0) =>
+      typeof __originalItem0 === 'undefined'
+        ? false
+        : ((__item0) =>
+            typeof __item0 === 'undefined'
+              ? false
+              : comparePost(__originalItem0, __item0))(
+            Array.from(__b['posts'])[__index0]
+          )
+    )
   );
 }
 export function updatePosts(value: Posts, changes: Partial<PostsInputParams>) {
@@ -2136,8 +1667,15 @@ export function updatePosts(value: Posts, changes: Partial<PostsInputParams>) {
     if (
       !(
         changes['posts'].length === value['posts'].length &&
-        changes['posts'].every((__i, index) =>
-          comparePost(__i, value['posts'][index])
+        Array.from(changes['posts']).every((__originalItem1, __index1) =>
+          typeof __originalItem1 === 'undefined'
+            ? false
+            : ((__item1) =>
+                typeof __item1 === 'undefined'
+                  ? false
+                  : comparePost(__originalItem1, __item1))(
+                Array.from(value['posts'])[__index1]
+              )
         )
       )
     ) {
@@ -2148,6 +1686,10 @@ export function updatePosts(value: Posts, changes: Partial<PostsInputParams>) {
     }
   }
   return value;
+}
+export interface GetPostById extends IRequest<Readonly<Posts>> {
+  _name: 'schema.GetPostById';
+  postId: number;
 }
 export function isGetPostById(value: unknown): value is GetPostById {
   if (
@@ -2175,35 +1717,6 @@ export function isGetPostById(value: unknown): value is GetPostById {
     return false;
   return true;
 }
-export const GetPostByIdMetadata = {
-  name: 'GetPostById',
-  id: -1279409050,
-  kind: 'call',
-  params: [
-    {
-      name: 'postId',
-      type: {
-        type: 'generic',
-        value: 'uint32',
-      },
-    },
-  ],
-};
-export const GetPostByIdMetadataV2 = {
-  kind: 'call',
-  id: -1279409050,
-  globalName: 'schema.GetPostById',
-  name: 'GetPostById',
-  params: [
-    {
-      name: 'postId',
-      type: {
-        type: 'generic',
-        value: 'uint32',
-      },
-    },
-  ],
-};
 export interface GetPostByIdInputParams {
   postId: number;
 }
@@ -2236,10 +1749,6 @@ export function decodeGetPostById(__d: IDeserializer): GetPostById | null {
     _name: 'schema.GetPostById',
     postId,
   };
-}
-export interface GetPostById extends IRequest<Readonly<Posts>> {
-  _name: 'schema.GetPostById';
-  postId: number;
 }
 export function defaultGetPostById(
   params: Partial<GetPostByIdInputParams> = {}
@@ -2274,6 +1783,9 @@ export function updateGetPostById(
   }
   return value;
 }
+export interface GetConversations extends IRequest<Readonly<Conversations>> {
+  _name: 'schema.GetConversations';
+}
 export function isGetConversations(value: unknown): value is GetConversations {
   if (
     !(
@@ -2287,19 +1799,6 @@ export function isGetConversations(value: unknown): value is GetConversations {
     return false;
   return true;
 }
-export const GetConversationsMetadata = {
-  name: 'GetConversations',
-  id: -416881,
-  kind: 'call',
-  params: [],
-};
-export const GetConversationsMetadataV2 = {
-  kind: 'call',
-  id: -416881,
-  globalName: 'schema.GetConversations',
-  name: 'GetConversations',
-  params: [],
-};
 export interface GetConversationsInputParams {}
 export function GetConversations(
   _: GetConversationsInputParams = {}
@@ -2323,9 +1822,6 @@ export function decodeGetConversations(
     _name: 'schema.GetConversations',
   };
 }
-export interface GetConversations extends IRequest<Readonly<Conversations>> {
-  _name: 'schema.GetConversations';
-}
 export function defaultGetConversations(
   params: Partial<GetConversationsInputParams> = {}
 ): GetConversations {
@@ -2344,6 +1840,11 @@ export function updateGetConversations(
   _: Partial<GetConversationsInputParams>
 ) {
   return value;
+}
+export interface Coordinates {
+  _name: 'schema.Coordinates';
+  latitude: number;
+  longitude: number;
 }
 export function isCoordinates(value: unknown): value is Coordinates {
   if (
@@ -2372,49 +1873,6 @@ export function isCoordinates(value: unknown): value is Coordinates {
     return false;
   return true;
 }
-export const CoordinatesMetadata = {
-  name: 'Coordinates',
-  id: -2145804928,
-  kind: 'type',
-  params: [
-    {
-      name: 'latitude',
-      type: {
-        type: 'generic',
-        value: 'double',
-      },
-    },
-    {
-      name: 'longitude',
-      type: {
-        type: 'generic',
-        value: 'double',
-      },
-    },
-  ],
-};
-export const CoordinatesMetadataV2 = {
-  kind: 'type',
-  id: -2145804928,
-  globalName: 'schema.Coordinates',
-  name: 'Coordinates',
-  params: [
-    {
-      name: 'latitude',
-      type: {
-        type: 'generic',
-        value: 'double',
-      },
-    },
-    {
-      name: 'longitude',
-      type: {
-        type: 'generic',
-        value: 'double',
-      },
-    },
-  ],
-};
 export interface CoordinatesInputParams {
   latitude: number;
   longitude: number;
@@ -2461,11 +1919,6 @@ export function decodeCoordinates(__d: IDeserializer): Coordinates | null {
     longitude,
   };
 }
-export interface Coordinates {
-  _name: 'schema.Coordinates';
-  latitude: number;
-  longitude: number;
-}
 export function defaultCoordinates(
   params: Partial<CoordinatesInputParams> = {}
 ): Coordinates {
@@ -2511,6 +1964,16 @@ export function updateCoordinates(
     }
   }
   return value;
+}
+export interface ShouldSupportSeveralSequentialVectorParams {
+  _name: 'schema.ShouldSupportSeveralSequentialVectorParams';
+  a: ReadonlyArray<number>;
+  b: ReadonlyArray<number>;
+  c: ReadonlyArray<string>;
+  d: ReadonlyArray<number>;
+  e: ReadonlyArray<number>;
+  f: ReadonlyArray<ReadonlyArray<number> | null>;
+  g: [number, number, number, ReadonlyArray<number>, string | null];
 }
 export function isShouldSupportSeveralSequentialVectorParams(
   value: unknown
@@ -2590,21 +2053,21 @@ export function isShouldSupportSeveralSequentialVectorParams(
       'f' in value &&
       ((__v5) =>
         (Array.isArray(__v5) || __v5 instanceof Set) &&
-        Array.from(__v5).every(
-          (p) =>
-            p !== null &&
-            ((x) =>
-              (Array.isArray(x) || x instanceof Set) &&
-              Array.from(x).every(
-                (p) =>
-                  typeof p === 'number' &&
-                  JSBI.equal(JSBI.BigInt(p), JSBI.BigInt(p)) &&
-                  JSBI.greaterThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('0')) &&
-                  JSBI.lessThanOrEqual(
-                    JSBI.BigInt(p),
-                    JSBI.BigInt('4294967295')
-                  )
-              ))(p)
+        Array.from(__v5).every((p) =>
+          p === null
+            ? true
+            : ((x) =>
+                (Array.isArray(x) || x instanceof Set) &&
+                Array.from(x).every(
+                  (p) =>
+                    typeof p === 'number' &&
+                    JSBI.equal(JSBI.BigInt(p), JSBI.BigInt(p)) &&
+                    JSBI.greaterThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('0')) &&
+                    JSBI.lessThanOrEqual(
+                      JSBI.BigInt(p),
+                      JSBI.BigInt('4294967295')
+                    )
+                ))(p)
         ))(value['f'])
     )
   )
@@ -2633,251 +2096,14 @@ export function isShouldSupportSeveralSequentialVectorParams(
               JSBI.greaterThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('0')) &&
               JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('4294967295'))
           ))(__v6[3]) &&
-        ((a) => a !== null && ((x) => typeof x === 'string')(a))(__v6[4]))(
-        value['g']
-      )
+        ((a) => (a === null ? true : ((x) => typeof x === 'string')(a)))(
+          __v6[4]
+        ))(value['g'])
     )
   )
     return false;
   return true;
 }
-export const ShouldSupportSeveralSequentialVectorParamsMetadata = {
-  name: 'ShouldSupportSeveralSequentialVectorParams',
-  id: -2007546384,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          type: 'generic',
-          value: 'int',
-        },
-      },
-    },
-    {
-      name: 'b',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          type: 'generic',
-          value: 'double',
-        },
-      },
-    },
-    {
-      name: 'c',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
-      },
-    },
-    {
-      name: 'd',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          type: 'generic',
-          value: 'float',
-        },
-      },
-    },
-    {
-      name: 'e',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          type: 'generic',
-          value: 'uint32',
-        },
-      },
-    },
-    {
-      name: 'f',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          type: 'template',
-          name: 'optional',
-          value: {
-            type: 'template',
-            name: 'vector',
-            value: {
-              type: 'generic',
-              value: 'uint32',
-            },
-          },
-        },
-      },
-    },
-    {
-      name: 'g',
-      type: {
-        type: 'template',
-        name: 'tuple',
-        args: [
-          {
-            type: 'generic',
-            value: 'int',
-          },
-          {
-            type: 'generic',
-            value: 'float',
-          },
-          {
-            type: 'generic',
-            value: 'double',
-          },
-          {
-            type: 'template',
-            name: 'vector',
-            value: {
-              type: 'generic',
-              value: 'uint32',
-            },
-          },
-          {
-            type: 'template',
-            name: 'optional',
-            value: {
-              type: 'generic',
-              value: 'string',
-            },
-          },
-        ],
-      },
-    },
-  ],
-};
-export const ShouldSupportSeveralSequentialVectorParamsMetadataV2 = {
-  kind: 'type',
-  id: -2007546384,
-  globalName: 'schema.ShouldSupportSeveralSequentialVectorParams',
-  name: 'ShouldSupportSeveralSequentialVectorParams',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'template',
-        template: 'vector',
-        value: {
-          type: 'generic',
-          value: 'int',
-        },
-      },
-    },
-    {
-      name: 'b',
-      type: {
-        type: 'template',
-        template: 'vector',
-        value: {
-          type: 'generic',
-          value: 'double',
-        },
-      },
-    },
-    {
-      name: 'c',
-      type: {
-        type: 'template',
-        template: 'vector',
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
-      },
-    },
-    {
-      name: 'd',
-      type: {
-        type: 'template',
-        template: 'vector',
-        value: {
-          type: 'generic',
-          value: 'float',
-        },
-      },
-    },
-    {
-      name: 'e',
-      type: {
-        type: 'template',
-        template: 'vector',
-        value: {
-          type: 'generic',
-          value: 'uint32',
-        },
-      },
-    },
-    {
-      name: 'f',
-      type: {
-        type: 'template',
-        template: 'vector',
-        value: {
-          type: 'template',
-          template: 'optional',
-          value: {
-            type: 'template',
-            template: 'vector',
-            value: {
-              type: 'generic',
-              value: 'uint32',
-            },
-          },
-        },
-      },
-    },
-    {
-      name: 'g',
-      type: {
-        type: 'template',
-        name: 'tuple',
-        args: [
-          {
-            type: 'generic',
-            value: 'int',
-          },
-          {
-            type: 'generic',
-            value: 'float',
-          },
-          {
-            type: 'generic',
-            value: 'double',
-          },
-          {
-            type: 'template',
-            template: 'vector',
-            value: {
-              type: 'generic',
-              value: 'uint32',
-            },
-          },
-          {
-            type: 'template',
-            template: 'optional',
-            value: {
-              type: 'generic',
-              value: 'string',
-            },
-          },
-        ],
-      },
-    },
-  ],
-};
 export interface ShouldSupportSeveralSequentialVectorParamsInputParams {
   a: ReadonlyArray<number>;
   b: ReadonlyArray<number>;
@@ -2912,9 +2138,8 @@ export function encodeShouldSupportSeveralSequentialVectorParams(
   const __pv0 = value['a'];
   const __l1 = __pv0.length;
   __s.writeUint32(__l1);
-  for (let __i1 = 0; __i1 < __l1; __i1++) {
-    const __v__i1 = __pv0[__i1];
-    __s.writeInt32(__v__i1);
+  for (const __item1 of __pv0) {
+    __s.writeInt32(__item1);
   }
   /**
    * encoding param: b
@@ -2922,9 +2147,8 @@ export function encodeShouldSupportSeveralSequentialVectorParams(
   const __pv2 = value['b'];
   const __l3 = __pv2.length;
   __s.writeUint32(__l3);
-  for (let __i3 = 0; __i3 < __l3; __i3++) {
-    const __v__i3 = __pv2[__i3];
-    __s.writeDouble(__v__i3);
+  for (const __item3 of __pv2) {
+    __s.writeDouble(__item3);
   }
   /**
    * encoding param: c
@@ -2932,9 +2156,8 @@ export function encodeShouldSupportSeveralSequentialVectorParams(
   const __pv4 = value['c'];
   const __l5 = __pv4.length;
   __s.writeUint32(__l5);
-  for (let __i5 = 0; __i5 < __l5; __i5++) {
-    const __v__i5 = __pv4[__i5];
-    __s.writeString(__v__i5);
+  for (const __item5 of __pv4) {
+    __s.writeString(__item5);
   }
   /**
    * encoding param: d
@@ -2942,9 +2165,8 @@ export function encodeShouldSupportSeveralSequentialVectorParams(
   const __pv6 = value['d'];
   const __l7 = __pv6.length;
   __s.writeUint32(__l7);
-  for (let __i7 = 0; __i7 < __l7; __i7++) {
-    const __v__i7 = __pv6[__i7];
-    __s.writeFloat(__v__i7);
+  for (const __item7 of __pv6) {
+    __s.writeFloat(__item7);
   }
   /**
    * encoding param: e
@@ -2952,9 +2174,8 @@ export function encodeShouldSupportSeveralSequentialVectorParams(
   const __pv8 = value['e'];
   const __l9 = __pv8.length;
   __s.writeUint32(__l9);
-  for (let __i9 = 0; __i9 < __l9; __i9++) {
-    const __v__i9 = __pv8[__i9];
-    __s.writeUint32(__v__i9);
+  for (const __item9 of __pv8) {
+    __s.writeUint32(__item9);
   }
   /**
    * encoding param: f
@@ -2962,17 +2183,15 @@ export function encodeShouldSupportSeveralSequentialVectorParams(
   const __pv10 = value['f'];
   const __l11 = __pv10.length;
   __s.writeUint32(__l11);
-  for (let __i11 = 0; __i11 < __l11; __i11++) {
-    const __v__i11 = __pv10[__i11];
-    if (__v__i11 === null) {
+  for (const __item11 of __pv10) {
+    if (__item11 === null) {
       __s.writeUint8(0);
     } else {
       __s.writeUint8(1);
-      const __l13 = __v__i11.length;
+      const __l13 = __item11.length;
       __s.writeUint32(__l13);
-      for (let __i13 = 0; __i13 < __l13; __i13++) {
-        const __v__i13 = __v__i11[__i13];
-        __s.writeUint32(__v__i13);
+      for (const __item13 of __item11) {
+        __s.writeUint32(__item13);
       }
     }
   }
@@ -2989,9 +2208,8 @@ export function encodeShouldSupportSeveralSequentialVectorParams(
   const __t21 = __pv14[3];
   const __l25 = __t21.length;
   __s.writeUint32(__l25);
-  for (let __i25 = 0; __i25 < __l25; __i25++) {
-    const __v__i25 = __t21[__i25];
-    __s.writeUint32(__v__i25);
+  for (const __item25 of __t21) {
+    __s.writeUint32(__item25);
   }
   const __t26 = __pv14[4];
   if (__t26 === null) {
@@ -3113,16 +2331,6 @@ export function decodeShouldSupportSeveralSequentialVectorParams(
     g,
   };
 }
-export interface ShouldSupportSeveralSequentialVectorParams {
-  _name: 'schema.ShouldSupportSeveralSequentialVectorParams';
-  a: ReadonlyArray<number>;
-  b: ReadonlyArray<number>;
-  c: ReadonlyArray<string>;
-  d: ReadonlyArray<number>;
-  e: ReadonlyArray<number>;
-  f: ReadonlyArray<ReadonlyArray<number> | null>;
-  g: [number, number, number, ReadonlyArray<number>, string | null];
-}
 export function defaultShouldSupportSeveralSequentialVectorParams(
   params: Partial<ShouldSupportSeveralSequentialVectorParamsInputParams> = {}
 ): ShouldSupportSeveralSequentialVectorParams {
@@ -3146,37 +2354,88 @@ export function compareShouldSupportSeveralSequentialVectorParams(
      * compare parameter a
      */
     __a['a'].length === __b['a'].length &&
-    __a['a'].every((__i, index) => __i === __b['a'][index]) &&
+    Array.from(__a['a']).every((__originalItem0, __index0) =>
+      typeof __originalItem0 === 'undefined'
+        ? false
+        : ((__item0) =>
+            typeof __item0 === 'undefined'
+              ? false
+              : __originalItem0 === __item0)(Array.from(__b['a'])[__index0])
+    ) &&
     /**
      * compare parameter b
      */
     __a['b'].length === __b['b'].length &&
-    __a['b'].every((__i, index) => __i === __b['b'][index]) &&
+    Array.from(__a['b']).every((__originalItem1, __index1) =>
+      typeof __originalItem1 === 'undefined'
+        ? false
+        : ((__item1) =>
+            typeof __item1 === 'undefined'
+              ? false
+              : __originalItem1 === __item1)(Array.from(__b['b'])[__index1])
+    ) &&
     /**
      * compare parameter c
      */
     __a['c'].length === __b['c'].length &&
-    __a['c'].every((__i, index) => __i === __b['c'][index]) &&
+    Array.from(__a['c']).every((__originalItem2, __index2) =>
+      typeof __originalItem2 === 'undefined'
+        ? false
+        : ((__item2) =>
+            typeof __item2 === 'undefined'
+              ? false
+              : __originalItem2 === __item2)(Array.from(__b['c'])[__index2])
+    ) &&
     /**
      * compare parameter d
      */
     __a['d'].length === __b['d'].length &&
-    __a['d'].every((__i, index) => __i === __b['d'][index]) &&
+    Array.from(__a['d']).every((__originalItem3, __index3) =>
+      typeof __originalItem3 === 'undefined'
+        ? false
+        : ((__item3) =>
+            typeof __item3 === 'undefined'
+              ? false
+              : __originalItem3 === __item3)(Array.from(__b['d'])[__index3])
+    ) &&
     /**
      * compare parameter e
      */
     __a['e'].length === __b['e'].length &&
-    __a['e'].every((__i, index) => __i === __b['e'][index]) &&
+    Array.from(__a['e']).every((__originalItem4, __index4) =>
+      typeof __originalItem4 === 'undefined'
+        ? false
+        : ((__item4) =>
+            typeof __item4 === 'undefined'
+              ? false
+              : __originalItem4 === __item4)(Array.from(__b['e'])[__index4])
+    ) &&
     /**
      * compare parameter f
      */
     __a['f'].length === __b['f'].length &&
-    __a['f'].every((__i, index) =>
-      ((__dp61, __dp62) =>
-        __dp61 !== null && __dp62 !== null
-          ? __dp61.length === __dp62.length &&
-            __dp61.every((__i, index) => __i === __dp62[index])
-          : __dp61 === __dp62)(__i, __b['f'][index])
+    Array.from(__a['f']).every((__originalItem5, __index5) =>
+      typeof __originalItem5 === 'undefined'
+        ? false
+        : ((__item5) =>
+            typeof __item5 === 'undefined'
+              ? false
+              : ((__dp61, __dp62) =>
+                  __dp61 !== null && __dp62 !== null
+                    ? __dp61.length === __dp62.length &&
+                      Array.from(__dp61).every((__originalItem7, __index7) =>
+                        typeof __originalItem7 === 'undefined'
+                          ? false
+                          : ((__item7) =>
+                              typeof __item7 === 'undefined'
+                                ? false
+                                : __originalItem7 === __item7)(
+                              Array.from(__dp62)[__index7]
+                            )
+                      )
+                    : __dp61 === __dp62)(__originalItem5, __item5))(
+            Array.from(__b['f'])[__index5]
+          )
     ) &&
     /**
      * compare parameter g
@@ -3189,10 +2448,14 @@ export function compareShouldSupportSeveralSequentialVectorParams(
       __a62 === __b62)(__a['g'][2], __b['g'][2]) &&
     /* compare tuple item 3 of type ReadonlyArray<number> */ ((__a63, __b63) =>
       __a63.length === __b63.length &&
-      __a63.every((__i, index) => __i === __b63[index]))(
-      __a['g'][3],
-      __b['g'][3]
-    ) &&
+      Array.from(__a63).every((__originalItem16, __index16) =>
+        typeof __originalItem16 === 'undefined'
+          ? false
+          : ((__item16) =>
+              typeof __item16 === 'undefined'
+                ? false
+                : __originalItem16 === __item16)(Array.from(__b63)[__index16])
+      ))(__a['g'][3], __b['g'][3]) &&
     /* compare tuple item 4 of type string | null */ ((__a64, __b64) =>
       ((__dp221, __dp222) =>
         __dp221 !== null && __dp222 !== null
@@ -3208,7 +2471,16 @@ export function updateShouldSupportSeveralSequentialVectorParams(
     if (
       !(
         changes['a'].length === value['a'].length &&
-        changes['a'].every((__i, index) => __i === value['a'][index])
+        Array.from(changes['a']).every((__originalItem1, __index1) =>
+          typeof __originalItem1 === 'undefined'
+            ? false
+            : ((__item1) =>
+                typeof __item1 === 'undefined'
+                  ? false
+                  : __originalItem1 === __item1)(
+                Array.from(value['a'])[__index1]
+              )
+        )
       )
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
@@ -3221,7 +2493,16 @@ export function updateShouldSupportSeveralSequentialVectorParams(
     if (
       !(
         changes['b'].length === value['b'].length &&
-        changes['b'].every((__i, index) => __i === value['b'][index])
+        Array.from(changes['b']).every((__originalItem3, __index3) =>
+          typeof __originalItem3 === 'undefined'
+            ? false
+            : ((__item3) =>
+                typeof __item3 === 'undefined'
+                  ? false
+                  : __originalItem3 === __item3)(
+                Array.from(value['b'])[__index3]
+              )
+        )
       )
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
@@ -3234,7 +2515,16 @@ export function updateShouldSupportSeveralSequentialVectorParams(
     if (
       !(
         changes['c'].length === value['c'].length &&
-        changes['c'].every((__i, index) => __i === value['c'][index])
+        Array.from(changes['c']).every((__originalItem5, __index5) =>
+          typeof __originalItem5 === 'undefined'
+            ? false
+            : ((__item5) =>
+                typeof __item5 === 'undefined'
+                  ? false
+                  : __originalItem5 === __item5)(
+                Array.from(value['c'])[__index5]
+              )
+        )
       )
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
@@ -3247,7 +2537,16 @@ export function updateShouldSupportSeveralSequentialVectorParams(
     if (
       !(
         changes['d'].length === value['d'].length &&
-        changes['d'].every((__i, index) => __i === value['d'][index])
+        Array.from(changes['d']).every((__originalItem7, __index7) =>
+          typeof __originalItem7 === 'undefined'
+            ? false
+            : ((__item7) =>
+                typeof __item7 === 'undefined'
+                  ? false
+                  : __originalItem7 === __item7)(
+                Array.from(value['d'])[__index7]
+              )
+        )
       )
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
@@ -3260,7 +2559,16 @@ export function updateShouldSupportSeveralSequentialVectorParams(
     if (
       !(
         changes['e'].length === value['e'].length &&
-        changes['e'].every((__i, index) => __i === value['e'][index])
+        Array.from(changes['e']).every((__originalItem9, __index9) =>
+          typeof __originalItem9 === 'undefined'
+            ? false
+            : ((__item9) =>
+                typeof __item9 === 'undefined'
+                  ? false
+                  : __originalItem9 === __item9)(
+                Array.from(value['e'])[__index9]
+              )
+        )
       )
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
@@ -3273,12 +2581,29 @@ export function updateShouldSupportSeveralSequentialVectorParams(
     if (
       !(
         changes['f'].length === value['f'].length &&
-        changes['f'].every((__i, index) =>
-          ((__dp121, __dp122) =>
-            __dp121 !== null && __dp122 !== null
-              ? __dp121.length === __dp122.length &&
-                __dp121.every((__i, index) => __i === __dp122[index])
-              : __dp121 === __dp122)(__i, value['f'][index])
+        Array.from(changes['f']).every((__originalItem11, __index11) =>
+          typeof __originalItem11 === 'undefined'
+            ? false
+            : ((__item11) =>
+                typeof __item11 === 'undefined'
+                  ? false
+                  : ((__dp121, __dp122) =>
+                      __dp121 !== null && __dp122 !== null
+                        ? __dp121.length === __dp122.length &&
+                          Array.from(__dp121).every(
+                            (__originalItem13, __index13) =>
+                              typeof __originalItem13 === 'undefined'
+                                ? false
+                                : ((__item13) =>
+                                    typeof __item13 === 'undefined'
+                                      ? false
+                                      : __originalItem13 === __item13)(
+                                    Array.from(__dp122)[__index13]
+                                  )
+                          )
+                        : __dp121 === __dp122)(__originalItem11, __item11))(
+                Array.from(value['f'])[__index11]
+              )
         )
       )
     ) {
@@ -3305,10 +2630,16 @@ export function updateShouldSupportSeveralSequentialVectorParams(
             __b153
           ) =>
             __a153.length === __b153.length &&
-            __a153.every((__i, index) => __i === __b153[index]))(
-            changes['g'][3],
-            value['g'][3]
-          ) &&
+            Array.from(__a153).every((__originalItem25, __index25) =>
+              typeof __originalItem25 === 'undefined'
+                ? false
+                : ((__item25) =>
+                    typeof __item25 === 'undefined'
+                      ? false
+                      : __originalItem25 === __item25)(
+                    Array.from(__b153)[__index25]
+                  )
+            ))(changes['g'][3], value['g'][3]) &&
           /* compare tuple item 4 of type string | null */ ((__a154, __b154) =>
             ((__dp311, __dp312) =>
               __dp311 !== null && __dp312 !== null
@@ -3327,6 +2658,13 @@ export function updateShouldSupportSeveralSequentialVectorParams(
     }
   }
   return value;
+}
+export interface simpleTupleTest {
+  _name: 'schema.simpleTupleTest';
+  a: [number, number, number, ReadonlyArray<number>, string | null];
+  b: ReadonlyArray<
+    [number, number, number, ReadonlyArray<number>, string | null]
+  >;
 }
 export function isSimpleTupleTest(value: unknown): value is simpleTupleTest {
   if (
@@ -3363,18 +2701,18 @@ export function isSimpleTupleTest(value: unknown): value is simpleTupleTest {
               JSBI.greaterThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('0')) &&
               JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('4294967295'))
           ))(__v0[3]) &&
-        ((a) => a !== null && ((x) => typeof x === 'string')(a))(__v0[4]))(
-        value['a']
-      )
+        ((a) => (a === null ? true : ((x) => typeof x === 'string')(a)))(
+          __v0[4]
+        ))(value['a'])
     )
   )
     return false;
   if (
     !(
       'b' in value &&
-      ((__v1) =>
-        (Array.isArray(__v1) || __v1 instanceof Set) &&
-        Array.from(__v1).every(
+      ((__v7) =>
+        (Array.isArray(__v7) || __v7 instanceof Set) &&
+        Array.from(__v7).every(
           (p) =>
             Array.isArray(p) &&
             p.length === 5 &&
@@ -3402,184 +2740,15 @@ export function isSimpleTupleTest(value: unknown): value is simpleTupleTest {
                     JSBI.BigInt('4294967295')
                   )
               ))(p[3]) &&
-            ((a) => a !== null && ((x) => typeof x === 'string')(a))(p[4])
+            ((a) => (a === null ? true : ((x) => typeof x === 'string')(a)))(
+              p[4]
+            )
         ))(value['b'])
     )
   )
     return false;
   return true;
 }
-export const simpleTupleTestMetadata = {
-  name: 'simpleTupleTest',
-  id: 546242333,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'template',
-        name: 'tuple',
-        args: [
-          {
-            type: 'generic',
-            value: 'int',
-          },
-          {
-            type: 'generic',
-            value: 'float',
-          },
-          {
-            type: 'generic',
-            value: 'double',
-          },
-          {
-            type: 'template',
-            name: 'vector',
-            value: {
-              type: 'generic',
-              value: 'uint32',
-            },
-          },
-          {
-            type: 'template',
-            name: 'optional',
-            value: {
-              type: 'generic',
-              value: 'string',
-            },
-          },
-        ],
-      },
-    },
-    {
-      name: 'b',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          type: 'template',
-          name: 'tuple',
-          args: [
-            {
-              type: 'generic',
-              value: 'int',
-            },
-            {
-              type: 'generic',
-              value: 'float',
-            },
-            {
-              type: 'generic',
-              value: 'double',
-            },
-            {
-              type: 'template',
-              name: 'vector',
-              value: {
-                type: 'generic',
-                value: 'uint32',
-              },
-            },
-            {
-              type: 'template',
-              name: 'optional',
-              value: {
-                type: 'generic',
-                value: 'string',
-              },
-            },
-          ],
-        },
-      },
-    },
-  ],
-};
-export const simpleTupleTestMetadataV2 = {
-  kind: 'type',
-  id: 546242333,
-  globalName: 'schema.simpleTupleTest',
-  name: 'simpleTupleTest',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'template',
-        name: 'tuple',
-        args: [
-          {
-            type: 'generic',
-            value: 'int',
-          },
-          {
-            type: 'generic',
-            value: 'float',
-          },
-          {
-            type: 'generic',
-            value: 'double',
-          },
-          {
-            type: 'template',
-            template: 'vector',
-            value: {
-              type: 'generic',
-              value: 'uint32',
-            },
-          },
-          {
-            type: 'template',
-            template: 'optional',
-            value: {
-              type: 'generic',
-              value: 'string',
-            },
-          },
-        ],
-      },
-    },
-    {
-      name: 'b',
-      type: {
-        type: 'template',
-        template: 'vector',
-        value: {
-          type: 'template',
-          name: 'tuple',
-          args: [
-            {
-              type: 'generic',
-              value: 'int',
-            },
-            {
-              type: 'generic',
-              value: 'float',
-            },
-            {
-              type: 'generic',
-              value: 'double',
-            },
-            {
-              type: 'template',
-              template: 'vector',
-              value: {
-                type: 'generic',
-                value: 'uint32',
-              },
-            },
-            {
-              type: 'template',
-              template: 'optional',
-              value: {
-                type: 'generic',
-                value: 'string',
-              },
-            },
-          ],
-        },
-      },
-    },
-  ],
-};
 export interface simpleTupleTestInputParams {
   a: [number, number, number, ReadonlyArray<number>, string | null];
   b: ReadonlyArray<
@@ -3613,9 +2782,8 @@ export function encodeSimpleTupleTest(
   const __t7 = __pv0[3];
   const __l11 = __t7.length;
   __s.writeUint32(__l11);
-  for (let __i11 = 0; __i11 < __l11; __i11++) {
-    const __v__i11 = __t7[__i11];
-    __s.writeUint32(__v__i11);
+  for (const __item11 of __t7) {
+    __s.writeUint32(__item11);
   }
   const __t12 = __pv0[4];
   if (__t12 === null) {
@@ -3630,22 +2798,20 @@ export function encodeSimpleTupleTest(
   const __pv18 = value['b'];
   const __l19 = __pv18.length;
   __s.writeUint32(__l19);
-  for (let __i19 = 0; __i19 < __l19; __i19++) {
-    const __v__i19 = __pv18[__i19];
-    const __t20 = __v__i19[0];
+  for (const __item19 of __pv18) {
+    const __t20 = __item19[0];
     __s.writeInt32(__t20);
-    const __t21 = __v__i19[1];
+    const __t21 = __item19[1];
     __s.writeFloat(__t21);
-    const __t23 = __v__i19[2];
+    const __t23 = __item19[2];
     __s.writeDouble(__t23);
-    const __t26 = __v__i19[3];
+    const __t26 = __item19[3];
     const __l30 = __t26.length;
     __s.writeUint32(__l30);
-    for (let __i30 = 0; __i30 < __l30; __i30++) {
-      const __v__i30 = __t26[__i30];
-      __s.writeUint32(__v__i30);
+    for (const __item30 of __t26) {
+      __s.writeUint32(__item30);
     }
-    const __t31 = __v__i19[4];
+    const __t31 = __item19[4];
     if (__t31 === null) {
       __s.writeUint8(0);
     } else {
@@ -3723,13 +2889,6 @@ export function decodeSimpleTupleTest(
     b,
   };
 }
-export interface simpleTupleTest {
-  _name: 'schema.simpleTupleTest';
-  a: [number, number, number, ReadonlyArray<number>, string | null];
-  b: ReadonlyArray<
-    [number, number, number, ReadonlyArray<number>, string | null]
-  >;
-}
 export function defaultSimpleTupleTest(
   params: Partial<simpleTupleTestInputParams> = {}
 ): simpleTupleTest {
@@ -3755,10 +2914,14 @@ export function compareSimpleTupleTest(
       __a02 === __b02)(__a['a'][2], __b['a'][2]) &&
     /* compare tuple item 3 of type ReadonlyArray<number> */ ((__a03, __b03) =>
       __a03.length === __b03.length &&
-      __a03.every((__i, index) => __i === __b03[index]))(
-      __a['a'][3],
-      __b['a'][3]
-    ) &&
+      Array.from(__a03).every((__originalItem10, __index10) =>
+        typeof __originalItem10 === 'undefined'
+          ? false
+          : ((__item10) =>
+              typeof __item10 === 'undefined'
+                ? false
+                : __originalItem10 === __item10)(Array.from(__b03)[__index10])
+      ))(__a['a'][3], __b['a'][3]) &&
     /* compare tuple item 4 of type string | null */ ((__a04, __b04) =>
       ((__dp161, __dp162) =>
         __dp161 !== null && __dp162 !== null
@@ -3768,28 +2931,44 @@ export function compareSimpleTupleTest(
      * compare parameter b
      */
     __a['b'].length === __b['b'].length &&
-    __a['b'].every(
-      (__i, index) =>
-        /* compare tuple item 0 of type number */ ((__a20, __b20) =>
-          __a20 === __b20)(__i[0], __b['b'][index][0]) &&
-        /* compare tuple item 1 of type number */ ((__a21, __b21) =>
-          __a21 === __b21)(__i[1], __b['b'][index][1]) &&
-        /* compare tuple item 2 of type number */ ((__a22, __b22) =>
-          __a22 === __b22)(__i[2], __b['b'][index][2]) &&
-        /* compare tuple item 3 of type ReadonlyArray<number> */ ((
-          __a23,
-          __b23
-        ) =>
-          __a23.length === __b23.length &&
-          __a23.every((__i, index) => __i === __b23[index]))(
-          __i[3],
-          __b['b'][index][3]
-        ) &&
-        /* compare tuple item 4 of type string | null */ ((__a24, __b24) =>
-          ((__dp181, __dp182) =>
-            __dp181 !== null && __dp182 !== null
-              ? __dp181 === __dp182
-              : __dp181 === __dp182)(__a24, __b24))(__i[4], __b['b'][index][4])
+    Array.from(__a['b']).every((__originalItem1, __index1) =>
+      typeof __originalItem1 === 'undefined'
+        ? false
+        : ((__item1) =>
+            typeof __item1 === 'undefined'
+              ? false
+              : /* compare tuple item 0 of type number */ ((__a20, __b20) =>
+                  __a20 === __b20)(__originalItem1[0], __item1[0]) &&
+                /* compare tuple item 1 of type number */ ((__a21, __b21) =>
+                  __a21 === __b21)(__originalItem1[1], __item1[1]) &&
+                /* compare tuple item 2 of type number */ ((__a22, __b22) =>
+                  __a22 === __b22)(__originalItem1[2], __item1[2]) &&
+                /* compare tuple item 3 of type ReadonlyArray<number> */ ((
+                  __a23,
+                  __b23
+                ) =>
+                  __a23.length === __b23.length &&
+                  Array.from(__a23).every((__originalItem12, __index12) =>
+                    typeof __originalItem12 === 'undefined'
+                      ? false
+                      : ((__item12) =>
+                          typeof __item12 === 'undefined'
+                            ? false
+                            : __originalItem12 === __item12)(
+                          Array.from(__b23)[__index12]
+                        )
+                  ))(__originalItem1[3], __item1[3]) &&
+                /* compare tuple item 4 of type string | null */ ((
+                  __a24,
+                  __b24
+                ) =>
+                  ((__dp181, __dp182) =>
+                    __dp181 !== null && __dp182 !== null
+                      ? __dp181 === __dp182
+                      : __dp181 === __dp182)(__a24, __b24))(
+                  __originalItem1[4],
+                  __item1[4]
+                ))(Array.from(__b['b'])[__index1])
     )
   );
 }
@@ -3811,10 +2990,16 @@ export function updateSimpleTupleTest(
             __b13
           ) =>
             __a13.length === __b13.length &&
-            __a13.every((__i, index) => __i === __b13[index]))(
-            changes['a'][3],
-            value['a'][3]
-          ) &&
+            Array.from(__a13).every((__originalItem11, __index11) =>
+              typeof __originalItem11 === 'undefined'
+                ? false
+                : ((__item11) =>
+                    typeof __item11 === 'undefined'
+                      ? false
+                      : __originalItem11 === __item11)(
+                    Array.from(__b13)[__index11]
+                  )
+            ))(changes['a'][3], value['a'][3]) &&
           /* compare tuple item 4 of type string | null */ ((__a14, __b14) =>
             ((__dp171, __dp172) =>
               __dp171 !== null && __dp172 !== null
@@ -3836,34 +3021,50 @@ export function updateSimpleTupleTest(
     if (
       !(
         changes['b'].length === value['b'].length &&
-        changes['b'].every(
-          (__i, index) =>
-            /* compare tuple item 0 of type number */ ((__a200, __b200) =>
-              __a200 === __b200)(__i[0], value['b'][index][0]) &&
-            /* compare tuple item 1 of type number */ ((__a201, __b201) =>
-              __a201 === __b201)(__i[1], value['b'][index][1]) &&
-            /* compare tuple item 2 of type number */ ((__a202, __b202) =>
-              __a202 === __b202)(__i[2], value['b'][index][2]) &&
-            /* compare tuple item 3 of type ReadonlyArray<number> */ ((
-              __a203,
-              __b203
-            ) =>
-              __a203.length === __b203.length &&
-              __a203.every((__i, index) => __i === __b203[index]))(
-              __i[3],
-              value['b'][index][3]
-            ) &&
-            /* compare tuple item 4 of type string | null */ ((
-              __a204,
-              __b204
-            ) =>
-              ((__dp361, __dp362) =>
-                __dp361 !== null && __dp362 !== null
-                  ? __dp361 === __dp362
-                  : __dp361 === __dp362)(__a204, __b204))(
-              __i[4],
-              value['b'][index][4]
-            )
+        Array.from(changes['b']).every((__originalItem19, __index19) =>
+          typeof __originalItem19 === 'undefined'
+            ? false
+            : ((__item19) =>
+                typeof __item19 === 'undefined'
+                  ? false
+                  : /* compare tuple item 0 of type number */ ((
+                      __a200,
+                      __b200
+                    ) => __a200 === __b200)(__originalItem19[0], __item19[0]) &&
+                    /* compare tuple item 1 of type number */ ((
+                      __a201,
+                      __b201
+                    ) => __a201 === __b201)(__originalItem19[1], __item19[1]) &&
+                    /* compare tuple item 2 of type number */ ((
+                      __a202,
+                      __b202
+                    ) => __a202 === __b202)(__originalItem19[2], __item19[2]) &&
+                    /* compare tuple item 3 of type ReadonlyArray<number> */ ((
+                      __a203,
+                      __b203
+                    ) =>
+                      __a203.length === __b203.length &&
+                      Array.from(__a203).every((__originalItem30, __index30) =>
+                        typeof __originalItem30 === 'undefined'
+                          ? false
+                          : ((__item30) =>
+                              typeof __item30 === 'undefined'
+                                ? false
+                                : __originalItem30 === __item30)(
+                              Array.from(__b203)[__index30]
+                            )
+                      ))(__originalItem19[3], __item19[3]) &&
+                    /* compare tuple item 4 of type string | null */ ((
+                      __a204,
+                      __b204
+                    ) =>
+                      ((__dp361, __dp362) =>
+                        __dp361 !== null && __dp362 !== null
+                          ? __dp361 === __dp362
+                          : __dp361 === __dp362)(__a204, __b204))(
+                      __originalItem19[4],
+                      __item19[4]
+                    ))(Array.from(value['b'])[__index19])
         )
       )
     ) {
@@ -3874,6 +3075,9 @@ export function updateSimpleTupleTest(
     }
   }
   return value;
+}
+export interface emptyNode {
+  _name: 'schema.emptyNode';
 }
 export function isEmptyNode(value: unknown): value is emptyNode {
   if (
@@ -3888,19 +3092,6 @@ export function isEmptyNode(value: unknown): value is emptyNode {
     return false;
   return true;
 }
-export const emptyNodeMetadata = {
-  name: 'emptyNode',
-  id: -1994197976,
-  kind: 'type',
-  params: [],
-};
-export const emptyNodeMetadataV2 = {
-  kind: 'type',
-  id: -1994197976,
-  globalName: 'schema.emptyNode',
-  name: 'emptyNode',
-  params: [],
-};
 export interface emptyNodeInputParams {}
 export function emptyNode(_: emptyNodeInputParams = {}): emptyNode {
   return {
@@ -3920,9 +3111,6 @@ export function decodeEmptyNode(__d: IDeserializer): emptyNode | null {
     _name: 'schema.emptyNode',
   };
 }
-export interface emptyNode {
-  _name: 'schema.emptyNode';
-}
 export function defaultEmptyNode(
   params: Partial<emptyNodeInputParams> = {}
 ): emptyNode {
@@ -3938,6 +3126,11 @@ export function updateEmptyNode(
   _: Partial<emptyNodeInputParams>
 ) {
   return value;
+}
+export interface user {
+  _name: 'schema.user';
+  id: number;
+  name: string;
 }
 export function isUser(value: unknown): value is user {
   if (
@@ -3970,49 +3163,6 @@ export function isUser(value: unknown): value is user {
     return false;
   return true;
 }
-export const userMetadata = {
-  name: 'user',
-  id: 136841399,
-  kind: 'type',
-  params: [
-    {
-      name: 'id',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-    {
-      name: 'name',
-      type: {
-        type: 'generic',
-        value: 'string',
-      },
-    },
-  ],
-};
-export const userMetadataV2 = {
-  kind: 'type',
-  id: 136841399,
-  globalName: 'schema.user',
-  name: 'user',
-  params: [
-    {
-      name: 'id',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-    {
-      name: 'name',
-      type: {
-        type: 'generic',
-        value: 'string',
-      },
-    },
-  ],
-};
 export interface userInputParams {
   id: number;
   name: string;
@@ -4059,11 +3209,6 @@ export function decodeUser(__d: IDeserializer): user | null {
     name,
   };
 }
-export interface user {
-  _name: 'schema.user';
-  id: number;
-  name: string;
-}
 export function defaultUser(params: Partial<userInputParams> = {}): user {
   return user({
     id: 0,
@@ -4102,6 +3247,10 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
   }
   return value;
 }
+export interface supportNullTerminatedString {
+  _name: 'schema.supportNullTerminatedString';
+  value: string;
+}
 export function isSupportNullTerminatedString(
   value: unknown
 ): value is supportNullTerminatedString {
@@ -4121,35 +3270,6 @@ export function isSupportNullTerminatedString(
     return false;
   return true;
 }
-export const supportNullTerminatedStringMetadata = {
-  name: 'supportNullTerminatedString',
-  id: -1360902719,
-  kind: 'type',
-  params: [
-    {
-      name: 'value',
-      type: {
-        type: 'generic',
-        value: 'null_terminated_string',
-      },
-    },
-  ],
-};
-export const supportNullTerminatedStringMetadataV2 = {
-  kind: 'type',
-  id: -1360902719,
-  globalName: 'schema.supportNullTerminatedString',
-  name: 'supportNullTerminatedString',
-  params: [
-    {
-      name: 'value',
-      type: {
-        type: 'generic',
-        value: 'null_terminated_string',
-      },
-    },
-  ],
-};
 export interface supportNullTerminatedStringInputParams {
   value: string;
 }
@@ -4190,10 +3310,6 @@ export function decodeSupportNullTerminatedString(
     value,
   };
 }
-export interface supportNullTerminatedString {
-  _name: 'schema.supportNullTerminatedString';
-  value: string;
-}
 export function defaultSupportNullTerminatedString(
   params: Partial<supportNullTerminatedStringInputParams> = {}
 ): supportNullTerminatedString {
@@ -4227,6 +3343,10 @@ export function updateSupportNullTerminatedString(
   }
   return value;
 }
+export interface nullTerminatedStringList {
+  _name: 'schema.nullTerminatedStringList';
+  value: ReadonlyArray<string>;
+}
 export function isNullTerminatedStringList(
   value: unknown
 ): value is nullTerminatedStringList {
@@ -4251,43 +3371,6 @@ export function isNullTerminatedStringList(
     return false;
   return true;
 }
-export const nullTerminatedStringListMetadata = {
-  name: 'nullTerminatedStringList',
-  id: -1953588325,
-  kind: 'type',
-  params: [
-    {
-      name: 'value',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          type: 'generic',
-          value: 'null_terminated_string',
-        },
-      },
-    },
-  ],
-};
-export const nullTerminatedStringListMetadataV2 = {
-  kind: 'type',
-  id: -1953588325,
-  globalName: 'schema.nullTerminatedStringList',
-  name: 'nullTerminatedStringList',
-  params: [
-    {
-      name: 'value',
-      type: {
-        type: 'template',
-        template: 'vector',
-        value: {
-          type: 'generic',
-          value: 'null_terminated_string',
-        },
-      },
-    },
-  ],
-};
 export interface nullTerminatedStringListInputParams {
   value: ReadonlyArray<string>;
 }
@@ -4310,9 +3393,8 @@ export function encodeNullTerminatedStringList(
   const __pv0 = value['value'];
   const __l1 = __pv0.length;
   __s.writeUint32(__l1);
-  for (let __i1 = 0; __i1 < __l1; __i1++) {
-    const __v__i1 = __pv0[__i1];
-    __s.writeNullTerminatedString(__v__i1);
+  for (const __item1 of __pv0) {
+    __s.writeNullTerminatedString(__item1);
   }
 }
 export function decodeNullTerminatedStringList(
@@ -4338,10 +3420,6 @@ export function decodeNullTerminatedStringList(
     value,
   };
 }
-export interface nullTerminatedStringList {
-  _name: 'schema.nullTerminatedStringList';
-  value: ReadonlyArray<string>;
-}
 export function defaultNullTerminatedStringList(
   params: Partial<nullTerminatedStringListInputParams> = {}
 ): nullTerminatedStringList {
@@ -4359,7 +3437,14 @@ export function compareNullTerminatedStringList(
      * compare parameter value
      */
     __a['value'].length === __b['value'].length &&
-    __a['value'].every((__i, index) => __i === __b['value'][index])
+    Array.from(__a['value']).every((__originalItem0, __index0) =>
+      typeof __originalItem0 === 'undefined'
+        ? false
+        : ((__item0) =>
+            typeof __item0 === 'undefined'
+              ? false
+              : __originalItem0 === __item0)(Array.from(__b['value'])[__index0])
+    )
   );
 }
 export function updateNullTerminatedStringList(
@@ -4370,7 +3455,16 @@ export function updateNullTerminatedStringList(
     if (
       !(
         changes['value'].length === value['value'].length &&
-        changes['value'].every((__i, index) => __i === value['value'][index])
+        Array.from(changes['value']).every((__originalItem1, __index1) =>
+          typeof __originalItem1 === 'undefined'
+            ? false
+            : ((__item1) =>
+                typeof __item1 === 'undefined'
+                  ? false
+                  : __originalItem1 === __item1)(
+                Array.from(value['value'])[__index1]
+              )
+        )
       )
     ) {
       value = nullTerminatedStringList({
@@ -4380,6 +3474,10 @@ export function updateNullTerminatedStringList(
     }
   }
   return value;
+}
+export interface normalStringList {
+  _name: 'schema.normalStringList';
+  value: ReadonlyArray<string>;
 }
 export function isNormalStringList(value: unknown): value is normalStringList {
   if (
@@ -4403,43 +3501,6 @@ export function isNormalStringList(value: unknown): value is normalStringList {
     return false;
   return true;
 }
-export const normalStringListMetadata = {
-  name: 'normalStringList',
-  id: -1964890795,
-  kind: 'type',
-  params: [
-    {
-      name: 'value',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
-      },
-    },
-  ],
-};
-export const normalStringListMetadataV2 = {
-  kind: 'type',
-  id: -1964890795,
-  globalName: 'schema.normalStringList',
-  name: 'normalStringList',
-  params: [
-    {
-      name: 'value',
-      type: {
-        type: 'template',
-        template: 'vector',
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
-      },
-    },
-  ],
-};
 export interface normalStringListInputParams {
   value: ReadonlyArray<string>;
 }
@@ -4462,9 +3523,8 @@ export function encodeNormalStringList(
   const __pv0 = value['value'];
   const __l1 = __pv0.length;
   __s.writeUint32(__l1);
-  for (let __i1 = 0; __i1 < __l1; __i1++) {
-    const __v__i1 = __pv0[__i1];
-    __s.writeString(__v__i1);
+  for (const __item1 of __pv0) {
+    __s.writeString(__item1);
   }
 }
 export function decodeNormalStringList(
@@ -4490,10 +3550,6 @@ export function decodeNormalStringList(
     value,
   };
 }
-export interface normalStringList {
-  _name: 'schema.normalStringList';
-  value: ReadonlyArray<string>;
-}
 export function defaultNormalStringList(
   params: Partial<normalStringListInputParams> = {}
 ): normalStringList {
@@ -4511,7 +3567,14 @@ export function compareNormalStringList(
      * compare parameter value
      */
     __a['value'].length === __b['value'].length &&
-    __a['value'].every((__i, index) => __i === __b['value'][index])
+    Array.from(__a['value']).every((__originalItem0, __index0) =>
+      typeof __originalItem0 === 'undefined'
+        ? false
+        : ((__item0) =>
+            typeof __item0 === 'undefined'
+              ? false
+              : __originalItem0 === __item0)(Array.from(__b['value'])[__index0])
+    )
   );
 }
 export function updateNormalStringList(
@@ -4522,7 +3585,16 @@ export function updateNormalStringList(
     if (
       !(
         changes['value'].length === value['value'].length &&
-        changes['value'].every((__i, index) => __i === value['value'][index])
+        Array.from(changes['value']).every((__originalItem1, __index1) =>
+          typeof __originalItem1 === 'undefined'
+            ? false
+            : ((__item1) =>
+                typeof __item1 === 'undefined'
+                  ? false
+                  : __originalItem1 === __item1)(
+                Array.from(value['value'])[__index1]
+              )
+        )
       )
     ) {
       value = normalStringList({
@@ -4532,6 +3604,10 @@ export function updateNormalStringList(
     }
   }
   return value;
+}
+export interface boolAndTuple {
+  _name: 'schema.boolAndTuple';
+  sorryIJustLoveTuples: [boolean, boolean, [boolean, boolean]];
 }
 export function isBoolAndTuple(value: unknown): value is boolAndTuple {
   if (
@@ -4564,83 +3640,6 @@ export function isBoolAndTuple(value: unknown): value is boolAndTuple {
     return false;
   return true;
 }
-export const boolAndTupleMetadata = {
-  name: 'boolAndTuple',
-  id: -789978949,
-  kind: 'type',
-  params: [
-    {
-      name: 'sorryIJustLoveTuples',
-      type: {
-        type: 'template',
-        name: 'tuple',
-        args: [
-          {
-            type: 'generic',
-            value: 'bool',
-          },
-          {
-            type: 'generic',
-            value: 'bool',
-          },
-          {
-            type: 'template',
-            name: 'tuple',
-            args: [
-              {
-                type: 'generic',
-                value: 'bool',
-              },
-              {
-                type: 'generic',
-                value: 'bool',
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ],
-};
-export const boolAndTupleMetadataV2 = {
-  kind: 'type',
-  id: -789978949,
-  globalName: 'schema.boolAndTuple',
-  name: 'boolAndTuple',
-  params: [
-    {
-      name: 'sorryIJustLoveTuples',
-      type: {
-        type: 'template',
-        name: 'tuple',
-        args: [
-          {
-            type: 'generic',
-            value: 'bool',
-          },
-          {
-            type: 'generic',
-            value: 'bool',
-          },
-          {
-            type: 'template',
-            name: 'tuple',
-            args: [
-              {
-                type: 'generic',
-                value: 'bool',
-              },
-              {
-                type: 'generic',
-                value: 'bool',
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ],
-};
 export interface boolAndTupleInputParams {
   sorryIJustLoveTuples: [boolean, boolean, [boolean, boolean]];
 }
@@ -4691,10 +3690,6 @@ export function decodeBoolAndTuple(__d: IDeserializer): boolAndTuple | null {
     _name: 'schema.boolAndTuple',
     sorryIJustLoveTuples,
   };
-}
-export interface boolAndTuple {
-  _name: 'schema.boolAndTuple';
-  sorryIJustLoveTuples: [boolean, boolean, [boolean, boolean]];
 }
 export function defaultBoolAndTuple(
   params: Partial<boolAndTupleInputParams> = {}
@@ -4771,28 +3766,3 @@ export function updateBoolAndTuple(
   }
   return value;
 }
-export const __metadataObjects__ = [
-  testMapMetadataV2,
-  testMap2MetadataV2,
-  testMap3MetadataV2,
-  testSetMetadataV2,
-  testSet2MetadataV2,
-  VoidMetadataV2,
-  msgMetadataV2,
-  ResultMetadataV2,
-  UsersMetadataV2,
-  GetUserByIdMetadataV2,
-  PostMetadataV2,
-  PostsMetadataV2,
-  GetPostByIdMetadataV2,
-  GetConversationsMetadataV2,
-  CoordinatesMetadataV2,
-  ShouldSupportSeveralSequentialVectorParamsMetadataV2,
-  simpleTupleTestMetadataV2,
-  emptyNodeMetadataV2,
-  userMetadataV2,
-  supportNullTerminatedStringMetadataV2,
-  nullTerminatedStringListMetadataV2,
-  normalStringListMetadataV2,
-  boolAndTupleMetadataV2,
-];

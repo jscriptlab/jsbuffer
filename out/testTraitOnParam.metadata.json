@@ -1,0 +1,100 @@
+{
+  "A0": {
+    "kind": "type",
+    "id": -1244603213,
+    "globalName": "testTraitOnParam.A0",
+    "name": "A0",
+    "params": [
+      {
+        "name": "value",
+        "type": {
+          "type": "externalType",
+          "name": "A",
+          "relativePath": "./testTraitOnParamTrait"
+        }
+      }
+    ]
+  },
+  "A1": {
+    "kind": "type",
+    "id": -2001668861,
+    "globalName": "testTraitOnParam.A1",
+    "name": "A1",
+    "params": [
+      {
+        "name": "value",
+        "type": {
+          "type": "externalType",
+          "name": "A",
+          "relativePath": "./testTraitOnParamTrait"
+        }
+      }
+    ]
+  },
+  "A2": {
+    "kind": "type",
+    "id": -820998189,
+    "globalName": "testTraitOnParam.A2",
+    "name": "A2",
+    "params": [
+      {
+        "name": "value",
+        "type": {
+          "type": "externalType",
+          "name": "A",
+          "relativePath": "./testTraitOnParamTrait"
+        }
+      }
+    ]
+  },
+  "__all": [
+    {
+      "kind": "type",
+      "id": -1244603213,
+      "globalName": "testTraitOnParam.A0",
+      "name": "A0",
+      "params": [
+        {
+          "name": "value",
+          "type": {
+            "type": "externalType",
+            "name": "A",
+            "relativePath": "./testTraitOnParamTrait"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "id": -2001668861,
+      "globalName": "testTraitOnParam.A1",
+      "name": "A1",
+      "params": [
+        {
+          "name": "value",
+          "type": {
+            "type": "externalType",
+            "name": "A",
+            "relativePath": "./testTraitOnParamTrait"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "id": -820998189,
+      "globalName": "testTraitOnParam.A2",
+      "name": "A2",
+      "params": [
+        {
+          "name": "value",
+          "type": {
+            "type": "externalType",
+            "name": "A",
+            "relativePath": "./testTraitOnParamTrait"
+          }
+        }
+      ]
+    }
+  ]
+}
