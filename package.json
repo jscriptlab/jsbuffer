@@ -21,7 +21,7 @@
   "version": "1.0.0",
   "main": "./src/index.js",
   "bin": {
-    "jsbuffer": "./cli/index.js"
+    "jsbuffer": "cli/index.js"
   },
   "files": [
     "cli/**/*.{d.ts,map,js}",
