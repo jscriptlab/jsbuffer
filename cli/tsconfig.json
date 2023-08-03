@@ -1,8 +1,7 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "types": ["node"],
-    "noUncheckedIndexedAccess": false
+    "types": ["node"]
   },
   "references": [{ "path": "../code-generator" }],
   "include": ["index.ts"]

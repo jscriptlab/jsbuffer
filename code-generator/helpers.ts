@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 
-export async function fileClosestFileOrFolder(
+export async function findClosestFileOrFolder(
   startingDir: string,
   expectedName: string
 ): Promise<string | null> {
@@ -9,7 +9,7 @@ export async function fileClosestFileOrFolder(
   try {
     folders = await fs.promises.readdir(startingDir);
   } catch (reason) {
-    return fileClosestFileOrFolder(path.dirname(startingDir), expectedName);
+    return findClosestFileOrFolder(path.dirname(startingDir), expectedName);
   }
   if (folders.includes(expectedName)) {
     return path.resolve(startingDir, expectedName);
@@ -17,5 +17,5 @@ export async function fileClosestFileOrFolder(
   if (path.dirname(startingDir) === startingDir) {
     return null;
   }
-  return fileClosestFileOrFolder(path.dirname(startingDir), expectedName);
+  return findClosestFileOrFolder(path.dirname(startingDir), expectedName);
 }

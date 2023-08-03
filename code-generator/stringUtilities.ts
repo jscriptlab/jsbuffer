@@ -12,3 +12,18 @@ export function enforceLocalImport(value: string) {
   }
   return value;
 }
+
+export function replaceExtension(
+  k: string,
+  replacement: string,
+  extension = '[a-zA-Z_-]'
+) {
+  return k.replace(
+    new RegExp(`([a-zA-Z0-9_-]+)${extension}$`),
+    `$1${replacement}`
+  );
+}
+
+export function getMetadataFileName(k: string) {
+  return replaceExtension(k, '.metadata.json', '.(ts|js)');
+}

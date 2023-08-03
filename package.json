@@ -18,7 +18,7 @@
   },
   "name": "jsbuffer",
   "license": "MIT",
-  "version": "0.0.75",
+  "version": "0.0.77",
   "main": "./src/index.js",
   "bin": {
     "jsbuffer": "./cli/index.js"
@@ -32,7 +32,7 @@
   ],
   "scripts": {
     "lint:eslint": "npx eslint --fix src code-generator codec",
-    "lint:prettier": "npx prettier --write \"out/**/*.ts\" \"src/**/*.ts\" \"code-generator/**/*.ts\" \"codec/**/*.ts\"",
+    "lint:prettier": "npx prettier --write \"out/**/*.{ts,json}\" \"src/**/*.ts\" \"code-generator/**/*.ts\" \"codec/**/*.ts\"",
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "cli": "npx ts-node --project cli/tsconfig.json cli",
     "schema": "npm run cli -- test/schema -o out --extends tsconfig.base.json --indentation-size 2",

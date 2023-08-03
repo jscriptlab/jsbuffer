@@ -163,7 +163,7 @@ export interface IMetadataParam {
 export type MetadataParamType =
   | {
       type: 'generic';
-      value: string;
+      value: GenericName;
     }
   | {
       type: 'template';
@@ -172,12 +172,12 @@ export type MetadataParamType =
     }
   | {
       type: 'template';
-      name: 'tuple';
+      template: 'tuple';
       args: MetadataParamType[];
     }
   | {
       type: 'template';
-      name: 'map';
+      template: 'map';
       key: MetadataParamType;
       value: MetadataParamType;
     }
@@ -189,4 +189,9 @@ export type MetadataParamType =
       type: 'externalType';
       name: string;
       relativePath: string;
+    }
+  | {
+      type: 'externalModuleType';
+      name: string;
+      importPath: string;
     };
