@@ -1,11 +1,12 @@
 import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
+import JSBI from 'jsbi';
 export type User = Readonly<user> | Readonly<userDeleted>;
-export const UserMetadata = {
-  name: 'User',
-  id: 738416594,
-  kind: 'trait',
-};
+export function isUserTrait(value: unknown): value is User {
+  if (isUser(value)) return true;
+  if (isUserDeleted(value)) return true;
+  return false;
+}
 export function encodeUserTrait(__s: ISerializer, value: User) {
   switch (value._name) {
     case 'user.user':
@@ -52,11 +53,10 @@ export function compareUserTrait(__a: User, __b: User) {
   }
 }
 export type Test = Readonly<test>;
-export const TestMetadata = {
-  name: 'Test',
-  id: 2045771671,
-  kind: 'trait',
-};
+export function isTestTrait(value: unknown): value is Test {
+  if (isTest(value)) return true;
+  return false;
+}
 export function encodeTestTrait(__s: ISerializer, value: Test) {
   switch (value._name) {
     case 'user.test':
@@ -86,31 +86,40 @@ export function defaultTestTrait() {
 export function compareTestTrait(__a: Test, __b: Test) {
   return compareTest(__a, __b);
 }
-export const userMetadata = {
-  name: 'user',
-  id: -2086976610,
-  kind: 'type',
-  params: [
-    {
-      name: 'firstName',
-      type: {
-        type: 'generic',
-        value: 'string',
-      },
-    },
-    {
-      name: 'aliases',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          type: 'generic',
-          value: 'string',
-        },
-      },
-    },
-  ],
-};
+export interface user {
+  _name: 'user.user';
+  firstName: string;
+  aliases: ReadonlyArray<string>;
+}
+export function isUser(value: unknown): value is user {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'user.user'
+    )
+  )
+    return false;
+  if (
+    !(
+      'firstName' in value &&
+      ((__v0) => typeof __v0 === 'string')(value['firstName'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'aliases' in value &&
+      ((__v1) =>
+        (Array.isArray(__v1) || __v1 instanceof Set) &&
+        Array.from(__v1).every((p) => typeof p === 'string'))(value['aliases'])
+    )
+  )
+    return false;
+  return true;
+}
 export interface userInputParams {
   firstName: string;
   aliases: ReadonlyArray<string>;
@@ -135,9 +144,8 @@ export function encodeUser(__s: ISerializer, value: user) {
   const __pv1 = value['aliases'];
   const __l2 = __pv1.length;
   __s.writeUint32(__l2);
-  for (let __i2 = 0; __i2 < __l2; __i2++) {
-    const __v__i2 = __pv1[__i2];
-    __s.writeString(__v__i2);
+  for (const __item2 of __pv1) {
+    __s.writeString(__item2);
   }
 }
 export function decodeUser(__d: IDeserializer): user | null {
@@ -167,11 +175,6 @@ export function decodeUser(__d: IDeserializer): user | null {
     aliases,
   };
 }
-export interface user {
-  _name: 'user.user';
-  firstName: string;
-  aliases: ReadonlyArray<string>;
-}
 export function defaultUser(params: Partial<userInputParams> = {}): user {
   return user({
     firstName: '',
@@ -189,7 +192,16 @@ export function compareUser(__a: user, __b: user): boolean {
      * compare parameter aliases
      */
     __a['aliases'].length === __b['aliases'].length &&
-    __a['aliases'].every((__i, index) => __i === __b['aliases'][index])
+    Array.from(__a['aliases']).every((__originalItem1, __index1) =>
+      typeof __originalItem1 === 'undefined'
+        ? false
+        : ((__item1) =>
+            typeof __item1 === 'undefined'
+              ? false
+              : __originalItem1 === __item1)(
+            Array.from(__b['aliases'])[__index1]
+          )
+    )
   );
 }
 export function updateUser(value: user, changes: Partial<userInputParams>) {
@@ -205,8 +217,15 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
     if (
       !(
         changes['aliases'].length === value['aliases'].length &&
-        changes['aliases'].every(
-          (__i, index) => __i === value['aliases'][index]
+        Array.from(changes['aliases']).every((__originalItem2, __index2) =>
+          typeof __originalItem2 === 'undefined'
+            ? false
+            : ((__item2) =>
+                typeof __item2 === 'undefined'
+                  ? false
+                  : __originalItem2 === __item2)(
+                Array.from(value['aliases'])[__index2]
+              )
         )
       )
     ) {
@@ -218,20 +237,39 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
   }
   return value;
 }
-export const userDeletedMetadata = {
-  name: 'userDeleted',
-  id: 1001160586,
-  kind: 'type',
-  params: [
-    {
-      name: 'deletedAt',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
+export interface userDeleted {
+  _name: 'user.userDeleted';
+  deletedAt: number;
+}
+export function isUserDeleted(value: unknown): value is userDeleted {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'user.userDeleted'
+    )
+  )
+    return false;
+  if (
+    !(
+      'deletedAt' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['deletedAt']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export interface userDeletedInputParams {
   deletedAt: number;
 }
@@ -264,10 +302,6 @@ export function decodeUserDeleted(__d: IDeserializer): userDeleted | null {
     _name: 'user.userDeleted',
     deletedAt,
   };
-}
-export interface userDeleted {
-  _name: 'user.userDeleted';
-  deletedAt: number;
 }
 export function defaultUserDeleted(
   params: Partial<userDeletedInputParams> = {}
@@ -302,41 +336,41 @@ export function updateUserDeleted(
   }
   return value;
 }
-export const testMetadata = {
-  name: 'test',
-  id: -834825061,
-  kind: 'type',
-  params: [
-    {
-      name: 'user',
-      type: {
-        id: -2086976610,
-        type: 'internalType',
-        kind: 'type',
-        name: 'user',
-      },
-    },
-    {
-      name: 'b',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          type: 'template',
-          name: 'vector',
-          value: {
-            type: 'template',
-            name: 'optional',
-            value: {
-              type: 'generic',
-              value: 'string',
-            },
-          },
-        },
-      },
-    },
-  ],
-};
+export interface test {
+  _name: 'user.test';
+  user: Readonly<user>;
+  b: ReadonlyArray<ReadonlyArray<string | null>>;
+}
+export function isTest(value: unknown): value is test {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'user.test'
+    )
+  )
+    return false;
+  if (!('user' in value && ((__v0) => isUser(__v0))(value['user'])))
+    return false;
+  if (
+    !(
+      'b' in value &&
+      ((__v1) =>
+        (Array.isArray(__v1) || __v1 instanceof Set) &&
+        Array.from(__v1).every(
+          (p) =>
+            (Array.isArray(p) || p instanceof Set) &&
+            Array.from(p).every((p) =>
+              p === null ? true : ((x) => typeof x === 'string')(p)
+            )
+        ))(value['b'])
+    )
+  )
+    return false;
+  return true;
+}
 export interface testInputParams {
   user: Readonly<user>;
   b: ReadonlyArray<ReadonlyArray<string | null>>;
@@ -361,17 +395,15 @@ export function encodeTest(__s: ISerializer, value: test) {
   const __pv1 = value['b'];
   const __l2 = __pv1.length;
   __s.writeUint32(__l2);
-  for (let __i2 = 0; __i2 < __l2; __i2++) {
-    const __v__i2 = __pv1[__i2];
-    const __l3 = __v__i2.length;
+  for (const __item2 of __pv1) {
+    const __l3 = __item2.length;
     __s.writeUint32(__l3);
-    for (let __i3 = 0; __i3 < __l3; __i3++) {
-      const __v__i3 = __v__i2[__i3];
-      if (__v__i3 === null) {
+    for (const __item3 of __item2) {
+      if (__item3 === null) {
         __s.writeUint8(0);
       } else {
         __s.writeUint8(1);
-        __s.writeString(__v__i3);
+        __s.writeString(__item3);
       }
     }
   }
@@ -414,11 +446,6 @@ export function decodeTest(__d: IDeserializer): test | null {
     b,
   };
 }
-export interface test {
-  _name: 'user.test';
-  user: Readonly<user>;
-  b: ReadonlyArray<ReadonlyArray<string | null>>;
-}
 export function defaultTest(params: Partial<testInputParams> = {}): test {
   return test({
     user: defaultUser(),
@@ -436,15 +463,26 @@ export function compareTest(__a: test, __b: test): boolean {
      * compare parameter b
      */
     __a['b'].length === __b['b'].length &&
-    __a['b'].every(
-      (__i, index) =>
-        __i.length === __b['b'][index].length &&
-        __i.every((__i, index) =>
-          ((__dp31, __dp32) =>
-            __dp31 !== null && __dp32 !== null
-              ? __dp31 === __dp32
-              : __dp31 === __dp32)(__i, __b['b'][index][index])
-        )
+    Array.from(__a['b']).every((__originalItem1, __index1) =>
+      typeof __originalItem1 === 'undefined'
+        ? false
+        : ((__item1) =>
+            typeof __item1 === 'undefined'
+              ? false
+              : __originalItem1.length === __item1.length &&
+                Array.from(__originalItem1).every((__originalItem2, __index2) =>
+                  typeof __originalItem2 === 'undefined'
+                    ? false
+                    : ((__item2) =>
+                        typeof __item2 === 'undefined'
+                          ? false
+                          : ((__dp31, __dp32) =>
+                              __dp31 !== null && __dp32 !== null
+                                ? __dp31 === __dp32
+                                : __dp31 === __dp32)(__originalItem2, __item2))(
+                        Array.from(__item1)[__index2]
+                      )
+                ))(Array.from(__b['b'])[__index1])
     )
   );
 }
@@ -461,15 +499,28 @@ export function updateTest(value: test, changes: Partial<testInputParams>) {
     if (
       !(
         changes['b'].length === value['b'].length &&
-        changes['b'].every(
-          (__i, index) =>
-            __i.length === value['b'][index].length &&
-            __i.every((__i, index) =>
-              ((__dp41, __dp42) =>
-                __dp41 !== null && __dp42 !== null
-                  ? __dp41 === __dp42
-                  : __dp41 === __dp42)(__i, value['b'][index][index])
-            )
+        Array.from(changes['b']).every((__originalItem2, __index2) =>
+          typeof __originalItem2 === 'undefined'
+            ? false
+            : ((__item2) =>
+                typeof __item2 === 'undefined'
+                  ? false
+                  : __originalItem2.length === __item2.length &&
+                    Array.from(__originalItem2).every(
+                      (__originalItem3, __index3) =>
+                        typeof __originalItem3 === 'undefined'
+                          ? false
+                          : ((__item3) =>
+                              typeof __item3 === 'undefined'
+                                ? false
+                                : ((__dp41, __dp42) =>
+                                    __dp41 !== null && __dp42 !== null
+                                      ? __dp41 === __dp42
+                                      : __dp41 === __dp42)(
+                                    __originalItem3,
+                                    __item3
+                                  ))(Array.from(__item2)[__index3])
+                    ))(Array.from(value['b'])[__index2])
         )
       )
     ) {

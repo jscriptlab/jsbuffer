@@ -3,6 +3,7 @@ import ASTGenerator, {
   EOF,
   INodeCallDefinition,
   INodeExportStatement,
+  INodeParamDefinition,
   INodeTraitDefinition,
   INodeTypeDefinition,
   NodeType,
@@ -11,7 +12,7 @@ import ASTGenerator, {
 import CodeStream from 'textstreamjs';
 import fs from 'fs';
 import path from 'path';
-import Tokenizer, { ITextDecoder, ITextEncoder } from '../src/Tokenizer';
+import Tokenizer from '../src/Tokenizer';
 import Exception from '../exception/Exception';
 import {
   getDecodeFunctionName,
@@ -23,212 +24,43 @@ import {
   getDefaultFunctionName,
   getCompareFunctionName,
   getUpdateFunctionName,
+  getValidateDefinitionFunctionName,
+  integerRangeFromBits,
 } from './fileGeneratorUtilities';
 import crc from 'crc';
 import GenericName from './GenericName';
 import JavaScriptObjectStringify from './JavaScriptObjectStringify';
-import { enforceLocalImport } from './stringUtilities';
+import { enforceLocalImport, getMetadataFileName } from './stringUtilities';
+import {
+  IConfiguration,
+  IExternalModule,
+  IFileGeneratorOptions,
+  IMetadataParam,
+  IOutputFile,
+  ITrait,
+  ITypeScriptConfiguration,
+  InputRequirement,
+  Metadata,
+  MetadataParamType,
+  Requirement,
+  ResolvedType,
+} from './types';
+import {
+  ASTNodePreprocessingFailure,
+  DuplicateExport,
+  ExceptionInternalError,
+  InvalidTemplateArgumentCount,
+  TypeExpressionNotExported,
+  TypeNotFound,
+  UnexpectedTraitOutputNodeCount,
+  UnhandledNode,
+  UnsupportedGenericExpression,
+  UnsupportedTemplate,
+  UnsupportedTypeExpression,
+} from './exceptions';
 
 export interface IFile {
   path: string;
-}
-
-export class ASTNodePreprocessingFailure extends Exception {
-  public constructor(public readonly node: ASTGeneratorOutputNode) {
-    super();
-  }
-}
-
-export class DuplicateScopeIdentifier extends Exception {
-  public constructor(
-    public readonly node: FileGenerator | ASTGeneratorOutputNode
-  ) {
-    super();
-  }
-}
-
-export class TypeScriptConfigurationParsingError extends Exception {
-  public constructor(
-    public readonly configuration: unknown | Record<string, unknown>
-  ) {
-    super();
-  }
-}
-
-export class UnexpectedTraitOutputNodeCount extends Exception {
-  public constructor(public readonly trait: INodeTraitDefinition) {
-    super();
-  }
-}
-
-export class UnsupportedTypeExpression extends Exception {
-  public constructor(public readonly node: NodeTypeExpression) {
-    super();
-  }
-}
-
-export class UnsupportedTrait extends Exception {
-  public constructor(public readonly name: string) {
-    super();
-  }
-}
-
-export class UnsupportedTemplate extends Exception {
-  public constructor(public readonly node: NodeTypeExpression) {
-    super();
-  }
-}
-
-export class InvalidTemplateArgumentCount extends Exception {
-  public constructor(public readonly node: NodeTypeExpression) {
-    super();
-  }
-}
-
-export class TypeNotFound extends Exception {}
-
-export class TypeExpressionNotExported extends Exception {
-  public constructor(public readonly node: ResolvedType) {
-    super();
-  }
-}
-
-export class UnsupportedGenericExpression extends Exception {
-  public constructor(public readonly node: ResolvedType) {
-    super();
-  }
-}
-
-export class DuplicateExport extends Exception {
-  public constructor(public readonly node: INodeExportStatement) {
-    super();
-  }
-}
-
-export class UnhandledNode extends Exception {
-  public constructor(public readonly node: ASTGeneratorOutputNode) {
-    super();
-  }
-}
-
-export interface IOutputFile {
-  path: string;
-  contents: string | Uint8Array;
-}
-
-export interface IOutputFileImport {
-  path: string;
-  identifiers: Set<IdentifierImport>;
-}
-
-export type IdentifierImport =
-  | string
-  | {
-      alias: string;
-      identifier: string;
-    };
-
-export interface ITypeScriptConfiguration {
-  include: string[];
-  compilerOptions: Record<string, unknown>;
-  extends: string;
-}
-
-export interface IFileGeneratorOptions {
-  indentationSize: number;
-  textDecoder: ITextDecoder;
-  typeScriptConfiguration?: Partial<ITypeScriptConfiguration> | null;
-  textEncoder: ITextEncoder;
-  root: FileGenerator | null;
-  uniqueNamePropertyName?: string | null;
-  externalModule?: boolean | null;
-  compilerOptions: ICompilerOptions;
-}
-
-export interface ICompilerOptions {
-  rootDir: string;
-  outDir: string;
-}
-
-export type ResolvedType =
-  | {
-      fileGenerator: FileGenerator;
-      identifier: string;
-    }
-  | INodeTypeDefinition
-  | INodeCallDefinition
-  | INodeTraitDefinition
-  | {
-      generic: GenericName;
-    }
-  | {
-      template: 'vector' | 'set';
-      expression: NodeTypeExpression;
-      type: ResolvedType;
-    }
-  | {
-      template: 'optional';
-      expression: NodeTypeExpression;
-      type: ResolvedType;
-    }
-  | {
-      template: 'tuple';
-      expressions: ReadonlyArray<NodeTypeExpression>;
-      types: ResolvedType[];
-    }
-  | {
-      template: 'map';
-      key: {
-        expression: NodeTypeExpression;
-        resolved: ResolvedType;
-      };
-      value: {
-        expression: NodeTypeExpression;
-        resolved: ResolvedType;
-      };
-    };
-
-export type InputRequirement =
-  | {
-      fileGenerator: FileGenerator;
-      identifier: string;
-    }
-  | {
-      identifier: string;
-      path: string;
-      target: 'outDir';
-    };
-
-export type Requirement =
-  | {
-      target: 'outDir';
-      path: string;
-      alias?: string;
-      identifier: string;
-    }
-  | {
-      path: string;
-      alias?: string;
-      identifier: string;
-      fileGenerator: FileGenerator;
-    };
-
-export interface ITrait {
-  name: string;
-  nodes: ResolvedType[];
-}
-
-export class ExceptionInternalError extends Exception {}
-
-export interface IConfiguration {
-  mainFile: string;
-  outDir: string;
-}
-
-export interface IExternalModule {
-  configFile: string;
-  nodeModulesFolderPath: string;
-  configuration: IConfiguration;
 }
 
 export default class FileGenerator extends CodeStream {
@@ -248,6 +80,7 @@ export default class FileGenerator extends CodeStream {
   readonly #typeScriptConfiguration;
   readonly #imports = new Set<Requirement>();
   readonly #indentationSize;
+  readonly #metadataObjects = new Set<Metadata>();
   readonly #originalImports = new Map<
     FileGenerator,
     {
@@ -279,6 +112,11 @@ export default class FileGenerator extends CodeStream {
     super(undefined, {
       indentationSize,
     });
+    if (!path.isAbsolute(compilerOptions.outDir)) {
+      throw new Exception(
+        'The `outDir` compiler options must be an absolute path'
+      );
+    }
     this.#compilerOptions = compilerOptions;
     this.#externalModule = externalModule;
     this.#file = file;
@@ -290,17 +128,93 @@ export default class FileGenerator extends CodeStream {
     this.#textDecoder = textDecoder;
   }
   public async generate() {
+    /**
+     * preprocess all file generators, dependencies etc.
+     */
     await this.#preprocess();
+    /**
+     * import trait dependencies after preprocessing
+     */
+    await this.#iterateFileGenerators((f) => f.#importTraitDependencies());
+    /**
+     * update metadata objects
+     */
+    await this.#iterateFileGenerators((f) => f.#updateMetadataObjects());
+    /**
+     * actually generate code
+     */
     const files = await this.#generateFiles();
+    let exists: boolean;
     for (const f of files) {
       const resolvedFilePath = path.resolve(
         this.#compilerOptions.outDir,
         f.path
       );
-      await fs.promises.mkdir(path.dirname(resolvedFilePath), {
-        recursive: true,
-      });
+      const resolvedFilePathDirName = path.dirname(resolvedFilePath);
+      exists = false;
+      try {
+        await fs.promises.access(resolvedFilePathDirName, fs.constants.W_OK);
+        exists = true;
+      } catch (reason) {
+        await fs.promises.mkdir(resolvedFilePathDirName, {
+          recursive: true,
+        });
+      }
+      if (
+        exists &&
+        !(await fs.promises.stat(resolvedFilePathDirName)).isDirectory()
+      ) {
+        throw new Exception('The specified `outDir` is not a directory');
+      }
+      exists = false;
+      try {
+        await fs.promises.access(resolvedFilePath, fs.constants.W_OK);
+        exists = true;
+      } catch (reason) {
+        /* empty */
+      }
+      if (exists && !(await fs.promises.stat(resolvedFilePath)).isFile()) {
+        throw new Exception(
+          `FileGenerator outputted file "${resolvedFilePath}", but it is not a file, so we cannot move on`
+        );
+      }
       await fs.promises.writeFile(resolvedFilePath, f.contents);
+    }
+  }
+  async #updateMetadataObjects() {
+    this.#iterate((node) => {
+      switch (node.type) {
+        case NodeType.CallDefinition:
+        case NodeType.TraitDefinition:
+        case NodeType.TypeDefinition:
+          this.#metadataObjects.add(
+            this.#getMetadataFromCallOrTypeDefinition(node)
+          );
+          break;
+      }
+    });
+  }
+  async #importTraitDependencies() {
+    this.#iterate((node) => {
+      switch (node.type) {
+        case NodeType.TraitDefinition: {
+          const trait = this.#traits.get(node.name.value);
+          if (!trait) {
+            break;
+          }
+          for (const node of trait.nodes) {
+            if ('fileGenerator' in node) {
+              this.#import(node);
+            }
+          }
+          break;
+        }
+      }
+    });
+  }
+  async #iterateFileGenerators(fn: (f: FileGenerator) => Promise<void> | void) {
+    for (const f of [...this.#fileGenerators.values(), this]) {
+      await Promise.resolve(fn(f));
     }
   }
   async #processExternalSchemaImports(node: ASTGeneratorOutputNode) {
@@ -389,10 +303,30 @@ export default class FileGenerator extends CodeStream {
      */
     this.#fillTraits();
   }
+  #iterate(fn: (node: ASTGeneratorOutputNode) => void) {
+    for (const node of this.#nodes) {
+      fn(node);
+      switch (node.type) {
+        case NodeType.ExportStatement:
+          fn(node.value);
+          break;
+        case NodeType.TraitDefinition:
+        case NodeType.TypeDefinition:
+        case NodeType.CallDefinition:
+        case NodeType.ImportStatement:
+          break;
+        default:
+          // @ts-expect-error all nodes should be handled
+          throw new Exception(`Unhandled node type: ${node.type}`);
+      }
+    }
+  }
   #updateImportsBasedOnUsage(node: ASTGeneratorOutputNode) {
     switch (node.type) {
       case NodeType.ExportStatement:
         this.#updateImportsBasedOnUsage(node.value);
+        break;
+      case NodeType.TraitDefinition:
         break;
       case NodeType.CallDefinition:
       case NodeType.TypeDefinition: {
@@ -532,6 +466,9 @@ export default class FileGenerator extends CodeStream {
   #fillTraits() {
     for (const n of this.#definitions.values()) {
       switch (n.type) {
+        // TODO: this is gonna be used when dealing with traits extending other traits
+        case NodeType.TraitDefinition:
+          break;
         case NodeType.CallDefinition:
         case NodeType.TypeDefinition: {
           for (const t of n.traits) {
@@ -566,18 +503,31 @@ export default class FileGenerator extends CodeStream {
       let contents = f.value();
       f.#generateRequirementsCode();
       contents = `${f.value()}${contents}`;
+      const relativePath = `${f.#removeRootDir(f.#file.path)}.ts`;
       files.push({
-        path: `${f.#removeRootDir(f.#file.path)}.ts`,
+        path: relativePath,
         contents,
       });
+      files.push({
+        path: getMetadataFileName(relativePath),
+        contents: JSON.stringify({
+          ...Array.from(f.#metadataObjects).reduce<Record<string, unknown>>(
+            (out, a) => {
+              out[a.name] = a;
+              return out;
+            },
+            {}
+          ),
+          __all: Array.from(f.#metadataObjects),
+        }),
+      });
     }
+
     files.push(this.#generateTypesFile());
 
     if (this.#typeScriptConfiguration) {
       let config: Partial<ITypeScriptConfiguration> = {
-        compilerOptions: {
-          noUncheckedIndexedAccess: false,
-        },
+        compilerOptions: {},
         include: files.map((f) => f.path).filter((t) => t.endsWith('.ts')),
       };
       const compilerOptions = this.#typeScriptConfiguration.compilerOptions;
@@ -611,7 +561,6 @@ export default class FileGenerator extends CodeStream {
   #import(req: InputRequirement): string {
     const id = req.identifier;
     let fullPath: string;
-    let fileGenerator: FileGenerator | null;
     if ('fileGenerator' in req) {
       /**
        * if we're trying to import something from the current @type {FileGenerator}
@@ -620,10 +569,8 @@ export default class FileGenerator extends CodeStream {
       if (this === req.fileGenerator) {
         return id;
       }
-      fileGenerator = req.fileGenerator;
       fullPath = req.fileGenerator.#file.path;
     } else {
-      fileGenerator = null;
       fullPath = req.path;
     }
     const existingImport = Array.from(this.#imports).find(
@@ -633,18 +580,30 @@ export default class FileGenerator extends CodeStream {
       return id;
     }
     let resolvedRequirement: Requirement;
-    if (fileGenerator) {
+    if ('fileGenerator' in req) {
       resolvedRequirement = {
         path: fullPath,
         identifier: id,
-        fileGenerator,
+        fileGenerator: req.fileGenerator,
       };
     } else {
-      resolvedRequirement = {
-        target: 'outDir',
+      const defaultOptions = {
         path: fullPath,
         identifier: id,
       };
+      if (req.target === 'nodeModule') {
+        resolvedRequirement = {
+          target: 'nodeModule',
+          wildcard: req.wildcard,
+          ...defaultOptions,
+          isDefaultImport: req.isDefaultImport,
+        };
+      } else {
+        resolvedRequirement = {
+          target: 'outDir',
+          ...defaultOptions,
+        };
+      }
     }
     this.#imports.add(resolvedRequirement);
     this.#identifiers.set(id, null);
@@ -700,28 +659,39 @@ export default class FileGenerator extends CodeStream {
     for (const i of this.#imports) {
       let finalPath: string;
       if ('target' in i) {
-        finalPath = this.#sourceImportToOutDirImport(
-          this,
-          path.resolve(this.#compilerOptions.rootDir, i.path)
-        );
+        if (i.target === 'nodeModule') {
+          finalPath = i.path;
+        } else {
+          finalPath = this.#sourceImportToOutDirImport(
+            this,
+            path.resolve(this.#compilerOptions.rootDir, i.path)
+          );
+        }
       } else {
         finalPath = i.fileGenerator.#sourceImportToOutDirImport(this, i.path);
       }
-      this.write(`import { ${i.identifier}`);
-      if (i.alias) {
-        this.append(` as ${i.alias}`);
+      const isNodeModule = 'target' in i && i.target === 'nodeModule';
+      const maybeDefaultImport = isNodeModule
+        ? i.isDefaultImport
+          ? i.identifier
+          : null
+        : null;
+      this.write('import ');
+      if (isNodeModule && maybeDefaultImport) {
+        if (i.wildcard) {
+          this.append('* as ');
+        }
+        this.append(maybeDefaultImport);
+      } else {
+        this.append(`{ ${i.identifier}`);
+        if (i.alias) {
+          this.append(` as ${i.alias}`);
+        }
+        this.append(' }');
       }
-      this.append(' } from "');
-      this.append(finalPath);
-      this.append('";\n');
+      this.append(` from "${finalPath}";\n`);
     }
   }
-  // #outFileAbsolutePath() {
-  //   return path.resolve(
-  //     this.#compilerOptionsOrFail().outDir,
-  //     this.#removeRootDirOrFail(this.#file.path)
-  //   );
-  // }
   #generateFinalCode() {
     /**
      * generate code for all nodes
@@ -735,7 +705,9 @@ export default class FileGenerator extends CodeStream {
   #generateTypeScriptConfigurationFile(
     additionalTypeScriptConfiguration: Record<string, unknown>
   ): IOutputFile {
-    const stringify = new JavaScriptObjectStringify();
+    const stringify = new JavaScriptObjectStringify(undefined, {
+      indentationSize: this.#indentationSize,
+    });
     const config = {
       ...additionalTypeScriptConfiguration,
       ...(this.#typeScriptConfiguration ? this.#typeScriptConfiguration : {}),
@@ -825,8 +797,8 @@ export default class FileGenerator extends CodeStream {
   async #setExportsAndValidateImports(node: ASTGeneratorOutputNode) {
     switch (node.type) {
       case NodeType.CallDefinition:
-      case NodeType.TypeDefinition:
       case NodeType.TraitDefinition:
+      case NodeType.TypeDefinition:
         break;
       case NodeType.ExportStatement:
         this.#export(node);
@@ -957,24 +929,31 @@ export default class FileGenerator extends CodeStream {
         case 'map': {
           this.append('((l1,l2) => (');
           (() => {
+            const secondValueVarName = `__v2${depth}`;
             this.append('l1.every(');
             (() => {
               this.append('([k1,v1],i) => (');
-              (() => {
-                depth = this.#generateComparisonExpression(
-                  resolved.key.expression,
-                  'k1',
-                  'l2[i][0]',
-                  depth + 1
+              this.indentBlock(() => {
+                this.append(
+                  `(${secondValueVarName} => typeof ${secondValueVarName} === 'undefined' ? false : `
                 );
-                this.append(' && ');
-                depth = this.#generateComparisonExpression(
-                  resolved.value.expression,
-                  'v1',
-                  'l2[i][1]',
-                  depth + 1
-                );
-              })();
+                this.indentBlock(() => {
+                  depth = this.#generateComparisonExpression(
+                    resolved.key.expression,
+                    'k1',
+                    `${secondValueVarName}[0]`,
+                    depth + 1
+                  );
+                  this.append(' && ');
+                  depth = this.#generateComparisonExpression(
+                    resolved.value.expression,
+                    'v1',
+                    `${secondValueVarName}[1]`,
+                    depth + 1
+                  );
+                });
+                this.append(')(l2[i])');
+              });
               this.append(')');
             })();
             this.append(')');
@@ -982,48 +961,63 @@ export default class FileGenerator extends CodeStream {
           this.append(`))(Array.from(${v1}),Array.from(${v2}))`);
           break;
         }
-        case 'vector':
+        case 'set':
+        case 'vector': {
+          const itemVarName = `__originalItem${depth}`;
+          const indexVarName = `__index${depth}`;
+          const lengthPropName =
+            resolved.template === 'set' ? 'size' : 'length';
           this.append(
             [
-              `${v1}.length === ${v2}.length`,
-              `${v1}.every((__i,index) => (`,
+              `${v1}.${lengthPropName} === ${v2}.${lengthPropName}`,
+              `Array.from(${v1}).every((${itemVarName},${indexVarName}) => (`,
             ].join(' && ')
           );
-          depth = this.#generateComparisonExpression(
-            resolved.expression,
-            '__i',
-            `${v2}[index]`,
-            depth + 1
-          );
+          this.indentBlock(() => {
+            const validateUndefinedFnVarName = `__item${depth}`;
+            this.append(
+              `typeof ${itemVarName} === 'undefined' ? false : (${validateUndefinedFnVarName} => typeof ${validateUndefinedFnVarName} === 'undefined' ? false : (`
+            );
+            this.indentBlock(() => {
+              depth = this.#generateComparisonExpression(
+                resolved.expression,
+                itemVarName,
+                validateUndefinedFnVarName,
+                depth + 1
+              );
+            });
+            this.append(`))(Array.from(${v2})[${indexVarName}])`);
+          });
           this.append('))');
           break;
-        case 'set': {
-          const aVarName = `__a${depth}`;
-          const bVarName = `__b${depth}`;
-          const itemVarName = `__it${depth}`;
-          const itemIndexVarName = `__i${depth}`;
-          this.append('(');
-          (() => {
-            this.append(`(${aVarName},${bVarName}) => (`);
-            (() => {
-              this.append(
-                `${aVarName}.every((${itemVarName},${itemIndexVarName}) => (`
-              );
-              (() => {
-                depth = this.#generateComparisonExpression(
-                  resolved.expression,
-                  itemVarName,
-                  `${bVarName}[${itemIndexVarName}]`,
-                  depth + 1
-                );
-              })();
-              this.append('))');
-            })();
-            this.append(')');
-          })();
-          this.append(`)(Array.from(${v1}),Array.from(${v2}))`);
-          break;
         }
+        // case 'set': {
+        //   const aVarName = `__a${depth}`;
+        //   const bVarName = `__b${depth}`;
+        //   const itemVarName = `__it${depth}`;
+        //   const itemIndexVarName = `__i${depth}`;
+        //   this.append('(');
+        //   (() => {
+        //     this.append(`(${aVarName},${bVarName}) => (`);
+        //     (() => {
+        //       this.append(
+        //         `${aVarName}.every((${itemVarName},${itemIndexVarName}) => (`
+        //       );
+        //       (() => {
+        //         depth = this.#generateComparisonExpression(
+        //           resolved.expression,
+        //           itemVarName,
+        //           `${bVarName}[${itemIndexVarName}]`,
+        //           depth + 1
+        //         );
+        //       })();
+        //       this.append('))');
+        //     })();
+        //     this.append(')');
+        //   })();
+        //   this.append(`)(Array.from(${v1}),Array.from(${v2}))`);
+        //   break;
+        // }
         case 'tuple': {
           const exps = resolved.expressions.map((exp, index) => ({
             exp,
@@ -1197,57 +1191,105 @@ export default class FileGenerator extends CodeStream {
       '}\n'
     );
   }
-  #generateExportTypeMetadataInformation(
+  #getMetadataFromResolvedType(resolvedType: ResolvedType): MetadataParamType {
+    if ('generic' in resolvedType) {
+      return {
+        type: 'generic',
+        value: resolvedType.generic,
+      };
+    } else if ('template' in resolvedType) {
+      switch (resolvedType.template) {
+        case 'set':
+        case 'vector':
+        case 'optional':
+          return {
+            type: 'template',
+            template: resolvedType.template,
+            value: this.#getMetadataFromResolvedType(resolvedType.type),
+          };
+        case 'map':
+          return {
+            type: 'template',
+            template: 'map',
+            key: this.#getMetadataFromResolvedType(resolvedType.key.resolved),
+            value: this.#getMetadataFromResolvedType(
+              resolvedType.value.resolved
+            ),
+          };
+        case 'tuple':
+          return {
+            type: 'template',
+            template: 'tuple',
+            args: resolvedType.types.map((t) =>
+              this.#getMetadataFromResolvedType(t)
+            ),
+          };
+      }
+    } else if ('fileGenerator' in resolvedType) {
+      const importPath = resolvedType.fileGenerator.#sourceImportToOutDirImport(
+        this,
+        resolvedType.fileGenerator.#file.path
+      );
+      if (resolvedType.fileGenerator.#externalModule) {
+        return {
+          type: 'externalModuleType',
+          importPath,
+          name: resolvedType.identifier,
+        };
+      }
+      return {
+        type: 'externalType',
+        name: resolvedType.identifier,
+        relativePath: importPath,
+      };
+    }
+    return {
+      type: 'internalType',
+      interfaceName: resolvedType.name.value,
+    };
+  }
+  #getMetadataFromParam(param: INodeParamDefinition): IMetadataParam {
+    return {
+      name: param.name.value,
+      type: this.#getMetadataFromResolvedType(
+        this.#resolveTypeExpression(param.typeExpression)
+      ),
+    };
+  }
+  #getMetadataFromCallOrTypeDefinition(
     node: INodeCallDefinition | INodeTypeDefinition | INodeTraitDefinition
-  ) {
-    this.write(
-      `export const ${node.name.value}Metadata = {\n`,
-      () => {
-        this.write(`name: "${node.name.value}",\n`);
-        this.write(`id: ${this.#getUniqueHeader(node)},\n`);
-        let kind: string;
-        switch (node.type) {
-          case NodeType.CallDefinition:
-            kind = 'call';
-            break;
-          case NodeType.TraitDefinition:
-            kind = 'trait';
-            break;
-          case NodeType.TypeDefinition:
-            kind = 'type';
-            break;
+  ): Metadata {
+    let kind: Metadata['kind'];
+    switch (node.type) {
+      case NodeType.CallDefinition:
+        kind = 'call';
+        break;
+      case NodeType.TypeDefinition:
+        kind = 'type';
+        break;
+      case NodeType.TraitDefinition: {
+        const trait = this.#traits.get(node.name.value);
+        if (!trait) {
+          throw new Exception(`No nodes found for trait: ${node.name.value}`);
         }
-        this.write(`kind: "${kind}",\n`);
-        if ('parameters' in node) {
-          this.write(
-            'params: [\n',
-            () => {
-              for (const param of node.parameters) {
-                const resolvedType = this.#resolveTypeExpression(
-                  param.typeExpression
-                );
-                this.write(
-                  '{\n',
-                  () => {
-                    this.write(`name: "${param.name.value}",\n`);
-                    this.write(
-                      'type: {\n',
-                      () => {
-                        this.#generateResolvedTypeMetadata(resolvedType);
-                      },
-                      '}\n'
-                    );
-                  },
-                  '},\n'
-                );
-              }
-            },
-            ']\n'
-          );
-        }
-      },
-      '};\n'
-    );
+        return {
+          kind: 'trait',
+          name: node.name.value,
+          // ! should be filled with correct metadata objects
+          nodes: trait.nodes.map((resolvedType) =>
+            this.#getMetadataFromResolvedType(resolvedType)
+          ),
+        };
+      }
+    }
+    return {
+      kind,
+      id: this.#getUniqueHeader(node),
+      globalName:
+        this.#getTypeDefinitionOrCallDefinitionNamePropertyValue(node),
+      name: node.name.value,
+      params: node.parameters.map((p) => this.#getMetadataFromParam(p)),
+    };
   }
   #generateResolvedTypeMetadata(resolvedType: ResolvedType) {
     if ('generic' in resolvedType) {
@@ -1365,11 +1407,11 @@ export default class FileGenerator extends CodeStream {
         break;
       case NodeType.CallDefinition:
       case NodeType.TypeDefinition:
-        this.#generateExportTypeMetadataInformation(node);
+        this.#generateDefinitionInterface(node);
+        this.#generateDefinitionAssertionFunction(node);
         this.#generateDefinitionObjectCreatorFunction(node);
         this.#generateDefinitionEncodeFunction(node);
         this.#generateDefinitionDecodeFunction(node);
-        this.#generateDefinitionInterface(node);
         this.#generateDefinitionDefaultObjectCreator(node);
         this.#generateDefinitionCompareFunction(node);
         this.#generateDefinitionUpdateFunction(node);
@@ -1378,11 +1420,6 @@ export default class FileGenerator extends CodeStream {
         const trait = this.#traits.get(node.name.value);
         if (!trait) {
           break;
-        }
-        for (const node of trait.nodes) {
-          if ('fileGenerator' in node) {
-            this.#import(node);
-          }
         }
         this.write(
           `export type ${node.name.value} = ${trait.nodes
@@ -1394,7 +1431,7 @@ export default class FileGenerator extends CodeStream {
             )
             .join(' | ')};\n`
         );
-        this.#generateExportTypeMetadataInformation(node);
+        this.#generateTraitDefinitionAssertionFunction(node, trait.nodes);
         this.#generateEncodeTraitFunction(node, trait.nodes);
         this.#generateDecodeTraitFunction(node, trait.nodes);
         this.#generateTraitDefaultFunction(node, trait.nodes);
@@ -1406,6 +1443,239 @@ export default class FileGenerator extends CodeStream {
       default:
         throw new UnhandledNode(node);
     }
+  }
+  #generateDefinitionAssertionFunction(
+    node: INodeCallDefinition | INodeTypeDefinition
+  ) {
+    const valueVarName = 'value';
+    const namePropVarName = `${valueVarName}['_name']`;
+    const exps = [
+      `typeof ${valueVarName} === 'object'`,
+      `${valueVarName} !== null`,
+      `'_name' in ${valueVarName}`,
+      `typeof ${namePropVarName} === 'string'`,
+      `${namePropVarName} === "${this.#getTypeDefinitionOrCallDefinitionNamePropertyValue(
+        node
+      )}"`,
+    ];
+    this.write(
+      `export function ${getValidateDefinitionFunctionName(
+        node
+      )}(${valueVarName}: unknown): ${valueVarName} is ${node.name.value} {\n`,
+      () => {
+        this.write(`if(!(${exps.join(' && ')})) return false;\n`);
+        let depth = 0;
+        for (const param of node.parameters) {
+          const resolvedType = this.#resolveTypeExpression(
+            param.typeExpression
+          );
+          this.write(
+            'if(!(\n',
+            () => {
+              const paramValueVarName = `__v${depth}`;
+              this.write([`"${param.name.value}" in value`].join(' && '));
+              this.append(` && ((${paramValueVarName}) => (`);
+              depth = this.#generateResolvedTypeValidationExpression(
+                resolvedType,
+                paramValueVarName,
+                depth
+              );
+              this.append(`))(${valueVarName}['${param.name.value}'])\n`);
+            },
+            ')) return false;\n'
+          );
+          depth++;
+        }
+        this.write('return true;\n');
+      },
+      '}\n'
+    );
+  }
+  #generateTraitDefinitionAssertionFunction(
+    node: INodeTraitDefinition,
+    types: ResolvedType[]
+  ) {
+    const args: [string, string] = [types.length ? 'value' : '_', 'unknown'];
+    this.write(
+      `export function ${getValidateDefinitionFunctionName(node)}(${args[0]}: ${
+        args[1]
+      }): ${args[0]} is ${node.name.value} {\n`,
+      () => {
+        let depth = 0;
+        for (const t of types) {
+          this.write('if(');
+          depth = this.#generateResolvedTypeValidationExpression(
+            t,
+            args[0],
+            depth
+          );
+          this.append(') return true;\n');
+        }
+        this.write('return false;\n');
+      },
+      '}\n'
+    );
+  }
+  #generateResolvedTypeValidationExpression(
+    param: ResolvedType,
+    value: string,
+    depth: number
+  ) {
+    if ('generic' in param) {
+      switch (param.generic) {
+        case GenericName.Boolean:
+          this.append(`typeof ${value} === 'boolean'`);
+          break;
+        case GenericName.Double:
+        case GenericName.UnsignedLong:
+        case GenericName.Long:
+        case GenericName.Float:
+        case GenericName.Int32:
+        case GenericName.Int8:
+        case GenericName.Int16:
+        case GenericName.Integer:
+        case GenericName.Uint16:
+        case GenericName.Uint32:
+        case GenericName.Uint8: {
+          const exps = new Array<string>();
+          if (
+            param.generic === GenericName.Long ||
+            param.generic === GenericName.UnsignedLong
+          ) {
+            exps.push(`typeof ${value} === 'string'`);
+          } else {
+            exps.push(`typeof ${value} === 'number'`);
+          }
+          for (const i of [
+            { type: GenericName.Uint16, bits: 16, unsigned: true },
+            { type: GenericName.Uint32, bits: 32, unsigned: true },
+            { type: GenericName.Uint8, bits: 8, unsigned: true },
+            { type: GenericName.UnsignedLong, bits: 64, unsigned: true },
+            { type: GenericName.Int8, bits: 8, unsigned: false },
+            { type: GenericName.Int16, bits: 16, unsigned: false },
+            { type: GenericName.Int32, bits: 32, unsigned: false },
+            { type: GenericName.Integer, bits: 32, unsigned: false },
+            { type: GenericName.Long, bits: 64, unsigned: false },
+          ]) {
+            if (param.generic !== i.type) {
+              continue;
+            }
+            const [min, max] = integerRangeFromBits({
+              bits: i.bits,
+              signed: !i.unsigned,
+            });
+            const jsbi = this.#import({
+              path: 'jsbi',
+              wildcard: false,
+              identifier: 'JSBI',
+              target: 'nodeModule',
+              isDefaultImport: true,
+            });
+            exps.push(
+              `${jsbi}.equal(${jsbi}.BigInt(${value}),${jsbi}.BigInt(${value}))`
+            );
+            exps.push(
+              `${jsbi}.greaterThanOrEqual(${jsbi}.BigInt(${value}),${jsbi}.BigInt("${min}"))`
+            );
+            exps.push(
+              `${jsbi}.lessThanOrEqual(${jsbi}.BigInt(${value}),${jsbi}.BigInt("${max}"))`
+            );
+          }
+          for (const exp of exps) {
+            this.append(exp);
+            if (exp !== exps[exps.length - 1]) {
+              this.append(' && ');
+            }
+          }
+          break;
+        }
+        case GenericName.String:
+        case GenericName.NullTerminatedString:
+          this.append(`typeof ${value} === 'string'`);
+          break;
+        case GenericName.Bytes:
+          this.append(`${value} instanceof Uint8Array`);
+          break;
+        default:
+          throw new Error(`Unhandled generic param type: ${param.generic}`);
+      }
+    } else if ('fileGenerator' in param) {
+      const def = this.#resolvedTypeExpressionToDefinition(param);
+      const fn = this.#import({
+        fileGenerator: param.fileGenerator,
+        identifier: getValidateDefinitionFunctionName(def),
+      });
+      this.append(`${fn}(${value})`);
+    } else if ('template' in param) {
+      switch (param.template) {
+        case 'optional':
+          this.append(`${value} === null ? true : ((x) => (`);
+          depth = this.#generateResolvedTypeValidationExpression(
+            param.type,
+            'x',
+            depth + 1
+          );
+          this.append(`))(${value})`);
+          break;
+        case 'map':
+          this.append(`${value} instanceof Map && `);
+          this.append(`Array.from(${value}).every(([k,v]) => (`);
+          depth = this.#generateResolvedTypeValidationExpression(
+            param.key.resolved,
+            'k',
+            depth + 1
+          );
+          this.append(' && ');
+          depth = this.#generateResolvedTypeValidationExpression(
+            param.value.resolved,
+            'v',
+            depth + 1
+          );
+          this.append('))');
+          break;
+        case 'tuple': {
+          const isArrayString = [
+            `Array.isArray(${value})`,
+            `(${value}.length === ${param.expressions.length})`,
+          ].join(' && ');
+          this.append(`${isArrayString} && `);
+          let i = 0;
+          for (const exp of param.types) {
+            this.append('((a) => (');
+            depth = this.#generateResolvedTypeValidationExpression(
+              exp,
+              'a',
+              depth + 1
+            );
+            this.append(`))(${value}[${i}])`);
+            if (exp !== param.types[param.types.length - 1]) {
+              this.append(' && ');
+            }
+            ++i;
+          }
+          break;
+        }
+        case 'vector':
+        case 'set':
+          this.append(
+            `(Array.isArray(${value}) || ${value} instanceof Set) && Array.from(${value}).every(`
+          );
+          this.append('p => (');
+          this.#generateResolvedTypeValidationExpression(
+            param.type,
+            'p',
+            depth + 1
+          );
+          this.append('))');
+          break;
+        default:
+          throw new Exception(`Unhandled template type: ${param}`);
+      }
+    } else {
+      const fn = getValidateDefinitionFunctionName(param);
+      this.append(`${fn}(${value})`);
+    }
+    return depth;
   }
   #export(node: INodeExportStatement) {
     const exportName = node.value.name.value;
@@ -1936,18 +2206,16 @@ export default class FileGenerator extends CodeStream {
           this.write('}\n');
           break;
         case 'vector': {
-          const i = `__i${depth}`;
+          const itemVarName = `__item${depth}`;
           const lengthVarName = `__l${depth}`;
           this.write(`const ${lengthVarName} = ${value}.length;\n`);
           this.write(`${serializerVarName}.writeUint32(${lengthVarName});\n`);
           this.write(
-            `for(let ${i} = 0; ${i} < ${lengthVarName}; ${i}++) {\n`,
+            `for(const ${itemVarName} of ${value}) {\n`,
             () => {
-              const valueVarName = `__v${i}`;
-              this.write(`const ${valueVarName} = ${value}[${i}];\n`);
               depth = this.#generateEncodeTypeExpression(
                 resolved.expression,
-                valueVarName,
+                itemVarName,
                 depth + 1
               );
             },

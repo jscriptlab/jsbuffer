@@ -18,10 +18,10 @@
   },
   "name": "jsbuffer",
   "license": "MIT",
-  "version": "0.0.75",
+  "version": "1.0.1",
   "main": "./src/index.js",
   "bin": {
-    "jsbuffer": "./cli/index.js"
+    "jsbuffer": "cli/index.js"
   },
   "files": [
     "cli/**/*.{d.ts,map,js}",
@@ -32,14 +32,15 @@
   ],
   "scripts": {
     "lint:eslint": "npx eslint --fix src code-generator codec",
-    "lint:prettier": "npx prettier --write \"out/**/*.ts\" \"src/**/*.ts\" \"code-generator/**/*.ts\" \"codec/**/*.ts\"",
-    "lint": "yarn run lint:eslint && yarn run lint:prettier",
+    "lint:prettier": "npx prettier --write \"out/**/*.{ts,json}\" \"src/**/*.ts\" \"code-generator/**/*.ts\" \"codec/**/*.ts\"",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
     "cli": "npx ts-node --project cli/tsconfig.json cli",
-    "schema": "yarn run cli test/schema -o out --extends tsconfig.base.json --indentation-size 2",
-    "build": "npx tsc -b cli code-generator codec src --force",
-    "prepublishOnly": "yarn run schema && yarn run build && yarn run lint && yarn run test",
+    "schema": "npm run cli -- test/schema -o out --extends tsconfig.base.json --indentation-size 2",
+    "build": "npx tsc -b out cli code-generator codec src --force",
+    "build:all": "npm run schema && npm run build && npm run lint",
+    "prepublishOnly": "npm run build:all && npm run test",
     "test": "TS_NODE_PROJECT=test/tsconfig.json npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
-    "test:coverage": "npx nyc yarn test"
+    "test:coverage": "npx nyc npm test"
   },
   "dependencies": {
     "cli-argument-helper": "0.x",

@@ -1,27 +1,30 @@
 import { A } from './testTraitOnParamTrait';
+import { isATrait } from './testTraitOnParamTrait';
 import { ISerializer } from './__types__';
 import { encodeATrait } from './testTraitOnParamTrait';
 import { IDeserializer } from './__types__';
 import { decodeATrait } from './testTraitOnParamTrait';
 import { defaultATrait } from './testTraitOnParamTrait';
 import { compareATrait } from './testTraitOnParamTrait';
-export const A0Metadata = {
-  name: 'A0',
-  id: -1244603213,
-  kind: 'type',
-  params: [
-    {
-      name: 'value',
-      type: {
-        name: 'A',
-        id: '-945659736',
-        type: 'externalType',
-        externalModule: false,
-        relativePath: './testTraitOnParamTrait',
-      },
-    },
-  ],
-};
+export interface A0 {
+  _name: 'testTraitOnParam.A0';
+  value: Readonly<A>;
+}
+export function isA0(value: unknown): value is A0 {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'testTraitOnParam.A0'
+    )
+  )
+    return false;
+  if (!('value' in value && ((__v0) => isATrait(__v0))(value['value'])))
+    return false;
+  return true;
+}
 export interface A0InputParams {
   value: Readonly<A>;
 }
@@ -57,10 +60,6 @@ export function decodeA0(__d: IDeserializer): A0 | null {
     value,
   };
 }
-export interface A0 {
-  _name: 'testTraitOnParam.A0';
-  value: Readonly<A>;
-}
 export function defaultA0(params: Partial<A0InputParams> = {}): A0 {
   return A0({
     value: defaultATrait(),
@@ -86,23 +85,25 @@ export function updateA0(value: A0, changes: Partial<A0InputParams>) {
   }
   return value;
 }
-export const A1Metadata = {
-  name: 'A1',
-  id: -2001668861,
-  kind: 'type',
-  params: [
-    {
-      name: 'value',
-      type: {
-        name: 'A',
-        id: '-945659736',
-        type: 'externalType',
-        externalModule: false,
-        relativePath: './testTraitOnParamTrait',
-      },
-    },
-  ],
-};
+export interface A1 {
+  _name: 'testTraitOnParam.A1';
+  value: Readonly<A>;
+}
+export function isA1(value: unknown): value is A1 {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'testTraitOnParam.A1'
+    )
+  )
+    return false;
+  if (!('value' in value && ((__v0) => isATrait(__v0))(value['value'])))
+    return false;
+  return true;
+}
 export interface A1InputParams {
   value: Readonly<A>;
 }
@@ -138,10 +139,6 @@ export function decodeA1(__d: IDeserializer): A1 | null {
     value,
   };
 }
-export interface A1 {
-  _name: 'testTraitOnParam.A1';
-  value: Readonly<A>;
-}
 export function defaultA1(params: Partial<A1InputParams> = {}): A1 {
   return A1({
     value: defaultATrait(),
@@ -167,23 +164,25 @@ export function updateA1(value: A1, changes: Partial<A1InputParams>) {
   }
   return value;
 }
-export const A2Metadata = {
-  name: 'A2',
-  id: -820998189,
-  kind: 'type',
-  params: [
-    {
-      name: 'value',
-      type: {
-        name: 'A',
-        id: '-945659736',
-        type: 'externalType',
-        externalModule: false,
-        relativePath: './testTraitOnParamTrait',
-      },
-    },
-  ],
-};
+export interface A2 {
+  _name: 'testTraitOnParam.A2';
+  value: Readonly<A>;
+}
+export function isA2(value: unknown): value is A2 {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'testTraitOnParam.A2'
+    )
+  )
+    return false;
+  if (!('value' in value && ((__v0) => isATrait(__v0))(value['value'])))
+    return false;
+  return true;
+}
 export interface A2InputParams {
   value: Readonly<A>;
 }
@@ -218,10 +217,6 @@ export function decodeA2(__d: IDeserializer): A2 | null {
     _name: 'testTraitOnParam.A2',
     value,
   };
-}
-export interface A2 {
-  _name: 'testTraitOnParam.A2';
-  value: Readonly<A>;
 }
 export function defaultA2(params: Partial<A2InputParams> = {}): A2 {
   return A2({

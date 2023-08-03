@@ -13,7 +13,6 @@
   ],
   "compilerOptions": {
     "noUnusedLocals": false,
-    "noUncheckedIndexedAccess": false,
     "types": ["node"]
   },
   "references": [

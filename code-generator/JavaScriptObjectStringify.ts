@@ -3,7 +3,7 @@ import Exception from '../exception/Exception';
 
 export class ValueStringifyFailure extends Exception {
   public constructor(public readonly value: unknown) {
-    super();
+    super(`Failed to stringify value: ${value} (type is ${typeof value})`);
   }
 }
 
@@ -16,46 +16,79 @@ function isArray(value: unknown): value is ReadonlyArray<unknown> {
 }
 
 export default class JavaScriptObjectStringify extends CodeStream {
+  readonly #quoteObjectParameterNames: boolean;
+  public constructor(
+    parent: CodeStream | undefined,
+    {
+      indentationSize,
+      quoteObjectParameterNames = true,
+    }: {
+      indentationSize: number;
+      quoteObjectParameterNames?: boolean;
+    }
+  ) {
+    super(parent, {
+      indentationSize,
+    });
+    this.#quoteObjectParameterNames = quoteObjectParameterNames;
+  }
   public stringify(value?: unknown) {
-    if (isObject(value)) {
+    if (value instanceof Set) {
+      this.append('new Set(');
+      this.stringify(Array.from(value));
+      this.append(')');
+    } else if (value instanceof Map) {
+      this.append('new Map(');
+      this.stringify(Array.from(value));
+      this.append(')');
+    } else if (value instanceof Uint8Array) {
+      this.append('new Uint8Array(');
+      this.stringify(Array.from(value));
+      this.append(')');
+    } else if (isArray(value)) {
+      this.append('[');
+      this.indentBlock(() => {
+        for (let i = 0; i < value.length; i++) {
+          this.stringify(value[i]);
+          if (i !== value.length - 1) {
+            this.append(', ');
+          }
+        }
+      });
+      this.append(']');
+    } else if (isObject(value)) {
       const map = new Map(Object.entries(value));
-      this.append('{\n');
+      this.append('{ ');
       this.indentBlock(() => {
         const items = Array.from(map);
         for (const item of items) {
           const [k, v] = item;
-          this.write(`"${k}": `);
+          this.append(`${this.#paramName(k)}: `);
           this.stringify(v);
           if (item !== items[items.length - 1]) {
-            this.append(',');
+            this.append(', ');
           }
-          this.append('\n');
         }
       });
-      this.write('}');
+      this.append(' }');
     } else if (typeof value === 'boolean') {
       this.append(`${value}`);
     } else if (typeof value === 'string') {
       this.append(`"${value}"`);
-    } else if (isArray(value)) {
-      this.append('[\n');
-      this.indentBlock(() => {
-        for (let i = 0; i < value.length; i++) {
-          this.write('');
-          this.stringify(value[i]);
-          if (i !== value.length - 1) {
-            this.append(',');
-          }
-          this.append('\n');
-        }
-      });
-      this.write(']');
     } else if (typeof value === 'undefined') {
       this.append('undefined');
     } else if (value === null) {
       this.append('null');
+    } else if (typeof value === 'number') {
+      this.append(`${value}`);
     } else {
       throw new ValueStringifyFailure(value);
     }
+  }
+  #paramName(value: string) {
+    if (this.#quoteObjectParameterNames) {
+      value = `"${value}"`;
+    }
+    return value;
   }
 }

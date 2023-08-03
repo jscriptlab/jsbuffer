@@ -1,19 +1,29 @@
 import { ISerializer } from '../__types__';
 import { IDeserializer } from '../__types__';
-export const UserMetadata = {
-  name: 'User',
-  id: 1249778753,
-  kind: 'type',
-  params: [
-    {
-      name: 'firstName',
-      type: {
-        type: 'generic',
-        value: 'string',
-      },
-    },
-  ],
-};
+export interface User {
+  _name: 'conversation.secondUser.User';
+  firstName: string;
+}
+export function isUser(value: unknown): value is User {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'conversation.secondUser.User'
+    )
+  )
+    return false;
+  if (
+    !(
+      'firstName' in value &&
+      ((__v0) => typeof __v0 === 'string')(value['firstName'])
+    )
+  )
+    return false;
+  return true;
+}
 export interface UserInputParams {
   firstName: string;
 }
@@ -46,10 +56,6 @@ export function decodeUser(__d: IDeserializer): User | null {
     _name: 'conversation.secondUser.User',
     firstName,
   };
-}
-export interface User {
-  _name: 'conversation.secondUser.User';
-  firstName: string;
 }
 export function defaultUser(params: Partial<UserInputParams> = {}): User {
   return User({

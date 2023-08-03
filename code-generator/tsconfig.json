@@ -10,6 +10,8 @@
     "fileGeneratorUtilities.ts",
     "stringUtilities.ts",
     "helpers.ts",
+    "exceptions.ts",
+    "types.ts",
     "CodeGenerator.ts"
   ],
   "exclude": ["**/*.d.ts"],

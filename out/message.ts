@@ -1,20 +1,40 @@
+import JSBI from 'jsbi';
 import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
 import { IRequest } from './__types__';
-export const MessageMetadata = {
-  name: 'Message',
-  id: -1731107621,
-  kind: 'type',
-  params: [
-    {
-      name: 'id',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
+export interface Message {
+  _name: 'message.Message';
+  id: number;
+}
+export function isMessage(value: unknown): value is Message {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'message.Message'
+    )
+  )
+    return false;
+  if (
+    !(
+      'id' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['id']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export interface MessageInputParams {
   id: number;
 }
@@ -48,10 +68,6 @@ export function decodeMessage(__d: IDeserializer): Message | null {
     id,
   };
 }
-export interface Message {
-  _name: 'message.Message';
-  id: number;
-}
 export function defaultMessage(
   params: Partial<MessageInputParams> = {}
 ): Message {
@@ -82,26 +98,32 @@ export function updateMessage(
   }
   return value;
 }
-export const MessagesMetadata = {
-  name: 'Messages',
-  id: 1419827675,
-  kind: 'type',
-  params: [
-    {
-      name: 'messages',
-      type: {
-        type: 'template',
-        name: 'vector',
-        value: {
-          id: -1731107621,
-          type: 'internalType',
-          kind: 'type',
-          name: 'Message',
-        },
-      },
-    },
-  ],
-};
+export interface Messages {
+  _name: 'message.Messages';
+  messages: ReadonlyArray<Readonly<Message>>;
+}
+export function isMessages(value: unknown): value is Messages {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'message.Messages'
+    )
+  )
+    return false;
+  if (
+    !(
+      'messages' in value &&
+      ((__v0) =>
+        (Array.isArray(__v0) || __v0 instanceof Set) &&
+        Array.from(__v0).every((p) => isMessage(p)))(value['messages'])
+    )
+  )
+    return false;
+  return true;
+}
 export interface MessagesInputParams {
   messages: ReadonlyArray<Readonly<Message>>;
 }
@@ -119,9 +141,8 @@ export function encodeMessages(__s: ISerializer, value: Messages) {
   const __pv0 = value['messages'];
   const __l1 = __pv0.length;
   __s.writeUint32(__l1);
-  for (let __i1 = 0; __i1 < __l1; __i1++) {
-    const __v__i1 = __pv0[__i1];
-    encodeMessage(__s, __v__i1);
+  for (const __item1 of __pv0) {
+    encodeMessage(__s, __item1);
   }
 }
 export function decodeMessages(__d: IDeserializer): Messages | null {
@@ -147,10 +168,6 @@ export function decodeMessages(__d: IDeserializer): Messages | null {
     messages,
   };
 }
-export interface Messages {
-  _name: 'message.Messages';
-  messages: ReadonlyArray<Readonly<Message>>;
-}
 export function defaultMessages(
   params: Partial<MessagesInputParams> = {}
 ): Messages {
@@ -165,8 +182,15 @@ export function compareMessages(__a: Messages, __b: Messages): boolean {
      * compare parameter messages
      */
     __a['messages'].length === __b['messages'].length &&
-    __a['messages'].every((__i, index) =>
-      compareMessage(__i, __b['messages'][index])
+    Array.from(__a['messages']).every((__originalItem0, __index0) =>
+      typeof __originalItem0 === 'undefined'
+        ? false
+        : ((__item0) =>
+            typeof __item0 === 'undefined'
+              ? false
+              : compareMessage(__originalItem0, __item0))(
+            Array.from(__b['messages'])[__index0]
+          )
     )
   );
 }
@@ -178,8 +202,15 @@ export function updateMessages(
     if (
       !(
         changes['messages'].length === value['messages'].length &&
-        changes['messages'].every((__i, index) =>
-          compareMessage(__i, value['messages'][index])
+        Array.from(changes['messages']).every((__originalItem1, __index1) =>
+          typeof __originalItem1 === 'undefined'
+            ? false
+            : ((__item1) =>
+                typeof __item1 === 'undefined'
+                  ? false
+                  : compareMessage(__originalItem1, __item1))(
+                Array.from(value['messages'])[__index1]
+              )
         )
       )
     ) {
@@ -191,27 +222,56 @@ export function updateMessages(
   }
   return value;
 }
-export const GetMessagesMetadata = {
-  name: 'GetMessages',
-  id: 1394938243,
-  kind: 'call',
-  params: [
-    {
-      name: 'offset',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-    {
-      name: 'limit',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
+export interface GetMessages extends IRequest<Readonly<Messages>> {
+  _name: 'message.GetMessages';
+  offset: number;
+  limit: number;
+}
+export function isGetMessages(value: unknown): value is GetMessages {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'message.GetMessages'
+    )
+  )
+    return false;
+  if (
+    !(
+      'offset' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['offset']
+      )
+    )
+  )
+    return false;
+  if (
+    !(
+      'limit' in value &&
+      ((__v1) =>
+        typeof __v1 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v1), JSBI.BigInt(__v1)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v1),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v1), JSBI.BigInt('2147483647')))(
+        value['limit']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export interface GetMessagesInputParams {
   offset: number;
   limit: number;
@@ -257,11 +317,6 @@ export function decodeGetMessages(__d: IDeserializer): GetMessages | null {
     offset,
     limit,
   };
-}
-export interface GetMessages extends IRequest<Readonly<Messages>> {
-  _name: 'message.GetMessages';
-  offset: number;
-  limit: number;
 }
 export function defaultGetMessages(
   params: Partial<GetMessagesInputParams> = {}

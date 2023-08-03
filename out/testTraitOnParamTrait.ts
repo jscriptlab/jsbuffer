@@ -1,11 +1,13 @@
 import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
+import JSBI from 'jsbi';
 export type A = Readonly<B> | Readonly<C> | Readonly<D>;
-export const AMetadata = {
-  name: 'A',
-  id: -945659736,
-  kind: 'trait',
-};
+export function isATrait(value: unknown): value is A {
+  if (isB(value)) return true;
+  if (isC(value)) return true;
+  if (isD(value)) return true;
+  return false;
+}
 export function encodeATrait(__s: ISerializer, value: A) {
   switch (value._name) {
     case 'testTraitOnParamTrait.B':
@@ -63,20 +65,39 @@ export function compareATrait(__a: A, __b: A) {
       return compareD(__a, __b);
   }
 }
-export const BMetadata = {
-  name: 'B',
-  id: 543394260,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
+export interface B {
+  _name: 'testTraitOnParamTrait.B';
+  a: number;
+}
+export function isB(value: unknown): value is B {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'testTraitOnParamTrait.B'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['a']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export interface BInputParams {
   a: number;
 }
@@ -110,10 +131,6 @@ export function decodeB(__d: IDeserializer): B | null {
     a,
   };
 }
-export interface B {
-  _name: 'testTraitOnParamTrait.B';
-  a: number;
-}
 export function defaultB(params: Partial<BInputParams> = {}): B {
   return B({
     a: 0,
@@ -139,20 +156,39 @@ export function updateB(value: B, changes: Partial<BInputParams>) {
   }
   return value;
 }
-export const CMetadata = {
-  name: 'C',
-  id: -811474198,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
+export interface C {
+  _name: 'testTraitOnParamTrait.C';
+  a: number;
+}
+export function isC(value: unknown): value is C {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'testTraitOnParamTrait.C'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['a']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export interface CInputParams {
   a: number;
 }
@@ -186,10 +222,6 @@ export function decodeC(__d: IDeserializer): C | null {
     a,
   };
 }
-export interface C {
-  _name: 'testTraitOnParamTrait.C';
-  a: number;
-}
 export function defaultC(params: Partial<CInputParams> = {}): C {
   return C({
     a: 0,
@@ -215,20 +247,39 @@ export function updateC(value: C, changes: Partial<CInputParams>) {
   }
   return value;
 }
-export const DMetadata = {
-  name: 'D',
-  id: 763230611,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
+export interface D {
+  _name: 'testTraitOnParamTrait.D';
+  a: number;
+}
+export function isD(value: unknown): value is D {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'testTraitOnParamTrait.D'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        typeof __v0 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
+        value['a']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export interface DInputParams {
   a: number;
 }
@@ -261,10 +312,6 @@ export function decodeD(__d: IDeserializer): D | null {
     _name: 'testTraitOnParamTrait.D',
     a,
   };
-}
-export interface D {
-  _name: 'testTraitOnParamTrait.D';
-  a: number;
 }
 export function defaultD(params: Partial<DInputParams> = {}): D {
   return D({

@@ -1,19 +1,40 @@
+import JSBI from 'jsbi';
 import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
-export const AMetadata = {
-  name: 'A',
-  id: -1688212411,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'long',
-      },
-    },
-  ],
-};
+export interface A {
+  _name: 'testLong.A';
+  a: string;
+}
+export function isA(value: unknown): value is A {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'testLong.A'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        typeof __v0 === 'string' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-9223372036854775808')
+        ) &&
+        JSBI.lessThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('9223372036854775807')
+        ))(value['a'])
+    )
+  )
+    return false;
+  return true;
+}
 export interface AInputParams {
   a: string;
 }
@@ -47,10 +68,6 @@ export function decodeA(__d: IDeserializer): A | null {
     a,
   };
 }
-export interface A {
-  _name: 'testLong.A';
-  a: string;
-}
 export function defaultA(params: Partial<AInputParams> = {}): A {
   return A({
     a: '0',
@@ -76,20 +93,37 @@ export function updateA(value: A, changes: Partial<AInputParams>) {
   }
   return value;
 }
-export const BMetadata = {
-  name: 'B',
-  id: 1885886278,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'ulong',
-      },
-    },
-  ],
-};
+export interface B {
+  _name: 'testLong.B';
+  a: string;
+}
+export function isB(value: unknown): value is B {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'testLong.B'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        typeof __v0 === 'string' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('0')) &&
+        JSBI.lessThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('18446744073709551615')
+        ))(value['a'])
+    )
+  )
+    return false;
+  return true;
+}
 export interface BInputParams {
   a: string;
 }
@@ -123,10 +157,6 @@ export function decodeB(__d: IDeserializer): B | null {
     a,
   };
 }
-export interface B {
-  _name: 'testLong.B';
-  a: string;
-}
 export function defaultB(params: Partial<BInputParams> = {}): B {
   return B({
     a: '0',
@@ -152,34 +182,72 @@ export function updateB(value: B, changes: Partial<BInputParams>) {
   }
   return value;
 }
-export const CMetadata = {
-  name: 'C',
-  id: -523698750,
-  kind: 'type',
-  params: [
-    {
-      name: 'a',
-      type: {
-        type: 'generic',
-        value: 'long',
-      },
-    },
-    {
-      name: 'b',
-      type: {
-        type: 'generic',
-        value: 'ulong',
-      },
-    },
-    {
-      name: 'c',
-      type: {
-        type: 'generic',
-        value: 'int',
-      },
-    },
-  ],
-};
+export interface C {
+  _name: 'testLong.C';
+  a: string;
+  b: string;
+  c: number;
+}
+export function isC(value: unknown): value is C {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'testLong.C'
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v0) =>
+        typeof __v0 === 'string' &&
+        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('-9223372036854775808')
+        ) &&
+        JSBI.lessThanOrEqual(
+          JSBI.BigInt(__v0),
+          JSBI.BigInt('9223372036854775807')
+        ))(value['a'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'b' in value &&
+      ((__v1) =>
+        typeof __v1 === 'string' &&
+        JSBI.equal(JSBI.BigInt(__v1), JSBI.BigInt(__v1)) &&
+        JSBI.greaterThanOrEqual(JSBI.BigInt(__v1), JSBI.BigInt('0')) &&
+        JSBI.lessThanOrEqual(
+          JSBI.BigInt(__v1),
+          JSBI.BigInt('18446744073709551615')
+        ))(value['b'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'c' in value &&
+      ((__v2) =>
+        typeof __v2 === 'number' &&
+        JSBI.equal(JSBI.BigInt(__v2), JSBI.BigInt(__v2)) &&
+        JSBI.greaterThanOrEqual(
+          JSBI.BigInt(__v2),
+          JSBI.BigInt('-2147483648')
+        ) &&
+        JSBI.lessThanOrEqual(JSBI.BigInt(__v2), JSBI.BigInt('2147483647')))(
+        value['c']
+      )
+    )
+  )
+    return false;
+  return true;
+}
 export interface CInputParams {
   a: string;
   b: string;
@@ -238,12 +306,6 @@ export function decodeC(__d: IDeserializer): C | null {
     b,
     c,
   };
-}
-export interface C {
-  _name: 'testLong.C';
-  a: string;
-  b: string;
-  c: number;
 }
 export function defaultC(params: Partial<CInputParams> = {}): C {
   return C({

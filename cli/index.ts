@@ -108,9 +108,10 @@ import Exception from '../exception/Exception';
     await generator.generate();
   } catch (reason) {
     if (reason instanceof Exception) {
-      throw new Error(`Failed to generate files with error: ${reason.what}`);
+      throw new Error(`Failed to generate files with error: ${reason}`);
+    } else {
+      console.error('Received unexpected error instance: %o', reason);
     }
-    console.error('Received unexpected error instance: %o', reason);
     throw reason;
   }
 })().catch((reason) => {

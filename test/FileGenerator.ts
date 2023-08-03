@@ -21,6 +21,64 @@ function checkException(fn: () => Promise<void>) {
 }
 
 suite.test(
+  'it should allow importing external schemas in a cascading format',
+  checkException(async () => {
+    const module1 = await (
+      await generateWithVirtualFs({
+        packageInfo: {
+          name: 'a',
+          version: '0.0.1',
+        },
+        paths: {
+          'schema/main': ['export type A { int id; }'].join('\n'),
+        },
+        mainFile: 'schema/main',
+      })
+    ).test();
+
+    const module2 = await generateWithVirtualFs({
+      packageInfo: {
+        name: 'b',
+        version: '0.0.1',
+      },
+      paths: {
+        'schema/main': [
+          'import { A } from "a/schema/main";',
+          'export type B {A id;}',
+        ].join('\n'),
+      },
+      mainFile: 'schema/main',
+    });
+
+    await spawn('npm', ['install', ...module1.tgzFiles], {
+      cwd: module2.rootDir,
+    }).wait();
+
+    const { tgzFiles } = await module2.test();
+
+    const module3 = await generateWithVirtualFs({
+      packageInfo: {
+        name: 'c',
+        version: '0.0.1',
+      },
+      paths: {
+        'schema/main': [
+          'import { B } from "b/schema/main";',
+          'export type C { int id; B b; }',
+        ].join('\n'),
+      },
+      mainFile: 'schema/main',
+    });
+
+    await spawn('npm', ['install', ...tgzFiles], {
+      cwd: module3.rootDir,
+    }).wait();
+
+    await module3.test();
+  })
+);
+
+suite.test(
   'it should allow two imports of the same file coming from different files',
   checkException(async () => {
     const createImport = (a: string) => `import { ${a} } from "./${a}";`;
@@ -119,64 +177,6 @@ suite.test(
   }
 );
 
-suite.test(
-  'it should allow importing external schemas in a cascading format',
-  checkException(async () => {
-    const module1 = await (
-      await generateWithVirtualFs({
-        packageInfo: {
-          name: 'a',
-          version: '0.0.1',
-        },
-        paths: {
-          'schema/main': ['export type A { int id; }'].join('\n'),
-        },
-        mainFile: 'schema/main',
-      })
-    ).test();
-
-    const module2 = await generateWithVirtualFs({
-      packageInfo: {
-        name: 'b',
-        version: '0.0.1',
-      },
-      paths: {
-        'schema/main': [
-          'import { A } from "a/schema/main";',
-          'export type B {A id;}',
-        ].join('\n'),
-      },
-      mainFile: 'schema/main',
-    });
-
-    await spawn('npm', ['install', ...module1.tgzFiles], {
-      cwd: module2.rootDir,
-    }).wait();
-
-    const { tgzFiles } = await module2.test();
-
-    const module3 = await generateWithVirtualFs({
-      packageInfo: {
-        name: 'c',
-        version: '0.0.1',
-      },
-      paths: {
-        'schema/main': [
-          'import { B } from "b/schema/main";',
-          'export type C { int id; B b; }',
-        ].join('\n'),
-      },
-      mainFile: 'schema/main',
-    });
-
-    await spawn('npm', ['install', ...tgzFiles], {
-      cwd: module3.rootDir,
-    }).wait();
-
-    await module3.test();
-  })
-);
-
 suite.test('it should compile external types', async () => {
   await (
     await generateWithVirtualFs({
@@ -273,37 +273,41 @@ suite.test(
         mainFile: 'main',
       })
     ).test();
-    const [moduleA, moduleB] = await Promise.all(
-      [
-        generateWithVirtualFs({
-          packageInfo: {
-            name: 'a-schema',
-          },
-          paths: {
-            main: [
-              'import { Shared } from "shared-schema/main";',
-              'export type A { Shared value; }',
-            ].join('\n'),
-          },
-          mainFile: 'main',
-        }),
-        generateWithVirtualFs({
-          packageInfo: {
-            name: 'b-schema',
-          },
-          paths: {
-            main: [
-              'import { Shared } from "shared-schema/main";',
-              'export type B { Shared value; }',
-            ].join('\n'),
-          },
-          mainFile: 'main',
-        }),
-      ].map(async (m) => {
+    const modules = [
+      generateWithVirtualFs({
+        packageInfo: {
+          name: 'a-schema',
+        },
+        paths: {
+          main: [
+            'import { Shared } from "shared-schema/main";',
+            'export type A { Shared value; }',
+          ].join('\n'),
+        },
+        mainFile: 'main',
+      }),
+      generateWithVirtualFs({
+        packageInfo: {
+          name: 'b-schema',
+        },
+        paths: {
+          main: [
+            'import { Shared } from "shared-schema/main";',
+            'export type B { Shared value; }',
+          ].join('\n'),
+        },
+        mainFile: 'main',
+      }),
+    ] as const;
+
+    await Promise.all(
+      modules.map(async (m) => {
         await (await m).installPackages(sharedSchema.tgzFiles);
         return m;
       })
     );
+
+    const [moduleA, moduleB] = await Promise.all(modules);
 
     const testSchemaCode = new CodeStream();
     testSchemaCode.write(

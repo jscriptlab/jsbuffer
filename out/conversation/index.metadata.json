@@ -1,0 +1,70 @@
+{
+  "Conversation": {
+    "kind": "type",
+    "id": 1288012364,
+    "globalName": "conversation.index.Conversation",
+    "name": "Conversation",
+    "params": [
+      { "name": "id", "type": { "type": "generic", "value": "int" } },
+      {
+        "name": "user",
+        "type": {
+          "type": "externalType",
+          "name": "User",
+          "relativePath": "./SecondUser"
+        }
+      }
+    ]
+  },
+  "Conversations": {
+    "kind": "type",
+    "id": -1572302470,
+    "globalName": "conversation.index.Conversations",
+    "name": "Conversations",
+    "params": [
+      {
+        "name": "conversations",
+        "type": {
+          "type": "template",
+          "template": "vector",
+          "value": { "type": "internalType", "interfaceName": "Conversation" }
+        }
+      }
+    ]
+  },
+  "__all": [
+    {
+      "kind": "type",
+      "id": 1288012364,
+      "globalName": "conversation.index.Conversation",
+      "name": "Conversation",
+      "params": [
+        { "name": "id", "type": { "type": "generic", "value": "int" } },
+        {
+          "name": "user",
+          "type": {
+            "type": "externalType",
+            "name": "User",
+            "relativePath": "./SecondUser"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "id": -1572302470,
+      "globalName": "conversation.index.Conversations",
+      "name": "Conversations",
+      "params": [
+        {
+          "name": "conversations",
+          "type": {
+            "type": "template",
+            "template": "vector",
+            "value": { "type": "internalType", "interfaceName": "Conversation" }
+          }
+        }
+      ]
+    }
+  ]
+}
