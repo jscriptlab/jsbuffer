@@ -1,44 +1,69 @@
 import Exception from '../exception/Exception';
 import { IToken, TokenType } from './Tokenizer';
 
-export class ASTGenerationException extends Exception {}
+export type ASTGenerationExceptionInput =
+  | IToken
+  | ASTGeneratorOutputNode
+  | null;
 
-export class UnexpectedTokenType extends ASTGenerationException {
+export class ASTGenerationException extends Exception {
   public constructor(
-    public readonly expectedTokenType: TokenType,
-    public readonly giveToken: IToken | null,
-    public readonly lastToken: IToken | null
+    public readonly value: ASTGenerationExceptionInput,
+    what = ''
   ) {
-    super();
+    super(what);
   }
 }
-export class UnexpectedKeywordName extends ASTGenerationException {
-  public constructor(
-    public readonly expectedKeywordName: string,
-    public readonly giveToken: IToken | null
-  ) {
-    super();
+
+export class UnexpectedTokenType extends ASTGenerationException {
+  public constructor(token: IToken, expectedTokenType: TokenType) {
+    super(
+      token,
+      `Expecting token of type "${expectedTokenType}", but got "${token.type}"`
+    );
+  }
+}
+
+export class UnexpectedNodeType extends ASTGenerationException {
+  public constructor(node: ASTGeneratorOutputNode) {
+    super(node, `Unexpected output node type: ${node.type}`);
+  }
+}
+
+export class UnexpectedTokenValue extends ASTGenerationException {
+  public constructor(token: IToken, expectedValue: string) {
+    super(
+      token,
+      `Expecting "${expectedValue}", but got "${token.value}" instead`
+    );
   }
 }
 
 export class UnexpectedPunctuatorName extends ASTGenerationException {
   public constructor(
-    public readonly expectedPunctuatorName: string,
-    public readonly giveToken: IToken | null
+    token: IToken,
+    public readonly expectedPunctuatorName: string
   ) {
-    super();
+    super(
+      token,
+      `Expected ${expectedPunctuatorName} punctuator, but got ${token.value} instead`
+    );
   }
 }
 
 export class UnexpectedExport extends ASTGenerationException {}
 
 export class UnexpectedToken extends ASTGenerationException {
-  public constructor(public readonly token: IToken) {
-    super();
+  public constructor(value: ASTGenerationExceptionInput) {
+    super(value);
   }
 }
 
-export class EOF extends ASTGenerationException {}
+export class EOF extends ASTGenerationException {
+  public constructor() {
+    super(null, 'Unexpected EOF');
+  }
+}
 
 export enum NodeType {
   Identifier,
@@ -130,28 +155,64 @@ export type ASTGeneratorOutputNode =
 
 export default class ASTGenerator {
   readonly #tokens;
-  #lastToken: IToken | null = null;
+  readonly #previousSiblingMap = new Map<
+    ASTGeneratorOutputNode,
+    ASTGeneratorOutputNode | null
+  >();
+  readonly #nextSiblingMap = new Map<
+    ASTGeneratorOutputNode,
+    ASTGeneratorOutputNode | null
+  >();
+  readonly #nodeByStartToken = new Map<IToken, ASTGeneratorOutputNode>();
+  #lastNode: ASTGeneratorOutputNode | null = null;
   public constructor(tokens: ReadonlyArray<IToken>) {
     this.#tokens = Array.from(tokens);
+  }
+  public nextSibling(node: ASTGeneratorOutputNode) {
+    return this.#nextSiblingMap.get(node) ?? null;
+  }
+  public previousSibling(node: ASTGeneratorOutputNode) {
+    return this.#previousSiblingMap.get(node) ?? null;
+  }
+  public nodeByStartToken(token: IToken) {
+    return this.#nodeByStartToken.get(token) ?? null;
   }
   public generate() {
     const nodes = new Array<ASTGeneratorOutputNode>();
     while (!this.#eof()) {
-      if (this.#peek(TokenType.Keyword, 'import')) {
-        nodes.push(this.#readImportStatement());
-      } else if (this.#peek(TokenType.Keyword, 'export')) {
-        nodes.push(this.#readExportStatement());
-      } else if (this.#peek(TokenType.Keyword, 'type')) {
-        nodes.push(this.#readTypeStatement());
-      } else if (this.#peek(TokenType.Keyword, 'call')) {
-        nodes.push(this.#readCallStatement());
-      } else if (this.#peek(TokenType.Keyword, 'trait')) {
-        nodes.push(this.#readTraitStatement());
-      } else {
-        throw new UnexpectedToken(this.#match());
-      }
+      nodes.push(this.#readNode());
     }
     return nodes;
+  }
+  #readNode(): ASTGeneratorOutputNode {
+    let node: ASTGeneratorOutputNode;
+    const match = this.#match();
+    switch (match.value) {
+      case 'import':
+        node = this.#readImportStatement();
+        break;
+      case 'export':
+        node = this.#readExportStatement();
+        break;
+      case 'type':
+        node = this.#readTypeStatement();
+        break;
+      case 'call':
+        node = this.#readCallStatement();
+        break;
+      case 'trait':
+        node = this.#readTraitStatement();
+        break;
+      default:
+        throw new UnexpectedToken(match);
+    }
+    this.#nodeByStartToken.set(match, node);
+    this.#previousSiblingMap.set(node, this.#lastNode);
+    if (this.#lastNode) {
+      this.#nextSiblingMap.set(this.#lastNode, node);
+    }
+    this.#lastNode = node;
+    return node;
   }
   #readTraitStatement(): INodeTraitDefinition {
     const startToken = this.#expectKeyword('trait');
@@ -233,9 +294,6 @@ export default class ASTGenerator {
     }
     return token;
   }
-  #peekKeyword(value: string) {
-    return this.#peek(TokenType.Keyword, value);
-  }
   #match(): IToken {
     const token = this.#tokens[0];
     if (typeof token === 'undefined') {
@@ -245,17 +303,18 @@ export default class ASTGenerator {
   }
   #readExportStatement(): INodeExportStatement {
     const startToken = this.#expectKeyword('export');
+    const value = this.#readNode();
 
-    let value: INodeTypeDefinition | INodeTraitDefinition | INodeCallDefinition;
-    if (this.#peekKeyword('type')) {
-      value = this.#readTypeStatement();
-    } else if (this.#peekKeyword('trait')) {
-      value = this.#readTraitStatement();
-    } else if (this.#peekKeyword('call')) {
-      value = this.#readCallStatement();
-    } else {
-      throw new UnexpectedExport();
+    switch (value.type) {
+      case NodeType.ExportStatement:
+      case NodeType.ImportStatement:
+        throw new UnexpectedNodeType(value);
+      case NodeType.TraitDefinition:
+      case NodeType.TypeDefinition:
+      case NodeType.CallDefinition:
+        break;
     }
+
     return {
       type: NodeType.ExportStatement,
       value,
@@ -333,17 +392,22 @@ export default class ASTGenerator {
   #expectPunctuator(value: string) {
     const punctuator = this.#expectByType(TokenType.Punctuator);
     if (punctuator.value !== value) {
-      throw new UnexpectedPunctuatorName(value, punctuator);
+      throw new UnexpectedPunctuatorName(punctuator, value);
     }
     return punctuator;
   }
+  /**
+   * consumes the token if it's a match, returns null if it's not
+   * @param expectedType expected token type
+   * @param value value that the token should contain
+   * @returns the consumed IToken if everything matches
+   */
   #matchByType(expectedType: TokenType, value: string) {
     const token = this.#peek(expectedType, value);
     if (token === null) {
       return null;
     }
-    this.#lastToken = this.#tokens.shift() ?? null;
-    return token;
+    return this.#consume();
   }
   #matchPunctuator(value: string) {
     return this.#matchByType(TokenType.Punctuator, value);
@@ -362,26 +426,22 @@ export default class ASTGenerator {
   #expectKeyword(value: string) {
     const token = this.#expectByType(TokenType.Keyword);
     if (token.value !== value) {
-      throw new UnexpectedKeywordName(value, token);
+      throw new UnexpectedTokenValue(token, token.value);
     }
     return token;
   }
   #expectByType(expectedType: TokenType) {
-    const token = this.#tokens[0];
-    if (typeof token === 'undefined' || token.type !== expectedType) {
-      throw new UnexpectedTokenType(
-        expectedType,
-        token ?? null,
-        this.#lastToken
-      );
+    const token = this.#consume();
+    if (token.type !== expectedType) {
+      throw new UnexpectedTokenType(token, expectedType);
     }
-    /**
-     * remove first token
-     */
-    this.#lastToken = this.#tokens.shift() ?? null;
-    /**
-     * return first token
-     */
+    return token;
+  }
+  #consume(): IToken {
+    const token = this.#tokens.shift();
+    if (!token) {
+      throw new EOF();
+    }
     return token;
   }
   #eof() {

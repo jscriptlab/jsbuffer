@@ -145,15 +145,17 @@ export default class Tokenizer {
       if (!this.#peek(value)) {
         continue;
       }
+      const startOffset = this.#offset;
       this.#offset += this.#textEncoder.encode(value).byteLength;
       return {
         type: TokenType.Punctuator,
         value,
         position: {
           offset: {
-            start: this.#offset,
+            start: startOffset,
             end: this.#offset,
           },
+          // ! are we ever gonna have a punctuator that takes more than one line?
           lineNumber: {
             start: this.#lineNumber,
             end: this.#lineNumber,

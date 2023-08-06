@@ -89,8 +89,6 @@ suite.test(
   }
 );
 
-import { expect } from 'chai';
-
 suite.test('ASTGenerator: it should throw UnexpectedPunctuatorName', () => {
   assert.strict.throws(() => {
     new ASTGenerator(

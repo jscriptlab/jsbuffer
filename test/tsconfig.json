@@ -9,6 +9,7 @@
     "schema.ts",
     "fruit-list.json",
     "FileGenerator.ts",
+    "DetailedErrorPrinter.ts",
     "ASTGenerator.ts"
   ],
   "compilerOptions": {
