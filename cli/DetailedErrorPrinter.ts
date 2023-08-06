@@ -1,9 +1,6 @@
 import assert from 'assert';
 import Exception from '../exception/Exception';
-import ASTGenerator, {
-  ASTGenerationException,
-  NodeType,
-} from '../src/ASTGenerator';
+import ASTGenerator, { ASTGenerationException } from '../src/ASTGenerator';
 import { IToken, TokenType } from '../src/Tokenizer';
 
 function addSpacing({
