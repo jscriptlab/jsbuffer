@@ -60,10 +60,15 @@ export function integerRangeFromBits({
   bits,
   signed,
 }: {
-  bits: number;
+  bits: number | JSBI;
   signed: boolean;
 }): [JSBI, JSBI] {
-  const lastBitIndex = JSBI.BigInt(bits - 1);
+  const lastBitIndex = JSBI.BigInt(
+    JSBI.subtract(
+      typeof bits === 'number' ? JSBI.BigInt(bits) : bits,
+      JSBI.BigInt(1)
+    )
+  );
   const two = JSBI.BigInt(2);
   const zero = JSBI.BigInt(0);
   const negativeTwo = JSBI.BigInt(-2);

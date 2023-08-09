@@ -14,6 +14,9 @@ import assert from 'assert';
 import JavaScriptObjectStringify from '../code-generator/JavaScriptObjectStringify';
 import { crc32 } from 'crc';
 import { findClosestFileOrFolder } from '../code-generator/helpers';
+import JSBI from 'jsbi';
+import { integerRangeFromBits } from '../code-generator/fileGeneratorUtilities';
+import { BN } from 'bn.js';
 
 function getFunctionName(prefix: string, metadata: Metadata) {
   let out = `${prefix}${upperFirst(metadata.name)}`;
@@ -49,17 +52,26 @@ export class ReadFileFailure extends Exception {
   }
 }
 
+export interface ITraitNodeRandomValues {
+  externalTypeMetadata: Metadata | undefined;
+  paramTypeMetadata: MetadataParamType;
+  wrongValueSet: Set<unknown>;
+  randomValues: unknown;
+}
+
 export class MetadataCodeGenerator extends CodeStream {
   readonly #metadata;
   readonly #metadataObjects;
   readonly #outFile;
   readonly #absoluteImportPath;
   readonly #stringifier;
+  readonly #littleEndian;
   public constructor({
     parent,
     absoluteImportPath,
     metadata,
     metadataObjects,
+    littleEndian,
     outFile,
     indentationSize,
   }: {
@@ -69,10 +81,12 @@ export class MetadataCodeGenerator extends CodeStream {
     metadata: Metadata;
     metadataObjects: Metadata[];
     indentationSize: number;
+    littleEndian: boolean;
   }) {
     super(parent, {
       indentationSize,
     });
+    this.#littleEndian = littleEndian;
     this.#stringifier = new JavaScriptObjectStringify(this, {
       quoteObjectParameterNames: false,
       indentationSize,
@@ -101,7 +115,7 @@ export class MetadataCodeGenerator extends CodeStream {
     ];
     this.write(`console.log("-- %s","${relativePath}");\n`);
     this.write("const assert = require('assert');\n");
-    this.write("const {Codec, Serializer} = require('jsbuffer/codec');\n");
+    this.write("const {Codec, Serializer} = require('@jsbuffer/codec');\n");
     this.write(`const value = require("./${relativePath}");\n`);
     this.write(
       'const {\n',
@@ -119,56 +133,59 @@ export class MetadataCodeGenerator extends CodeStream {
       await this.#generateUpdateFunctionTests();
     }
   }
-  async #generateCodecFunctionTests() {
-    const traitNodeRandomValues =
-      this.#metadata.kind === 'trait'
-        ? await Promise.all(
-            this.#metadata.nodes.map(async (paramTypeMetadata) => {
-              const wrongValueSet = new Set<unknown>();
-              const maxDepth =
-                await this.#generateWrongRandomValueFromParamMetadata(
-                  paramTypeMetadata,
-                  {},
-                  'result',
-                  -1
-                );
-              const randomValues =
-                await this.#generateRandomValueFromParamMetadata(
-                  paramTypeMetadata
-                );
-              for (let i = 0; i < maxDepth; i++) {
-                const wrongValues: Record<string, unknown> = {};
-                await this.#generateWrongRandomValueFromParamMetadata(
-                  paramTypeMetadata,
-                  wrongValues,
-                  'result',
-                  i
-                );
-                wrongValueSet.add(wrongValues['result']);
-              }
-              const externalTypeMetadata =
-                paramTypeMetadata.type === 'externalType'
-                  ? {
-                      name: paramTypeMetadata.name,
-                      metadataObjects: await getMetadataFromRelativePath(
-                        this.#absoluteImportPath,
-                        paramTypeMetadata.relativePath
-                      ),
-                    }
-                  : null;
+  async #traitNodeRandomValues(
+    metadata: Metadata
+  ): Promise<ITraitNodeRandomValues[] | null> {
+    if (metadata.kind !== 'trait') {
+      return null;
+    }
+    const pendingNodes = metadata.nodes.map(async (paramTypeMetadata) => {
+      const wrongValueSet = new Set<unknown>();
+      const maxDepth = await this.#generateWrongRandomValueFromParamMetadata(
+        paramTypeMetadata,
+        {},
+        'result',
+        -1
+      );
+      const randomValues = await this.#generateRandomValueFromParamMetadata(
+        paramTypeMetadata
+      );
+      for (let i = 0; i < maxDepth; i++) {
+        const wrongValues: Record<string, unknown> = {};
+        await this.#generateWrongRandomValueFromParamMetadata(
+          paramTypeMetadata,
+          wrongValues,
+          'result',
+          i
+        );
+        wrongValueSet.add(wrongValues['result']);
+      }
+      const externalTypeMetadata =
+        paramTypeMetadata.type === 'externalType'
+          ? {
+              name: paramTypeMetadata.name,
+              metadataObjects: await getMetadataFromRelativePath(
+                this.#absoluteImportPath,
+                paramTypeMetadata.relativePath
+              ),
+            }
+          : null;
 
-              return {
-                externalTypeMetadata:
-                  externalTypeMetadata?.metadataObjects.find(
-                    (m) => m.name === externalTypeMetadata.name
-                  ),
-                paramTypeMetadata,
-                wrongValueSet,
-                randomValues,
-              };
-            })
-          )
-        : null;
+      return {
+        externalTypeMetadata: externalTypeMetadata?.metadataObjects.find(
+          (m) => m.name === externalTypeMetadata.name
+        ),
+        paramTypeMetadata,
+        wrongValueSet,
+        randomValues,
+      };
+    });
+    return Promise.all(pendingNodes);
+  }
+  async #generateCodecFunctionTests() {
+    const traitNodeRandomValues = await this.#traitNodeRandomValues(
+      this.#metadata
+    );
     this.write(
       '{\n',
       () => {
@@ -185,72 +202,105 @@ export class MetadataCodeGenerator extends CodeStream {
           'assert.strict.deepEqual(codec.decode(decodeFn, buffer),defaultFn());\n'
         );
         if (traitNodeRandomValues) {
-          for (const {
-            randomValues,
-            externalTypeMetadata,
-            wrongValueSet,
-          } of traitNodeRandomValues) {
-            if (externalTypeMetadata) {
-              assert.strict.ok(externalTypeMetadata.kind !== 'trait');
-              this.write(
-                '{\n',
-                () => {
-                  if (externalTypeMetadata.params.length > 0) {
-                    return;
-                  }
-                  this.write(
-                    'const s = new Serializer({textDecoder: new TextDecoder(), textEncoder: new TextEncoder()});\n'
-                  );
-                  this.write(
-                    `s.writeInt32(${crc32(`${externalTypeMetadata.id}`)});\n`
-                  );
-                  this.write(
-                    'assert.strict.equal(codec.decode(decodeFn,s.view()),null);\n'
-                  );
-                },
-                '}\n'
-              );
-            }
-            for (const wrongValues of wrongValueSet) {
-              this.write(
-                '{\n',
-                () => {
-                  this.write('const v = ');
-                  this.#stringifier.stringify(wrongValues);
-                  this.append(';\n');
-                  this.write(
-                    'assert.strict.throws(() => {\n',
-                    () => {
-                      this.write('buffer = codec.encode(encodeFn, v);\n');
-                    },
-                    '});\n'
-                  );
-                  this.write(
-                    'assert.strict.equal(codec.decode(decodeFn),null);\n'
-                  );
-                },
-                '}\n'
-              );
-            }
-            this.write(
-              '{\n',
-              () => {
-                this.write('const v = ');
-                this.#stringifier.stringify(randomValues);
-                this.append(';\n');
-
-                this.write('buffer = codec.encode(encodeFn, v);\n');
-                this.write(
-                  'assert.strict.deepEqual(codec.decode(decodeFn, buffer),v);\n'
-                );
-              },
-              '}\n'
-            );
-          }
+          this.#generateTraitTestingWithRandomValues(traitNodeRandomValues);
         }
       },
       '}\n'
     );
+  }
+  #generateTraitTestingWithRandomValues(
+    traitNodeRandomValues: ITraitNodeRandomValues[]
+  ) {
+    for (const {
+      randomValues,
+      externalTypeMetadata,
+      wrongValueSet,
+    } of traitNodeRandomValues) {
+      if (externalTypeMetadata) {
+        assert.strict.ok(externalTypeMetadata.kind !== 'trait');
+        this.write(
+          '{\n',
+          () => {
+            if (externalTypeMetadata.params.length > 0) {
+              return;
+            }
+            this.write(
+              'const s = new Serializer({textDecoder: new TextDecoder(), textEncoder: new TextEncoder()});\n'
+            );
+            this.write(
+              `s.writeInt32(${crc32(`${externalTypeMetadata.id}`)});\n`
+            );
+            this.write(
+              'assert.strict.equal(codec.decode(decodeFn,s.view()),null);\n'
+            );
+          },
+          '}\n'
+        );
+      }
+      const [firstWrongValueSet] = Array.from(wrongValueSet);
+      for (const wrongValues of wrongValueSet) {
+        this.write(
+          '{\n',
+          () => {
+            this.write(
+              'const s = new Serializer({ textEncoder: new TextEncoder() });\n'
+            );
+            this.write('const v = ');
+            this.#stringifier.stringify(wrongValues);
+            this.append(';\n');
+            this.write(
+              'assert.strict.throws(() => {\n',
+              () => {
+                // let fnName = 'encodeFn';
+                // if (firstWrongValueSet !== wrongValues) {
+                //   fnName = 'wrappedEncodeFn';
+                //   this.write(
+                //     `const ${fnName} = (s, value) => {\n`,
+                //     () => {
+                //       this.write(
+                //         'try {\n',
+                //         () => {
+                //           this.write('encodeFn(s, value);\n');
+                //         },
+                //         '} catch(reason){}'
+                //       );
+                //     },
+                //     '};\n'
+                //   );
+                // }
+                // this.write(`buffer = codec.encode(${fnName}, v);\n`);
+                this.write('encodeFn(s, v);\n');
+              },
+              '});\n'
+            );
+            const decodeExpression = 'codec.decode(decodeFn, s.view())';
+
+            this.write(
+              'assert.strict.throws(() => {\n',
+              () => {
+                this.write(`${decodeExpression};\n`);
+              },
+              '});\n'
+            );
+          },
+          '}\n'
+        );
+      }
+      this.write(
+        '{\n',
+        () => {
+          this.write('const v = ');
+          this.#stringifier.stringify(randomValues);
+          this.append(';\n');
+
+          this.write('buffer = codec.encode(encodeFn, v);\n');
+          this.write(
+            'assert.strict.deepEqual(codec.decode(decodeFn, buffer),v);\n'
+          );
+        },
+        '}\n'
+      );
+    }
   }
   async #generateUpdateFunctionTests() {
     const randomValues = await this.#generateRandomValuesFromMetadata(
@@ -377,6 +427,9 @@ export class MetadataCodeGenerator extends CodeStream {
             name = `${this.#metadataParamTypeToString(
               node.key
             )}, ${this.#metadataParamTypeToString(node.value)}`;
+            break;
+          case 'bigint':
+            name = node.bits;
             break;
         }
         return `${node.template}<${name}>`;
@@ -511,6 +564,9 @@ export class MetadataCodeGenerator extends CodeStream {
          */
         depth++;
         switch (param.template) {
+          case 'bigint':
+            value = { a: 1 };
+            break;
           case 'vector':
           case 'set': {
             const length = crypto.randomInt(1, 2);
@@ -663,15 +719,24 @@ export class MetadataCodeGenerator extends CodeStream {
       }
       case 'template':
         switch (param.template) {
+          case 'bigint': {
+            const bits = JSBI.toNumber(JSBI.BigInt(param.bits));
+            const byteLength = bits / 8;
+            return new BN(
+              crypto.randomBytes(byteLength),
+              this.#littleEndian ? 'le' : 'be'
+            )
+              .fromTwos(bits)
+              .toString();
+          }
           case 'vector':
           case 'set': {
             const length = crypto.randomInt(10, 100);
             const list = new Array<unknown>(length);
             for (let i = 0; i < length; i++) {
-              const value = await this.#generateRandomValueFromParamMetadata(
+              list[i] = await this.#generateRandomValueFromParamMetadata(
                 param.value
               );
-              list[i] = value;
             }
             if (param.template === 'set') {
               return new Set(list);
@@ -864,6 +929,7 @@ export default class SchemaTestCodeGenerator extends CodeStream {
             parent: this,
             indentationSize: this.#indentationSize,
             absoluteImportPath: f,
+            littleEndian: true,
             outFile: this.#outFile,
           })
       );

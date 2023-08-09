@@ -1,5 +1,5 @@
 import { Suite } from 'sarg';
-import { Deserializer, Serializer } from '../codec';
+import { Deserializer, Serializer } from '@jsbuffer/codec';
 import assert from 'assert';
 
 const suite = new Suite();
@@ -100,7 +100,7 @@ suite.test('Deserializer: it should rewind 4 bytes', () => {
     textDecoder: new TextDecoder(),
   });
   assert.strict.equal(d.readInt32(), -250);
-  d.rewindInt32();
+  d.rewind(4);
   assert.strict.equal(d.readInt32(), -250);
 });
 
@@ -116,7 +116,7 @@ suite.test(
       textDecoder: new TextDecoder(),
     });
     assert.strict.throws(() => {
-      d.rewindInt32();
+      d.rewind(4);
     });
   }
 );

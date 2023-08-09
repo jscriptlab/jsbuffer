@@ -38,6 +38,12 @@ export class UnexpectedTraitOutputNodeCount extends Exception {
   }
 }
 
+export class UnhandledResolvedType extends Exception {
+  public constructor(public readonly resolvedType: ResolvedType) {
+    super('Unhandled resolved type');
+  }
+}
+
 export class UnsupportedTypeExpression extends Exception {
   public constructor(public readonly node: NodeTypeExpression) {
     super();

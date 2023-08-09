@@ -1,5 +1,5 @@
 import { Suite } from 'sarg';
-import { Deserializer, Serializer } from '../codec';
+import { Deserializer, Serializer } from '@jsbuffer/codec';
 import { TextEncoder } from 'util';
 import assert from 'assert';
 import fruitList from './fruit-list.json';

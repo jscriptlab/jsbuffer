@@ -1,0 +1,142 @@
+[
+  {
+    "type": 0,
+    "value": "type",
+    "position": {
+      "lineNumber": {
+        "start": 0,
+        "end": 0
+      },
+      "offset": {
+        "start": 0,
+        "end": 4
+      }
+    }
+  },
+  {
+    "type": 1,
+    "value": "Message",
+    "position": {
+      "lineNumber": {
+        "start": 0,
+        "end": 0
+      },
+      "offset": {
+        "start": 5,
+        "end": 12
+      }
+    }
+  },
+  {
+    "type": 6,
+    "value": "{",
+    "position": {
+      "offset": {
+        "start": 14,
+        "end": 14
+      },
+      "lineNumber": {
+        "start": 0,
+        "end": 0
+      }
+    }
+  },
+  {
+    "type": 1,
+    "value": "bigint",
+    "position": {
+      "lineNumber": {
+        "start": 0,
+        "end": 0
+      },
+      "offset": {
+        "start": 15,
+        "end": 21
+      }
+    }
+  },
+  {
+    "type": 6,
+    "value": "<",
+    "position": {
+      "offset": {
+        "start": 22,
+        "end": 22
+      },
+      "lineNumber": {
+        "start": 0,
+        "end": 0
+      }
+    }
+  },
+  {
+    "type": 5,
+    "position": {
+      "offset": {
+        "start": 22,
+        "end": 26
+      },
+      "lineNumber": {
+        "start": 0,
+        "end": 0
+      }
+    },
+    "value": "1000"
+  },
+  {
+    "type": 6,
+    "value": ">",
+    "position": {
+      "offset": {
+        "start": 27,
+        "end": 27
+      },
+      "lineNumber": {
+        "start": 0,
+        "end": 0
+      }
+    }
+  },
+  {
+    "type": 1,
+    "value": "id",
+    "position": {
+      "lineNumber": {
+        "start": 0,
+        "end": 0
+      },
+      "offset": {
+        "start": 28,
+        "end": 30
+      }
+    }
+  },
+  {
+    "type": 6,
+    "value": ";",
+    "position": {
+      "offset": {
+        "start": 31,
+        "end": 31
+      },
+      "lineNumber": {
+        "start": 0,
+        "end": 0
+      }
+    }
+  },
+  {
+    "type": 6,
+    "value": "}",
+    "position": {
+      "offset": {
+        "start": 33,
+        "end": 33
+      },
+      "lineNumber": {
+        "start": 0,
+        "end": 0
+      }
+    }
+  }
+]

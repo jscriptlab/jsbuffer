@@ -6,6 +6,7 @@ import ASTGenerator, { UnexpectedToken } from '../src/ASTGenerator';
 import assert from 'assert';
 
 const suite = new Suite();
+
 suite.test('ASTGenerator: it should tokenize files', async () => {
   new ASTGenerator(
     new Tokenizer({
@@ -88,8 +89,6 @@ suite.test(
     });
   }
 );
-
-import { expect } from 'chai';
 
 suite.test('ASTGenerator: it should throw UnexpectedPunctuatorName', () => {
   assert.strict.throws(() => {

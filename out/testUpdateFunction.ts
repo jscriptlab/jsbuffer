@@ -12,22 +12,21 @@ export function isETrait(value: unknown): value is E {
 export function encodeETrait(__s: ISerializer, value: E) {
   switch (value._name) {
     case 'testUpdateFunction.A':
-      encodeA(__s, value);
-      break;
+      return encodeA(__s, value);
     case 'testUpdateFunction.B':
-      encodeB(__s, value);
-      break;
+      return encodeB(__s, value);
     case 'testUpdateFunction.C':
-      encodeC(__s, value);
-      break;
+      return encodeC(__s, value);
     case 'testUpdateFunction.D':
-      encodeD(__s, value);
-      break;
+      return encodeD(__s, value);
   }
+  throw new Error(
+    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- testUpdateFunction.A\n\t- testUpdateFunction.B\n\t- testUpdateFunction.C\n\t- testUpdateFunction.D\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
+  );
 }
 export function decodeETrait(__d: IDeserializer) {
   const __id = __d.readInt32();
-  __d.rewindInt32();
+  __d.rewind(4);
   let value: A | B | C | D;
   switch (__id) {
     case -344653639: {

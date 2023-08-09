@@ -1,24 +1,71 @@
 import { Suite } from 'sarg';
 import assert from 'assert';
 import { generateWithVirtualFs } from '../helpers';
-import { Exception, spawn } from 'child-process-utilities';
+import { spawn } from 'child-process-utilities';
 import CodeStream from 'textstreamjs';
 
 const suite = new Suite();
 
 function checkException(fn: () => Promise<void>) {
-  return async () => {
-    try {
-      await fn();
-    } catch (reason) {
-      console.log(reason);
-      if (reason instanceof Exception) {
-        console.log(reason, reason.constructor);
-      }
-      throw reason;
-    }
-  };
+  return fn;
 }
+
+suite.test('it should support bigint<uint64> template 2', async () => {
+  const createImport = (a: string) => `import { ${a} } from "./${a}";`;
+  await (
+    await generateWithVirtualFs({
+      packageInfo: {
+        name: 'shared-schema',
+      },
+      paths: {
+        Void: 'export type Void {}',
+        Request: ['export trait Request {}'].join('\n'),
+        a: [
+          createImport('Request'),
+          createImport('Void'),
+          'export call a : Request => Void {}',
+        ].join('\n'),
+        b: [
+          createImport('Request'),
+          createImport('Void'),
+          'export call b : Request => Void { bigint<256> b; }',
+        ].join('\n'),
+        main: ['import "./b";', 'import "./a";'].join('\n'),
+      },
+      mainFile: 'main',
+    })
+  ).test();
+});
+
+suite.test('it should throw if an unknown template is used', async () => {
+  await assert.strict.rejects(async () => {
+    await (
+      await generateWithVirtualFs({
+        packageInfo: {
+          name: 'shared-schema',
+        },
+        paths: {
+          main: 'export type X { unknown_template____<int> b; }',
+        },
+        mainFile: 'main',
+      })
+    ).test();
+  });
+});
+
+suite.test('it should support bigint<int> template 1', async () => {
+  await (
+    await generateWithVirtualFs({
+      packageInfo: {
+        name: 'shared-schema',
+      },
+      paths: {
+        main: 'export type X { bigint<2000> b; }',
+      },
+      mainFile: 'main',
+    })
+  ).test();
+});
 
 suite.test(
   'it should allow importing external schemas in a cascading format',

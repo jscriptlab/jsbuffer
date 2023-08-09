@@ -126,6 +126,435 @@ export function updateTestMap(
   }
   return value;
 }
+export interface testBigInt {
+  _name: 'schema.testBigInt';
+  beforeA: string;
+  a: string;
+  b: string;
+  c: string;
+  d: string;
+  e: string;
+  f: string;
+}
+export function isTestBigInt(value: unknown): value is testBigInt {
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'schema.testBigInt'
+    )
+  )
+    return false;
+  if (
+    !(
+      'beforeA' in value &&
+      ((__v0) =>
+        typeof __v0 === 'string' &&
+        ((__bigintValue0) =>
+          JSBI.greaterThanOrEqual(
+            __bigintValue0,
+            JSBI.BigInt(
+              '-57406534763712726211641660058884099201115885104434760023882136841288313069618515692832974315825313495922298231949373138672355948043152766571296567808332659269564994572656140000344389574120022435714463495031743122390807731823194181973658513020233176985452498279081199404472314802811655824768082110985166340672084454492229252801189742403957029450467388250214501358353312915261004066118140645880633941658603299497698209063510889929202021079926591625770444716951045960277478891794836019580040978608315291377690212791863007764174393209716027254457637891941312587717764400411421385408982726881092425574514688'
+            )
+          ) &&
+          JSBI.lessThanOrEqual(
+            __bigintValue0,
+            JSBI.BigInt(
+              '57406534763712726211641660058884099201115885104434760023882136841288313069618515692832974315825313495922298231949373138672355948043152766571296567808332659269564994572656140000344389574120022435714463495031743122390807731823194181973658513020233176985452498279081199404472314802811655824768082110985166340672084454492229252801189742403957029450467388250214501358353312915261004066118140645880633941658603299497698209063510889929202021079926591625770444716951045960277478891794836019580040978608315291377690212791863007764174393209716027254457637891941312587717764400411421385408982726881092425574514687'
+            )
+          ))(JSBI.BigInt(__v0)))(value['beforeA'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'a' in value &&
+      ((__v2) =>
+        typeof __v2 === 'string' &&
+        ((__bigintValue2) =>
+          JSBI.greaterThanOrEqual(
+            __bigintValue2,
+            JSBI.BigInt(
+              '-89884656743115795386465259539451236680898848947115328636715040578866337902750481566354238661203768010560056939935696678829394884407208311246423715319737062188883946712432742638151109800623047059726541476042502884419075341171231440736956555270413618581675255342293149119973622969239858152417678164812112068608'
+            )
+          ) &&
+          JSBI.lessThanOrEqual(
+            __bigintValue2,
+            JSBI.BigInt(
+              '89884656743115795386465259539451236680898848947115328636715040578866337902750481566354238661203768010560056939935696678829394884407208311246423715319737062188883946712432742638151109800623047059726541476042502884419075341171231440736956555270413618581675255342293149119973622969239858152417678164812112068607'
+            )
+          ))(JSBI.BigInt(__v2)))(value['a'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'b' in value &&
+      ((__v4) =>
+        typeof __v4 === 'string' &&
+        ((__bigintValue4) =>
+          JSBI.greaterThanOrEqual(
+            __bigintValue4,
+            JSBI.BigInt(
+              '-6703903964971298549787012499102923063739682910296196688861780721860882015036773488400937149083451713845015929093243025426876941405973284973216824503042048'
+            )
+          ) &&
+          JSBI.lessThanOrEqual(
+            __bigintValue4,
+            JSBI.BigInt(
+              '6703903964971298549787012499102923063739682910296196688861780721860882015036773488400937149083451713845015929093243025426876941405973284973216824503042047'
+            )
+          ))(JSBI.BigInt(__v4)))(value['b'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'c' in value &&
+      ((__v6) =>
+        typeof __v6 === 'string' &&
+        ((__bigintValue6) =>
+          JSBI.greaterThanOrEqual(
+            __bigintValue6,
+            JSBI.BigInt(
+              '-57896044618658097711785492504343953926634992332820282019728792003956564819968'
+            )
+          ) &&
+          JSBI.lessThanOrEqual(
+            __bigintValue6,
+            JSBI.BigInt(
+              '57896044618658097711785492504343953926634992332820282019728792003956564819967'
+            )
+          ))(JSBI.BigInt(__v6)))(value['c'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'd' in value &&
+      ((__v8) =>
+        typeof __v8 === 'string' &&
+        ((__bigintValue8) =>
+          JSBI.greaterThanOrEqual(
+            __bigintValue8,
+            JSBI.BigInt('-170141183460469231731687303715884105728')
+          ) &&
+          JSBI.lessThanOrEqual(
+            __bigintValue8,
+            JSBI.BigInt('170141183460469231731687303715884105727')
+          ))(JSBI.BigInt(__v8)))(value['d'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'e' in value &&
+      ((__v10) =>
+        typeof __v10 === 'string' &&
+        ((__bigintValue10) =>
+          JSBI.greaterThanOrEqual(
+            __bigintValue10,
+            JSBI.BigInt('-9223372036854775808')
+          ) &&
+          JSBI.lessThanOrEqual(
+            __bigintValue10,
+            JSBI.BigInt('9223372036854775807')
+          ))(JSBI.BigInt(__v10)))(value['e'])
+    )
+  )
+    return false;
+  if (
+    !(
+      'f' in value &&
+      ((__v12) =>
+        typeof __v12 === 'string' &&
+        ((__bigintValue12) =>
+          JSBI.greaterThanOrEqual(
+            __bigintValue12,
+            JSBI.BigInt('-2147483648')
+          ) &&
+          JSBI.lessThanOrEqual(__bigintValue12, JSBI.BigInt('2147483647')))(
+          JSBI.BigInt(__v12)
+        ))(value['f'])
+    )
+  )
+    return false;
+  return true;
+}
+export interface testBigIntInputParams {
+  beforeA: string;
+  a: string;
+  b: string;
+  c: string;
+  d: string;
+  e: string;
+  f: string;
+}
+export function testBigInt(params: testBigIntInputParams): testBigInt {
+  return {
+    _name: 'schema.testBigInt',
+    beforeA: params['beforeA'],
+    a: params['a'],
+    b: params['b'],
+    c: params['c'],
+    d: params['d'],
+    e: params['e'],
+    f: params['f'],
+  };
+}
+export function encodeTestBigInt(__s: ISerializer, value: testBigInt) {
+  __s.writeInt32(328647898);
+  /**
+   * encoding param: beforeA
+   */
+  const __pv0 = value['beforeA'];
+  __s.writeSignedBigInt(__pv0, 2000);
+  /**
+   * encoding param: a
+   */
+  const __pv2 = value['a'];
+  __s.writeSignedBigInt(__pv2, 1024);
+  /**
+   * encoding param: b
+   */
+  const __pv4 = value['b'];
+  __s.writeSignedBigInt(__pv4, 512);
+  /**
+   * encoding param: c
+   */
+  const __pv6 = value['c'];
+  __s.writeSignedBigInt(__pv6, 256);
+  /**
+   * encoding param: d
+   */
+  const __pv8 = value['d'];
+  __s.writeSignedBigInt(__pv8, 128);
+  /**
+   * encoding param: e
+   */
+  const __pv10 = value['e'];
+  __s.writeSignedBigInt(__pv10, 64);
+  /**
+   * encoding param: f
+   */
+  const __pv12 = value['f'];
+  __s.writeSignedBigInt(__pv12, 32);
+}
+export function decodeTestBigInt(__d: IDeserializer): testBigInt | null {
+  const __id = __d.readInt32();
+  /**
+   * decode header
+   */
+  if (__id !== 328647898) return null;
+  let beforeA: string;
+  let a: string;
+  let b: string;
+  let c: string;
+  let d: string;
+  let e: string;
+  let f: string;
+  /**
+   * decoding param: beforeA
+   */
+  beforeA = __d.readSignedBigInt(2000);
+  /**
+   * decoding param: a
+   */
+  a = __d.readSignedBigInt(1024);
+  /**
+   * decoding param: b
+   */
+  b = __d.readSignedBigInt(512);
+  /**
+   * decoding param: c
+   */
+  c = __d.readSignedBigInt(256);
+  /**
+   * decoding param: d
+   */
+  d = __d.readSignedBigInt(128);
+  /**
+   * decoding param: e
+   */
+  e = __d.readSignedBigInt(64);
+  /**
+   * decoding param: f
+   */
+  f = __d.readSignedBigInt(32);
+  return {
+    _name: 'schema.testBigInt',
+    beforeA,
+    a,
+    b,
+    c,
+    d,
+    e,
+    f,
+  };
+}
+export function defaultTestBigInt(
+  params: Partial<testBigIntInputParams> = {}
+): testBigInt {
+  return testBigInt({
+    beforeA: '0',
+    a: '0',
+    b: '0',
+    c: '0',
+    d: '0',
+    e: '0',
+    f: '0',
+    ...params,
+  });
+}
+export function compareTestBigInt(__a: testBigInt, __b: testBigInt): boolean {
+  return (
+    /**
+     * compare parameter beforeA
+     */
+    ((a, b) => JSBI.equal(a, b))(
+      JSBI.BigInt(__a['beforeA']),
+      JSBI.BigInt(__b['beforeA'])
+    ) &&
+    /**
+     * compare parameter a
+     */
+    ((a, b) => JSBI.equal(a, b))(
+      JSBI.BigInt(__a['a']),
+      JSBI.BigInt(__b['a'])
+    ) &&
+    /**
+     * compare parameter b
+     */
+    ((a, b) => JSBI.equal(a, b))(
+      JSBI.BigInt(__a['b']),
+      JSBI.BigInt(__b['b'])
+    ) &&
+    /**
+     * compare parameter c
+     */
+    ((a, b) => JSBI.equal(a, b))(
+      JSBI.BigInt(__a['c']),
+      JSBI.BigInt(__b['c'])
+    ) &&
+    /**
+     * compare parameter d
+     */
+    ((a, b) => JSBI.equal(a, b))(
+      JSBI.BigInt(__a['d']),
+      JSBI.BigInt(__b['d'])
+    ) &&
+    /**
+     * compare parameter e
+     */
+    ((a, b) => JSBI.equal(a, b))(
+      JSBI.BigInt(__a['e']),
+      JSBI.BigInt(__b['e'])
+    ) &&
+    /**
+     * compare parameter f
+     */
+    ((a, b) => JSBI.equal(a, b))(JSBI.BigInt(__a['f']), JSBI.BigInt(__b['f']))
+  );
+}
+export function updateTestBigInt(
+  value: testBigInt,
+  changes: Partial<testBigIntInputParams>
+) {
+  if (typeof changes['beforeA'] !== 'undefined') {
+    if (
+      !((a, b) => JSBI.equal(a, b))(
+        JSBI.BigInt(changes['beforeA']),
+        JSBI.BigInt(value['beforeA'])
+      )
+    ) {
+      value = testBigInt({
+        ...value,
+        beforeA: changes['beforeA'],
+      });
+    }
+  }
+  if (typeof changes['a'] !== 'undefined') {
+    if (
+      !((a, b) => JSBI.equal(a, b))(
+        JSBI.BigInt(changes['a']),
+        JSBI.BigInt(value['a'])
+      )
+    ) {
+      value = testBigInt({
+        ...value,
+        a: changes['a'],
+      });
+    }
+  }
+  if (typeof changes['b'] !== 'undefined') {
+    if (
+      !((a, b) => JSBI.equal(a, b))(
+        JSBI.BigInt(changes['b']),
+        JSBI.BigInt(value['b'])
+      )
+    ) {
+      value = testBigInt({
+        ...value,
+        b: changes['b'],
+      });
+    }
+  }
+  if (typeof changes['c'] !== 'undefined') {
+    if (
+      !((a, b) => JSBI.equal(a, b))(
+        JSBI.BigInt(changes['c']),
+        JSBI.BigInt(value['c'])
+      )
+    ) {
+      value = testBigInt({
+        ...value,
+        c: changes['c'],
+      });
+    }
+  }
+  if (typeof changes['d'] !== 'undefined') {
+    if (
+      !((a, b) => JSBI.equal(a, b))(
+        JSBI.BigInt(changes['d']),
+        JSBI.BigInt(value['d'])
+      )
+    ) {
+      value = testBigInt({
+        ...value,
+        d: changes['d'],
+      });
+    }
+  }
+  if (typeof changes['e'] !== 'undefined') {
+    if (
+      !((a, b) => JSBI.equal(a, b))(
+        JSBI.BigInt(changes['e']),
+        JSBI.BigInt(value['e'])
+      )
+    ) {
+      value = testBigInt({
+        ...value,
+        e: changes['e'],
+      });
+    }
+  }
+  if (typeof changes['f'] !== 'undefined') {
+    if (
+      !((a, b) => JSBI.equal(a, b))(
+        JSBI.BigInt(changes['f']),
+        JSBI.BigInt(value['f'])
+      )
+    ) {
+      value = testBigInt({
+        ...value,
+        f: changes['f'],
+      });
+    }
+  }
+  return value;
+}
 export interface testMap2 {
   _name: 'schema.testMap2';
   a: ReadonlyMap<string | null, string>;
@@ -1220,16 +1649,17 @@ export function isResultTrait(value: unknown): value is Result {
 export function encodeResultTrait(__s: ISerializer, value: Result) {
   switch (value._name) {
     case 'schema.Users':
-      encodeUsers(__s, value);
-      break;
+      return encodeUsers(__s, value);
     case 'schema.Posts':
-      encodePosts(__s, value);
-      break;
+      return encodePosts(__s, value);
   }
+  throw new Error(
+    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- schema.Users\n\t- schema.Posts\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
+  );
 }
 export function decodeResultTrait(__d: IDeserializer) {
   const __id = __d.readInt32();
-  __d.rewindInt32();
+  __d.rewind(4);
   let value: Users | Posts;
   switch (__id) {
     case 1801329960: {

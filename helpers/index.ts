@@ -170,9 +170,9 @@ export async function generateWithVirtualFs({
   await runCommand('npm', [
     'install',
     '--save-dev',
-    'jsbuffer@0.x',
-    'typescript@5.x',
-    'nyc@15.x',
+    '@jsbuffer/codec@^1',
+    'typescript@^5',
+    'nyc@^15',
   ]);
   return {
     test,

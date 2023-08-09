@@ -10,16 +10,17 @@ export function isUserTrait(value: unknown): value is User {
 export function encodeUserTrait(__s: ISerializer, value: User) {
   switch (value._name) {
     case 'user.user':
-      encodeUser(__s, value);
-      break;
+      return encodeUser(__s, value);
     case 'user.userDeleted':
-      encodeUserDeleted(__s, value);
-      break;
+      return encodeUserDeleted(__s, value);
   }
+  throw new Error(
+    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- user.user\n\t- user.userDeleted\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
+  );
 }
 export function decodeUserTrait(__d: IDeserializer) {
   const __id = __d.readInt32();
-  __d.rewindInt32();
+  __d.rewind(4);
   let value: user | userDeleted;
   switch (__id) {
     case -2086976610: {
@@ -60,13 +61,15 @@ export function isTestTrait(value: unknown): value is Test {
 export function encodeTestTrait(__s: ISerializer, value: Test) {
   switch (value._name) {
     case 'user.test':
-      encodeTest(__s, value);
-      break;
+      return encodeTest(__s, value);
   }
+  throw new Error(
+    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- user.test\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
+  );
 }
 export function decodeTestTrait(__d: IDeserializer) {
   const __id = __d.readInt32();
-  __d.rewindInt32();
+  __d.rewind(4);
   let value: test;
   switch (__id) {
     case -834825061: {

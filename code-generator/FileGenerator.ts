@@ -54,10 +54,12 @@ import {
   TypeNotFound,
   UnexpectedTraitOutputNodeCount,
   UnhandledNode,
+  UnhandledResolvedType,
   UnsupportedGenericExpression,
   UnsupportedTemplate,
   UnsupportedTypeExpression,
 } from './exceptions';
+import JSBI from 'jsbi';
 
 export interface IFile {
   path: string;
@@ -719,6 +721,7 @@ export default class FileGenerator extends CodeStream {
     };
   }
   #generateTypesFile(): IOutputFile {
+    this.write("import JSBI from 'jsbi';\n");
     this.write(
       'export type RequestResult<T> = T extends IRequest<infer R> ? R : never;\n'
     );
@@ -729,6 +732,8 @@ export default class FileGenerator extends CodeStream {
         this.write('writeBuffer(value: Uint8Array): void;\n');
         this.write('writeUint32(value: number): void;\n');
         this.write('writeString(value: string): void;\n');
+        this.write('writeSignedBigInt(value: string, bits: number): void;\n');
+        this.write('writeUnsignedBigInt(value: string, bits: number): void;\n');
         this.write('writeNullTerminatedString(value: string): void;\n');
         this.write('writeSignedLong(value: string): void;\n');
         this.write('writeUnsignedLong(value: string): void;\n');
@@ -743,6 +748,8 @@ export default class FileGenerator extends CodeStream {
       () => {
         this.write('readUint8(): number;\n');
         this.write('readBuffer(length: number): Uint8Array;\n');
+        this.write('readSignedBigInt(bits: number): string;\n');
+        this.write('readUnsignedBigInt(bits: number): string;\n');
         this.write('readUint32(): number;\n');
         this.write('readString(): string;\n');
         this.write('readNullTerminatedString(): string;\n');
@@ -751,7 +758,7 @@ export default class FileGenerator extends CodeStream {
         this.write('readInt32(): number;\n');
         this.write('readDouble(): number;\n');
         this.write('readFloat(): number;\n');
-        this.write('rewindInt32(): void;\n');
+        this.write('rewind(bytes: number): void;\n');
       },
       '}\n'
     );
@@ -909,6 +916,14 @@ export default class FileGenerator extends CodeStream {
       this.append(`${compareFunctionName}(${v1},${v2})`);
     } else if ('template' in resolved) {
       switch (resolved.template) {
+        case 'bigint': {
+          this.append('((a, b) => ');
+          this.indentBlock(() => {
+            this.append('JSBI.equal(a, b)');
+          });
+          this.append(`)(JSBI.BigInt(${v1}),JSBI.BigInt(${v2}))`);
+          break;
+        }
         case 'optional': {
           const optionalVarName1 = `__dp${depth}1`;
           const optionalVarName2 = `__dp${depth}2`;
@@ -991,33 +1006,6 @@ export default class FileGenerator extends CodeStream {
           this.append('))');
           break;
         }
-        // case 'set': {
-        //   const aVarName = `__a${depth}`;
-        //   const bVarName = `__b${depth}`;
-        //   const itemVarName = `__it${depth}`;
-        //   const itemIndexVarName = `__i${depth}`;
-        //   this.append('(');
-        //   (() => {
-        //     this.append(`(${aVarName},${bVarName}) => (`);
-        //     (() => {
-        //       this.append(
-        //         `${aVarName}.every((${itemVarName},${itemIndexVarName}) => (`
-        //       );
-        //       (() => {
-        //         depth = this.#generateComparisonExpression(
-        //           resolved.expression,
-        //           itemVarName,
-        //           `${bVarName}[${itemIndexVarName}]`,
-        //           depth + 1
-        //         );
-        //       })();
-        //       this.append('))');
-        //     })();
-        //     this.append(')');
-        //   })();
-        //   this.append(`)(Array.from(${v1}),Array.from(${v2}))`);
-        //   break;
-        // }
         case 'tuple': {
           const exps = resolved.expressions.map((exp, index) => ({
             exp,
@@ -1113,6 +1101,8 @@ export default class FileGenerator extends CodeStream {
       }
     } else if ('template' in resolved) {
       switch (resolved.template) {
+        case 'bigint':
+          return '"0"';
         case 'map':
           return `new Map<${this.#resolveTypeExpressionToString({
             typeExpression: resolved.key.expression,
@@ -1224,6 +1214,14 @@ export default class FileGenerator extends CodeStream {
               this.#getMetadataFromResolvedType(t)
             ),
           };
+        case 'bigint':
+          return {
+            type: 'template',
+            template: 'bigint',
+            bits: resolvedType.bits.value,
+          };
+        default:
+          throw new UnhandledResolvedType(resolvedType);
       }
     } else if ('fileGenerator' in resolvedType) {
       const importPath = resolvedType.fileGenerator.#sourceImportToOutDirImport(
@@ -1290,115 +1288,6 @@ export default class FileGenerator extends CodeStream {
       name: node.name.value,
       params: node.parameters.map((p) => this.#getMetadataFromParam(p)),
     };
-  }
-  #generateResolvedTypeMetadata(resolvedType: ResolvedType) {
-    if ('generic' in resolvedType) {
-      this.write('type: "generic",\n');
-      this.write(`value: "${resolvedType.generic}"\n`);
-    } else if ('template' in resolvedType) {
-      this.write('type: "template",\n');
-      this.write(`name: "${resolvedType.template}",\n`);
-      switch (resolvedType.template) {
-        default:
-          throw new Exception(
-            // @ts-expect-error `template` property should not exist since we have tried all template types
-            `Failed to generate metadata for template: ${resolvedType.template}`
-          );
-        case 'optional':
-        case 'set':
-        case 'vector':
-          this.write(
-            'value: {\n',
-            () => {
-              this.#generateResolvedTypeMetadata(resolvedType.type);
-            },
-            '}\n'
-          );
-          break;
-        case 'tuple':
-          this.write(
-            'args: [\n',
-            () => {
-              for (const resolvedTupleType of resolvedType.types) {
-                this.write(
-                  '{\n',
-                  () => {
-                    this.#generateResolvedTypeMetadata(resolvedTupleType);
-                  },
-                  '},\n'
-                );
-              }
-            },
-            ']\n'
-          );
-          break;
-        case 'map': {
-          const items = [
-            ['key', resolvedType.key],
-            ['value', resolvedType.value],
-          ] as const;
-          for (const item of items) {
-            const [name, value] = item;
-            this.write(
-              `${name}: {\n`,
-              () => {
-                this.#generateResolvedTypeMetadata(value.resolved);
-              },
-              '}'
-            );
-            if (item !== items[items.length - 1]) {
-              this.append(',');
-            }
-            this.append('\n');
-          }
-          break;
-        }
-      }
-    } else if ('fileGenerator' in resolvedType) {
-      const definition = this.#resolvedTypeExpressionToDefinition(resolvedType);
-      this.write(`name: "${resolvedType.identifier}",\n`);
-      this.write(
-        `id: "${resolvedType.fileGenerator.#getUniqueHeader(definition)}",\n`
-      );
-      this.write('type: "externalType",\n');
-      this.write(
-        `externalModule: ${
-          resolvedType.fileGenerator.#externalModule ? 'true' : 'false'
-        },\n`
-      );
-      this.write(
-        `relativePath: "${resolvedType.fileGenerator.#sourceImportToOutDirImport(
-          this,
-          resolvedType.fileGenerator.#file.path
-        )}"\n`
-      );
-    } else {
-      this.write(`id: ${this.#getUniqueHeader(resolvedType)},\n`);
-      this.write('type: "internalType",\n');
-      let kind: string;
-      switch (resolvedType.type) {
-        case NodeType.CallDefinition:
-          kind = 'call';
-          this.write(
-            'returnType: {\n',
-            () => {
-              this.#generateResolvedTypeMetadata(
-                this.#resolveTypeExpression(resolvedType.returnType)
-              );
-            },
-            '},\n'
-          );
-          break;
-        case NodeType.TraitDefinition:
-          kind = 'trait';
-          break;
-        case NodeType.TypeDefinition:
-          kind = 'type';
-          break;
-      }
-      this.write(`kind: "${kind}",\n`);
-      this.write(`name: "${resolvedType.name.value}"\n`);
-    }
   }
   #generateNodeCode(node: ASTGeneratorOutputNode) {
     switch (node.type) {
@@ -1668,6 +1557,32 @@ export default class FileGenerator extends CodeStream {
           );
           this.append('))');
           break;
+        case 'bigint': {
+          const jsbi = this.#import({
+            path: 'jsbi',
+            wildcard: false,
+            identifier: 'JSBI',
+            target: 'nodeModule',
+            isDefaultImport: true,
+          });
+          const [min, max] = integerRangeFromBits({
+            bits: JSBI.BigInt(param.bits.value),
+            signed: true,
+          });
+          const argName = `__bigintValue${depth}`;
+          this.append(`typeof ${value} === 'string' && (${argName} => `);
+          this.indentBlock(() => {
+            this.append(
+              [
+                `${jsbi}.greaterThanOrEqual(${argName}, ${jsbi}.BigInt("${min}"))`,
+                `${jsbi}.lessThanOrEqual(${argName}, ${jsbi}.BigInt("${max}"))`,
+              ].join(' && ')
+            );
+          });
+          this.append(`)(${jsbi}.BigInt(${value}))`);
+          depth++;
+          break;
+        }
         default:
           throw new Exception(`Unhandled template type: ${param}`);
       }
@@ -1760,6 +1675,10 @@ export default class FileGenerator extends CodeStream {
             ...options,
             typeExpression: resolved.expression,
           })}>`;
+        case 'bigint':
+          return 'string';
+        default:
+          throw new UnhandledResolvedType(resolved);
       }
     }
     const name =
@@ -1819,6 +1738,18 @@ export default class FileGenerator extends CodeStream {
               template: typeExpression.name.value,
               expression: setOrVectorType,
               type: this.#resolveTypeExpression(setOrVectorType),
+            };
+          }
+          case 'bigint': {
+            const [bits] = typeExpression.templateArguments;
+            if (!bits || bits.type !== NodeType.LiteralNumber) {
+              throw new Exception(
+                'First argument of `bigint` template should be a literal number'
+              );
+            }
+            return {
+              template: 'bigint',
+              bits,
             };
           }
           default:
@@ -1976,6 +1907,7 @@ export default class FileGenerator extends CodeStream {
         trait
       )}(__s: ISerializer,value: ${getTypeName(trait)}) {\n`,
       () => {
+        const uniqueNames = new Set<string>();
         this.write(
           `switch(value.${this.#uniqueNamePropertyName}) {\n`,
           () => {
@@ -1986,24 +1918,39 @@ export default class FileGenerator extends CodeStream {
                 : this;
               const def = this.#resolvedTypeExpressionToDefinition(exp);
               const encodeFunctionName = getEncodeFunctionName(def);
-              if (isExternalRequirement)
+              if (isExternalRequirement) {
                 this.#import({
                   ...exp,
                   identifier: encodeFunctionName,
                 });
-              this.write(
-                `case '${fileGenerator.#getTypeDefinitionOrCallDefinitionNamePropertyValue(
+              }
+              const uniqueName =
+                fileGenerator.#getTypeDefinitionOrCallDefinitionNamePropertyValue(
                   def
-                )}':\n`
-              );
+                );
+              this.write(`case '${uniqueName}':\n`);
               this.indentBlock(() => {
-                this.write(`${encodeFunctionName}(__s,value);\n`);
-                this.write('break;\n');
+                this.write(`return ${encodeFunctionName}(__s,value);\n`);
               });
+              uniqueNames.add(uniqueName);
             }
           },
           '}\n'
         );
+        const propValue = `\${value['${this.#uniqueNamePropertyName}']}`;
+        const formattedUniqueNames = new Array<string>();
+        for (const uniqueName of uniqueNames) {
+          formattedUniqueNames.push(`\\t- ${uniqueName}\\n`);
+        }
+        const msg =
+          `Failed to encode: Received invalid value on "${
+            this.#uniqueNamePropertyName
+          }" property. ` +
+          `We got "${propValue}" value, but this function was expecting to receive one of the following:\\n` +
+          `${formattedUniqueNames.join('')}\\n\\n` +
+          'Possible cause is that maybe this type simply does not extend this trait, and somehow ' +
+          'the type-checking prevented you from calling this function wrongly.';
+        this.write(`throw new Error(\`${msg}\`);\n`);
       },
       '}\n'
     );
@@ -2093,7 +2040,7 @@ export default class FileGenerator extends CodeStream {
       `export function ${getDecodeFunctionName(trait)}(__d: IDeserializer) {\n`,
       () => {
         this.write('const __id = __d.readInt32();\n');
-        this.write('__d.rewindInt32();\n');
+        this.write('__d.rewind(4);\n');
         this.write(
           `let value: ${nodes.map((n) => getTypeName(n)).join(' | ')};\n`
         );
@@ -2277,6 +2224,14 @@ export default class FileGenerator extends CodeStream {
           }
           break;
         }
+        case 'bigint':
+          this.write(
+            `${serializerVarName}.writeSignedBigInt(${value}, ${JSBI.toNumber(
+              JSBI.BigInt(resolved.bits.value)
+            )});\n`
+          );
+          depth++;
+          break;
         default:
           throw new UnsupportedTemplate(resolved);
       }
@@ -2354,6 +2309,11 @@ export default class FileGenerator extends CodeStream {
       }
     } else if ('template' in resolved) {
       switch (resolved.template) {
+        case 'bigint':
+          this.write(
+            `${value} = __d.readSignedBigInt(${resolved.bits.value});\n`
+          );
+          break;
         case 'optional':
           this.write(
             'if(__d.readUint8() === 1) {\n',

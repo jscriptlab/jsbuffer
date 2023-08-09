@@ -3,7 +3,6 @@
     "types": ["node"]
   },
   "references": [
-    { "path": "../codec" },
     {
       "path": "../code-generator"
     }

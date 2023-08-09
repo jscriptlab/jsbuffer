@@ -1,5 +1,5 @@
 import { Suite } from 'sarg';
-import { Codec } from '../codec';
+import { Codec } from '@jsbuffer/codec';
 import {
   GetPostById,
   decodeGetPostById,

@@ -6,7 +6,7 @@ import {
   normalStringList,
   nullTerminatedStringList,
 } from '../out/schema';
-import { Deserializer, Serializer } from '../codec';
+import { Deserializer, Serializer } from '@jsbuffer/codec';
 import perf_hooks from 'perf_hooks';
 import crypto from 'crypto';
 

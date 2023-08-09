@@ -8,6 +8,7 @@
     "stringUtilities.ts",
     "schema.ts",
     "fruit-list.json",
+    "expected-tokens-1.json",
     "FileGenerator.ts",
     "ASTGenerator.ts"
   ],
@@ -16,7 +17,6 @@
     "types": ["node"]
   },
   "references": [
-    { "path": "../codec" },
     { "path": "../helpers" },
     { "path": "../out" },
     { "path": "../src" },

@@ -37,7 +37,7 @@ import {
   updateTupleTupleTest,
 } from '../out/tupleTest2';
 import { A, defaultTest, test, updateTest } from '../out/testUpdateFunction';
-import { Serializer, Deserializer, Codec } from '../codec';
+import { Serializer, Deserializer, Codec } from '@jsbuffer/codec';
 import { TextDecoder, TextEncoder } from 'util';
 import assert from 'assert';
 import crypto from 'crypto';

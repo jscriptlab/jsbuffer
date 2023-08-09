@@ -92,13 +92,15 @@ export default class Tokenizer {
         this.#lineNumber++;
       } else if (Character.isStringLiteralStart(ch)) {
         tokens.push(this.#readLiteralString());
+      } else if (Character.isIntegerPart(ch)) {
+        tokens.push(this.#readLiteralNumber());
       } else {
         const punctuator = this.#readPunctuator();
         if (punctuator) {
           tokens.push(punctuator);
         } else {
           throw new Exception(
-            `unexpected ${String.fromCharCode(ch)} at line number ${
+            `Unexpected ${String.fromCharCode(ch)} at line number ${
               this.#lineNumber + 1
             }`
           );
@@ -112,13 +114,10 @@ export default class Tokenizer {
     const startOffset = this.#offset++;
     while (
       !this.#eof() &&
-      !Character.isStringLiteralStart(this.#currentCharacter())
+      !Character.isStringLiteralStart(this.#currentCharacter()) &&
+      !Character.isLineBreak(this.#currentCharacter())
     ) {
-      if (Character.isLineBreak(this.#currentCharacter())) {
-        throw new Exception('line break before end of string');
-      } else {
-        this.#offset++;
-      }
+      this.#offset++;
     }
     // skip string end and get offset before end string token
     const endOffset = this.#offset++;
@@ -136,6 +135,29 @@ export default class Tokenizer {
       },
       value: this.#textDecoder.decode(
         this.#contents.subarray(startOffset + 1, endOffset)
+      ),
+    };
+  }
+  #readLiteralNumber(): IToken {
+    const startOffset = this.#offset;
+    while (!this.#eof() && Character.isIntegerPart(this.#currentCharacter())) {
+      this.#offset++;
+    }
+    const endOffset = this.#offset;
+    return {
+      type: TokenType.LiteralNumber,
+      position: {
+        offset: {
+          start: startOffset,
+          end: this.#offset,
+        },
+        lineNumber: {
+          start: this.#lineNumber,
+          end: this.#lineNumber,
+        },
+      },
+      value: this.#textDecoder.decode(
+        this.#contents.subarray(startOffset, endOffset)
       ),
     };
   }

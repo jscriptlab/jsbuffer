@@ -8,6 +8,7 @@ export default class Character {
   static isWhiteSpace(ch: number) {
     return ch === 32;
   }
+  // "
   static isStringLiteralStart(ch: number) {
     return ch === 34;
   }

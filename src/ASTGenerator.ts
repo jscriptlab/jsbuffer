@@ -47,6 +47,7 @@ export enum NodeType {
   ParamDefinition,
   TraitDefinition,
   LiteralString,
+  LiteralNumber,
   TypeDefinition,
   CallDefinition,
   ImportStatement,
@@ -55,11 +56,16 @@ export enum NodeType {
 export interface INodeTemplateExpression extends INode {
   type: NodeType.TemplateExpression;
   name: INodeIdentifier;
-  templateArguments: ReadonlyArray<INodeIdentifier | INodeTemplateExpression>;
+  templateArguments: ReadonlyArray<NodeTypeExpression>;
 }
 
 export interface INodeLiteralString extends INode {
   type: NodeType.LiteralString;
+  value: string;
+}
+
+export interface INodeLiteralNumber extends INode {
+  type: NodeType.LiteralNumber;
   value: string;
 }
 
@@ -119,7 +125,11 @@ export type Node =
   | INodeTypeDefinition
   | INodeExportStatement;
 
-export type NodeTypeExpression = INodeIdentifier | INodeTemplateExpression;
+export type NodeTypeExpression =
+  | INodeLiteralString
+  | INodeLiteralNumber
+  | INodeIdentifier
+  | INodeTemplateExpression;
 
 export type ASTGeneratorOutputNode =
   | INodeExportStatement
@@ -222,12 +232,12 @@ export default class ASTGenerator {
       from: fileName,
     };
   }
-  #peek(expectedTokenType: TokenType, value: string) {
+  #peek(expectedTokenType: TokenType, value?: string) {
     const token = this.#tokens[0];
     if (
       typeof token === 'undefined' ||
       token.type !== expectedTokenType ||
-      token.value !== value
+      (typeof value === 'undefined' ? false : token.value !== value)
     ) {
       return null;
     }
@@ -292,25 +302,74 @@ export default class ASTGenerator {
     }
     return parameters;
   }
-  #readTypeExpression(): NodeTypeExpression {
-    const id = this.#expectIdentifier();
-    const templateArguments = new Array<NodeTypeExpression>();
-    if (!this.#matchPunctuator('<')) {
-      return id;
-    }
-    do {
-      templateArguments.push(this.#readTypeExpression());
-    } while (this.#matchPunctuator(','));
-    const endToken = this.#expectPunctuator('>');
+  #readLiteralString(): INodeLiteralString {
+    const id = this.#expectByType(TokenType.LiteralString);
     return {
-      type: NodeType.TemplateExpression,
-      name: id,
+      value: id.value,
+      type: NodeType.LiteralString,
       position: {
-        start: id.position.start,
-        end: endToken,
+        start: id,
+        end: id,
       },
-      templateArguments,
     };
+  }
+  #readLiteralNumber(): INodeLiteralNumber {
+    const id = this.#expectByType(TokenType.LiteralNumber);
+    return {
+      value: id.value,
+      type: NodeType.LiteralNumber,
+      position: {
+        start: id,
+        end: id,
+      },
+    };
+  }
+  #readTypeExpression(): NodeTypeExpression {
+    const token =
+      this.#peek(TokenType.Identifier) ??
+      this.#peek(TokenType.LiteralNumber) ??
+      this.#peek(TokenType.LiteralString);
+    if (token === null) {
+      throw new Exception('Invalid type expression');
+    }
+    let id: NodeTypeExpression;
+    switch (token.type) {
+      case TokenType.Identifier:
+        id = this.#expectIdentifier();
+        break;
+      case TokenType.LiteralString:
+        id = this.#readLiteralString();
+        break;
+      case TokenType.LiteralNumber:
+        id = this.#readLiteralNumber();
+        break;
+      default:
+        throw new Exception(`Invalid token type: ${token.type}`);
+    }
+    switch (id.type) {
+      case NodeType.Identifier: {
+        const templateArguments = new Array<NodeTypeExpression>();
+        if (!this.#matchPunctuator('<')) {
+          return id;
+        }
+        do {
+          templateArguments.push(this.#readTypeExpression());
+        } while (this.#matchPunctuator(','));
+        const endToken = this.#expectPunctuator('>');
+        return {
+          type: NodeType.TemplateExpression,
+          name: id,
+          position: {
+            start: id.position.start,
+            end: endToken,
+          },
+          templateArguments,
+        };
+      }
+      case NodeType.LiteralString:
+      case NodeType.LiteralNumber:
+        return id;
+    }
   }
   #readTypeStatement(): INodeTypeDefinition {
     const startToken = this.#expectKeyword('type');
@@ -337,7 +396,7 @@ export default class ASTGenerator {
     }
     return punctuator;
   }
-  #matchByType(expectedType: TokenType, value: string) {
+  #matchByType(expectedType: TokenType, value?: string) {
     const token = this.#peek(expectedType, value);
     if (token === null) {
       return null;

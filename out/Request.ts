@@ -29,19 +29,19 @@ export function isRequestTrait(value: unknown): value is Request {
 export function encodeRequestTrait(__s: ISerializer, value: Request) {
   switch (value._name) {
     case 'schema.GetUserById':
-      encodeGetUserById(__s, value);
-      break;
+      return encodeGetUserById(__s, value);
     case 'schema.GetPostById':
-      encodeGetPostById(__s, value);
-      break;
+      return encodeGetPostById(__s, value);
     case 'schema.GetConversations':
-      encodeGetConversations(__s, value);
-      break;
+      return encodeGetConversations(__s, value);
   }
+  throw new Error(
+    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- schema.GetUserById\n\t- schema.GetPostById\n\t- schema.GetConversations\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
+  );
 }
 export function decodeRequestTrait(__d: IDeserializer) {
   const __id = __d.readInt32();
-  __d.rewindInt32();
+  __d.rewind(4);
   let value: GetUserById | GetPostById | GetConversations;
   switch (__id) {
     case -2021730434: {

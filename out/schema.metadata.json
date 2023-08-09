@@ -16,6 +16,42 @@
       }
     ]
   },
+  "testBigInt": {
+    "kind": "type",
+    "id": 328647898,
+    "globalName": "schema.testBigInt",
+    "name": "testBigInt",
+    "params": [
+      {
+        "name": "beforeA",
+        "type": { "type": "template", "template": "bigint", "bits": "2000" }
+      },
+      {
+        "name": "a",
+        "type": { "type": "template", "template": "bigint", "bits": "1024" }
+      },
+      {
+        "name": "b",
+        "type": { "type": "template", "template": "bigint", "bits": "512" }
+      },
+      {
+        "name": "c",
+        "type": { "type": "template", "template": "bigint", "bits": "256" }
+      },
+      {
+        "name": "d",
+        "type": { "type": "template", "template": "bigint", "bits": "128" }
+      },
+      {
+        "name": "e",
+        "type": { "type": "template", "template": "bigint", "bits": "64" }
+      },
+      {
+        "name": "f",
+        "type": { "type": "template", "template": "bigint", "bits": "32" }
+      }
+    ]
+  },
   "testMap2": {
     "kind": "type",
     "id": -42313774,
@@ -494,6 +530,42 @@
             "key": { "type": "generic", "value": "string" },
             "value": { "type": "generic", "value": "string" }
           }
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "id": 328647898,
+      "globalName": "schema.testBigInt",
+      "name": "testBigInt",
+      "params": [
+        {
+          "name": "beforeA",
+          "type": { "type": "template", "template": "bigint", "bits": "2000" }
+        },
+        {
+          "name": "a",
+          "type": { "type": "template", "template": "bigint", "bits": "1024" }
+        },
+        {
+          "name": "b",
+          "type": { "type": "template", "template": "bigint", "bits": "512" }
+        },
+        {
+          "name": "c",
+          "type": { "type": "template", "template": "bigint", "bits": "256" }
+        },
+        {
+          "name": "d",
+          "type": { "type": "template", "template": "bigint", "bits": "128" }
+        },
+        {
+          "name": "e",
+          "type": { "type": "template", "template": "bigint", "bits": "64" }
+        },
+        {
+          "name": "f",
+          "type": { "type": "template", "template": "bigint", "bits": "32" }
         }
       ]
     },

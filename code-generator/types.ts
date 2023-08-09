@@ -1,5 +1,6 @@
 import {
   INodeCallDefinition,
+  INodeLiteralNumber,
   INodeTraitDefinition,
   INodeTypeDefinition,
   NodeTypeExpression,
@@ -83,6 +84,10 @@ export type ResolvedType =
         expression: NodeTypeExpression;
         resolved: ResolvedType;
       };
+    }
+  | {
+      template: 'bigint';
+      bits: INodeLiteralNumber;
     };
 
 export type InputRequirement =
@@ -180,6 +185,11 @@ export type MetadataParamType =
       template: 'map';
       key: MetadataParamType;
       value: MetadataParamType;
+    }
+  | {
+      type: 'template';
+      template: 'bigint';
+      bits: string;
     }
   | {
       type: 'internalType';
