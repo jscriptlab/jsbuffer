@@ -1,4 +1,3 @@
-import JSBI from 'jsbi';
 export type RequestResult<T> = T extends IRequest<infer R> ? R : never;
 export interface ISerializer {
   writeUint8(value: number): void;

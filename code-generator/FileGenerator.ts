@@ -721,7 +721,6 @@ export default class FileGenerator extends CodeStream {
     };
   }
   #generateTypesFile(): IOutputFile {
-    this.write("import JSBI from 'jsbi';\n");
     this.write(
       'export type RequestResult<T> = T extends IRequest<infer R> ? R : never;\n'
     );
