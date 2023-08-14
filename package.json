@@ -38,7 +38,7 @@
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "cli": "npx ts-node --project cli/tsconfig.json cli",
     "schema": "npm run cli -- test/schema -o out --extends tsconfig.base.json --indentation-size 2",
-    "build": "npx tsc -b out cli code-generator codec src --force",
+    "build": "npx tsc -b out cli code-generator src --force",
     "build:all": "npm run schema && npm run build && npm run lint",
     "prepublishOnly": "npm run build:all && npm run test",
     "test": "TS_NODE_PROJECT=test/tsconfig.json npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
