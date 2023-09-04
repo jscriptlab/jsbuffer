@@ -995,11 +995,7 @@ export default class FileGeneratorKotlin extends CodeStream {
       case 'internalType':
       case 'externalType':
         this.write(
-          `val ${value} = ${
-            'interfaceName' in paramType
-              ? paramType.interfaceName
-              : paramType.name
-          }.decode(d) ?: return null\n`
+          `val ${value} = ${getClassName(paramType)}.decode(d) ?: return null\n`
         );
         break;
       case 'externalModuleType':
