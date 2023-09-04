@@ -797,7 +797,7 @@ export default class FileGeneratorKotlin extends CodeStream {
             this.write(`s.write(${value})\n`);
             break;
           case GenericName.Boolean:
-            this.write(`s.writeByte(${value} ? 1 : 0)\n`);
+            this.write(`s.writeByte(if(${value}) 1 else 0)\n`);
             break;
           case GenericName.Float:
             this.write(`s.writeFloat(${value})\n`);
