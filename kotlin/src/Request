@@ -1,0 +1,2 @@
+export trait Request {}
+export trait RequestResponse {}

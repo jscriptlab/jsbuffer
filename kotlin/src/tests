@@ -1,0 +1,13 @@
+trait Test {
+
+}
+
+trait testTrait {}
+
+type testDeepTraitArray1 : Test, testTrait {
+  vector<vector<vector<Test>>> value;
+}
+
+type testOptionalTraitArray1 : Test, testTrait {
+  vector<vector<vector<optional<Test>>>> value;
+}

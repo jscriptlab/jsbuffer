@@ -41,7 +41,7 @@ export interface MessageInputParams {
 export function Message(params: MessageInputParams): Message {
   return {
     _name: 'message.Message',
-    id: params['id'],
+    id: params['id']
   };
 }
 export function encodeMessage(__s: ISerializer, value: Message) {
@@ -65,7 +65,7 @@ export function decodeMessage(__d: IDeserializer): Message | null {
   id = __d.readInt32();
   return {
     _name: 'message.Message',
-    id,
+    id
   };
 }
 export function defaultMessage(
@@ -73,7 +73,7 @@ export function defaultMessage(
 ): Message {
   return Message({
     id: 0,
-    ...params,
+    ...params
   });
 }
 export function compareMessage(__a: Message, __b: Message): boolean {
@@ -92,7 +92,7 @@ export function updateMessage(
     if (!(changes['id'] === value['id'])) {
       value = Message({
         ...value,
-        id: changes['id'],
+        id: changes['id']
       });
     }
   }
@@ -130,7 +130,7 @@ export interface MessagesInputParams {
 export function Messages(params: MessagesInputParams): Messages {
   return {
     _name: 'message.Messages',
-    messages: params['messages'],
+    messages: params['messages']
   };
 }
 export function encodeMessages(__s: ISerializer, value: Messages) {
@@ -165,7 +165,7 @@ export function decodeMessages(__d: IDeserializer): Messages | null {
   }
   return {
     _name: 'message.Messages',
-    messages,
+    messages
   };
 }
 export function defaultMessages(
@@ -173,7 +173,7 @@ export function defaultMessages(
 ): Messages {
   return Messages({
     messages: [],
-    ...params,
+    ...params
   });
 }
 export function compareMessages(__a: Messages, __b: Messages): boolean {
@@ -216,7 +216,7 @@ export function updateMessages(
     ) {
       value = Messages({
         ...value,
-        messages: changes['messages'],
+        messages: changes['messages']
       });
     }
   }
@@ -280,7 +280,7 @@ export function GetMessages(params: GetMessagesInputParams): GetMessages {
   return {
     _name: 'message.GetMessages',
     offset: params['offset'],
-    limit: params['limit'],
+    limit: params['limit']
   };
 }
 export function encodeGetMessages(__s: ISerializer, value: GetMessages) {
@@ -315,7 +315,7 @@ export function decodeGetMessages(__d: IDeserializer): GetMessages | null {
   return {
     _name: 'message.GetMessages',
     offset,
-    limit,
+    limit
   };
 }
 export function defaultGetMessages(
@@ -324,7 +324,7 @@ export function defaultGetMessages(
   return GetMessages({
     offset: 0,
     limit: 0,
-    ...params,
+    ...params
   });
 }
 export function compareGetMessages(
@@ -350,7 +350,7 @@ export function updateGetMessages(
     if (!(changes['offset'] === value['offset'])) {
       value = GetMessages({
         ...value,
-        offset: changes['offset'],
+        offset: changes['offset']
       });
     }
   }
@@ -358,7 +358,7 @@ export function updateGetMessages(
     if (!(changes['limit'] === value['limit'])) {
       value = GetMessages({
         ...value,
-        limit: changes['limit'],
+        limit: changes['limit']
       });
     }
   }

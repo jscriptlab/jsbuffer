@@ -1,80 +1,15 @@
 {
-  "User": {
-    "kind": "trait",
-    "name": "User",
-    "nodes": [
-      { "type": "externalType", "name": "user", "relativePath": "./User" },
-      {
-        "type": "externalType",
-        "name": "userDeleted",
-        "relativePath": "./User"
-      }
-    ]
-  },
-  "Test": {
-    "kind": "trait",
-    "name": "Test",
-    "nodes": [
-      { "type": "externalType", "name": "test", "relativePath": "./User" }
-    ]
-  },
-  "user": {
-    "kind": "type",
-    "id": -2086976610,
-    "globalName": "user.user",
-    "name": "user",
-    "params": [
-      { "name": "firstName", "type": { "type": "generic", "value": "string" } },
-      {
-        "name": "aliases",
-        "type": {
-          "type": "template",
-          "template": "vector",
-          "value": { "type": "generic", "value": "string" }
-        }
-      }
-    ]
-  },
-  "userDeleted": {
-    "kind": "type",
-    "id": 1001160586,
-    "globalName": "user.userDeleted",
-    "name": "userDeleted",
-    "params": [
-      { "name": "deletedAt", "type": { "type": "generic", "value": "int" } }
-    ]
-  },
-  "test": {
-    "kind": "type",
-    "id": -834825061,
-    "globalName": "user.test",
-    "name": "test",
-    "params": [
-      {
-        "name": "user",
-        "type": { "type": "internalType", "interfaceName": "user" }
-      },
-      {
-        "name": "b",
-        "type": {
-          "type": "template",
-          "template": "vector",
-          "value": {
-            "type": "template",
-            "template": "vector",
-            "value": {
-              "type": "template",
-              "template": "optional",
-              "value": { "type": "generic", "value": "string" }
-            }
-          }
-        }
-      }
-    ]
-  },
+  "__imports": [
+    { "relativePath": "./message" },
+    { "relativePath": "./tupleTest2" },
+    { "relativePath": "./testLong" },
+    { "relativePath": "./testUpdateFunction" },
+    { "relativePath": "./testTraitOnParam" }
+  ],
   "__all": [
     {
       "kind": "trait",
+      "globalName": "user.User",
       "name": "User",
       "nodes": [
         { "type": "externalType", "name": "user", "relativePath": "./User" },
@@ -87,16 +22,16 @@
     },
     {
       "kind": "trait",
+      "globalName": "user.Test",
       "name": "Test",
       "nodes": [
         { "type": "externalType", "name": "test", "relativePath": "./User" }
       ]
     },
     {
-      "kind": "type",
       "id": -2086976610,
-      "globalName": "user.user",
-      "name": "user",
+      "traits": [{ "type": "internalType", "interfaceName": "User" }],
+      "kind": "type",
       "params": [
         {
           "name": "firstName",
@@ -110,22 +45,24 @@
             "value": { "type": "generic", "value": "string" }
           }
         }
-      ]
+      ],
+      "globalName": "user.user",
+      "name": "user"
     },
     {
-      "kind": "type",
       "id": 1001160586,
-      "globalName": "user.userDeleted",
-      "name": "userDeleted",
+      "traits": [{ "type": "internalType", "interfaceName": "User" }],
+      "kind": "type",
       "params": [
         { "name": "deletedAt", "type": { "type": "generic", "value": "int" } }
-      ]
+      ],
+      "globalName": "user.userDeleted",
+      "name": "userDeleted"
     },
     {
-      "kind": "type",
       "id": -834825061,
-      "globalName": "user.test",
-      "name": "test",
+      "traits": [{ "type": "internalType", "interfaceName": "Test" }],
+      "kind": "type",
       "params": [
         {
           "name": "user",
@@ -147,7 +84,9 @@
             }
           }
         }
-      ]
+      ],
+      "globalName": "user.test",
+      "name": "test"
     }
   ]
 }

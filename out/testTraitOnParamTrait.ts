@@ -104,7 +104,7 @@ export interface BInputParams {
 export function B(params: BInputParams): B {
   return {
     _name: 'testTraitOnParamTrait.B',
-    a: params['a'],
+    a: params['a']
   };
 }
 export function encodeB(__s: ISerializer, value: B) {
@@ -128,13 +128,13 @@ export function decodeB(__d: IDeserializer): B | null {
   a = __d.readInt32();
   return {
     _name: 'testTraitOnParamTrait.B',
-    a,
+    a
   };
 }
 export function defaultB(params: Partial<BInputParams> = {}): B {
   return B({
     a: 0,
-    ...params,
+    ...params
   });
 }
 export function compareB(__a: B, __b: B): boolean {
@@ -150,7 +150,7 @@ export function updateB(value: B, changes: Partial<BInputParams>) {
     if (!(changes['a'] === value['a'])) {
       value = B({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -195,7 +195,7 @@ export interface CInputParams {
 export function C(params: CInputParams): C {
   return {
     _name: 'testTraitOnParamTrait.C',
-    a: params['a'],
+    a: params['a']
   };
 }
 export function encodeC(__s: ISerializer, value: C) {
@@ -219,13 +219,13 @@ export function decodeC(__d: IDeserializer): C | null {
   a = __d.readInt32();
   return {
     _name: 'testTraitOnParamTrait.C',
-    a,
+    a
   };
 }
 export function defaultC(params: Partial<CInputParams> = {}): C {
   return C({
     a: 0,
-    ...params,
+    ...params
   });
 }
 export function compareC(__a: C, __b: C): boolean {
@@ -241,7 +241,7 @@ export function updateC(value: C, changes: Partial<CInputParams>) {
     if (!(changes['a'] === value['a'])) {
       value = C({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -286,7 +286,7 @@ export interface DInputParams {
 export function D(params: DInputParams): D {
   return {
     _name: 'testTraitOnParamTrait.D',
-    a: params['a'],
+    a: params['a']
   };
 }
 export function encodeD(__s: ISerializer, value: D) {
@@ -310,13 +310,13 @@ export function decodeD(__d: IDeserializer): D | null {
   a = __d.readInt32();
   return {
     _name: 'testTraitOnParamTrait.D',
-    a,
+    a
   };
 }
 export function defaultD(params: Partial<DInputParams> = {}): D {
   return D({
     a: 0,
-    ...params,
+    ...params
   });
 }
 export function compareD(__a: D, __b: D): boolean {
@@ -332,7 +332,7 @@ export function updateD(value: D, changes: Partial<DInputParams>) {
     if (!(changes['a'] === value['a'])) {
       value = D({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }

@@ -24,7 +24,7 @@ export enum TokenType {
   MultiLineComment,
   LiteralString,
   LiteralNumber,
-  Punctuator,
+  Punctuator
 }
 
 export interface ITokenizerOptions {
@@ -53,7 +53,7 @@ export default class Tokenizer {
   public constructor({
     contents,
     textDecoder,
-    textEncoder,
+    textEncoder
   }: ITokenizerOptions) {
     this.#lineNumber = 0;
     this.#offset = 0;
@@ -80,7 +80,7 @@ export default class Tokenizer {
         if (isKeyword) {
           tokens.push({
             ...id,
-            type: TokenType.Keyword,
+            type: TokenType.Keyword
           });
         } else {
           tokens.push(id);
@@ -126,16 +126,16 @@ export default class Tokenizer {
       position: {
         offset: {
           start: startOffset,
-          end: this.#offset,
+          end: this.#offset
         },
         lineNumber: {
           start: this.#lineNumber,
-          end: this.#lineNumber,
-        },
+          end: this.#lineNumber
+        }
       },
       value: this.#textDecoder.decode(
         this.#contents.subarray(startOffset + 1, endOffset)
-      ),
+      )
     };
   }
   #readLiteralNumber(): IToken {
@@ -149,16 +149,16 @@ export default class Tokenizer {
       position: {
         offset: {
           start: startOffset,
-          end: this.#offset,
+          end: this.#offset
         },
         lineNumber: {
           start: this.#lineNumber,
-          end: this.#lineNumber,
-        },
+          end: this.#lineNumber
+        }
       },
       value: this.#textDecoder.decode(
         this.#contents.subarray(startOffset, endOffset)
-      ),
+      )
     };
   }
   #readPunctuator(): IToken | null {
@@ -174,13 +174,13 @@ export default class Tokenizer {
         position: {
           offset: {
             start: this.#offset,
-            end: this.#offset,
+            end: this.#offset
           },
           lineNumber: {
             start: this.#lineNumber,
-            end: this.#lineNumber,
-          },
-        },
+            end: this.#lineNumber
+          }
+        }
       };
     }
     return null;
@@ -207,13 +207,13 @@ export default class Tokenizer {
       position: {
         lineNumber: {
           start: this.#lineNumber,
-          end: this.#lineNumber,
+          end: this.#lineNumber
         },
         offset: {
           start: startOffset,
-          end: this.#offset,
-        },
-      },
+          end: this.#offset
+        }
+      }
     };
   }
   #readIdentifier(): IToken {
@@ -232,13 +232,13 @@ export default class Tokenizer {
       position: {
         lineNumber: {
           start: this.#lineNumber,
-          end: this.#lineNumber,
+          end: this.#lineNumber
         },
         offset: {
           start: startOffset,
-          end: this.#offset,
-        },
-      },
+          end: this.#offset
+        }
+      }
     };
   }
   #peek(value: string) {

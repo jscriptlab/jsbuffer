@@ -131,7 +131,7 @@ export function user(params: userInputParams): user {
   return {
     _name: 'user.user',
     firstName: params['firstName'],
-    aliases: params['aliases'],
+    aliases: params['aliases']
   };
 }
 export function encodeUser(__s: ISerializer, value: user) {
@@ -175,14 +175,14 @@ export function decodeUser(__d: IDeserializer): user | null {
   return {
     _name: 'user.user',
     firstName,
-    aliases,
+    aliases
   };
 }
 export function defaultUser(params: Partial<userInputParams> = {}): user {
   return user({
     firstName: '',
     aliases: [],
-    ...params,
+    ...params
   });
 }
 export function compareUser(__a: user, __b: user): boolean {
@@ -212,7 +212,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
     if (!(changes['firstName'] === value['firstName'])) {
       value = user({
         ...value,
-        firstName: changes['firstName'],
+        firstName: changes['firstName']
       });
     }
   }
@@ -234,7 +234,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
     ) {
       value = user({
         ...value,
-        aliases: changes['aliases'],
+        aliases: changes['aliases']
       });
     }
   }
@@ -279,7 +279,7 @@ export interface userDeletedInputParams {
 export function userDeleted(params: userDeletedInputParams): userDeleted {
   return {
     _name: 'user.userDeleted',
-    deletedAt: params['deletedAt'],
+    deletedAt: params['deletedAt']
   };
 }
 export function encodeUserDeleted(__s: ISerializer, value: userDeleted) {
@@ -303,7 +303,7 @@ export function decodeUserDeleted(__d: IDeserializer): userDeleted | null {
   deletedAt = __d.readInt32();
   return {
     _name: 'user.userDeleted',
-    deletedAt,
+    deletedAt
   };
 }
 export function defaultUserDeleted(
@@ -311,7 +311,7 @@ export function defaultUserDeleted(
 ): userDeleted {
   return userDeleted({
     deletedAt: 0,
-    ...params,
+    ...params
   });
 }
 export function compareUserDeleted(
@@ -333,7 +333,7 @@ export function updateUserDeleted(
     if (!(changes['deletedAt'] === value['deletedAt'])) {
       value = userDeleted({
         ...value,
-        deletedAt: changes['deletedAt'],
+        deletedAt: changes['deletedAt']
       });
     }
   }
@@ -382,7 +382,7 @@ export function test(params: testInputParams): test {
   return {
     _name: 'user.test',
     user: params['user'],
-    b: params['b'],
+    b: params['b']
   };
 }
 export function encodeTest(__s: ISerializer, value: test) {
@@ -446,14 +446,14 @@ export function decodeTest(__d: IDeserializer): test | null {
   return {
     _name: 'user.test',
     user,
-    b,
+    b
   };
 }
 export function defaultTest(params: Partial<testInputParams> = {}): test {
   return test({
     user: defaultUser(),
     b: [],
-    ...params,
+    ...params
   });
 }
 export function compareTest(__a: test, __b: test): boolean {
@@ -494,7 +494,7 @@ export function updateTest(value: test, changes: Partial<testInputParams>) {
     if (!compareUser(changes['user'], value['user'])) {
       value = test({
         ...value,
-        user: changes['user'],
+        user: changes['user']
       });
     }
   }
@@ -529,7 +529,7 @@ export function updateTest(value: test, changes: Partial<testInputParams>) {
     ) {
       value = test({
         ...value,
-        b: changes['b'],
+        b: changes['b']
       });
     }
   }

@@ -9,7 +9,7 @@ import {
   getArgument,
   getInteger,
   getNamedArgument,
-  getString,
+  getString
 } from 'cli-argument-helper';
 import Exception from '../exception/Exception';
 
@@ -65,7 +65,7 @@ import Exception from '../exception/Exception';
     if (tsExtends !== null) {
       typeScriptConfiguration = {
         ...typeScriptConfiguration,
-        extends: path.relative(outDir, path.resolve(process.cwd(), tsExtends)),
+        extends: path.relative(outDir, path.resolve(process.cwd(), tsExtends))
       };
     }
   }
@@ -74,12 +74,12 @@ import Exception from '../exception/Exception';
 
   const compilerOptions = {
     outDir,
-    rootDir,
+    rootDir
   };
 
   const generator = new FileGenerator(
     {
-      path: mainFile,
+      path: mainFile
     },
     {
       root: null,
@@ -88,7 +88,7 @@ import Exception from '../exception/Exception';
       uniqueNamePropertyName,
       compilerOptions,
       typeScriptConfiguration,
-      indentationSize,
+      indentationSize
     }
   );
 
@@ -97,7 +97,7 @@ import Exception from '../exception/Exception';
     JSON.stringify(
       {
         outDir: path.relative(rootDir, outDir),
-        mainFile: path.relative(rootDir, mainFile),
+        mainFile: path.relative(rootDir, mainFile)
       },
       null,
       indentationSize

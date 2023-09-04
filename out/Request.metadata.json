@@ -1,28 +1,15 @@
 {
-  "Request": {
-    "kind": "trait",
-    "name": "Request",
-    "nodes": [
-      {
-        "type": "externalType",
-        "name": "GetUserById",
-        "relativePath": "./schema"
-      },
-      {
-        "type": "externalType",
-        "name": "GetPostById",
-        "relativePath": "./schema"
-      },
-      {
-        "type": "externalType",
-        "name": "GetConversations",
-        "relativePath": "./schema"
-      }
-    ]
-  },
+  "__imports": [
+    { "relativePath": "./message" },
+    { "relativePath": "./tupleTest2" },
+    { "relativePath": "./testLong" },
+    { "relativePath": "./testUpdateFunction" },
+    { "relativePath": "./testTraitOnParam" }
+  ],
   "__all": [
     {
       "kind": "trait",
+      "globalName": "request.Request",
       "name": "Request",
       "nodes": [
         {

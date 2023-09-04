@@ -31,7 +31,7 @@ export interface A0InputParams {
 export function A0(params: A0InputParams): A0 {
   return {
     _name: 'testTraitOnParam.A0',
-    value: params['value'],
+    value: params['value']
   };
 }
 export function encodeA0(__s: ISerializer, value: A0) {
@@ -57,13 +57,13 @@ export function decodeA0(__d: IDeserializer): A0 | null {
   value = tmp2;
   return {
     _name: 'testTraitOnParam.A0',
-    value,
+    value
   };
 }
 export function defaultA0(params: Partial<A0InputParams> = {}): A0 {
   return A0({
     value: defaultATrait(),
-    ...params,
+    ...params
   });
 }
 export function compareA0(__a: A0, __b: A0): boolean {
@@ -79,7 +79,7 @@ export function updateA0(value: A0, changes: Partial<A0InputParams>) {
     if (!compareATrait(changes['value'], value['value'])) {
       value = A0({
         ...value,
-        value: changes['value'],
+        value: changes['value']
       });
     }
   }
@@ -110,7 +110,7 @@ export interface A1InputParams {
 export function A1(params: A1InputParams): A1 {
   return {
     _name: 'testTraitOnParam.A1',
-    value: params['value'],
+    value: params['value']
   };
 }
 export function encodeA1(__s: ISerializer, value: A1) {
@@ -136,13 +136,13 @@ export function decodeA1(__d: IDeserializer): A1 | null {
   value = tmp2;
   return {
     _name: 'testTraitOnParam.A1',
-    value,
+    value
   };
 }
 export function defaultA1(params: Partial<A1InputParams> = {}): A1 {
   return A1({
     value: defaultATrait(),
-    ...params,
+    ...params
   });
 }
 export function compareA1(__a: A1, __b: A1): boolean {
@@ -158,7 +158,7 @@ export function updateA1(value: A1, changes: Partial<A1InputParams>) {
     if (!compareATrait(changes['value'], value['value'])) {
       value = A1({
         ...value,
-        value: changes['value'],
+        value: changes['value']
       });
     }
   }
@@ -189,7 +189,7 @@ export interface A2InputParams {
 export function A2(params: A2InputParams): A2 {
   return {
     _name: 'testTraitOnParam.A2',
-    value: params['value'],
+    value: params['value']
   };
 }
 export function encodeA2(__s: ISerializer, value: A2) {
@@ -215,13 +215,13 @@ export function decodeA2(__d: IDeserializer): A2 | null {
   value = tmp2;
   return {
     _name: 'testTraitOnParam.A2',
-    value,
+    value
   };
 }
 export function defaultA2(params: Partial<A2InputParams> = {}): A2 {
   return A2({
     value: defaultATrait(),
-    ...params,
+    ...params
   });
 }
 export function compareA2(__a: A2, __b: A2): boolean {
@@ -237,7 +237,7 @@ export function updateA2(value: A2, changes: Partial<A2InputParams>) {
     if (!compareATrait(changes['value'], value['value'])) {
       value = A2({
         ...value,
-        value: changes['value'],
+        value: changes['value']
       });
     }
   }

@@ -1,526 +1,16 @@
 {
-  "testMap": {
-    "kind": "type",
-    "id": 1326441943,
-    "globalName": "schema.testMap",
-    "name": "testMap",
-    "params": [
-      {
-        "name": "a",
-        "type": {
-          "type": "template",
-          "template": "map",
-          "key": { "type": "generic", "value": "string" },
-          "value": { "type": "generic", "value": "string" }
-        }
-      }
-    ]
-  },
-  "testBigInt": {
-    "kind": "type",
-    "id": 328647898,
-    "globalName": "schema.testBigInt",
-    "name": "testBigInt",
-    "params": [
-      {
-        "name": "beforeA",
-        "type": { "type": "template", "template": "bigint", "bits": "2000" }
-      },
-      {
-        "name": "a",
-        "type": { "type": "template", "template": "bigint", "bits": "1024" }
-      },
-      {
-        "name": "b",
-        "type": { "type": "template", "template": "bigint", "bits": "512" }
-      },
-      {
-        "name": "c",
-        "type": { "type": "template", "template": "bigint", "bits": "256" }
-      },
-      {
-        "name": "d",
-        "type": { "type": "template", "template": "bigint", "bits": "128" }
-      },
-      {
-        "name": "e",
-        "type": { "type": "template", "template": "bigint", "bits": "64" }
-      },
-      {
-        "name": "f",
-        "type": { "type": "template", "template": "bigint", "bits": "32" }
-      }
-    ]
-  },
-  "testMap2": {
-    "kind": "type",
-    "id": -42313774,
-    "globalName": "schema.testMap2",
-    "name": "testMap2",
-    "params": [
-      {
-        "name": "a",
-        "type": {
-          "type": "template",
-          "template": "map",
-          "key": {
-            "type": "template",
-            "template": "optional",
-            "value": { "type": "generic", "value": "string" }
-          },
-          "value": { "type": "generic", "value": "string" }
-        }
-      },
-      {
-        "name": "b",
-        "type": {
-          "type": "template",
-          "template": "map",
-          "key": {
-            "type": "template",
-            "template": "optional",
-            "value": { "type": "generic", "value": "string" }
-          },
-          "value": {
-            "type": "template",
-            "template": "tuple",
-            "args": [
-              { "type": "generic", "value": "string" },
-              {
-                "type": "template",
-                "template": "map",
-                "key": { "type": "generic", "value": "int" },
-                "value": { "type": "generic", "value": "int" }
-              }
-            ]
-          }
-        }
-      }
-    ]
-  },
-  "testMap3": {
-    "kind": "type",
-    "id": 263728261,
-    "globalName": "schema.testMap3",
-    "name": "testMap3",
-    "params": [
-      {
-        "name": "a",
-        "type": {
-          "type": "template",
-          "template": "map",
-          "key": { "type": "internalType", "interfaceName": "testMap2" },
-          "value": { "type": "generic", "value": "string" }
-        }
-      }
-    ]
-  },
-  "testSet": {
-    "kind": "type",
-    "id": 1426622717,
-    "globalName": "schema.testSet",
-    "name": "testSet",
-    "params": [
-      {
-        "name": "a",
-        "type": {
-          "type": "template",
-          "template": "set",
-          "value": { "type": "generic", "value": "string" }
-        }
-      },
-      {
-        "name": "b",
-        "type": {
-          "type": "template",
-          "template": "set",
-          "value": { "type": "generic", "value": "int" }
-        }
-      }
-    ]
-  },
-  "testSet2": {
-    "kind": "type",
-    "id": 1091514709,
-    "globalName": "schema.testSet2",
-    "name": "testSet2",
-    "params": [
-      {
-        "name": "a",
-        "type": {
-          "type": "template",
-          "template": "set",
-          "value": { "type": "generic", "value": "string" }
-        }
-      },
-      {
-        "name": "b",
-        "type": {
-          "type": "template",
-          "template": "set",
-          "value": {
-            "type": "template",
-            "template": "map",
-            "key": { "type": "generic", "value": "string" },
-            "value": { "type": "generic", "value": "string" }
-          }
-        }
-      },
-      {
-        "name": "c",
-        "type": {
-          "type": "template",
-          "template": "set",
-          "value": {
-            "type": "template",
-            "template": "tuple",
-            "args": [
-              { "type": "generic", "value": "int" },
-              { "type": "generic", "value": "int" }
-            ]
-          }
-        }
-      }
-    ]
-  },
-  "Void": {
-    "kind": "type",
-    "id": 189644707,
-    "globalName": "schema.Void",
-    "name": "Void",
-    "params": []
-  },
-  "msg": {
-    "kind": "type",
-    "id": -1103074928,
-    "globalName": "schema.msg",
-    "name": "msg",
-    "params": [
-      { "name": "data", "type": { "type": "generic", "value": "bytes" } }
-    ]
-  },
-  "Result": {
-    "kind": "trait",
-    "name": "Result",
-    "nodes": [
-      { "type": "externalType", "name": "Users", "relativePath": "./schema" },
-      { "type": "externalType", "name": "Posts", "relativePath": "./schema" }
-    ]
-  },
-  "Users": {
-    "kind": "type",
-    "id": 1801329960,
-    "globalName": "schema.Users",
-    "name": "Users",
-    "params": [
-      {
-        "name": "users",
-        "type": {
-          "type": "template",
-          "template": "vector",
-          "value": {
-            "type": "externalType",
-            "name": "User",
-            "relativePath": "./User"
-          }
-        }
-      }
-    ]
-  },
-  "GetUserById": {
-    "kind": "call",
-    "id": -2021730434,
-    "globalName": "schema.GetUserById",
-    "name": "GetUserById",
-    "params": [
-      { "name": "userId", "type": { "type": "generic", "value": "uint32" } }
-    ]
-  },
-  "Post": {
-    "kind": "type",
-    "id": 901140138,
-    "globalName": "schema.Post",
-    "name": "Post",
-    "params": [{ "name": "id", "type": { "type": "generic", "value": "int" } }]
-  },
-  "Posts": {
-    "kind": "type",
-    "id": 413461762,
-    "globalName": "schema.Posts",
-    "name": "Posts",
-    "params": [
-      {
-        "name": "posts",
-        "type": {
-          "type": "template",
-          "template": "vector",
-          "value": { "type": "internalType", "interfaceName": "Post" }
-        }
-      }
-    ]
-  },
-  "GetPostById": {
-    "kind": "call",
-    "id": -1279409050,
-    "globalName": "schema.GetPostById",
-    "name": "GetPostById",
-    "params": [
-      { "name": "postId", "type": { "type": "generic", "value": "uint32" } }
-    ]
-  },
-  "GetConversations": {
-    "kind": "call",
-    "id": -416881,
-    "globalName": "schema.GetConversations",
-    "name": "GetConversations",
-    "params": []
-  },
-  "Coordinates": {
-    "kind": "type",
-    "id": -2145804928,
-    "globalName": "schema.Coordinates",
-    "name": "Coordinates",
-    "params": [
-      { "name": "latitude", "type": { "type": "generic", "value": "double" } },
-      { "name": "longitude", "type": { "type": "generic", "value": "double" } }
-    ]
-  },
-  "ShouldSupportSeveralSequentialVectorParams": {
-    "kind": "type",
-    "id": -2007546384,
-    "globalName": "schema.ShouldSupportSeveralSequentialVectorParams",
-    "name": "ShouldSupportSeveralSequentialVectorParams",
-    "params": [
-      {
-        "name": "a",
-        "type": {
-          "type": "template",
-          "template": "vector",
-          "value": { "type": "generic", "value": "int" }
-        }
-      },
-      {
-        "name": "b",
-        "type": {
-          "type": "template",
-          "template": "vector",
-          "value": { "type": "generic", "value": "double" }
-        }
-      },
-      {
-        "name": "c",
-        "type": {
-          "type": "template",
-          "template": "vector",
-          "value": { "type": "generic", "value": "string" }
-        }
-      },
-      {
-        "name": "d",
-        "type": {
-          "type": "template",
-          "template": "vector",
-          "value": { "type": "generic", "value": "float" }
-        }
-      },
-      {
-        "name": "e",
-        "type": {
-          "type": "template",
-          "template": "vector",
-          "value": { "type": "generic", "value": "uint32" }
-        }
-      },
-      {
-        "name": "f",
-        "type": {
-          "type": "template",
-          "template": "vector",
-          "value": {
-            "type": "template",
-            "template": "optional",
-            "value": {
-              "type": "template",
-              "template": "vector",
-              "value": { "type": "generic", "value": "uint32" }
-            }
-          }
-        }
-      },
-      {
-        "name": "g",
-        "type": {
-          "type": "template",
-          "template": "tuple",
-          "args": [
-            { "type": "generic", "value": "int" },
-            { "type": "generic", "value": "float" },
-            { "type": "generic", "value": "double" },
-            {
-              "type": "template",
-              "template": "vector",
-              "value": { "type": "generic", "value": "uint32" }
-            },
-            {
-              "type": "template",
-              "template": "optional",
-              "value": { "type": "generic", "value": "string" }
-            }
-          ]
-        }
-      }
-    ]
-  },
-  "simpleTupleTest": {
-    "kind": "type",
-    "id": 546242333,
-    "globalName": "schema.simpleTupleTest",
-    "name": "simpleTupleTest",
-    "params": [
-      {
-        "name": "a",
-        "type": {
-          "type": "template",
-          "template": "tuple",
-          "args": [
-            { "type": "generic", "value": "int" },
-            { "type": "generic", "value": "float" },
-            { "type": "generic", "value": "double" },
-            {
-              "type": "template",
-              "template": "vector",
-              "value": { "type": "generic", "value": "uint32" }
-            },
-            {
-              "type": "template",
-              "template": "optional",
-              "value": { "type": "generic", "value": "string" }
-            }
-          ]
-        }
-      },
-      {
-        "name": "b",
-        "type": {
-          "type": "template",
-          "template": "vector",
-          "value": {
-            "type": "template",
-            "template": "tuple",
-            "args": [
-              { "type": "generic", "value": "int" },
-              { "type": "generic", "value": "float" },
-              { "type": "generic", "value": "double" },
-              {
-                "type": "template",
-                "template": "vector",
-                "value": { "type": "generic", "value": "uint32" }
-              },
-              {
-                "type": "template",
-                "template": "optional",
-                "value": { "type": "generic", "value": "string" }
-              }
-            ]
-          }
-        }
-      }
-    ]
-  },
-  "emptyNode": {
-    "kind": "type",
-    "id": -1994197976,
-    "globalName": "schema.emptyNode",
-    "name": "emptyNode",
-    "params": []
-  },
-  "user": {
-    "kind": "type",
-    "id": 136841399,
-    "globalName": "schema.user",
-    "name": "user",
-    "params": [
-      { "name": "id", "type": { "type": "generic", "value": "int" } },
-      { "name": "name", "type": { "type": "generic", "value": "string" } }
-    ]
-  },
-  "supportNullTerminatedString": {
-    "kind": "type",
-    "id": -1360902719,
-    "globalName": "schema.supportNullTerminatedString",
-    "name": "supportNullTerminatedString",
-    "params": [
-      {
-        "name": "value",
-        "type": { "type": "generic", "value": "null_terminated_string" }
-      }
-    ]
-  },
-  "nullTerminatedStringList": {
-    "kind": "type",
-    "id": -1953588325,
-    "globalName": "schema.nullTerminatedStringList",
-    "name": "nullTerminatedStringList",
-    "params": [
-      {
-        "name": "value",
-        "type": {
-          "type": "template",
-          "template": "vector",
-          "value": { "type": "generic", "value": "null_terminated_string" }
-        }
-      }
-    ]
-  },
-  "normalStringList": {
-    "kind": "type",
-    "id": -1964890795,
-    "globalName": "schema.normalStringList",
-    "name": "normalStringList",
-    "params": [
-      {
-        "name": "value",
-        "type": {
-          "type": "template",
-          "template": "vector",
-          "value": { "type": "generic", "value": "string" }
-        }
-      }
-    ]
-  },
-  "boolAndTuple": {
-    "kind": "type",
-    "id": -789978949,
-    "globalName": "schema.boolAndTuple",
-    "name": "boolAndTuple",
-    "params": [
-      {
-        "name": "sorryIJustLoveTuples",
-        "type": {
-          "type": "template",
-          "template": "tuple",
-          "args": [
-            { "type": "generic", "value": "bool" },
-            { "type": "generic", "value": "bool" },
-            {
-              "type": "template",
-              "template": "tuple",
-              "args": [
-                { "type": "generic", "value": "bool" },
-                { "type": "generic", "value": "bool" }
-              ]
-            }
-          ]
-        }
-      }
-    ]
-  },
+  "__imports": [
+    { "relativePath": "./message" },
+    { "relativePath": "./tupleTest2" },
+    { "relativePath": "./testLong" },
+    { "relativePath": "./testUpdateFunction" },
+    { "relativePath": "./testTraitOnParam" }
+  ],
   "__all": [
     {
-      "kind": "type",
       "id": 1326441943,
-      "globalName": "schema.testMap",
-      "name": "testMap",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "a",
@@ -531,13 +21,14 @@
             "value": { "type": "generic", "value": "string" }
           }
         }
-      ]
+      ],
+      "globalName": "schema.testMap",
+      "name": "testMap"
     },
     {
-      "kind": "type",
       "id": 328647898,
-      "globalName": "schema.testBigInt",
-      "name": "testBigInt",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "beforeA",
@@ -567,13 +58,14 @@
           "name": "f",
           "type": { "type": "template", "template": "bigint", "bits": "32" }
         }
-      ]
+      ],
+      "globalName": "schema.testBigInt",
+      "name": "testBigInt"
     },
     {
-      "kind": "type",
       "id": -42313774,
-      "globalName": "schema.testMap2",
-      "name": "testMap2",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "a",
@@ -613,13 +105,14 @@
             }
           }
         }
-      ]
+      ],
+      "globalName": "schema.testMap2",
+      "name": "testMap2"
     },
     {
-      "kind": "type",
       "id": 263728261,
-      "globalName": "schema.testMap3",
-      "name": "testMap3",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "a",
@@ -630,13 +123,14 @@
             "value": { "type": "generic", "value": "string" }
           }
         }
-      ]
+      ],
+      "globalName": "schema.testMap3",
+      "name": "testMap3"
     },
     {
-      "kind": "type",
       "id": 1426622717,
-      "globalName": "schema.testSet",
-      "name": "testSet",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "a",
@@ -654,13 +148,14 @@
             "value": { "type": "generic", "value": "int" }
           }
         }
-      ]
+      ],
+      "globalName": "schema.testSet",
+      "name": "testSet"
     },
     {
-      "kind": "type",
       "id": 1091514709,
-      "globalName": "schema.testSet2",
-      "name": "testSet2",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "a",
@@ -698,26 +193,31 @@
             }
           }
         }
-      ]
+      ],
+      "globalName": "schema.testSet2",
+      "name": "testSet2"
     },
     {
-      "kind": "type",
       "id": 189644707,
+      "traits": [],
+      "kind": "type",
+      "params": [],
       "globalName": "schema.Void",
-      "name": "Void",
-      "params": []
+      "name": "Void"
     },
     {
-      "kind": "type",
       "id": -1103074928,
-      "globalName": "schema.msg",
-      "name": "msg",
+      "traits": [],
+      "kind": "type",
       "params": [
         { "name": "data", "type": { "type": "generic", "value": "bytes" } }
-      ]
+      ],
+      "globalName": "schema.msg",
+      "name": "msg"
     },
     {
       "kind": "trait",
+      "globalName": "schema.Result",
       "name": "Result",
       "nodes": [
         { "type": "externalType", "name": "Users", "relativePath": "./schema" },
@@ -725,10 +225,9 @@
       ]
     },
     {
-      "kind": "type",
       "id": 1801329960,
-      "globalName": "schema.Users",
-      "name": "Users",
+      "traits": [{ "type": "internalType", "interfaceName": "Result" }],
+      "kind": "type",
       "params": [
         {
           "name": "users",
@@ -742,7 +241,9 @@
             }
           }
         }
-      ]
+      ],
+      "globalName": "schema.Users",
+      "name": "Users"
     },
     {
       "kind": "call",
@@ -751,22 +252,30 @@
       "name": "GetUserById",
       "params": [
         { "name": "userId", "type": { "type": "generic", "value": "uint32" } }
-      ]
+      ],
+      "traits": [
+        {
+          "type": "externalType",
+          "name": "Request",
+          "relativePath": "./Request"
+        }
+      ],
+      "returnType": { "type": "internalType", "interfaceName": "Users" }
     },
     {
-      "kind": "type",
       "id": 901140138,
-      "globalName": "schema.Post",
-      "name": "Post",
+      "traits": [],
+      "kind": "type",
       "params": [
         { "name": "id", "type": { "type": "generic", "value": "int" } }
-      ]
+      ],
+      "globalName": "schema.Post",
+      "name": "Post"
     },
     {
-      "kind": "type",
       "id": 413461762,
-      "globalName": "schema.Posts",
-      "name": "Posts",
+      "traits": [{ "type": "internalType", "interfaceName": "Result" }],
+      "kind": "type",
       "params": [
         {
           "name": "posts",
@@ -776,7 +285,9 @@
             "value": { "type": "internalType", "interfaceName": "Post" }
           }
         }
-      ]
+      ],
+      "globalName": "schema.Posts",
+      "name": "Posts"
     },
     {
       "kind": "call",
@@ -785,20 +296,39 @@
       "name": "GetPostById",
       "params": [
         { "name": "postId", "type": { "type": "generic", "value": "uint32" } }
-      ]
+      ],
+      "traits": [
+        {
+          "type": "externalType",
+          "name": "Request",
+          "relativePath": "./Request"
+        }
+      ],
+      "returnType": { "type": "internalType", "interfaceName": "Posts" }
     },
     {
       "kind": "call",
       "id": -416881,
       "globalName": "schema.GetConversations",
       "name": "GetConversations",
-      "params": []
+      "params": [],
+      "traits": [
+        {
+          "type": "externalType",
+          "name": "Request",
+          "relativePath": "./Request"
+        }
+      ],
+      "returnType": {
+        "type": "externalType",
+        "name": "Conversations",
+        "relativePath": "./conversation/index"
+      }
     },
     {
-      "kind": "type",
       "id": -2145804928,
-      "globalName": "schema.Coordinates",
-      "name": "Coordinates",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "latitude",
@@ -808,13 +338,14 @@
           "name": "longitude",
           "type": { "type": "generic", "value": "double" }
         }
-      ]
+      ],
+      "globalName": "schema.Coordinates",
+      "name": "Coordinates"
     },
     {
-      "kind": "type",
       "id": -2007546384,
-      "globalName": "schema.ShouldSupportSeveralSequentialVectorParams",
-      "name": "ShouldSupportSeveralSequentialVectorParams",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "a",
@@ -894,13 +425,14 @@
             ]
           }
         }
-      ]
+      ],
+      "globalName": "schema.ShouldSupportSeveralSequentialVectorParams",
+      "name": "ShouldSupportSeveralSequentialVectorParams"
     },
     {
-      "kind": "type",
       "id": 546242333,
-      "globalName": "schema.simpleTupleTest",
-      "name": "simpleTupleTest",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "a",
@@ -950,42 +482,46 @@
             }
           }
         }
-      ]
+      ],
+      "globalName": "schema.simpleTupleTest",
+      "name": "simpleTupleTest"
     },
     {
-      "kind": "type",
       "id": -1994197976,
+      "traits": [],
+      "kind": "type",
+      "params": [],
       "globalName": "schema.emptyNode",
-      "name": "emptyNode",
-      "params": []
+      "name": "emptyNode"
     },
     {
-      "kind": "type",
       "id": 136841399,
-      "globalName": "schema.user",
-      "name": "user",
+      "traits": [],
+      "kind": "type",
       "params": [
         { "name": "id", "type": { "type": "generic", "value": "int" } },
         { "name": "name", "type": { "type": "generic", "value": "string" } }
-      ]
+      ],
+      "globalName": "schema.user",
+      "name": "user"
     },
     {
-      "kind": "type",
       "id": -1360902719,
-      "globalName": "schema.supportNullTerminatedString",
-      "name": "supportNullTerminatedString",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "value",
           "type": { "type": "generic", "value": "null_terminated_string" }
         }
-      ]
+      ],
+      "globalName": "schema.supportNullTerminatedString",
+      "name": "supportNullTerminatedString"
     },
     {
-      "kind": "type",
       "id": -1953588325,
-      "globalName": "schema.nullTerminatedStringList",
-      "name": "nullTerminatedStringList",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "value",
@@ -995,13 +531,14 @@
             "value": { "type": "generic", "value": "null_terminated_string" }
           }
         }
-      ]
+      ],
+      "globalName": "schema.nullTerminatedStringList",
+      "name": "nullTerminatedStringList"
     },
     {
-      "kind": "type",
       "id": -1964890795,
-      "globalName": "schema.normalStringList",
-      "name": "normalStringList",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "value",
@@ -1011,13 +548,14 @@
             "value": { "type": "generic", "value": "string" }
           }
         }
-      ]
+      ],
+      "globalName": "schema.normalStringList",
+      "name": "normalStringList"
     },
     {
-      "kind": "type",
       "id": -789978949,
-      "globalName": "schema.boolAndTuple",
-      "name": "boolAndTuple",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "sorryIJustLoveTuples",
@@ -1038,7 +576,9 @@
             ]
           }
         }
-      ]
+      ],
+      "globalName": "schema.boolAndTuple",
+      "name": "boolAndTuple"
     }
   ]
 }

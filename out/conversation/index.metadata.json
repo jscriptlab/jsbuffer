@@ -1,43 +1,16 @@
 {
-  "Conversation": {
-    "kind": "type",
-    "id": 1288012364,
-    "globalName": "conversation.index.Conversation",
-    "name": "Conversation",
-    "params": [
-      { "name": "id", "type": { "type": "generic", "value": "int" } },
-      {
-        "name": "user",
-        "type": {
-          "type": "externalType",
-          "name": "User",
-          "relativePath": "./SecondUser"
-        }
-      }
-    ]
-  },
-  "Conversations": {
-    "kind": "type",
-    "id": -1572302470,
-    "globalName": "conversation.index.Conversations",
-    "name": "Conversations",
-    "params": [
-      {
-        "name": "conversations",
-        "type": {
-          "type": "template",
-          "template": "vector",
-          "value": { "type": "internalType", "interfaceName": "Conversation" }
-        }
-      }
-    ]
-  },
+  "__imports": [
+    { "relativePath": "./message" },
+    { "relativePath": "./tupleTest2" },
+    { "relativePath": "./testLong" },
+    { "relativePath": "./testUpdateFunction" },
+    { "relativePath": "./testTraitOnParam" }
+  ],
   "__all": [
     {
-      "kind": "type",
       "id": 1288012364,
-      "globalName": "conversation.index.Conversation",
-      "name": "Conversation",
+      "traits": [],
+      "kind": "type",
       "params": [
         { "name": "id", "type": { "type": "generic", "value": "int" } },
         {
@@ -48,13 +21,14 @@
             "relativePath": "./SecondUser"
           }
         }
-      ]
+      ],
+      "globalName": "conversation.index.Conversation",
+      "name": "Conversation"
     },
     {
-      "kind": "type",
       "id": -1572302470,
-      "globalName": "conversation.index.Conversations",
-      "name": "Conversations",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "conversations",
@@ -64,7 +38,9 @@
             "value": { "type": "internalType", "interfaceName": "Conversation" }
           }
         }
-      ]
+      ],
+      "globalName": "conversation.index.Conversations",
+      "name": "Conversations"
     }
   ]
 }

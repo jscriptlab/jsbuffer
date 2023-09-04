@@ -1,9 +1,10 @@
 import JSBI from 'jsbi';
+import fs from 'fs';
 import {
   INodeCallDefinition,
   INodeTraitDefinition,
   INodeTypeDefinition,
-  NodeType,
+  NodeType
 } from '../src/ASTGenerator';
 import { lowerFirst, upperFirst } from './stringUtilities';
 
@@ -56,9 +57,13 @@ export function getUpdateFunctionName(
   return `update${upperFirst(node.name.value)}`;
 }
 
+export async function readJSONFile<T>(path: string): Promise<T> {
+  return JSON.parse(await fs.promises.readFile(path, 'utf8'));
+}
+
 export function integerRangeFromBits({
   bits,
-  signed,
+  signed
 }: {
   bits: number | JSBI;
   signed: boolean;
@@ -77,7 +82,7 @@ export function integerRangeFromBits({
   if (signed) {
     return [
       JSBI.exponentiate(negativeTwo, lastBitIndex),
-      JSBI.subtract(maxRange, one),
+      JSBI.subtract(maxRange, one)
     ];
   }
   return [zero, JSBI.subtract(JSBI.multiply(maxRange, two), one)];

@@ -5,6 +5,7 @@
     "GenericName.ts",
     "schema/**/*.ts",
     "FileGenerator.ts",
+    "FileGeneratorKotlin.ts",
     "JavaScriptObjectStringify.ts",
     "typeUtilities.ts",
     "fileGeneratorUtilities.ts",

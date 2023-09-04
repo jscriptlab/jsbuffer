@@ -21,14 +21,14 @@ export default class JavaScriptObjectStringify extends CodeStream {
     parent: CodeStream | undefined,
     {
       indentationSize,
-      quoteObjectParameterNames = true,
+      quoteObjectParameterNames = true
     }: {
       indentationSize: number;
       quoteObjectParameterNames?: boolean;
     }
   ) {
     super(parent, {
-      indentationSize,
+      indentationSize
     });
     this.#quoteObjectParameterNames = quoteObjectParameterNames;
   }

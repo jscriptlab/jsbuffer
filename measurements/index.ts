@@ -4,7 +4,7 @@ import {
   encodeNormalStringList,
   encodeNullTerminatedStringList,
   normalStringList,
-  nullTerminatedStringList,
+  nullTerminatedStringList
 } from '../out/schema';
 import { Deserializer, Serializer } from '@jsbuffer/codec';
 import perf_hooks from 'perf_hooks';
@@ -12,7 +12,7 @@ import crypto from 'crypto';
 
 function measureEncodingListOfStrings() {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
 
   const hugeStringList = new Array<string>(10000);
@@ -24,18 +24,18 @@ function measureEncodingListOfStrings() {
   encodeNormalStringList(
     s,
     normalStringList({
-      value: hugeStringList,
+      value: hugeStringList
     })
   );
   encodeNullTerminatedStringList(
     s,
     nullTerminatedStringList({
-      value: hugeStringList,
+      value: hugeStringList
     })
   );
   const d = new Deserializer({
     buffer: s.view(),
-    textDecoder: new TextDecoder(),
+    textDecoder: new TextDecoder()
   });
 
   perf_hooks.performance.mark('normalStringList');
@@ -52,7 +52,7 @@ function measureEncodingListOfStrings() {
 
 function measureNullTerminatedString() {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
 
   const inputs = [
@@ -60,11 +60,11 @@ function measureNullTerminatedString() {
     crypto.randomBytes(256),
     crypto.randomBytes(64),
     crypto.randomBytes(32),
-    crypto.randomBytes(8),
+    crypto.randomBytes(8)
   ].map((buffer, index) => ({
     index,
     buffer,
-    hex: buffer.toString('hex'),
+    hex: buffer.toString('hex')
   }));
 
   for (const { hex } of inputs) {
@@ -74,7 +74,7 @@ function measureNullTerminatedString() {
 
   const d = new Deserializer({
     buffer: s.view(),
-    textDecoder: new TextDecoder(),
+    textDecoder: new TextDecoder()
   });
 
   for (const { index, buffer } of inputs) {

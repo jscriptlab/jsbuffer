@@ -11,19 +11,19 @@
     "child-process-utilities": "0.x",
     "eslint": "8.x",
     "glob": "^10.2.3",
-    "jsbuffer": "0.x",
     "nyc": "15.x",
     "prettier": "2.x",
     "sarg": "5.x",
     "ts-node": "10.x",
     "typescript": "5.x"
   },
-  "name": "jsbuffer",
+  "name": "@jsbuffer/next",
   "license": "MIT",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "./src/index.js",
   "bin": {
-    "jsbuffer": "cli/index.js"
+    "jsbuffer": "cli/index.js",
+    "jsbuffer-kt": "cli/kotlin.js"
   },
   "files": [
     "cli/**/*.{d.ts,map,js}",

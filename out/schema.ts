@@ -42,7 +42,7 @@ export interface testMapInputParams {
 export function testMap(params: testMapInputParams): testMap {
   return {
     _name: 'schema.testMap',
-    a: params['a'],
+    a: params['a']
   };
 }
 export function encodeTestMap(__s: ISerializer, value: testMap) {
@@ -79,7 +79,7 @@ export function decodeTestMap(__d: IDeserializer): testMap | null {
   }
   return {
     _name: 'schema.testMap',
-    a,
+    a
   };
 }
 export function defaultTestMap(
@@ -87,7 +87,7 @@ export function defaultTestMap(
 ): testMap {
   return testMap({
     a: new Map<string, string>(),
-    ...params,
+    ...params
   });
 }
 export function compareTestMap(__a: testMap, __b: testMap): boolean {
@@ -120,7 +120,7 @@ export function updateTestMap(
     ) {
       value = testMap({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -301,7 +301,7 @@ export function testBigInt(params: testBigIntInputParams): testBigInt {
     c: params['c'],
     d: params['d'],
     e: params['e'],
-    f: params['f'],
+    f: params['f']
   };
 }
 export function encodeTestBigInt(__s: ISerializer, value: testBigInt) {
@@ -391,7 +391,7 @@ export function decodeTestBigInt(__d: IDeserializer): testBigInt | null {
     c,
     d,
     e,
-    f,
+    f
   };
 }
 export function defaultTestBigInt(
@@ -405,7 +405,7 @@ export function defaultTestBigInt(
     d: '0',
     e: '0',
     f: '0',
-    ...params,
+    ...params
   });
 }
 export function compareTestBigInt(__a: testBigInt, __b: testBigInt): boolean {
@@ -471,7 +471,7 @@ export function updateTestBigInt(
     ) {
       value = testBigInt({
         ...value,
-        beforeA: changes['beforeA'],
+        beforeA: changes['beforeA']
       });
     }
   }
@@ -484,7 +484,7 @@ export function updateTestBigInt(
     ) {
       value = testBigInt({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -497,7 +497,7 @@ export function updateTestBigInt(
     ) {
       value = testBigInt({
         ...value,
-        b: changes['b'],
+        b: changes['b']
       });
     }
   }
@@ -510,7 +510,7 @@ export function updateTestBigInt(
     ) {
       value = testBigInt({
         ...value,
-        c: changes['c'],
+        c: changes['c']
       });
     }
   }
@@ -523,7 +523,7 @@ export function updateTestBigInt(
     ) {
       value = testBigInt({
         ...value,
-        d: changes['d'],
+        d: changes['d']
       });
     }
   }
@@ -536,7 +536,7 @@ export function updateTestBigInt(
     ) {
       value = testBigInt({
         ...value,
-        e: changes['e'],
+        e: changes['e']
       });
     }
   }
@@ -549,7 +549,7 @@ export function updateTestBigInt(
     ) {
       value = testBigInt({
         ...value,
-        f: changes['f'],
+        f: changes['f']
       });
     }
   }
@@ -635,7 +635,7 @@ export function testMap2(params: testMap2InputParams): testMap2 {
   return {
     _name: 'schema.testMap2',
     a: params['a'],
-    b: params['b'],
+    b: params['b']
   };
 }
 export function encodeTestMap2(__s: ISerializer, value: testMap2) {
@@ -734,7 +734,7 @@ export function decodeTestMap2(__d: IDeserializer): testMap2 | null {
   return {
     _name: 'schema.testMap2',
     a,
-    b,
+    b
   };
 }
 export function defaultTestMap2(
@@ -743,7 +743,7 @@ export function defaultTestMap2(
   return testMap2({
     a: new Map<string | null, string>(),
     b: new Map<string | null, [string, Map<number, number>]>(),
-    ...params,
+    ...params
   });
 }
 export function compareTestMap2(__a: testMap2, __b: testMap2): boolean {
@@ -813,7 +813,7 @@ export function updateTestMap2(
     ) {
       value = testMap2({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -848,7 +848,7 @@ export function updateTestMap2(
     ) {
       value = testMap2({
         ...value,
-        b: changes['b'],
+        b: changes['b']
       });
     }
   }
@@ -888,7 +888,7 @@ export interface testMap3InputParams {
 export function testMap3(params: testMap3InputParams): testMap3 {
   return {
     _name: 'schema.testMap3',
-    a: params['a'],
+    a: params['a']
   };
 }
 export function encodeTestMap3(__s: ISerializer, value: testMap3) {
@@ -927,7 +927,7 @@ export function decodeTestMap3(__d: IDeserializer): testMap3 | null {
   }
   return {
     _name: 'schema.testMap3',
-    a,
+    a
   };
 }
 export function defaultTestMap3(
@@ -935,7 +935,7 @@ export function defaultTestMap3(
 ): testMap3 {
   return testMap3({
     a: new Map<testMap2, string>(),
-    ...params,
+    ...params
   });
 }
 export function compareTestMap3(__a: testMap3, __b: testMap3): boolean {
@@ -968,7 +968,7 @@ export function updateTestMap3(
     ) {
       value = testMap3({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -1027,7 +1027,7 @@ export function testSet(params: testSetInputParams): testSet {
   return {
     _name: 'schema.testSet',
     a: params['a'],
-    b: params['b'],
+    b: params['b']
   };
 }
 export function encodeTestSet(__s: ISerializer, value: testSet) {
@@ -1084,7 +1084,7 @@ export function decodeTestSet(__d: IDeserializer): testSet | null {
   return {
     _name: 'schema.testSet',
     a,
-    b,
+    b
   };
 }
 export function defaultTestSet(
@@ -1093,7 +1093,7 @@ export function defaultTestSet(
   return testSet({
     a: new Set<string>(),
     b: new Set<number>(),
-    ...params,
+    ...params
   });
 }
 export function compareTestSet(__a: testSet, __b: testSet): boolean {
@@ -1146,7 +1146,7 @@ export function updateTestSet(
     ) {
       value = testSet({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -1168,7 +1168,7 @@ export function updateTestSet(
     ) {
       value = testSet({
         ...value,
-        b: changes['b'],
+        b: changes['b']
       });
     }
   }
@@ -1260,7 +1260,7 @@ export function testSet2(params: testSet2InputParams): testSet2 {
     _name: 'schema.testSet2',
     a: params['a'],
     b: params['b'],
-    c: params['c'],
+    c: params['c']
   };
 }
 export function encodeTestSet2(__s: ISerializer, value: testSet2) {
@@ -1359,7 +1359,7 @@ export function decodeTestSet2(__d: IDeserializer): testSet2 | null {
     _name: 'schema.testSet2',
     a,
     b,
-    c,
+    c
   };
 }
 export function defaultTestSet2(
@@ -1369,7 +1369,7 @@ export function defaultTestSet2(
     a: new Set<string>(),
     b: new Set<Map<string, string>>(),
     c: new Set<[number, number]>(),
-    ...params,
+    ...params
   });
 }
 export function compareTestSet2(__a: testSet2, __b: testSet2): boolean {
@@ -1447,7 +1447,7 @@ export function updateTestSet2(
     ) {
       value = testSet2({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -1475,7 +1475,7 @@ export function updateTestSet2(
     ) {
       value = testSet2({
         ...value,
-        b: changes['b'],
+        b: changes['b']
       });
     }
   }
@@ -1500,7 +1500,7 @@ export function updateTestSet2(
     ) {
       value = testSet2({
         ...value,
-        c: changes['c'],
+        c: changes['c']
       });
     }
   }
@@ -1525,7 +1525,7 @@ export function isVoid(value: unknown): value is Void {
 export interface VoidInputParams {}
 export function Void(_: VoidInputParams = {}): Void {
   return {
-    _name: 'schema.Void',
+    _name: 'schema.Void'
   };
 }
 export function encodeVoid(__s: ISerializer, _: Void) {
@@ -1538,12 +1538,12 @@ export function decodeVoid(__d: IDeserializer): Void | null {
    */
   if (__id !== 189644707) return null;
   return {
-    _name: 'schema.Void',
+    _name: 'schema.Void'
   };
 }
 export function defaultVoid(params: Partial<VoidInputParams> = {}): Void {
   return Void({
-    ...params,
+    ...params
   });
 }
 export function compareVoid(__a: Void, __b: Void): boolean {
@@ -1579,7 +1579,7 @@ export interface msgInputParams {
 export function msg(params: msgInputParams): msg {
   return {
     _name: 'schema.msg',
-    data: params['data'],
+    data: params['data']
   };
 }
 export function encodeMsg(__s: ISerializer, value: msg) {
@@ -1604,13 +1604,13 @@ export function decodeMsg(__d: IDeserializer): msg | null {
   data = __d.readBuffer(__d.readUint32());
   return {
     _name: 'schema.msg',
-    data,
+    data
   };
 }
 export function defaultMsg(params: Partial<msgInputParams> = {}): msg {
   return msg({
     data: new Uint8Array(0),
-    ...params,
+    ...params
   });
 }
 export function compareMsg(__a: msg, __b: msg): boolean {
@@ -1634,7 +1634,7 @@ export function updateMsg(value: msg, changes: Partial<msgInputParams>) {
     ) {
       value = msg({
         ...value,
-        data: changes['data'],
+        data: changes['data']
       });
     }
   }
@@ -1724,7 +1724,7 @@ export interface UsersInputParams {
 export function Users(params: UsersInputParams): Users {
   return {
     _name: 'schema.Users',
-    users: params['users'],
+    users: params['users']
   };
 }
 export function encodeUsers(__s: ISerializer, value: Users) {
@@ -1759,13 +1759,13 @@ export function decodeUsers(__d: IDeserializer): Users | null {
   }
   return {
     _name: 'schema.Users',
-    users,
+    users
   };
 }
 export function defaultUsers(params: Partial<UsersInputParams> = {}): Users {
   return Users({
     users: [],
-    ...params,
+    ...params
   });
 }
 export function compareUsers(__a: Users, __b: Users): boolean {
@@ -1805,7 +1805,7 @@ export function updateUsers(value: Users, changes: Partial<UsersInputParams>) {
     ) {
       value = Users({
         ...value,
-        users: changes['users'],
+        users: changes['users']
       });
     }
   }
@@ -1847,7 +1847,7 @@ export interface GetUserByIdInputParams {
 export function GetUserById(params: GetUserByIdInputParams): GetUserById {
   return {
     _name: 'schema.GetUserById',
-    userId: params['userId'],
+    userId: params['userId']
   };
 }
 export function encodeGetUserById(__s: ISerializer, value: GetUserById) {
@@ -1871,7 +1871,7 @@ export function decodeGetUserById(__d: IDeserializer): GetUserById | null {
   userId = __d.readUint32();
   return {
     _name: 'schema.GetUserById',
-    userId,
+    userId
   };
 }
 export function defaultGetUserById(
@@ -1879,7 +1879,7 @@ export function defaultGetUserById(
 ): GetUserById {
   return GetUserById({
     userId: 0,
-    ...params,
+    ...params
   });
 }
 export function compareGetUserById(
@@ -1901,7 +1901,7 @@ export function updateGetUserById(
     if (!(changes['userId'] === value['userId'])) {
       value = GetUserById({
         ...value,
-        userId: changes['userId'],
+        userId: changes['userId']
       });
     }
   }
@@ -1946,7 +1946,7 @@ export interface PostInputParams {
 export function Post(params: PostInputParams): Post {
   return {
     _name: 'schema.Post',
-    id: params['id'],
+    id: params['id']
   };
 }
 export function encodePost(__s: ISerializer, value: Post) {
@@ -1970,13 +1970,13 @@ export function decodePost(__d: IDeserializer): Post | null {
   id = __d.readInt32();
   return {
     _name: 'schema.Post',
-    id,
+    id
   };
 }
 export function defaultPost(params: Partial<PostInputParams> = {}): Post {
   return Post({
     id: 0,
-    ...params,
+    ...params
   });
 }
 export function comparePost(__a: Post, __b: Post): boolean {
@@ -1992,7 +1992,7 @@ export function updatePost(value: Post, changes: Partial<PostInputParams>) {
     if (!(changes['id'] === value['id'])) {
       value = Post({
         ...value,
-        id: changes['id'],
+        id: changes['id']
       });
     }
   }
@@ -2030,7 +2030,7 @@ export interface PostsInputParams {
 export function Posts(params: PostsInputParams): Posts {
   return {
     _name: 'schema.Posts',
-    posts: params['posts'],
+    posts: params['posts']
   };
 }
 export function encodePosts(__s: ISerializer, value: Posts) {
@@ -2065,13 +2065,13 @@ export function decodePosts(__d: IDeserializer): Posts | null {
   }
   return {
     _name: 'schema.Posts',
-    posts,
+    posts
   };
 }
 export function defaultPosts(params: Partial<PostsInputParams> = {}): Posts {
   return Posts({
     posts: [],
-    ...params,
+    ...params
   });
 }
 export function comparePosts(__a: Posts, __b: Posts): boolean {
@@ -2111,7 +2111,7 @@ export function updatePosts(value: Posts, changes: Partial<PostsInputParams>) {
     ) {
       value = Posts({
         ...value,
-        posts: changes['posts'],
+        posts: changes['posts']
       });
     }
   }
@@ -2153,7 +2153,7 @@ export interface GetPostByIdInputParams {
 export function GetPostById(params: GetPostByIdInputParams): GetPostById {
   return {
     _name: 'schema.GetPostById',
-    postId: params['postId'],
+    postId: params['postId']
   };
 }
 export function encodeGetPostById(__s: ISerializer, value: GetPostById) {
@@ -2177,7 +2177,7 @@ export function decodeGetPostById(__d: IDeserializer): GetPostById | null {
   postId = __d.readUint32();
   return {
     _name: 'schema.GetPostById',
-    postId,
+    postId
   };
 }
 export function defaultGetPostById(
@@ -2185,7 +2185,7 @@ export function defaultGetPostById(
 ): GetPostById {
   return GetPostById({
     postId: 0,
-    ...params,
+    ...params
   });
 }
 export function compareGetPostById(
@@ -2207,7 +2207,7 @@ export function updateGetPostById(
     if (!(changes['postId'] === value['postId'])) {
       value = GetPostById({
         ...value,
-        postId: changes['postId'],
+        postId: changes['postId']
       });
     }
   }
@@ -2234,7 +2234,7 @@ export function GetConversations(
   _: GetConversationsInputParams = {}
 ): GetConversations {
   return {
-    _name: 'schema.GetConversations',
+    _name: 'schema.GetConversations'
   };
 }
 export function encodeGetConversations(__s: ISerializer, _: GetConversations) {
@@ -2249,14 +2249,14 @@ export function decodeGetConversations(
    */
   if (__id !== -416881) return null;
   return {
-    _name: 'schema.GetConversations',
+    _name: 'schema.GetConversations'
   };
 }
 export function defaultGetConversations(
   params: Partial<GetConversationsInputParams> = {}
 ): GetConversations {
   return GetConversations({
-    ...params,
+    ...params
   });
 }
 export function compareGetConversations(
@@ -2311,7 +2311,7 @@ export function Coordinates(params: CoordinatesInputParams): Coordinates {
   return {
     _name: 'schema.Coordinates',
     latitude: params['latitude'],
-    longitude: params['longitude'],
+    longitude: params['longitude']
   };
 }
 export function encodeCoordinates(__s: ISerializer, value: Coordinates) {
@@ -2346,7 +2346,7 @@ export function decodeCoordinates(__d: IDeserializer): Coordinates | null {
   return {
     _name: 'schema.Coordinates',
     latitude,
-    longitude,
+    longitude
   };
 }
 export function defaultCoordinates(
@@ -2355,7 +2355,7 @@ export function defaultCoordinates(
   return Coordinates({
     latitude: 0.0,
     longitude: 0.0,
-    ...params,
+    ...params
   });
 }
 export function compareCoordinates(
@@ -2381,7 +2381,7 @@ export function updateCoordinates(
     if (!(changes['latitude'] === value['latitude'])) {
       value = Coordinates({
         ...value,
-        latitude: changes['latitude'],
+        latitude: changes['latitude']
       });
     }
   }
@@ -2389,7 +2389,7 @@ export function updateCoordinates(
     if (!(changes['longitude'] === value['longitude'])) {
       value = Coordinates({
         ...value,
-        longitude: changes['longitude'],
+        longitude: changes['longitude']
       });
     }
   }
@@ -2554,7 +2554,7 @@ export function ShouldSupportSeveralSequentialVectorParams(
     d: params['d'],
     e: params['e'],
     f: params['f'],
-    g: params['g'],
+    g: params['g']
   };
 }
 export function encodeShouldSupportSeveralSequentialVectorParams(
@@ -2758,7 +2758,7 @@ export function decodeShouldSupportSeveralSequentialVectorParams(
     d,
     e,
     f,
-    g,
+    g
   };
 }
 export function defaultShouldSupportSeveralSequentialVectorParams(
@@ -2772,7 +2772,7 @@ export function defaultShouldSupportSeveralSequentialVectorParams(
     e: [],
     f: [],
     g: [0, 0.0, 0.0, [], null],
-    ...params,
+    ...params
   });
 }
 export function compareShouldSupportSeveralSequentialVectorParams(
@@ -2915,7 +2915,7 @@ export function updateShouldSupportSeveralSequentialVectorParams(
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -2937,7 +2937,7 @@ export function updateShouldSupportSeveralSequentialVectorParams(
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
         ...value,
-        b: changes['b'],
+        b: changes['b']
       });
     }
   }
@@ -2959,7 +2959,7 @@ export function updateShouldSupportSeveralSequentialVectorParams(
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
         ...value,
-        c: changes['c'],
+        c: changes['c']
       });
     }
   }
@@ -2981,7 +2981,7 @@ export function updateShouldSupportSeveralSequentialVectorParams(
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
         ...value,
-        d: changes['d'],
+        d: changes['d']
       });
     }
   }
@@ -3003,7 +3003,7 @@ export function updateShouldSupportSeveralSequentialVectorParams(
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
         ...value,
-        e: changes['e'],
+        e: changes['e']
       });
     }
   }
@@ -3039,7 +3039,7 @@ export function updateShouldSupportSeveralSequentialVectorParams(
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
         ...value,
-        f: changes['f'],
+        f: changes['f']
       });
     }
   }
@@ -3083,7 +3083,7 @@ export function updateShouldSupportSeveralSequentialVectorParams(
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
         ...value,
-        g: changes['g'],
+        g: changes['g']
       });
     }
   }
@@ -3191,7 +3191,7 @@ export function simpleTupleTest(
   return {
     _name: 'schema.simpleTupleTest',
     a: params['a'],
-    b: params['b'],
+    b: params['b']
   };
 }
 export function encodeSimpleTupleTest(
@@ -3316,7 +3316,7 @@ export function decodeSimpleTupleTest(
   return {
     _name: 'schema.simpleTupleTest',
     a,
-    b,
+    b
   };
 }
 export function defaultSimpleTupleTest(
@@ -3325,7 +3325,7 @@ export function defaultSimpleTupleTest(
   return simpleTupleTest({
     a: [0, 0.0, 0.0, [], null],
     b: [],
-    ...params,
+    ...params
   });
 }
 export function compareSimpleTupleTest(
@@ -3443,7 +3443,7 @@ export function updateSimpleTupleTest(
     ) {
       value = simpleTupleTest({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -3500,7 +3500,7 @@ export function updateSimpleTupleTest(
     ) {
       value = simpleTupleTest({
         ...value,
-        b: changes['b'],
+        b: changes['b']
       });
     }
   }
@@ -3525,7 +3525,7 @@ export function isEmptyNode(value: unknown): value is emptyNode {
 export interface emptyNodeInputParams {}
 export function emptyNode(_: emptyNodeInputParams = {}): emptyNode {
   return {
-    _name: 'schema.emptyNode',
+    _name: 'schema.emptyNode'
   };
 }
 export function encodeEmptyNode(__s: ISerializer, _: emptyNode) {
@@ -3538,14 +3538,14 @@ export function decodeEmptyNode(__d: IDeserializer): emptyNode | null {
    */
   if (__id !== -1994197976) return null;
   return {
-    _name: 'schema.emptyNode',
+    _name: 'schema.emptyNode'
   };
 }
 export function defaultEmptyNode(
   params: Partial<emptyNodeInputParams> = {}
 ): emptyNode {
   return emptyNode({
-    ...params,
+    ...params
   });
 }
 export function compareEmptyNode(__a: emptyNode, __b: emptyNode): boolean {
@@ -3601,7 +3601,7 @@ export function user(params: userInputParams): user {
   return {
     _name: 'schema.user',
     id: params['id'],
-    name: params['name'],
+    name: params['name']
   };
 }
 export function encodeUser(__s: ISerializer, value: user) {
@@ -3636,14 +3636,14 @@ export function decodeUser(__d: IDeserializer): user | null {
   return {
     _name: 'schema.user',
     id,
-    name,
+    name
   };
 }
 export function defaultUser(params: Partial<userInputParams> = {}): user {
   return user({
     id: 0,
     name: '',
-    ...params,
+    ...params
   });
 }
 export function compareUser(__a: user, __b: user): boolean {
@@ -3663,7 +3663,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
     if (!(changes['id'] === value['id'])) {
       value = user({
         ...value,
-        id: changes['id'],
+        id: changes['id']
       });
     }
   }
@@ -3671,7 +3671,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
     if (!(changes['name'] === value['name'])) {
       value = user({
         ...value,
-        name: changes['name'],
+        name: changes['name']
       });
     }
   }
@@ -3708,7 +3708,7 @@ export function supportNullTerminatedString(
 ): supportNullTerminatedString {
   return {
     _name: 'schema.supportNullTerminatedString',
-    value: params['value'],
+    value: params['value']
   };
 }
 export function encodeSupportNullTerminatedString(
@@ -3737,7 +3737,7 @@ export function decodeSupportNullTerminatedString(
   value = __d.readNullTerminatedString();
   return {
     _name: 'schema.supportNullTerminatedString',
-    value,
+    value
   };
 }
 export function defaultSupportNullTerminatedString(
@@ -3745,7 +3745,7 @@ export function defaultSupportNullTerminatedString(
 ): supportNullTerminatedString {
   return supportNullTerminatedString({
     value: '',
-    ...params,
+    ...params
   });
 }
 export function compareSupportNullTerminatedString(
@@ -3767,7 +3767,7 @@ export function updateSupportNullTerminatedString(
     if (!(changes['value'] === value['value'])) {
       value = supportNullTerminatedString({
         ...value,
-        value: changes['value'],
+        value: changes['value']
       });
     }
   }
@@ -3809,7 +3809,7 @@ export function nullTerminatedStringList(
 ): nullTerminatedStringList {
   return {
     _name: 'schema.nullTerminatedStringList',
-    value: params['value'],
+    value: params['value']
   };
 }
 export function encodeNullTerminatedStringList(
@@ -3847,7 +3847,7 @@ export function decodeNullTerminatedStringList(
   }
   return {
     _name: 'schema.nullTerminatedStringList',
-    value,
+    value
   };
 }
 export function defaultNullTerminatedStringList(
@@ -3855,7 +3855,7 @@ export function defaultNullTerminatedStringList(
 ): nullTerminatedStringList {
   return nullTerminatedStringList({
     value: [],
-    ...params,
+    ...params
   });
 }
 export function compareNullTerminatedStringList(
@@ -3899,7 +3899,7 @@ export function updateNullTerminatedStringList(
     ) {
       value = nullTerminatedStringList({
         ...value,
-        value: changes['value'],
+        value: changes['value']
       });
     }
   }
@@ -3939,7 +3939,7 @@ export function normalStringList(
 ): normalStringList {
   return {
     _name: 'schema.normalStringList',
-    value: params['value'],
+    value: params['value']
   };
 }
 export function encodeNormalStringList(
@@ -3977,7 +3977,7 @@ export function decodeNormalStringList(
   }
   return {
     _name: 'schema.normalStringList',
-    value,
+    value
   };
 }
 export function defaultNormalStringList(
@@ -3985,7 +3985,7 @@ export function defaultNormalStringList(
 ): normalStringList {
   return normalStringList({
     value: [],
-    ...params,
+    ...params
   });
 }
 export function compareNormalStringList(
@@ -4029,7 +4029,7 @@ export function updateNormalStringList(
     ) {
       value = normalStringList({
         ...value,
-        value: changes['value'],
+        value: changes['value']
       });
     }
   }
@@ -4076,7 +4076,7 @@ export interface boolAndTupleInputParams {
 export function boolAndTuple(params: boolAndTupleInputParams): boolAndTuple {
   return {
     _name: 'schema.boolAndTuple',
-    sorryIJustLoveTuples: params['sorryIJustLoveTuples'],
+    sorryIJustLoveTuples: params['sorryIJustLoveTuples']
   };
 }
 export function encodeBoolAndTuple(__s: ISerializer, value: boolAndTuple) {
@@ -4118,7 +4118,7 @@ export function decodeBoolAndTuple(__d: IDeserializer): boolAndTuple | null {
   sorryIJustLoveTuples = [__e1, __e2, __e3];
   return {
     _name: 'schema.boolAndTuple',
-    sorryIJustLoveTuples,
+    sorryIJustLoveTuples
   };
 }
 export function defaultBoolAndTuple(
@@ -4126,7 +4126,7 @@ export function defaultBoolAndTuple(
 ): boolAndTuple {
   return boolAndTuple({
     sorryIJustLoveTuples: [false, false, [false, false]],
-    ...params,
+    ...params
   });
 }
 export function compareBoolAndTuple(
@@ -4190,7 +4190,7 @@ export function updateBoolAndTuple(
     ) {
       value = boolAndTuple({
         ...value,
-        sorryIJustLoveTuples: changes['sorryIJustLoveTuples'],
+        sorryIJustLoveTuples: changes['sorryIJustLoveTuples']
       });
     }
   }

@@ -60,7 +60,7 @@ export function user(params: userInputParams): user {
     _name: 'tupleTest2.user',
     id: params['id'],
     firstName: params['firstName'],
-    lastName: params['lastName'],
+    lastName: params['lastName']
   };
 }
 export function encodeUser(__s: ISerializer, value: user) {
@@ -106,7 +106,7 @@ export function decodeUser(__d: IDeserializer): user | null {
     _name: 'tupleTest2.user',
     id,
     firstName,
-    lastName,
+    lastName
   };
 }
 export function defaultUser(params: Partial<userInputParams> = {}): user {
@@ -114,7 +114,7 @@ export function defaultUser(params: Partial<userInputParams> = {}): user {
     id: 0,
     firstName: '',
     lastName: '',
-    ...params,
+    ...params
   });
 }
 export function compareUser(__a: user, __b: user): boolean {
@@ -138,7 +138,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
     if (!(changes['id'] === value['id'])) {
       value = user({
         ...value,
-        id: changes['id'],
+        id: changes['id']
       });
     }
   }
@@ -146,7 +146,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
     if (!(changes['firstName'] === value['firstName'])) {
       value = user({
         ...value,
-        firstName: changes['firstName'],
+        firstName: changes['firstName']
       });
     }
   }
@@ -154,7 +154,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
     if (!(changes['lastName'] === value['lastName'])) {
       value = user({
         ...value,
-        lastName: changes['lastName'],
+        lastName: changes['lastName']
       });
     }
   }
@@ -218,7 +218,7 @@ export function post(params: postInputParams): post {
     _name: 'tupleTest2.post',
     id: params['id'],
     title: params['title'],
-    comments: params['comments'],
+    comments: params['comments']
   };
 }
 export function encodePost(__s: ISerializer, value: post) {
@@ -275,7 +275,7 @@ export function decodePost(__d: IDeserializer): post | null {
     _name: 'tupleTest2.post',
     id,
     title,
-    comments,
+    comments
   };
 }
 export function defaultPost(params: Partial<postInputParams> = {}): post {
@@ -283,7 +283,7 @@ export function defaultPost(params: Partial<postInputParams> = {}): post {
     id: 0,
     title: '',
     comments: [],
-    ...params,
+    ...params
   });
 }
 export function comparePost(__a: post, __b: post): boolean {
@@ -317,7 +317,7 @@ export function updatePost(value: post, changes: Partial<postInputParams>) {
     if (!(changes['id'] === value['id'])) {
       value = post({
         ...value,
-        id: changes['id'],
+        id: changes['id']
       });
     }
   }
@@ -325,7 +325,7 @@ export function updatePost(value: post, changes: Partial<postInputParams>) {
     if (!(changes['title'] === value['title'])) {
       value = post({
         ...value,
-        title: changes['title'],
+        title: changes['title']
       });
     }
   }
@@ -347,7 +347,7 @@ export function updatePost(value: post, changes: Partial<postInputParams>) {
     ) {
       value = post({
         ...value,
-        comments: changes['comments'],
+        comments: changes['comments']
       });
     }
   }
@@ -409,7 +409,7 @@ export function comment(params: commentInputParams): comment {
     _name: 'tupleTest2.comment',
     id: params['id'],
     title: params['title'],
-    contents: params['contents'],
+    contents: params['contents']
   };
 }
 export function encodeComment(__s: ISerializer, value: comment) {
@@ -455,7 +455,7 @@ export function decodeComment(__d: IDeserializer): comment | null {
     _name: 'tupleTest2.comment',
     id,
     title,
-    contents,
+    contents
   };
 }
 export function defaultComment(
@@ -465,7 +465,7 @@ export function defaultComment(
     id: 0,
     title: '',
     contents: '',
-    ...params,
+    ...params
   });
 }
 export function compareComment(__a: comment, __b: comment): boolean {
@@ -492,7 +492,7 @@ export function updateComment(
     if (!(changes['id'] === value['id'])) {
       value = comment({
         ...value,
-        id: changes['id'],
+        id: changes['id']
       });
     }
   }
@@ -500,7 +500,7 @@ export function updateComment(
     if (!(changes['title'] === value['title'])) {
       value = comment({
         ...value,
-        title: changes['title'],
+        title: changes['title']
       });
     }
   }
@@ -508,7 +508,7 @@ export function updateComment(
     if (!(changes['contents'] === value['contents'])) {
       value = comment({
         ...value,
-        contents: changes['contents'],
+        contents: changes['contents']
       });
     }
   }
@@ -569,7 +569,7 @@ export interface tupleTestInputParams {
 export function tupleTest(params: tupleTestInputParams): tupleTest {
   return {
     _name: 'tupleTest2.tupleTest',
-    data: params['data'],
+    data: params['data']
   };
 }
 export function encodeTupleTest(__s: ISerializer, value: tupleTest) {
@@ -649,7 +649,7 @@ export function decodeTupleTest(__d: IDeserializer): tupleTest | null {
   data = [__e1, __e2, __e3, __e4, __e6];
   return {
     _name: 'tupleTest2.tupleTest',
-    data,
+    data
   };
 }
 export function defaultTupleTest(
@@ -657,7 +657,7 @@ export function defaultTupleTest(
 ): tupleTest {
   return tupleTest({
     data: [defaultUser(), defaultPost(), defaultComment(), [], []],
-    ...params,
+    ...params
   });
 }
 export function compareTupleTest(__a: tupleTest, __b: tupleTest): boolean {
@@ -765,7 +765,7 @@ export function updateTupleTest(
     ) {
       value = tupleTest({
         ...value,
-        data: changes['data'],
+        data: changes['data']
       });
     }
   }
@@ -857,7 +857,7 @@ export function tupleTupleTest(
 ): tupleTupleTest {
   return {
     _name: 'tupleTest2.tupleTupleTest',
-    a: params['a'],
+    a: params['a']
   };
 }
 export function encodeTupleTupleTest(__s: ISerializer, value: tupleTupleTest) {
@@ -925,7 +925,7 @@ export function decodeTupleTupleTest(
   a = [__e1, __e8, __e9, __e10];
   return {
     _name: 'tupleTest2.tupleTupleTest',
-    a,
+    a
   };
 }
 export function defaultTupleTupleTest(
@@ -933,7 +933,7 @@ export function defaultTupleTupleTest(
 ): tupleTupleTest {
   return tupleTupleTest({
     a: [[0, '', []], 0, '', 0.0],
-    ...params,
+    ...params
   });
 }
 export function compareTupleTupleTest(
@@ -1028,7 +1028,7 @@ export function updateTupleTupleTest(
     ) {
       value = tupleTupleTest({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -1097,7 +1097,7 @@ export function superTupleTupleTest(
 ): superTupleTupleTest {
   return {
     _name: 'tupleTest2.superTupleTupleTest',
-    a: params['a'],
+    a: params['a']
   };
 }
 export function encodeSuperTupleTupleTest(
@@ -1143,7 +1143,7 @@ export function decodeSuperTupleTupleTest(
   a = [__e1, __e5];
   return {
     _name: 'tupleTest2.superTupleTupleTest',
-    a,
+    a
   };
 }
 export function defaultSuperTupleTupleTest(
@@ -1151,7 +1151,7 @@ export function defaultSuperTupleTupleTest(
 ): superTupleTupleTest {
   return superTupleTupleTest({
     a: [[[0], 0], 0.0],
-    ...params,
+    ...params
   });
 }
 export function compareSuperTupleTupleTest(
@@ -1196,7 +1196,7 @@ export function updateSuperTupleTupleTest(
     ) {
       value = superTupleTupleTest({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }

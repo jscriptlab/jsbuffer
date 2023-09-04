@@ -1,0 +1,30 @@
+import { Request } from "./Request";
+import { Error } from "./Error";
+
+export trait ServerMessage {}
+
+export type serverMessageRequestSuccessResponse : ServerMessage {
+  long requestId;
+  Request response;
+}
+
+export type serverMessageRequestFailureResponse : ServerMessage {
+  long requestId;
+  Error response;
+}
+
+export trait ClientMessage {}
+
+export type clientMessageEncrypted : ClientMessage {
+  long requestId;
+  bytes payload;
+}
+
+export type clientMessageMessagesAcknowledgment : ClientMessage {
+  vector<long> ids;
+}
+
+export type clientMessageRequest : ClientMessage {
+  long requestId;
+  Request payload;
+}

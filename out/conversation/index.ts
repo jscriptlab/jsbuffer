@@ -51,7 +51,7 @@ export function Conversation(params: ConversationInputParams): Conversation {
   return {
     _name: 'conversation.index.Conversation',
     id: params['id'],
-    user: params['user'],
+    user: params['user']
   };
 }
 export function encodeConversation(__s: ISerializer, value: Conversation) {
@@ -88,7 +88,7 @@ export function decodeConversation(__d: IDeserializer): Conversation | null {
   return {
     _name: 'conversation.index.Conversation',
     id,
-    user,
+    user
   };
 }
 export function defaultConversation(
@@ -97,7 +97,7 @@ export function defaultConversation(
   return Conversation({
     id: 0,
     user: defaultUser(),
-    ...params,
+    ...params
   });
 }
 export function compareConversation(
@@ -123,7 +123,7 @@ export function updateConversation(
     if (!(changes['id'] === value['id'])) {
       value = Conversation({
         ...value,
-        id: changes['id'],
+        id: changes['id']
       });
     }
   }
@@ -131,7 +131,7 @@ export function updateConversation(
     if (!compareUser(changes['user'], value['user'])) {
       value = Conversation({
         ...value,
-        user: changes['user'],
+        user: changes['user']
       });
     }
   }
@@ -171,7 +171,7 @@ export interface ConversationsInputParams {
 export function Conversations(params: ConversationsInputParams): Conversations {
   return {
     _name: 'conversation.index.Conversations',
-    conversations: params['conversations'],
+    conversations: params['conversations']
   };
 }
 export function encodeConversations(__s: ISerializer, value: Conversations) {
@@ -206,7 +206,7 @@ export function decodeConversations(__d: IDeserializer): Conversations | null {
   }
   return {
     _name: 'conversation.index.Conversations',
-    conversations,
+    conversations
   };
 }
 export function defaultConversations(
@@ -214,7 +214,7 @@ export function defaultConversations(
 ): Conversations {
   return Conversations({
     conversations: [],
-    ...params,
+    ...params
   });
 }
 export function compareConversations(
@@ -261,7 +261,7 @@ export function updateConversations(
     ) {
       value = Conversations({
         ...value,
-        conversations: changes['conversations'],
+        conversations: changes['conversations']
       });
     }
   }

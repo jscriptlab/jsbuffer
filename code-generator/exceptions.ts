@@ -3,7 +3,7 @@ import {
   ASTGeneratorOutputNode,
   INodeExportStatement,
   INodeTraitDefinition,
-  NodeTypeExpression,
+  NodeTypeExpression
 } from '../src/ASTGenerator';
 import FileGenerator from './FileGenerator';
 import { ResolvedType } from './types';

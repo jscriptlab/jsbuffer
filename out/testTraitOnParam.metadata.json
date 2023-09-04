@@ -1,74 +1,33 @@
 {
-  "A0": {
-    "kind": "type",
-    "id": -1244603213,
-    "globalName": "testTraitOnParam.A0",
-    "name": "A0",
-    "params": [
-      {
-        "name": "value",
-        "type": {
-          "type": "externalType",
-          "name": "A",
-          "relativePath": "./testTraitOnParamTrait"
-        }
-      }
-    ]
-  },
-  "A1": {
-    "kind": "type",
-    "id": -2001668861,
-    "globalName": "testTraitOnParam.A1",
-    "name": "A1",
-    "params": [
-      {
-        "name": "value",
-        "type": {
-          "type": "externalType",
-          "name": "A",
-          "relativePath": "./testTraitOnParamTrait"
-        }
-      }
-    ]
-  },
-  "A2": {
-    "kind": "type",
-    "id": -820998189,
-    "globalName": "testTraitOnParam.A2",
-    "name": "A2",
-    "params": [
-      {
-        "name": "value",
-        "type": {
-          "type": "externalType",
-          "name": "A",
-          "relativePath": "./testTraitOnParamTrait"
-        }
-      }
-    ]
-  },
+  "__imports": [
+    { "relativePath": "./message" },
+    { "relativePath": "./tupleTest2" },
+    { "relativePath": "./testLong" },
+    { "relativePath": "./testUpdateFunction" },
+    { "relativePath": "./testTraitOnParam" }
+  ],
   "__all": [
     {
-      "kind": "type",
       "id": -1244603213,
+      "traits": [],
+      "kind": "type",
+      "params": [
+        {
+          "name": "value",
+          "type": {
+            "type": "externalType",
+            "name": "A",
+            "relativePath": "./testTraitOnParamTrait"
+          }
+        }
+      ],
       "globalName": "testTraitOnParam.A0",
-      "name": "A0",
-      "params": [
-        {
-          "name": "value",
-          "type": {
-            "type": "externalType",
-            "name": "A",
-            "relativePath": "./testTraitOnParamTrait"
-          }
-        }
-      ]
+      "name": "A0"
     },
     {
-      "kind": "type",
       "id": -2001668861,
-      "globalName": "testTraitOnParam.A1",
-      "name": "A1",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "value",
@@ -78,13 +37,14 @@
             "relativePath": "./testTraitOnParamTrait"
           }
         }
-      ]
+      ],
+      "globalName": "testTraitOnParam.A1",
+      "name": "A1"
     },
     {
-      "kind": "type",
       "id": -820998189,
-      "globalName": "testTraitOnParam.A2",
-      "name": "A2",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "value",
@@ -94,7 +54,9 @@
             "relativePath": "./testTraitOnParamTrait"
           }
         }
-      ]
+      ],
+      "globalName": "testTraitOnParam.A2",
+      "name": "A2"
     }
   ]
 }

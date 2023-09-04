@@ -1,52 +1,26 @@
 {
-  "Message": {
-    "kind": "type",
-    "id": -1731107621,
-    "globalName": "message.Message",
-    "name": "Message",
-    "params": [{ "name": "id", "type": { "type": "generic", "value": "int" } }]
-  },
-  "Messages": {
-    "kind": "type",
-    "id": 1419827675,
-    "globalName": "message.Messages",
-    "name": "Messages",
-    "params": [
-      {
-        "name": "messages",
-        "type": {
-          "type": "template",
-          "template": "vector",
-          "value": { "type": "internalType", "interfaceName": "Message" }
-        }
-      }
-    ]
-  },
-  "GetMessages": {
-    "kind": "call",
-    "id": 1394938243,
-    "globalName": "message.GetMessages",
-    "name": "GetMessages",
-    "params": [
-      { "name": "offset", "type": { "type": "generic", "value": "int" } },
-      { "name": "limit", "type": { "type": "generic", "value": "int" } }
-    ]
-  },
+  "__imports": [
+    { "relativePath": "./message" },
+    { "relativePath": "./tupleTest2" },
+    { "relativePath": "./testLong" },
+    { "relativePath": "./testUpdateFunction" },
+    { "relativePath": "./testTraitOnParam" }
+  ],
   "__all": [
     {
-      "kind": "type",
       "id": -1731107621,
-      "globalName": "message.Message",
-      "name": "Message",
+      "traits": [],
+      "kind": "type",
       "params": [
         { "name": "id", "type": { "type": "generic", "value": "int" } }
-      ]
+      ],
+      "globalName": "message.Message",
+      "name": "Message"
     },
     {
-      "kind": "type",
       "id": 1419827675,
-      "globalName": "message.Messages",
-      "name": "Messages",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "messages",
@@ -56,7 +30,9 @@
             "value": { "type": "internalType", "interfaceName": "Message" }
           }
         }
-      ]
+      ],
+      "globalName": "message.Messages",
+      "name": "Messages"
     },
     {
       "kind": "call",
@@ -66,7 +42,9 @@
       "params": [
         { "name": "offset", "type": { "type": "generic", "value": "int" } },
         { "name": "limit", "type": { "type": "generic", "value": "int" } }
-      ]
+      ],
+      "traits": [],
+      "returnType": { "type": "internalType", "interfaceName": "Messages" }
     }
   ]
 }

@@ -12,7 +12,7 @@ suite.test('ASTGenerator: it should tokenize files', async () => {
     new Tokenizer({
       contents: await fs.promises.readFile(path.resolve(__dirname, 'schema')),
       textEncoder: new TextEncoder(),
-      textDecoder: new TextDecoder(),
+      textDecoder: new TextDecoder()
     })
       .tokenize()
       .tokens()
@@ -21,7 +21,7 @@ suite.test('ASTGenerator: it should tokenize files', async () => {
     new Tokenizer({
       contents: await fs.promises.readFile(path.resolve(__dirname, 'User')),
       textEncoder: new TextEncoder(),
-      textDecoder: new TextDecoder(),
+      textDecoder: new TextDecoder()
     })
       .tokenize()
       .tokens()
@@ -36,7 +36,7 @@ suite.test(
         new Tokenizer({
           contents: new TextEncoder().encode('a'),
           textEncoder: new TextEncoder(),
-          textDecoder: new TextDecoder(),
+          textDecoder: new TextDecoder()
         })
           .tokenize()
           .tokens()
@@ -50,7 +50,7 @@ suite.test('ASTGenerator: it should read call statement', () => {
     new Tokenizer({
       contents: new TextEncoder().encode('type y {} call X => y { int b; }'),
       textEncoder: new TextEncoder(),
-      textDecoder: new TextDecoder(),
+      textDecoder: new TextDecoder()
     })
       .tokenize()
       .tokens()
@@ -65,7 +65,7 @@ suite.test(
         new Tokenizer({
           contents: new TextEncoder().encode('import ;'),
           textEncoder: new TextEncoder(),
-          textDecoder: new TextDecoder(),
+          textDecoder: new TextDecoder()
         })
           .tokenize()
           .tokens()
@@ -81,7 +81,7 @@ suite.test(
         new Tokenizer({
           contents: new TextEncoder().encode('export ;'),
           textEncoder: new TextEncoder(),
-          textDecoder: new TextDecoder(),
+          textDecoder: new TextDecoder()
         })
           .tokenize()
           .tokens()
@@ -96,7 +96,7 @@ suite.test('ASTGenerator: it should throw UnexpectedPunctuatorName', () => {
       new Tokenizer({
         contents: new TextEncoder().encode('trait x ;'),
         textEncoder: new TextEncoder(),
-        textDecoder: new TextDecoder(),
+        textDecoder: new TextDecoder()
       })
         .tokenize()
         .tokens()
@@ -110,7 +110,7 @@ suite.test('ASTGenerator: it should throw UnexpectedKeywordName', () => {
       new Tokenizer({
         contents: new TextEncoder().encode('export {'),
         textEncoder: new TextEncoder(),
-        textDecoder: new TextDecoder(),
+        textDecoder: new TextDecoder()
       })
         .tokenize()
         .tokens()
@@ -126,7 +126,7 @@ suite.test(
         new Tokenizer({
           contents: new TextEncoder().encode('export 2;'),
           textEncoder: new TextEncoder(),
-          textDecoder: new TextDecoder(),
+          textDecoder: new TextDecoder()
         })
           .tokenize()
           .tokens()

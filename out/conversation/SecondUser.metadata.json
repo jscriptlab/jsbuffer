@@ -1,25 +1,24 @@
 {
-  "User": {
-    "kind": "type",
-    "id": 1249778753,
-    "globalName": "conversation.secondUser.User",
-    "name": "User",
-    "params": [
-      { "name": "firstName", "type": { "type": "generic", "value": "string" } }
-    ]
-  },
+  "__imports": [
+    { "relativePath": "./message" },
+    { "relativePath": "./tupleTest2" },
+    { "relativePath": "./testLong" },
+    { "relativePath": "./testUpdateFunction" },
+    { "relativePath": "./testTraitOnParam" }
+  ],
   "__all": [
     {
-      "kind": "type",
       "id": 1249778753,
-      "globalName": "conversation.secondUser.User",
-      "name": "User",
+      "traits": [],
+      "kind": "type",
       "params": [
         {
           "name": "firstName",
           "type": { "type": "generic", "value": "string" }
         }
-      ]
+      ],
+      "globalName": "conversation.secondUser.User",
+      "name": "User"
     }
   ]
 }

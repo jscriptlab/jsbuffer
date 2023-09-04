@@ -1,0 +1,7 @@
+export trait Error {}
+
+export type errorBadRequest : Error {}
+
+export type errorInternalServerError : Error {}
+
+export type errorNotFound : Error {}

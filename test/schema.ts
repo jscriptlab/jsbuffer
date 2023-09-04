@@ -28,13 +28,13 @@ import {
   testSet,
   compareTestSet,
   encodeTestSet,
-  decodeTestSet,
+  decodeTestSet
 } from '../out/schema';
 import {
   defaultSuperTupleTupleTest,
   tupleTupleTest,
   updateSuperTupleTupleTest,
-  updateTupleTupleTest,
+  updateTupleTupleTest
 } from '../out/tupleTest2';
 import { A, defaultTest, test, updateTest } from '../out/testUpdateFunction';
 import { Serializer, Deserializer, Codec } from '@jsbuffer/codec';
@@ -48,12 +48,12 @@ const suite = new Suite();
 
 suite.test('it should encode Request trait', () => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   encodeRequestTrait(s, GetConversations({}));
   const d = new Deserializer({
     textDecoder: new TextDecoder(),
-    buffer: s.view(),
+    buffer: s.view()
   });
   assert.strict.deepEqual(decodeRequestTrait(d), GetConversations({}));
 });
@@ -61,7 +61,7 @@ suite.test('it should encode Request trait', () => {
 suite.test('it should encode map', () => {
   const codec = new Codec({
     textDecoder: new TextDecoder(),
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   assert.strict.deepEqual(
     codec.decode(
@@ -72,8 +72,8 @@ suite.test('it should encode map', () => {
           a: new Map([
             ['a', '1'],
             ['b', '2'],
-            ['c', '3'],
-          ]),
+            ['c', '3']
+          ])
         })
       )
     ),
@@ -81,8 +81,8 @@ suite.test('it should encode map', () => {
       a: new Map([
         ['a', '1'],
         ['b', '2'],
-        ['c', '3'],
-      ]),
+        ['c', '3']
+      ])
     })
   );
 });
@@ -94,15 +94,15 @@ suite.test('it should compare types with map template as parameters', () => {
         a: new Map([
           ['a', '1'],
           ['b', '2'],
-          ['c', '3'],
-        ]),
+          ['c', '3']
+        ])
       }),
       testMap({
         a: new Map([
           ['a', '1'],
           ['b', '2'],
-          ['c', '3'],
-        ]),
+          ['c', '3']
+        ])
       })
     )
   );
@@ -113,11 +113,11 @@ suite.test('it should compare types with set<t> has a param type', () => {
     compareTestSet(
       testSet({
         a: new Set(['a', 'b', 'c']),
-        b: new Set([1, 2, 3, 4]),
+        b: new Set([1, 2, 3, 4])
       }),
       testSet({
         a: new Set(['a', 'b', 'c']),
-        b: new Set([1, 2, 3, 4]),
+        b: new Set([1, 2, 3, 4])
       })
     )
   );
@@ -125,11 +125,11 @@ suite.test('it should compare types with set<t> has a param type', () => {
     compareTestSet(
       testSet({
         a: new Set(['a', 'b', 'c']),
-        b: new Set([1, 2, 3, 4]),
+        b: new Set([1, 2, 3, 4])
       }),
       testSet({
         a: new Set(['a', 'b', 'd']),
-        b: new Set([1, 2, 3, 4]),
+        b: new Set([1, 2, 3, 4])
       })
     ),
     false
@@ -139,7 +139,7 @@ suite.test('it should compare types with set<t> has a param type', () => {
 suite.test('it should encode/decode types with set<t> has a param type', () => {
   const codec = new Codec({
     textDecoder: new TextDecoder(),
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   assert.strict.deepEqual(
     codec.decode(
@@ -148,13 +148,13 @@ suite.test('it should encode/decode types with set<t> has a param type', () => {
         encodeTestSet,
         testSet({
           a: new Set(['a', 'b', 'c']),
-          b: new Set([1, 2, 3, 4]),
+          b: new Set([1, 2, 3, 4])
         })
       )
     ),
     testSet({
       a: new Set(['a', 'b', 'c']),
-      b: new Set([1, 2, 3, 4]),
+      b: new Set([1, 2, 3, 4])
     })
   );
 });
@@ -164,7 +164,7 @@ suite.test(
   () => {
     const codec = new Codec({
       textDecoder: new TextDecoder(),
-      textEncoder: new TextEncoder(),
+      textEncoder: new TextEncoder()
     });
     assert.strict.deepEqual(
       codec.decode(
@@ -180,13 +180,13 @@ suite.test(
                   a: new Map([
                     ['a', '1'],
                     ['b', '2'],
-                    ['c', '3'],
+                    ['c', '3']
                   ]),
-                  b: new Map([['a', ['', new Map([[1, 2]])]]]),
+                  b: new Map([['a', ['', new Map([[1, 2]])]]])
                 }),
-                'b',
-              ],
-            ]),
+                'b'
+              ]
+            ])
           })
         )
       ),
@@ -199,13 +199,13 @@ suite.test(
               a: new Map([
                 ['a', '1'],
                 ['b', '2'],
-                ['c', '3'],
+                ['c', '3']
               ]),
-              b: new Map([['a', ['', new Map([[1, 2]])]]]),
+              b: new Map([['a', ['', new Map([[1, 2]])]]])
             }),
-            'b',
-          ],
-        ]),
+            'b'
+          ]
+        ])
       })
     );
   }
@@ -220,17 +220,17 @@ suite.test(
           a: new Map([
             ['a', '1'],
             ['b', '2'],
-            ['c', '3'],
+            ['c', '3']
           ]),
-          b: new Map([['a', ['', new Map([[1, 2]])]]]),
+          b: new Map([['a', ['', new Map([[1, 2]])]]])
         }),
         testMap2({
           a: new Map([
             ['a', '1'],
             ['b', '2'],
-            ['c', '3'],
+            ['c', '3']
           ]),
-          b: new Map([['a', ['', new Map([[1, 2]])]]]),
+          b: new Map([['a', ['', new Map([[1, 2]])]]])
         })
       )
     );
@@ -244,14 +244,14 @@ suite.test(
       a: new Map([
         ['a', '1'],
         ['b', '2'],
-        ['c', '3'],
+        ['c', '3']
       ]),
-      b: new Map([['a', ['', new Map([[1, 2]])]]]),
+      b: new Map([['a', ['', new Map([[1, 2]])]]])
     });
     assert.strict.equal(updateTestMap2(a1, {}), a1);
     assert.strict.equal(
       updateTestMap2(a1, {
-        b: new Map([['a', ['', new Map([[1, 2]])]]]),
+        b: new Map([['a', ['', new Map([[1, 2]])]]])
       }),
       a1
     );
@@ -265,27 +265,27 @@ suite.test(
       a: new Map([
         ['a', '1'],
         ['b', '2'],
-        ['c', '3'],
+        ['c', '3']
       ]),
-      b: new Map([['a', ['', new Map([[1, 2]])]]]),
+      b: new Map([['a', ['', new Map([[1, 2]])]]])
     });
     assert.strict.notEqual(
       updateTestMap2(a1, {
-        b: new Map([['a', ['', new Map([[1, 3]])]]]),
+        b: new Map([['a', ['', new Map([[1, 3]])]]])
       }),
       a1
     );
     assert.strict.deepEqual(
       updateTestMap2(a1, {
-        b: new Map([['a', ['', new Map([[1, 3]])]]]),
+        b: new Map([['a', ['', new Map([[1, 3]])]]])
       }),
       testMap2({
         a: new Map([
           ['a', '1'],
           ['b', '2'],
-          ['c', '3'],
+          ['c', '3']
         ]),
-        b: new Map([['a', ['', new Map([[1, 3]])]]]),
+        b: new Map([['a', ['', new Map([[1, 3]])]]])
       })
     );
   }
@@ -296,7 +296,7 @@ suite.test(
   () => {
     const codec = new Codec({
       textDecoder: new TextDecoder(),
-      textEncoder: new TextEncoder(),
+      textEncoder: new TextEncoder()
     });
     assert.strict.deepEqual(
       codec.decode(
@@ -307,9 +307,9 @@ suite.test(
             a: new Map([
               ['a', '1'],
               ['b', '2'],
-              ['c', '3'],
+              ['c', '3']
             ]),
-            b: new Map([['a', ['', new Map([[1, 2]])]]]),
+            b: new Map([['a', ['', new Map([[1, 2]])]]])
           })
         )
       ),
@@ -317,9 +317,9 @@ suite.test(
         a: new Map([
           ['a', '1'],
           ['b', '2'],
-          ['c', '3'],
+          ['c', '3']
         ]),
-        b: new Map([['a', ['', new Map([[1, 2]])]]]),
+        b: new Map([['a', ['', new Map([[1, 2]])]]])
       })
     );
   }
@@ -327,45 +327,45 @@ suite.test(
 
 suite.test('it should encode get post by id call', () => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   encodeRequestTrait(
     s,
     GetPostById({
-      postId: 100000,
+      postId: 100000
     })
   );
   const d = new Deserializer({
     textDecoder: new TextDecoder(),
-    buffer: s.view(),
+    buffer: s.view()
   });
   assert.strict.deepEqual(
     decodeRequestTrait(d),
     GetPostById({
-      postId: 100000,
+      postId: 100000
     })
   );
 });
 
 suite.test('it should encode types with buffers in it', () => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   const data = new Uint8Array([...crypto.randomBytes(1000)]);
   encodeMsg(
     s,
     msg({
-      data,
+      data
     })
   );
   const d = new Deserializer({
     textDecoder: new TextDecoder(),
-    buffer: s.view(),
+    buffer: s.view()
   });
   assert.strict.deepEqual(
     decodeMsg(d),
     msg({
-      data,
+      data
     })
   );
 });
@@ -379,39 +379,39 @@ suite.test(
 
 suite.test('it should encode tuple', () => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   encodeSimpleTupleTest(
     s,
     simpleTupleTest({
       a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
-      b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+      b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]]
     })
   );
   const d = new Deserializer({
     textDecoder: new TextDecoder(),
-    buffer: s.view(),
+    buffer: s.view()
   });
   assert.strict.deepEqual(
     decodeSimpleTupleTest(d),
     simpleTupleTest({
       a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
-      b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+      b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]]
     })
   );
 });
 
 suite.test('it should support tuple inside tuple types', () => {
   const a1 = tupleTupleTest({
-    a: [[0, '', []], 0, '', 0.0],
+    a: [[0, '', []], 0, '', 0.0]
   });
   assert.strict.equal(updateTupleTupleTest(a1, {}), a1);
   assert.strict.deepEqual(
     updateTupleTupleTest(a1, {
-      a: [[0, 'aaa', [['', 1]]], 0, '', 0.0],
+      a: [[0, 'aaa', [['', 1]]], 0, '', 0.0]
     }),
     tupleTupleTest({
-      a: [[0, 'aaa', [['', 1]]], 0, '', 0.0],
+      a: [[0, 'aaa', [['', 1]]], 0, '', 0.0]
     })
   );
   const a2 = defaultSuperTupleTupleTest();
@@ -423,29 +423,29 @@ suite.test(
   () => {
     const a1 = simpleTupleTest({
       a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
-      b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+      b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]]
     });
     assert.strict.equal(
       updateSimpleTupleTest(a1, {
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]]
       }),
       a1
     );
     assert.strict.equal(updateSimpleTupleTest(a1, {}), a1);
     assert.strict.notEqual(
       updateSimpleTupleTest(a1, {
-        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], ''],
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], '']
       }),
       a1
     );
     assert.strict.deepEqual(
       updateSimpleTupleTest(a1, {
-        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], ''],
+        a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], '']
       }),
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], ''],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]]
       })
     );
   }
@@ -456,11 +456,11 @@ suite.test('it should compare tuples', () => {
     compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]]
       }),
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]]
       })
     )
   );
@@ -468,11 +468,11 @@ suite.test('it should compare tuples', () => {
     compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa'],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]]
       }),
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa'],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]]
       })
     )
   );
@@ -480,11 +480,11 @@ suite.test('it should compare tuples', () => {
     compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa'],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]]
       }),
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'bbb'],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]]
       })
     ),
     false
@@ -493,11 +493,11 @@ suite.test('it should compare tuples', () => {
     compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]]
       }),
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'bbb'],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]]
       })
     ),
     false
@@ -506,11 +506,11 @@ suite.test('it should compare tuples', () => {
     compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']]
       }),
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null]]
       })
     ),
     false
@@ -519,11 +519,11 @@ suite.test('it should compare tuples', () => {
     compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']]
       }),
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']]
       })
     )
   );
@@ -531,11 +531,11 @@ suite.test('it should compare tuples', () => {
     compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.12345678, [1, 2, 3, 4], null],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']]
       }),
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.12345678, [1, 2, 3, 4], null],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']]
       })
     )
   );
@@ -543,11 +543,11 @@ suite.test('it should compare tuples', () => {
     compareSimpleTupleTest(
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.12345678, [1, 2, 3, 4], null],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']]
       }),
       simpleTupleTest({
         a: [1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], null],
-        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']],
+        b: [[1, 1.1234567165374756, 0.123456789, [1, 2, 3, 4], 'aaa']]
       })
     ),
     false
@@ -561,26 +561,26 @@ suite.test(
     assert.strict.equal(
       updateTest(a1, {
         traitParam: A({
-          a: 0,
-        }),
+          a: 0
+        })
       }),
       a1
     );
     const a2 = test({
       traitParam: A({
-        a: 1,
-      }),
+        a: 1
+      })
     });
     assert.strict.deepEqual(
       updateTest(a2, {
         traitParam: C({
-          a: 2.5,
-        }),
+          a: 2.5
+        })
       }),
       test({
         traitParam: C({
-          a: 2.5,
-        }),
+          a: 2.5
+        })
       })
     );
   }
@@ -592,18 +592,18 @@ suite.test(
     const { A, B, C, encodeA, encodeB, encodeC, decodeA, decodeB, decodeC } =
       await import('../out/testLong');
     const s = new Serializer({
-      textEncoder: new TextEncoder(),
+      textEncoder: new TextEncoder()
     });
     encodeA(
       s,
       A({
-        a: '-100000000',
+        a: '-100000000'
       })
     );
     encodeB(
       s,
       B({
-        a: '10000',
+        a: '10000'
       })
     );
     encodeC(
@@ -611,23 +611,23 @@ suite.test(
       C({
         a: '-100000000',
         b: '10000',
-        c: -200000,
+        c: -200000
       })
     );
     const d = new Deserializer({
       buffer: s.view(),
-      textDecoder: new TextDecoder(),
+      textDecoder: new TextDecoder()
     });
     assert.strict.deepEqual(
       decodeA(d),
       A({
-        a: '-100000000',
+        a: '-100000000'
       })
     );
     assert.strict.deepEqual(
       decodeB(d),
       B({
-        a: '10000',
+        a: '10000'
       })
     );
     assert.strict.deepEqual(
@@ -635,7 +635,7 @@ suite.test(
       C({
         a: '-100000000',
         b: '10000',
-        c: -200000,
+        c: -200000
       })
     );
   }

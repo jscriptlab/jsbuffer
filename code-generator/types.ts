@@ -3,7 +3,7 @@ import {
   INodeLiteralNumber,
   INodeTraitDefinition,
   INodeTypeDefinition,
-  NodeTypeExpression,
+  NodeTypeExpression
 } from '../src/ASTGenerator';
 import { ITextDecoder, ITextEncoder } from '../src/Tokenizer';
 import FileGenerator from './FileGenerator';
@@ -108,27 +108,33 @@ export type InputRequirement =
       target: 'nodeModule';
     };
 
+export interface INodeModuleRequirement {
+  target: 'nodeModule';
+  path: string;
+  alias?: string;
+  wildcard: boolean;
+  isDefaultImport: boolean;
+  identifier: string;
+}
+
+export interface IOutDirRequirement {
+  target: 'outDir';
+  path: string;
+  alias?: string;
+  identifier: string;
+}
+
+export interface IExternalTypeRequirement {
+  path: string;
+  alias?: string;
+  identifier: string;
+  fileGenerator: FileGenerator;
+}
+
 export type Requirement =
-  | {
-      target: 'nodeModule';
-      path: string;
-      alias?: string;
-      wildcard: boolean;
-      isDefaultImport: boolean;
-      identifier: string;
-    }
-  | {
-      target: 'outDir';
-      path: string;
-      alias?: string;
-      identifier: string;
-    }
-  | {
-      path: string;
-      alias?: string;
-      identifier: string;
-      fileGenerator: FileGenerator;
-    };
+  | INodeModuleRequirement
+  | IOutDirRequirement
+  | IExternalTypeRequirement;
 
 export interface ITrait {
   name: string;
@@ -146,62 +152,91 @@ export interface IExternalModule {
   configuration: IConfiguration;
 }
 
-export type Metadata =
-  | {
-      kind: 'type' | 'call';
-      id: number;
-      name: string;
-      params: IMetadataParam[];
-      globalName: string;
-    }
-  | {
-      kind: 'trait';
-      name: string;
-      nodes: MetadataParamType[];
-    };
-
-export interface IMetadataParam {
+export interface IMetadataType {
+  kind: 'type';
+  id: number;
   name: string;
-  type: MetadataParamType;
+  params: IParamMetadata[];
+  traits: TypeExpressionMetadata[];
+  globalName: string;
 }
 
-export type MetadataParamType =
-  | {
-      type: 'generic';
-      value: GenericName;
-    }
+export interface IMetadataCall {
+  kind: 'call';
+  returnType: TypeExpressionMetadata;
+  id: number;
+  name: string;
+  params: IParamMetadata[];
+  traits: TypeExpressionMetadata[];
+  globalName: string;
+}
+
+export interface ITraitMetadata {
+  kind: 'trait';
+  name: string;
+  globalName: string;
+  nodes: TypeExpressionMetadata[];
+}
+
+export type Metadata = IMetadataCall | IMetadataType | ITraitMetadata;
+
+export interface IMetadataFileContents {
+  __imports: MetadataImport[];
+  __all: Metadata[];
+}
+
+export type MetadataImport = {
+  relativePath: string;
+};
+
+export interface IParamMetadata {
+  name: string;
+  type: TypeExpressionMetadata;
+}
+
+export interface IParamTypeMetadataExternalType {
+  type: 'externalType';
+  name: string;
+  relativePath: string;
+}
+
+export interface IParamTypeMetadataGeneric {
+  type: 'generic';
+  value: GenericName;
+}
+
+export type TypeExpressionMetadata =
+  | IParamTypeMetadataGeneric
   | {
       type: 'template';
       template: 'vector' | 'set' | 'optional';
-      value: MetadataParamType;
+      value: TypeExpressionMetadata;
     }
   | {
       type: 'template';
       template: 'tuple';
-      args: MetadataParamType[];
+      args: TypeExpressionMetadata[];
     }
   | {
       type: 'template';
       template: 'map';
-      key: MetadataParamType;
-      value: MetadataParamType;
+      key: TypeExpressionMetadata;
+      value: TypeExpressionMetadata;
     }
   | {
       type: 'template';
       template: 'bigint';
       bits: string;
     }
-  | {
-      type: 'internalType';
-      interfaceName: string;
-    }
-  | {
-      type: 'externalType';
-      name: string;
-      relativePath: string;
-    }
+  | IParamTypeMetadataInternalType
+  | IParamTypeMetadataExternalType
   | {
       type: 'externalModuleType';
       name: string;
       importPath: string;
     };
+
+export interface IParamTypeMetadataInternalType {
+  type: 'internalType';
+  interfaceName: string;
+}
