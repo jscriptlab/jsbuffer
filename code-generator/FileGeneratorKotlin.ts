@@ -889,7 +889,7 @@ export default class FileGeneratorKotlin extends CodeStream {
             this.write(`val ${value} = d.readLong()\n`);
             break;
           case GenericName.Boolean:
-            this.write(`val ${value} = d.readByte() == 1 ? true : false\n`);
+            this.write(`val ${value} = d.readByte().toInt() == 1\n`);
             break;
           case GenericName.Float:
             this.write(`val ${value} = d.readFloat()\n`);
