@@ -19,7 +19,7 @@
   },
   "name": "@jsbuffer/next",
   "license": "MIT",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "./src/index.js",
   "bin": {
     "jsbuffer": "cli/index.js",
