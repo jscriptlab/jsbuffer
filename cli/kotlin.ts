@@ -21,7 +21,7 @@ function getAbsolutePath(value: string) {
 }
 
 (async () => {
-  const args = Array.from(process.argv);
+  const args = Array.from(process.argv.slice(2));
   let kotlinLibOutDir = getNamedArgument(args, '-o', getString);
   let configFile = args.shift() ?? null;
 
