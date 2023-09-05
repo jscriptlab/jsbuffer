@@ -22,9 +22,14 @@ function getAbsolutePath(value: string) {
 
 (async () => {
   const args = Array.from(process.argv.slice(2));
+  const schemaName = getNamedArgument(args, '--name', getString);
   let kotlinLibOutDir = getNamedArgument(args, '-o', getString);
   let configFile = args.shift() ?? null;
 
+  assert.strict.ok(
+    schemaName !== null,
+    '--name must be defined to specify package name'
+  );
   assert.strict.ok(kotlinLibOutDir !== null, '-o argument must be defined');
   assert.strict.ok(
     configFile !== null,
@@ -77,7 +82,7 @@ function getAbsolutePath(value: string) {
   );
   const metadata = await readJSONFile<IMetadataFileContents>(mainMetadataFile);
   const files = await new FileGeneratorKotlin({
-    schemaName: 'schema',
+    schemaName,
     metadata,
     filePath: mainMetadataFile
   }).generate();
