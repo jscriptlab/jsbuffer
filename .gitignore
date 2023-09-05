@@ -8,3 +8,4 @@ tsconfig.tsbuildinfo
 /.history
 /yarn-error.log
 /.vscode/settings.json
+/jsbuffer*.tgz

@@ -42,7 +42,8 @@
     "build:all": "npm run schema && npm run build && npm run lint",
     "prepublishOnly": "npm run build:all && npm run test",
     "test": "TS_NODE_PROJECT=test/tsconfig.json npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
-    "test:coverage": "npx nyc npm test"
+    "test:coverage": "npx nyc npm test",
+    "prepack": "npm run build:all"
   },
   "dependencies": {
     "bn.js": "^5.2.1",

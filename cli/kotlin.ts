@@ -40,36 +40,11 @@ function getAbsolutePath(value: string) {
   configFile = getAbsolutePath(configFile);
 
   /**
-   * make sure we have the right permissions for the selected files
+   * make sure we have the right permissions for the config file
    */
-  for (const testInfo of [
-    {
-      mode: fs.constants.W_OK,
-      path: kotlinLibOutDir,
-      mustBeDirectory: true
-    },
-    {
-      path: configFile,
-      mustBeFile: true,
-      mode: fs.constants.R_OK
-    }
-  ]) {
-    await fs.promises.access(testInfo.path, testInfo.mode);
-    const stat = await fs.promises.stat(testInfo.path);
-    /**
-     * human readable expected type
-     */
-    let expectedType: string;
-    let value: boolean;
-    if (testInfo.mustBeDirectory) {
-      expectedType = 'directory';
-      value = stat.isDirectory();
-    } else {
-      expectedType = 'file';
-      value = stat.isFile();
-    }
-    assert.strict.ok(value, `${testInfo.path} must be a ${expectedType}`);
-  }
+  await fs.promises.access(configFile, fs.constants.R_OK);
+  const stat = await fs.promises.stat(configFile);
+  assert.strict.ok(stat.isFile(), `${configFile} must be a file`);
 
   const projectConfig = await readJSONFile<IProjectConfig>(configFile);
   const projectResolvedOutDir = path.resolve(

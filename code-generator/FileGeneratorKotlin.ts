@@ -403,8 +403,8 @@ export default class FileGeneratorKotlin extends CodeStream {
           ...this.#schemaName.split('.'),
           ...metadata.globalName
             .split('.')
-            .map((a, _, list) =>
-              a === list[list.length - 1] ? upperFirst(a) : a
+            .map((a, index, list) =>
+              index === list.length - 1 ? upperFirst(a) : a
             )
         ];
       }

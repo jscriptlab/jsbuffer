@@ -10,6 +10,7 @@
     "fruit-list.json",
     "expected-tokens-1.json",
     "FileGenerator.ts",
+    "FileGeneratorKotlin.ts",
     "ASTGenerator.ts"
   ],
   "compilerOptions": {
