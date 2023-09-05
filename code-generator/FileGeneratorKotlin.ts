@@ -400,7 +400,7 @@ export default class FileGeneratorKotlin extends CodeStream {
       case 'type':
       case 'trait': {
         return [
-          this.#schemaName,
+          ...this.#schemaName.split('.'),
           ...metadata.globalName
             .split('.')
             .map((a, _, list) =>
