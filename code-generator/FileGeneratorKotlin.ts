@@ -34,6 +34,24 @@ function getVarName(prefix: string, value: string, depth: number) {
   return `${prefix}${upperFirst(value)}${depth}`;
 }
 
+export function getImportPath(packageName: string[], metadata: Metadata) {
+  return `${packageName.join('.')}.${getClassName(metadata)}`;
+}
+
+export function getPackageName(schemaName: string, metadata: Metadata) {
+  switch (metadata.kind) {
+    case 'trait':
+    case 'type':
+    case 'call': {
+      const globalNameSlices = metadata.globalName.split('.');
+      return [
+        schemaName,
+        ...globalNameSlices.slice(0, globalNameSlices.length - 1)
+      ];
+    }
+  }
+}
+
 export function getClassName(
   metadata:
     | Metadata
@@ -381,17 +399,7 @@ export default class FileGeneratorKotlin extends CodeStream {
   #packageName() {
     const metadata = this.#currentMetadata();
     assert.strict.ok(this.#metadata.includes(metadata));
-    switch (metadata.kind) {
-      case 'trait':
-      case 'type':
-      case 'call': {
-        const globalNameSlices = metadata.globalName.split('.');
-        return [
-          this.#schemaName,
-          ...globalNameSlices.slice(0, globalNameSlices.length - 1)
-        ];
-      }
-    }
+    return getPackageName(this.#schemaName, metadata);
   }
   #outRelativeFilePath() {
     const metadata = this.#currentMetadata();
@@ -446,7 +454,8 @@ export default class FileGeneratorKotlin extends CodeStream {
             case 'type':
             case 'trait':
               this.write(
-                `import ${gen.#packageName().join('.')}.${getClassName(
+                `import ${getImportPath(
+                  getPackageName(this.#schemaName, importedMetadata),
                   importedMetadata
                 )}\n`
               );
