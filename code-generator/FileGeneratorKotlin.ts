@@ -34,7 +34,7 @@ function getVarName(prefix: string, value: string, depth: number) {
   return `${prefix}${upperFirst(value)}${depth}`;
 }
 
-function getClassName(
+export function getClassName(
   metadata:
     | Metadata
     | IParamTypeMetadataExternalType
