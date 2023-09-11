@@ -5,7 +5,7 @@ import fs from 'fs';
 import { readJSONFile } from '../code-generator/fileGeneratorUtilities';
 import { IMetadataFileContents } from '../code-generator/types';
 import FileGeneratorKotlin from '../code-generator/FileGeneratorKotlin';
-import { getNamedArgument, getString } from 'cli-argument-helper';
+import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
 import assert from 'assert';
 
 interface IProjectConfig {
@@ -23,6 +23,8 @@ function getAbsolutePath(value: string) {
 (async () => {
   const args = Array.from(process.argv.slice(2));
   const schemaName = getNamedArgument(args, '--name', getString);
+  const indentationSize =
+    getNamedArgument(args, '--indentation-size', getInteger) ?? 2;
   let kotlinLibOutDir = getNamedArgument(args, '-o', getString);
   let configFile = args.shift() ?? null;
 
@@ -59,6 +61,7 @@ function getAbsolutePath(value: string) {
   const files = await new FileGeneratorKotlin({
     schemaName,
     metadata,
+    indentationSize,
     filePath: mainMetadataFile
   }).generate();
   for (const file of files) {
