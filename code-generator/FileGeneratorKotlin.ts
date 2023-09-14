@@ -338,7 +338,7 @@ export default class FileGeneratorKotlin extends CodeStream {
   }
   async #preprocessMetadataParam(metadataType: TypeExpressionMetadata) {
     this.#imports.add('java.io.DataOutput');
-    this.#imports.add('java.io.DataInputStream');
+    this.#imports.add('java.io.DataInput');
     switch (metadataType.type) {
       case 'template':
         switch (metadataType.template) {
@@ -497,9 +497,7 @@ export default class FileGeneratorKotlin extends CodeStream {
             'companion object {\n',
             () => {
               this.write(
-                `fun decode(d: DataInputStream): ${getClassName(
-                  metadata
-                )}? {\n`,
+                `fun decode(d: DataInput): ${getClassName(metadata)}? {\n`,
                 () => {
                   this.write(`if(d.readInt() != ${metadata.id}) return null\n`);
                   let depth = 0;
@@ -615,7 +613,7 @@ export default class FileGeneratorKotlin extends CodeStream {
             'companion object {\n',
             () => {
               this.write(
-                `fun decode(d: DataInputStream): ${traitClassName}? {\n`,
+                `fun decode(d: DataInput): ${traitClassName}? {\n`,
                 () => {
                   this.write('d.mark(4)\n');
                   this.write('val id = d.readInt()\n');
