@@ -32,6 +32,7 @@ suite.test(
     ]).wait();
     await spawn('kotlinc', [
       ...(await glob(path.resolve(libDir, 'com/**/*.kt'))),
+      ...(await glob(path.resolve(libDir, 'test/**/*.kt'))),
       path.resolve(libDir, 'main.kt'),
       '-include-runtime',
       '-d',

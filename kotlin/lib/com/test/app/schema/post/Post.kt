@@ -1,13 +1,13 @@
 package com.test.app.schema.post
-import java.io.DataOutput
-import java.io.DataInputStream
+import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Deserializer
 class Post(
   val id: Long,
   val userId: Int,
   val likes: List<PostLike?>
 ) {
   companion object {
-    fun decode(d: DataInputStream): Post? {
+    fun decode(d: Deserializer): Post? {
       if(d.readInt() != -1854473321) return null
       val id = d.readLong()
       val userId = d.readInt()
@@ -33,7 +33,7 @@ class Post(
       )
     }
   }
-  fun encode(s: DataOutput) {
+  fun encode(s: Serializer) {
     s.writeInt(-1854473321)
     s.writeLong(id)
     s.writeInt(userId)

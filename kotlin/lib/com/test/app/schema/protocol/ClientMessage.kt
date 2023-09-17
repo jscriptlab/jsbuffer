@@ -1,6 +1,6 @@
 package com.test.app.schema.protocol
-import java.io.DataOutput
-import java.io.DataInputStream
+import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Deserializer
 import com.test.app.schema.protocol.ClientMessageEncrypted
 import com.test.app.schema.protocol.ClientMessageMessagesAcknowledgment
 import com.test.app.schema.protocol.ClientMessageRequest
@@ -16,8 +16,8 @@ class ClientMessage(
   val clientMessageRequest: ClientMessageRequest?
 ) {
   companion object {
-    fun decode(d: DataInputStream): ClientMessage? {
-      d.mark(4)
+    fun decode(d: Deserializer): ClientMessage? {
+      d.mark()
       val id = d.readInt()
       d.reset()
       when(id) {
@@ -78,7 +78,7 @@ class ClientMessage(
     }
     throw Exception("Invalid trait data. clientMessageType was set to $clientMessageType, which does not match any of the type declarations that was pushed this trait. We actually expect one of the following ids:\n\n\t- 1935211896\n\t- -522163247\n\t- -1480887542")
   }
-  fun encode(s: DataOutput) {
+  fun encode(s: Serializer) {
     test(object : ClientMessageSwitch<Unit> {
       override fun clientMessageEncrypted(clientMessageEncrypted: ClientMessageEncrypted) {
         clientMessageEncrypted.encode(s)

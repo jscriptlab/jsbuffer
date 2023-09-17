@@ -1,11 +1,11 @@
 package com.test.app.schema.post
-import java.io.DataOutput
-import java.io.DataInputStream
+import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Deserializer
 class PostLike(
   val userId: Int
 ) {
   companion object {
-    fun decode(d: DataInputStream): PostLike? {
+    fun decode(d: Deserializer): PostLike? {
       if(d.readInt() != 266529116) return null
       val userId = d.readInt()
       return PostLike(
@@ -13,7 +13,7 @@ class PostLike(
       )
     }
   }
-  fun encode(s: DataOutput) {
+  fun encode(s: Serializer) {
     s.writeInt(266529116)
     s.writeInt(userId)
   }

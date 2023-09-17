@@ -1,6 +1,6 @@
 package com.test.app.schema.tests
-import java.io.DataOutput
-import java.io.DataInputStream
+import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Deserializer
 import com.test.app.schema.tests.TestDeepTraitArray1
 import com.test.app.schema.tests.TestOptionalTraitArray1
 interface TestSwitch<T> {
@@ -13,8 +13,8 @@ class Test(
   val testOptionalTraitArray1: TestOptionalTraitArray1?
 ) {
   companion object {
-    fun decode(d: DataInputStream): Test? {
-      d.mark(4)
+    fun decode(d: Deserializer): Test? {
+      d.mark()
       val id = d.readInt()
       d.reset()
       when(id) {
@@ -57,7 +57,7 @@ class Test(
     }
     throw Exception("Invalid trait data. testType was set to $testType, which does not match any of the type declarations that was pushed this trait. We actually expect one of the following ids:\n\n\t- -1996458609\n\t- 762674555")
   }
-  fun encode(s: DataOutput) {
+  fun encode(s: Serializer) {
     test(object : TestSwitch<Unit> {
       override fun testDeepTraitArray1(testDeepTraitArray1: TestDeepTraitArray1) {
         testDeepTraitArray1.encode(s)

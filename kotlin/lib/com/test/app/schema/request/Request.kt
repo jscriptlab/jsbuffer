@@ -1,6 +1,6 @@
 package com.test.app.schema.request
-import java.io.DataOutput
-import java.io.DataInputStream
+import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Deserializer
 import com.test.app.schema.post.GetPost
 import com.test.app.schema.main.GetCurrentUser
 interface RequestSwitch<T> {
@@ -13,8 +13,8 @@ class Request(
   val getCurrentUser: GetCurrentUser?
 ) {
   companion object {
-    fun decode(d: DataInputStream): Request? {
-      d.mark(4)
+    fun decode(d: Deserializer): Request? {
+      d.mark()
       val id = d.readInt()
       d.reset()
       when(id) {
@@ -57,7 +57,7 @@ class Request(
     }
     throw Exception("Invalid trait data. requestType was set to $requestType, which does not match any of the type declarations that was pushed this trait. We actually expect one of the following ids:\n\n\t- -1267528456\n\t- -895800374")
   }
-  fun encode(s: DataOutput) {
+  fun encode(s: Serializer) {
     test(object : RequestSwitch<Unit> {
       override fun getPost(getPost: GetPost) {
         getPost.encode(s)

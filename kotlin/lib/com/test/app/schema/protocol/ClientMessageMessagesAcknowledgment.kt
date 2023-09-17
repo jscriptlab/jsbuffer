@@ -1,11 +1,11 @@
 package com.test.app.schema.protocol
-import java.io.DataOutput
-import java.io.DataInputStream
+import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Deserializer
 class ClientMessageMessagesAcknowledgment(
   val ids: List<Long>
 ) {
   companion object {
-    fun decode(d: DataInputStream): ClientMessageMessagesAcknowledgment? {
+    fun decode(d: Deserializer): ClientMessageMessagesAcknowledgment? {
       if(d.readInt() != -522163247) return null
       val lengthIds2 = d.readInt()
       val ids = mutableListOf<Long>()
@@ -18,7 +18,7 @@ class ClientMessageMessagesAcknowledgment(
       )
     }
   }
-  fun encode(s: DataOutput) {
+  fun encode(s: Serializer) {
     s.writeInt(-522163247)
     s.writeInt(ids.size)
     for(itemIds2 in ids) {

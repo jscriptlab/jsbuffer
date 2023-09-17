@@ -1,2 +1,5 @@
 /typescript
 /lib/main.jar
+/lib/out
+/lib/lib.iml
+/lib/.idea

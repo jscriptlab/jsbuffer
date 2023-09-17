@@ -1,6 +1,6 @@
 package com.test.app.schema.error
-import java.io.DataOutput
-import java.io.DataInputStream
+import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Deserializer
 import com.test.app.schema.error.ErrorBadRequest
 import com.test.app.schema.error.ErrorInternalServerError
 import com.test.app.schema.error.ErrorNotFound
@@ -16,8 +16,8 @@ class Error(
   val errorNotFound: ErrorNotFound?
 ) {
   companion object {
-    fun decode(d: DataInputStream): Error? {
-      d.mark(4)
+    fun decode(d: Deserializer): Error? {
+      d.mark()
       val id = d.readInt()
       d.reset()
       when(id) {
@@ -78,7 +78,7 @@ class Error(
     }
     throw Exception("Invalid trait data. errorType was set to $errorType, which does not match any of the type declarations that was pushed this trait. We actually expect one of the following ids:\n\n\t- 627611118\n\t- 990932201\n\t- -1612310455")
   }
-  fun encode(s: DataOutput) {
+  fun encode(s: Serializer) {
     test(object : ErrorSwitch<Unit> {
       override fun errorBadRequest(errorBadRequest: ErrorBadRequest) {
         errorBadRequest.encode(s)

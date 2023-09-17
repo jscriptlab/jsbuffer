@@ -1,11 +1,11 @@
 package com.test.app.schema.tests
-import java.io.DataOutput
-import java.io.DataInputStream
+import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Deserializer
 class TestDeepTraitArray1(
   val value: List<List<List<Test>>>
 ) {
   companion object {
-    fun decode(d: DataInputStream): TestDeepTraitArray1? {
+    fun decode(d: Deserializer): TestDeepTraitArray1? {
       if(d.readInt() != -1996458609) return null
       val lengthValue2 = d.readInt()
       val value = mutableListOf<List<List<Test>>>()
@@ -28,7 +28,7 @@ class TestDeepTraitArray1(
       )
     }
   }
-  fun encode(s: DataOutput) {
+  fun encode(s: Serializer) {
     s.writeInt(-1996458609)
     s.writeInt(value.size)
     for(itemValue2 in value) {

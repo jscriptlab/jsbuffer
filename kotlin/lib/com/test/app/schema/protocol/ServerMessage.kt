@@ -1,6 +1,6 @@
 package com.test.app.schema.protocol
-import java.io.DataOutput
-import java.io.DataInputStream
+import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Deserializer
 import com.test.app.schema.protocol.ServerMessageRequestSuccessResponse
 import com.test.app.schema.protocol.ServerMessageRequestFailureResponse
 interface ServerMessageSwitch<T> {
@@ -13,8 +13,8 @@ class ServerMessage(
   val serverMessageRequestFailureResponse: ServerMessageRequestFailureResponse?
 ) {
   companion object {
-    fun decode(d: DataInputStream): ServerMessage? {
-      d.mark(4)
+    fun decode(d: Deserializer): ServerMessage? {
+      d.mark()
       val id = d.readInt()
       d.reset()
       when(id) {
@@ -57,7 +57,7 @@ class ServerMessage(
     }
     throw Exception("Invalid trait data. serverMessageType was set to $serverMessageType, which does not match any of the type declarations that was pushed this trait. We actually expect one of the following ids:\n\n\t- -539011791\n\t- -1870719710")
   }
-  fun encode(s: DataOutput) {
+  fun encode(s: Serializer) {
     test(object : ServerMessageSwitch<Unit> {
       override fun serverMessageRequestSuccessResponse(serverMessageRequestSuccessResponse: ServerMessageRequestSuccessResponse) {
         serverMessageRequestSuccessResponse.encode(s)

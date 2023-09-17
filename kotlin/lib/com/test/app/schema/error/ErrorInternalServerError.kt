@@ -1,16 +1,16 @@
 package com.test.app.schema.error
-import java.io.DataOutput
-import java.io.DataInputStream
+import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Deserializer
 class ErrorInternalServerError(
 ) {
   companion object {
-    fun decode(d: DataInputStream): ErrorInternalServerError? {
+    fun decode(d: Deserializer): ErrorInternalServerError? {
       if(d.readInt() != 990932201) return null
       return ErrorInternalServerError(
       )
     }
   }
-  fun encode(s: DataOutput) {
+  fun encode(s: Serializer) {
     s.writeInt(990932201)
   }
 }

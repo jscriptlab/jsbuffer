@@ -1,6 +1,6 @@
 package com.test.app.schema.request
-import java.io.DataOutput
-import java.io.DataInputStream
+import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Deserializer
 import com.test.app.schema.main.User
 interface RequestResponseSwitch<T> {
   fun user(user: User): T
@@ -10,8 +10,8 @@ class RequestResponse(
   val user: User?
 ) {
   companion object {
-    fun decode(d: DataInputStream): RequestResponse? {
-      d.mark(4)
+    fun decode(d: Deserializer): RequestResponse? {
+      d.mark()
       val id = d.readInt()
       d.reset()
       when(id) {
@@ -38,7 +38,7 @@ class RequestResponse(
     }
     throw Exception("Invalid trait data. requestResponseType was set to $requestResponseType, which does not match any of the type declarations that was pushed this trait. We actually expect one of the following ids:\n\n\t- -1307935086")
   }
-  fun encode(s: DataOutput) {
+  fun encode(s: Serializer) {
     test(object : RequestResponseSwitch<Unit> {
       override fun user(user: User) {
         user.encode(s)

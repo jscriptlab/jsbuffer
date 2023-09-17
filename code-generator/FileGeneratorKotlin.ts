@@ -167,7 +167,7 @@ export default class FileGeneratorKotlin extends CodeStream {
     return this.#files;
   }
   #generateDeserializerInterface() {
-    this.write(`package ${this.#packageName}.internal\n\n`);
+    this.write(`package ${this.#schemaName}.internal\n\n`);
     this.write(
       'interface Deserializer {\n',
       () => {
@@ -189,7 +189,7 @@ export default class FileGeneratorKotlin extends CodeStream {
     };
   }
   #generateSerializerInterface() {
-    this.write(`package ${this.#packageName}.internal\n\n`);
+    this.write(`package ${this.#schemaName}.internal\n\n`);
     this.write(
       'interface Serializer {\n',
       () => {
@@ -209,7 +209,7 @@ export default class FileGeneratorKotlin extends CodeStream {
     };
   }
   #internalModuleNameOutPath(name: string) {
-    return `${this.#packageName().join('/')}/internal/${name}.kt\n`;
+    return `${this.#schemaName.split('.').join('/')}/internal/${name}.kt`;
   }
   #root(): FileGeneratorKotlin {
     return this.#kind === null ? this : this.#kind.root;
@@ -663,7 +663,7 @@ export default class FileGeneratorKotlin extends CodeStream {
               this.write(
                 `fun decode(d: Deserializer): ${traitClassName}? {\n`,
                 () => {
-                  this.write('d.mark(4)\n');
+                  this.write('d.mark()\n');
                   this.write('val id = d.readInt()\n');
                   this.write('d.reset()\n');
                   this.write(
@@ -775,7 +775,7 @@ export default class FileGeneratorKotlin extends CodeStream {
             '}\n'
           );
           this.write(
-            'fun encode(s: DataOutput) {\n',
+            'fun encode(s: Serializer) {\n',
             () => {
               this.write(
                 `test(object : ${switchInterfaceName}<Unit> {\n`,
