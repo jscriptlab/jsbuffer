@@ -209,7 +209,7 @@ export default class FileGeneratorKotlin extends CodeStream {
     };
   }
   #internalModuleNameOutPath(name: string) {
-    return `${this.#schemaName}/internal/${name}.kt\n`;
+    return `${this.#packageName().join('/')}/internal/${name}.kt\n`;
   }
   #root(): FileGeneratorKotlin {
     return this.#kind === null ? this : this.#kind.root;
