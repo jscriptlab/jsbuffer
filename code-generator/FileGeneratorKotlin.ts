@@ -146,6 +146,9 @@ export default class FileGeneratorKotlin extends CodeStream {
       await gen.#preprocess();
     }
 
+    this.#files.push(this.#generateDeserializerInterface());
+    this.#files.push(this.#generateSerializerInterface());
+
     /**
      * call iterator again, because now the #fileGenerators of the root file was generated
      */
@@ -162,6 +165,51 @@ export default class FileGeneratorKotlin extends CodeStream {
       this.#files.push(file);
     }
     return this.#files;
+  }
+  #generateDeserializerInterface() {
+    this.write(`package ${this.#packageName}.internal\n\n`);
+    this.write(
+      'interface Deserializer {\n',
+      () => {
+        this.write('fun readInt(): Int\n');
+        this.write('fun mark(): Unit\n');
+        this.write('fun reset(): Unit\n');
+        this.write('fun readLong(): Long\n');
+        this.write('fun readDouble(): Double\n');
+        this.write('fun readFloat(): Float\n');
+        this.write('fun readShort(): Short\n');
+        this.write('fun readByte(): Byte\n');
+        this.write('fun read(value: ByteArray): Unit\n');
+      },
+      '}\n'
+    );
+    return {
+      path: this.#internalModuleNameOutPath('Deserializer'),
+      contents: this.value()
+    };
+  }
+  #generateSerializerInterface() {
+    this.write(`package ${this.#packageName}.internal\n\n`);
+    this.write(
+      'interface Serializer {\n',
+      () => {
+        this.write('fun writeInt(value: Int): Unit\n');
+        this.write('fun writeLong(value: Long): Unit\n');
+        this.write('fun writeDouble(value: Double): Unit\n');
+        this.write('fun writeFloat(value: Float): Unit\n');
+        this.write('fun writeShort(value: Short): Unit\n');
+        this.write('fun writeByte(value: Byte): Unit\n');
+        this.write('fun write(value: ByteArray): Unit\n');
+      },
+      '}\n'
+    );
+    return {
+      path: this.#internalModuleNameOutPath('Serializer'),
+      contents: this.value()
+    };
+  }
+  #internalModuleNameOutPath(name: string) {
+    return `${this.#packageName}/internal/${name}.kt\n`;
   }
   #root(): FileGeneratorKotlin {
     return this.#kind === null ? this : this.#kind.root;
@@ -337,8 +385,8 @@ export default class FileGeneratorKotlin extends CodeStream {
     }
   }
   async #preprocessMetadataParam(metadataType: TypeExpressionMetadata) {
-    this.#imports.add('java.io.DataOutput');
-    this.#imports.add('java.io.DataInputStream');
+    this.#imports.add(`${this.#packageName}.internal.Serializer`);
+    this.#imports.add(`${this.#packageName}.internal.Deserializer`);
     switch (metadataType.type) {
       case 'template':
         switch (metadataType.template) {
@@ -497,9 +545,7 @@ export default class FileGeneratorKotlin extends CodeStream {
             'companion object {\n',
             () => {
               this.write(
-                `fun decode(d: DataInputStream): ${getClassName(
-                  metadata
-                )}? {\n`,
+                `fun decode(d: Deserializer): ${getClassName(metadata)}? {\n`,
                 () => {
                   this.write(`if(d.readInt() != ${metadata.id}) return null\n`);
                   let depth = 0;
@@ -526,7 +572,7 @@ export default class FileGeneratorKotlin extends CodeStream {
             '}\n'
           );
           this.write(
-            'fun encode(s: DataOutput) {\n',
+            'fun encode(s: Serializer) {\n',
             () => {
               this.write(`s.writeInt(${metadata.id})\n`);
               let depth = 0;
@@ -615,7 +661,7 @@ export default class FileGeneratorKotlin extends CodeStream {
             'companion object {\n',
             () => {
               this.write(
-                `fun decode(d: DataInputStream): ${traitClassName}? {\n`,
+                `fun decode(d: Deserializer): ${traitClassName}? {\n`,
                 () => {
                   this.write('d.mark(4)\n');
                   this.write('val id = d.readInt()\n');
@@ -923,7 +969,7 @@ export default class FileGeneratorKotlin extends CodeStream {
                 ? value
                 : `${value}AsByteArray${depth}`;
             this.write(`val ${varName} = ByteArray(d.readInt())\n`);
-            this.write(`d.readFully(${varName})\n`);
+            this.write(`d.read(${varName})\n`);
             if (paramType.value === GenericName.String) {
               this.write(`val ${value} = String(${varName}, Charsets.UTF_8)\n`);
             }
