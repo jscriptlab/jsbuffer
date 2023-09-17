@@ -209,7 +209,7 @@ export default class FileGeneratorKotlin extends CodeStream {
     };
   }
   #internalModuleNameOutPath(name: string) {
-    return `${this.#packageName}/internal/${name}.kt\n`;
+    return `${this.#schemaName}/internal/${name}.kt\n`;
   }
   #root(): FileGeneratorKotlin {
     return this.#kind === null ? this : this.#kind.root;
@@ -385,8 +385,8 @@ export default class FileGeneratorKotlin extends CodeStream {
     }
   }
   async #preprocessMetadataParam(metadataType: TypeExpressionMetadata) {
-    this.#imports.add(`${this.#packageName}.internal.Serializer`);
-    this.#imports.add(`${this.#packageName}.internal.Deserializer`);
+    this.#imports.add(`${this.#schemaName}.internal.Serializer`);
+    this.#imports.add(`${this.#schemaName}.internal.Deserializer`);
     switch (metadataType.type) {
       case 'template':
         switch (metadataType.template) {
