@@ -81,6 +81,15 @@ function getTraitClassTypeDiscriminatorPropertyName(metadata: ITraitMetadata) {
   }
 }
 
+function getTypeDefinitionTraitClassName(metadata: Metadata): string | null {
+  switch (metadata.kind) {
+    case 'trait':
+    case 'type':
+    case 'call':
+      return `${getClassName(metadata)}Type`;
+  }
+}
+
 export default class FileGeneratorKotlin extends CodeStream {
   readonly #metadata;
   readonly #kind;
@@ -625,178 +634,74 @@ export default class FileGeneratorKotlin extends CodeStream {
           assert.strict.ok(!('nodes' in currentMetadata));
           nodes.push({ node: currentMetadata, param });
         }
-        const switchInterfaceName = `${traitClassName}Switch`;
         this.write(
-          `interface ${switchInterfaceName}<T> {\n`,
+          `sealed class ${traitClassName} {\n`,
           () => {
-            for (const { param } of nodes) {
+            this.write('abstract fun encode(s: Serializer)\n');
+            this.write(
+              'companion object {\n',
+              () => {
+                this.write(
+                  `fun decode(d: Deserializer): ${traitClassName}? {\n`,
+                  () => {
+                    this.write('d.mark()\n');
+                    this.write('val id = d.readInt()\n');
+                    this.write('d.reset()\n');
+                    this.write(
+                      'when(id) {\n',
+                      () => {
+                        for (const { node: nodeMetadata } of nodes) {
+                          this.write(
+                            `${nodeMetadata.id} -> {\n`,
+                            () => {
+                              this.write(
+                                `val result = ${getClassName(
+                                  nodeMetadata
+                                )}.decode(d)\n`
+                              );
+                              this.write(
+                                `if(result != null) return ${getTypeDefinitionTraitClassName(
+                                  nodeMetadata
+                                )}(result)\n`
+                              );
+                            },
+                            '}\n'
+                          );
+                        }
+                      },
+                      '}\n'
+                    );
+                    this.write('return null\n');
+                  },
+                  '}\n'
+                );
+              },
+              '}\n'
+            );
+
+            for (const node of nodes) {
               this.write(
-                `fun ${param.classParamName}(${
-                  param.classParamName
-                }: ${param.typeName.replace(/\?$/, '')}): T\n`
+                `data class ${getTypeDefinitionTraitClassName(
+                  node.node
+                )}(val value: ${node.param.typeName.replace(
+                  /\?$/,
+                  ''
+                )}) : ${traitClassName}() {\n`,
+                () => {
+                  this.write(
+                    'override fun encode(s: Serializer) {\n',
+                    () => {
+                      this.write('value.encode(s)\n');
+                    },
+                    '}\n'
+                  );
+                },
+                '}\n'
               );
             }
           },
           '}\n'
         );
-        this.write(
-          `class ${traitClassName}(\n`,
-          () => {
-            for (const p of params) {
-              this.write(
-                `${p.private ? 'private ' : ''}val ${p.classParamName}: ${
-                  p.typeName
-                }`
-              );
-              if (p !== params[params.length - 1]) {
-                this.append(',');
-              }
-              this.append('\n');
-            }
-          },
-          ') {\n'
-        );
-        this.indentBlock(() => {
-          this.write(
-            'companion object {\n',
-            () => {
-              this.write(
-                `fun decode(d: Deserializer): ${traitClassName}? {\n`,
-                () => {
-                  this.write('d.mark()\n');
-                  this.write('val id = d.readInt()\n');
-                  this.write('d.reset()\n');
-                  this.write(
-                    'when(id) {\n',
-                    () => {
-                      for (const { node: nodeMetadata } of nodes) {
-                        this.write(
-                          `${nodeMetadata.id} -> {\n`,
-                          () => {
-                            this.write(
-                              `val result = ${getClassName(
-                                nodeMetadata
-                              )}.decode(d)\n`
-                            );
-                            this.write(
-                              `if(result != null) return ${traitClassName}(result)\n`
-                            );
-                          },
-                          '}\n'
-                        );
-                      }
-                    },
-                    '}\n'
-                  );
-                  this.write('return null\n');
-                },
-                '}\n'
-              );
-            },
-            '}\n'
-          );
-          for (let i = 0; i < metadata.nodes.length; i++) {
-            const node = metadata.nodes[i];
-            assert.strict.ok(node);
-            this.write(
-              `constructor(value: ${this.#resolveMetadataParamType(
-                node
-              )}): this(\n`,
-              () => {
-                const nodeParam = params.find((p) => p.node === node);
-                assert.strict.ok(nodeParam);
-                const { node: currentNode } = nodeParam;
-                assert.strict.ok(currentNode);
-                const fg =
-                  this.#fileGeneratorFromParamTypeMetadata(currentNode);
-                const currentMetadata = fg.#currentMetadata();
-                assert.strict.ok(
-                  !('nodes' in currentMetadata),
-                  'Not implemented'
-                );
-                this.write(`${currentMetadata.id},\n`);
-                const lastNode = metadata.nodes[metadata.nodes.length - 1];
-                for (const node2 of metadata.nodes) {
-                  const isLastNode = node2 === lastNode;
-                  if (node2 === node) {
-                    this.write('value');
-                  } else {
-                    this.write('null');
-                  }
-                  if (!isLastNode) {
-                    this.append(',');
-                  }
-                  this.append('\n');
-                }
-              },
-              ')\n'
-            );
-          }
-          this.write(
-            `fun <T> test(testObject: ${switchInterfaceName}<T>): T {\n`,
-            () => {
-              this.write(
-                `when(${traitTypePropName}) {\n`,
-                () => {
-                  for (const {
-                    node: nodeMetadata,
-                    param: { classParamName }
-                  } of nodes) {
-                    this.write(
-                      `${nodeMetadata.id} -> {\n`,
-                      () => {
-                        this.write(
-                          `if(${classParamName} == null) {\n`,
-                          () => {
-                            this.write(
-                              `throw Exception("${traitTypePropName} was set to ${nodeMetadata.id}, ` +
-                                `but ${classParamName} was null")\n`
-                            );
-                          },
-                          '}\n'
-                        );
-                        this.write(
-                          `return testObject.${classParamName}(${classParamName})\n`
-                        );
-                      },
-                      '}\n'
-                    );
-                  }
-                },
-                '}\n'
-              );
-              this.write(
-                `throw Exception("Invalid trait data. ${traitTypePropName} was set to ` +
-                  `$${traitTypePropName}, which does not match any of the type declarations that ` +
-                  'was pushed this trait. We actually expect one of the following ids:\\n\\n' +
-                  `${nodes.map((n) => `\\t- ${n.node.id}`).join('\\n')}")\n`
-              );
-            },
-            '}\n'
-          );
-          this.write(
-            'fun encode(s: Serializer) {\n',
-            () => {
-              this.write(
-                `test(object : ${switchInterfaceName}<Unit> {\n`,
-                () => {
-                  for (const { param: n } of nodes) {
-                    this.write(
-                      `override fun ${n.classParamName}(${n.classParamName}: ${n.nonOptionalTypeName}) {\n`,
-                      () => {
-                        this.write(`${n.classParamName}.encode(s)\n`);
-                      },
-                      '}\n'
-                    );
-                  }
-                },
-                '})\n'
-              );
-            },
-            '}\n'
-          );
-        });
-        this.write('}\n');
         break;
       }
     }

@@ -3,15 +3,8 @@ import com.test.app.schema.internal.Serializer
 import com.test.app.schema.internal.Deserializer
 import com.test.app.schema.post.GetPost
 import com.test.app.schema.main.GetCurrentUser
-interface RequestSwitch<T> {
-  fun getPost(getPost: GetPost): T
-  fun getCurrentUser(getCurrentUser: GetCurrentUser): T
-}
-class Request(
-  private val requestType: Int,
-  val getPost: GetPost?,
-  val getCurrentUser: GetCurrentUser?
-) {
+sealed class Request {
+  abstract fun encode(s: Serializer)
   companion object {
     fun decode(d: Deserializer): Request? {
       d.mark()
@@ -20,51 +13,24 @@ class Request(
       when(id) {
         -1267528456 -> {
           val result = GetPost.decode(d)
-          if(result != null) return Request(result)
+          if(result != null) return GetPostType(result)
         }
         -895800374 -> {
           val result = GetCurrentUser.decode(d)
-          if(result != null) return Request(result)
+          if(result != null) return GetCurrentUserType(result)
         }
       }
       return null
     }
   }
-  constructor(value: GetPost): this(
-    -1267528456,
-    value,
-    null
-  )
-  constructor(value: GetCurrentUser): this(
-    -895800374,
-    null,
-    value
-  )
-  fun <T> test(testObject: RequestSwitch<T>): T {
-    when(requestType) {
-      -1267528456 -> {
-        if(getPost == null) {
-          throw Exception("requestType was set to -1267528456, but getPost was null")
-        }
-        return testObject.getPost(getPost)
-      }
-      -895800374 -> {
-        if(getCurrentUser == null) {
-          throw Exception("requestType was set to -895800374, but getCurrentUser was null")
-        }
-        return testObject.getCurrentUser(getCurrentUser)
-      }
+  data class GetPostType(val value: GetPost) : Request() {
+    override fun encode(s: Serializer) {
+      value.encode(s)
     }
-    throw Exception("Invalid trait data. requestType was set to $requestType, which does not match any of the type declarations that was pushed this trait. We actually expect one of the following ids:\n\n\t- -1267528456\n\t- -895800374")
   }
-  fun encode(s: Serializer) {
-    test(object : RequestSwitch<Unit> {
-      override fun getPost(getPost: GetPost) {
-        getPost.encode(s)
-      }
-      override fun getCurrentUser(getCurrentUser: GetCurrentUser) {
-        getCurrentUser.encode(s)
-      }
-    })
+  data class GetCurrentUserType(val value: GetCurrentUser) : Request() {
+    override fun encode(s: Serializer) {
+      value.encode(s)
+    }
   }
 }
