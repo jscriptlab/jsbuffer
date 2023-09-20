@@ -81,7 +81,9 @@ function getTraitClassTypeDiscriminatorPropertyName(metadata: ITraitMetadata) {
   }
 }
 
-function getTypeDefinitionTraitClassName(metadata: Metadata): string | null {
+export function getTypeDefinitionTraitClassName(
+  metadata: Metadata
+): string | null {
   switch (metadata.kind) {
     case 'trait':
     case 'type':
