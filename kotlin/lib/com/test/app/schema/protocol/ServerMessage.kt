@@ -6,17 +6,17 @@ import com.test.app.schema.protocol.ServerMessageRequestSuccessResponse
 import com.test.app.schema.protocol.ServerMessageRequestFailureResponse
 sealed class ServerMessage : Encodable() {
   companion object {
-    fun decode(d: Deserializer): ServerMessage? {
-      d.mark()
-      val id = d.readInt()
-      d.reset()
+    fun decode(deserializer: Deserializer): ServerMessage? {
+      deserializer.mark()
+      val id = deserializer.readInt()
+      deserializer.reset()
       when(id) {
         -539011791 -> {
-          val result = ServerMessageRequestSuccessResponse.decode(d)
+          val result = ServerMessageRequestSuccessResponse.decode(deserializer)
           if(result != null) return ServerMessageRequestSuccessResponseType(result)
         }
         -1870719710 -> {
-          val result = ServerMessageRequestFailureResponse.decode(d)
+          val result = ServerMessageRequestFailureResponse.decode(deserializer)
           if(result != null) return ServerMessageRequestFailureResponseType(result)
         }
       }
@@ -24,13 +24,13 @@ sealed class ServerMessage : Encodable() {
     }
   }
   data class ServerMessageRequestSuccessResponseType(val value: ServerMessageRequestSuccessResponse) : ServerMessage() {
-    override fun encode(s: Serializer) {
-      value.encode(s)
+    override fun encode(serializer: Serializer) {
+      value.encode(serializer)
     }
   }
   data class ServerMessageRequestFailureResponseType(val value: ServerMessageRequestFailureResponse) : ServerMessage() {
-    override fun encode(s: Serializer) {
-      value.encode(s)
+    override fun encode(serializer: Serializer) {
+      value.encode(serializer)
     }
   }
 }

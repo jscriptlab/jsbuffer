@@ -8,12 +8,12 @@ class Comment(
   val text: String
 ) : Encodable() {
   companion object {
-    fun decode(d: Deserializer): Comment? {
-      if(d.readInt() != -1202685592) return null
-      val id = d.readInt()
-      val postId = d.readLong()
-      val textAsByteArray3 = ByteArray(d.readInt())
-      d.read(textAsByteArray3)
+    fun decode(deserializer: Deserializer): Comment? {
+      if(deserializer.readInt() != -1202685592) return null
+      val id = deserializer.readInt()
+      val postId = deserializer.readLong()
+      val textAsByteArray3 = ByteArray(deserializer.readInt())
+      deserializer.read(textAsByteArray3)
       val text = String(textAsByteArray3, Charsets.UTF_8)
       return Comment(
         id,
@@ -22,12 +22,12 @@ class Comment(
       )
     }
   }
-  override fun encode(s: Serializer) {
-    s.writeInt(-1202685592)
-    s.writeInt(id)
-    s.writeLong(postId)
+  override fun encode(serializer: Serializer) {
+    serializer.writeInt(-1202685592)
+    serializer.writeInt(id)
+    serializer.writeLong(postId)
     val batext3 = text.toByteArray(Charsets.UTF_8)
-    s.writeInt(batext3.size)
-    s.write(batext3)
+    serializer.writeInt(batext3.size)
+    serializer.write(batext3)
   }
 }

@@ -226,7 +226,7 @@ export default class FileGeneratorKotlin extends CodeStream {
     this.write(
       'abstract class Encodable {\n',
       () => {
-        this.write('abstract fun encode(s: Serializer)\n');
+        this.write('abstract fun encode(serializer: Serializer)\n');
       },
       '}\n'
     );
@@ -579,9 +579,13 @@ export default class FileGeneratorKotlin extends CodeStream {
             'companion object {\n',
             () => {
               this.write(
-                `fun decode(d: Deserializer): ${getClassName(metadata)}? {\n`,
+                `fun decode(deserializer: Deserializer): ${getClassName(
+                  metadata
+                )}? {\n`,
                 () => {
-                  this.write(`if(d.readInt() != ${metadata.id}) return null\n`);
+                  this.write(
+                    `if(deserializer.readInt() != ${metadata.id}) return null\n`
+                  );
                   let depth = 0;
                   for (const p of metadata.params) {
                     depth = this.#writeDecodeCall(p.type, p.name, depth + 1);
@@ -606,9 +610,9 @@ export default class FileGeneratorKotlin extends CodeStream {
             '}\n'
           );
           this.write(
-            'override fun encode(s: Serializer) {\n',
+            'override fun encode(serializer: Serializer) {\n',
             () => {
-              this.write(`s.writeInt(${metadata.id})\n`);
+              this.write(`serializer.writeInt(${metadata.id})\n`);
               let depth = 0;
               for (const p of metadata.params) {
                 depth = this.#writeEncodeCall(p.type, p.name, depth + 1);
@@ -666,11 +670,11 @@ export default class FileGeneratorKotlin extends CodeStream {
               'companion object {\n',
               () => {
                 this.write(
-                  `fun decode(d: Deserializer): ${traitClassName}? {\n`,
+                  `fun decode(deserializer: Deserializer): ${traitClassName}? {\n`,
                   () => {
-                    this.write('d.mark()\n');
-                    this.write('val id = d.readInt()\n');
-                    this.write('d.reset()\n');
+                    this.write('deserializer.mark()\n');
+                    this.write('val id = deserializer.readInt()\n');
+                    this.write('deserializer.reset()\n');
                     this.write(
                       'when(id) {\n',
                       () => {
@@ -681,7 +685,7 @@ export default class FileGeneratorKotlin extends CodeStream {
                               this.write(
                                 `val result = ${getClassName(
                                   nodeMetadata
-                                )}.decode(d)\n`
+                                )}.decode(deserializer)\n`
                               );
                               this.write(
                                 `if(result != null) return ${getTypeDefinitionTraitClassName(
@@ -713,9 +717,9 @@ export default class FileGeneratorKotlin extends CodeStream {
                 )}) : ${traitClassName}() {\n`,
                 () => {
                   this.write(
-                    'override fun encode(s: Serializer) {\n',
+                    'override fun encode(serializer: Serializer) {\n',
                     () => {
-                      this.write('value.encode(s)\n');
+                      this.write('value.encode(serializer)\n');
                     },
                     '}\n'
                   );
@@ -774,43 +778,45 @@ export default class FileGeneratorKotlin extends CodeStream {
           case GenericName.Uint8:
             throw new Exception('Unsigned integers are not supported');
           case GenericName.Long:
-            this.write(`s.writeLong(${value})\n`);
+            this.write(`serializer.writeLong(${value})\n`);
             break;
           case GenericName.Bytes:
-            this.write(`s.writeInt(${value}.size)\n`);
-            this.write(`s.write(${value})\n`);
+            this.write(`serializer.writeInt(${value}.size)\n`);
+            this.write(`serializer.write(${value})\n`);
             break;
           case GenericName.Boolean:
-            this.write(`s.writeByte(if(${value}) 1 else 0)\n`);
+            this.write(`serializer.writeByte(if(${value}) 1 else 0)\n`);
             break;
           case GenericName.Float:
-            this.write(`s.writeFloat(${value})\n`);
+            this.write(`serializer.writeFloat(${value})\n`);
             break;
           case GenericName.Double:
-            this.write(`s.writeDouble(${value})\n`);
+            this.write(`serializer.writeDouble(${value})\n`);
             break;
           case GenericName.Integer:
           case GenericName.Int32:
-            this.write(`s.writeInt(${value})\n`);
+            this.write(`serializer.writeInt(${value})\n`);
             break;
           case GenericName.Int16:
-            this.write(`s.writeShort(${value})\n`);
+            this.write(`serializer.writeShort(${value})\n`);
             break;
           case GenericName.Int8:
-            this.write(`s.writeByte(${value})\n`);
+            this.write(`serializer.writeByte(${value})\n`);
             break;
           case GenericName.String: {
             const byteArrayVarName = `ba${value}${depth}`;
             this.write(
               `val ${byteArrayVarName} = ${value}.toByteArray(Charsets.UTF_8)\n`
             );
-            this.write(`s.writeInt(${byteArrayVarName}.size)\n`);
-            this.write(`s.write(${byteArrayVarName})\n`);
+            this.write(`serializer.writeInt(${byteArrayVarName}.size)\n`);
+            this.write(`serializer.write(${byteArrayVarName})\n`);
             break;
           }
           case GenericName.NullTerminatedString:
-            this.write(`s.write(${value}.toByteArray(Charsets.UTF_8))\n`);
-            this.write('s.writeByte(0)\n');
+            this.write(
+              `serializer.write(${value}.toByteArray(Charsets.UTF_8))\n`
+            );
+            this.write('serializer.writeByte(0)\n');
         }
         break;
       case 'template':
@@ -818,7 +824,7 @@ export default class FileGeneratorKotlin extends CodeStream {
         switch (paramType.template) {
           case 'vector':
           case 'set': {
-            this.write(`s.writeInt(${value}.size)\n`);
+            this.write(`serializer.writeInt(${value}.size)\n`);
             const itemVarName = `item${upperFirst(value)}${depth}`;
             this.write(
               `for(${itemVarName} in ${value}) {\n`,
@@ -850,7 +856,7 @@ export default class FileGeneratorKotlin extends CodeStream {
         break;
       case 'internalType':
       case 'externalType':
-        this.write(`${value}.encode(s)\n`);
+        this.write(`${value}.encode(serializer)\n`);
         break;
       case 'externalModuleType':
     }
@@ -870,26 +876,26 @@ export default class FileGeneratorKotlin extends CodeStream {
           case GenericName.Uint8:
             throw new Exception('Unsigned integers are not supported');
           case GenericName.Long:
-            this.write(`val ${value} = d.readLong()\n`);
+            this.write(`val ${value} = deserializer.readLong()\n`);
             break;
           case GenericName.Boolean:
-            this.write(`val ${value} = d.readByte().toInt() == 1\n`);
+            this.write(`val ${value} = deserializer.readByte().toInt() == 1\n`);
             break;
           case GenericName.Float:
-            this.write(`val ${value} = d.readFloat()\n`);
+            this.write(`val ${value} = deserializer.readFloat()\n`);
             break;
           case GenericName.Double:
-            this.write(`val ${value} = d.readDouble()\n`);
+            this.write(`val ${value} = deserializer.readDouble()\n`);
             break;
           case GenericName.Integer:
           case GenericName.Int32:
-            this.write(`val ${value} = d.readInt()\n`);
+            this.write(`val ${value} = deserializer.readInt()\n`);
             break;
           case GenericName.Int16:
-            this.write(`val ${value} = d.readShort()\n`);
+            this.write(`val ${value} = deserializer.readShort()\n`);
             break;
           case GenericName.Int8:
-            this.write(`val ${value} = d.readByte()\n`);
+            this.write(`val ${value} = deserializer.readByte()\n`);
             break;
           case GenericName.String:
           case GenericName.Bytes: {
@@ -897,8 +903,8 @@ export default class FileGeneratorKotlin extends CodeStream {
               paramType.value === GenericName.Bytes
                 ? value
                 : `${value}AsByteArray${depth}`;
-            this.write(`val ${varName} = ByteArray(d.readInt())\n`);
-            this.write(`d.read(${varName})\n`);
+            this.write(`val ${varName} = ByteArray(deserializer.readInt())\n`);
+            this.write(`deserializer.read(${varName})\n`);
             if (paramType.value === GenericName.String) {
               this.write(`val ${value} = String(${varName}, Charsets.UTF_8)\n`);
             }
@@ -916,7 +922,7 @@ export default class FileGeneratorKotlin extends CodeStream {
             const lengthVarName = getVarName('length', value, depth);
             const indexVarName = getVarName('index', value, depth);
             const itemVarName = getVarName('item', value, depth);
-            this.write(`val ${lengthVarName} = d.readInt()\n`);
+            this.write(`val ${lengthVarName} = deserializer.readInt()\n`);
             this.write(
               `val ${value} = mutableListOf<${this.#resolveMetadataParamType(
                 paramType.value
@@ -944,7 +950,9 @@ export default class FileGeneratorKotlin extends CodeStream {
               value,
               depth
             );
-            this.write(`val ${optionalByteVarName} = d.readByte().toInt()\n`);
+            this.write(
+              `val ${optionalByteVarName} = deserializer.readByte().toInt()\n`
+            );
             this.write(
               `var ${value}: ${this.#resolveMetadataParamType(paramType)}\n`
             );
@@ -979,7 +987,9 @@ export default class FileGeneratorKotlin extends CodeStream {
       case 'internalType':
       case 'externalType':
         this.write(
-          `val ${value} = ${getClassName(paramType)}.decode(d) ?: return null\n`
+          `val ${value} = ${getClassName(
+            paramType
+          )}.decode(deserializer) ?: return null\n`
         );
         break;
       case 'externalModuleType':

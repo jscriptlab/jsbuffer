@@ -8,17 +8,17 @@ class Post(
   val likes: List<PostLike?>
 ) : Encodable() {
   companion object {
-    fun decode(d: Deserializer): Post? {
-      if(d.readInt() != -1854473321) return null
-      val id = d.readLong()
-      val userId = d.readInt()
-      val lengthLikes4 = d.readInt()
+    fun decode(deserializer: Deserializer): Post? {
+      if(deserializer.readInt() != -1854473321) return null
+      val id = deserializer.readLong()
+      val userId = deserializer.readInt()
+      val lengthLikes4 = deserializer.readInt()
       val likes = mutableListOf<PostLike?>()
       for(indexLikes4 in 0..lengthLikes4) {
-        val optionalByteItemLikes45 = d.readByte().toInt()
+        val optionalByteItemLikes45 = deserializer.readByte().toInt()
         var itemLikes4: PostLike?
         if(optionalByteItemLikes45 == 1) {
-          val actualValueItemLikes45 = PostLike.decode(d) ?: return null
+          val actualValueItemLikes45 = PostLike.decode(deserializer) ?: return null
           itemLikes4 = actualValueItemLikes45
         } else if(optionalByteItemLikes45 == 0) {
           itemLikes4 = null
@@ -34,14 +34,14 @@ class Post(
       )
     }
   }
-  override fun encode(s: Serializer) {
-    s.writeInt(-1854473321)
-    s.writeLong(id)
-    s.writeInt(userId)
-    s.writeInt(likes.size)
+  override fun encode(serializer: Serializer) {
+    serializer.writeInt(-1854473321)
+    serializer.writeLong(id)
+    serializer.writeInt(userId)
+    serializer.writeInt(likes.size)
     for(itemLikes4 in likes) {
       if(itemLikes4 != null) {
-        itemLikes4.encode(s)
+        itemLikes4.encode(serializer)
       }
     }
   }

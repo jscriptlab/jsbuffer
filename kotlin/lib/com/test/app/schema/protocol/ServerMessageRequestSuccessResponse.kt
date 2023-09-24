@@ -8,19 +8,19 @@ class ServerMessageRequestSuccessResponse(
   val response: Request
 ) : Encodable() {
   companion object {
-    fun decode(d: Deserializer): ServerMessageRequestSuccessResponse? {
-      if(d.readInt() != -539011791) return null
-      val requestId = d.readLong()
-      val response = Request.decode(d) ?: return null
+    fun decode(deserializer: Deserializer): ServerMessageRequestSuccessResponse? {
+      if(deserializer.readInt() != -539011791) return null
+      val requestId = deserializer.readLong()
+      val response = Request.decode(deserializer) ?: return null
       return ServerMessageRequestSuccessResponse(
         requestId,
         response
       )
     }
   }
-  override fun encode(s: Serializer) {
-    s.writeInt(-539011791)
-    s.writeLong(requestId)
-    response.encode(s)
+  override fun encode(serializer: Serializer) {
+    serializer.writeInt(-539011791)
+    serializer.writeLong(requestId)
+    response.encode(serializer)
   }
 }

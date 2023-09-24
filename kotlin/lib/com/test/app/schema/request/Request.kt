@@ -6,17 +6,17 @@ import com.test.app.schema.post.GetPost
 import com.test.app.schema.main.GetCurrentUser
 sealed class Request : Encodable() {
   companion object {
-    fun decode(d: Deserializer): Request? {
-      d.mark()
-      val id = d.readInt()
-      d.reset()
+    fun decode(deserializer: Deserializer): Request? {
+      deserializer.mark()
+      val id = deserializer.readInt()
+      deserializer.reset()
       when(id) {
         -1267528456 -> {
-          val result = GetPost.decode(d)
+          val result = GetPost.decode(deserializer)
           if(result != null) return GetPostType(result)
         }
         -895800374 -> {
-          val result = GetCurrentUser.decode(d)
+          val result = GetCurrentUser.decode(deserializer)
           if(result != null) return GetCurrentUserType(result)
         }
       }
@@ -24,13 +24,13 @@ sealed class Request : Encodable() {
     }
   }
   data class GetPostType(val value: GetPost) : Request() {
-    override fun encode(s: Serializer) {
-      value.encode(s)
+    override fun encode(serializer: Serializer) {
+      value.encode(serializer)
     }
   }
   data class GetCurrentUserType(val value: GetCurrentUser) : Request() {
-    override fun encode(s: Serializer) {
-      value.encode(s)
+    override fun encode(serializer: Serializer) {
+      value.encode(serializer)
     }
   }
 }

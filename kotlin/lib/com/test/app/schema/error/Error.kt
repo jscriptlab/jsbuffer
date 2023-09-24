@@ -7,21 +7,21 @@ import com.test.app.schema.error.ErrorInternalServerError
 import com.test.app.schema.error.ErrorNotFound
 sealed class Error : Encodable() {
   companion object {
-    fun decode(d: Deserializer): Error? {
-      d.mark()
-      val id = d.readInt()
-      d.reset()
+    fun decode(deserializer: Deserializer): Error? {
+      deserializer.mark()
+      val id = deserializer.readInt()
+      deserializer.reset()
       when(id) {
         627611118 -> {
-          val result = ErrorBadRequest.decode(d)
+          val result = ErrorBadRequest.decode(deserializer)
           if(result != null) return ErrorBadRequestType(result)
         }
         990932201 -> {
-          val result = ErrorInternalServerError.decode(d)
+          val result = ErrorInternalServerError.decode(deserializer)
           if(result != null) return ErrorInternalServerErrorType(result)
         }
         -1612310455 -> {
-          val result = ErrorNotFound.decode(d)
+          val result = ErrorNotFound.decode(deserializer)
           if(result != null) return ErrorNotFoundType(result)
         }
       }
@@ -29,18 +29,18 @@ sealed class Error : Encodable() {
     }
   }
   data class ErrorBadRequestType(val value: ErrorBadRequest) : Error() {
-    override fun encode(s: Serializer) {
-      value.encode(s)
+    override fun encode(serializer: Serializer) {
+      value.encode(serializer)
     }
   }
   data class ErrorInternalServerErrorType(val value: ErrorInternalServerError) : Error() {
-    override fun encode(s: Serializer) {
-      value.encode(s)
+    override fun encode(serializer: Serializer) {
+      value.encode(serializer)
     }
   }
   data class ErrorNotFoundType(val value: ErrorNotFound) : Error() {
-    override fun encode(s: Serializer) {
-      value.encode(s)
+    override fun encode(serializer: Serializer) {
+      value.encode(serializer)
     }
   }
 }

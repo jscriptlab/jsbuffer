@@ -5,13 +5,13 @@ import com.test.app.schema.internal.Serializer
 class ErrorNotFound(
 ) : Encodable() {
   companion object {
-    fun decode(d: Deserializer): ErrorNotFound? {
-      if(d.readInt() != -1612310455) return null
+    fun decode(deserializer: Deserializer): ErrorNotFound? {
+      if(deserializer.readInt() != -1612310455) return null
       return ErrorNotFound(
       )
     }
   }
-  override fun encode(s: Serializer) {
-    s.writeInt(-1612310455)
+  override fun encode(serializer: Serializer) {
+    serializer.writeInt(-1612310455)
   }
 }

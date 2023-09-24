@@ -7,21 +7,21 @@ class ClientMessageEncrypted(
   val payload: ByteArray
 ) : Encodable() {
   companion object {
-    fun decode(d: Deserializer): ClientMessageEncrypted? {
-      if(d.readInt() != 1935211896) return null
-      val requestId = d.readLong()
-      val payload = ByteArray(d.readInt())
-      d.read(payload)
+    fun decode(deserializer: Deserializer): ClientMessageEncrypted? {
+      if(deserializer.readInt() != 1935211896) return null
+      val requestId = deserializer.readLong()
+      val payload = ByteArray(deserializer.readInt())
+      deserializer.read(payload)
       return ClientMessageEncrypted(
         requestId,
         payload
       )
     }
   }
-  override fun encode(s: Serializer) {
-    s.writeInt(1935211896)
-    s.writeLong(requestId)
-    s.writeInt(payload.size)
-    s.write(payload)
+  override fun encode(serializer: Serializer) {
+    serializer.writeInt(1935211896)
+    serializer.writeLong(requestId)
+    serializer.writeInt(payload.size)
+    serializer.write(payload)
   }
 }

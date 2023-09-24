@@ -5,13 +5,13 @@ import com.test.app.schema.internal.Serializer
 class ErrorBadRequest(
 ) : Encodable() {
   companion object {
-    fun decode(d: Deserializer): ErrorBadRequest? {
-      if(d.readInt() != 627611118) return null
+    fun decode(deserializer: Deserializer): ErrorBadRequest? {
+      if(deserializer.readInt() != 627611118) return null
       return ErrorBadRequest(
       )
     }
   }
-  override fun encode(s: Serializer) {
-    s.writeInt(627611118)
+  override fun encode(serializer: Serializer) {
+    serializer.writeInt(627611118)
   }
 }

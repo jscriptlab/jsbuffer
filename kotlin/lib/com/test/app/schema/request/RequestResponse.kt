@@ -5,13 +5,13 @@ import com.test.app.schema.internal.Serializer
 import com.test.app.schema.main.User
 sealed class RequestResponse : Encodable() {
   companion object {
-    fun decode(d: Deserializer): RequestResponse? {
-      d.mark()
-      val id = d.readInt()
-      d.reset()
+    fun decode(deserializer: Deserializer): RequestResponse? {
+      deserializer.mark()
+      val id = deserializer.readInt()
+      deserializer.reset()
       when(id) {
         -1307935086 -> {
-          val result = User.decode(d)
+          val result = User.decode(deserializer)
           if(result != null) return UserType(result)
         }
       }
@@ -19,8 +19,8 @@ sealed class RequestResponse : Encodable() {
     }
   }
   data class UserType(val value: User) : RequestResponse() {
-    override fun encode(s: Serializer) {
-      value.encode(s)
+    override fun encode(serializer: Serializer) {
+      value.encode(serializer)
     }
   }
 }

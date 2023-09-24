@@ -7,16 +7,16 @@ class GetCurrentUser(
   val id: Int
 ) : Encodable() {
   companion object {
-    fun decode(d: Deserializer): GetCurrentUser? {
-      if(d.readInt() != -895800374) return null
-      val id = d.readInt()
+    fun decode(deserializer: Deserializer): GetCurrentUser? {
+      if(deserializer.readInt() != -895800374) return null
+      val id = deserializer.readInt()
       return GetCurrentUser(
         id
       )
     }
   }
-  override fun encode(s: Serializer) {
-    s.writeInt(-895800374)
-    s.writeInt(id)
+  override fun encode(serializer: Serializer) {
+    serializer.writeInt(-895800374)
+    serializer.writeInt(id)
   }
 }

@@ -8,19 +8,19 @@ class ClientMessageRequest(
   val payload: Request
 ) : Encodable() {
   companion object {
-    fun decode(d: Deserializer): ClientMessageRequest? {
-      if(d.readInt() != -1480887542) return null
-      val requestId = d.readLong()
-      val payload = Request.decode(d) ?: return null
+    fun decode(deserializer: Deserializer): ClientMessageRequest? {
+      if(deserializer.readInt() != -1480887542) return null
+      val requestId = deserializer.readLong()
+      val payload = Request.decode(deserializer) ?: return null
       return ClientMessageRequest(
         requestId,
         payload
       )
     }
   }
-  override fun encode(s: Serializer) {
-    s.writeInt(-1480887542)
-    s.writeLong(requestId)
-    payload.encode(s)
+  override fun encode(serializer: Serializer) {
+    serializer.writeInt(-1480887542)
+    serializer.writeLong(requestId)
+    payload.encode(serializer)
   }
 }

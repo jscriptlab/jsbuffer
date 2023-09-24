@@ -5,13 +5,13 @@ import com.test.app.schema.internal.Serializer
 class ErrorInternalServerError(
 ) : Encodable() {
   companion object {
-    fun decode(d: Deserializer): ErrorInternalServerError? {
-      if(d.readInt() != 990932201) return null
+    fun decode(deserializer: Deserializer): ErrorInternalServerError? {
+      if(deserializer.readInt() != 990932201) return null
       return ErrorInternalServerError(
       )
     }
   }
-  override fun encode(s: Serializer) {
-    s.writeInt(990932201)
+  override fun encode(serializer: Serializer) {
+    serializer.writeInt(990932201)
   }
 }

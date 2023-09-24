@@ -7,16 +7,16 @@ class GetPost(
   val id: Int
 ) : Encodable() {
   companion object {
-    fun decode(d: Deserializer): GetPost? {
-      if(d.readInt() != -1267528456) return null
-      val id = d.readInt()
+    fun decode(deserializer: Deserializer): GetPost? {
+      if(deserializer.readInt() != -1267528456) return null
+      val id = deserializer.readInt()
       return GetPost(
         id
       )
     }
   }
-  override fun encode(s: Serializer) {
-    s.writeInt(-1267528456)
-    s.writeInt(id)
+  override fun encode(serializer: Serializer) {
+    serializer.writeInt(-1267528456)
+    serializer.writeInt(id)
   }
 }
