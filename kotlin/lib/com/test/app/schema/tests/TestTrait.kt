@@ -1,10 +1,10 @@
 package com.test.app.schema.tests
-import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Encodable
 import com.test.app.schema.internal.Deserializer
+import com.test.app.schema.internal.Serializer
 import com.test.app.schema.tests.TestDeepTraitArray1
 import com.test.app.schema.tests.TestOptionalTraitArray1
-sealed class TestTrait {
-  abstract fun encode(s: Serializer)
+sealed class TestTrait : Encodable() {
   companion object {
     fun decode(d: Deserializer): TestTrait? {
       d.mark()

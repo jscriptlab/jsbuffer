@@ -1,9 +1,10 @@
 package com.test.app.schema.post
-import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Encodable
 import com.test.app.schema.internal.Deserializer
+import com.test.app.schema.internal.Serializer
 class PostLike(
   val userId: Int
-) {
+) : Encodable() {
   companion object {
     fun decode(d: Deserializer): PostLike? {
       if(d.readInt() != 266529116) return null
@@ -13,7 +14,7 @@ class PostLike(
       )
     }
   }
-  fun encode(s: Serializer) {
+  override fun encode(s: Serializer) {
     s.writeInt(266529116)
     s.writeInt(userId)
   }

@@ -1,10 +1,10 @@
 package com.test.app.schema.protocol
-import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Encodable
 import com.test.app.schema.internal.Deserializer
+import com.test.app.schema.internal.Serializer
 import com.test.app.schema.protocol.ServerMessageRequestSuccessResponse
 import com.test.app.schema.protocol.ServerMessageRequestFailureResponse
-sealed class ServerMessage {
-  abstract fun encode(s: Serializer)
+sealed class ServerMessage : Encodable() {
   companion object {
     fun decode(d: Deserializer): ServerMessage? {
       d.mark()

@@ -1,11 +1,11 @@
 package com.test.app.schema.protocol
-import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Encodable
 import com.test.app.schema.internal.Deserializer
+import com.test.app.schema.internal.Serializer
 import com.test.app.schema.protocol.ClientMessageEncrypted
 import com.test.app.schema.protocol.ClientMessageMessagesAcknowledgment
 import com.test.app.schema.protocol.ClientMessageRequest
-sealed class ClientMessage {
-  abstract fun encode(s: Serializer)
+sealed class ClientMessage : Encodable() {
   companion object {
     fun decode(d: Deserializer): ClientMessage? {
       d.mark()

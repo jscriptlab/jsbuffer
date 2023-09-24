@@ -1,9 +1,10 @@
 package com.test.app.schema.tests
-import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Encodable
 import com.test.app.schema.internal.Deserializer
+import com.test.app.schema.internal.Serializer
 class TestDeepTraitArray1(
   val value: List<List<List<Test>>>
-) {
+) : Encodable() {
   companion object {
     fun decode(d: Deserializer): TestDeepTraitArray1? {
       if(d.readInt() != -1996458609) return null
@@ -28,7 +29,7 @@ class TestDeepTraitArray1(
       )
     }
   }
-  fun encode(s: Serializer) {
+  override fun encode(s: Serializer) {
     s.writeInt(-1996458609)
     s.writeInt(value.size)
     for(itemValue2 in value) {

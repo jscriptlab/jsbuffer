@@ -1,9 +1,9 @@
 package com.test.app.schema.request
-import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Encodable
 import com.test.app.schema.internal.Deserializer
+import com.test.app.schema.internal.Serializer
 import com.test.app.schema.main.User
-sealed class RequestResponse {
-  abstract fun encode(s: Serializer)
+sealed class RequestResponse : Encodable() {
   companion object {
     fun decode(d: Deserializer): RequestResponse? {
       d.mark()

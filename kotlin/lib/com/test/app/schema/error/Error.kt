@@ -1,11 +1,11 @@
 package com.test.app.schema.error
-import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Encodable
 import com.test.app.schema.internal.Deserializer
+import com.test.app.schema.internal.Serializer
 import com.test.app.schema.error.ErrorBadRequest
 import com.test.app.schema.error.ErrorInternalServerError
 import com.test.app.schema.error.ErrorNotFound
-sealed class Error {
-  abstract fun encode(s: Serializer)
+sealed class Error : Encodable() {
   companion object {
     fun decode(d: Deserializer): Error? {
       d.mark()

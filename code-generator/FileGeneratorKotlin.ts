@@ -159,6 +159,7 @@ export default class FileGeneratorKotlin extends CodeStream {
 
     this.#files.push(this.#generateDeserializerInterface());
     this.#files.push(this.#generateSerializerInterface());
+    this.#files.push(this.#generateEncodableInterface());
 
     /**
      * call iterator again, because now the #fileGenerators of the root file was generated
@@ -216,6 +217,21 @@ export default class FileGeneratorKotlin extends CodeStream {
     );
     return {
       path: this.#internalModuleNameOutPath('Serializer'),
+      contents: this.value()
+    };
+  }
+  #generateEncodableInterface() {
+    this.write(`package ${this.#schemaName}.internal\n\n`);
+    this.write(`import ${this.#schemaName}.internal.Serializer\n\n`);
+    this.write(
+      'abstract class Encodable {\n',
+      () => {
+        this.write('abstract fun encode(s: Serializer)\n');
+      },
+      '}\n'
+    );
+    return {
+      path: this.#internalModuleNameOutPath('Encodable'),
       contents: this.value()
     };
   }
@@ -365,6 +381,15 @@ export default class FileGeneratorKotlin extends CodeStream {
     switch (metadata.kind) {
       case 'call':
       case 'type':
+      case 'trait':
+        this.#imports.add(`${this.#schemaName}.internal.Encodable`);
+        this.#imports.add(`${this.#schemaName}.internal.Deserializer`);
+        this.#imports.add(`${this.#schemaName}.internal.Serializer`);
+        break;
+    }
+    switch (metadata.kind) {
+      case 'call':
+      case 'type':
         for (const t of metadata.traits) {
           await this.#preprocessMetadataParam(t);
         }
@@ -396,8 +421,6 @@ export default class FileGeneratorKotlin extends CodeStream {
     }
   }
   async #preprocessMetadataParam(metadataType: TypeExpressionMetadata) {
-    this.#imports.add(`${this.#schemaName}.internal.Serializer`);
-    this.#imports.add(`${this.#schemaName}.internal.Deserializer`);
     switch (metadataType.type) {
       case 'template':
         switch (metadataType.template) {
@@ -549,7 +572,7 @@ export default class FileGeneratorKotlin extends CodeStream {
               this.append('\n');
             }
           },
-          ') {\n'
+          ') : Encodable() {\n'
         );
         this.indentBlock(() => {
           this.write(
@@ -583,7 +606,7 @@ export default class FileGeneratorKotlin extends CodeStream {
             '}\n'
           );
           this.write(
-            'fun encode(s: Serializer) {\n',
+            'override fun encode(s: Serializer) {\n',
             () => {
               this.write(`s.writeInt(${metadata.id})\n`);
               let depth = 0;
@@ -637,9 +660,8 @@ export default class FileGeneratorKotlin extends CodeStream {
           nodes.push({ node: currentMetadata, param });
         }
         this.write(
-          `sealed class ${traitClassName} {\n`,
+          `sealed class ${traitClassName} : Encodable() {\n`,
           () => {
-            this.write('abstract fun encode(s: Serializer)\n');
             this.write(
               'companion object {\n',
               () => {

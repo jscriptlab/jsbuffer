@@ -1,11 +1,12 @@
 package com.test.app.schema.main
-import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Encodable
 import com.test.app.schema.internal.Deserializer
+import com.test.app.schema.internal.Serializer
 class Comment(
   val id: Int,
   val postId: Long,
   val text: String
-) {
+) : Encodable() {
   companion object {
     fun decode(d: Deserializer): Comment? {
       if(d.readInt() != -1202685592) return null
@@ -21,7 +22,7 @@ class Comment(
       )
     }
   }
-  fun encode(s: Serializer) {
+  override fun encode(s: Serializer) {
     s.writeInt(-1202685592)
     s.writeInt(id)
     s.writeLong(postId)

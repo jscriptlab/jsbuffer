@@ -1,6 +1,7 @@
 package com.test.app.schema.main
-import com.test.app.schema.internal.Serializer
+import com.test.app.schema.internal.Encodable
 import com.test.app.schema.internal.Deserializer
+import com.test.app.schema.internal.Serializer
 import com.test.app.schema.request.RequestResponse
 import com.test.app.schema.post.Post
 class User(
@@ -8,7 +9,7 @@ class User(
   val name: String,
   val comments: List<Comment>,
   val posts: List<Post>
-) {
+) : Encodable() {
   companion object {
     fun decode(d: Deserializer): User? {
       if(d.readInt() != -1307935086) return null
@@ -36,7 +37,7 @@ class User(
       )
     }
   }
-  fun encode(s: Serializer) {
+  override fun encode(s: Serializer) {
     s.writeInt(-1307935086)
     s.writeInt(id)
     val baname2 = name.toByteArray(Charsets.UTF_8)
