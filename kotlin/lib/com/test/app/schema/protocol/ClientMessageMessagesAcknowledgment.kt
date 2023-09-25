@@ -9,10 +9,9 @@ class ClientMessageMessagesAcknowledgment(
     fun decode(deserializer: Deserializer): ClientMessageMessagesAcknowledgment? {
       if(deserializer.readInt() != -522163247) return null
       val lengthIds2 = deserializer.readInt()
-      val ids = mutableListOf<Long>()
-      for(indexIds2 in 0..lengthIds2) {
+      val ids = (0 until lengthIds2).map {
         val itemIds2 = deserializer.readLong()
-        ids.add(itemIds2)
+        itemIds2
       }
       return ClientMessageMessagesAcknowledgment(
         ids

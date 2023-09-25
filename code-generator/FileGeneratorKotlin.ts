@@ -920,23 +920,17 @@ export default class FileGeneratorKotlin extends CodeStream {
           case 'vector':
           case 'set': {
             const lengthVarName = getVarName('length', value, depth);
-            const indexVarName = getVarName('index', value, depth);
             const itemVarName = getVarName('item', value, depth);
             this.write(`val ${lengthVarName} = deserializer.readInt()\n`);
             this.write(
-              `val ${value} = mutableListOf<${this.#resolveMetadataParamType(
-                paramType.value
-              )}>()\n`
-            );
-            this.write(
-              `for(${indexVarName} in 0..${lengthVarName}) {\n`,
+              `val ${value} = (0 until ${lengthVarName}).map {\n`,
               () => {
                 depth = this.#writeDecodeCall(
                   paramType.value,
                   itemVarName,
                   depth
                 );
-                this.write(`${value}.add(${itemVarName})\n`);
+                this.write(`${itemVarName}\n`);
               },
               '}\n'
             );

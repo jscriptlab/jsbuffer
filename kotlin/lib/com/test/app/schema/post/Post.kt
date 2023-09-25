@@ -13,8 +13,7 @@ class Post(
       val id = deserializer.readLong()
       val userId = deserializer.readInt()
       val lengthLikes4 = deserializer.readInt()
-      val likes = mutableListOf<PostLike?>()
-      for(indexLikes4 in 0..lengthLikes4) {
+      val likes = (0 until lengthLikes4).map {
         val optionalByteItemLikes45 = deserializer.readByte().toInt()
         var itemLikes4: PostLike?
         if(optionalByteItemLikes45 == 1) {
@@ -25,7 +24,7 @@ class Post(
         } else {
           return null
         }
-        likes.add(itemLikes4)
+        itemLikes4
       }
       return Post(
         id,

@@ -18,16 +18,14 @@ class User(
       deserializer.read(nameAsByteArray2)
       val name = String(nameAsByteArray2, Charsets.UTF_8)
       val lengthComments4 = deserializer.readInt()
-      val comments = mutableListOf<Comment>()
-      for(indexComments4 in 0..lengthComments4) {
+      val comments = (0 until lengthComments4).map {
         val itemComments4 = Comment.decode(deserializer) ?: return null
-        comments.add(itemComments4)
+        itemComments4
       }
       val lengthPosts6 = deserializer.readInt()
-      val posts = mutableListOf<Post>()
-      for(indexPosts6 in 0..lengthPosts6) {
+      val posts = (0 until lengthPosts6).map {
         val itemPosts6 = Post.decode(deserializer) ?: return null
-        posts.add(itemPosts6)
+        itemPosts6
       }
       return User(
         id,

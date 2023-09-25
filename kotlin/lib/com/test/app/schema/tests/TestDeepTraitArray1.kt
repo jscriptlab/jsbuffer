@@ -9,20 +9,17 @@ class TestDeepTraitArray1(
     fun decode(deserializer: Deserializer): TestDeepTraitArray1? {
       if(deserializer.readInt() != -1996458609) return null
       val lengthValue2 = deserializer.readInt()
-      val value = mutableListOf<List<List<Test>>>()
-      for(indexValue2 in 0..lengthValue2) {
+      val value = (0 until lengthValue2).map {
         val lengthItemValue23 = deserializer.readInt()
-        val itemValue2 = mutableListOf<List<Test>>()
-        for(indexItemValue23 in 0..lengthItemValue23) {
+        val itemValue2 = (0 until lengthItemValue23).map {
           val lengthItemItemValue234 = deserializer.readInt()
-          val itemItemValue23 = mutableListOf<Test>()
-          for(indexItemItemValue234 in 0..lengthItemItemValue234) {
+          val itemItemValue23 = (0 until lengthItemItemValue234).map {
             val itemItemItemValue234 = Test.decode(deserializer) ?: return null
-            itemItemValue23.add(itemItemItemValue234)
+            itemItemItemValue234
           }
-          itemValue2.add(itemItemValue23)
+          itemItemValue23
         }
-        value.add(itemValue2)
+        itemValue2
       }
       return TestDeepTraitArray1(
         value
