@@ -7,7 +7,7 @@ export class UnexpectedTokenType extends ASTGenerationException {
   public constructor(
     public readonly expectedTokenType: TokenType,
     public readonly giveToken: IToken | null,
-    public readonly lastToken: IToken | null,
+    public readonly lastToken: IToken | null
   ) {
     super();
   }
@@ -15,7 +15,7 @@ export class UnexpectedTokenType extends ASTGenerationException {
 export class UnexpectedKeywordName extends ASTGenerationException {
   public constructor(
     public readonly expectedKeywordName: string,
-    public readonly giveToken: IToken | null,
+    public readonly giveToken: IToken | null
   ) {
     super();
   }
@@ -24,7 +24,7 @@ export class UnexpectedKeywordName extends ASTGenerationException {
 export class UnexpectedPunctuatorName extends ASTGenerationException {
   public constructor(
     public readonly expectedPunctuatorName: string,
-    public readonly giveToken: IToken | null,
+    public readonly giveToken: IToken | null
   ) {
     super();
   }
@@ -50,7 +50,7 @@ export enum NodeType {
   LiteralNumber,
   TypeDefinition,
   CallDefinition,
-  ImportStatement,
+  ImportStatement
 }
 
 export interface INodeTemplateExpression extends INode {
@@ -173,9 +173,9 @@ export default class ASTGenerator {
       name,
       position: {
         start: startToken,
-        end: endToken,
+        end: endToken
       },
-      traits: [],
+      traits: []
     };
   }
   #readCallStatement(): INodeCallDefinition {
@@ -195,8 +195,8 @@ export default class ASTGenerator {
       traits,
       position: {
         start: startToken,
-        end: endToken,
-      },
+        end: endToken
+      }
     };
   }
   #readImportStatement(): INodeImportStatement {
@@ -217,9 +217,9 @@ export default class ASTGenerator {
       type: NodeType.LiteralString,
       position: {
         start: fileNameToken,
-        end: fileNameToken,
+        end: fileNameToken
       },
-      value: fileNameToken.value,
+      value: fileNameToken.value
     };
     const endToken = this.#expectPunctuator(';');
     return {
@@ -227,9 +227,9 @@ export default class ASTGenerator {
       requirements,
       position: {
         start: startToken,
-        end: endToken,
+        end: endToken
       },
-      from: fileName,
+      from: fileName
     };
   }
   #peek(expectedTokenType: TokenType, value?: string) {
@@ -271,8 +271,8 @@ export default class ASTGenerator {
       value,
       position: {
         start: startToken,
-        end: value.position.end,
-      },
+        end: value.position.end
+      }
     };
   }
   #readTraits() {
@@ -294,10 +294,10 @@ export default class ASTGenerator {
         type: NodeType.ParamDefinition,
         position: {
           start: typeExpression.position.start,
-          end: endParamPunctuator,
+          end: endParamPunctuator
         },
         name: paramName,
-        typeExpression,
+        typeExpression
       });
     }
     return parameters;
@@ -309,8 +309,8 @@ export default class ASTGenerator {
       type: NodeType.LiteralString,
       position: {
         start: id,
-        end: id,
-      },
+        end: id
+      }
     };
   }
   #readLiteralNumber(): INodeLiteralNumber {
@@ -320,8 +320,8 @@ export default class ASTGenerator {
       type: NodeType.LiteralNumber,
       position: {
         start: id,
-        end: id,
-      },
+        end: id
+      }
     };
   }
   #readTypeExpression(): NodeTypeExpression {
@@ -361,9 +361,9 @@ export default class ASTGenerator {
           name: id,
           position: {
             start: id.position.start,
-            end: endToken,
+            end: endToken
           },
-          templateArguments,
+          templateArguments
         };
       }
       case NodeType.LiteralString:
@@ -384,9 +384,9 @@ export default class ASTGenerator {
       traits,
       position: {
         start: startToken,
-        end: endPunctuator,
+        end: endPunctuator
       },
-      parameters,
+      parameters
     };
   }
   #expectPunctuator(value: string) {
@@ -412,10 +412,10 @@ export default class ASTGenerator {
     return {
       position: {
         start: id,
-        end: id,
+        end: id
       },
       type: NodeType.Identifier,
-      value: id.value,
+      value: id.value
     };
   }
   #expectKeyword(value: string) {
@@ -431,7 +431,7 @@ export default class ASTGenerator {
       throw new UnexpectedTokenType(
         expectedType,
         token ?? null,
-        this.#lastToken,
+        this.#lastToken
       );
     }
     /**

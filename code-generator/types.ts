@@ -3,7 +3,7 @@ import {
   INodeLiteralNumber,
   INodeTraitDefinition,
   INodeTypeDefinition,
-  NodeTypeExpression,
+  NodeTypeExpression
 } from '../src/ASTGenerator';
 import { ITextDecoder, ITextEncoder } from '../src/Tokenizer';
 import FileGenerator from './FileGenerator';

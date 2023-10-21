@@ -3,12 +3,12 @@ import {
   INodeCallDefinition,
   INodeTraitDefinition,
   INodeTypeDefinition,
-  NodeType,
+  NodeType
 } from '../src/ASTGenerator';
 import { lowerFirst, upperFirst } from './stringUtilities';
 
 export function getEncodeFunctionName(
-  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition,
+  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
   switch (node.type) {
     case NodeType.TraitDefinition:
@@ -20,7 +20,7 @@ export function getEncodeFunctionName(
 }
 
 export function getDecodeFunctionName(
-  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition,
+  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
   switch (node.type) {
     case NodeType.TraitDefinition:
@@ -33,13 +33,13 @@ export function getDecodeFunctionName(
 
 export function getTypeDefinitionOrCallDefinitionNamePropertyValue(
   node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition,
-  file: string,
+  file: string
 ) {
   return `${file.split('/').map(lowerFirst).join('.')}.${node.name.value}`;
 }
 
 export function getCompareFunctionName(
-  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition,
+  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
   switch (node.type) {
     case NodeType.CallDefinition:
@@ -51,14 +51,14 @@ export function getCompareFunctionName(
 }
 
 export function getUpdateFunctionName(
-  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition,
+  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
   return `update${upperFirst(node.name.value)}`;
 }
 
 export function integerRangeFromBits({
   bits,
-  signed,
+  signed
 }: {
   bits: number | JSBI;
   signed: boolean;
@@ -66,8 +66,8 @@ export function integerRangeFromBits({
   const lastBitIndex = JSBI.BigInt(
     JSBI.subtract(
       typeof bits === 'number' ? JSBI.BigInt(bits) : bits,
-      JSBI.BigInt(1),
-    ),
+      JSBI.BigInt(1)
+    )
   );
   const two = JSBI.BigInt(2);
   const zero = JSBI.BigInt(0);
@@ -77,14 +77,14 @@ export function integerRangeFromBits({
   if (signed) {
     return [
       JSBI.exponentiate(negativeTwo, lastBitIndex),
-      JSBI.subtract(maxRange, one),
+      JSBI.subtract(maxRange, one)
     ];
   }
   return [zero, JSBI.subtract(JSBI.multiply(maxRange, two), one)];
 }
 
 export function getTypeDefinitionOrCallDefinitionObjectCreator(
-  value: INodeTypeDefinition | INodeCallDefinition,
+  value: INodeTypeDefinition | INodeCallDefinition
 ) {
   switch (value.type) {
     case NodeType.CallDefinition:
@@ -95,7 +95,7 @@ export function getTypeDefinitionOrCallDefinitionObjectCreator(
 }
 
 export function getValidateDefinitionFunctionName(
-  value: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition,
+  value: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
   let out = `is${upperFirst(value.name.value)}`;
   switch (value.type) {
@@ -107,13 +107,13 @@ export function getValidateDefinitionFunctionName(
 }
 
 export function getTypeName(
-  value: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition,
+  value: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
   return value.name.value;
 }
 
 export function getDefaultFunctionName(
-  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition,
+  node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
   switch (node.type) {
     case NodeType.CallDefinition:
@@ -125,7 +125,7 @@ export function getDefaultFunctionName(
 }
 
 export function getTypeInputParamsInterfaceName(
-  value: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition,
+  value: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
   return `${value.name.value}InputParams`;
 }

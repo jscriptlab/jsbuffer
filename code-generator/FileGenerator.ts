@@ -7,7 +7,7 @@ import ASTGenerator, {
   INodeTraitDefinition,
   INodeTypeDefinition,
   NodeType,
-  NodeTypeExpression,
+  NodeTypeExpression
 } from '../src/ASTGenerator';
 import CodeStream from 'textstreamjs';
 import fs from 'fs';
@@ -25,7 +25,7 @@ import {
   getCompareFunctionName,
   getUpdateFunctionName,
   getValidateDefinitionFunctionName,
-  integerRangeFromBits,
+  integerRangeFromBits
 } from './fileGeneratorUtilities';
 import crc from 'crc';
 import GenericName from './GenericName';
@@ -43,7 +43,7 @@ import {
   Metadata,
   MetadataParamType,
   Requirement,
-  ResolvedType,
+  ResolvedType
 } from './types';
 import {
   ASTNodePreprocessingFailure,
@@ -57,7 +57,7 @@ import {
   UnhandledResolvedType,
   UnsupportedGenericExpression,
   UnsupportedTemplate,
-  UnsupportedTypeExpression,
+  UnsupportedTypeExpression
 } from './exceptions';
 import JSBI from 'jsbi';
 
@@ -110,11 +110,11 @@ export default class FileGenerator extends CodeStream {
       uniqueNamePropertyName,
       indentationSize,
       root: parent = null,
-      typeScriptConfiguration,
+      typeScriptConfiguration
     }: IFileGeneratorOptions
   ) {
     super(undefined, {
-      indentationSize,
+      indentationSize
     });
     if (!path.isAbsolute(compilerOptions.outDir)) {
       throw new Exception(
@@ -162,7 +162,7 @@ export default class FileGenerator extends CodeStream {
         exists = true;
       } catch (reason) {
         await fs.promises.mkdir(resolvedFilePathDirName, {
-          recursive: true,
+          recursive: true
         });
       }
       if (
@@ -229,7 +229,7 @@ export default class FileGenerator extends CodeStream {
       textDecoder: this.#textDecoder,
       sortProperties: this.#sortProperties,
       indentationSize: this.#indentationSize,
-      textEncoder: this.#textEncoder,
+      textEncoder: this.#textEncoder
     };
     const fileGenerators = root.#fileGenerators;
     switch (node.type) {
@@ -245,13 +245,13 @@ export default class FileGenerator extends CodeStream {
           );
           const compilerOptions = {
             outDir: path.resolve(rootDir, externalModule.configuration.outDir),
-            rootDir,
+            rootDir
           };
           let mainFileGenerator = fileGenerators.get(mainFile);
           if (!mainFileGenerator) {
             mainFileGenerator = new FileGenerator(
               {
-                path: mainFile,
+                path: mainFile
               },
               {
                 // TODO: maybe set root to null, and leave each external module to resolve it's own dependencies accordingly, then we'd have to look into the main schema file generator for the desired file generator
@@ -259,7 +259,7 @@ export default class FileGenerator extends CodeStream {
                 externalModule: true,
                 // TODO: maybe get it from `jsbufferconfig.json` file
                 uniqueNamePropertyName: root.#uniqueNamePropertyName,
-                compilerOptions,
+                compilerOptions
               }
             );
             fileGenerators.set(mainFile, mainFileGenerator);
@@ -273,7 +273,7 @@ export default class FileGenerator extends CodeStream {
     const tokenizer = new Tokenizer({
       textDecoder: this.#textDecoder,
       textEncoder: this.#textEncoder,
-      contents: await fs.promises.readFile(this.#file.path),
+      contents: await fs.promises.readFile(this.#file.path)
     });
     this.#nodes = new ASTGenerator(tokenizer.tokenize().tokens()).generate();
     if (this.#sortProperties) {
@@ -401,7 +401,7 @@ export default class FileGenerator extends CodeStream {
       externalModule = {
         nodeModulesFolderPath,
         configFile,
-        configuration: parsedConfig,
+        configuration: parsedConfig
       };
     } else {
       externalModule = null;
@@ -421,7 +421,7 @@ export default class FileGenerator extends CodeStream {
 
     return {
       inputFile,
-      externalModule,
+      externalModule
     };
   }
   async #updateOriginalImportsAndSetDefinitions(node: ASTGeneratorOutputNode) {
@@ -438,7 +438,7 @@ export default class FileGenerator extends CodeStream {
           textDecoder: this.#textDecoder,
           textEncoder: this.#textEncoder,
           sortProperties: this.#sortProperties,
-          root,
+          root
         };
         let fileGenerator = root.#fileGenerators.get(inputFile);
         if (!fileGenerator) {
@@ -449,13 +449,13 @@ export default class FileGenerator extends CodeStream {
           }
           fileGenerator = new FileGenerator(
             {
-              path: inputFile,
+              path: inputFile
             },
             {
               ...defaultOptions,
               compilerOptions: this.#compilerOptions,
               // TODO: check if this makes sense
-              externalModule: this.#externalModule,
+              externalModule: this.#externalModule
             }
           );
           root.#fileGenerators.set(inputFile, fileGenerator);
@@ -465,7 +465,7 @@ export default class FileGenerator extends CodeStream {
           originalImport = {
             identifiers: new Set(),
             externalModule: externalModule !== null,
-            fileGenerator,
+            fileGenerator
           };
           this.#originalImports.set(fileGenerator, originalImport);
         }
@@ -503,13 +503,13 @@ export default class FileGenerator extends CodeStream {
             if (!trait) {
               trait = {
                 name: t.value,
-                nodes: [],
+                nodes: []
               };
               fileGenerator.#traits.set(t.value, trait);
             }
             trait.nodes.push({
               fileGenerator: this,
-              identifier: n.name.value,
+              identifier: n.name.value
             });
           }
           break;
@@ -530,7 +530,7 @@ export default class FileGenerator extends CodeStream {
       const relativePath = `${f.#removeRootDir(f.#file.path)}.ts`;
       files.push({
         path: relativePath,
-        contents,
+        contents
       });
       files.push({
         path: getMetadataFileName(relativePath),
@@ -542,8 +542,8 @@ export default class FileGenerator extends CodeStream {
             },
             {}
           ),
-          __all: Array.from(f.#metadataObjects),
-        }),
+          __all: Array.from(f.#metadataObjects)
+        })
       });
     }
 
@@ -552,7 +552,7 @@ export default class FileGenerator extends CodeStream {
     if (this.#typeScriptConfiguration) {
       let config: Partial<ITypeScriptConfiguration> = {
         compilerOptions: {},
-        include: files.map((f) => f.path).filter((t) => t.endsWith('.ts')),
+        include: files.map((f) => f.path).filter((t) => t.endsWith('.ts'))
       };
       const compilerOptions = this.#typeScriptConfiguration.compilerOptions;
       if (compilerOptions) {
@@ -560,8 +560,8 @@ export default class FileGenerator extends CodeStream {
           ...config,
           compilerOptions: {
             ...compilerOptions,
-            ...config.compilerOptions,
-          },
+            ...config.compilerOptions
+          }
         };
       }
       files.push(this.#generateTypeScriptConfigurationFile(config));
@@ -608,24 +608,24 @@ export default class FileGenerator extends CodeStream {
       resolvedRequirement = {
         path: fullPath,
         identifier: id,
-        fileGenerator: req.fileGenerator,
+        fileGenerator: req.fileGenerator
       };
     } else {
       const defaultOptions = {
         path: fullPath,
-        identifier: id,
+        identifier: id
       };
       if (req.target === 'nodeModule') {
         resolvedRequirement = {
           target: 'nodeModule',
           wildcard: req.wildcard,
           ...defaultOptions,
-          isDefaultImport: req.isDefaultImport,
+          isDefaultImport: req.isDefaultImport
         };
       } else {
         resolvedRequirement = {
           target: 'outDir',
-          ...defaultOptions,
+          ...defaultOptions
         };
       }
     }
@@ -730,16 +730,16 @@ export default class FileGenerator extends CodeStream {
     additionalTypeScriptConfiguration: Record<string, unknown>
   ): IOutputFile {
     const stringify = new JavaScriptObjectStringify(undefined, {
-      indentationSize: this.#indentationSize,
+      indentationSize: this.#indentationSize
     });
     const config = {
       ...additionalTypeScriptConfiguration,
-      ...(this.#typeScriptConfiguration ? this.#typeScriptConfiguration : {}),
+      ...(this.#typeScriptConfiguration ? this.#typeScriptConfiguration : {})
     };
     stringify.stringify(config);
     return {
       path: 'tsconfig.json',
-      contents: stringify.value(),
+      contents: stringify.value()
     };
   }
   #generateTypesFile(): IOutputFile {
@@ -792,7 +792,7 @@ export default class FileGenerator extends CodeStream {
     );
     return {
       path: '__types__.ts',
-      contents: this.value(),
+      contents: this.value()
     };
   }
   async #fileClosestFileOrFolder(
@@ -904,7 +904,7 @@ export default class FileGenerator extends CodeStream {
         case GenericName.Bytes: {
           const expressions = [
             `${v1}.byteLength === ${v2}.byteLength`,
-            `${v1}.every((__byte,index) => ${v2}[index] === __byte)`,
+            `${v1}.every((__byte,index) => ${v2}[index] === __byte)`
           ];
           this.append(expressions.join(' && '));
           break;
@@ -932,7 +932,7 @@ export default class FileGenerator extends CodeStream {
       const type = this.#resolvedTypeExpressionToDefinition(resolved);
       const compareFunctionName = this.#import({
         fileGenerator: resolved.fileGenerator,
-        identifier: getCompareFunctionName(type),
+        identifier: getCompareFunctionName(type)
       });
       this.append(`${compareFunctionName}(${v1},${v2})`);
     } else if ('template' in resolved) {
@@ -1006,7 +1006,7 @@ export default class FileGenerator extends CodeStream {
           this.append(
             [
               `${v1}.${lengthPropName} === ${v2}.${lengthPropName}`,
-              `Array.from(${v1}).every((${itemVarName},${indexVarName}) => (`,
+              `Array.from(${v1}).every((${itemVarName},${indexVarName}) => (`
             ].join(' && ')
           );
           this.indentBlock(() => {
@@ -1032,14 +1032,14 @@ export default class FileGenerator extends CodeStream {
             exp,
             varName1: `__a${depth}${index}`,
             varName2: `__b${depth}${index}`,
-            index,
+            index
           }));
           for (const { exp, index, varName1, varName2 } of exps) {
             this.append(
               `/* compare tuple item ${index} of type ${this.#resolveTypeExpressionToString(
                 {
                   typeExpression: exp,
-                  readOnly: true,
+                  readOnly: true
                 }
               )} */ ((${varName1}, ${varName2}) => `
             );
@@ -1127,15 +1127,15 @@ export default class FileGenerator extends CodeStream {
         case 'map':
           return `new Map<${this.#resolveTypeExpressionToString({
             typeExpression: resolved.key.expression,
-            readOnly: false,
+            readOnly: false
           })}, ${this.#resolveTypeExpressionToString({
             typeExpression: resolved.value.expression,
-            readOnly: false,
+            readOnly: false
           })}>()`;
         case 'set':
           return `new Set<${this.#resolveTypeExpressionToString({
             typeExpression: resolved.expression,
-            readOnly: false,
+            readOnly: false
           })}>()`;
         case 'optional':
           return 'null';
@@ -1151,7 +1151,7 @@ export default class FileGenerator extends CodeStream {
     if ('fileGenerator' in resolved) {
       this.#import({
         identifier: getDefaultFunctionName(type),
-        fileGenerator: resolved.fileGenerator,
+        fileGenerator: resolved.fileGenerator
       });
     }
     return `${getDefaultFunctionName(type)}()`;
@@ -1206,7 +1206,7 @@ export default class FileGenerator extends CodeStream {
     if ('generic' in resolvedType) {
       return {
         type: 'generic',
-        value: resolvedType.generic,
+        value: resolvedType.generic
       };
     } else if ('template' in resolvedType) {
       switch (resolvedType.template) {
@@ -1216,7 +1216,7 @@ export default class FileGenerator extends CodeStream {
           return {
             type: 'template',
             template: resolvedType.template,
-            value: this.#getMetadataFromResolvedType(resolvedType.type),
+            value: this.#getMetadataFromResolvedType(resolvedType.type)
           };
         case 'map':
           return {
@@ -1225,7 +1225,7 @@ export default class FileGenerator extends CodeStream {
             key: this.#getMetadataFromResolvedType(resolvedType.key.resolved),
             value: this.#getMetadataFromResolvedType(
               resolvedType.value.resolved
-            ),
+            )
           };
         case 'tuple':
           return {
@@ -1233,13 +1233,13 @@ export default class FileGenerator extends CodeStream {
             template: 'tuple',
             args: resolvedType.types.map((t) =>
               this.#getMetadataFromResolvedType(t)
-            ),
+            )
           };
         case 'bigint':
           return {
             type: 'template',
             template: 'bigint',
-            bits: resolvedType.bits.value,
+            bits: resolvedType.bits.value
           };
         default:
           throw new UnhandledResolvedType(resolvedType);
@@ -1253,18 +1253,18 @@ export default class FileGenerator extends CodeStream {
         return {
           type: 'externalModuleType',
           importPath,
-          name: resolvedType.identifier,
+          name: resolvedType.identifier
         };
       }
       return {
         type: 'externalType',
         name: resolvedType.identifier,
-        relativePath: importPath,
+        relativePath: importPath
       };
     }
     return {
       type: 'internalType',
-      interfaceName: resolvedType.name.value,
+      interfaceName: resolvedType.name.value
     };
   }
   #getMetadataFromParam(param: INodeParamDefinition): IMetadataParam {
@@ -1272,7 +1272,7 @@ export default class FileGenerator extends CodeStream {
       name: param.name.value,
       type: this.#getMetadataFromResolvedType(
         this.#resolveTypeExpression(param.typeExpression)
-      ),
+      )
     };
   }
   #getMetadataFromCallOrTypeDefinition(
@@ -1297,7 +1297,7 @@ export default class FileGenerator extends CodeStream {
           // ! should be filled with correct metadata objects
           nodes: trait.nodes.map((resolvedType) =>
             this.#getMetadataFromResolvedType(resolvedType)
-          ),
+          )
         };
       }
     }
@@ -1307,7 +1307,7 @@ export default class FileGenerator extends CodeStream {
       globalName:
         this.#getTypeDefinitionOrCallDefinitionNamePropertyValue(node),
       name: node.name.value,
-      params: node.parameters.map((p) => this.#getMetadataFromParam(p)),
+      params: node.parameters.map((p) => this.#getMetadataFromParam(p))
     };
   }
   #generateNodeCode(node: ASTGeneratorOutputNode) {
@@ -1336,7 +1336,7 @@ export default class FileGenerator extends CodeStream {
             .map((n) =>
               this.#resolvedTypeToString({
                 resolvedType: n,
-                readOnly: true,
+                readOnly: true
               })
             )
             .join(' | ')};\n`
@@ -1366,7 +1366,7 @@ export default class FileGenerator extends CodeStream {
       `typeof ${namePropVarName} === 'string'`,
       `${namePropVarName} === "${this.#getTypeDefinitionOrCallDefinitionNamePropertyValue(
         node
-      )}"`,
+      )}"`
     ];
     this.write(
       `export function ${getValidateDefinitionFunctionName(
@@ -1465,21 +1465,21 @@ export default class FileGenerator extends CodeStream {
             { type: GenericName.Int16, bits: 16, unsigned: false },
             { type: GenericName.Int32, bits: 32, unsigned: false },
             { type: GenericName.Integer, bits: 32, unsigned: false },
-            { type: GenericName.Long, bits: 64, unsigned: false },
+            { type: GenericName.Long, bits: 64, unsigned: false }
           ]) {
             if (param.generic !== i.type) {
               continue;
             }
             const [min, max] = integerRangeFromBits({
               bits: i.bits,
-              signed: !i.unsigned,
+              signed: !i.unsigned
             });
             const jsbi = this.#import({
               path: 'jsbi',
               wildcard: false,
               identifier: 'JSBI',
               target: 'nodeModule',
-              isDefaultImport: true,
+              isDefaultImport: true
             });
             exps.push(
               `${jsbi}.equal(${jsbi}.BigInt(${value}),${jsbi}.BigInt(${value}))`
@@ -1513,7 +1513,7 @@ export default class FileGenerator extends CodeStream {
       const def = this.#resolvedTypeExpressionToDefinition(param);
       const fn = this.#import({
         fileGenerator: param.fileGenerator,
-        identifier: getValidateDefinitionFunctionName(def),
+        identifier: getValidateDefinitionFunctionName(def)
       });
       this.append(`${fn}(${value})`);
     } else if ('template' in param) {
@@ -1546,7 +1546,7 @@ export default class FileGenerator extends CodeStream {
         case 'tuple': {
           const isArrayString = [
             `Array.isArray(${value})`,
-            `(${value}.length === ${param.expressions.length})`,
+            `(${value}.length === ${param.expressions.length})`
           ].join(' && ');
           this.append(`${isArrayString} && `);
           let i = 0;
@@ -1584,11 +1584,11 @@ export default class FileGenerator extends CodeStream {
             wildcard: false,
             identifier: 'JSBI',
             target: 'nodeModule',
-            isDefaultImport: true,
+            isDefaultImport: true
           });
           const [min, max] = integerRangeFromBits({
             bits: JSBI.BigInt(param.bits.value),
-            signed: true,
+            signed: true
           });
           const argName = `__bigintValue${depth}`;
           this.append(`typeof ${value} === 'string' && (${argName} => `);
@@ -1596,7 +1596,7 @@ export default class FileGenerator extends CodeStream {
             this.append(
               [
                 `${jsbi}.greaterThanOrEqual(${argName}, ${jsbi}.BigInt("${min}"))`,
-                `${jsbi}.lessThanOrEqual(${argName}, ${jsbi}.BigInt("${max}"))`,
+                `${jsbi}.lessThanOrEqual(${argName}, ${jsbi}.BigInt("${max}"))`
               ].join(' && ')
             );
           });
@@ -1627,7 +1627,7 @@ export default class FileGenerator extends CodeStream {
     const { readOnly, typeExpression } = options;
     return this.#resolvedTypeToString({
       resolvedType: this.#resolveTypeExpression(typeExpression),
-      readOnly,
+      readOnly
     });
   }
   #resolvedTypeToString(options: {
@@ -1662,16 +1662,16 @@ export default class FileGenerator extends CodeStream {
         case 'optional':
           return `${this.#resolveTypeExpressionToString({
             ...options,
-            typeExpression: resolved.expression,
+            typeExpression: resolved.expression
           })} | null`;
         case 'map': {
           const k = this.#resolveTypeExpressionToString({
             ...options,
-            typeExpression: resolved.key.expression,
+            typeExpression: resolved.key.expression
           });
           const v = this.#resolveTypeExpressionToString({
             ...options,
-            typeExpression: resolved.value.expression,
+            typeExpression: resolved.value.expression
           });
           return `${readOnly ? 'ReadonlyMap' : 'Map'}<${k}, ${v}>`;
         }
@@ -1679,7 +1679,7 @@ export default class FileGenerator extends CodeStream {
           return `[${resolved.expressions.map((t) =>
             this.#resolveTypeExpressionToString({
               ...options,
-              typeExpression: t,
+              typeExpression: t
             })
           )}]`;
         case 'vector':
@@ -1687,14 +1687,14 @@ export default class FileGenerator extends CodeStream {
             readOnly ? 'ReadonlyArray' : 'Array'
           }<${this.#resolveTypeExpressionToString({
             ...options,
-            typeExpression: resolved.expression,
+            typeExpression: resolved.expression
           })}>`;
         case 'set':
           return `${
             readOnly ? 'ReadonlySet' : 'Set'
           }<${this.#resolveTypeExpressionToString({
             ...options,
-            typeExpression: resolved.expression,
+            typeExpression: resolved.expression
           })}>`;
         case 'bigint':
           return 'string';
@@ -1719,7 +1719,7 @@ export default class FileGenerator extends CodeStream {
               expressions: typeExpression.templateArguments,
               types: typeExpression.templateArguments.map((t) =>
                 this.#resolveTypeExpression(t)
-              ),
+              )
             };
           case 'optional': {
             const optionalType = typeExpression.templateArguments[0];
@@ -1729,7 +1729,7 @@ export default class FileGenerator extends CodeStream {
             return {
               template: 'optional',
               expression: optionalType,
-              type: this.#resolveTypeExpression(optionalType),
+              type: this.#resolveTypeExpression(optionalType)
             };
           }
           case 'map': {
@@ -1741,12 +1741,12 @@ export default class FileGenerator extends CodeStream {
               template: 'map',
               key: {
                 resolved: this.#resolveTypeExpression(key),
-                expression: key,
+                expression: key
               },
               value: {
                 resolved: this.#resolveTypeExpression(value),
-                expression: value,
-              },
+                expression: value
+              }
             };
           }
           case 'set':
@@ -1758,7 +1758,7 @@ export default class FileGenerator extends CodeStream {
             return {
               template: typeExpression.name.value,
               expression: setOrVectorType,
-              type: this.#resolveTypeExpression(setOrVectorType),
+              type: this.#resolveTypeExpression(setOrVectorType)
             };
           }
           case 'bigint': {
@@ -1770,7 +1770,7 @@ export default class FileGenerator extends CodeStream {
             }
             return {
               template: 'bigint',
-              bits,
+              bits
             };
           }
           default:
@@ -1794,7 +1794,7 @@ export default class FileGenerator extends CodeStream {
           case GenericName.Long:
           case GenericName.UnsignedLong:
             return {
-              generic: typeExpression.value,
+              generic: typeExpression.value
             };
         }
         break;
@@ -1815,7 +1815,7 @@ export default class FileGenerator extends CodeStream {
     if (id instanceof FileGenerator) {
       return {
         identifier: typeExpression.value,
-        fileGenerator: id,
+        fileGenerator: id
       };
     }
 
@@ -1843,11 +1843,11 @@ export default class FileGenerator extends CodeStream {
       this.#import({
         target: 'outDir',
         path: '__types__',
-        identifier: 'IRequest',
+        identifier: 'IRequest'
       });
       interfaceExtends = `extends IRequest<${this.#resolvedTypeToString({
         resolvedType: resolvedReturnType,
-        readOnly: true,
+        readOnly: true
       })}>`;
     }
     this.write(
@@ -1906,7 +1906,7 @@ export default class FileGenerator extends CodeStream {
         if ('fileGenerator' in firstNode) {
           this.#import({
             fileGenerator: firstNode.fileGenerator,
-            identifier: getDefaultFunctionName(node),
+            identifier: getDefaultFunctionName(node)
           });
         }
         this.write(`return ${getDefaultFunctionName(node)}();\n`);
@@ -1921,7 +1921,7 @@ export default class FileGenerator extends CodeStream {
     this.#import({
       target: 'outDir',
       path: '__types__',
-      identifier: 'ISerializer',
+      identifier: 'ISerializer'
     });
     this.write(
       `export function ${getEncodeFunctionName(
@@ -1942,7 +1942,7 @@ export default class FileGenerator extends CodeStream {
               if (isExternalRequirement) {
                 this.#import({
                   ...exp,
-                  identifier: encodeFunctionName,
+                  identifier: encodeFunctionName
                 });
               }
               const uniqueName =
@@ -1984,13 +1984,13 @@ export default class FileGenerator extends CodeStream {
     if (isExternalRequirement) {
       compareFunctionName = this.#import({
         ...exp,
-        identifier: compareFunctionName,
+        identifier: compareFunctionName
       });
     }
     return {
       fileGenerator,
       definition,
-      compareFunctionName,
+      compareFunctionName
     };
   }
   #generateTraitCompareFunction(
@@ -2055,7 +2055,7 @@ export default class FileGenerator extends CodeStream {
     this.#import({
       target: 'outDir',
       path: '__types__',
-      identifier: 'IDeserializer',
+      identifier: 'IDeserializer'
     });
     this.write(
       `export function ${getDecodeFunctionName(trait)}(__d: IDeserializer) {\n`,
@@ -2079,7 +2079,7 @@ export default class FileGenerator extends CodeStream {
               if (isExternalRequirement)
                 this.#import({
                   ...exp,
-                  identifier: decodeFunctionName,
+                  identifier: decodeFunctionName
                 });
               this.write(`case ${fileGenerator.#getUniqueHeader(def)}: {\n`);
               this.indentBlock(() => {
@@ -2265,13 +2265,13 @@ export default class FileGenerator extends CodeStream {
         const node = this.#resolvedTypeExpressionToDefinition(type);
         const encodeFunctionName = this.#import({
           ...resolved,
-          identifier: getEncodeFunctionName(node),
+          identifier: getEncodeFunctionName(node)
         });
         this.write(`${encodeFunctionName}(${serializerVarName},${value});\n`);
       } else {
         const encodeFunctionName = this.#import({
           identifier: getEncodeFunctionName(type),
-          fileGenerator: resolved.fileGenerator,
+          fileGenerator: resolved.fileGenerator
         });
         this.write(`${encodeFunctionName}(${serializerVarName},${value});\n`);
       }
@@ -2359,7 +2359,7 @@ export default class FileGenerator extends CodeStream {
             this.write(
               `let ${varName}: ${this.#resolveTypeExpressionToString({
                 readOnly: false,
-                typeExpression,
+                typeExpression
               })};\n`
             );
             depth = this.#generateDecodeTypeExpression(
@@ -2380,7 +2380,7 @@ export default class FileGenerator extends CodeStream {
           this.write(
             `let ${tmpVarName}: ${this.#resolveTypeExpressionToString({
               typeExpression: resolved.expression,
-              readOnly: false,
+              readOnly: false
             })};\n`
           );
           this.write(`const ${lengthVarName} = __d.readUint32();\n`);
@@ -2435,11 +2435,11 @@ export default class FileGenerator extends CodeStream {
           this.write(`const ${lengthVarName} = __d.readUint32();\n`);
           const keyTypeName = this.#resolveTypeExpressionToString({
             typeExpression: resolved.key.expression,
-            readOnly: false,
+            readOnly: false
           });
           const valueTypeName = this.#resolveTypeExpressionToString({
             typeExpression: resolved.value.expression,
-            readOnly: false,
+            readOnly: false
           });
           this.write(
             `const ${outVarName} = new Map<${keyTypeName}, ${valueTypeName}>();\n`
@@ -2500,7 +2500,7 @@ export default class FileGenerator extends CodeStream {
   ) {
     const decodeFunctionName = this.#import({
       identifier: getDecodeFunctionName(node),
-      fileGenerator,
+      fileGenerator
     });
     const intermediaryValueVarName = `tmp${depth}`;
     this.write(
@@ -2514,7 +2514,7 @@ export default class FileGenerator extends CodeStream {
     node: INodeTraitDefinition | INodeCallDefinition | INodeTypeDefinition
   ) {
     const values = [
-      `${this.#removeRootDir(this.#file.path)}/${node.name.value}`,
+      `${this.#removeRootDir(this.#file.path)}/${node.name.value}`
     ];
     if (node.type === NodeType.CallDefinition) {
       const resolvedTypeExpression = this.#resolveTypeExpression(
@@ -2524,7 +2524,7 @@ export default class FileGenerator extends CodeStream {
         // TODO: get full path of the expression and add it to the final unique header
         `${this.#resolvedTypeToString({
           resolvedType: resolvedTypeExpression,
-          readOnly: true,
+          readOnly: true
         })} =>`
       );
     }
@@ -2538,7 +2538,7 @@ export default class FileGenerator extends CodeStream {
               // TODO: get full path of the expression and add it to the final unique header
               this.#resolveTypeExpressionToString({
                 readOnly: false,
-                typeExpression: p.typeExpression,
+                typeExpression: p.typeExpression
               })
             )
             .join(', ')
@@ -2567,11 +2567,11 @@ export default class FileGenerator extends CodeStream {
     this.#import({
       target: 'outDir',
       path: '__types__',
-      identifier: 'ISerializer',
+      identifier: 'ISerializer'
     });
     const args = [
       '__s: ISerializer',
-      `${node.parameters.length ? 'value' : '_'}: ${interfaceName}`,
+      `${node.parameters.length ? 'value' : '_'}: ${interfaceName}`
     ];
     this.write(
       `export function ${getEncodeFunctionName(node)}(${args.join(', ')}) {\n`,
@@ -2606,7 +2606,7 @@ export default class FileGenerator extends CodeStream {
     this.#import({
       path: '__types__',
       target: 'outDir',
-      identifier: 'IDeserializer',
+      identifier: 'IDeserializer'
     });
     this.write(
       `export function ${getDecodeFunctionName(
@@ -2622,7 +2622,7 @@ export default class FileGenerator extends CodeStream {
           this.write(
             `let ${p.name.value}: ${this.#resolveTypeExpressionToString({
               typeExpression: p.typeExpression,
-              readOnly: false,
+              readOnly: false
             })};\n`
           );
         }
@@ -2714,7 +2714,7 @@ export default class FileGenerator extends CodeStream {
       this.write(
         `${p.name.value}: ${this.#resolvedTypeToString({
           resolvedType,
-          readOnly: true,
+          readOnly: true
         })};\n`
       );
     }
@@ -2750,7 +2750,7 @@ export default class FileGenerator extends CodeStream {
     }
     this.#import({
       identifier: resolvedType.name.value,
-      fileGenerator: this,
+      fileGenerator: this
     });
   }
   #node() {

@@ -30,7 +30,7 @@ export interface UserInputParams {
 export function User(params: UserInputParams): User {
   return {
     _name: 'conversation.secondUser.User',
-    firstName: params['firstName'],
+    firstName: params['firstName']
   };
 }
 export function encodeUser(__s: ISerializer, value: User) {
@@ -54,13 +54,13 @@ export function decodeUser(__d: IDeserializer): User | null {
   firstName = __d.readString();
   return {
     _name: 'conversation.secondUser.User',
-    firstName,
+    firstName
   };
 }
 export function defaultUser(params: Partial<UserInputParams> = {}): User {
   return User({
     firstName: '',
-    ...params,
+    ...params
   });
 }
 export function compareUser(__a: User, __b: User): boolean {
@@ -76,7 +76,7 @@ export function updateUser(value: User, changes: Partial<UserInputParams>) {
     if (!(changes['firstName'] === value['firstName'])) {
       value = User({
         ...value,
-        firstName: changes['firstName'],
+        firstName: changes['firstName']
       });
     }
   }

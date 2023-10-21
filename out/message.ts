@@ -25,10 +25,10 @@ export function isMessage(value: unknown): value is Message {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('-2147483648'),
+          JSBI.BigInt('-2147483648')
         ) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
-        value['id'],
+        value['id']
       )
     )
   )
@@ -41,7 +41,7 @@ export interface MessageInputParams {
 export function Message(params: MessageInputParams): Message {
   return {
     _name: 'message.Message',
-    id: params['id'],
+    id: params['id']
   };
 }
 export function encodeMessage(__s: ISerializer, value: Message) {
@@ -65,15 +65,15 @@ export function decodeMessage(__d: IDeserializer): Message | null {
   id = __d.readInt32();
   return {
     _name: 'message.Message',
-    id,
+    id
   };
 }
 export function defaultMessage(
-  params: Partial<MessageInputParams> = {},
+  params: Partial<MessageInputParams> = {}
 ): Message {
   return Message({
     id: 0,
-    ...params,
+    ...params
   });
 }
 export function compareMessage(__a: Message, __b: Message): boolean {
@@ -86,13 +86,13 @@ export function compareMessage(__a: Message, __b: Message): boolean {
 }
 export function updateMessage(
   value: Message,
-  changes: Partial<MessageInputParams>,
+  changes: Partial<MessageInputParams>
 ) {
   if (typeof changes['id'] !== 'undefined') {
     if (!(changes['id'] === value['id'])) {
       value = Message({
         ...value,
-        id: changes['id'],
+        id: changes['id']
       });
     }
   }
@@ -130,7 +130,7 @@ export interface MessagesInputParams {
 export function Messages(params: MessagesInputParams): Messages {
   return {
     _name: 'message.Messages',
-    messages: params['messages'],
+    messages: params['messages']
   };
 }
 export function encodeMessages(__s: ISerializer, value: Messages) {
@@ -165,15 +165,15 @@ export function decodeMessages(__d: IDeserializer): Messages | null {
   }
   return {
     _name: 'message.Messages',
-    messages,
+    messages
   };
 }
 export function defaultMessages(
-  params: Partial<MessagesInputParams> = {},
+  params: Partial<MessagesInputParams> = {}
 ): Messages {
   return Messages({
     messages: [],
-    ...params,
+    ...params
   });
 }
 export function compareMessages(__a: Messages, __b: Messages): boolean {
@@ -189,14 +189,14 @@ export function compareMessages(__a: Messages, __b: Messages): boolean {
             typeof __item0 === 'undefined'
               ? false
               : compareMessage(__originalItem0, __item0))(
-            Array.from(__b['messages'])[__index0],
-          ),
+            Array.from(__b['messages'])[__index0]
+          )
     )
   );
 }
 export function updateMessages(
   value: Messages,
-  changes: Partial<MessagesInputParams>,
+  changes: Partial<MessagesInputParams>
 ) {
   if (typeof changes['messages'] !== 'undefined') {
     if (
@@ -209,14 +209,14 @@ export function updateMessages(
                 typeof __item1 === 'undefined'
                   ? false
                   : compareMessage(__originalItem1, __item1))(
-                Array.from(value['messages'])[__index1],
-              ),
+                Array.from(value['messages'])[__index1]
+              )
         )
       )
     ) {
       value = Messages({
         ...value,
-        messages: changes['messages'],
+        messages: changes['messages']
       });
     }
   }
@@ -246,10 +246,10 @@ export function isGetMessages(value: unknown): value is GetMessages {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('-2147483648'),
+          JSBI.BigInt('-2147483648')
         ) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
-        value['offset'],
+        value['offset']
       )
     )
   )
@@ -262,10 +262,10 @@ export function isGetMessages(value: unknown): value is GetMessages {
         JSBI.equal(JSBI.BigInt(__v1), JSBI.BigInt(__v1)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v1),
-          JSBI.BigInt('-2147483648'),
+          JSBI.BigInt('-2147483648')
         ) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v1), JSBI.BigInt('2147483647')))(
-        value['limit'],
+        value['limit']
       )
     )
   )
@@ -280,7 +280,7 @@ export function GetMessages(params: GetMessagesInputParams): GetMessages {
   return {
     _name: 'message.GetMessages',
     offset: params['offset'],
-    limit: params['limit'],
+    limit: params['limit']
   };
 }
 export function encodeGetMessages(__s: ISerializer, value: GetMessages) {
@@ -315,21 +315,21 @@ export function decodeGetMessages(__d: IDeserializer): GetMessages | null {
   return {
     _name: 'message.GetMessages',
     offset,
-    limit,
+    limit
   };
 }
 export function defaultGetMessages(
-  params: Partial<GetMessagesInputParams> = {},
+  params: Partial<GetMessagesInputParams> = {}
 ): GetMessages {
   return GetMessages({
     offset: 0,
     limit: 0,
-    ...params,
+    ...params
   });
 }
 export function compareGetMessages(
   __a: GetMessages,
-  __b: GetMessages,
+  __b: GetMessages
 ): boolean {
   return (
     /**
@@ -344,13 +344,13 @@ export function compareGetMessages(
 }
 export function updateGetMessages(
   value: GetMessages,
-  changes: Partial<GetMessagesInputParams>,
+  changes: Partial<GetMessagesInputParams>
 ) {
   if (typeof changes['offset'] !== 'undefined') {
     if (!(changes['offset'] === value['offset'])) {
       value = GetMessages({
         ...value,
-        offset: changes['offset'],
+        offset: changes['offset']
       });
     }
   }
@@ -358,7 +358,7 @@ export function updateGetMessages(
     if (!(changes['limit'] === value['limit'])) {
       value = GetMessages({
         ...value,
-        limit: changes['limit'],
+        limit: changes['limit']
       });
     }
   }

@@ -15,7 +15,7 @@ export function encodeUserTrait(__s: ISerializer, value: User) {
       return encodeUserDeleted(__s, value);
   }
   throw new Error(
-    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- user.user\n\t- user.userDeleted\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`,
+    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- user.user\n\t- user.userDeleted\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
   );
 }
 export function decodeUserTrait(__d: IDeserializer) {
@@ -64,7 +64,7 @@ export function encodeTestTrait(__s: ISerializer, value: Test) {
       return encodeTest(__s, value);
   }
   throw new Error(
-    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- user.test\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`,
+    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- user.test\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
   );
 }
 export function decodeTestTrait(__d: IDeserializer) {
@@ -131,7 +131,7 @@ export function user(params: userInputParams): user {
   return {
     _name: 'user.user',
     firstName: params['firstName'],
-    aliases: params['aliases'],
+    aliases: params['aliases']
   };
 }
 export function encodeUser(__s: ISerializer, value: user) {
@@ -175,14 +175,14 @@ export function decodeUser(__d: IDeserializer): user | null {
   return {
     _name: 'user.user',
     firstName,
-    aliases,
+    aliases
   };
 }
 export function defaultUser(params: Partial<userInputParams> = {}): user {
   return user({
     firstName: '',
     aliases: [],
-    ...params,
+    ...params
   });
 }
 export function compareUser(__a: user, __b: user): boolean {
@@ -202,8 +202,8 @@ export function compareUser(__a: user, __b: user): boolean {
             typeof __item1 === 'undefined'
               ? false
               : __originalItem1 === __item1)(
-            Array.from(__b['aliases'])[__index1],
-          ),
+            Array.from(__b['aliases'])[__index1]
+          )
     )
   );
 }
@@ -212,7 +212,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
     if (!(changes['firstName'] === value['firstName'])) {
       value = user({
         ...value,
-        firstName: changes['firstName'],
+        firstName: changes['firstName']
       });
     }
   }
@@ -227,14 +227,14 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
                 typeof __item2 === 'undefined'
                   ? false
                   : __originalItem2 === __item2)(
-                Array.from(value['aliases'])[__index2],
-              ),
+                Array.from(value['aliases'])[__index2]
+              )
         )
       )
     ) {
       value = user({
         ...value,
-        aliases: changes['aliases'],
+        aliases: changes['aliases']
       });
     }
   }
@@ -263,10 +263,10 @@ export function isUserDeleted(value: unknown): value is userDeleted {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('-2147483648'),
+          JSBI.BigInt('-2147483648')
         ) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
-        value['deletedAt'],
+        value['deletedAt']
       )
     )
   )
@@ -279,7 +279,7 @@ export interface userDeletedInputParams {
 export function userDeleted(params: userDeletedInputParams): userDeleted {
   return {
     _name: 'user.userDeleted',
-    deletedAt: params['deletedAt'],
+    deletedAt: params['deletedAt']
   };
 }
 export function encodeUserDeleted(__s: ISerializer, value: userDeleted) {
@@ -303,20 +303,20 @@ export function decodeUserDeleted(__d: IDeserializer): userDeleted | null {
   deletedAt = __d.readInt32();
   return {
     _name: 'user.userDeleted',
-    deletedAt,
+    deletedAt
   };
 }
 export function defaultUserDeleted(
-  params: Partial<userDeletedInputParams> = {},
+  params: Partial<userDeletedInputParams> = {}
 ): userDeleted {
   return userDeleted({
     deletedAt: 0,
-    ...params,
+    ...params
   });
 }
 export function compareUserDeleted(
   __a: userDeleted,
-  __b: userDeleted,
+  __b: userDeleted
 ): boolean {
   return (
     /**
@@ -327,13 +327,13 @@ export function compareUserDeleted(
 }
 export function updateUserDeleted(
   value: userDeleted,
-  changes: Partial<userDeletedInputParams>,
+  changes: Partial<userDeletedInputParams>
 ) {
   if (typeof changes['deletedAt'] !== 'undefined') {
     if (!(changes['deletedAt'] === value['deletedAt'])) {
       value = userDeleted({
         ...value,
-        deletedAt: changes['deletedAt'],
+        deletedAt: changes['deletedAt']
       });
     }
   }
@@ -366,8 +366,8 @@ export function isTest(value: unknown): value is test {
           (p) =>
             (Array.isArray(p) || p instanceof Set) &&
             Array.from(p).every((p) =>
-              p === null ? true : ((x) => typeof x === 'string')(p),
-            ),
+              p === null ? true : ((x) => typeof x === 'string')(p)
+            )
         ))(value['b'])
     )
   )
@@ -382,7 +382,7 @@ export function test(params: testInputParams): test {
   return {
     _name: 'user.test',
     user: params['user'],
-    b: params['b'],
+    b: params['b']
   };
 }
 export function encodeTest(__s: ISerializer, value: test) {
@@ -446,14 +446,14 @@ export function decodeTest(__d: IDeserializer): test | null {
   return {
     _name: 'user.test',
     user,
-    b,
+    b
   };
 }
 export function defaultTest(params: Partial<testInputParams> = {}): test {
   return test({
     user: defaultUser(),
     b: [],
-    ...params,
+    ...params
   });
 }
 export function compareTest(__a: test, __b: test): boolean {
@@ -485,9 +485,9 @@ export function compareTest(__a: test, __b: test): boolean {
                                   ? __dp31 === __dp32
                                   : __dp31 === __dp32)(
                                 __originalItem2,
-                                __item2,
-                              ))(Array.from(__item1)[__index2]),
-                ))(Array.from(__b['b'])[__index1]),
+                                __item2
+                              ))(Array.from(__item1)[__index2])
+                ))(Array.from(__b['b'])[__index1])
     )
   );
 }
@@ -496,7 +496,7 @@ export function updateTest(value: test, changes: Partial<testInputParams>) {
     if (!compareUser(changes['user'], value['user'])) {
       value = test({
         ...value,
-        user: changes['user'],
+        user: changes['user']
       });
     }
   }
@@ -523,15 +523,15 @@ export function updateTest(value: test, changes: Partial<testInputParams>) {
                                       ? __dp41 === __dp42
                                       : __dp41 === __dp42)(
                                     __originalItem3,
-                                    __item3,
-                                  ))(Array.from(__item2)[__index3]),
-                    ))(Array.from(value['b'])[__index2]),
+                                    __item3
+                                  ))(Array.from(__item2)[__index3])
+                    ))(Array.from(value['b'])[__index2])
         )
       )
     ) {
       value = test({
         ...value,
-        b: changes['b'],
+        b: changes['b']
       });
     }
   }

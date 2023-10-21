@@ -16,7 +16,7 @@ enum GenericName {
   Uint8 = 'uint8',
   Int8 = 'int8',
   NullTerminatedString = 'null_terminated_string',
-  String = 'string',
+  String = 'string'
 }
 
 export default GenericName;

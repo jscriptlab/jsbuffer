@@ -3,7 +3,7 @@ import fs from 'fs';
 
 export async function findClosestFileOrFolder(
   startingDir: string,
-  expectedName: string,
+  expectedName: string
 ): Promise<string | null> {
   let folders: string[];
   try {

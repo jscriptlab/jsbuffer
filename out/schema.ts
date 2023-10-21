@@ -29,7 +29,7 @@ export function isTestMap(value: unknown): value is testMap {
       ((__v0) =>
         __v0 instanceof Map &&
         Array.from(__v0).every(
-          ([k, v]) => typeof k === 'string' && typeof v === 'string',
+          ([k, v]) => typeof k === 'string' && typeof v === 'string'
         ))(value['a'])
     )
   )
@@ -42,7 +42,7 @@ export interface testMapInputParams {
 export function testMap(params: testMapInputParams): testMap {
   return {
     _name: 'schema.testMap',
-    a: params['a'],
+    a: params['a']
   };
 }
 export function encodeTestMap(__s: ISerializer, value: testMap) {
@@ -79,15 +79,15 @@ export function decodeTestMap(__d: IDeserializer): testMap | null {
   }
   return {
     _name: 'schema.testMap',
-    a,
+    a
   };
 }
 export function defaultTestMap(
-  params: Partial<testMapInputParams> = {},
+  params: Partial<testMapInputParams> = {}
 ): testMap {
   return testMap({
     a: new Map<string, string>(),
-    ...params,
+    ...params
   });
 }
 export function compareTestMap(__a: testMap, __b: testMap): boolean {
@@ -100,13 +100,13 @@ export function compareTestMap(__a: testMap, __b: testMap): boolean {
         ((__v20) =>
           typeof __v20 === 'undefined'
             ? false
-            : k1 === __v20[0] && v1 === __v20[1])(l2[i]),
+            : k1 === __v20[0] && v1 === __v20[1])(l2[i])
       ))(Array.from(__a['a']), Array.from(__b['a']))
   );
 }
 export function updateTestMap(
   value: testMap,
-  changes: Partial<testMapInputParams>,
+  changes: Partial<testMapInputParams>
 ) {
   if (typeof changes['a'] !== 'undefined') {
     if (
@@ -115,12 +115,12 @@ export function updateTestMap(
           ((__v21) =>
             typeof __v21 === 'undefined'
               ? false
-              : k1 === __v21[0] && v1 === __v21[1])(l2[i]),
+              : k1 === __v21[0] && v1 === __v21[1])(l2[i])
         ))(Array.from(changes['a']), Array.from(value['a']))
     ) {
       value = testMap({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -156,14 +156,14 @@ export function isTestBigInt(value: unknown): value is testBigInt {
           JSBI.greaterThanOrEqual(
             __bigintValue0,
             JSBI.BigInt(
-              '-57406534763712726211641660058884099201115885104434760023882136841288313069618515692832974315825313495922298231949373138672355948043152766571296567808332659269564994572656140000344389574120022435714463495031743122390807731823194181973658513020233176985452498279081199404472314802811655824768082110985166340672084454492229252801189742403957029450467388250214501358353312915261004066118140645880633941658603299497698209063510889929202021079926591625770444716951045960277478891794836019580040978608315291377690212791863007764174393209716027254457637891941312587717764400411421385408982726881092425574514688',
-            ),
+              '-57406534763712726211641660058884099201115885104434760023882136841288313069618515692832974315825313495922298231949373138672355948043152766571296567808332659269564994572656140000344389574120022435714463495031743122390807731823194181973658513020233176985452498279081199404472314802811655824768082110985166340672084454492229252801189742403957029450467388250214501358353312915261004066118140645880633941658603299497698209063510889929202021079926591625770444716951045960277478891794836019580040978608315291377690212791863007764174393209716027254457637891941312587717764400411421385408982726881092425574514688'
+            )
           ) &&
           JSBI.lessThanOrEqual(
             __bigintValue0,
             JSBI.BigInt(
-              '57406534763712726211641660058884099201115885104434760023882136841288313069618515692832974315825313495922298231949373138672355948043152766571296567808332659269564994572656140000344389574120022435714463495031743122390807731823194181973658513020233176985452498279081199404472314802811655824768082110985166340672084454492229252801189742403957029450467388250214501358353312915261004066118140645880633941658603299497698209063510889929202021079926591625770444716951045960277478891794836019580040978608315291377690212791863007764174393209716027254457637891941312587717764400411421385408982726881092425574514687',
-            ),
+              '57406534763712726211641660058884099201115885104434760023882136841288313069618515692832974315825313495922298231949373138672355948043152766571296567808332659269564994572656140000344389574120022435714463495031743122390807731823194181973658513020233176985452498279081199404472314802811655824768082110985166340672084454492229252801189742403957029450467388250214501358353312915261004066118140645880633941658603299497698209063510889929202021079926591625770444716951045960277478891794836019580040978608315291377690212791863007764174393209716027254457637891941312587717764400411421385408982726881092425574514687'
+            )
           ))(JSBI.BigInt(__v0)))(value['beforeA'])
     )
   )
@@ -177,14 +177,14 @@ export function isTestBigInt(value: unknown): value is testBigInt {
           JSBI.greaterThanOrEqual(
             __bigintValue2,
             JSBI.BigInt(
-              '-89884656743115795386465259539451236680898848947115328636715040578866337902750481566354238661203768010560056939935696678829394884407208311246423715319737062188883946712432742638151109800623047059726541476042502884419075341171231440736956555270413618581675255342293149119973622969239858152417678164812112068608',
-            ),
+              '-89884656743115795386465259539451236680898848947115328636715040578866337902750481566354238661203768010560056939935696678829394884407208311246423715319737062188883946712432742638151109800623047059726541476042502884419075341171231440736956555270413618581675255342293149119973622969239858152417678164812112068608'
+            )
           ) &&
           JSBI.lessThanOrEqual(
             __bigintValue2,
             JSBI.BigInt(
-              '89884656743115795386465259539451236680898848947115328636715040578866337902750481566354238661203768010560056939935696678829394884407208311246423715319737062188883946712432742638151109800623047059726541476042502884419075341171231440736956555270413618581675255342293149119973622969239858152417678164812112068607',
-            ),
+              '89884656743115795386465259539451236680898848947115328636715040578866337902750481566354238661203768010560056939935696678829394884407208311246423715319737062188883946712432742638151109800623047059726541476042502884419075341171231440736956555270413618581675255342293149119973622969239858152417678164812112068607'
+            )
           ))(JSBI.BigInt(__v2)))(value['a'])
     )
   )
@@ -198,14 +198,14 @@ export function isTestBigInt(value: unknown): value is testBigInt {
           JSBI.greaterThanOrEqual(
             __bigintValue4,
             JSBI.BigInt(
-              '-6703903964971298549787012499102923063739682910296196688861780721860882015036773488400937149083451713845015929093243025426876941405973284973216824503042048',
-            ),
+              '-6703903964971298549787012499102923063739682910296196688861780721860882015036773488400937149083451713845015929093243025426876941405973284973216824503042048'
+            )
           ) &&
           JSBI.lessThanOrEqual(
             __bigintValue4,
             JSBI.BigInt(
-              '6703903964971298549787012499102923063739682910296196688861780721860882015036773488400937149083451713845015929093243025426876941405973284973216824503042047',
-            ),
+              '6703903964971298549787012499102923063739682910296196688861780721860882015036773488400937149083451713845015929093243025426876941405973284973216824503042047'
+            )
           ))(JSBI.BigInt(__v4)))(value['b'])
     )
   )
@@ -219,14 +219,14 @@ export function isTestBigInt(value: unknown): value is testBigInt {
           JSBI.greaterThanOrEqual(
             __bigintValue6,
             JSBI.BigInt(
-              '-57896044618658097711785492504343953926634992332820282019728792003956564819968',
-            ),
+              '-57896044618658097711785492504343953926634992332820282019728792003956564819968'
+            )
           ) &&
           JSBI.lessThanOrEqual(
             __bigintValue6,
             JSBI.BigInt(
-              '57896044618658097711785492504343953926634992332820282019728792003956564819967',
-            ),
+              '57896044618658097711785492504343953926634992332820282019728792003956564819967'
+            )
           ))(JSBI.BigInt(__v6)))(value['c'])
     )
   )
@@ -239,11 +239,11 @@ export function isTestBigInt(value: unknown): value is testBigInt {
         ((__bigintValue8) =>
           JSBI.greaterThanOrEqual(
             __bigintValue8,
-            JSBI.BigInt('-170141183460469231731687303715884105728'),
+            JSBI.BigInt('-170141183460469231731687303715884105728')
           ) &&
           JSBI.lessThanOrEqual(
             __bigintValue8,
-            JSBI.BigInt('170141183460469231731687303715884105727'),
+            JSBI.BigInt('170141183460469231731687303715884105727')
           ))(JSBI.BigInt(__v8)))(value['d'])
     )
   )
@@ -256,11 +256,11 @@ export function isTestBigInt(value: unknown): value is testBigInt {
         ((__bigintValue10) =>
           JSBI.greaterThanOrEqual(
             __bigintValue10,
-            JSBI.BigInt('-9223372036854775808'),
+            JSBI.BigInt('-9223372036854775808')
           ) &&
           JSBI.lessThanOrEqual(
             __bigintValue10,
-            JSBI.BigInt('9223372036854775807'),
+            JSBI.BigInt('9223372036854775807')
           ))(JSBI.BigInt(__v10)))(value['e'])
     )
   )
@@ -273,10 +273,10 @@ export function isTestBigInt(value: unknown): value is testBigInt {
         ((__bigintValue12) =>
           JSBI.greaterThanOrEqual(
             __bigintValue12,
-            JSBI.BigInt('-2147483648'),
+            JSBI.BigInt('-2147483648')
           ) &&
           JSBI.lessThanOrEqual(__bigintValue12, JSBI.BigInt('2147483647')))(
-          JSBI.BigInt(__v12),
+          JSBI.BigInt(__v12)
         ))(value['f'])
     )
   )
@@ -301,7 +301,7 @@ export function testBigInt(params: testBigIntInputParams): testBigInt {
     c: params['c'],
     d: params['d'],
     e: params['e'],
-    f: params['f'],
+    f: params['f']
   };
 }
 export function encodeTestBigInt(__s: ISerializer, value: testBigInt) {
@@ -391,11 +391,11 @@ export function decodeTestBigInt(__d: IDeserializer): testBigInt | null {
     c,
     d,
     e,
-    f,
+    f
   };
 }
 export function defaultTestBigInt(
-  params: Partial<testBigIntInputParams> = {},
+  params: Partial<testBigIntInputParams> = {}
 ): testBigInt {
   return testBigInt({
     beforeA: '0',
@@ -405,7 +405,7 @@ export function defaultTestBigInt(
     d: '0',
     e: '0',
     f: '0',
-    ...params,
+    ...params
   });
 }
 export function compareTestBigInt(__a: testBigInt, __b: testBigInt): boolean {
@@ -415,42 +415,42 @@ export function compareTestBigInt(__a: testBigInt, __b: testBigInt): boolean {
      */
     ((a, b) => JSBI.equal(a, b))(
       JSBI.BigInt(__a['beforeA']),
-      JSBI.BigInt(__b['beforeA']),
+      JSBI.BigInt(__b['beforeA'])
     ) &&
     /**
      * compare parameter a
      */
     ((a, b) => JSBI.equal(a, b))(
       JSBI.BigInt(__a['a']),
-      JSBI.BigInt(__b['a']),
+      JSBI.BigInt(__b['a'])
     ) &&
     /**
      * compare parameter b
      */
     ((a, b) => JSBI.equal(a, b))(
       JSBI.BigInt(__a['b']),
-      JSBI.BigInt(__b['b']),
+      JSBI.BigInt(__b['b'])
     ) &&
     /**
      * compare parameter c
      */
     ((a, b) => JSBI.equal(a, b))(
       JSBI.BigInt(__a['c']),
-      JSBI.BigInt(__b['c']),
+      JSBI.BigInt(__b['c'])
     ) &&
     /**
      * compare parameter d
      */
     ((a, b) => JSBI.equal(a, b))(
       JSBI.BigInt(__a['d']),
-      JSBI.BigInt(__b['d']),
+      JSBI.BigInt(__b['d'])
     ) &&
     /**
      * compare parameter e
      */
     ((a, b) => JSBI.equal(a, b))(
       JSBI.BigInt(__a['e']),
-      JSBI.BigInt(__b['e']),
+      JSBI.BigInt(__b['e'])
     ) &&
     /**
      * compare parameter f
@@ -460,18 +460,18 @@ export function compareTestBigInt(__a: testBigInt, __b: testBigInt): boolean {
 }
 export function updateTestBigInt(
   value: testBigInt,
-  changes: Partial<testBigIntInputParams>,
+  changes: Partial<testBigIntInputParams>
 ) {
   if (typeof changes['beforeA'] !== 'undefined') {
     if (
       !((a, b) => JSBI.equal(a, b))(
         JSBI.BigInt(changes['beforeA']),
-        JSBI.BigInt(value['beforeA']),
+        JSBI.BigInt(value['beforeA'])
       )
     ) {
       value = testBigInt({
         ...value,
-        beforeA: changes['beforeA'],
+        beforeA: changes['beforeA']
       });
     }
   }
@@ -479,12 +479,12 @@ export function updateTestBigInt(
     if (
       !((a, b) => JSBI.equal(a, b))(
         JSBI.BigInt(changes['a']),
-        JSBI.BigInt(value['a']),
+        JSBI.BigInt(value['a'])
       )
     ) {
       value = testBigInt({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -492,12 +492,12 @@ export function updateTestBigInt(
     if (
       !((a, b) => JSBI.equal(a, b))(
         JSBI.BigInt(changes['b']),
-        JSBI.BigInt(value['b']),
+        JSBI.BigInt(value['b'])
       )
     ) {
       value = testBigInt({
         ...value,
-        b: changes['b'],
+        b: changes['b']
       });
     }
   }
@@ -505,12 +505,12 @@ export function updateTestBigInt(
     if (
       !((a, b) => JSBI.equal(a, b))(
         JSBI.BigInt(changes['c']),
-        JSBI.BigInt(value['c']),
+        JSBI.BigInt(value['c'])
       )
     ) {
       value = testBigInt({
         ...value,
-        c: changes['c'],
+        c: changes['c']
       });
     }
   }
@@ -518,12 +518,12 @@ export function updateTestBigInt(
     if (
       !((a, b) => JSBI.equal(a, b))(
         JSBI.BigInt(changes['d']),
-        JSBI.BigInt(value['d']),
+        JSBI.BigInt(value['d'])
       )
     ) {
       value = testBigInt({
         ...value,
-        d: changes['d'],
+        d: changes['d']
       });
     }
   }
@@ -531,12 +531,12 @@ export function updateTestBigInt(
     if (
       !((a, b) => JSBI.equal(a, b))(
         JSBI.BigInt(changes['e']),
-        JSBI.BigInt(value['e']),
+        JSBI.BigInt(value['e'])
       )
     ) {
       value = testBigInt({
         ...value,
-        e: changes['e'],
+        e: changes['e']
       });
     }
   }
@@ -544,12 +544,12 @@ export function updateTestBigInt(
     if (
       !((a, b) => JSBI.equal(a, b))(
         JSBI.BigInt(changes['f']),
-        JSBI.BigInt(value['f']),
+        JSBI.BigInt(value['f'])
       )
     ) {
       value = testBigInt({
         ...value,
-        f: changes['f'],
+        f: changes['f']
       });
     }
   }
@@ -579,7 +579,7 @@ export function isTestMap2(value: unknown): value is testMap2 {
         Array.from(__v0).every(([k, v]) =>
           k === null
             ? true
-            : ((x) => typeof x === 'string')(k) && typeof v === 'string',
+            : ((x) => typeof x === 'string')(k) && typeof v === 'string'
         ))(value['a'])
     )
   )
@@ -604,23 +604,23 @@ export function isTestMap2(value: unknown): value is testMap2 {
                     JSBI.equal(JSBI.BigInt(k), JSBI.BigInt(k)) &&
                     JSBI.greaterThanOrEqual(
                       JSBI.BigInt(k),
-                      JSBI.BigInt('-2147483648'),
+                      JSBI.BigInt('-2147483648')
                     ) &&
                     JSBI.lessThanOrEqual(
                       JSBI.BigInt(k),
-                      JSBI.BigInt('2147483647'),
+                      JSBI.BigInt('2147483647')
                     ) &&
                     typeof v === 'number' &&
                     JSBI.equal(JSBI.BigInt(v), JSBI.BigInt(v)) &&
                     JSBI.greaterThanOrEqual(
                       JSBI.BigInt(v),
-                      JSBI.BigInt('-2147483648'),
+                      JSBI.BigInt('-2147483648')
                     ) &&
                     JSBI.lessThanOrEqual(
                       JSBI.BigInt(v),
-                      JSBI.BigInt('2147483647'),
-                    ),
-                ))(v[1]),
+                      JSBI.BigInt('2147483647')
+                    )
+                ))(v[1])
         ))(value['b'])
     )
   )
@@ -635,7 +635,7 @@ export function testMap2(params: testMap2InputParams): testMap2 {
   return {
     _name: 'schema.testMap2',
     a: params['a'],
-    b: params['b'],
+    b: params['b']
   };
 }
 export function encodeTestMap2(__s: ISerializer, value: testMap2) {
@@ -734,16 +734,16 @@ export function decodeTestMap2(__d: IDeserializer): testMap2 | null {
   return {
     _name: 'schema.testMap2',
     a,
-    b,
+    b
   };
 }
 export function defaultTestMap2(
-  params: Partial<testMap2InputParams> = {},
+  params: Partial<testMap2InputParams> = {}
 ): testMap2 {
   return testMap2({
     a: new Map<string | null, string>(),
     b: new Map<string | null, [string, Map<number, number>]>(),
-    ...params,
+    ...params
   });
 }
 export function compareTestMap2(__a: testMap2, __b: testMap2): boolean {
@@ -759,7 +759,7 @@ export function compareTestMap2(__a: testMap2, __b: testMap2): boolean {
             : ((__dp11, __dp12) =>
                 __dp11 !== null && __dp12 !== null
                   ? __dp11 === __dp12
-                  : __dp11 === __dp12)(k1, __v20[0]) && v1 === __v20[1])(l2[i]),
+                  : __dp11 === __dp12)(k1, __v20[0]) && v1 === __v20[1])(l2[i])
       ))(Array.from(__a['a']), Array.from(__b['a'])) &&
     /**
      * compare parameter b
@@ -777,24 +777,24 @@ export function compareTestMap2(__a: testMap2, __b: testMap2): boolean {
                 __a40 === __b40)(v1[0], __v21[1][0]) &&
               /* compare tuple item 1 of type ReadonlyMap<number, number> */ ((
                 __a41,
-                __b41,
+                __b41
               ) =>
                 ((l1, l2) =>
                   l1.every(([k1, v1], i) =>
                     ((__v27) =>
                       typeof __v27 === 'undefined'
                         ? false
-                        : k1 === __v27[0] && v1 === __v27[1])(l2[i]),
+                        : k1 === __v27[0] && v1 === __v27[1])(l2[i])
                   ))(Array.from(__a41), Array.from(__b41)))(
                 v1[1],
-                __v21[1][1],
-              ))(l2[i]),
+                __v21[1][1]
+              ))(l2[i])
       ))(Array.from(__a['b']), Array.from(__b['b']))
   );
 }
 export function updateTestMap2(
   value: testMap2,
-  changes: Partial<testMap2InputParams>,
+  changes: Partial<testMap2InputParams>
 ) {
   if (typeof changes['a'] !== 'undefined') {
     if (
@@ -807,13 +807,13 @@ export function updateTestMap2(
                   __dp21 !== null && __dp22 !== null
                     ? __dp21 === __dp22
                     : __dp21 === __dp22)(k1, __v21[0]) && v1 === __v21[1])(
-            l2[i],
-          ),
+            l2[i]
+          )
         ))(Array.from(changes['a']), Array.from(value['a']))
     ) {
       value = testMap2({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -832,23 +832,23 @@ export function updateTestMap2(
                   __a80 === __b80)(v1[0], __v25[1][0]) &&
                 /* compare tuple item 1 of type ReadonlyMap<number, number> */ ((
                   __a81,
-                  __b81,
+                  __b81
                 ) =>
                   ((l1, l2) =>
                     l1.every(([k1, v1], i) =>
                       ((__v211) =>
                         typeof __v211 === 'undefined'
                           ? false
-                          : k1 === __v211[0] && v1 === __v211[1])(l2[i]),
+                          : k1 === __v211[0] && v1 === __v211[1])(l2[i])
                     ))(Array.from(__a81), Array.from(__b81)))(
                   v1[1],
-                  __v25[1][1],
-                ))(l2[i]),
+                  __v25[1][1]
+                ))(l2[i])
         ))(Array.from(changes['b']), Array.from(value['b']))
     ) {
       value = testMap2({
         ...value,
-        b: changes['b'],
+        b: changes['b']
       });
     }
   }
@@ -875,7 +875,7 @@ export function isTestMap3(value: unknown): value is testMap3 {
       ((__v0) =>
         __v0 instanceof Map &&
         Array.from(__v0).every(
-          ([k, v]) => isTestMap2(k) && typeof v === 'string',
+          ([k, v]) => isTestMap2(k) && typeof v === 'string'
         ))(value['a'])
     )
   )
@@ -888,7 +888,7 @@ export interface testMap3InputParams {
 export function testMap3(params: testMap3InputParams): testMap3 {
   return {
     _name: 'schema.testMap3',
-    a: params['a'],
+    a: params['a']
   };
 }
 export function encodeTestMap3(__s: ISerializer, value: testMap3) {
@@ -927,15 +927,15 @@ export function decodeTestMap3(__d: IDeserializer): testMap3 | null {
   }
   return {
     _name: 'schema.testMap3',
-    a,
+    a
   };
 }
 export function defaultTestMap3(
-  params: Partial<testMap3InputParams> = {},
+  params: Partial<testMap3InputParams> = {}
 ): testMap3 {
   return testMap3({
     a: new Map<testMap2, string>(),
-    ...params,
+    ...params
   });
 }
 export function compareTestMap3(__a: testMap3, __b: testMap3): boolean {
@@ -948,13 +948,13 @@ export function compareTestMap3(__a: testMap3, __b: testMap3): boolean {
         ((__v20) =>
           typeof __v20 === 'undefined'
             ? false
-            : compareTestMap2(k1, __v20[0]) && v1 === __v20[1])(l2[i]),
+            : compareTestMap2(k1, __v20[0]) && v1 === __v20[1])(l2[i])
       ))(Array.from(__a['a']), Array.from(__b['a']))
   );
 }
 export function updateTestMap3(
   value: testMap3,
-  changes: Partial<testMap3InputParams>,
+  changes: Partial<testMap3InputParams>
 ) {
   if (typeof changes['a'] !== 'undefined') {
     if (
@@ -963,12 +963,12 @@ export function updateTestMap3(
           ((__v21) =>
             typeof __v21 === 'undefined'
               ? false
-              : compareTestMap2(k1, __v21[0]) && v1 === __v21[1])(l2[i]),
+              : compareTestMap2(k1, __v21[0]) && v1 === __v21[1])(l2[i])
         ))(Array.from(changes['a']), Array.from(value['a']))
     ) {
       value = testMap3({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -1010,9 +1010,9 @@ export function isTestSet(value: unknown): value is testSet {
             JSBI.equal(JSBI.BigInt(p), JSBI.BigInt(p)) &&
             JSBI.greaterThanOrEqual(
               JSBI.BigInt(p),
-              JSBI.BigInt('-2147483648'),
+              JSBI.BigInt('-2147483648')
             ) &&
-            JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('2147483647')),
+            JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('2147483647'))
         ))(value['b'])
     )
   )
@@ -1027,7 +1027,7 @@ export function testSet(params: testSetInputParams): testSet {
   return {
     _name: 'schema.testSet',
     a: params['a'],
-    b: params['b'],
+    b: params['b']
   };
 }
 export function encodeTestSet(__s: ISerializer, value: testSet) {
@@ -1084,16 +1084,16 @@ export function decodeTestSet(__d: IDeserializer): testSet | null {
   return {
     _name: 'schema.testSet',
     a,
-    b,
+    b
   };
 }
 export function defaultTestSet(
-  params: Partial<testSetInputParams> = {},
+  params: Partial<testSetInputParams> = {}
 ): testSet {
   return testSet({
     a: new Set<string>(),
     b: new Set<number>(),
-    ...params,
+    ...params
   });
 }
 export function compareTestSet(__a: testSet, __b: testSet): boolean {
@@ -1108,7 +1108,7 @@ export function compareTestSet(__a: testSet, __b: testSet): boolean {
         : ((__item0) =>
             typeof __item0 === 'undefined'
               ? false
-              : __originalItem0 === __item0)(Array.from(__b['a'])[__index0]),
+              : __originalItem0 === __item0)(Array.from(__b['a'])[__index0])
     ) &&
     /**
      * compare parameter b
@@ -1120,13 +1120,13 @@ export function compareTestSet(__a: testSet, __b: testSet): boolean {
         : ((__item1) =>
             typeof __item1 === 'undefined'
               ? false
-              : __originalItem1 === __item1)(Array.from(__b['b'])[__index1]),
+              : __originalItem1 === __item1)(Array.from(__b['b'])[__index1])
     )
   );
 }
 export function updateTestSet(
   value: testSet,
-  changes: Partial<testSetInputParams>,
+  changes: Partial<testSetInputParams>
 ) {
   if (typeof changes['a'] !== 'undefined') {
     if (
@@ -1139,14 +1139,14 @@ export function updateTestSet(
                 typeof __item1 === 'undefined'
                   ? false
                   : __originalItem1 === __item1)(
-                Array.from(value['a'])[__index1],
-              ),
+                Array.from(value['a'])[__index1]
+              )
         )
       )
     ) {
       value = testSet({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -1161,14 +1161,14 @@ export function updateTestSet(
                 typeof __item3 === 'undefined'
                   ? false
                   : __originalItem3 === __item3)(
-                Array.from(value['b'])[__index3],
-              ),
+                Array.from(value['b'])[__index3]
+              )
         )
       )
     ) {
       value = testSet({
         ...value,
-        b: changes['b'],
+        b: changes['b']
       });
     }
   }
@@ -1209,8 +1209,8 @@ export function isTestSet2(value: unknown): value is testSet2 {
           (p) =>
             p instanceof Map &&
             Array.from(p).every(
-              ([k, v]) => typeof k === 'string' && typeof v === 'string',
-            ),
+              ([k, v]) => typeof k === 'string' && typeof v === 'string'
+            )
         ))(value['b'])
     )
   )
@@ -1229,21 +1229,21 @@ export function isTestSet2(value: unknown): value is testSet2 {
               JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
               JSBI.greaterThanOrEqual(
                 JSBI.BigInt(a),
-                JSBI.BigInt('-2147483648'),
+                JSBI.BigInt('-2147483648')
               ) &&
               JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
-              p[0],
+              p[0]
             ) &&
             ((a) =>
               typeof a === 'number' &&
               JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
               JSBI.greaterThanOrEqual(
                 JSBI.BigInt(a),
-                JSBI.BigInt('-2147483648'),
+                JSBI.BigInt('-2147483648')
               ) &&
               JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
-              p[1],
-            ),
+              p[1]
+            )
         ))(value['c'])
     )
   )
@@ -1260,7 +1260,7 @@ export function testSet2(params: testSet2InputParams): testSet2 {
     _name: 'schema.testSet2',
     a: params['a'],
     b: params['b'],
-    c: params['c'],
+    c: params['c']
   };
 }
 export function encodeTestSet2(__s: ISerializer, value: testSet2) {
@@ -1359,17 +1359,17 @@ export function decodeTestSet2(__d: IDeserializer): testSet2 | null {
     _name: 'schema.testSet2',
     a,
     b,
-    c,
+    c
   };
 }
 export function defaultTestSet2(
-  params: Partial<testSet2InputParams> = {},
+  params: Partial<testSet2InputParams> = {}
 ): testSet2 {
   return testSet2({
     a: new Set<string>(),
     b: new Set<Map<string, string>>(),
     c: new Set<[number, number]>(),
-    ...params,
+    ...params
   });
 }
 export function compareTestSet2(__a: testSet2, __b: testSet2): boolean {
@@ -1384,7 +1384,7 @@ export function compareTestSet2(__a: testSet2, __b: testSet2): boolean {
         : ((__item0) =>
             typeof __item0 === 'undefined'
               ? false
-              : __originalItem0 === __item0)(Array.from(__b['a'])[__index0]),
+              : __originalItem0 === __item0)(Array.from(__b['a'])[__index0])
     ) &&
     /**
      * compare parameter b
@@ -1401,10 +1401,10 @@ export function compareTestSet2(__a: testSet2, __b: testSet2): boolean {
                     ((__v22) =>
                       typeof __v22 === 'undefined'
                         ? false
-                        : k1 === __v22[0] && v1 === __v22[1])(l2[i]),
+                        : k1 === __v22[0] && v1 === __v22[1])(l2[i])
                   ))(Array.from(__originalItem1), Array.from(__item1)))(
-            Array.from(__b['b'])[__index1],
-          ),
+            Array.from(__b['b'])[__index1]
+          )
     ) &&
     /**
      * compare parameter c
@@ -1420,14 +1420,14 @@ export function compareTestSet2(__a: testSet2, __b: testSet2): boolean {
                   __a30 === __b30)(__originalItem2[0], __item2[0]) &&
                 /* compare tuple item 1 of type number */ ((__a31, __b31) =>
                   __a31 === __b31)(__originalItem2[1], __item2[1]))(
-            Array.from(__b['c'])[__index2],
-          ),
+            Array.from(__b['c'])[__index2]
+          )
     )
   );
 }
 export function updateTestSet2(
   value: testSet2,
-  changes: Partial<testSet2InputParams>,
+  changes: Partial<testSet2InputParams>
 ) {
   if (typeof changes['a'] !== 'undefined') {
     if (
@@ -1440,14 +1440,14 @@ export function updateTestSet2(
                 typeof __item1 === 'undefined'
                   ? false
                   : __originalItem1 === __item1)(
-                Array.from(value['a'])[__index1],
-              ),
+                Array.from(value['a'])[__index1]
+              )
         )
       )
     ) {
       value = testSet2({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -1466,16 +1466,16 @@ export function updateTestSet2(
                         ((__v24) =>
                           typeof __v24 === 'undefined'
                             ? false
-                            : k1 === __v24[0] && v1 === __v24[1])(l2[i]),
+                            : k1 === __v24[0] && v1 === __v24[1])(l2[i])
                       ))(Array.from(__originalItem3), Array.from(__item3)))(
-                Array.from(value['b'])[__index3],
-              ),
+                Array.from(value['b'])[__index3]
+              )
         )
       )
     ) {
       value = testSet2({
         ...value,
-        b: changes['b'],
+        b: changes['b']
       });
     }
   }
@@ -1493,14 +1493,14 @@ export function updateTestSet2(
                       __a80 === __b80)(__originalItem7[0], __item7[0]) &&
                     /* compare tuple item 1 of type number */ ((__a81, __b81) =>
                       __a81 === __b81)(__originalItem7[1], __item7[1]))(
-                Array.from(value['c'])[__index7],
-              ),
+                Array.from(value['c'])[__index7]
+              )
         )
       )
     ) {
       value = testSet2({
         ...value,
-        c: changes['c'],
+        c: changes['c']
       });
     }
   }
@@ -1525,7 +1525,7 @@ export function isVoid(value: unknown): value is Void {
 export interface VoidInputParams {}
 export function Void(_: VoidInputParams = {}): Void {
   return {
-    _name: 'schema.Void',
+    _name: 'schema.Void'
   };
 }
 export function encodeVoid(__s: ISerializer, _: Void) {
@@ -1538,12 +1538,12 @@ export function decodeVoid(__d: IDeserializer): Void | null {
    */
   if (__id !== 189644707) return null;
   return {
-    _name: 'schema.Void',
+    _name: 'schema.Void'
   };
 }
 export function defaultVoid(params: Partial<VoidInputParams> = {}): Void {
   return Void({
-    ...params,
+    ...params
   });
 }
 export function compareVoid(__a: Void, __b: Void): boolean {
@@ -1579,7 +1579,7 @@ export interface msgInputParams {
 export function msg(params: msgInputParams): msg {
   return {
     _name: 'schema.msg',
-    data: params['data'],
+    data: params['data']
   };
 }
 export function encodeMsg(__s: ISerializer, value: msg) {
@@ -1604,13 +1604,13 @@ export function decodeMsg(__d: IDeserializer): msg | null {
   data = __d.readBuffer(__d.readUint32());
   return {
     _name: 'schema.msg',
-    data,
+    data
   };
 }
 export function defaultMsg(params: Partial<msgInputParams> = {}): msg {
   return msg({
     data: new Uint8Array(0),
-    ...params,
+    ...params
   });
 }
 export function compareMsg(__a: msg, __b: msg): boolean {
@@ -1628,13 +1628,13 @@ export function updateMsg(value: msg, changes: Partial<msgInputParams>) {
       !(
         changes['data'].byteLength === value['data'].byteLength &&
         changes['data'].every(
-          (__byte, index) => value['data'][index] === __byte,
+          (__byte, index) => value['data'][index] === __byte
         )
       )
     ) {
       value = msg({
         ...value,
-        data: changes['data'],
+        data: changes['data']
       });
     }
   }
@@ -1654,7 +1654,7 @@ export function encodeResultTrait(__s: ISerializer, value: Result) {
       return encodePosts(__s, value);
   }
   throw new Error(
-    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- schema.Users\n\t- schema.Posts\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`,
+    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- schema.Users\n\t- schema.Posts\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
   );
 }
 export function decodeResultTrait(__d: IDeserializer) {
@@ -1724,7 +1724,7 @@ export interface UsersInputParams {
 export function Users(params: UsersInputParams): Users {
   return {
     _name: 'schema.Users',
-    users: params['users'],
+    users: params['users']
   };
 }
 export function encodeUsers(__s: ISerializer, value: Users) {
@@ -1759,13 +1759,13 @@ export function decodeUsers(__d: IDeserializer): Users | null {
   }
   return {
     _name: 'schema.Users',
-    users,
+    users
   };
 }
 export function defaultUsers(params: Partial<UsersInputParams> = {}): Users {
   return Users({
     users: [],
-    ...params,
+    ...params
   });
 }
 export function compareUsers(__a: Users, __b: Users): boolean {
@@ -1781,8 +1781,8 @@ export function compareUsers(__a: Users, __b: Users): boolean {
             typeof __item0 === 'undefined'
               ? false
               : compareUserTrait(__originalItem0, __item0))(
-            Array.from(__b['users'])[__index0],
-          ),
+            Array.from(__b['users'])[__index0]
+          )
     )
   );
 }
@@ -1798,14 +1798,14 @@ export function updateUsers(value: Users, changes: Partial<UsersInputParams>) {
                 typeof __item1 === 'undefined'
                   ? false
                   : compareUserTrait(__originalItem1, __item1))(
-                Array.from(value['users'])[__index1],
-              ),
+                Array.from(value['users'])[__index1]
+              )
         )
       )
     ) {
       value = Users({
         ...value,
-        users: changes['users'],
+        users: changes['users']
       });
     }
   }
@@ -1834,7 +1834,7 @@ export function isGetUserById(value: unknown): value is GetUserById {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('0')) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('4294967295')))(
-        value['userId'],
+        value['userId']
       )
     )
   )
@@ -1847,7 +1847,7 @@ export interface GetUserByIdInputParams {
 export function GetUserById(params: GetUserByIdInputParams): GetUserById {
   return {
     _name: 'schema.GetUserById',
-    userId: params['userId'],
+    userId: params['userId']
   };
 }
 export function encodeGetUserById(__s: ISerializer, value: GetUserById) {
@@ -1871,20 +1871,20 @@ export function decodeGetUserById(__d: IDeserializer): GetUserById | null {
   userId = __d.readUint32();
   return {
     _name: 'schema.GetUserById',
-    userId,
+    userId
   };
 }
 export function defaultGetUserById(
-  params: Partial<GetUserByIdInputParams> = {},
+  params: Partial<GetUserByIdInputParams> = {}
 ): GetUserById {
   return GetUserById({
     userId: 0,
-    ...params,
+    ...params
   });
 }
 export function compareGetUserById(
   __a: GetUserById,
-  __b: GetUserById,
+  __b: GetUserById
 ): boolean {
   return (
     /**
@@ -1895,13 +1895,13 @@ export function compareGetUserById(
 }
 export function updateGetUserById(
   value: GetUserById,
-  changes: Partial<GetUserByIdInputParams>,
+  changes: Partial<GetUserByIdInputParams>
 ) {
   if (typeof changes['userId'] !== 'undefined') {
     if (!(changes['userId'] === value['userId'])) {
       value = GetUserById({
         ...value,
-        userId: changes['userId'],
+        userId: changes['userId']
       });
     }
   }
@@ -1930,10 +1930,10 @@ export function isPost(value: unknown): value is Post {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('-2147483648'),
+          JSBI.BigInt('-2147483648')
         ) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
-        value['id'],
+        value['id']
       )
     )
   )
@@ -1946,7 +1946,7 @@ export interface PostInputParams {
 export function Post(params: PostInputParams): Post {
   return {
     _name: 'schema.Post',
-    id: params['id'],
+    id: params['id']
   };
 }
 export function encodePost(__s: ISerializer, value: Post) {
@@ -1970,13 +1970,13 @@ export function decodePost(__d: IDeserializer): Post | null {
   id = __d.readInt32();
   return {
     _name: 'schema.Post',
-    id,
+    id
   };
 }
 export function defaultPost(params: Partial<PostInputParams> = {}): Post {
   return Post({
     id: 0,
-    ...params,
+    ...params
   });
 }
 export function comparePost(__a: Post, __b: Post): boolean {
@@ -1992,7 +1992,7 @@ export function updatePost(value: Post, changes: Partial<PostInputParams>) {
     if (!(changes['id'] === value['id'])) {
       value = Post({
         ...value,
-        id: changes['id'],
+        id: changes['id']
       });
     }
   }
@@ -2030,7 +2030,7 @@ export interface PostsInputParams {
 export function Posts(params: PostsInputParams): Posts {
   return {
     _name: 'schema.Posts',
-    posts: params['posts'],
+    posts: params['posts']
   };
 }
 export function encodePosts(__s: ISerializer, value: Posts) {
@@ -2065,13 +2065,13 @@ export function decodePosts(__d: IDeserializer): Posts | null {
   }
   return {
     _name: 'schema.Posts',
-    posts,
+    posts
   };
 }
 export function defaultPosts(params: Partial<PostsInputParams> = {}): Posts {
   return Posts({
     posts: [],
-    ...params,
+    ...params
   });
 }
 export function comparePosts(__a: Posts, __b: Posts): boolean {
@@ -2087,8 +2087,8 @@ export function comparePosts(__a: Posts, __b: Posts): boolean {
             typeof __item0 === 'undefined'
               ? false
               : comparePost(__originalItem0, __item0))(
-            Array.from(__b['posts'])[__index0],
-          ),
+            Array.from(__b['posts'])[__index0]
+          )
     )
   );
 }
@@ -2104,14 +2104,14 @@ export function updatePosts(value: Posts, changes: Partial<PostsInputParams>) {
                 typeof __item1 === 'undefined'
                   ? false
                   : comparePost(__originalItem1, __item1))(
-                Array.from(value['posts'])[__index1],
-              ),
+                Array.from(value['posts'])[__index1]
+              )
         )
       )
     ) {
       value = Posts({
         ...value,
-        posts: changes['posts'],
+        posts: changes['posts']
       });
     }
   }
@@ -2140,7 +2140,7 @@ export function isGetPostById(value: unknown): value is GetPostById {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('0')) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('4294967295')))(
-        value['postId'],
+        value['postId']
       )
     )
   )
@@ -2153,7 +2153,7 @@ export interface GetPostByIdInputParams {
 export function GetPostById(params: GetPostByIdInputParams): GetPostById {
   return {
     _name: 'schema.GetPostById',
-    postId: params['postId'],
+    postId: params['postId']
   };
 }
 export function encodeGetPostById(__s: ISerializer, value: GetPostById) {
@@ -2177,20 +2177,20 @@ export function decodeGetPostById(__d: IDeserializer): GetPostById | null {
   postId = __d.readUint32();
   return {
     _name: 'schema.GetPostById',
-    postId,
+    postId
   };
 }
 export function defaultGetPostById(
-  params: Partial<GetPostByIdInputParams> = {},
+  params: Partial<GetPostByIdInputParams> = {}
 ): GetPostById {
   return GetPostById({
     postId: 0,
-    ...params,
+    ...params
   });
 }
 export function compareGetPostById(
   __a: GetPostById,
-  __b: GetPostById,
+  __b: GetPostById
 ): boolean {
   return (
     /**
@@ -2201,13 +2201,13 @@ export function compareGetPostById(
 }
 export function updateGetPostById(
   value: GetPostById,
-  changes: Partial<GetPostByIdInputParams>,
+  changes: Partial<GetPostByIdInputParams>
 ) {
   if (typeof changes['postId'] !== 'undefined') {
     if (!(changes['postId'] === value['postId'])) {
       value = GetPostById({
         ...value,
-        postId: changes['postId'],
+        postId: changes['postId']
       });
     }
   }
@@ -2231,17 +2231,17 @@ export function isGetConversations(value: unknown): value is GetConversations {
 }
 export interface GetConversationsInputParams {}
 export function GetConversations(
-  _: GetConversationsInputParams = {},
+  _: GetConversationsInputParams = {}
 ): GetConversations {
   return {
-    _name: 'schema.GetConversations',
+    _name: 'schema.GetConversations'
   };
 }
 export function encodeGetConversations(__s: ISerializer, _: GetConversations) {
   __s.writeInt32(-416881);
 }
 export function decodeGetConversations(
-  __d: IDeserializer,
+  __d: IDeserializer
 ): GetConversations | null {
   const __id = __d.readInt32();
   /**
@@ -2249,25 +2249,25 @@ export function decodeGetConversations(
    */
   if (__id !== -416881) return null;
   return {
-    _name: 'schema.GetConversations',
+    _name: 'schema.GetConversations'
   };
 }
 export function defaultGetConversations(
-  params: Partial<GetConversationsInputParams> = {},
+  params: Partial<GetConversationsInputParams> = {}
 ): GetConversations {
   return GetConversations({
-    ...params,
+    ...params
   });
 }
 export function compareGetConversations(
   __a: GetConversations,
-  __b: GetConversations,
+  __b: GetConversations
 ): boolean {
   return true;
 }
 export function updateGetConversations(
   value: GetConversations,
-  _: Partial<GetConversationsInputParams>,
+  _: Partial<GetConversationsInputParams>
 ) {
   return value;
 }
@@ -2311,7 +2311,7 @@ export function Coordinates(params: CoordinatesInputParams): Coordinates {
   return {
     _name: 'schema.Coordinates',
     latitude: params['latitude'],
-    longitude: params['longitude'],
+    longitude: params['longitude']
   };
 }
 export function encodeCoordinates(__s: ISerializer, value: Coordinates) {
@@ -2346,21 +2346,21 @@ export function decodeCoordinates(__d: IDeserializer): Coordinates | null {
   return {
     _name: 'schema.Coordinates',
     latitude,
-    longitude,
+    longitude
   };
 }
 export function defaultCoordinates(
-  params: Partial<CoordinatesInputParams> = {},
+  params: Partial<CoordinatesInputParams> = {}
 ): Coordinates {
   return Coordinates({
     latitude: 0.0,
     longitude: 0.0,
-    ...params,
+    ...params
   });
 }
 export function compareCoordinates(
   __a: Coordinates,
-  __b: Coordinates,
+  __b: Coordinates
 ): boolean {
   return (
     /**
@@ -2375,13 +2375,13 @@ export function compareCoordinates(
 }
 export function updateCoordinates(
   value: Coordinates,
-  changes: Partial<CoordinatesInputParams>,
+  changes: Partial<CoordinatesInputParams>
 ) {
   if (typeof changes['latitude'] !== 'undefined') {
     if (!(changes['latitude'] === value['latitude'])) {
       value = Coordinates({
         ...value,
-        latitude: changes['latitude'],
+        latitude: changes['latitude']
       });
     }
   }
@@ -2389,7 +2389,7 @@ export function updateCoordinates(
     if (!(changes['longitude'] === value['longitude'])) {
       value = Coordinates({
         ...value,
-        longitude: changes['longitude'],
+        longitude: changes['longitude']
       });
     }
   }
@@ -2406,7 +2406,7 @@ export interface ShouldSupportSeveralSequentialVectorParams {
   g: [number, number, number, ReadonlyArray<number>, string | null];
 }
 export function isShouldSupportSeveralSequentialVectorParams(
-  value: unknown,
+  value: unknown
 ): value is ShouldSupportSeveralSequentialVectorParams {
   if (
     !(
@@ -2429,9 +2429,9 @@ export function isShouldSupportSeveralSequentialVectorParams(
             JSBI.equal(JSBI.BigInt(p), JSBI.BigInt(p)) &&
             JSBI.greaterThanOrEqual(
               JSBI.BigInt(p),
-              JSBI.BigInt('-2147483648'),
+              JSBI.BigInt('-2147483648')
             ) &&
-            JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('2147483647')),
+            JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('2147483647'))
         ))(value['a'])
     )
   )
@@ -2473,7 +2473,7 @@ export function isShouldSupportSeveralSequentialVectorParams(
             typeof p === 'number' &&
             JSBI.equal(JSBI.BigInt(p), JSBI.BigInt(p)) &&
             JSBI.greaterThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('0')) &&
-            JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('4294967295')),
+            JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('4294967295'))
         ))(value['e'])
     )
   )
@@ -2495,9 +2495,9 @@ export function isShouldSupportSeveralSequentialVectorParams(
                     JSBI.greaterThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('0')) &&
                     JSBI.lessThanOrEqual(
                       JSBI.BigInt(p),
-                      JSBI.BigInt('4294967295'),
-                    ),
-                ))(p),
+                      JSBI.BigInt('4294967295')
+                    )
+                ))(p)
         ))(value['f'])
     )
   )
@@ -2513,7 +2513,7 @@ export function isShouldSupportSeveralSequentialVectorParams(
           JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
           JSBI.greaterThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('-2147483648')) &&
           JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
-          __v6[0],
+          __v6[0]
         ) &&
         ((a) => typeof a === 'number')(__v6[1]) &&
         ((a) => typeof a === 'number')(__v6[2]) &&
@@ -2524,10 +2524,10 @@ export function isShouldSupportSeveralSequentialVectorParams(
               typeof p === 'number' &&
               JSBI.equal(JSBI.BigInt(p), JSBI.BigInt(p)) &&
               JSBI.greaterThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('0')) &&
-              JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('4294967295')),
+              JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('4294967295'))
           ))(__v6[3]) &&
         ((a) => (a === null ? true : ((x) => typeof x === 'string')(a)))(
-          __v6[4],
+          __v6[4]
         ))(value['g'])
     )
   )
@@ -2544,7 +2544,7 @@ export interface ShouldSupportSeveralSequentialVectorParamsInputParams {
   g: [number, number, number, ReadonlyArray<number>, string | null];
 }
 export function ShouldSupportSeveralSequentialVectorParams(
-  params: ShouldSupportSeveralSequentialVectorParamsInputParams,
+  params: ShouldSupportSeveralSequentialVectorParamsInputParams
 ): ShouldSupportSeveralSequentialVectorParams {
   return {
     _name: 'schema.ShouldSupportSeveralSequentialVectorParams',
@@ -2554,12 +2554,12 @@ export function ShouldSupportSeveralSequentialVectorParams(
     d: params['d'],
     e: params['e'],
     f: params['f'],
-    g: params['g'],
+    g: params['g']
   };
 }
 export function encodeShouldSupportSeveralSequentialVectorParams(
   __s: ISerializer,
-  value: ShouldSupportSeveralSequentialVectorParams,
+  value: ShouldSupportSeveralSequentialVectorParams
 ) {
   __s.writeInt32(-2007546384);
   /**
@@ -2650,7 +2650,7 @@ export function encodeShouldSupportSeveralSequentialVectorParams(
   }
 }
 export function decodeShouldSupportSeveralSequentialVectorParams(
-  __d: IDeserializer,
+  __d: IDeserializer
 ): ShouldSupportSeveralSequentialVectorParams | null {
   const __id = __d.readInt32();
   /**
@@ -2758,11 +2758,11 @@ export function decodeShouldSupportSeveralSequentialVectorParams(
     d,
     e,
     f,
-    g,
+    g
   };
 }
 export function defaultShouldSupportSeveralSequentialVectorParams(
-  params: Partial<ShouldSupportSeveralSequentialVectorParamsInputParams> = {},
+  params: Partial<ShouldSupportSeveralSequentialVectorParamsInputParams> = {}
 ): ShouldSupportSeveralSequentialVectorParams {
   return ShouldSupportSeveralSequentialVectorParams({
     a: [],
@@ -2772,12 +2772,12 @@ export function defaultShouldSupportSeveralSequentialVectorParams(
     e: [],
     f: [],
     g: [0, 0.0, 0.0, [], null],
-    ...params,
+    ...params
   });
 }
 export function compareShouldSupportSeveralSequentialVectorParams(
   __a: ShouldSupportSeveralSequentialVectorParams,
-  __b: ShouldSupportSeveralSequentialVectorParams,
+  __b: ShouldSupportSeveralSequentialVectorParams
 ): boolean {
   return (
     /**
@@ -2790,7 +2790,7 @@ export function compareShouldSupportSeveralSequentialVectorParams(
         : ((__item0) =>
             typeof __item0 === 'undefined'
               ? false
-              : __originalItem0 === __item0)(Array.from(__b['a'])[__index0]),
+              : __originalItem0 === __item0)(Array.from(__b['a'])[__index0])
     ) &&
     /**
      * compare parameter b
@@ -2802,7 +2802,7 @@ export function compareShouldSupportSeveralSequentialVectorParams(
         : ((__item1) =>
             typeof __item1 === 'undefined'
               ? false
-              : __originalItem1 === __item1)(Array.from(__b['b'])[__index1]),
+              : __originalItem1 === __item1)(Array.from(__b['b'])[__index1])
     ) &&
     /**
      * compare parameter c
@@ -2814,7 +2814,7 @@ export function compareShouldSupportSeveralSequentialVectorParams(
         : ((__item2) =>
             typeof __item2 === 'undefined'
               ? false
-              : __originalItem2 === __item2)(Array.from(__b['c'])[__index2]),
+              : __originalItem2 === __item2)(Array.from(__b['c'])[__index2])
     ) &&
     /**
      * compare parameter d
@@ -2826,7 +2826,7 @@ export function compareShouldSupportSeveralSequentialVectorParams(
         : ((__item3) =>
             typeof __item3 === 'undefined'
               ? false
-              : __originalItem3 === __item3)(Array.from(__b['d'])[__index3]),
+              : __originalItem3 === __item3)(Array.from(__b['d'])[__index3])
     ) &&
     /**
      * compare parameter e
@@ -2838,7 +2838,7 @@ export function compareShouldSupportSeveralSequentialVectorParams(
         : ((__item4) =>
             typeof __item4 === 'undefined'
               ? false
-              : __originalItem4 === __item4)(Array.from(__b['e'])[__index4]),
+              : __originalItem4 === __item4)(Array.from(__b['e'])[__index4])
     ) &&
     /**
      * compare parameter f
@@ -2860,12 +2860,12 @@ export function compareShouldSupportSeveralSequentialVectorParams(
                               typeof __item7 === 'undefined'
                                 ? false
                                 : __originalItem7 === __item7)(
-                              Array.from(__dp62)[__index7],
-                            ),
+                              Array.from(__dp62)[__index7]
+                            )
                       )
                     : __dp61 === __dp62)(__originalItem5, __item5))(
-            Array.from(__b['f'])[__index5],
-          ),
+            Array.from(__b['f'])[__index5]
+          )
     ) &&
     /**
      * compare parameter g
@@ -2884,7 +2884,7 @@ export function compareShouldSupportSeveralSequentialVectorParams(
           : ((__item16) =>
               typeof __item16 === 'undefined'
                 ? false
-                : __originalItem16 === __item16)(Array.from(__b63)[__index16]),
+                : __originalItem16 === __item16)(Array.from(__b63)[__index16])
       ))(__a['g'][3], __b['g'][3]) &&
     /* compare tuple item 4 of type string | null */ ((__a64, __b64) =>
       ((__dp221, __dp222) =>
@@ -2895,7 +2895,7 @@ export function compareShouldSupportSeveralSequentialVectorParams(
 }
 export function updateShouldSupportSeveralSequentialVectorParams(
   value: ShouldSupportSeveralSequentialVectorParams,
-  changes: Partial<ShouldSupportSeveralSequentialVectorParamsInputParams>,
+  changes: Partial<ShouldSupportSeveralSequentialVectorParamsInputParams>
 ) {
   if (typeof changes['a'] !== 'undefined') {
     if (
@@ -2908,14 +2908,14 @@ export function updateShouldSupportSeveralSequentialVectorParams(
                 typeof __item1 === 'undefined'
                   ? false
                   : __originalItem1 === __item1)(
-                Array.from(value['a'])[__index1],
-              ),
+                Array.from(value['a'])[__index1]
+              )
         )
       )
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -2930,14 +2930,14 @@ export function updateShouldSupportSeveralSequentialVectorParams(
                 typeof __item3 === 'undefined'
                   ? false
                   : __originalItem3 === __item3)(
-                Array.from(value['b'])[__index3],
-              ),
+                Array.from(value['b'])[__index3]
+              )
         )
       )
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
         ...value,
-        b: changes['b'],
+        b: changes['b']
       });
     }
   }
@@ -2952,14 +2952,14 @@ export function updateShouldSupportSeveralSequentialVectorParams(
                 typeof __item5 === 'undefined'
                   ? false
                   : __originalItem5 === __item5)(
-                Array.from(value['c'])[__index5],
-              ),
+                Array.from(value['c'])[__index5]
+              )
         )
       )
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
         ...value,
-        c: changes['c'],
+        c: changes['c']
       });
     }
   }
@@ -2974,14 +2974,14 @@ export function updateShouldSupportSeveralSequentialVectorParams(
                 typeof __item7 === 'undefined'
                   ? false
                   : __originalItem7 === __item7)(
-                Array.from(value['d'])[__index7],
-              ),
+                Array.from(value['d'])[__index7]
+              )
         )
       )
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
         ...value,
-        d: changes['d'],
+        d: changes['d']
       });
     }
   }
@@ -2996,14 +2996,14 @@ export function updateShouldSupportSeveralSequentialVectorParams(
                 typeof __item9 === 'undefined'
                   ? false
                   : __originalItem9 === __item9)(
-                Array.from(value['e'])[__index9],
-              ),
+                Array.from(value['e'])[__index9]
+              )
         )
       )
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
         ...value,
-        e: changes['e'],
+        e: changes['e']
       });
     }
   }
@@ -3028,18 +3028,18 @@ export function updateShouldSupportSeveralSequentialVectorParams(
                                     typeof __item13 === 'undefined'
                                       ? false
                                       : __originalItem13 === __item13)(
-                                    Array.from(__dp122)[__index13],
-                                  ),
+                                    Array.from(__dp122)[__index13]
+                                  )
                           )
                         : __dp121 === __dp122)(__originalItem11, __item11))(
-                Array.from(value['f'])[__index11],
-              ),
+                Array.from(value['f'])[__index11]
+              )
         )
       )
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
         ...value,
-        f: changes['f'],
+        f: changes['f']
       });
     }
   }
@@ -3049,7 +3049,7 @@ export function updateShouldSupportSeveralSequentialVectorParams(
         /* compare tuple item 0 of type number */ (
           ((__a150, __b150) => __a150 === __b150)(
             changes['g'][0],
-            value['g'][0],
+            value['g'][0]
           ) &&
           /* compare tuple item 1 of type number */ ((__a151, __b151) =>
             __a151 === __b151)(changes['g'][1], value['g'][1]) &&
@@ -3057,7 +3057,7 @@ export function updateShouldSupportSeveralSequentialVectorParams(
             __a152 === __b152)(changes['g'][2], value['g'][2]) &&
           /* compare tuple item 3 of type ReadonlyArray<number> */ ((
             __a153,
-            __b153,
+            __b153
           ) =>
             __a153.length === __b153.length &&
             Array.from(__a153).every((__originalItem25, __index25) =>
@@ -3067,8 +3067,8 @@ export function updateShouldSupportSeveralSequentialVectorParams(
                     typeof __item25 === 'undefined'
                       ? false
                       : __originalItem25 === __item25)(
-                    Array.from(__b153)[__index25],
-                  ),
+                    Array.from(__b153)[__index25]
+                  )
             ))(changes['g'][3], value['g'][3]) &&
           /* compare tuple item 4 of type string | null */ ((__a154, __b154) =>
             ((__dp311, __dp312) =>
@@ -3076,14 +3076,14 @@ export function updateShouldSupportSeveralSequentialVectorParams(
                 ? __dp311 === __dp312
                 : __dp311 === __dp312)(__a154, __b154))(
             changes['g'][4],
-            value['g'][4],
+            value['g'][4]
           )
         )
       )
     ) {
       value = ShouldSupportSeveralSequentialVectorParams({
         ...value,
-        g: changes['g'],
+        g: changes['g']
       });
     }
   }
@@ -3118,7 +3118,7 @@ export function isSimpleTupleTest(value: unknown): value is simpleTupleTest {
           JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
           JSBI.greaterThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('-2147483648')) &&
           JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
-          __v0[0],
+          __v0[0]
         ) &&
         ((a) => typeof a === 'number')(__v0[1]) &&
         ((a) => typeof a === 'number')(__v0[2]) &&
@@ -3129,10 +3129,10 @@ export function isSimpleTupleTest(value: unknown): value is simpleTupleTest {
               typeof p === 'number' &&
               JSBI.equal(JSBI.BigInt(p), JSBI.BigInt(p)) &&
               JSBI.greaterThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('0')) &&
-              JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('4294967295')),
+              JSBI.lessThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('4294967295'))
           ))(__v0[3]) &&
         ((a) => (a === null ? true : ((x) => typeof x === 'string')(a)))(
-          __v0[4],
+          __v0[4]
         ))(value['a'])
     )
   )
@@ -3151,10 +3151,10 @@ export function isSimpleTupleTest(value: unknown): value is simpleTupleTest {
               JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
               JSBI.greaterThanOrEqual(
                 JSBI.BigInt(a),
-                JSBI.BigInt('-2147483648'),
+                JSBI.BigInt('-2147483648')
               ) &&
               JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
-              p[0],
+              p[0]
             ) &&
             ((a) => typeof a === 'number')(p[1]) &&
             ((a) => typeof a === 'number')(p[2]) &&
@@ -3167,12 +3167,12 @@ export function isSimpleTupleTest(value: unknown): value is simpleTupleTest {
                   JSBI.greaterThanOrEqual(JSBI.BigInt(p), JSBI.BigInt('0')) &&
                   JSBI.lessThanOrEqual(
                     JSBI.BigInt(p),
-                    JSBI.BigInt('4294967295'),
-                  ),
+                    JSBI.BigInt('4294967295')
+                  )
               ))(p[3]) &&
             ((a) => (a === null ? true : ((x) => typeof x === 'string')(a)))(
-              p[4],
-            ),
+              p[4]
+            )
         ))(value['b'])
     )
   )
@@ -3186,17 +3186,17 @@ export interface simpleTupleTestInputParams {
   >;
 }
 export function simpleTupleTest(
-  params: simpleTupleTestInputParams,
+  params: simpleTupleTestInputParams
 ): simpleTupleTest {
   return {
     _name: 'schema.simpleTupleTest',
     a: params['a'],
-    b: params['b'],
+    b: params['b']
   };
 }
 export function encodeSimpleTupleTest(
   __s: ISerializer,
-  value: simpleTupleTest,
+  value: simpleTupleTest
 ) {
   __s.writeInt32(546242333);
   /**
@@ -3251,7 +3251,7 @@ export function encodeSimpleTupleTest(
   }
 }
 export function decodeSimpleTupleTest(
-  __d: IDeserializer,
+  __d: IDeserializer
 ): simpleTupleTest | null {
   const __id = __d.readInt32();
   /**
@@ -3316,21 +3316,21 @@ export function decodeSimpleTupleTest(
   return {
     _name: 'schema.simpleTupleTest',
     a,
-    b,
+    b
   };
 }
 export function defaultSimpleTupleTest(
-  params: Partial<simpleTupleTestInputParams> = {},
+  params: Partial<simpleTupleTestInputParams> = {}
 ): simpleTupleTest {
   return simpleTupleTest({
     a: [0, 0.0, 0.0, [], null],
     b: [],
-    ...params,
+    ...params
   });
 }
 export function compareSimpleTupleTest(
   __a: simpleTupleTest,
-  __b: simpleTupleTest,
+  __b: simpleTupleTest
 ): boolean {
   return (
     /**
@@ -3350,7 +3350,7 @@ export function compareSimpleTupleTest(
           : ((__item10) =>
               typeof __item10 === 'undefined'
                 ? false
-                : __originalItem10 === __item10)(Array.from(__b03)[__index10]),
+                : __originalItem10 === __item10)(Array.from(__b03)[__index10])
       ))(__a['a'][3], __b['a'][3]) &&
     /* compare tuple item 4 of type string | null */ ((__a04, __b04) =>
       ((__dp161, __dp162) =>
@@ -3375,7 +3375,7 @@ export function compareSimpleTupleTest(
                   __a22 === __b22)(__originalItem1[2], __item1[2]) &&
                 /* compare tuple item 3 of type ReadonlyArray<number> */ ((
                   __a23,
-                  __b23,
+                  __b23
                 ) =>
                   __a23.length === __b23.length &&
                   Array.from(__a23).every((__originalItem12, __index12) =>
@@ -3385,26 +3385,26 @@ export function compareSimpleTupleTest(
                           typeof __item12 === 'undefined'
                             ? false
                             : __originalItem12 === __item12)(
-                          Array.from(__b23)[__index12],
-                        ),
+                          Array.from(__b23)[__index12]
+                        )
                   ))(__originalItem1[3], __item1[3]) &&
                 /* compare tuple item 4 of type string | null */ ((
                   __a24,
-                  __b24,
+                  __b24
                 ) =>
                   ((__dp181, __dp182) =>
                     __dp181 !== null && __dp182 !== null
                       ? __dp181 === __dp182
                       : __dp181 === __dp182)(__a24, __b24))(
                   __originalItem1[4],
-                  __item1[4],
-                ))(Array.from(__b['b'])[__index1]),
+                  __item1[4]
+                ))(Array.from(__b['b'])[__index1])
     )
   );
 }
 export function updateSimpleTupleTest(
   value: simpleTupleTest,
-  changes: Partial<simpleTupleTestInputParams>,
+  changes: Partial<simpleTupleTestInputParams>
 ) {
   if (typeof changes['a'] !== 'undefined') {
     if (
@@ -3417,7 +3417,7 @@ export function updateSimpleTupleTest(
             __a12 === __b12)(changes['a'][2], value['a'][2]) &&
           /* compare tuple item 3 of type ReadonlyArray<number> */ ((
             __a13,
-            __b13,
+            __b13
           ) =>
             __a13.length === __b13.length &&
             Array.from(__a13).every((__originalItem11, __index11) =>
@@ -3427,8 +3427,8 @@ export function updateSimpleTupleTest(
                     typeof __item11 === 'undefined'
                       ? false
                       : __originalItem11 === __item11)(
-                    Array.from(__b13)[__index11],
-                  ),
+                    Array.from(__b13)[__index11]
+                  )
             ))(changes['a'][3], value['a'][3]) &&
           /* compare tuple item 4 of type string | null */ ((__a14, __b14) =>
             ((__dp171, __dp172) =>
@@ -3436,14 +3436,14 @@ export function updateSimpleTupleTest(
                 ? __dp171 === __dp172
                 : __dp171 === __dp172)(__a14, __b14))(
             changes['a'][4],
-            value['a'][4],
+            value['a'][4]
           )
         )
       )
     ) {
       value = simpleTupleTest({
         ...value,
-        a: changes['a'],
+        a: changes['a']
       });
     }
   }
@@ -3459,19 +3459,19 @@ export function updateSimpleTupleTest(
                   ? false
                   : /* compare tuple item 0 of type number */ ((
                       __a200,
-                      __b200,
+                      __b200
                     ) => __a200 === __b200)(__originalItem19[0], __item19[0]) &&
                     /* compare tuple item 1 of type number */ ((
                       __a201,
-                      __b201,
+                      __b201
                     ) => __a201 === __b201)(__originalItem19[1], __item19[1]) &&
                     /* compare tuple item 2 of type number */ ((
                       __a202,
-                      __b202,
+                      __b202
                     ) => __a202 === __b202)(__originalItem19[2], __item19[2]) &&
                     /* compare tuple item 3 of type ReadonlyArray<number> */ ((
                       __a203,
-                      __b203,
+                      __b203
                     ) =>
                       __a203.length === __b203.length &&
                       Array.from(__a203).every((__originalItem30, __index30) =>
@@ -3481,26 +3481,26 @@ export function updateSimpleTupleTest(
                               typeof __item30 === 'undefined'
                                 ? false
                                 : __originalItem30 === __item30)(
-                              Array.from(__b203)[__index30],
-                            ),
+                              Array.from(__b203)[__index30]
+                            )
                       ))(__originalItem19[3], __item19[3]) &&
                     /* compare tuple item 4 of type string | null */ ((
                       __a204,
-                      __b204,
+                      __b204
                     ) =>
                       ((__dp361, __dp362) =>
                         __dp361 !== null && __dp362 !== null
                           ? __dp361 === __dp362
                           : __dp361 === __dp362)(__a204, __b204))(
                       __originalItem19[4],
-                      __item19[4],
-                    ))(Array.from(value['b'])[__index19]),
+                      __item19[4]
+                    ))(Array.from(value['b'])[__index19])
         )
       )
     ) {
       value = simpleTupleTest({
         ...value,
-        b: changes['b'],
+        b: changes['b']
       });
     }
   }
@@ -3525,7 +3525,7 @@ export function isEmptyNode(value: unknown): value is emptyNode {
 export interface emptyNodeInputParams {}
 export function emptyNode(_: emptyNodeInputParams = {}): emptyNode {
   return {
-    _name: 'schema.emptyNode',
+    _name: 'schema.emptyNode'
   };
 }
 export function encodeEmptyNode(__s: ISerializer, _: emptyNode) {
@@ -3538,14 +3538,14 @@ export function decodeEmptyNode(__d: IDeserializer): emptyNode | null {
    */
   if (__id !== -1994197976) return null;
   return {
-    _name: 'schema.emptyNode',
+    _name: 'schema.emptyNode'
   };
 }
 export function defaultEmptyNode(
-  params: Partial<emptyNodeInputParams> = {},
+  params: Partial<emptyNodeInputParams> = {}
 ): emptyNode {
   return emptyNode({
-    ...params,
+    ...params
   });
 }
 export function compareEmptyNode(__a: emptyNode, __b: emptyNode): boolean {
@@ -3553,7 +3553,7 @@ export function compareEmptyNode(__a: emptyNode, __b: emptyNode): boolean {
 }
 export function updateEmptyNode(
   value: emptyNode,
-  _: Partial<emptyNodeInputParams>,
+  _: Partial<emptyNodeInputParams>
 ) {
   return value;
 }
@@ -3581,10 +3581,10 @@ export function isUser(value: unknown): value is user {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('-2147483648'),
+          JSBI.BigInt('-2147483648')
         ) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
-        value['id'],
+        value['id']
       )
     )
   )
@@ -3601,7 +3601,7 @@ export function user(params: userInputParams): user {
   return {
     _name: 'schema.user',
     id: params['id'],
-    name: params['name'],
+    name: params['name']
   };
 }
 export function encodeUser(__s: ISerializer, value: user) {
@@ -3636,14 +3636,14 @@ export function decodeUser(__d: IDeserializer): user | null {
   return {
     _name: 'schema.user',
     id,
-    name,
+    name
   };
 }
 export function defaultUser(params: Partial<userInputParams> = {}): user {
   return user({
     id: 0,
     name: '',
-    ...params,
+    ...params
   });
 }
 export function compareUser(__a: user, __b: user): boolean {
@@ -3663,7 +3663,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
     if (!(changes['id'] === value['id'])) {
       value = user({
         ...value,
-        id: changes['id'],
+        id: changes['id']
       });
     }
   }
@@ -3671,7 +3671,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
     if (!(changes['name'] === value['name'])) {
       value = user({
         ...value,
-        name: changes['name'],
+        name: changes['name']
       });
     }
   }
@@ -3682,7 +3682,7 @@ export interface supportNullTerminatedString {
   value: string;
 }
 export function isSupportNullTerminatedString(
-  value: unknown,
+  value: unknown
 ): value is supportNullTerminatedString {
   if (
     !(
@@ -3704,16 +3704,16 @@ export interface supportNullTerminatedStringInputParams {
   value: string;
 }
 export function supportNullTerminatedString(
-  params: supportNullTerminatedStringInputParams,
+  params: supportNullTerminatedStringInputParams
 ): supportNullTerminatedString {
   return {
     _name: 'schema.supportNullTerminatedString',
-    value: params['value'],
+    value: params['value']
   };
 }
 export function encodeSupportNullTerminatedString(
   __s: ISerializer,
-  value: supportNullTerminatedString,
+  value: supportNullTerminatedString
 ) {
   __s.writeInt32(-1360902719);
   /**
@@ -3723,7 +3723,7 @@ export function encodeSupportNullTerminatedString(
   __s.writeNullTerminatedString(__pv0);
 }
 export function decodeSupportNullTerminatedString(
-  __d: IDeserializer,
+  __d: IDeserializer
 ): supportNullTerminatedString | null {
   const __id = __d.readInt32();
   /**
@@ -3737,20 +3737,20 @@ export function decodeSupportNullTerminatedString(
   value = __d.readNullTerminatedString();
   return {
     _name: 'schema.supportNullTerminatedString',
-    value,
+    value
   };
 }
 export function defaultSupportNullTerminatedString(
-  params: Partial<supportNullTerminatedStringInputParams> = {},
+  params: Partial<supportNullTerminatedStringInputParams> = {}
 ): supportNullTerminatedString {
   return supportNullTerminatedString({
     value: '',
-    ...params,
+    ...params
   });
 }
 export function compareSupportNullTerminatedString(
   __a: supportNullTerminatedString,
-  __b: supportNullTerminatedString,
+  __b: supportNullTerminatedString
 ): boolean {
   return (
     /**
@@ -3761,13 +3761,13 @@ export function compareSupportNullTerminatedString(
 }
 export function updateSupportNullTerminatedString(
   value: supportNullTerminatedString,
-  changes: Partial<supportNullTerminatedStringInputParams>,
+  changes: Partial<supportNullTerminatedStringInputParams>
 ) {
   if (typeof changes['value'] !== 'undefined') {
     if (!(changes['value'] === value['value'])) {
       value = supportNullTerminatedString({
         ...value,
-        value: changes['value'],
+        value: changes['value']
       });
     }
   }
@@ -3778,7 +3778,7 @@ export interface nullTerminatedStringList {
   value: ReadonlyArray<string>;
 }
 export function isNullTerminatedStringList(
-  value: unknown,
+  value: unknown
 ): value is nullTerminatedStringList {
   if (
     !(
@@ -3805,16 +3805,16 @@ export interface nullTerminatedStringListInputParams {
   value: ReadonlyArray<string>;
 }
 export function nullTerminatedStringList(
-  params: nullTerminatedStringListInputParams,
+  params: nullTerminatedStringListInputParams
 ): nullTerminatedStringList {
   return {
     _name: 'schema.nullTerminatedStringList',
-    value: params['value'],
+    value: params['value']
   };
 }
 export function encodeNullTerminatedStringList(
   __s: ISerializer,
-  value: nullTerminatedStringList,
+  value: nullTerminatedStringList
 ) {
   __s.writeInt32(-1953588325);
   /**
@@ -3828,7 +3828,7 @@ export function encodeNullTerminatedStringList(
   }
 }
 export function decodeNullTerminatedStringList(
-  __d: IDeserializer,
+  __d: IDeserializer
 ): nullTerminatedStringList | null {
   const __id = __d.readInt32();
   /**
@@ -3847,20 +3847,20 @@ export function decodeNullTerminatedStringList(
   }
   return {
     _name: 'schema.nullTerminatedStringList',
-    value,
+    value
   };
 }
 export function defaultNullTerminatedStringList(
-  params: Partial<nullTerminatedStringListInputParams> = {},
+  params: Partial<nullTerminatedStringListInputParams> = {}
 ): nullTerminatedStringList {
   return nullTerminatedStringList({
     value: [],
-    ...params,
+    ...params
   });
 }
 export function compareNullTerminatedStringList(
   __a: nullTerminatedStringList,
-  __b: nullTerminatedStringList,
+  __b: nullTerminatedStringList
 ): boolean {
   return (
     /**
@@ -3873,15 +3873,13 @@ export function compareNullTerminatedStringList(
         : ((__item0) =>
             typeof __item0 === 'undefined'
               ? false
-              : __originalItem0 === __item0)(
-            Array.from(__b['value'])[__index0],
-          ),
+              : __originalItem0 === __item0)(Array.from(__b['value'])[__index0])
     )
   );
 }
 export function updateNullTerminatedStringList(
   value: nullTerminatedStringList,
-  changes: Partial<nullTerminatedStringListInputParams>,
+  changes: Partial<nullTerminatedStringListInputParams>
 ) {
   if (typeof changes['value'] !== 'undefined') {
     if (
@@ -3894,14 +3892,14 @@ export function updateNullTerminatedStringList(
                 typeof __item1 === 'undefined'
                   ? false
                   : __originalItem1 === __item1)(
-                Array.from(value['value'])[__index1],
-              ),
+                Array.from(value['value'])[__index1]
+              )
         )
       )
     ) {
       value = nullTerminatedStringList({
         ...value,
-        value: changes['value'],
+        value: changes['value']
       });
     }
   }
@@ -3937,16 +3935,16 @@ export interface normalStringListInputParams {
   value: ReadonlyArray<string>;
 }
 export function normalStringList(
-  params: normalStringListInputParams,
+  params: normalStringListInputParams
 ): normalStringList {
   return {
     _name: 'schema.normalStringList',
-    value: params['value'],
+    value: params['value']
   };
 }
 export function encodeNormalStringList(
   __s: ISerializer,
-  value: normalStringList,
+  value: normalStringList
 ) {
   __s.writeInt32(-1964890795);
   /**
@@ -3960,7 +3958,7 @@ export function encodeNormalStringList(
   }
 }
 export function decodeNormalStringList(
-  __d: IDeserializer,
+  __d: IDeserializer
 ): normalStringList | null {
   const __id = __d.readInt32();
   /**
@@ -3979,20 +3977,20 @@ export function decodeNormalStringList(
   }
   return {
     _name: 'schema.normalStringList',
-    value,
+    value
   };
 }
 export function defaultNormalStringList(
-  params: Partial<normalStringListInputParams> = {},
+  params: Partial<normalStringListInputParams> = {}
 ): normalStringList {
   return normalStringList({
     value: [],
-    ...params,
+    ...params
   });
 }
 export function compareNormalStringList(
   __a: normalStringList,
-  __b: normalStringList,
+  __b: normalStringList
 ): boolean {
   return (
     /**
@@ -4005,15 +4003,13 @@ export function compareNormalStringList(
         : ((__item0) =>
             typeof __item0 === 'undefined'
               ? false
-              : __originalItem0 === __item0)(
-            Array.from(__b['value'])[__index0],
-          ),
+              : __originalItem0 === __item0)(Array.from(__b['value'])[__index0])
     )
   );
 }
 export function updateNormalStringList(
   value: normalStringList,
-  changes: Partial<normalStringListInputParams>,
+  changes: Partial<normalStringListInputParams>
 ) {
   if (typeof changes['value'] !== 'undefined') {
     if (
@@ -4026,14 +4022,14 @@ export function updateNormalStringList(
                 typeof __item1 === 'undefined'
                   ? false
                   : __originalItem1 === __item1)(
-                Array.from(value['value'])[__index1],
-              ),
+                Array.from(value['value'])[__index1]
+              )
         )
       )
     ) {
       value = normalStringList({
         ...value,
-        value: changes['value'],
+        value: changes['value']
       });
     }
   }
@@ -4067,7 +4063,7 @@ export function isBoolAndTuple(value: unknown): value is boolAndTuple {
           a.length === 2 &&
           ((a) => typeof a === 'boolean')(a[0]) &&
           ((a) => typeof a === 'boolean')(a[1]))(__v0[2]))(
-        value['sorryIJustLoveTuples'],
+        value['sorryIJustLoveTuples']
       )
     )
   )
@@ -4080,7 +4076,7 @@ export interface boolAndTupleInputParams {
 export function boolAndTuple(params: boolAndTupleInputParams): boolAndTuple {
   return {
     _name: 'schema.boolAndTuple',
-    sorryIJustLoveTuples: params['sorryIJustLoveTuples'],
+    sorryIJustLoveTuples: params['sorryIJustLoveTuples']
   };
 }
 export function encodeBoolAndTuple(__s: ISerializer, value: boolAndTuple) {
@@ -4122,20 +4118,20 @@ export function decodeBoolAndTuple(__d: IDeserializer): boolAndTuple | null {
   sorryIJustLoveTuples = [__e1, __e2, __e3];
   return {
     _name: 'schema.boolAndTuple',
-    sorryIJustLoveTuples,
+    sorryIJustLoveTuples
   };
 }
 export function defaultBoolAndTuple(
-  params: Partial<boolAndTupleInputParams> = {},
+  params: Partial<boolAndTupleInputParams> = {}
 ): boolAndTuple {
   return boolAndTuple({
     sorryIJustLoveTuples: [false, false, [false, false]],
-    ...params,
+    ...params
   });
 }
 export function compareBoolAndTuple(
   __a: boolAndTuple,
-  __b: boolAndTuple,
+  __b: boolAndTuple
 ): boolean {
   return (
     /**
@@ -4144,12 +4140,12 @@ export function compareBoolAndTuple(
     /* compare tuple item 0 of type boolean */ ((__a00, __b00) =>
       __a00 === __b00)(
       __a['sorryIJustLoveTuples'][0],
-      __b['sorryIJustLoveTuples'][0],
+      __b['sorryIJustLoveTuples'][0]
     ) &&
     /* compare tuple item 1 of type boolean */ ((__a01, __b01) =>
       __a01 === __b01)(
       __a['sorryIJustLoveTuples'][1],
-      __b['sorryIJustLoveTuples'][1],
+      __b['sorryIJustLoveTuples'][1]
     ) &&
     /* compare tuple item 2 of type [boolean,boolean] */ ((__a02, __b02) =>
       /* compare tuple item 0 of type boolean */ ((__a60, __b60) =>
@@ -4157,13 +4153,13 @@ export function compareBoolAndTuple(
       /* compare tuple item 1 of type boolean */ ((__a61, __b61) =>
         __a61 === __b61)(__a02[1], __b02[1]))(
       __a['sorryIJustLoveTuples'][2],
-      __b['sorryIJustLoveTuples'][2],
+      __b['sorryIJustLoveTuples'][2]
     )
   );
 }
 export function updateBoolAndTuple(
   value: boolAndTuple,
-  changes: Partial<boolAndTupleInputParams>,
+  changes: Partial<boolAndTupleInputParams>
 ) {
   if (typeof changes['sorryIJustLoveTuples'] !== 'undefined') {
     if (
@@ -4171,30 +4167,30 @@ export function updateBoolAndTuple(
         /* compare tuple item 0 of type boolean */ (
           ((__a10, __b10) => __a10 === __b10)(
             changes['sorryIJustLoveTuples'][0],
-            value['sorryIJustLoveTuples'][0],
+            value['sorryIJustLoveTuples'][0]
           ) &&
           /* compare tuple item 1 of type boolean */ ((__a11, __b11) =>
             __a11 === __b11)(
             changes['sorryIJustLoveTuples'][1],
-            value['sorryIJustLoveTuples'][1],
+            value['sorryIJustLoveTuples'][1]
           ) &&
           /* compare tuple item 2 of type [boolean,boolean] */ ((
             __a12,
-            __b12,
+            __b12
           ) =>
             /* compare tuple item 0 of type boolean */ ((__a70, __b70) =>
               __a70 === __b70)(__a12[0], __b12[0]) &&
             /* compare tuple item 1 of type boolean */ ((__a71, __b71) =>
               __a71 === __b71)(__a12[1], __b12[1]))(
             changes['sorryIJustLoveTuples'][2],
-            value['sorryIJustLoveTuples'][2],
+            value['sorryIJustLoveTuples'][2]
           )
         )
       )
     ) {
       value = boolAndTuple({
         ...value,
-        sorryIJustLoveTuples: changes['sorryIJustLoveTuples'],
+        sorryIJustLoveTuples: changes['sorryIJustLoveTuples']
       });
     }
   }
