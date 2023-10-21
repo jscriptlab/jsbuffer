@@ -111,14 +111,14 @@ export default class FileGenerator extends CodeStream {
       indentationSize,
       root: parent = null,
       typeScriptConfiguration,
-    }: IFileGeneratorOptions,
+    }: IFileGeneratorOptions
   ) {
     super(undefined, {
       indentationSize,
     });
     if (!path.isAbsolute(compilerOptions.outDir)) {
       throw new Exception(
-        'The `outDir` compiler options must be an absolute path',
+        'The `outDir` compiler options must be an absolute path'
       );
     }
     this.#sortProperties = sortProperties;
@@ -153,7 +153,7 @@ export default class FileGenerator extends CodeStream {
     for (const f of files) {
       const resolvedFilePath = path.resolve(
         this.#compilerOptions.outDir,
-        f.path,
+        f.path
       );
       const resolvedFilePathDirName = path.dirname(resolvedFilePath);
       exists = false;
@@ -180,7 +180,7 @@ export default class FileGenerator extends CodeStream {
       }
       if (exists && !(await fs.promises.stat(resolvedFilePath)).isFile()) {
         throw new Exception(
-          `FileGenerator outputted file "${resolvedFilePath}", but it is not a file, so we cannot move on`,
+          `FileGenerator outputted file "${resolvedFilePath}", but it is not a file, so we cannot move on`
         );
       }
       await fs.promises.writeFile(resolvedFilePath, f.contents);
@@ -193,7 +193,7 @@ export default class FileGenerator extends CodeStream {
         case NodeType.TraitDefinition:
         case NodeType.TypeDefinition:
           this.#metadataObjects.add(
-            this.#getMetadataFromCallOrTypeDefinition(node),
+            this.#getMetadataFromCallOrTypeDefinition(node)
           );
           break;
       }
@@ -227,6 +227,7 @@ export default class FileGenerator extends CodeStream {
     const defaultOptions = {
       root,
       textDecoder: this.#textDecoder,
+      sortProperties: this.#sortProperties,
       indentationSize: this.#indentationSize,
       textEncoder: this.#textEncoder,
     };
@@ -234,13 +235,13 @@ export default class FileGenerator extends CodeStream {
     switch (node.type) {
       case NodeType.ImportStatement: {
         const { externalModule } = await this.#resolveModulePathToAbsolutePath(
-          node.from.value,
+          node.from.value
         );
         if (externalModule) {
           const rootDir = path.dirname(externalModule.configFile);
           const mainFile = path.resolve(
             rootDir,
-            externalModule.configuration.mainFile,
+            externalModule.configuration.mainFile
           );
           const compilerOptions = {
             outDir: path.resolve(rootDir, externalModule.configuration.outDir),
@@ -259,7 +260,7 @@ export default class FileGenerator extends CodeStream {
                 // TODO: maybe get it from `jsbufferconfig.json` file
                 uniqueNamePropertyName: root.#uniqueNamePropertyName,
                 compilerOptions,
-              },
+              }
             );
             fileGenerators.set(mainFile, mainFileGenerator);
           }
@@ -285,7 +286,7 @@ export default class FileGenerator extends CodeStream {
           case NodeType.TypeDefinition:
           case NodeType.CallDefinition:
             node.parameters = Array.from(node.parameters).sort((p1, p2) =>
-              p1.name.value.localeCompare(p2.name.value),
+              p1.name.value.localeCompare(p2.name.value)
             );
             break;
           case NodeType.ImportStatement:
@@ -354,7 +355,7 @@ export default class FileGenerator extends CodeStream {
       case NodeType.TypeDefinition: {
         if ('returnType' in node) {
           this.#importResolvedType(
-            this.#resolveTypeExpression(node.returnType),
+            this.#resolveTypeExpression(node.returnType)
           );
         }
         for (const p of node.parameters) {
@@ -373,7 +374,7 @@ export default class FileGenerator extends CodeStream {
 
     if (!modulePath.startsWith('.')) {
       const nodeModulesFolderPath = await this.#findClosestNodeModules(
-        this.#file.path,
+        this.#file.path
       );
       if (nodeModulesFolderPath === null) {
         throw new Exception('Failed to find closest node_modules folder');
@@ -381,7 +382,7 @@ export default class FileGenerator extends CodeStream {
       inputFile = path.resolve(nodeModulesFolderPath, modulePath);
       const configFile = await this.#fileClosestFileOrFolder(
         inputFile,
-        'jsbufferconfig.json',
+        'jsbufferconfig.json'
       );
       if (configFile === null) {
         throw new Exception(`No jsbufferconfig found for: ${modulePath}`);
@@ -389,7 +390,7 @@ export default class FileGenerator extends CodeStream {
       let parsedConfig: IConfiguration;
       try {
         parsedConfig = JSON.parse(
-          await fs.promises.readFile(configFile, 'utf8'),
+          await fs.promises.readFile(configFile, 'utf8')
         );
       } catch (reason) {
         throw new Exception(`Failed to parse ${configFile}: ${reason}`);
@@ -413,8 +414,8 @@ export default class FileGenerator extends CodeStream {
     ) {
       throw new Exception(
         `Tried to import ${path.resolve(
-          inputFile,
-        )}/${inputFile} that is outside of ${compilerOptions.rootDir}`,
+          inputFile
+        )}/${inputFile} that is outside of ${compilerOptions.rootDir}`
       );
     }
 
@@ -436,13 +437,14 @@ export default class FileGenerator extends CodeStream {
           indentationSize: this.#indentationSize,
           textDecoder: this.#textDecoder,
           textEncoder: this.#textEncoder,
+          sortProperties: this.#sortProperties,
           root,
         };
         let fileGenerator = root.#fileGenerators.get(inputFile);
         if (!fileGenerator) {
           if (externalModule) {
             throw new Exception(
-              `Could not find "${inputFile}" file generator for external schema with config file at: ${externalModule.configFile}`,
+              `Could not find "${inputFile}" file generator for external schema with config file at: ${externalModule.configFile}`
             );
           }
           fileGenerator = new FileGenerator(
@@ -454,7 +456,7 @@ export default class FileGenerator extends CodeStream {
               compilerOptions: this.#compilerOptions,
               // TODO: check if this makes sense
               externalModule: this.#externalModule,
-            },
+            }
           );
           root.#fileGenerators.set(inputFile, fileGenerator);
         }
@@ -538,7 +540,7 @@ export default class FileGenerator extends CodeStream {
               out[a.name] = a;
               return out;
             },
-            {},
+            {}
           ),
           __all: Array.from(f.#metadataObjects),
         }),
@@ -572,7 +574,7 @@ export default class FileGenerator extends CodeStream {
       throw new Exception(
         `Path does not include root dir (${
           this.#root().#compilerOptions.rootDir
-        }) at the beginning: ${value}`,
+        }) at the beginning: ${value}`
       );
     }
     return value.replace(rootDirRegExp, '');
@@ -596,7 +598,7 @@ export default class FileGenerator extends CodeStream {
       fullPath = req.path;
     }
     const existingImport = Array.from(this.#imports).find(
-      (i) => i.path === fullPath && i.identifier === id,
+      (i) => i.path === fullPath && i.identifier === id
     );
     if (existingImport) {
       return id;
@@ -640,7 +642,7 @@ export default class FileGenerator extends CodeStream {
    */
   #sourceImportToOutDirImport(
     originalFileGenerator: FileGenerator,
-    absolutePath: string,
+    absolutePath: string
   ) {
     let finalPath: string;
 
@@ -650,29 +652,29 @@ export default class FileGenerator extends CodeStream {
       const nodeModulesFolderPath = compilerOptions.rootDir.substring(
         0,
         compilerOptions.rootDir.lastIndexOf('node_modules') +
-          'node_modules'.length,
+          'node_modules'.length
       );
       const externalSchemaOutDir = path.resolve(
         externalSchemaRootFolder,
-        compilerOptions.outDir,
+        compilerOptions.outDir
       );
       const finalInputFile = path.resolve(
         externalSchemaOutDir,
         this.#file.path.replace(
           new RegExp(`^${externalSchemaRootFolder}/?`),
-          '',
-        ),
+          ''
+        )
       );
       finalPath = finalInputFile.replace(
         new RegExp(`^${nodeModulesFolderPath}/?`),
-        '',
+        ''
       );
     } else {
       finalPath = enforceLocalImport(
         path.relative(
           path.dirname(originalFileGenerator.#file.path),
-          absolutePath,
-        ),
+          absolutePath
+        )
       );
     }
     return finalPath;
@@ -686,7 +688,7 @@ export default class FileGenerator extends CodeStream {
         } else {
           finalPath = this.#sourceImportToOutDirImport(
             this,
-            path.resolve(this.#compilerOptions.rootDir, i.path),
+            path.resolve(this.#compilerOptions.rootDir, i.path)
           );
         }
       } else {
@@ -725,7 +727,7 @@ export default class FileGenerator extends CodeStream {
     }
   }
   #generateTypeScriptConfigurationFile(
-    additionalTypeScriptConfiguration: Record<string, unknown>,
+    additionalTypeScriptConfiguration: Record<string, unknown>
   ): IOutputFile {
     const stringify = new JavaScriptObjectStringify(undefined, {
       indentationSize: this.#indentationSize,
@@ -742,7 +744,7 @@ export default class FileGenerator extends CodeStream {
   }
   #generateTypesFile(): IOutputFile {
     this.write(
-      'export type RequestResult<T> = T extends IRequest<infer R> ? R : never;\n',
+      'export type RequestResult<T> = T extends IRequest<infer R> ? R : never;\n'
     );
     this.write(
       'export interface ISerializer {\n',
@@ -760,7 +762,7 @@ export default class FileGenerator extends CodeStream {
         this.write('writeDouble(value: number): void;\n');
         this.write('writeFloat(value: number): void;\n');
       },
-      '}\n',
+      '}\n'
     );
     this.write(
       'export interface IDeserializer {\n',
@@ -779,14 +781,14 @@ export default class FileGenerator extends CodeStream {
         this.write('readFloat(): number;\n');
         this.write('rewind(bytes: number): void;\n');
       },
-      '}\n',
+      '}\n'
     );
     this.write(
       'export interface IRequest<T> {\n',
       () => {
         this.write('_returnType?: T;\n');
       },
-      '}\n',
+      '}\n'
     );
     return {
       path: '__types__.ts',
@@ -795,7 +797,7 @@ export default class FileGenerator extends CodeStream {
   }
   async #fileClosestFileOrFolder(
     startingDir: string,
-    expectedName: string,
+    expectedName: string
   ): Promise<string | null> {
     let folders: string[];
     try {
@@ -803,7 +805,7 @@ export default class FileGenerator extends CodeStream {
     } catch (reason) {
       return this.#fileClosestFileOrFolder(
         path.dirname(startingDir),
-        expectedName,
+        expectedName
       );
     }
     if (folders.includes(expectedName)) {
@@ -814,7 +816,7 @@ export default class FileGenerator extends CodeStream {
     }
     return this.#fileClosestFileOrFolder(
       path.dirname(startingDir),
-      expectedName,
+      expectedName
     );
   }
   async #findClosestNodeModules(startingDir: string): Promise<string | null> {
@@ -833,13 +835,13 @@ export default class FileGenerator extends CodeStream {
       // TODO: maybe remove this switch case, since it's just checking if the imported file has a file generator for it
       case NodeType.ImportStatement: {
         const { inputFile } = await this.#resolveModulePathToAbsolutePath(
-          node.from.value,
+          node.from.value
         );
         const root = this.#root();
         const fileGenerator = root.#fileGenerators.get(inputFile);
         if (!fileGenerator) {
           throw new ExceptionInternalError(
-            `File generator not previously created for file: ${inputFile}`,
+            `File generator not previously created for file: ${inputFile}`
           );
         }
         break;
@@ -852,12 +854,12 @@ export default class FileGenerator extends CodeStream {
     return this.#parent ?? this;
   }
   #generateDefinitionCompareFunction(
-    node: INodeTypeDefinition | INodeCallDefinition,
+    node: INodeTypeDefinition | INodeCallDefinition
   ) {
     const args = [`__a: ${getTypeName(node)}`, `__b: ${getTypeName(node)}`];
     this.write(
       `export function ${getCompareFunctionName(node)}(${args.join(
-        ', ',
+        ', '
       )}): boolean {\n`,
       () => {
         if (!node.parameters.length) {
@@ -875,7 +877,7 @@ export default class FileGenerator extends CodeStream {
                 p.typeExpression,
                 `__a['${p.name.value}']`,
                 `__b['${p.name.value}']`,
-                depth,
+                depth
               );
               if (p !== node.parameters[node.parameters.length - 1]) {
                 this.append(' &&');
@@ -884,17 +886,17 @@ export default class FileGenerator extends CodeStream {
               depth++;
             }
           },
-          ');\n',
+          ');\n'
         );
       },
-      '}\n',
+      '}\n'
     );
   }
   #generateComparisonExpression(
     expression: NodeTypeExpression,
     v1: string,
     v2: string,
-    depth: number,
+    depth: number
   ) {
     const resolved = this.#resolveTypeExpression(expression);
     if ('generic' in resolved) {
@@ -948,13 +950,13 @@ export default class FileGenerator extends CodeStream {
           const optionalVarName2 = `__dp${depth}2`;
           this.append(`((${optionalVarName1}, ${optionalVarName2}) => `);
           this.append(
-            `${optionalVarName1} !== null && ${optionalVarName2} !== null ? `,
+            `${optionalVarName1} !== null && ${optionalVarName2} !== null ? `
           );
           depth = this.#generateComparisonExpression(
             resolved.expression,
             optionalVarName1,
             optionalVarName2,
-            depth + 1,
+            depth + 1
           );
           this.append(` : ${optionalVarName1} === ${optionalVarName2}`);
           this.append(`)(${v1},${v2})`);
@@ -969,21 +971,21 @@ export default class FileGenerator extends CodeStream {
               this.append('([k1,v1],i) => (');
               this.indentBlock(() => {
                 this.append(
-                  `(${secondValueVarName} => typeof ${secondValueVarName} === 'undefined' ? false : `,
+                  `(${secondValueVarName} => typeof ${secondValueVarName} === 'undefined' ? false : `
                 );
                 this.indentBlock(() => {
                   depth = this.#generateComparisonExpression(
                     resolved.key.expression,
                     'k1',
                     `${secondValueVarName}[0]`,
-                    depth + 1,
+                    depth + 1
                   );
                   this.append(' && ');
                   depth = this.#generateComparisonExpression(
                     resolved.value.expression,
                     'v1',
                     `${secondValueVarName}[1]`,
-                    depth + 1,
+                    depth + 1
                   );
                 });
                 this.append(')(l2[i])');
@@ -1005,19 +1007,19 @@ export default class FileGenerator extends CodeStream {
             [
               `${v1}.${lengthPropName} === ${v2}.${lengthPropName}`,
               `Array.from(${v1}).every((${itemVarName},${indexVarName}) => (`,
-            ].join(' && '),
+            ].join(' && ')
           );
           this.indentBlock(() => {
             const validateUndefinedFnVarName = `__item${depth}`;
             this.append(
-              `typeof ${itemVarName} === 'undefined' ? false : (${validateUndefinedFnVarName} => typeof ${validateUndefinedFnVarName} === 'undefined' ? false : (`,
+              `typeof ${itemVarName} === 'undefined' ? false : (${validateUndefinedFnVarName} => typeof ${validateUndefinedFnVarName} === 'undefined' ? false : (`
             );
             this.indentBlock(() => {
               depth = this.#generateComparisonExpression(
                 resolved.expression,
                 itemVarName,
                 validateUndefinedFnVarName,
-                depth + 1,
+                depth + 1
               );
             });
             this.append(`))(Array.from(${v2})[${indexVarName}])`);
@@ -1038,14 +1040,14 @@ export default class FileGenerator extends CodeStream {
                 {
                   typeExpression: exp,
                   readOnly: true,
-                },
-              )} */ ((${varName1}, ${varName2}) => `,
+                }
+              )} */ ((${varName1}, ${varName2}) => `
             );
             depth = this.#generateComparisonExpression(
               exp,
               varName1,
               varName2,
-              depth + index + 1,
+              depth + index + 1
             );
             this.append(`)(${v1}[${index}],${v2}[${index}])`);
             if (exp !== resolved.expressions[resolved.expressions.length - 1]) {
@@ -1063,13 +1065,13 @@ export default class FileGenerator extends CodeStream {
     return depth;
   }
   #generateDefinitionDefaultObjectCreator(
-    node: INodeTypeDefinition | INodeCallDefinition,
+    node: INodeTypeDefinition | INodeCallDefinition
   ) {
     this.write(
       `export function ${getDefaultFunctionName(
-        node,
+        node
       )}(params: Partial<${getTypeInputParamsInterfaceName(
-        node,
+        node
       )}> = {}): ${getTypeName(node)} {\n`,
       () => {
         this.write(
@@ -1080,17 +1082,17 @@ export default class FileGenerator extends CodeStream {
                 `${
                   p.name.value
                 }: ${this.#resolvedTypeExpressionToDefaultExpression(
-                  this.#resolveTypeExpression(p.typeExpression),
-                )}`,
+                  this.#resolveTypeExpression(p.typeExpression)
+                )}`
               );
               this.append(',\n');
             }
             this.write('...params\n');
           },
-          '});\n',
+          '});\n'
         );
       },
-      '}\n',
+      '}\n'
     );
   }
   #resolvedTypeExpressionToDefaultExpression(resolved: ResolvedType): string {
@@ -1155,14 +1157,14 @@ export default class FileGenerator extends CodeStream {
     return `${getDefaultFunctionName(type)}()`;
   }
   #generateDefinitionUpdateFunction(
-    node: INodeCallDefinition | INodeTypeDefinition,
+    node: INodeCallDefinition | INodeTypeDefinition
   ) {
     const changesVarName = node.parameters.length ? 'changes' : '_';
     this.write(
       `export function ${getUpdateFunctionName(node)}(value: ${getTypeName(
-        node,
+        node
       )}, ${changesVarName}: Partial<${getTypeInputParamsInterfaceName(
-        node,
+        node
       )}>) {\n`,
       () => {
         let depth = 0;
@@ -1175,7 +1177,7 @@ export default class FileGenerator extends CodeStream {
                 p.typeExpression,
                 `changes['${p.name.value}']`,
                 `value['${p.name.value}']`,
-                depth + 1,
+                depth + 1
               );
               this.append(')) {\n');
               this.indentBlock(() => {
@@ -1184,20 +1186,20 @@ export default class FileGenerator extends CodeStream {
                   () => {
                     this.write('...value,\n');
                     this.write(
-                      `${p.name.value}: changes['${p.name.value}'],\n`,
+                      `${p.name.value}: changes['${p.name.value}'],\n`
                     );
                   },
-                  '});\n',
+                  '});\n'
                 );
               });
               this.write('}\n');
             },
-            '}\n',
+            '}\n'
           );
         }
         this.write('return value;\n');
       },
-      '}\n',
+      '}\n'
     );
   }
   #getMetadataFromResolvedType(resolvedType: ResolvedType): MetadataParamType {
@@ -1222,7 +1224,7 @@ export default class FileGenerator extends CodeStream {
             template: 'map',
             key: this.#getMetadataFromResolvedType(resolvedType.key.resolved),
             value: this.#getMetadataFromResolvedType(
-              resolvedType.value.resolved,
+              resolvedType.value.resolved
             ),
           };
         case 'tuple':
@@ -1230,7 +1232,7 @@ export default class FileGenerator extends CodeStream {
             type: 'template',
             template: 'tuple',
             args: resolvedType.types.map((t) =>
-              this.#getMetadataFromResolvedType(t),
+              this.#getMetadataFromResolvedType(t)
             ),
           };
         case 'bigint':
@@ -1245,7 +1247,7 @@ export default class FileGenerator extends CodeStream {
     } else if ('fileGenerator' in resolvedType) {
       const importPath = resolvedType.fileGenerator.#sourceImportToOutDirImport(
         this,
-        resolvedType.fileGenerator.#file.path,
+        resolvedType.fileGenerator.#file.path
       );
       if (resolvedType.fileGenerator.#externalModule) {
         return {
@@ -1269,12 +1271,12 @@ export default class FileGenerator extends CodeStream {
     return {
       name: param.name.value,
       type: this.#getMetadataFromResolvedType(
-        this.#resolveTypeExpression(param.typeExpression),
+        this.#resolveTypeExpression(param.typeExpression)
       ),
     };
   }
   #getMetadataFromCallOrTypeDefinition(
-    node: INodeCallDefinition | INodeTypeDefinition | INodeTraitDefinition,
+    node: INodeCallDefinition | INodeTypeDefinition | INodeTraitDefinition
   ): Metadata {
     let kind: Metadata['kind'];
     switch (node.type) {
@@ -1294,7 +1296,7 @@ export default class FileGenerator extends CodeStream {
           name: node.name.value,
           // ! should be filled with correct metadata objects
           nodes: trait.nodes.map((resolvedType) =>
-            this.#getMetadataFromResolvedType(resolvedType),
+            this.#getMetadataFromResolvedType(resolvedType)
           ),
         };
       }
@@ -1335,9 +1337,9 @@ export default class FileGenerator extends CodeStream {
               this.#resolvedTypeToString({
                 resolvedType: n,
                 readOnly: true,
-              }),
+              })
             )
-            .join(' | ')};\n`,
+            .join(' | ')};\n`
         );
         this.#generateTraitDefinitionAssertionFunction(node, trait.nodes);
         this.#generateEncodeTraitFunction(node, trait.nodes);
@@ -1353,7 +1355,7 @@ export default class FileGenerator extends CodeStream {
     }
   }
   #generateDefinitionAssertionFunction(
-    node: INodeCallDefinition | INodeTypeDefinition,
+    node: INodeCallDefinition | INodeTypeDefinition
   ) {
     const valueVarName = 'value';
     const namePropVarName = `${valueVarName}['_name']`;
@@ -1363,19 +1365,19 @@ export default class FileGenerator extends CodeStream {
       `'_name' in ${valueVarName}`,
       `typeof ${namePropVarName} === 'string'`,
       `${namePropVarName} === "${this.#getTypeDefinitionOrCallDefinitionNamePropertyValue(
-        node,
+        node
       )}"`,
     ];
     this.write(
       `export function ${getValidateDefinitionFunctionName(
-        node,
+        node
       )}(${valueVarName}: unknown): ${valueVarName} is ${node.name.value} {\n`,
       () => {
         this.write(`if(!(${exps.join(' && ')})) return false;\n`);
         let depth = 0;
         for (const param of node.parameters) {
           const resolvedType = this.#resolveTypeExpression(
-            param.typeExpression,
+            param.typeExpression
           );
           this.write(
             'if(!(\n',
@@ -1386,22 +1388,22 @@ export default class FileGenerator extends CodeStream {
               depth = this.#generateResolvedTypeValidationExpression(
                 resolvedType,
                 paramValueVarName,
-                depth,
+                depth
               );
               this.append(`))(${valueVarName}['${param.name.value}'])\n`);
             },
-            ')) return false;\n',
+            ')) return false;\n'
           );
           depth++;
         }
         this.write('return true;\n');
       },
-      '}\n',
+      '}\n'
     );
   }
   #generateTraitDefinitionAssertionFunction(
     node: INodeTraitDefinition,
-    types: ResolvedType[],
+    types: ResolvedType[]
   ) {
     const args: [string, string] = [types.length ? 'value' : '_', 'unknown'];
     this.write(
@@ -1415,19 +1417,19 @@ export default class FileGenerator extends CodeStream {
           depth = this.#generateResolvedTypeValidationExpression(
             t,
             args[0],
-            depth,
+            depth
           );
           this.append(') return true;\n');
         }
         this.write('return false;\n');
       },
-      '}\n',
+      '}\n'
     );
   }
   #generateResolvedTypeValidationExpression(
     param: ResolvedType,
     value: string,
-    depth: number,
+    depth: number
   ) {
     if ('generic' in param) {
       switch (param.generic) {
@@ -1480,13 +1482,13 @@ export default class FileGenerator extends CodeStream {
               isDefaultImport: true,
             });
             exps.push(
-              `${jsbi}.equal(${jsbi}.BigInt(${value}),${jsbi}.BigInt(${value}))`,
+              `${jsbi}.equal(${jsbi}.BigInt(${value}),${jsbi}.BigInt(${value}))`
             );
             exps.push(
-              `${jsbi}.greaterThanOrEqual(${jsbi}.BigInt(${value}),${jsbi}.BigInt("${min}"))`,
+              `${jsbi}.greaterThanOrEqual(${jsbi}.BigInt(${value}),${jsbi}.BigInt("${min}"))`
             );
             exps.push(
-              `${jsbi}.lessThanOrEqual(${jsbi}.BigInt(${value}),${jsbi}.BigInt("${max}"))`,
+              `${jsbi}.lessThanOrEqual(${jsbi}.BigInt(${value}),${jsbi}.BigInt("${max}"))`
             );
           }
           for (const exp of exps) {
@@ -1521,7 +1523,7 @@ export default class FileGenerator extends CodeStream {
           depth = this.#generateResolvedTypeValidationExpression(
             param.type,
             'x',
-            depth + 1,
+            depth + 1
           );
           this.append(`))(${value})`);
           break;
@@ -1531,13 +1533,13 @@ export default class FileGenerator extends CodeStream {
           depth = this.#generateResolvedTypeValidationExpression(
             param.key.resolved,
             'k',
-            depth + 1,
+            depth + 1
           );
           this.append(' && ');
           depth = this.#generateResolvedTypeValidationExpression(
             param.value.resolved,
             'v',
-            depth + 1,
+            depth + 1
           );
           this.append('))');
           break;
@@ -1553,7 +1555,7 @@ export default class FileGenerator extends CodeStream {
             depth = this.#generateResolvedTypeValidationExpression(
               exp,
               'a',
-              depth + 1,
+              depth + 1
             );
             this.append(`))(${value}[${i}])`);
             if (exp !== param.types[param.types.length - 1]) {
@@ -1566,13 +1568,13 @@ export default class FileGenerator extends CodeStream {
         case 'vector':
         case 'set':
           this.append(
-            `(Array.isArray(${value}) || ${value} instanceof Set) && Array.from(${value}).every(`,
+            `(Array.isArray(${value}) || ${value} instanceof Set) && Array.from(${value}).every(`
           );
           this.append('p => (');
           this.#generateResolvedTypeValidationExpression(
             param.type,
             'p',
-            depth + 1,
+            depth + 1
           );
           this.append('))');
           break;
@@ -1595,7 +1597,7 @@ export default class FileGenerator extends CodeStream {
               [
                 `${jsbi}.greaterThanOrEqual(${argName}, ${jsbi}.BigInt("${min}"))`,
                 `${jsbi}.lessThanOrEqual(${argName}, ${jsbi}.BigInt("${max}"))`,
-              ].join(' && '),
+              ].join(' && ')
             );
           });
           this.append(`)(${jsbi}.BigInt(${value}))`);
@@ -1678,7 +1680,7 @@ export default class FileGenerator extends CodeStream {
             this.#resolveTypeExpressionToString({
               ...options,
               typeExpression: t,
-            }),
+            })
           )}]`;
         case 'vector':
           return `${
@@ -1716,7 +1718,7 @@ export default class FileGenerator extends CodeStream {
               template: 'tuple',
               expressions: typeExpression.templateArguments,
               types: typeExpression.templateArguments.map((t) =>
-                this.#resolveTypeExpression(t),
+                this.#resolveTypeExpression(t)
               ),
             };
           case 'optional': {
@@ -1763,7 +1765,7 @@ export default class FileGenerator extends CodeStream {
             const [bits] = typeExpression.templateArguments;
             if (!bits || bits.type !== NodeType.LiteralNumber) {
               throw new Exception(
-                'First argument of `bigint` template should be a literal number',
+                'First argument of `bigint` template should be a literal number'
               );
             }
             return {
@@ -1833,7 +1835,7 @@ export default class FileGenerator extends CodeStream {
     return null;
   }
   #generateDefinitionInterface(
-    node: INodeCallDefinition | INodeTypeDefinition,
+    node: INodeCallDefinition | INodeTypeDefinition
   ) {
     let interfaceExtends = '';
     if (node.type === NodeType.CallDefinition) {
@@ -1855,20 +1857,20 @@ export default class FileGenerator extends CodeStream {
           `${
             this.#uniqueNamePropertyName
           }: '${this.#getTypeDefinitionOrCallDefinitionNamePropertyValue(
-            node,
-          )}';\n`,
+            node
+          )}';\n`
         );
         this.#generateTypeDefinitionOrCallParameters(node);
       },
-      '}\n',
+      '}\n'
     );
   }
   #getTypeDefinitionOrCallDefinitionNamePropertyValue(
-    node: INodeCallDefinition | INodeTypeDefinition | INodeTraitDefinition,
+    node: INodeCallDefinition | INodeTypeDefinition | INodeTraitDefinition
   ) {
     return getTypeDefinitionOrCallDefinitionNamePropertyValue(
       node,
-      this.#removeRootDir(this.#file.path),
+      this.#removeRootDir(this.#file.path)
     );
   }
   #resolvedTypeExpressionToDefinition(exp: ResolvedType) {
@@ -1890,7 +1892,7 @@ export default class FileGenerator extends CodeStream {
   }
   #generateTraitDefaultFunction(
     trait: INodeTraitDefinition,
-    exps: ResolvedType[],
+    exps: ResolvedType[]
   ) {
     const [firstNode] = exps;
     if (typeof firstNode === 'undefined') {
@@ -1909,12 +1911,12 @@ export default class FileGenerator extends CodeStream {
         }
         this.write(`return ${getDefaultFunctionName(node)}();\n`);
       },
-      '}\n',
+      '}\n'
     );
   }
   #generateEncodeTraitFunction(
     trait: INodeTraitDefinition,
-    exps: ResolvedType[],
+    exps: ResolvedType[]
   ) {
     this.#import({
       target: 'outDir',
@@ -1923,7 +1925,7 @@ export default class FileGenerator extends CodeStream {
     });
     this.write(
       `export function ${getEncodeFunctionName(
-        trait,
+        trait
       )}(__s: ISerializer,value: ${getTypeName(trait)}) {\n`,
       () => {
         const uniqueNames = new Set<string>();
@@ -1945,7 +1947,7 @@ export default class FileGenerator extends CodeStream {
               }
               const uniqueName =
                 fileGenerator.#getTypeDefinitionOrCallDefinitionNamePropertyValue(
-                  def,
+                  def
                 );
               this.write(`case '${uniqueName}':\n`);
               this.indentBlock(() => {
@@ -1954,7 +1956,7 @@ export default class FileGenerator extends CodeStream {
               uniqueNames.add(uniqueName);
             }
           },
-          '}\n',
+          '}\n'
         );
         const propValue = `\${value['${this.#uniqueNamePropertyName}']}`;
         const formattedUniqueNames = new Array<string>();
@@ -1971,7 +1973,7 @@ export default class FileGenerator extends CodeStream {
           'the type-checking prevented you from calling this function wrongly.';
         this.write(`throw new Error(\`${msg}\`);\n`);
       },
-      '}\n',
+      '}\n'
     );
   }
   #compareFunctionNameAndDefinitionFromResolvedType(exp: ResolvedType) {
@@ -1993,26 +1995,26 @@ export default class FileGenerator extends CodeStream {
   }
   #generateTraitCompareFunction(
     trait: INodeTraitDefinition,
-    exps: ResolvedType[],
+    exps: ResolvedType[]
   ) {
     const args = [`__a: ${getTypeName(trait)}`, `__b: ${getTypeName(trait)}`];
     this.write(
       `export function ${getCompareFunctionName(trait)}(${args.join(
-        ', ',
+        ', '
       )}) {\n`,
       () => {
         const [firstExp] = exps;
         if (exps.length === 1) {
           if (typeof firstExp === 'undefined') {
             throw new Exception(
-              'firstExp was undefined, but `exps` length was 1',
+              'firstExp was undefined, but `exps` length was 1'
             );
           }
           this.write(
             `return ${
               this.#compareFunctionNameAndDefinitionFromResolvedType(firstExp)
                 .compareFunctionName
-            }(__a, __b);\n`,
+            }(__a, __b);\n`
           );
           return;
         }
@@ -2024,31 +2026,31 @@ export default class FileGenerator extends CodeStream {
                 this.#compareFunctionNameAndDefinitionFromResolvedType(exp);
               const typeStringifiedName =
                 fileGenerator.#getTypeDefinitionOrCallDefinitionNamePropertyValue(
-                  definition,
+                  definition
                 );
               this.write(`case '${typeStringifiedName}':\n`);
               this.indentBlock(() => {
                 this.write(
                   `if(__b.${
                     this.#uniqueNamePropertyName
-                  } !== "${typeStringifiedName}") return false;\n`,
+                  } !== "${typeStringifiedName}") return false;\n`
                 );
                 this.write(`return ${compareFunctionName}(__a,__b);\n`);
               });
             }
           },
-          '}\n',
+          '}\n'
         );
       },
-      '}\n',
+      '}\n'
     );
   }
   #generateDecodeTraitFunction(
     trait: INodeTraitDefinition,
-    exps: ResolvedType[],
+    exps: ResolvedType[]
   ) {
     const nodes = exps.map((exp) =>
-      this.#resolvedTypeExpressionToDefinition(exp),
+      this.#resolvedTypeExpressionToDefinition(exp)
     );
     this.#import({
       target: 'outDir',
@@ -2061,7 +2063,7 @@ export default class FileGenerator extends CodeStream {
         this.write('const __id = __d.readInt32();\n');
         this.write('__d.rewind(4);\n');
         this.write(
-          `let value: ${nodes.map((n) => getTypeName(n)).join(' | ')};\n`,
+          `let value: ${nodes.map((n) => getTypeName(n)).join(' | ')};\n`
         );
 
         this.write(
@@ -2090,17 +2092,17 @@ export default class FileGenerator extends CodeStream {
             }
             this.write('default: return null;\n');
           },
-          '}\n',
+          '}\n'
         );
         this.write('return value;\n');
       },
-      '}\n',
+      '}\n'
     );
   }
   #generateEncodeTypeExpression(
     exp: NodeTypeExpression,
     value: string,
-    depth: number,
+    depth: number
   ) {
     const resolved = this.#resolveTypeExpression(exp);
     const serializerVarName = '__s';
@@ -2130,12 +2132,12 @@ export default class FileGenerator extends CodeStream {
           break;
         case GenericName.NullTerminatedString:
           this.write(
-            `${serializerVarName}.writeNullTerminatedString(${value});\n`,
+            `${serializerVarName}.writeNullTerminatedString(${value});\n`
           );
           break;
         case GenericName.Boolean:
           this.write(
-            `${serializerVarName}.writeUint8(${value} === true ? 1 : 0);\n`,
+            `${serializerVarName}.writeUint8(${value} === true ? 1 : 0);\n`
           );
           break;
         case GenericName.Float:
@@ -2146,7 +2148,7 @@ export default class FileGenerator extends CodeStream {
           break;
         case GenericName.Bytes:
           this.write(
-            `${serializerVarName}.writeUint32(${value}.byteLength);\n`,
+            `${serializerVarName}.writeUint32(${value}.byteLength);\n`
           );
           this.write(`${serializerVarName}.writeBuffer(${value});\n`);
           break;
@@ -2159,14 +2161,14 @@ export default class FileGenerator extends CodeStream {
             () => {
               this.write(`${serializerVarName}.writeUint8(0);\n`);
             },
-            '} else {\n',
+            '} else {\n'
           );
           this.indentBlock(() => {
             this.write(`${serializerVarName}.writeUint8(1);\n`);
             depth = this.#generateEncodeTypeExpression(
               resolved.expression,
               value,
-              depth + 1,
+              depth + 1
             );
           });
           this.write('}\n');
@@ -2182,10 +2184,10 @@ export default class FileGenerator extends CodeStream {
               depth = this.#generateEncodeTypeExpression(
                 resolved.expression,
                 itemVarName,
-                depth + 1,
+                depth + 1
               );
             },
-            '}\n',
+            '}\n'
           );
           break;
         }
@@ -2200,10 +2202,10 @@ export default class FileGenerator extends CodeStream {
               depth = this.#generateEncodeTypeExpression(
                 resolved.expression,
                 valueVarName,
-                depth + 1,
+                depth + 1
               );
             },
-            '}\n',
+            '}\n'
           );
           break;
         }
@@ -2217,15 +2219,15 @@ export default class FileGenerator extends CodeStream {
               depth = this.#generateEncodeTypeExpression(
                 resolved.key.expression,
                 k,
-                depth + 1,
+                depth + 1
               );
               depth = this.#generateEncodeTypeExpression(
                 resolved.value.expression,
                 v,
-                depth + 1,
+                depth + 1
               );
             },
-            '}\n',
+            '}\n'
           );
           break;
         }
@@ -2237,7 +2239,7 @@ export default class FileGenerator extends CodeStream {
             depth = this.#generateEncodeTypeExpression(
               exp,
               valueVarName,
-              depth + i + 1,
+              depth + i + 1
             );
             i++;
           }
@@ -2246,8 +2248,8 @@ export default class FileGenerator extends CodeStream {
         case 'bigint':
           this.write(
             `${serializerVarName}.writeSignedBigInt(${value}, ${JSBI.toNumber(
-              JSBI.BigInt(resolved.bits.value),
-            )});\n`,
+              JSBI.BigInt(resolved.bits.value)
+            )});\n`
           );
           depth++;
           break;
@@ -2275,7 +2277,7 @@ export default class FileGenerator extends CodeStream {
       }
     } else {
       this.write(
-        `${getEncodeFunctionName(resolved)}(${serializerVarName},${value});\n`,
+        `${getEncodeFunctionName(resolved)}(${serializerVarName},${value});\n`
       );
     }
     return depth;
@@ -2283,7 +2285,7 @@ export default class FileGenerator extends CodeStream {
   #generateDecodeTypeExpression(
     exp: NodeTypeExpression,
     value: string,
-    depth: number,
+    depth: number
   ): number {
     const resolved = this.#resolveTypeExpression(exp);
     if ('generic' in resolved) {
@@ -2330,7 +2332,7 @@ export default class FileGenerator extends CodeStream {
       switch (resolved.template) {
         case 'bigint':
           this.write(
-            `${value} = __d.readSignedBigInt(${resolved.bits.value});\n`,
+            `${value} = __d.readSignedBigInt(${resolved.bits.value});\n`
           );
           break;
         case 'optional':
@@ -2340,10 +2342,10 @@ export default class FileGenerator extends CodeStream {
               depth = this.#generateDecodeTypeExpression(
                 resolved.expression,
                 value,
-                depth + 1,
+                depth + 1
               );
             },
-            '} else {\n',
+            '} else {\n'
           );
           this.indentBlock(() => {
             this.write(`${value} = null;\n`);
@@ -2358,12 +2360,12 @@ export default class FileGenerator extends CodeStream {
               `let ${varName}: ${this.#resolveTypeExpressionToString({
                 readOnly: false,
                 typeExpression,
-              })};\n`,
+              })};\n`
             );
             depth = this.#generateDecodeTypeExpression(
               typeExpression,
               varName,
-              depth + 1,
+              depth + 1
             );
             varNames.push(varName);
           }
@@ -2379,13 +2381,13 @@ export default class FileGenerator extends CodeStream {
             `let ${tmpVarName}: ${this.#resolveTypeExpressionToString({
               typeExpression: resolved.expression,
               readOnly: false,
-            })};\n`,
+            })};\n`
           );
           this.write(`const ${lengthVarName} = __d.readUint32();\n`);
           this.write(
             `const ${outVarName} = new Set<${this.#resolveTypeExpressionToString(
-              { typeExpression: resolved.expression, readOnly: false },
-            )}>();\n`,
+              { typeExpression: resolved.expression, readOnly: false }
+            )}>();\n`
           );
           this.write(`${value} = ${outVarName};\n`);
           this.write(
@@ -2394,11 +2396,11 @@ export default class FileGenerator extends CodeStream {
               depth = this.#generateDecodeTypeExpression(
                 resolved.expression,
                 tmpVarName,
-                depth + 1,
+                depth + 1
               );
               this.write(`${outVarName}.add(${tmpVarName});\n`);
             },
-            '}\n',
+            '}\n'
           );
           break;
         }
@@ -2409,8 +2411,8 @@ export default class FileGenerator extends CodeStream {
           this.write(`const ${lengthVarName} = __d.readUint32();\n`);
           this.write(
             `const ${outVarName} = new Array<${this.#resolveTypeExpressionToString(
-              { typeExpression: resolved.expression, readOnly: false },
-            )}>(${lengthVarName});\n`,
+              { typeExpression: resolved.expression, readOnly: false }
+            )}>(${lengthVarName});\n`
           );
           this.write(`${value} = ${outVarName};\n`);
           this.write(
@@ -2419,10 +2421,10 @@ export default class FileGenerator extends CodeStream {
               depth = this.#generateDecodeTypeExpression(
                 resolved.expression,
                 `${outVarName}[${i}]`,
-                depth + 1,
+                depth + 1
               );
             },
-            '}\n',
+            '}\n'
           );
           break;
         }
@@ -2440,7 +2442,7 @@ export default class FileGenerator extends CodeStream {
             readOnly: false,
           });
           this.write(
-            `const ${outVarName} = new Map<${keyTypeName}, ${valueTypeName}>();\n`,
+            `const ${outVarName} = new Map<${keyTypeName}, ${valueTypeName}>();\n`
           );
           this.write(`${value} = ${outVarName};\n`);
           const keyVarName = `__k${depth}`;
@@ -2453,18 +2455,18 @@ export default class FileGenerator extends CodeStream {
               depth = this.#generateDecodeTypeExpression(
                 resolved.key.expression,
                 keyVarName,
-                depth + 1,
+                depth + 1
               );
               depth = this.#generateDecodeTypeExpression(
                 resolved.value.expression,
                 valueVarName,
-                depth + 1,
+                depth + 1
               );
               this.write(
-                `${outVarName}.set(${keyVarName}, ${valueVarName});\n`,
+                `${outVarName}.set(${keyVarName}, ${valueVarName});\n`
               );
             },
-            '}\n',
+            '}\n'
           );
           break;
         }
@@ -2478,12 +2480,12 @@ export default class FileGenerator extends CodeStream {
         type,
         value,
         depth + 1,
-        resolved.fileGenerator,
+        resolved.fileGenerator
       );
     } else {
       const tmpVarName = `__tmp${depth}`;
       this.write(
-        `const ${tmpVarName} = ${getDecodeFunctionName(resolved)}(__d);\n`,
+        `const ${tmpVarName} = ${getDecodeFunctionName(resolved)}(__d);\n`
       );
       this.write(`if(${tmpVarName} === null) return null;\n`);
       this.write(`${value} = ${tmpVarName};\n`);
@@ -2494,7 +2496,7 @@ export default class FileGenerator extends CodeStream {
     node: INodeCallDefinition | INodeTypeDefinition | INodeTraitDefinition,
     value: string,
     depth: number,
-    fileGenerator: FileGenerator,
+    fileGenerator: FileGenerator
   ) {
     const decodeFunctionName = this.#import({
       identifier: getDecodeFunctionName(node),
@@ -2502,28 +2504,28 @@ export default class FileGenerator extends CodeStream {
     });
     const intermediaryValueVarName = `tmp${depth}`;
     this.write(
-      `const ${intermediaryValueVarName} = ${decodeFunctionName}(__d);\n`,
+      `const ${intermediaryValueVarName} = ${decodeFunctionName}(__d);\n`
     );
     this.write(`if(${intermediaryValueVarName} === null) return null;\n`);
     this.write(`${value} = ${intermediaryValueVarName};\n`);
     return depth;
   }
   #getUniqueHeaderString(
-    node: INodeTraitDefinition | INodeCallDefinition | INodeTypeDefinition,
+    node: INodeTraitDefinition | INodeCallDefinition | INodeTypeDefinition
   ) {
     const values = [
       `${this.#removeRootDir(this.#file.path)}/${node.name.value}`,
     ];
     if (node.type === NodeType.CallDefinition) {
       const resolvedTypeExpression = this.#resolveTypeExpression(
-        node.returnType,
+        node.returnType
       );
       values.unshift(
         // TODO: get full path of the expression and add it to the final unique header
         `${this.#resolvedTypeToString({
           resolvedType: resolvedTypeExpression,
           readOnly: true,
-        })} =>`,
+        })} =>`
       );
     }
     switch (node.type) {
@@ -2537,9 +2539,9 @@ export default class FileGenerator extends CodeStream {
               this.#resolveTypeExpressionToString({
                 readOnly: false,
                 typeExpression: p.typeExpression,
-              }),
+              })
             )
-            .join(', '),
+            .join(', ')
         );
     }
 
@@ -2551,7 +2553,7 @@ export default class FileGenerator extends CodeStream {
     return values.join(' ');
   }
   #getUniqueHeader(
-    node: INodeTraitDefinition | INodeCallDefinition | INodeTypeDefinition,
+    node: INodeTraitDefinition | INodeCallDefinition | INodeTypeDefinition
   ) {
     const n = crc.crc32(this.#getUniqueHeaderString(node));
     const view = new DataView(new ArrayBuffer(4));
@@ -2559,7 +2561,7 @@ export default class FileGenerator extends CodeStream {
     return view.getInt32(0, true);
   }
   #generateDefinitionEncodeFunction(
-    node: INodeCallDefinition | INodeTypeDefinition,
+    node: INodeCallDefinition | INodeTypeDefinition
   ) {
     const interfaceName = getTypeName(node);
     this.#import({
@@ -2583,11 +2585,11 @@ export default class FileGenerator extends CodeStream {
           depth = this.#generateEncodeTypeExpression(
             p.typeExpression,
             `${valueVarName}`,
-            depth + 1,
+            depth + 1
           );
         }
       },
-      '}\n',
+      '}\n'
     );
   }
   #writeMultilineComment(value: string) {
@@ -2598,7 +2600,7 @@ export default class FileGenerator extends CodeStream {
     this.write(' */\n');
   }
   #generateDefinitionDecodeFunction(
-    node: INodeCallDefinition | INodeTypeDefinition,
+    node: INodeCallDefinition | INodeTypeDefinition
   ) {
     const interfaceName = getTypeName(node);
     this.#import({
@@ -2608,20 +2610,20 @@ export default class FileGenerator extends CodeStream {
     });
     this.write(
       `export function ${getDecodeFunctionName(
-        node,
+        node
       )}(__d: IDeserializer): ${interfaceName} | null {\n`,
       () => {
         this.write('const __id = __d.readInt32();\n');
         this.#writeMultilineComment('decode header');
         this.write(
-          `if(__id !== ${this.#getUniqueHeader(node)}) return null;\n`,
+          `if(__id !== ${this.#getUniqueHeader(node)}) return null;\n`
         );
         for (const p of node.parameters) {
           this.write(
             `let ${p.name.value}: ${this.#resolveTypeExpressionToString({
               typeExpression: p.typeExpression,
               readOnly: false,
-            })};\n`,
+            })};\n`
           );
         }
         let i = 0;
@@ -2630,7 +2632,7 @@ export default class FileGenerator extends CodeStream {
           i = this.#generateDecodeTypeExpression(
             p.typeExpression,
             p.name.value,
-            i + 1,
+            i + 1
           );
         }
         this.write(
@@ -2640,8 +2642,8 @@ export default class FileGenerator extends CodeStream {
               `${
                 this.#uniqueNamePropertyName
               }: '${this.#getTypeDefinitionOrCallDefinitionNamePropertyValue(
-                node,
-              )}',\n`,
+                node
+              )}',\n`
             );
             for (const p of node.parameters) {
               this.write(`${p.name.value}`);
@@ -2651,14 +2653,14 @@ export default class FileGenerator extends CodeStream {
               this.append('\n');
             }
           },
-          '};\n',
+          '};\n'
         );
       },
-      '}\n',
+      '}\n'
     );
   }
   #generateDefinitionObjectCreatorFunction(
-    node: INodeCallDefinition | INodeTypeDefinition,
+    node: INodeCallDefinition | INodeTypeDefinition
   ) {
     const interfaceName = getTypeName(node);
     const paramsType = getTypeInputParamsInterfaceName(node);
@@ -2667,13 +2669,13 @@ export default class FileGenerator extends CodeStream {
       () => {
         this.#generateTypeDefinitionOrCallParameters(node);
       },
-      '}\n',
+      '}\n'
     );
     const defaultAssignment = node.parameters.length ? '' : ' = {}';
     const paramsVarName = node.parameters.length ? 'params' : '_';
     this.write(
       `export function ${getCreateObjectFunctionName(
-        node,
+        node
       )}(${paramsVarName}: ${paramsType}${defaultAssignment}): ${interfaceName} {\n`,
       () => {
         this.write(
@@ -2683,8 +2685,8 @@ export default class FileGenerator extends CodeStream {
               `${
                 this.#uniqueNamePropertyName
               }: '${this.#getTypeDefinitionOrCallDefinitionNamePropertyValue(
-                node,
-              )}'`,
+                node
+              )}'`
             );
             if (node.parameters.length) {
               this.append(',');
@@ -2698,14 +2700,14 @@ export default class FileGenerator extends CodeStream {
               this.append('\n');
             }
           },
-          '};\n',
+          '};\n'
         );
       },
-      '}\n',
+      '}\n'
     );
   }
   #generateTypeDefinitionOrCallParameters(
-    node: INodeTypeDefinition | INodeCallDefinition,
+    node: INodeTypeDefinition | INodeCallDefinition
   ) {
     for (const p of node.parameters) {
       const resolvedType = this.#resolveTypeExpression(p.typeExpression);
@@ -2713,7 +2715,7 @@ export default class FileGenerator extends CodeStream {
         `${p.name.value}: ${this.#resolvedTypeToString({
           resolvedType,
           readOnly: true,
-        })};\n`,
+        })};\n`
       );
     }
   }
