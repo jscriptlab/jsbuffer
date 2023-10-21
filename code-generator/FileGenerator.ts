@@ -96,6 +96,7 @@ export default class FileGenerator extends CodeStream {
   readonly #traits = new Map<string, ITrait>();
   readonly #uniqueNamePropertyName: string;
   readonly #externalModule;
+  readonly #sortProperties;
   #offset = 0;
   #nodes: Array<ASTGeneratorOutputNode> = [];
   public constructor(
@@ -103,6 +104,7 @@ export default class FileGenerator extends CodeStream {
     {
       externalModule = false,
       textDecoder,
+      sortProperties = false,
       textEncoder,
       compilerOptions,
       uniqueNamePropertyName,
@@ -119,6 +121,7 @@ export default class FileGenerator extends CodeStream {
         'The `outDir` compiler options must be an absolute path'
       );
     }
+    this.#sortProperties = sortProperties;
     this.#compilerOptions = compilerOptions;
     this.#externalModule = externalModule;
     this.#file = file;
@@ -272,6 +275,23 @@ export default class FileGenerator extends CodeStream {
       contents: await fs.promises.readFile(this.#file.path),
     });
     this.#nodes = new ASTGenerator(tokenizer.tokenize().tokens()).generate();
+    if (this.#sortProperties) {
+      this.#iterate((node) => {
+        switch (node.type) {
+          case NodeType.ExportStatement:
+            break;
+          case NodeType.TraitDefinition:
+            break;
+          case NodeType.TypeDefinition:
+          case NodeType.CallDefinition:
+            node.parameters = Array.from(node.parameters).sort((p1, p2) =>
+              p1.name.value.localeCompare(p2.name.value)
+            );
+            break;
+          case NodeType.ImportStatement:
+        }
+      });
+    }
     for (const node of this.#nodes) {
       await this.#processExternalSchemaImports(node);
     }
