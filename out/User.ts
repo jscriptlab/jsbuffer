@@ -473,18 +473,20 @@ export function compareTest(__a: test, __b: test): boolean {
             typeof __item1 === 'undefined'
               ? false
               : __originalItem1.length === __item1.length &&
-                Array.from(__originalItem1).every((__originalItem2, __index2) =>
-                  typeof __originalItem2 === 'undefined'
-                    ? false
-                    : ((__item2) =>
-                        typeof __item2 === 'undefined'
-                          ? false
-                          : ((__dp31, __dp32) =>
-                              __dp31 !== null && __dp32 !== null
-                                ? __dp31 === __dp32
-                                : __dp31 === __dp32)(__originalItem2, __item2))(
-                        Array.from(__item1)[__index2]
-                      )
+                Array.from(__originalItem1).every(
+                  (__originalItem2, __index2) =>
+                    typeof __originalItem2 === 'undefined'
+                      ? false
+                      : ((__item2) =>
+                          typeof __item2 === 'undefined'
+                            ? false
+                            : ((__dp31, __dp32) =>
+                                __dp31 !== null && __dp32 !== null
+                                  ? __dp31 === __dp32
+                                  : __dp31 === __dp32)(
+                                __originalItem2,
+                                __item2
+                              ))(Array.from(__item1)[__index2])
                 ))(Array.from(__b['b'])[__index1])
     )
   );

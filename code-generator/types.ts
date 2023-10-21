@@ -41,6 +41,10 @@ export interface IFileGeneratorOptions {
   uniqueNamePropertyName?: string | null;
   externalModule?: boolean | null;
   compilerOptions: ICompilerOptions;
+  /**
+   * sort properties based on their names
+   */
+  sortProperties?: boolean;
 }
 
 export interface ICompilerOptions {

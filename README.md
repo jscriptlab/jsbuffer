@@ -2,7 +2,38 @@
 
 ## Description
 
-jsbuffer is the implementation of a type language. We offer tools for you to generate:
+jsbuffer is the implementation of a type language. We offer tools for you to generate TypeScript interfaces and functions to encode and decode your data, and more.
+
+## Usage
+
+### Example with command-line tool
+
+Create a `schema/main` file:
+
+```
+type User {
+  int id;
+  string name;
+}
+```
+
+Run your terminal:
+
+```bash
+npx jsbuffer schema/main -o src/schema
+```
+
+### Help
+
+```bash
+npx jsbuffer -h
+```
+
+Or
+
+```bash
+npx jsbuffer --help
+```
 
 ### TypeScript interfaces
 
