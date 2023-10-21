@@ -18,7 +18,7 @@ export function encodeATrait(__s: ISerializer, value: A) {
       return encodeD(__s, value);
   }
   throw new Error(
-    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- testTraitOnParamTrait.B\n\t- testTraitOnParamTrait.C\n\t- testTraitOnParamTrait.D\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
+    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- testTraitOnParamTrait.B\n\t- testTraitOnParamTrait.C\n\t- testTraitOnParamTrait.D\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`,
   );
 }
 export function decodeATrait(__d: IDeserializer) {
@@ -88,10 +88,10 @@ export function isB(value: unknown): value is B {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('-2147483648')
+          JSBI.BigInt('-2147483648'),
         ) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
-        value['a']
+        value['a'],
       )
     )
   )
@@ -179,10 +179,10 @@ export function isC(value: unknown): value is C {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('-2147483648')
+          JSBI.BigInt('-2147483648'),
         ) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
-        value['a']
+        value['a'],
       )
     )
   )
@@ -270,10 +270,10 @@ export function isD(value: unknown): value is D {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('-2147483648')
+          JSBI.BigInt('-2147483648'),
         ) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
-        value['a']
+        value['a'],
       )
     )
   )

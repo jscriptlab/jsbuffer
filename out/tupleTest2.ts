@@ -26,10 +26,10 @@ export function isUser(value: unknown): value is user {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('-2147483648')
+          JSBI.BigInt('-2147483648'),
         ) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
-        value['id']
+        value['id'],
       )
     )
   )
@@ -185,10 +185,10 @@ export function isPost(value: unknown): value is post {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('-2147483648')
+          JSBI.BigInt('-2147483648'),
         ) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
-        value['id']
+        value['id'],
       )
     )
   )
@@ -307,8 +307,8 @@ export function comparePost(__a: post, __b: post): boolean {
             typeof __item2 === 'undefined'
               ? false
               : compareComment(__originalItem2, __item2))(
-            Array.from(__b['comments'])[__index2]
-          )
+            Array.from(__b['comments'])[__index2],
+          ),
     )
   );
 }
@@ -340,8 +340,8 @@ export function updatePost(value: post, changes: Partial<postInputParams>) {
                 typeof __item3 === 'undefined'
                   ? false
                   : compareComment(__originalItem3, __item3))(
-                Array.from(value['comments'])[__index3]
-              )
+                Array.from(value['comments'])[__index3],
+              ),
         )
       )
     ) {
@@ -378,10 +378,10 @@ export function isComment(value: unknown): value is comment {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('-2147483648')
+          JSBI.BigInt('-2147483648'),
         ) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
-        value['id']
+        value['id'],
       )
     )
   )
@@ -459,7 +459,7 @@ export function decodeComment(__d: IDeserializer): comment | null {
   };
 }
 export function defaultComment(
-  params: Partial<commentInputParams> = {}
+  params: Partial<commentInputParams> = {},
 ): comment {
   return comment({
     id: 0,
@@ -486,7 +486,7 @@ export function compareComment(__a: comment, __b: comment): boolean {
 }
 export function updateComment(
   value: comment,
-  changes: Partial<commentInputParams>
+  changes: Partial<commentInputParams>,
 ) {
   if (typeof changes['id'] !== 'undefined') {
     if (!(changes['id'] === value['id'])) {
@@ -521,7 +521,7 @@ export interface tupleTest {
     Readonly<post>,
     Readonly<comment>,
     ReadonlyArray<Readonly<comment>>,
-    ReadonlyArray<Readonly<comment> | null>
+    ReadonlyArray<Readonly<comment> | null>,
   ];
 }
 export function isTupleTest(value: unknown): value is tupleTest {
@@ -550,7 +550,7 @@ export function isTupleTest(value: unknown): value is tupleTest {
         ((a) =>
           (Array.isArray(a) || a instanceof Set) &&
           Array.from(a).every((p) =>
-            p === null ? true : ((x) => isComment(x))(p)
+            p === null ? true : ((x) => isComment(x))(p),
           ))(__v0[4]))(value['data'])
     )
   )
@@ -563,7 +563,7 @@ export interface tupleTestInputParams {
     Readonly<post>,
     Readonly<comment>,
     ReadonlyArray<Readonly<comment>>,
-    ReadonlyArray<Readonly<comment> | null>
+    ReadonlyArray<Readonly<comment> | null>,
   ];
 }
 export function tupleTest(params: tupleTestInputParams): tupleTest {
@@ -653,7 +653,7 @@ export function decodeTupleTest(__d: IDeserializer): tupleTest | null {
   };
 }
 export function defaultTupleTest(
-  params: Partial<tupleTestInputParams> = {}
+  params: Partial<tupleTestInputParams> = {},
 ): tupleTest {
   return tupleTest({
     data: [defaultUser(), defaultPost(), defaultComment(), [], []],
@@ -673,7 +673,7 @@ export function compareTupleTest(__a: tupleTest, __b: tupleTest): boolean {
       compareComment(__a02, __b02))(__a['data'][2], __b['data'][2]) &&
     /* compare tuple item 3 of type ReadonlyArray<Readonly<comment>> */ ((
       __a03,
-      __b03
+      __b03,
     ) =>
       __a03.length === __b03.length &&
       Array.from(__a03).every((__originalItem10, __index10) =>
@@ -683,12 +683,12 @@ export function compareTupleTest(__a: tupleTest, __b: tupleTest): boolean {
               typeof __item10 === 'undefined'
                 ? false
                 : compareComment(__originalItem10, __item10))(
-              Array.from(__b03)[__index10]
-            )
+              Array.from(__b03)[__index10],
+            ),
       ))(__a['data'][3], __b['data'][3]) &&
     /* compare tuple item 4 of type ReadonlyArray<Readonly<comment> | null> */ ((
       __a04,
-      __b04
+      __b04,
     ) =>
       __a04.length === __b04.length &&
       Array.from(__a04).every((__originalItem16, __index16) =>
@@ -701,14 +701,14 @@ export function compareTupleTest(__a: tupleTest, __b: tupleTest): boolean {
                     __dp171 !== null && __dp172 !== null
                       ? compareComment(__dp171, __dp172)
                       : __dp171 === __dp172)(__originalItem16, __item16))(
-              Array.from(__b04)[__index16]
-            )
+              Array.from(__b04)[__index16],
+            ),
       ))(__a['data'][4], __b['data'][4])
   );
 }
 export function updateTupleTest(
   value: tupleTest,
-  changes: Partial<tupleTestInputParams>
+  changes: Partial<tupleTestInputParams>,
 ) {
   if (typeof changes['data'] !== 'undefined') {
     if (
@@ -716,20 +716,20 @@ export function updateTupleTest(
         /* compare tuple item 0 of type Readonly<user> */ (
           ((__a10, __b10) => compareUser(__a10, __b10))(
             changes['data'][0],
-            value['data'][0]
+            value['data'][0],
           ) &&
           /* compare tuple item 1 of type Readonly<post> */ ((__a11, __b11) =>
             comparePost(__a11, __b11))(changes['data'][1], value['data'][1]) &&
           /* compare tuple item 2 of type Readonly<comment> */ ((
             __a12,
-            __b12
+            __b12,
           ) => compareComment(__a12, __b12))(
             changes['data'][2],
-            value['data'][2]
+            value['data'][2],
           ) &&
           /* compare tuple item 3 of type ReadonlyArray<Readonly<comment>> */ ((
             __a13,
-            __b13
+            __b13,
           ) =>
             __a13.length === __b13.length &&
             Array.from(__a13).every((__originalItem11, __index11) =>
@@ -739,12 +739,12 @@ export function updateTupleTest(
                     typeof __item11 === 'undefined'
                       ? false
                       : compareComment(__originalItem11, __item11))(
-                    Array.from(__b13)[__index11]
-                  )
+                    Array.from(__b13)[__index11],
+                  ),
             ))(changes['data'][3], value['data'][3]) &&
           /* compare tuple item 4 of type ReadonlyArray<Readonly<comment> | null> */ ((
             __a14,
-            __b14
+            __b14,
           ) =>
             __a14.length === __b14.length &&
             Array.from(__a14).every((__originalItem17, __index17) =>
@@ -757,8 +757,8 @@ export function updateTupleTest(
                           __dp181 !== null && __dp182 !== null
                             ? compareComment(__dp181, __dp182)
                             : __dp181 === __dp182)(__originalItem17, __item17))(
-                    Array.from(__b14)[__index17]
-                  )
+                    Array.from(__b14)[__index17],
+                  ),
             ))(changes['data'][4], value['data'][4])
         )
       )
@@ -777,7 +777,7 @@ export interface tupleTupleTest {
     [number, string, ReadonlyArray<[string, number]>],
     number,
     string,
-    number
+    number,
   ];
 }
 export function isTupleTupleTest(value: unknown): value is tupleTupleTest {
@@ -805,10 +805,10 @@ export function isTupleTupleTest(value: unknown): value is tupleTupleTest {
             JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
             JSBI.greaterThanOrEqual(
               JSBI.BigInt(a),
-              JSBI.BigInt('-2147483648')
+              JSBI.BigInt('-2147483648'),
             ) &&
             JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
-            a[0]
+            a[0],
           ) &&
           ((a) => typeof a === 'string')(a[1]) &&
           ((a) =>
@@ -823,19 +823,19 @@ export function isTupleTupleTest(value: unknown): value is tupleTupleTest {
                   JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
                   JSBI.greaterThanOrEqual(
                     JSBI.BigInt(a),
-                    JSBI.BigInt('-2147483648')
+                    JSBI.BigInt('-2147483648'),
                   ) &&
                   JSBI.lessThanOrEqual(
                     JSBI.BigInt(a),
-                    JSBI.BigInt('2147483647')
-                  ))(p[1])
+                    JSBI.BigInt('2147483647'),
+                  ))(p[1]),
             ))(a[2]))(__v0[0]) &&
         ((a) =>
           typeof a === 'number' &&
           JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
           JSBI.greaterThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('-2147483648')) &&
           JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
-          __v0[1]
+          __v0[1],
         ) &&
         ((a) => typeof a === 'string')(__v0[2]) &&
         ((a) => typeof a === 'number')(__v0[3]))(value['a'])
@@ -849,11 +849,11 @@ export interface tupleTupleTestInputParams {
     [number, string, ReadonlyArray<[string, number]>],
     number,
     string,
-    number
+    number,
   ];
 }
 export function tupleTupleTest(
-  params: tupleTupleTestInputParams
+  params: tupleTupleTestInputParams,
 ): tupleTupleTest {
   return {
     _name: 'tupleTest2.tupleTupleTest',
@@ -888,7 +888,7 @@ export function encodeTupleTupleTest(__s: ISerializer, value: tupleTupleTest) {
   __s.writeDouble(__t17);
 }
 export function decodeTupleTupleTest(
-  __d: IDeserializer
+  __d: IDeserializer,
 ): tupleTupleTest | null {
   const __id = __d.readInt32();
   /**
@@ -929,7 +929,7 @@ export function decodeTupleTupleTest(
   };
 }
 export function defaultTupleTupleTest(
-  params: Partial<tupleTupleTestInputParams> = {}
+  params: Partial<tupleTupleTestInputParams> = {},
 ): tupleTupleTest {
   return tupleTupleTest({
     a: [[0, '', []], 0, '', 0.0],
@@ -938,7 +938,7 @@ export function defaultTupleTupleTest(
 }
 export function compareTupleTupleTest(
   __a: tupleTupleTest,
-  __b: tupleTupleTest
+  __b: tupleTupleTest,
 ): boolean {
   return (
     /**
@@ -946,7 +946,7 @@ export function compareTupleTupleTest(
      */
     /* compare tuple item 0 of type [number,string,ReadonlyArray<[string,number]>] */ ((
       __a00,
-      __b00
+      __b00,
     ) =>
       /* compare tuple item 0 of type number */ ((__a10, __b10) =>
         __a10 === __b10)(__a00[0], __b00[0]) &&
@@ -954,7 +954,7 @@ export function compareTupleTupleTest(
         __a11 === __b11)(__a00[1], __b00[1]) &&
       /* compare tuple item 2 of type ReadonlyArray<[string,number]> */ ((
         __a12,
-        __b12
+        __b12,
       ) =>
         __a12.length === __b12.length &&
         Array.from(__a12).every((__originalItem7, __index7) =>
@@ -967,8 +967,8 @@ export function compareTupleTupleTest(
                       __a80 === __b80)(__originalItem7[0], __item7[0]) &&
                     /* compare tuple item 1 of type number */ ((__a81, __b81) =>
                       __a81 === __b81)(__originalItem7[1], __item7[1]))(
-                Array.from(__b12)[__index7]
-              )
+                Array.from(__b12)[__index7],
+              ),
         ))(__a00[2], __b00[2]))(__a['a'][0], __b['a'][0]) &&
     /* compare tuple item 1 of type number */ ((__a01, __b01) =>
       __a01 === __b01)(__a['a'][1], __b['a'][1]) &&
@@ -980,7 +980,7 @@ export function compareTupleTupleTest(
 }
 export function updateTupleTupleTest(
   value: tupleTupleTest,
-  changes: Partial<tupleTupleTestInputParams>
+  changes: Partial<tupleTupleTestInputParams>,
 ) {
   if (typeof changes['a'] !== 'undefined') {
     if (
@@ -993,7 +993,7 @@ export function updateTupleTupleTest(
               __a21 === __b21)(__a10[1], __b10[1]) &&
             /* compare tuple item 2 of type ReadonlyArray<[string,number]> */ ((
               __a22,
-              __b22
+              __b22,
             ) =>
               __a22.length === __b22.length &&
               Array.from(__a22).every((__originalItem8, __index8) =>
@@ -1004,18 +1004,18 @@ export function updateTupleTupleTest(
                         ? false
                         : /* compare tuple item 0 of type string */ ((
                             __a90,
-                            __b90
+                            __b90,
                           ) => __a90 === __b90)(
                             __originalItem8[0],
-                            __item8[0]
+                            __item8[0],
                           ) &&
                           /* compare tuple item 1 of type number */ ((
                             __a91,
-                            __b91
+                            __b91,
                           ) => __a91 === __b91)(
                             __originalItem8[1],
-                            __item8[1]
-                          ))(Array.from(__b22)[__index8])
+                            __item8[1],
+                          ))(Array.from(__b22)[__index8]),
               ))(__a10[2], __b10[2]))(changes['a'][0], value['a'][0]) &&
           /* compare tuple item 1 of type number */ ((__a11, __b11) =>
             __a11 === __b11)(changes['a'][1], value['a'][1]) &&
@@ -1039,7 +1039,7 @@ export interface superTupleTupleTest {
   a: [[[number], number], number];
 }
 export function isSuperTupleTupleTest(
-  value: unknown
+  value: unknown,
 ): value is superTupleTupleTest {
   if (
     !(
@@ -1068,20 +1068,20 @@ export function isSuperTupleTupleTest(
               JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
               JSBI.greaterThanOrEqual(
                 JSBI.BigInt(a),
-                JSBI.BigInt('-2147483648')
+                JSBI.BigInt('-2147483648'),
               ) &&
               JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
-              a[0]
+              a[0],
             ))(a[0]) &&
           ((a) =>
             typeof a === 'number' &&
             JSBI.equal(JSBI.BigInt(a), JSBI.BigInt(a)) &&
             JSBI.greaterThanOrEqual(
               JSBI.BigInt(a),
-              JSBI.BigInt('-2147483648')
+              JSBI.BigInt('-2147483648'),
             ) &&
             JSBI.lessThanOrEqual(JSBI.BigInt(a), JSBI.BigInt('2147483647')))(
-            a[1]
+            a[1],
           ))(__v0[0]) &&
         ((a) => typeof a === 'number')(__v0[1]))(value['a'])
     )
@@ -1093,7 +1093,7 @@ export interface superTupleTupleTestInputParams {
   a: [[[number], number], number];
 }
 export function superTupleTupleTest(
-  params: superTupleTupleTestInputParams
+  params: superTupleTupleTestInputParams,
 ): superTupleTupleTest {
   return {
     _name: 'tupleTest2.superTupleTupleTest',
@@ -1102,7 +1102,7 @@ export function superTupleTupleTest(
 }
 export function encodeSuperTupleTupleTest(
   __s: ISerializer,
-  value: superTupleTupleTest
+  value: superTupleTupleTest,
 ) {
   __s.writeInt32(1329952558);
   /**
@@ -1119,7 +1119,7 @@ export function encodeSuperTupleTupleTest(
   __s.writeDouble(__t6);
 }
 export function decodeSuperTupleTupleTest(
-  __d: IDeserializer
+  __d: IDeserializer,
 ): superTupleTupleTest | null {
   const __id = __d.readInt32();
   /**
@@ -1147,7 +1147,7 @@ export function decodeSuperTupleTupleTest(
   };
 }
 export function defaultSuperTupleTupleTest(
-  params: Partial<superTupleTupleTestInputParams> = {}
+  params: Partial<superTupleTupleTestInputParams> = {},
 ): superTupleTupleTest {
   return superTupleTupleTest({
     a: [[[0], 0], 0.0],
@@ -1156,7 +1156,7 @@ export function defaultSuperTupleTupleTest(
 }
 export function compareSuperTupleTupleTest(
   __a: superTupleTupleTest,
-  __b: superTupleTupleTest
+  __b: superTupleTupleTest,
 ): boolean {
   return (
     /**
@@ -1174,7 +1174,7 @@ export function compareSuperTupleTupleTest(
 }
 export function updateSuperTupleTupleTest(
   value: superTupleTupleTest,
-  changes: Partial<superTupleTupleTestInputParams>
+  changes: Partial<superTupleTupleTestInputParams>,
 ) {
   if (typeof changes['a'] !== 'undefined') {
     if (
@@ -1187,7 +1187,7 @@ export function updateSuperTupleTupleTest(
             /* compare tuple item 1 of type number */ ((__a21, __b21) =>
               __a21 === __b21)(__a10[1], __b10[1]))(
             changes['a'][0],
-            value['a'][0]
+            value['a'][0],
           ) &&
           /* compare tuple item 1 of type number */ ((__a11, __b11) =>
             __a11 === __b11)(changes['a'][1], value['a'][1])

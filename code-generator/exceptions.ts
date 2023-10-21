@@ -18,7 +18,7 @@ export class ASTNodePreprocessingFailure extends Exception {
 
 export class DuplicateScopeIdentifier extends Exception {
   public constructor(
-    public readonly node: FileGenerator | ASTGeneratorOutputNode
+    public readonly node: FileGenerator | ASTGeneratorOutputNode,
   ) {
     super();
   }
@@ -26,7 +26,7 @@ export class DuplicateScopeIdentifier extends Exception {
 
 export class TypeScriptConfigurationParsingError extends Exception {
   public constructor(
-    public readonly configuration: unknown | Record<string, unknown>
+    public readonly configuration: unknown | Record<string, unknown>,
   ) {
     super();
   }

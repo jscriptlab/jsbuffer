@@ -24,11 +24,11 @@ export function isA(value: unknown): value is A {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('-9223372036854775808')
+          JSBI.BigInt('-9223372036854775808'),
         ) &&
         JSBI.lessThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('9223372036854775807')
+          JSBI.BigInt('9223372036854775807'),
         ))(value['a'])
     )
   )
@@ -117,7 +117,7 @@ export function isB(value: unknown): value is B {
         JSBI.greaterThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('0')) &&
         JSBI.lessThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('18446744073709551615')
+          JSBI.BigInt('18446744073709551615'),
         ))(value['a'])
     )
   )
@@ -207,11 +207,11 @@ export function isC(value: unknown): value is C {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('-9223372036854775808')
+          JSBI.BigInt('-9223372036854775808'),
         ) &&
         JSBI.lessThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('9223372036854775807')
+          JSBI.BigInt('9223372036854775807'),
         ))(value['a'])
     )
   )
@@ -225,7 +225,7 @@ export function isC(value: unknown): value is C {
         JSBI.greaterThanOrEqual(JSBI.BigInt(__v1), JSBI.BigInt('0')) &&
         JSBI.lessThanOrEqual(
           JSBI.BigInt(__v1),
-          JSBI.BigInt('18446744073709551615')
+          JSBI.BigInt('18446744073709551615'),
         ))(value['b'])
     )
   )
@@ -238,10 +238,10 @@ export function isC(value: unknown): value is C {
         JSBI.equal(JSBI.BigInt(__v2), JSBI.BigInt(__v2)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v2),
-          JSBI.BigInt('-2147483648')
+          JSBI.BigInt('-2147483648'),
         ) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v2), JSBI.BigInt('2147483647')))(
-        value['c']
+        value['c'],
       )
     )
   )

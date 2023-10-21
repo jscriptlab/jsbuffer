@@ -25,7 +25,7 @@ export default class JavaScriptObjectStringify extends CodeStream {
     }: {
       indentationSize: number;
       quoteObjectParameterNames?: boolean;
-    }
+    },
   ) {
     super(parent, {
       indentationSize,

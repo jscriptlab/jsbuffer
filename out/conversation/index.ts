@@ -31,10 +31,10 @@ export function isConversation(value: unknown): value is Conversation {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('-2147483648')
+          JSBI.BigInt('-2147483648'),
         ) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
-        value['id']
+        value['id'],
       )
     )
   )
@@ -92,7 +92,7 @@ export function decodeConversation(__d: IDeserializer): Conversation | null {
   };
 }
 export function defaultConversation(
-  params: Partial<ConversationInputParams> = {}
+  params: Partial<ConversationInputParams> = {},
 ): Conversation {
   return Conversation({
     id: 0,
@@ -102,7 +102,7 @@ export function defaultConversation(
 }
 export function compareConversation(
   __a: Conversation,
-  __b: Conversation
+  __b: Conversation,
 ): boolean {
   return (
     /**
@@ -117,7 +117,7 @@ export function compareConversation(
 }
 export function updateConversation(
   value: Conversation,
-  changes: Partial<ConversationInputParams>
+  changes: Partial<ConversationInputParams>,
 ) {
   if (typeof changes['id'] !== 'undefined') {
     if (!(changes['id'] === value['id'])) {
@@ -158,7 +158,7 @@ export function isConversations(value: unknown): value is Conversations {
       ((__v0) =>
         (Array.isArray(__v0) || __v0 instanceof Set) &&
         Array.from(__v0).every((p) => isConversation(p)))(
-        value['conversations']
+        value['conversations'],
       )
     )
   )
@@ -210,7 +210,7 @@ export function decodeConversations(__d: IDeserializer): Conversations | null {
   };
 }
 export function defaultConversations(
-  params: Partial<ConversationsInputParams> = {}
+  params: Partial<ConversationsInputParams> = {},
 ): Conversations {
   return Conversations({
     conversations: [],
@@ -219,7 +219,7 @@ export function defaultConversations(
 }
 export function compareConversations(
   __a: Conversations,
-  __b: Conversations
+  __b: Conversations,
 ): boolean {
   return (
     /**
@@ -233,14 +233,14 @@ export function compareConversations(
             typeof __item0 === 'undefined'
               ? false
               : compareConversation(__originalItem0, __item0))(
-            Array.from(__b['conversations'])[__index0]
-          )
+            Array.from(__b['conversations'])[__index0],
+          ),
     )
   );
 }
 export function updateConversations(
   value: Conversations,
-  changes: Partial<ConversationsInputParams>
+  changes: Partial<ConversationsInputParams>,
 ) {
   if (typeof changes['conversations'] !== 'undefined') {
     if (
@@ -254,8 +254,8 @@ export function updateConversations(
                   typeof __item1 === 'undefined'
                     ? false
                     : compareConversation(__originalItem1, __item1))(
-                  Array.from(value['conversations'])[__index1]
-                )
+                  Array.from(value['conversations'])[__index1],
+                ),
         )
       )
     ) {

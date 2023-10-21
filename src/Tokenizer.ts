@@ -102,7 +102,7 @@ export default class Tokenizer {
           throw new Exception(
             `Unexpected ${String.fromCharCode(ch)} at line number ${
               this.#lineNumber + 1
-            }`
+            }`,
           );
         }
       }
@@ -134,7 +134,7 @@ export default class Tokenizer {
         },
       },
       value: this.#textDecoder.decode(
-        this.#contents.subarray(startOffset + 1, endOffset)
+        this.#contents.subarray(startOffset + 1, endOffset),
       ),
     };
   }
@@ -157,7 +157,7 @@ export default class Tokenizer {
         },
       },
       value: this.#textDecoder.decode(
-        this.#contents.subarray(startOffset, endOffset)
+        this.#contents.subarray(startOffset, endOffset),
       ),
     };
   }
@@ -202,7 +202,7 @@ export default class Tokenizer {
     return {
       type: TokenType.MultiLineComment,
       value: this.#textDecoder.decode(
-        this.#contents.subarray(startOffset, this.#offset)
+        this.#contents.subarray(startOffset, this.#offset),
       ),
       position: {
         lineNumber: {
@@ -227,7 +227,7 @@ export default class Tokenizer {
     return {
       type: TokenType.Identifier,
       value: this.#textDecoder.decode(
-        this.#contents.subarray(startOffset, this.#offset)
+        this.#contents.subarray(startOffset, this.#offset),
       ),
       position: {
         lineNumber: {

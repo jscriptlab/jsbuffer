@@ -15,7 +15,7 @@ export function encodeUserTrait(__s: ISerializer, value: User) {
       return encodeUserDeleted(__s, value);
   }
   throw new Error(
-    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- user.user\n\t- user.userDeleted\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
+    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- user.user\n\t- user.userDeleted\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`,
   );
 }
 export function decodeUserTrait(__d: IDeserializer) {
@@ -64,7 +64,7 @@ export function encodeTestTrait(__s: ISerializer, value: Test) {
       return encodeTest(__s, value);
   }
   throw new Error(
-    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- user.test\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
+    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- user.test\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`,
   );
 }
 export function decodeTestTrait(__d: IDeserializer) {
@@ -202,8 +202,8 @@ export function compareUser(__a: user, __b: user): boolean {
             typeof __item1 === 'undefined'
               ? false
               : __originalItem1 === __item1)(
-            Array.from(__b['aliases'])[__index1]
-          )
+            Array.from(__b['aliases'])[__index1],
+          ),
     )
   );
 }
@@ -227,8 +227,8 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
                 typeof __item2 === 'undefined'
                   ? false
                   : __originalItem2 === __item2)(
-                Array.from(value['aliases'])[__index2]
-              )
+                Array.from(value['aliases'])[__index2],
+              ),
         )
       )
     ) {
@@ -263,10 +263,10 @@ export function isUserDeleted(value: unknown): value is userDeleted {
         JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
         JSBI.greaterThanOrEqual(
           JSBI.BigInt(__v0),
-          JSBI.BigInt('-2147483648')
+          JSBI.BigInt('-2147483648'),
         ) &&
         JSBI.lessThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('2147483647')))(
-        value['deletedAt']
+        value['deletedAt'],
       )
     )
   )
@@ -307,7 +307,7 @@ export function decodeUserDeleted(__d: IDeserializer): userDeleted | null {
   };
 }
 export function defaultUserDeleted(
-  params: Partial<userDeletedInputParams> = {}
+  params: Partial<userDeletedInputParams> = {},
 ): userDeleted {
   return userDeleted({
     deletedAt: 0,
@@ -316,7 +316,7 @@ export function defaultUserDeleted(
 }
 export function compareUserDeleted(
   __a: userDeleted,
-  __b: userDeleted
+  __b: userDeleted,
 ): boolean {
   return (
     /**
@@ -327,7 +327,7 @@ export function compareUserDeleted(
 }
 export function updateUserDeleted(
   value: userDeleted,
-  changes: Partial<userDeletedInputParams>
+  changes: Partial<userDeletedInputParams>,
 ) {
   if (typeof changes['deletedAt'] !== 'undefined') {
     if (!(changes['deletedAt'] === value['deletedAt'])) {
@@ -366,8 +366,8 @@ export function isTest(value: unknown): value is test {
           (p) =>
             (Array.isArray(p) || p instanceof Set) &&
             Array.from(p).every((p) =>
-              p === null ? true : ((x) => typeof x === 'string')(p)
-            )
+              p === null ? true : ((x) => typeof x === 'string')(p),
+            ),
         ))(value['b'])
     )
   )
@@ -473,19 +473,21 @@ export function compareTest(__a: test, __b: test): boolean {
             typeof __item1 === 'undefined'
               ? false
               : __originalItem1.length === __item1.length &&
-                Array.from(__originalItem1).every((__originalItem2, __index2) =>
-                  typeof __originalItem2 === 'undefined'
-                    ? false
-                    : ((__item2) =>
-                        typeof __item2 === 'undefined'
-                          ? false
-                          : ((__dp31, __dp32) =>
-                              __dp31 !== null && __dp32 !== null
-                                ? __dp31 === __dp32
-                                : __dp31 === __dp32)(__originalItem2, __item2))(
-                        Array.from(__item1)[__index2]
-                      )
-                ))(Array.from(__b['b'])[__index1])
+                Array.from(__originalItem1).every(
+                  (__originalItem2, __index2) =>
+                    typeof __originalItem2 === 'undefined'
+                      ? false
+                      : ((__item2) =>
+                          typeof __item2 === 'undefined'
+                            ? false
+                            : ((__dp31, __dp32) =>
+                                __dp31 !== null && __dp32 !== null
+                                  ? __dp31 === __dp32
+                                  : __dp31 === __dp32)(
+                                __originalItem2,
+                                __item2,
+                              ))(Array.from(__item1)[__index2]),
+                ))(Array.from(__b['b'])[__index1]),
     )
   );
 }
@@ -521,9 +523,9 @@ export function updateTest(value: test, changes: Partial<testInputParams>) {
                                       ? __dp41 === __dp42
                                       : __dp41 === __dp42)(
                                     __originalItem3,
-                                    __item3
-                                  ))(Array.from(__item2)[__index3])
-                    ))(Array.from(value['b'])[__index2])
+                                    __item3,
+                                  ))(Array.from(__item2)[__index3]),
+                    ))(Array.from(value['b'])[__index2]),
         )
       )
     ) {

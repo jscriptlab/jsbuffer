@@ -16,11 +16,11 @@ export function enforceLocalImport(value: string) {
 export function replaceExtension(
   k: string,
   replacement: string,
-  extension = '[a-zA-Z_-]'
+  extension = '[a-zA-Z_-]',
 ) {
   return k.replace(
     new RegExp(`([a-zA-Z0-9_-]+)${extension}$`),
-    `$1${replacement}`
+    `$1${replacement}`,
   );
 }
 
