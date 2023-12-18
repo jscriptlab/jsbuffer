@@ -1,11 +1,6 @@
 import Exception from '../exception/Exception';
 import Character from './Character';
 
-export interface ITokenPosition {
-  lineNumber: ITokenRange;
-  offset: ITokenRange;
-}
-
 export interface ITokenRange {
   start: number;
   end: number;
@@ -14,7 +9,7 @@ export interface ITokenRange {
 export interface IToken {
   type: TokenType;
   value: string;
-  position: ITokenPosition;
+  position: ITokenRange;
 }
 
 export enum TokenType {
@@ -124,14 +119,8 @@ export default class Tokenizer {
     return {
       type: TokenType.LiteralString,
       position: {
-        offset: {
-          start: startOffset,
-          end: this.#offset
-        },
-        lineNumber: {
-          start: this.#lineNumber,
-          end: this.#lineNumber
-        }
+        start: startOffset,
+        end: this.#offset
       },
       value: this.#textDecoder.decode(
         this.#contents.subarray(startOffset + 1, endOffset)
@@ -147,14 +136,8 @@ export default class Tokenizer {
     return {
       type: TokenType.LiteralNumber,
       position: {
-        offset: {
-          start: startOffset,
-          end: this.#offset
-        },
-        lineNumber: {
-          start: this.#lineNumber,
-          end: this.#lineNumber
-        }
+        start: startOffset,
+        end: this.#offset
       },
       value: this.#textDecoder.decode(
         this.#contents.subarray(startOffset, endOffset)
@@ -167,19 +150,14 @@ export default class Tokenizer {
       if (!this.#peek(value)) {
         continue;
       }
+      const startOffset = this.#offset;
       this.#offset += this.#textEncoder.encode(value).byteLength;
       return {
         type: TokenType.Punctuator,
         value,
         position: {
-          offset: {
-            start: this.#offset,
-            end: this.#offset
-          },
-          lineNumber: {
-            start: this.#lineNumber,
-            end: this.#lineNumber
-          }
+          start: startOffset,
+          end: this.#offset
         }
       };
     }
@@ -205,14 +183,8 @@ export default class Tokenizer {
         this.#contents.subarray(startOffset, this.#offset)
       ),
       position: {
-        lineNumber: {
-          start: this.#lineNumber,
-          end: this.#lineNumber
-        },
-        offset: {
-          start: startOffset,
-          end: this.#offset
-        }
+        start: startOffset,
+        end: this.#offset
       }
     };
   }
@@ -230,14 +202,8 @@ export default class Tokenizer {
         this.#contents.subarray(startOffset, this.#offset)
       ),
       position: {
-        lineNumber: {
-          start: this.#lineNumber,
-          end: this.#lineNumber
-        },
-        offset: {
-          start: startOffset,
-          end: this.#offset
-        }
+        start: startOffset,
+        end: this.#offset
       }
     };
   }

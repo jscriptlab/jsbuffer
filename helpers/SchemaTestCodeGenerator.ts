@@ -7,7 +7,7 @@ import path from 'path';
 import { Metadata, MetadataParamType } from '../code-generator/types';
 import {
   getMetadataFileName,
-  upperFirst,
+  upperFirst
 } from '../code-generator/stringUtilities';
 import GenericName from '../code-generator/GenericName';
 import assert from 'assert';
@@ -15,7 +15,7 @@ import JavaScriptObjectStringify from '../code-generator/JavaScriptObjectStringi
 import { crc32 } from 'crc';
 import { findClosestFileOrFolder } from '../code-generator/helpers';
 import JSBI from 'jsbi';
-import { integerRangeFromBits } from '../code-generator/fileGeneratorUtilities';
+// import { integerRangeFromBits } from '../code-generator/fileGeneratorUtilities';
 import { BN } from 'bn.js';
 
 function getFunctionName(prefix: string, metadata: Metadata) {
@@ -73,7 +73,7 @@ export class MetadataCodeGenerator extends CodeStream {
     metadataObjects,
     littleEndian,
     outFile,
-    indentationSize,
+    indentationSize
   }: {
     outFile: string;
     parent: CodeStream;
@@ -84,12 +84,12 @@ export class MetadataCodeGenerator extends CodeStream {
     littleEndian: boolean;
   }) {
     super(parent, {
-      indentationSize,
+      indentationSize
     });
     this.#littleEndian = littleEndian;
     this.#stringifier = new JavaScriptObjectStringify(this, {
       quoteObjectParameterNames: false,
-      indentationSize,
+      indentationSize
     });
     this.#metadata = metadata;
     this.#absoluteImportPath = absoluteImportPath;
@@ -111,7 +111,7 @@ export class MetadataCodeGenerator extends CodeStream {
       [getFunctionName('update', metadata), 'updateFn'],
       [getFunctionName('compare', metadata), 'compareFn'],
       [getFunctionName('decode', metadata), 'decodeFn'],
-      [getFunctionName('is', metadata), 'isFn'],
+      [getFunctionName('is', metadata), 'isFn']
     ];
     this.write(`console.log("-- %s","${relativePath}");\n`);
     this.write("const assert = require('assert');\n");
@@ -147,9 +147,8 @@ export class MetadataCodeGenerator extends CodeStream {
         'result',
         -1
       );
-      const randomValues = await this.#generateRandomValueFromParamMetadata(
-        paramTypeMetadata
-      );
+      const randomValues =
+        await this.#generateRandomValueFromParamMetadata(paramTypeMetadata);
       for (let i = 0; i < maxDepth; i++) {
         const wrongValues: Record<string, unknown> = {};
         await this.#generateWrongRandomValueFromParamMetadata(
@@ -167,7 +166,7 @@ export class MetadataCodeGenerator extends CodeStream {
               metadataObjects: await getMetadataFromRelativePath(
                 this.#absoluteImportPath,
                 paramTypeMetadata.relativePath
-              ),
+              )
             }
           : null;
 
@@ -177,7 +176,7 @@ export class MetadataCodeGenerator extends CodeStream {
         ),
         paramTypeMetadata,
         wrongValueSet,
-        randomValues,
+        randomValues
       };
     });
     return Promise.all(pendingNodes);
@@ -214,7 +213,7 @@ export class MetadataCodeGenerator extends CodeStream {
     for (const {
       randomValues,
       externalTypeMetadata,
-      wrongValueSet,
+      wrongValueSet
     } of traitNodeRandomValues) {
       if (externalTypeMetadata) {
         assert.strict.ok(externalTypeMetadata.kind !== 'trait');
@@ -237,7 +236,7 @@ export class MetadataCodeGenerator extends CodeStream {
           '}\n'
         );
       }
-      const [firstWrongValueSet] = Array.from(wrongValueSet);
+      // const [firstWrongValueSet] = Array.from(wrongValueSet);
       for (const wrongValues of wrongValueSet) {
         this.write(
           '{\n',
@@ -384,9 +383,8 @@ export class MetadataCodeGenerator extends CodeStream {
       case 'trait': {
         this.#log(`${metadata.kind}: [`);
         for (const node of metadata.nodes) {
-          const randomValues = await this.#generateRandomValueFromParamMetadata(
-            node
-          );
+          const randomValues =
+            await this.#generateRandomValueFromParamMetadata(node);
           this.write('assert.strict.ok(isFn(');
           this.indentBlock(() => {
             this.write('');
@@ -465,7 +463,7 @@ export class MetadataCodeGenerator extends CodeStream {
           : metadata.nodes[crypto.randomInt(0, metadata.nodes.length - 1)];
       assert.strict.ok(selectedMetadata);
       const value = {
-        result: null,
+        result: null
       };
       return this.#generateWrongRandomValueFromParamMetadata(
         selectedMetadata,
@@ -761,7 +759,7 @@ export class MetadataCodeGenerator extends CodeStream {
             for (let i = 0; i < length; i++) {
               list[i] = await Promise.all([
                 this.#generateRandomValueFromParamMetadata(param.key),
-                this.#generateRandomValueFromParamMetadata(param.value),
+                this.#generateRandomValueFromParamMetadata(param.value)
               ]);
             }
             return new Map(list);
@@ -883,7 +881,7 @@ export async function parseConfigFile(
   }
   return {
     outDir: getConfigProperty(maybeConfig, 'outDir'),
-    mainFile: getConfigProperty(maybeConfig, 'mainFile'),
+    mainFile: getConfigProperty(maybeConfig, 'mainFile')
   };
 }
 
@@ -893,13 +891,13 @@ export default class SchemaTestCodeGenerator extends CodeStream {
   #files = new Array<string>();
   public constructor({
     indentationSize,
-    outFile,
+    outFile
   }: {
     indentationSize: number;
     outFile: string;
   }) {
     super(undefined, {
-      indentationSize,
+      indentationSize
     });
     this.#indentationSize = indentationSize;
     this.#outFile = outFile;
@@ -930,7 +928,7 @@ export default class SchemaTestCodeGenerator extends CodeStream {
             indentationSize: this.#indentationSize,
             absoluteImportPath: f,
             littleEndian: true,
-            outFile: this.#outFile,
+            outFile: this.#outFile
           })
       );
       for (const g of generators) {

@@ -1,44 +1,9 @@
 import Exception from '../exception/Exception';
-import { IToken, TokenType } from './Tokenizer';
+import ErrorFormatter from './ErrorFormatter';
+import { ITextDecoder, IToken, TokenType } from './Tokenizer';
+import tokenTypeToString from './tokenTypeToString';
 
 export class ASTGenerationException extends Exception {}
-
-export class UnexpectedTokenType extends ASTGenerationException {
-  public constructor(
-    public readonly expectedTokenType: TokenType,
-    public readonly giveToken: IToken | null,
-    public readonly lastToken: IToken | null
-  ) {
-    super();
-  }
-}
-export class UnexpectedKeywordName extends ASTGenerationException {
-  public constructor(
-    public readonly expectedKeywordName: string,
-    public readonly giveToken: IToken | null
-  ) {
-    super();
-  }
-}
-
-export class UnexpectedPunctuatorName extends ASTGenerationException {
-  public constructor(
-    public readonly expectedPunctuatorName: string,
-    public readonly giveToken: IToken | null
-  ) {
-    super();
-  }
-}
-
-export class UnexpectedExport extends ASTGenerationException {}
-
-export class UnexpectedToken extends ASTGenerationException {
-  public constructor(public readonly token: IToken) {
-    super();
-  }
-}
-
-export class EOF extends ASTGenerationException {}
 
 export enum NodeType {
   Identifier,
@@ -140,9 +105,26 @@ export type ASTGeneratorOutputNode =
 
 export default class ASTGenerator {
   readonly #tokens;
-  #lastToken: IToken | null = null;
-  public constructor(tokens: ReadonlyArray<IToken>) {
-    this.#tokens = Array.from(tokens);
+  readonly #errorFormatter;
+  #offset = 0;
+  public constructor({
+    contents,
+    textDecoder,
+    tokens,
+    file
+  }: {
+    file: string;
+    tokens: ReadonlyArray<IToken>;
+    contents: Uint8Array;
+    textDecoder: ITextDecoder;
+  }) {
+    this.#tokens = tokens;
+    this.#errorFormatter = new ErrorFormatter({
+      file,
+      textDecoder,
+      contents,
+      offset: () => this.#errorFormatterByteOffset()
+    });
   }
   public generate() {
     const nodes = new Array<ASTGeneratorOutputNode>();
@@ -158,7 +140,9 @@ export default class ASTGenerator {
       } else if (this.#peek(TokenType.Keyword, 'trait')) {
         nodes.push(this.#readTraitStatement());
       } else {
-        throw new UnexpectedToken(this.#match());
+        throw new ASTGenerationException(
+          this.#errorFormatter.format('Unexpected token')
+        );
       }
     }
     return nodes;
@@ -233,7 +217,7 @@ export default class ASTGenerator {
     };
   }
   #peek(expectedTokenType: TokenType, value?: string) {
-    const token = this.#tokens[0];
+    const token = this.#tokens[this.#offset];
     if (
       typeof token === 'undefined' ||
       token.type !== expectedTokenType ||
@@ -246,13 +230,6 @@ export default class ASTGenerator {
   #peekKeyword(value: string) {
     return this.#peek(TokenType.Keyword, value);
   }
-  #match(): IToken {
-    const token = this.#tokens[0];
-    if (typeof token === 'undefined') {
-      throw new EOF();
-    }
-    return token;
-  }
   #readExportStatement(): INodeExportStatement {
     const startToken = this.#expectKeyword('export');
 
@@ -264,7 +241,9 @@ export default class ASTGenerator {
     } else if (this.#peekKeyword('call')) {
       value = this.#readCallStatement();
     } else {
-      throw new UnexpectedExport();
+      throw new ASTGenerationException(
+        this.#errorFormatter.format('Unexpected export')
+      );
     }
     return {
       type: NodeType.ExportStatement,
@@ -330,7 +309,7 @@ export default class ASTGenerator {
       this.#peek(TokenType.LiteralNumber) ??
       this.#peek(TokenType.LiteralString);
     if (token === null) {
-      throw new Exception('Invalid type expression');
+      throw new ASTGenerationException('Invalid type expression');
     }
     let id: NodeTypeExpression;
     switch (token.type) {
@@ -344,7 +323,7 @@ export default class ASTGenerator {
         id = this.#readLiteralNumber();
         break;
       default:
-        throw new Exception(`Invalid token type: ${token.type}`);
+        throw new ASTGenerationException(`Invalid token type: ${token.type}`);
     }
     switch (id.type) {
       case NodeType.Identifier: {
@@ -389,19 +368,32 @@ export default class ASTGenerator {
       parameters
     };
   }
+  /**
+   * Assert token.value === value or throw an exception
+   * @param token Token to assert
+   * @param value Value we expect to be equal to token.value
+   * @returns Token if token.value === value
+   */
+  #assertValue(token: IToken, value: string) {
+    if (token.value !== value) {
+      throw new ASTGenerationException(
+        this.#errorFormatter.format(
+          `Expected "${value}", got "${token.value}" instead`
+        )
+      );
+    }
+    return token;
+  }
   #expectPunctuator(value: string) {
     const punctuator = this.#expectByType(TokenType.Punctuator);
-    if (punctuator.value !== value) {
-      throw new UnexpectedPunctuatorName(value, punctuator);
-    }
-    return punctuator;
+    return this.#assertValue(punctuator, value);
   }
   #matchByType(expectedType: TokenType, value?: string) {
     const token = this.#peek(expectedType, value);
     if (token === null) {
       return null;
     }
-    this.#lastToken = this.#tokens.shift() ?? null;
+    this.#advance();
     return token;
   }
   #matchPunctuator(value: string) {
@@ -420,30 +412,65 @@ export default class ASTGenerator {
   }
   #expectKeyword(value: string) {
     const token = this.#expectByType(TokenType.Keyword);
-    if (token.value !== value) {
-      throw new UnexpectedKeywordName(value, token);
+    return this.#assertValue(token, value);
+  }
+  /**
+   * Advance to the next token
+   */
+  #advance() {
+    if (this.#eof()) {
+      throw new ASTGenerationException(
+        this.#errorFormatter.format('Tried to advance, but reached EOF')
+      );
+    }
+    this.#offset++;
+  }
+
+  #current() {
+    const token = this.#tokens[this.#offset];
+    if (typeof token === 'undefined') {
+      throw new ASTGenerationException(
+        this.#errorFormatter.format(
+          'Tried to get current token, but found EOF instead'
+        )
+      );
     }
     return token;
   }
   #expectByType(expectedType: TokenType) {
-    const token = this.#tokens[0];
-    if (typeof token === 'undefined' || token.type !== expectedType) {
-      throw new UnexpectedTokenType(
-        expectedType,
-        token ?? null,
-        this.#lastToken
+    const token = this.#current();
+    if (token.type !== expectedType) {
+      throw new ASTGenerationException(
+        this.#errorFormatter.format(
+          `Unexpected token type. Expected ${tokenTypeToString(
+            expectedType
+          )}, ` + `but got ${tokenTypeToString(token.type)} instead`
+        )
       );
     }
     /**
-     * remove first token
+     * advance offset
      */
-    this.#lastToken = this.#tokens.shift() ?? null;
+    this.#advance();
     /**
      * return first token
      */
     return token;
   }
   #eof() {
-    return this.#tokens.length === 0;
+    return this.#tokens.length === this.#offset;
+  }
+  #errorFormatterByteOffset() {
+    const token = this.#tokens[this.#offset];
+    if (typeof token === 'undefined') {
+      const lastToken = this.#tokens[this.#tokens.length - 1];
+      if (typeof lastToken === 'undefined') {
+        throw new ASTGenerationException(
+          'Unusual behavior: Tried to get last token but EOF was found instead'
+        );
+      }
+      return lastToken.position.end;
+    }
+    return token.position.start;
   }
 }
