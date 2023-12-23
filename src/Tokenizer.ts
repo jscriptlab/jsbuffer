@@ -178,7 +178,7 @@ export default class Tokenizer {
       this.#offset++;
     }
     return {
-      type: TokenType.MultiLineComment,
+      type: TokenType.SingleLineComment,
       value: this.#textDecoder.decode(
         this.#contents.subarray(startOffset, this.#offset)
       ),
