@@ -8,11 +8,11 @@ import Exception from '../exception/Exception';
 
 async function generateSchema() {
   const compilerOptions = {
-    rootDir: path.resolve(__dirname, '../test'),
+    rootDir: path.resolve(__dirname, '../test')
   };
   const fg = new FileGenerator(
     {
-      path: path.resolve(__dirname, '../test/schema'),
+      path: path.resolve(__dirname, '../test/schema')
     },
     {
       root: null,
@@ -22,14 +22,14 @@ async function generateSchema() {
       indentationSize: 2,
       compilerOptions,
       typeScriptConfiguration: {
-        extends: '../tsconfig.base.json',
-      },
+        extends: '../tsconfig.base.json'
+      }
     }
   );
   const outDir = path.resolve(__dirname, '../out');
   await fs.promises.rm(outDir, {
     force: true,
-    recursive: true,
+    recursive: true
   });
   for (const f of await fg.generate()) {
     const finalFilePath = path.resolve(outDir, f.path);
@@ -51,14 +51,10 @@ async function generateSchema() {
     inspector.open(undefined, undefined, true);
   }
   if (shouldRunTests) {
-    await spawn(
-      'npx',
-      ['sarg', '--require', 'ts-node/register', 'test/**/*.ts'],
-      {
-        stdio: 'inherit',
-        cwd: path.dirname(__dirname),
-      }
-    ).wait();
+    await spawn('npx', ['ava', 'test/**/*.js'], {
+      stdio: 'inherit',
+      cwd: path.dirname(__dirname)
+    }).wait();
   }
   if (shouldGenerateSchema) {
     await generateSchema();

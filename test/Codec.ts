@@ -7,7 +7,7 @@ import {
 } from '../out/schema';
 import { expect } from 'chai';
 
-test('Codec#encode: it should support encoding several times in a row', () => {
+test('Codec#encode: it should support encoding several times in a row', (t) => {
   const codec = new Codec({
     textDecoder: new TextDecoder(),
     textEncoder: new TextEncoder()
@@ -34,9 +34,10 @@ test('Codec#encode: it should support encoding several times in a row', () => {
       postId: 5
     })
   );
+  t.pass();
 });
 
-test('Codec#decode: it should support decode', () => {
+test('Codec#decode: it should support decode', (t) => {
   const codec = new Codec({
     textDecoder: new TextDecoder(),
     textEncoder: new TextEncoder()
@@ -56,4 +57,5 @@ test('Codec#decode: it should support decode', () => {
       postId: 100000
     })
   );
+  t.pass();
 });

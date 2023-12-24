@@ -1,15 +1,10 @@
-import { Suite } from 'sarg';
+import test from 'ava';
 import { lowerFirst, upperFirst } from '../code-generator/stringUtilities';
-import assert from 'assert';
 
-const suite = new Suite();
-
-suite.test('it should lower first', () => {
-  assert.strict.equal(lowerFirst('UserProfile'), 'userProfile');
+test('it should lower first', (t) => {
+  t.deepEqual(lowerFirst('UserProfile'), 'userProfile');
 });
 
-suite.test('it should upper first', () => {
-  assert.strict.equal(upperFirst('userProfile'), 'UserProfile');
+test('it should upper first', (t) => {
+  t.deepEqual(upperFirst('userProfile'), 'UserProfile');
 });
-
-export default suite;

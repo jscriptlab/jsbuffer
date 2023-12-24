@@ -1,14 +1,11 @@
-import { Suite } from 'sarg';
 import { Deserializer, Serializer } from '@jsbuffer/codec';
 import { TextEncoder } from 'util';
-import assert from 'assert';
+import test from 'ava';
 import fruitList from './fruit-list.json';
 
-const suite = new Suite();
-
-suite.test('it should write signed 32-bit integer', () => {
+test('it should write signed 32-bit integer', (t) => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   s.writeInt32(-19999);
   s.writeUint32(1706227759);
@@ -16,85 +13,85 @@ suite.test('it should write signed 32-bit integer', () => {
   s.writeUint32(2);
   const d = new Deserializer({
     buffer: s.view(),
-    textDecoder: new TextDecoder(),
+    textDecoder: new TextDecoder()
   });
-  assert.strict.equal(d.readInt32(), -19999);
-  assert.strict.equal(d.readUint32(), 1706227759);
-  assert.strict.equal(d.readUint32(), 1);
-  assert.strict.equal(d.readUint32(), 2);
+  t.deepEqual(d.readInt32(), -19999);
+  t.deepEqual(d.readUint32(), 1706227759);
+  t.deepEqual(d.readUint32(), 1);
+  t.deepEqual(d.readUint32(), 2);
 });
 
-suite.test('it should write signed 8-bit integer', () => {
+test('it should write signed 8-bit integer', (t) => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   s.writeInt8(-20);
   const d = new Deserializer({
     buffer: s.view(),
-    textDecoder: new TextDecoder(),
+    textDecoder: new TextDecoder()
   });
-  assert.strict.equal(d.readInt8(), -20);
+  t.deepEqual(d.readInt8(), -20);
 });
 
-suite.test('it should write unsigned 8-bit integer', () => {
+test('it should write unsigned 8-bit integer', (t) => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   s.writeUint8(140);
   const d = new Deserializer({
     buffer: s.view(),
-    textDecoder: new TextDecoder(),
+    textDecoder: new TextDecoder()
   });
-  assert.strict.equal(d.readUint8(), 140);
+  t.deepEqual(d.readUint8(), 140);
 });
 
-suite.test('it should write double', () => {
+test('it should write double', (t) => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   s.writeFloat(3.569991209869047e-24);
   const d = new Deserializer({
     buffer: s.view(),
-    textDecoder: new TextDecoder(),
+    textDecoder: new TextDecoder()
   });
-  assert.strict.equal(d.readFloat(), 3.569991209869047e-24);
+  t.deepEqual(d.readFloat(), 3.569991209869047e-24);
 });
 
-suite.test('it should write float', () => {
+test('it should write float', (t) => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   s.writeDouble(7.493994439385616e-56);
   const d = new Deserializer({
     buffer: s.view(),
-    textDecoder: new TextDecoder(),
+    textDecoder: new TextDecoder()
   });
-  assert.strict.equal(d.readDouble(), 7.493994439385616e-56);
+  t.deepEqual(d.readDouble(), 7.493994439385616e-56);
 });
 
-suite.test('it should rewind the serializer', () => {
+test('it should rewind the serializer', (t) => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   s.writeDouble(7.493994439385616e-56);
   let d = new Deserializer({
     buffer: s.view(),
-    textDecoder: new TextDecoder(),
+    textDecoder: new TextDecoder()
   });
-  assert.strict.equal(d.readDouble(), 7.493994439385616e-56);
+  t.deepEqual(d.readDouble(), 7.493994439385616e-56);
   s.rewind();
   s.writeDouble(1.123456789);
   d = new Deserializer({
     buffer: s.view(),
-    textDecoder: new TextDecoder(),
+    textDecoder: new TextDecoder()
   });
-  assert.strict.equal(d.readDouble(), 1.123456789);
+  t.deepEqual(d.readDouble(), 1.123456789);
 });
 
-suite.test('it should reallocate internal array buffer', () => {
+test('it should reallocate internal array buffer', (t) => {
   const s = new Serializer({
     textEncoder: new TextEncoder(),
-    tailByteLength: 1,
+    tailByteLength: 1
   });
   s.writeInt16(100);
   s.writeUint32(1000);
@@ -106,60 +103,61 @@ suite.test('it should reallocate internal array buffer', () => {
   s.writeUint8(100);
   s.writeString('😀😃😄😁😆😅😂🤣🥲🥹😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝');
   s.writeInt16(100);
+  t.pass();
 });
 
-suite.test('it should write unsigned 16-bit integer', () => {
+test('it should write unsigned 16-bit integer', (t) => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   s.writeUint16(16000);
   s.writeUint16(1);
   s.writeUint16(2);
   const d = new Deserializer({
     buffer: s.view(),
-    textDecoder: new TextDecoder(),
+    textDecoder: new TextDecoder()
   });
-  assert.strict.equal(d.readUint16(), 16000);
-  assert.strict.equal(d.readUint16(), 1);
-  assert.strict.equal(d.readUint16(), 2);
+  t.deepEqual(d.readUint16(), 16000);
+  t.deepEqual(d.readUint16(), 1);
+  t.deepEqual(d.readUint16(), 2);
 });
 
-suite.test('it should write signed 16-bit integer', () => {
+test('it should write signed 16-bit integer', (t) => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   s.writeInt16(-1349);
   s.writeInt16(-20);
   s.writeInt16(-250);
   const d = new Deserializer({
     buffer: s.view(),
-    textDecoder: new TextDecoder(),
+    textDecoder: new TextDecoder()
   });
-  assert.strict.equal(d.readInt16(), -1349);
-  assert.strict.equal(d.readInt16(), -20);
-  assert.strict.equal(d.readInt16(), -250);
+  t.deepEqual(d.readInt16(), -1349);
+  t.deepEqual(d.readInt16(), -20);
+  t.deepEqual(d.readInt16(), -250);
 });
 
-suite.test('it should write string', () => {
+test('it should write string', (t) => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   s.writeString('x');
   s.writeString('😀😃😄😁😆😅😂🤣🥲🥹😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝');
   const d = new Deserializer({
     buffer: s.view(),
-    textDecoder: new TextDecoder(),
+    textDecoder: new TextDecoder()
   });
-  assert.strict.equal(d.readString(), 'x');
-  assert.strict.equal(
+  t.deepEqual(d.readString(), 'x');
+  t.deepEqual(
     d.readString(),
     '😀😃😄😁😆😅😂🤣🥲🥹😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝'
   );
 });
 
-suite.test('it should write string 2', () => {
+test('it should write string 2', (t) => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   for (const list of fruitList.data) {
     for (const value of list) {
@@ -169,30 +167,30 @@ suite.test('it should write string 2', () => {
   }
   const d = new Deserializer({
     buffer: s.view(),
-    textDecoder: new TextDecoder(),
+    textDecoder: new TextDecoder()
   });
   for (const list of fruitList.data) {
     for (const value of list) {
-      assert.strict.equal(d.readString(), value);
-      assert.strict.equal(d.readNullTerminatedString(), value);
+      t.deepEqual(d.readString(), value);
+      t.deepEqual(d.readNullTerminatedString(), value);
     }
   }
 });
 
-suite.test('it should write null-terminated string', () => {
+test('it should write null-terminated string', (t) => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   s.writeNullTerminatedString('aaaaaaaa');
   const d = new Deserializer({
     buffer: s.view(),
-    textDecoder: new TextDecoder(),
+    textDecoder: new TextDecoder()
   });
-  assert.strict.equal(d.readNullTerminatedString(), 'aaaaaaaa');
+  t.deepEqual(d.readNullTerminatedString(), 'aaaaaaaa');
 });
-suite.test('it should write sequence of null-terminated strings', () => {
+test('it should write sequence of null-terminated strings', (t) => {
   const s = new Serializer({
-    textEncoder: new TextEncoder(),
+    textEncoder: new TextEncoder()
   });
   s.writeNullTerminatedString('');
   s.writeInt32(-10);
@@ -202,14 +200,12 @@ suite.test('it should write sequence of null-terminated strings', () => {
   s.writeNullTerminatedString('aaaaaaaa');
   const d = new Deserializer({
     buffer: s.view(),
-    textDecoder: new TextDecoder(),
+    textDecoder: new TextDecoder()
   });
-  assert.strict.equal(d.readNullTerminatedString(), '');
-  assert.strict.equal(d.readInt32(), -10);
-  assert.strict.equal(d.readNullTerminatedString(), 'a');
-  assert.strict.equal(d.readInt32(), -25);
-  assert.strict.equal(d.readNullTerminatedString(), 'b');
-  assert.strict.equal(d.readNullTerminatedString(), 'aaaaaaaa');
+  t.deepEqual(d.readNullTerminatedString(), '');
+  t.deepEqual(d.readInt32(), -10);
+  t.deepEqual(d.readNullTerminatedString(), 'a');
+  t.deepEqual(d.readInt32(), -25);
+  t.deepEqual(d.readNullTerminatedString(), 'b');
+  t.deepEqual(d.readNullTerminatedString(), 'aaaaaaaa');
 });
-
-export default suite;

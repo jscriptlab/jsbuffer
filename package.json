@@ -28,7 +28,7 @@
     "build": "npx tsc -b out cli code-generator src --force",
     "build:all": "npm run schema && npm run build && npm run lint",
     "prepublishOnly": "npm run build:all && npm run test",
-    "test": "TS_NODE_PROJECT=test/tsconfig.json npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
+    "test": "npx ava \"test/**/*.js\"",
     "test:coverage": "npx nyc npm test"
   },
   "dependencies": {
@@ -57,7 +57,6 @@
     "jsbuffer": "^1.0.2",
     "nyc": "^15.1.0",
     "prettier": "^3.0.3",
-    "sarg": "^5.0.12",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   }
