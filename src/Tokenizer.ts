@@ -1,5 +1,6 @@
 import Exception from '../exception/Exception';
 import Character from './Character';
+import ErrorFormatter from './ErrorFormatter';
 
 export interface ITokenRange {
   start: number;
@@ -23,6 +24,10 @@ export enum TokenType {
 }
 
 export interface ITokenizerOptions {
+  /**
+   * File name
+   */
+  file: string;
   contents: Uint8Array;
   textEncoder: ITextEncoder;
   textDecoder: ITextDecoder;
@@ -43,10 +48,12 @@ export default class Tokenizer {
   readonly #tokens = new Array<IToken>();
   readonly #comments = new Array<IToken>();
   readonly #keywords = ['call', 'from', 'trait', 'import', 'type', 'export'];
+  readonly #errorFormatter;
   #offset;
   #lineNumber;
   public constructor({
     contents,
+    file,
     textDecoder,
     textEncoder
   }: ITokenizerOptions) {
@@ -55,6 +62,12 @@ export default class Tokenizer {
     this.#contents = contents;
     this.#textEncoder = textEncoder;
     this.#textDecoder = textDecoder;
+    this.#errorFormatter = new ErrorFormatter({
+      contents,
+      textDecoder: this.#textDecoder,
+      file,
+      offset: () => this.#offset
+    });
   }
   public tokens(): ReadonlyArray<IToken> {
     return this.#tokens;
@@ -95,9 +108,7 @@ export default class Tokenizer {
           tokens.push(punctuator);
         } else {
           throw new Exception(
-            `Unexpected ${String.fromCharCode(ch)} at line number ${
-              this.#lineNumber + 1
-            }`
+            this.#errorFormatter.format('Unexpected character')
           );
         }
       }
@@ -166,7 +177,11 @@ export default class Tokenizer {
   #currentCharacter() {
     const ch = this.#contents[this.#offset];
     if (typeof ch === 'undefined') {
-      throw new Exception('EOF');
+      throw new Exception(
+        this.#errorFormatter.format(
+          'Tried to get current character, but reached the end of file'
+        )
+      );
     }
     return ch;
   }

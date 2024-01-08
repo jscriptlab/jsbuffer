@@ -271,6 +271,7 @@ export default class FileGenerator extends CodeStream {
   async #preprocess() {
     const contents = await fs.promises.readFile(this.#file.path);
     const tokenizer = new Tokenizer({
+      file: this.#file.path,
       textDecoder: this.#textDecoder,
       textEncoder: this.#textEncoder,
       contents

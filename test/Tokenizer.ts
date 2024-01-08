@@ -5,6 +5,7 @@ import path from 'path';
 import { TextEncoder } from 'util';
 import expectedTokens1 from './expected-tokens-1.json';
 import assert from 'assert';
+import Exception from '../exception/Exception';
 
 test('Tokenizer: it should tokenize files', async (t) => {
   for (const f of [
@@ -12,6 +13,7 @@ test('Tokenizer: it should tokenize files', async (t) => {
     path.resolve(__dirname, 'User')
   ]) {
     new Tokenizer({
+      file: 'test',
       contents: await fs.promises.readFile(f),
       textEncoder: new TextEncoder(),
       textDecoder: new TextDecoder()
@@ -75,6 +77,7 @@ test('Tokenizer: it should tokenize literal number', (t) => {
   ];
   t.deepEqual(
     new Tokenizer({
+      file: 'test',
       contents: new TextEncoder().encode('type Message { bigint<1000> id; }'),
       textEncoder: new TextEncoder(),
       textDecoder: new TextDecoder()
@@ -102,6 +105,7 @@ test('Tokenizer#tokens: it should not return comments in the call', (t) => {
   ];
   t.deepEqual(
     new Tokenizer({
+      file: 'test',
       contents: new TextEncoder().encode(['// a', 'type A {}'].join('\n')),
       textEncoder: new TextEncoder(),
       textDecoder: new TextDecoder()
@@ -110,6 +114,40 @@ test('Tokenizer#tokens: it should not return comments in the call', (t) => {
       .tokens(),
     expectedTokens
   );
+});
+
+test('Tokenizer#tokenize: it should throw a formatted error in case in case an unknown character is found during tokenization', async (t) => {
+  try {
+    new Tokenizer({
+      file: 'fileWithUnknownCharacter',
+      contents: await fs.promises.readFile(
+        path.resolve(__dirname, 'fileWithUnknownCharacter')
+      ),
+      textEncoder: new TextEncoder(),
+      textDecoder: new TextDecoder()
+    }).tokenize();
+    t.fail();
+  } catch (reason: unknown) {
+    if (!(reason instanceof Exception)) {
+      t.fail('Expected tokenize to throw an Exception instance');
+      return;
+    }
+    t.deepEqual(
+      reason.what,
+      'Error at fileWithUnknownCharacter:2:3:\n' +
+        '\n' +
+        '\tUnexpected character\n' +
+        '\n' +
+        'Detailed:\n' +
+        '\n' +
+        'type A {\n' +
+        '  (\n' +
+        '  ^ Unexpected character\n' +
+        '}\n' +
+        '\n' +
+        '\n'
+    );
+  }
 });
 
 test('Tokenizer#comments: it should return comments from the call', (t) => {
@@ -124,6 +162,7 @@ test('Tokenizer#comments: it should return comments from the call', (t) => {
     new Tokenizer({
       contents: new TextEncoder().encode(['// a', 'type A {}'].join('\n')),
       textEncoder: new TextEncoder(),
+      file: 'test',
       textDecoder: new TextDecoder()
     })
       .tokenize()

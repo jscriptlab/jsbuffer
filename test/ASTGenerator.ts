@@ -13,6 +13,7 @@ test('ASTGenerator: it should tokenize files', async (t) => {
     textDecoder: new TextDecoder(),
     file: file1,
     tokens: new Tokenizer({
+      file: file1,
       contents: contents1,
       textEncoder: new TextEncoder(),
       textDecoder: new TextDecoder()
@@ -27,6 +28,7 @@ test('ASTGenerator: it should tokenize files', async (t) => {
     contents: contents2,
     textDecoder: new TextDecoder(),
     tokens: new Tokenizer({
+      file: file2,
       contents: contents2,
       textEncoder: new TextEncoder(),
       textDecoder: new TextDecoder()
@@ -44,6 +46,7 @@ test('ASTGenerator: it should throw UnexpectedToken in case an unexpected token 
       textDecoder: new TextDecoder(),
       file: 'a',
       tokens: new Tokenizer({
+        file: 'a',
         contents: new TextEncoder().encode('a'),
         textEncoder: new TextEncoder(),
         textDecoder: new TextDecoder()
@@ -63,6 +66,7 @@ test('ASTGenerator: it should read call statement', (t) => {
     textDecoder: new TextDecoder(),
     file: 'a',
     tokens: new Tokenizer({
+      file: 'a',
       contents: new TextEncoder().encode('type y {} call X => y { int b; }'),
       textEncoder: new TextEncoder(),
       textDecoder: new TextDecoder()
@@ -80,6 +84,7 @@ test('ASTGenerator: it should handle errors in case of weird token types after i
       textDecoder: new TextDecoder(),
       file: 'a',
       tokens: new Tokenizer({
+        file: 'a',
         contents: new TextEncoder().encode('import ;'),
         textEncoder: new TextEncoder(),
         textDecoder: new TextDecoder()
@@ -103,6 +108,7 @@ test('ASTGenerator: it should handle errors in case of weird token types export 
       textDecoder: new TextDecoder(),
       file: 'a',
       tokens: new Tokenizer({
+        file: 'a',
         contents: new TextEncoder().encode('export ;'),
         textEncoder: new TextEncoder(),
         textDecoder: new TextDecoder()
@@ -123,6 +129,7 @@ test('ASTGenerator: it should expect { after trait name', (t) => {
       textDecoder: new TextDecoder(),
       file: 'a',
       tokens: new Tokenizer({
+        file: 'a',
         contents: new TextEncoder().encode('trait x ;'),
         textEncoder: new TextEncoder(),
         textDecoder: new TextDecoder()
@@ -143,6 +150,7 @@ test('ASTGenerator: it should throw UnexpectedKeywordName', (t) => {
       textDecoder: new TextDecoder(),
       file: 'a',
       tokens: new Tokenizer({
+        file: 'a',
         contents: new TextEncoder().encode('export {'),
         textEncoder: new TextEncoder(),
         textDecoder: new TextDecoder()
@@ -163,6 +171,7 @@ test('ASTGenerator##expectKeyword: it should call #expectKeyword after export', 
       textDecoder: new TextDecoder(),
       file: 'a',
       tokens: new Tokenizer({
+        file: 'a',
         contents: new TextEncoder().encode('export 2;'),
         textEncoder: new TextEncoder(),
         textDecoder: new TextDecoder()
