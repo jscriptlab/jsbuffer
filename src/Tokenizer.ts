@@ -82,6 +82,8 @@ export default class Tokenizer {
       const ch = this.#currentCharacter();
       if (this.#peek('//')) {
         comments.push(this.#readSingleLineComment());
+      } else if (this.#peek('/*')) {
+        comments.push(this.#readMultiLineComment());
       } else if (Character.isIdentifierStart(ch)) {
         const id = this.#readIdentifier();
         const isKeyword = this.#keywords.includes(id.value);
@@ -185,9 +187,27 @@ export default class Tokenizer {
     }
     return ch;
   }
+  #readMultiLineComment(): IToken {
+    this.#expect('/*');
+    const startOffset = this.#offset;
+    while (!this.#eof() && !this.#peek('*/')) {
+      this.#offset++;
+    }
+    const endOffset = this.#offset;
+    this.#expect('*/');
+    return {
+      type: TokenType.MultiLineComment,
+      value: this.#textDecoder.decode(
+        this.#contents.subarray(startOffset, endOffset)
+      ),
+      position: {
+        start: startOffset,
+        end: endOffset
+      }
+    };
+  }
   #readSingleLineComment(): IToken {
-    // skip //
-    this.#offset += 2;
+    this.#expect('//');
     const startOffset = this.#offset;
     while (!this.#eof() && !Character.isLineBreak(this.#currentCharacter())) {
       this.#offset++;
@@ -222,19 +242,34 @@ export default class Tokenizer {
       }
     };
   }
+  #expect(value: string) {
+    const encoded = this.#peek(value);
+    if (encoded === null) {
+      throw new Exception(this.#errorFormatter.format(`Expected "${value}"`));
+    }
+    this.#offset += encoded.byteLength;
+    return encoded;
+  }
   #peek(value: string) {
+    /**
+     * Ignore if the input string is empty
+     */
     if (!value.length) {
-      return false;
+      return null;
     }
     const encoded = this.#textEncoder.encode(value);
     const contents = this.#remaining();
+    /**
+     * If the remaining bytes is less than the encoded value, then
+     * return null
+     */
     if (contents.byteLength < encoded.byteLength) {
-      return false;
+      return null;
     }
     for (let i = 0; i < encoded.byteLength; i++) {
-      if (encoded[i] !== contents[i]) return false;
+      if (encoded[i] !== contents[i]) return null;
     }
-    return true;
+    return encoded;
   }
   #eof() {
     return this.#offset === this.#contents.byteLength;

@@ -88,7 +88,7 @@ test('Tokenizer: it should tokenize literal number', (t) => {
   );
 });
 
-test('Tokenizer#tokens: it should not return comments in the call', (t) => {
+test('Tokenizer#comments: it should only return the comment tokens in the calls to `comments` method', (t) => {
   const expectedTokens: IToken[] = [
     { type: TokenType.Keyword, value: 'type', position: { start: 5, end: 9 } },
     {
@@ -114,6 +114,64 @@ test('Tokenizer#tokens: it should not return comments in the call', (t) => {
       .tokens(),
     expectedTokens
   );
+});
+
+test('Tokenizer#tokens: it deal with leading multi-line comments', (t) => {
+  const contents = new TextEncoder().encode(['/* a */', 'type A {}'].join(' '));
+  const tokenizer = new Tokenizer({
+    file: 'test',
+    contents,
+    textEncoder: new TextEncoder(),
+    textDecoder: new TextDecoder()
+  });
+  tokenizer.tokenize();
+  t.deepEqual(tokenizer.comments(), [
+    {
+      type: TokenType.MultiLineComment,
+      value: ' a ',
+      position: { start: 2, end: 5 }
+    }
+  ]);
+  t.deepEqual(tokenizer.tokenize().tokens(), [
+    {
+      type: TokenType.Keyword,
+      value: 'type',
+      position: { start: 8, end: 12 }
+    },
+    {
+      type: TokenType.Identifier,
+      value: 'A',
+      position: { start: 13, end: 14 }
+    },
+    {
+      type: TokenType.Punctuator,
+      value: '{',
+      position: { start: 15, end: 16 }
+    },
+    {
+      type: TokenType.Punctuator,
+      value: '}',
+      position: { start: 16, end: 17 }
+    }
+  ]);
+});
+
+test('Tokenizer#tokens: it deal with trailing multi-line comments', (t) => {
+  const contents = new TextEncoder().encode(['type A {}', '/* a */'].join(' '));
+  const tokenizer = new Tokenizer({
+    file: 'test',
+    contents,
+    textEncoder: new TextEncoder(),
+    textDecoder: new TextDecoder()
+  });
+  tokenizer.tokenize();
+  t.deepEqual(tokenizer.comments(), [
+    {
+      type: TokenType.MultiLineComment,
+      value: ' a ',
+      position: { start: 12, end: 15 }
+    }
+  ]);
 });
 
 test('Tokenizer#tokenize: it should throw a formatted error in case in case an unknown character is found during tokenization', async (t) => {
