@@ -5,7 +5,6 @@ import {
   decodeGetPostById,
   encodeGetPostById
 } from '../out/schema';
-import { expect } from 'chai';
 
 test('Codec#encode: it should support encoding several times in a row', (t) => {
   const codec = new Codec({
@@ -18,7 +17,7 @@ test('Codec#encode: it should support encoding several times in a row', (t) => {
       postId: 100000
     })
   );
-  expect(codec.decode(decodeGetPostById, result)).to.be.deep.equal(
+  t.deepEqual(codec.decode(decodeGetPostById, result),
     GetPostById({
       postId: 100000
     })
@@ -29,12 +28,11 @@ test('Codec#encode: it should support encoding several times in a row', (t) => {
       postId: 5
     })
   );
-  expect(codec.decode(decodeGetPostById, result2)).to.be.deep.equal(
+  t.deepEqual(codec.decode(decodeGetPostById, result2),
     GetPostById({
       postId: 5
     })
-  );
-  t.pass();
+  )
 });
 
 test('Codec#decode: it should support decode', (t) => {
@@ -42,7 +40,7 @@ test('Codec#decode: it should support decode', (t) => {
     textDecoder: new TextDecoder(),
     textEncoder: new TextEncoder()
   });
-  expect(
+  t.deepEqual(
     codec.decode(
       decodeGetPostById,
       codec.encode(
@@ -51,11 +49,9 @@ test('Codec#decode: it should support decode', (t) => {
           postId: 100000
         })
       )
-    )
-  ).to.be.deep.equal(
+    ),
     GetPostById({
       postId: 100000
     })
   );
-  t.pass();
 });
