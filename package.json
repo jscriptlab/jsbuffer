@@ -10,7 +10,7 @@
   "files": [
     "cli/**/*.{d.ts,map,js}",
     "exception/**/*.{d.ts,map,js}",
-    "src/**/*.{d.ts,map,js}",
+    "src/**/*.{d.ts,map,js,txt,cpp,hpp}",
     "code-generator/**/*.{d.ts,map,js}",
     "codec/**/*.{d.ts,map,js}"
   ],
@@ -26,7 +26,7 @@
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "cli": "npx ts-node --project cli/tsconfig.json cli",
     "schema": "npm run cli -- test/schema -o out --extends tsconfig.base.json --indentation-size 2",
-    "build": "npx tsc -b out cli code-generator src --force",
+    "build": "npx tsc -b out cli code-generator src/generators src/core --force",
     "build:all": "npm run schema && npm run build && npm run lint",
     "prepublishOnly": "npm run build:all && npm run test",
     "test": "npx ava \"test/**/*.js\"",
