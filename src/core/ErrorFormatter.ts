@@ -43,6 +43,12 @@ function assert(
 }
 
 function lastLineBreakOffset(contents: Uint8Array, from: number) {
+  // Make sure `from` is actually a number
+  assert(typeof from === 'number', 'Expected `from` to be a number');
+  assert(
+    Number.isFinite(from) && Number.isInteger(from) && !Number.isNaN(from),
+    `Expected \`from\` to be a finite integer, but got ${from}`
+  );
   assert(from <= contents.byteLength - 1);
   let i: number;
   let ch: number | null;

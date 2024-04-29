@@ -9,3 +9,6 @@ tsconfig.tsbuildinfo
 /yarn-error.log
 /.vscode/settings.json
 /coverage
+
+/cmake-build-*
+/.idea

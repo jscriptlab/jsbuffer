@@ -1,4 +1,4 @@
-import Exception from '../exception/Exception';
+import Exception from '../../exception/Exception';
 import ErrorFormatter from './ErrorFormatter';
 import { ITextDecoder, IToken, TokenType } from './Tokenizer';
 import tokenTypeToString from './tokenTypeToString';

@@ -1,4 +1,4 @@
-import Exception from '../exception/Exception';
+import Exception from '../../exception/Exception';
 import Character from './Character';
 import ErrorFormatter from './ErrorFormatter';
 

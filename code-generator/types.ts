@@ -4,8 +4,8 @@ import {
   INodeTraitDefinition,
   INodeTypeDefinition,
   NodeTypeExpression
-} from '../src/ASTGenerator';
-import { ITextDecoder, ITextEncoder } from '../src/Tokenizer';
+} from '../src/core/ASTGenerator';
+import { ITextDecoder, ITextEncoder } from '../src/core/Tokenizer';
 import FileGenerator from './FileGenerator';
 import GenericName from './GenericName';
 

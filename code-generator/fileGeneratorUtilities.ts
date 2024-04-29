@@ -4,7 +4,7 @@ import {
   INodeTraitDefinition,
   INodeTypeDefinition,
   NodeType
-} from '../src/ASTGenerator';
+} from '../src/core/ASTGenerator';
 import { lowerFirst, upperFirst } from './stringUtilities';
 
 export function getEncodeFunctionName(

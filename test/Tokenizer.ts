@@ -1,5 +1,5 @@
 import test from 'ava';
-import Tokenizer, { IToken, TokenType } from '../src/Tokenizer';
+import Tokenizer, { IToken, TokenType } from '../src/core/Tokenizer';
 import fs from 'fs';
 import path from 'path';
 import { TextEncoder } from 'util';

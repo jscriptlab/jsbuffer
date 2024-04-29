@@ -1,7 +1,7 @@
-import Tokenizer from '../src/Tokenizer';
+import Tokenizer from '../src/core/Tokenizer';
 import path from 'path';
 import fs from 'fs';
-import ASTGenerator, { ASTGenerationException } from '../src/ASTGenerator';
+import ASTGenerator, { ASTGenerationException } from '../src/core/ASTGenerator';
 import test from 'ava';
 import assert from 'assert';
 

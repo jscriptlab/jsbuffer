@@ -6,6 +6,6 @@
     "tokenTypeToString.ts",
     "ASTGenerator.ts"
   ],
-  "references": [{ "path": "../exception" }],
-  "extends": "../tsconfig.base.json"
+  "references": [{ "path": "../../exception" }],
+  "extends": "../../tsconfig.base.json"
 }

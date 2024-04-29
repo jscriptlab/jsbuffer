@@ -1,0 +1,17 @@
+Language: Cpp
+BasedOnStyle: LLVM
+AccessModifierOffset: -2
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: false
+AlignTrailingComments: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowShortBlocksOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+NamespaceIndentation: None
+PointerAlignment: Left

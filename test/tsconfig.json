@@ -1,6 +1,7 @@
 {
   "extends": "../tsconfig.base.json",
   "include": [
+    "parser/Parser.ts",
     "Tokenizer.ts",
     "Serializer.ts",
     "Codec.ts",
@@ -13,13 +14,17 @@
     "ASTGenerator.ts"
   ],
   "compilerOptions": {
+    "lib": ["ESNext"],
+    "target": "ESNext",
     "noUnusedLocals": false,
     "types": ["node"]
   },
   "references": [
     { "path": "../helpers" },
     { "path": "../out" },
-    { "path": "../src" },
+    { "path": "../src/parser" },
+    { "path": "../src/generators" },
+    { "path": "../src/core" },
     {
       "path": "../code-generator"
     }

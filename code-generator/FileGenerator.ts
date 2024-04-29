@@ -7,11 +7,11 @@ import ASTGenerator, {
   INodeTypeDefinition,
   NodeType,
   NodeTypeExpression
-} from '../src/ASTGenerator';
+} from '../src/core/ASTGenerator';
 import CodeStream from 'textstreamjs';
 import fs from 'fs';
 import path from 'path';
-import Tokenizer from '../src/Tokenizer';
+import Tokenizer from '../src/core/Tokenizer';
 import Exception from '../exception/Exception';
 import {
   getDecodeFunctionName,

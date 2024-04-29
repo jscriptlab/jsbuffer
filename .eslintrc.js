@@ -1,14 +1,14 @@
 module.exports = {
   env: {
     es2021: true,
-    node: true,
+    node: true
   },
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
   overrides: [],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
-    sourceType: 'module',
+    sourceType: 'module'
   },
   plugins: ['@typescript-eslint'],
   rules: {
@@ -18,9 +18,10 @@ module.exports = {
       'error',
       'single',
       {
-        avoidEscape: true,
-      },
+        avoidEscape: true
+      }
     ],
-    semi: ['error', 'always'],
-  },
+    '@typescript-eslint/no-this-alias': 'off',
+    semi: ['error', 'always']
+  }
 };

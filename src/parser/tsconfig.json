@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "include": [
+    "Parser.ts",
+    "GenericName.ts",
+    "types/ASTNodePreprocessingFailure.ts",
+    "types/metadata.ts",
+    "types/GenericName.ts"
+  ],
+  "references": [
+    { "path": "../utilities" },
+    { "path": "../../exception" },
+    { "path": "../core" }
+  ]
+}
