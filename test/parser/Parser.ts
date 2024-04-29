@@ -4,7 +4,7 @@ import path from 'path';
 import test from 'ava';
 
 test('Parser test', async (t) => {
-  const mainFilePath = path.resolve(__dirname, 'main.jsb');
+  const mainFilePath = path.resolve(__dirname, 'index.jsb');
   const configuration = {
     rootDir: __dirname,
     outDir: path.resolve(__dirname, 'out'),
