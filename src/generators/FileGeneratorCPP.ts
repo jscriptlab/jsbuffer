@@ -601,8 +601,14 @@ export default class FileGeneratorCPP extends CodeStream {
           metadata
         );
         break;
-      case 'internalType':
+      case 'internalType': {
+        const typeDefinition =
+          this.#resolveMetadataFromDefinitionReference(paramType);
+        this.write(
+          `#include "${metadataToRelativePath(typeDefinition)}.hpp"\n`
+        );
         break;
+      }
       case 'externalType': {
         const generator = this.#resolveRelativeImportPath(
           paramType.relativePath
