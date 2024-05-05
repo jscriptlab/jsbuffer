@@ -2,7 +2,7 @@
   "A0": {
     "kind": "type",
     "id": -1244603213,
-    "globalName": "testTraitOnParam.A0",
+    "globalName": "test-trait-on-param.A0",
     "name": "A0",
     "params": [
       {
@@ -18,7 +18,7 @@
   "A1": {
     "kind": "type",
     "id": -2001668861,
-    "globalName": "testTraitOnParam.A1",
+    "globalName": "test-trait-on-param.A1",
     "name": "A1",
     "params": [
       {
@@ -34,7 +34,7 @@
   "A2": {
     "kind": "type",
     "id": -820998189,
-    "globalName": "testTraitOnParam.A2",
+    "globalName": "test-trait-on-param.A2",
     "name": "A2",
     "params": [
       {
@@ -51,7 +51,7 @@
     {
       "kind": "type",
       "id": -1244603213,
-      "globalName": "testTraitOnParam.A0",
+      "globalName": "test-trait-on-param.A0",
       "name": "A0",
       "params": [
         {
@@ -67,7 +67,7 @@
     {
       "kind": "type",
       "id": -2001668861,
-      "globalName": "testTraitOnParam.A1",
+      "globalName": "test-trait-on-param.A1",
       "name": "A1",
       "params": [
         {
@@ -83,7 +83,7 @@
     {
       "kind": "type",
       "id": -820998189,
-      "globalName": "testTraitOnParam.A2",
+      "globalName": "test-trait-on-param.A2",
       "name": "A2",
       "params": [
         {

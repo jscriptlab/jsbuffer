@@ -2,7 +2,7 @@
   "User": {
     "kind": "type",
     "id": 1249778753,
-    "globalName": "conversation.secondUser.User",
+    "globalName": "conversation.-second-user.User",
     "name": "User",
     "params": [
       { "name": "firstName", "type": { "type": "generic", "value": "string" } }
@@ -12,7 +12,7 @@
     {
       "kind": "type",
       "id": 1249778753,
-      "globalName": "conversation.secondUser.User",
+      "globalName": "conversation.-second-user.User",
       "name": "User",
       "params": [
         {

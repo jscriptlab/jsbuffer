@@ -10,15 +10,15 @@ export function isATrait(value: unknown): value is A {
 }
 export function encodeATrait(__s: ISerializer, value: A) {
   switch (value._name) {
-    case 'testTraitOnParamTrait.B':
+    case 'test-trait-on-param-trait.B':
       return encodeB(__s, value);
-    case 'testTraitOnParamTrait.C':
+    case 'test-trait-on-param-trait.C':
       return encodeC(__s, value);
-    case 'testTraitOnParamTrait.D':
+    case 'test-trait-on-param-trait.D':
       return encodeD(__s, value);
   }
   throw new Error(
-    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- testTraitOnParamTrait.B\n\t- testTraitOnParamTrait.C\n\t- testTraitOnParamTrait.D\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
+    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- test-trait-on-param-trait.B\n\t- test-trait-on-param-trait.C\n\t- test-trait-on-param-trait.D\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
   );
 }
 export function decodeATrait(__d: IDeserializer) {
@@ -54,19 +54,19 @@ export function defaultATrait() {
 }
 export function compareATrait(__a: A, __b: A) {
   switch (__a._name) {
-    case 'testTraitOnParamTrait.B':
-      if (__b._name !== 'testTraitOnParamTrait.B') return false;
+    case 'test-trait-on-param-trait.B':
+      if (__b._name !== 'test-trait-on-param-trait.B') return false;
       return compareB(__a, __b);
-    case 'testTraitOnParamTrait.C':
-      if (__b._name !== 'testTraitOnParamTrait.C') return false;
+    case 'test-trait-on-param-trait.C':
+      if (__b._name !== 'test-trait-on-param-trait.C') return false;
       return compareC(__a, __b);
-    case 'testTraitOnParamTrait.D':
-      if (__b._name !== 'testTraitOnParamTrait.D') return false;
+    case 'test-trait-on-param-trait.D':
+      if (__b._name !== 'test-trait-on-param-trait.D') return false;
       return compareD(__a, __b);
   }
 }
 export interface B {
-  _name: 'testTraitOnParamTrait.B';
+  _name: 'test-trait-on-param-trait.B';
   a: number;
 }
 export function isB(value: unknown): value is B {
@@ -76,7 +76,7 @@ export function isB(value: unknown): value is B {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'testTraitOnParamTrait.B'
+      value['_name'] === 'test-trait-on-param-trait.B'
     )
   )
     return false;
@@ -103,7 +103,7 @@ export interface BInputParams {
 }
 export function B(params: BInputParams): B {
   return {
-    _name: 'testTraitOnParamTrait.B',
+    _name: 'test-trait-on-param-trait.B',
     a: params['a']
   };
 }
@@ -127,7 +127,7 @@ export function decodeB(__d: IDeserializer): B | null {
    */
   a = __d.readInt32();
   return {
-    _name: 'testTraitOnParamTrait.B',
+    _name: 'test-trait-on-param-trait.B',
     a
   };
 }
@@ -157,7 +157,7 @@ export function updateB(value: B, changes: Partial<BInputParams>) {
   return value;
 }
 export interface C {
-  _name: 'testTraitOnParamTrait.C';
+  _name: 'test-trait-on-param-trait.C';
   a: number;
 }
 export function isC(value: unknown): value is C {
@@ -167,7 +167,7 @@ export function isC(value: unknown): value is C {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'testTraitOnParamTrait.C'
+      value['_name'] === 'test-trait-on-param-trait.C'
     )
   )
     return false;
@@ -194,7 +194,7 @@ export interface CInputParams {
 }
 export function C(params: CInputParams): C {
   return {
-    _name: 'testTraitOnParamTrait.C',
+    _name: 'test-trait-on-param-trait.C',
     a: params['a']
   };
 }
@@ -218,7 +218,7 @@ export function decodeC(__d: IDeserializer): C | null {
    */
   a = __d.readInt32();
   return {
-    _name: 'testTraitOnParamTrait.C',
+    _name: 'test-trait-on-param-trait.C',
     a
   };
 }
@@ -248,7 +248,7 @@ export function updateC(value: C, changes: Partial<CInputParams>) {
   return value;
 }
 export interface D {
-  _name: 'testTraitOnParamTrait.D';
+  _name: 'test-trait-on-param-trait.D';
   a: number;
 }
 export function isD(value: unknown): value is D {
@@ -258,7 +258,7 @@ export function isD(value: unknown): value is D {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'testTraitOnParamTrait.D'
+      value['_name'] === 'test-trait-on-param-trait.D'
     )
   )
     return false;
@@ -285,7 +285,7 @@ export interface DInputParams {
 }
 export function D(params: DInputParams): D {
   return {
-    _name: 'testTraitOnParamTrait.D',
+    _name: 'test-trait-on-param-trait.D',
     a: params['a']
   };
 }
@@ -309,7 +309,7 @@ export function decodeD(__d: IDeserializer): D | null {
    */
   a = __d.readInt32();
   return {
-    _name: 'testTraitOnParamTrait.D',
+    _name: 'test-trait-on-param-trait.D',
     a
   };
 }

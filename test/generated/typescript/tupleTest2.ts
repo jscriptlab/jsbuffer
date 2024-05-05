@@ -2,7 +2,7 @@ import JSBI from 'jsbi';
 import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
 export interface user {
-  _name: 'tupleTest2.user';
+  _name: 'tuple-test2.user';
   id: number;
   firstName: string;
   lastName: string;
@@ -14,7 +14,7 @@ export function isUser(value: unknown): value is user {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'tupleTest2.user'
+      value['_name'] === 'tuple-test2.user'
     )
   )
     return false;
@@ -57,7 +57,7 @@ export interface userInputParams {
 }
 export function user(params: userInputParams): user {
   return {
-    _name: 'tupleTest2.user',
+    _name: 'tuple-test2.user',
     id: params['id'],
     firstName: params['firstName'],
     lastName: params['lastName']
@@ -103,7 +103,7 @@ export function decodeUser(__d: IDeserializer): user | null {
    */
   lastName = __d.readString();
   return {
-    _name: 'tupleTest2.user',
+    _name: 'tuple-test2.user',
     id,
     firstName,
     lastName
@@ -161,7 +161,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
   return value;
 }
 export interface post {
-  _name: 'tupleTest2.post';
+  _name: 'tuple-test2.post';
   id: number;
   title: string;
   comments: ReadonlyArray<Readonly<comment>>;
@@ -173,7 +173,7 @@ export function isPost(value: unknown): value is post {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'tupleTest2.post'
+      value['_name'] === 'tuple-test2.post'
     )
   )
     return false;
@@ -215,7 +215,7 @@ export interface postInputParams {
 }
 export function post(params: postInputParams): post {
   return {
-    _name: 'tupleTest2.post',
+    _name: 'tuple-test2.post',
     id: params['id'],
     title: params['title'],
     comments: params['comments']
@@ -272,7 +272,7 @@ export function decodePost(__d: IDeserializer): post | null {
     __o3[__i3] = __tmp4;
   }
   return {
-    _name: 'tupleTest2.post',
+    _name: 'tuple-test2.post',
     id,
     title,
     comments
@@ -354,7 +354,7 @@ export function updatePost(value: post, changes: Partial<postInputParams>) {
   return value;
 }
 export interface comment {
-  _name: 'tupleTest2.comment';
+  _name: 'tuple-test2.comment';
   id: number;
   title: string;
   contents: string;
@@ -366,7 +366,7 @@ export function isComment(value: unknown): value is comment {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'tupleTest2.comment'
+      value['_name'] === 'tuple-test2.comment'
     )
   )
     return false;
@@ -406,7 +406,7 @@ export interface commentInputParams {
 }
 export function comment(params: commentInputParams): comment {
   return {
-    _name: 'tupleTest2.comment',
+    _name: 'tuple-test2.comment',
     id: params['id'],
     title: params['title'],
     contents: params['contents']
@@ -452,7 +452,7 @@ export function decodeComment(__d: IDeserializer): comment | null {
    */
   contents = __d.readString();
   return {
-    _name: 'tupleTest2.comment',
+    _name: 'tuple-test2.comment',
     id,
     title,
     contents
@@ -515,7 +515,7 @@ export function updateComment(
   return value;
 }
 export interface tupleTest {
-  _name: 'tupleTest2.tupleTest';
+  _name: 'tuple-test2.tupleTest';
   data: [
     Readonly<user>,
     Readonly<post>,
@@ -531,7 +531,7 @@ export function isTupleTest(value: unknown): value is tupleTest {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'tupleTest2.tupleTest'
+      value['_name'] === 'tuple-test2.tupleTest'
     )
   )
     return false;
@@ -568,7 +568,7 @@ export interface tupleTestInputParams {
 }
 export function tupleTest(params: tupleTestInputParams): tupleTest {
   return {
-    _name: 'tupleTest2.tupleTest',
+    _name: 'tuple-test2.tupleTest',
     data: params['data']
   };
 }
@@ -648,7 +648,7 @@ export function decodeTupleTest(__d: IDeserializer): tupleTest | null {
   }
   data = [__e1, __e2, __e3, __e4, __e6];
   return {
-    _name: 'tupleTest2.tupleTest',
+    _name: 'tuple-test2.tupleTest',
     data
   };
 }
@@ -772,7 +772,7 @@ export function updateTupleTest(
   return value;
 }
 export interface tupleTupleTest {
-  _name: 'tupleTest2.tupleTupleTest';
+  _name: 'tuple-test2.tupleTupleTest';
   a: [
     [number, string, ReadonlyArray<[string, number]>],
     number,
@@ -787,7 +787,7 @@ export function isTupleTupleTest(value: unknown): value is tupleTupleTest {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'tupleTest2.tupleTupleTest'
+      value['_name'] === 'tuple-test2.tupleTupleTest'
     )
   )
     return false;
@@ -856,7 +856,7 @@ export function tupleTupleTest(
   params: tupleTupleTestInputParams
 ): tupleTupleTest {
   return {
-    _name: 'tupleTest2.tupleTupleTest',
+    _name: 'tuple-test2.tupleTupleTest',
     a: params['a']
   };
 }
@@ -924,7 +924,7 @@ export function decodeTupleTupleTest(
   __e10 = __d.readDouble();
   a = [__e1, __e8, __e9, __e10];
   return {
-    _name: 'tupleTest2.tupleTupleTest',
+    _name: 'tuple-test2.tupleTupleTest',
     a
   };
 }
@@ -1035,7 +1035,7 @@ export function updateTupleTupleTest(
   return value;
 }
 export interface superTupleTupleTest {
-  _name: 'tupleTest2.superTupleTupleTest';
+  _name: 'tuple-test2.superTupleTupleTest';
   a: [[[number], number], number];
 }
 export function isSuperTupleTupleTest(
@@ -1047,7 +1047,7 @@ export function isSuperTupleTupleTest(
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'tupleTest2.superTupleTupleTest'
+      value['_name'] === 'tuple-test2.superTupleTupleTest'
     )
   )
     return false;
@@ -1096,7 +1096,7 @@ export function superTupleTupleTest(
   params: superTupleTupleTestInputParams
 ): superTupleTupleTest {
   return {
-    _name: 'tupleTest2.superTupleTupleTest',
+    _name: 'tuple-test2.superTupleTupleTest',
     a: params['a']
   };
 }
@@ -1142,7 +1142,7 @@ export function decodeSuperTupleTupleTest(
   __e5 = __d.readDouble();
   a = [__e1, __e5];
   return {
-    _name: 'tupleTest2.superTupleTupleTest',
+    _name: 'tuple-test2.superTupleTupleTest',
     a
   };
 }

@@ -2,7 +2,7 @@ import JSBI from 'jsbi';
 import { ISerializer } from './__types__';
 import { IDeserializer } from './__types__';
 export interface A {
-  _name: 'testLong.A';
+  _name: 'test-long.A';
   a: string;
 }
 export function isA(value: unknown): value is A {
@@ -12,7 +12,7 @@ export function isA(value: unknown): value is A {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'testLong.A'
+      value['_name'] === 'test-long.A'
     )
   )
     return false;
@@ -40,7 +40,7 @@ export interface AInputParams {
 }
 export function A(params: AInputParams): A {
   return {
-    _name: 'testLong.A',
+    _name: 'test-long.A',
     a: params['a']
   };
 }
@@ -64,7 +64,7 @@ export function decodeA(__d: IDeserializer): A | null {
    */
   a = __d.readSignedLong();
   return {
-    _name: 'testLong.A',
+    _name: 'test-long.A',
     a
   };
 }
@@ -94,7 +94,7 @@ export function updateA(value: A, changes: Partial<AInputParams>) {
   return value;
 }
 export interface B {
-  _name: 'testLong.B';
+  _name: 'test-long.B';
   a: string;
 }
 export function isB(value: unknown): value is B {
@@ -104,7 +104,7 @@ export function isB(value: unknown): value is B {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'testLong.B'
+      value['_name'] === 'test-long.B'
     )
   )
     return false;
@@ -129,7 +129,7 @@ export interface BInputParams {
 }
 export function B(params: BInputParams): B {
   return {
-    _name: 'testLong.B',
+    _name: 'test-long.B',
     a: params['a']
   };
 }
@@ -153,7 +153,7 @@ export function decodeB(__d: IDeserializer): B | null {
    */
   a = __d.readUnsignedLong();
   return {
-    _name: 'testLong.B',
+    _name: 'test-long.B',
     a
   };
 }
@@ -183,7 +183,7 @@ export function updateB(value: B, changes: Partial<BInputParams>) {
   return value;
 }
 export interface C {
-  _name: 'testLong.C';
+  _name: 'test-long.C';
   a: string;
   b: string;
   c: number;
@@ -195,7 +195,7 @@ export function isC(value: unknown): value is C {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'testLong.C'
+      value['_name'] === 'test-long.C'
     )
   )
     return false;
@@ -255,7 +255,7 @@ export interface CInputParams {
 }
 export function C(params: CInputParams): C {
   return {
-    _name: 'testLong.C',
+    _name: 'test-long.C',
     a: params['a'],
     b: params['b'],
     c: params['c']
@@ -301,7 +301,7 @@ export function decodeC(__d: IDeserializer): C | null {
    */
   c = __d.readInt32();
   return {
-    _name: 'testLong.C',
+    _name: 'test-long.C',
     a,
     b,
     c

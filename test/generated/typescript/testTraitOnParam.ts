@@ -7,7 +7,7 @@ import { decodeATrait } from './testTraitOnParamTrait';
 import { defaultATrait } from './testTraitOnParamTrait';
 import { compareATrait } from './testTraitOnParamTrait';
 export interface A0 {
-  _name: 'testTraitOnParam.A0';
+  _name: 'test-trait-on-param.A0';
   value: Readonly<A>;
 }
 export function isA0(value: unknown): value is A0 {
@@ -17,7 +17,7 @@ export function isA0(value: unknown): value is A0 {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'testTraitOnParam.A0'
+      value['_name'] === 'test-trait-on-param.A0'
     )
   )
     return false;
@@ -30,7 +30,7 @@ export interface A0InputParams {
 }
 export function A0(params: A0InputParams): A0 {
   return {
-    _name: 'testTraitOnParam.A0',
+    _name: 'test-trait-on-param.A0',
     value: params['value']
   };
 }
@@ -56,7 +56,7 @@ export function decodeA0(__d: IDeserializer): A0 | null {
   if (tmp2 === null) return null;
   value = tmp2;
   return {
-    _name: 'testTraitOnParam.A0',
+    _name: 'test-trait-on-param.A0',
     value
   };
 }
@@ -86,7 +86,7 @@ export function updateA0(value: A0, changes: Partial<A0InputParams>) {
   return value;
 }
 export interface A1 {
-  _name: 'testTraitOnParam.A1';
+  _name: 'test-trait-on-param.A1';
   value: Readonly<A>;
 }
 export function isA1(value: unknown): value is A1 {
@@ -96,7 +96,7 @@ export function isA1(value: unknown): value is A1 {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'testTraitOnParam.A1'
+      value['_name'] === 'test-trait-on-param.A1'
     )
   )
     return false;
@@ -109,7 +109,7 @@ export interface A1InputParams {
 }
 export function A1(params: A1InputParams): A1 {
   return {
-    _name: 'testTraitOnParam.A1',
+    _name: 'test-trait-on-param.A1',
     value: params['value']
   };
 }
@@ -135,7 +135,7 @@ export function decodeA1(__d: IDeserializer): A1 | null {
   if (tmp2 === null) return null;
   value = tmp2;
   return {
-    _name: 'testTraitOnParam.A1',
+    _name: 'test-trait-on-param.A1',
     value
   };
 }
@@ -165,7 +165,7 @@ export function updateA1(value: A1, changes: Partial<A1InputParams>) {
   return value;
 }
 export interface A2 {
-  _name: 'testTraitOnParam.A2';
+  _name: 'test-trait-on-param.A2';
   value: Readonly<A>;
 }
 export function isA2(value: unknown): value is A2 {
@@ -175,7 +175,7 @@ export function isA2(value: unknown): value is A2 {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'testTraitOnParam.A2'
+      value['_name'] === 'test-trait-on-param.A2'
     )
   )
     return false;
@@ -188,7 +188,7 @@ export interface A2InputParams {
 }
 export function A2(params: A2InputParams): A2 {
   return {
-    _name: 'testTraitOnParam.A2',
+    _name: 'test-trait-on-param.A2',
     value: params['value']
   };
 }
@@ -214,7 +214,7 @@ export function decodeA2(__d: IDeserializer): A2 | null {
   if (tmp2 === null) return null;
   value = tmp2;
   return {
-    _name: 'testTraitOnParam.A2',
+    _name: 'test-trait-on-param.A2',
     value
   };
 }

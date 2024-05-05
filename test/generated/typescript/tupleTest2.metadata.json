@@ -2,7 +2,7 @@
   "user": {
     "kind": "type",
     "id": 1638498929,
-    "globalName": "tupleTest2.user",
+    "globalName": "tuple-test2.user",
     "name": "user",
     "params": [
       { "name": "id", "type": { "type": "generic", "value": "int" } },
@@ -13,7 +13,7 @@
   "post": {
     "kind": "type",
     "id": -937937285,
-    "globalName": "tupleTest2.post",
+    "globalName": "tuple-test2.post",
     "name": "post",
     "params": [
       { "name": "id", "type": { "type": "generic", "value": "int" } },
@@ -31,7 +31,7 @@
   "comment": {
     "kind": "type",
     "id": 1770739505,
-    "globalName": "tupleTest2.comment",
+    "globalName": "tuple-test2.comment",
     "name": "comment",
     "params": [
       { "name": "id", "type": { "type": "generic", "value": "int" } },
@@ -42,7 +42,7 @@
   "tupleTest": {
     "kind": "type",
     "id": -166074495,
-    "globalName": "tupleTest2.tupleTest",
+    "globalName": "tuple-test2.tupleTest",
     "name": "tupleTest",
     "params": [
       {
@@ -76,7 +76,7 @@
   "tupleTupleTest": {
     "kind": "type",
     "id": 1504918786,
-    "globalName": "tupleTest2.tupleTupleTest",
+    "globalName": "tuple-test2.tupleTupleTest",
     "name": "tupleTupleTest",
     "params": [
       {
@@ -116,7 +116,7 @@
   "superTupleTupleTest": {
     "kind": "type",
     "id": 1329952558,
-    "globalName": "tupleTest2.superTupleTupleTest",
+    "globalName": "tuple-test2.superTupleTupleTest",
     "name": "superTupleTupleTest",
     "params": [
       {
@@ -147,7 +147,7 @@
     {
       "kind": "type",
       "id": 1638498929,
-      "globalName": "tupleTest2.user",
+      "globalName": "tuple-test2.user",
       "name": "user",
       "params": [
         { "name": "id", "type": { "type": "generic", "value": "int" } },
@@ -161,7 +161,7 @@
     {
       "kind": "type",
       "id": -937937285,
-      "globalName": "tupleTest2.post",
+      "globalName": "tuple-test2.post",
       "name": "post",
       "params": [
         { "name": "id", "type": { "type": "generic", "value": "int" } },
@@ -179,7 +179,7 @@
     {
       "kind": "type",
       "id": 1770739505,
-      "globalName": "tupleTest2.comment",
+      "globalName": "tuple-test2.comment",
       "name": "comment",
       "params": [
         { "name": "id", "type": { "type": "generic", "value": "int" } },
@@ -190,7 +190,7 @@
     {
       "kind": "type",
       "id": -166074495,
-      "globalName": "tupleTest2.tupleTest",
+      "globalName": "tuple-test2.tupleTest",
       "name": "tupleTest",
       "params": [
         {
@@ -227,7 +227,7 @@
     {
       "kind": "type",
       "id": 1504918786,
-      "globalName": "tupleTest2.tupleTupleTest",
+      "globalName": "tuple-test2.tupleTupleTest",
       "name": "tupleTupleTest",
       "params": [
         {
@@ -267,7 +267,7 @@
     {
       "kind": "type",
       "id": 1329952558,
-      "globalName": "tupleTest2.superTupleTupleTest",
+      "globalName": "tuple-test2.superTupleTupleTest",
       "name": "superTupleTupleTest",
       "params": [
         {

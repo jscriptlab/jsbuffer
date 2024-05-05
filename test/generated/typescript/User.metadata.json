@@ -21,7 +21,7 @@
   "user": {
     "kind": "type",
     "id": -2086976610,
-    "globalName": "user.user",
+    "globalName": "-user.user",
     "name": "user",
     "params": [
       { "name": "firstName", "type": { "type": "generic", "value": "string" } },
@@ -38,7 +38,7 @@
   "userDeleted": {
     "kind": "type",
     "id": 1001160586,
-    "globalName": "user.userDeleted",
+    "globalName": "-user.userDeleted",
     "name": "userDeleted",
     "params": [
       { "name": "deletedAt", "type": { "type": "generic", "value": "int" } }
@@ -47,7 +47,7 @@
   "test": {
     "kind": "type",
     "id": -834825061,
-    "globalName": "user.test",
+    "globalName": "-user.test",
     "name": "test",
     "params": [
       {
@@ -95,7 +95,7 @@
     {
       "kind": "type",
       "id": -2086976610,
-      "globalName": "user.user",
+      "globalName": "-user.user",
       "name": "user",
       "params": [
         {
@@ -115,7 +115,7 @@
     {
       "kind": "type",
       "id": 1001160586,
-      "globalName": "user.userDeleted",
+      "globalName": "-user.userDeleted",
       "name": "userDeleted",
       "params": [
         { "name": "deletedAt", "type": { "type": "generic", "value": "int" } }
@@ -124,7 +124,7 @@
     {
       "kind": "type",
       "id": -834825061,
-      "globalName": "user.test",
+      "globalName": "-user.test",
       "name": "test",
       "params": [
         {

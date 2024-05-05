@@ -28,14 +28,14 @@
   "A": {
     "kind": "type",
     "id": -344653639,
-    "globalName": "testUpdateFunction.A",
+    "globalName": "test-update-function.A",
     "name": "A",
     "params": [{ "name": "a", "type": { "type": "generic", "value": "int" } }]
   },
   "B": {
     "kind": "type",
     "id": 141301319,
-    "globalName": "testUpdateFunction.B",
+    "globalName": "test-update-function.B",
     "name": "B",
     "params": [
       { "name": "a", "type": { "type": "generic", "value": "string" } }
@@ -44,7 +44,7 @@
   "C": {
     "kind": "type",
     "id": -276770684,
-    "globalName": "testUpdateFunction.C",
+    "globalName": "test-update-function.C",
     "name": "C",
     "params": [
       { "name": "a", "type": { "type": "generic", "value": "double" } }
@@ -53,14 +53,14 @@
   "D": {
     "kind": "type",
     "id": 224185341,
-    "globalName": "testUpdateFunction.D",
+    "globalName": "test-update-function.D",
     "name": "D",
     "params": [{ "name": "a", "type": { "type": "generic", "value": "float" } }]
   },
   "test": {
     "kind": "type",
     "id": 1011101560,
-    "globalName": "testUpdateFunction.test",
+    "globalName": "test-update-function.test",
     "name": "test",
     "params": [
       {
@@ -99,14 +99,14 @@
     {
       "kind": "type",
       "id": -344653639,
-      "globalName": "testUpdateFunction.A",
+      "globalName": "test-update-function.A",
       "name": "A",
       "params": [{ "name": "a", "type": { "type": "generic", "value": "int" } }]
     },
     {
       "kind": "type",
       "id": 141301319,
-      "globalName": "testUpdateFunction.B",
+      "globalName": "test-update-function.B",
       "name": "B",
       "params": [
         { "name": "a", "type": { "type": "generic", "value": "string" } }
@@ -115,7 +115,7 @@
     {
       "kind": "type",
       "id": -276770684,
-      "globalName": "testUpdateFunction.C",
+      "globalName": "test-update-function.C",
       "name": "C",
       "params": [
         { "name": "a", "type": { "type": "generic", "value": "double" } }
@@ -124,7 +124,7 @@
     {
       "kind": "type",
       "id": 224185341,
-      "globalName": "testUpdateFunction.D",
+      "globalName": "test-update-function.D",
       "name": "D",
       "params": [
         { "name": "a", "type": { "type": "generic", "value": "float" } }
@@ -133,7 +133,7 @@
     {
       "kind": "type",
       "id": 1011101560,
-      "globalName": "testUpdateFunction.test",
+      "globalName": "test-update-function.test",
       "name": "test",
       "params": [
         {

@@ -11,17 +11,17 @@ export function isETrait(value: unknown): value is E {
 }
 export function encodeETrait(__s: ISerializer, value: E) {
   switch (value._name) {
-    case 'testUpdateFunction.A':
+    case 'test-update-function.A':
       return encodeA(__s, value);
-    case 'testUpdateFunction.B':
+    case 'test-update-function.B':
       return encodeB(__s, value);
-    case 'testUpdateFunction.C':
+    case 'test-update-function.C':
       return encodeC(__s, value);
-    case 'testUpdateFunction.D':
+    case 'test-update-function.D':
       return encodeD(__s, value);
   }
   throw new Error(
-    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- testUpdateFunction.A\n\t- testUpdateFunction.B\n\t- testUpdateFunction.C\n\t- testUpdateFunction.D\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
+    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- test-update-function.A\n\t- test-update-function.B\n\t- test-update-function.C\n\t- test-update-function.D\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
   );
 }
 export function decodeETrait(__d: IDeserializer) {
@@ -63,22 +63,22 @@ export function defaultETrait() {
 }
 export function compareETrait(__a: E, __b: E) {
   switch (__a._name) {
-    case 'testUpdateFunction.A':
-      if (__b._name !== 'testUpdateFunction.A') return false;
+    case 'test-update-function.A':
+      if (__b._name !== 'test-update-function.A') return false;
       return compareA(__a, __b);
-    case 'testUpdateFunction.B':
-      if (__b._name !== 'testUpdateFunction.B') return false;
+    case 'test-update-function.B':
+      if (__b._name !== 'test-update-function.B') return false;
       return compareB(__a, __b);
-    case 'testUpdateFunction.C':
-      if (__b._name !== 'testUpdateFunction.C') return false;
+    case 'test-update-function.C':
+      if (__b._name !== 'test-update-function.C') return false;
       return compareC(__a, __b);
-    case 'testUpdateFunction.D':
-      if (__b._name !== 'testUpdateFunction.D') return false;
+    case 'test-update-function.D':
+      if (__b._name !== 'test-update-function.D') return false;
       return compareD(__a, __b);
   }
 }
 export interface A {
-  _name: 'testUpdateFunction.A';
+  _name: 'test-update-function.A';
   a: number;
 }
 export function isA(value: unknown): value is A {
@@ -88,7 +88,7 @@ export function isA(value: unknown): value is A {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'testUpdateFunction.A'
+      value['_name'] === 'test-update-function.A'
     )
   )
     return false;
@@ -115,7 +115,7 @@ export interface AInputParams {
 }
 export function A(params: AInputParams): A {
   return {
-    _name: 'testUpdateFunction.A',
+    _name: 'test-update-function.A',
     a: params['a']
   };
 }
@@ -139,7 +139,7 @@ export function decodeA(__d: IDeserializer): A | null {
    */
   a = __d.readInt32();
   return {
-    _name: 'testUpdateFunction.A',
+    _name: 'test-update-function.A',
     a
   };
 }
@@ -169,7 +169,7 @@ export function updateA(value: A, changes: Partial<AInputParams>) {
   return value;
 }
 export interface B {
-  _name: 'testUpdateFunction.B';
+  _name: 'test-update-function.B';
   a: string;
 }
 export function isB(value: unknown): value is B {
@@ -179,7 +179,7 @@ export function isB(value: unknown): value is B {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'testUpdateFunction.B'
+      value['_name'] === 'test-update-function.B'
     )
   )
     return false;
@@ -192,7 +192,7 @@ export interface BInputParams {
 }
 export function B(params: BInputParams): B {
   return {
-    _name: 'testUpdateFunction.B',
+    _name: 'test-update-function.B',
     a: params['a']
   };
 }
@@ -216,7 +216,7 @@ export function decodeB(__d: IDeserializer): B | null {
    */
   a = __d.readString();
   return {
-    _name: 'testUpdateFunction.B',
+    _name: 'test-update-function.B',
     a
   };
 }
@@ -246,7 +246,7 @@ export function updateB(value: B, changes: Partial<BInputParams>) {
   return value;
 }
 export interface C {
-  _name: 'testUpdateFunction.C';
+  _name: 'test-update-function.C';
   a: number;
 }
 export function isC(value: unknown): value is C {
@@ -256,7 +256,7 @@ export function isC(value: unknown): value is C {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'testUpdateFunction.C'
+      value['_name'] === 'test-update-function.C'
     )
   )
     return false;
@@ -269,7 +269,7 @@ export interface CInputParams {
 }
 export function C(params: CInputParams): C {
   return {
-    _name: 'testUpdateFunction.C',
+    _name: 'test-update-function.C',
     a: params['a']
   };
 }
@@ -293,7 +293,7 @@ export function decodeC(__d: IDeserializer): C | null {
    */
   a = __d.readDouble();
   return {
-    _name: 'testUpdateFunction.C',
+    _name: 'test-update-function.C',
     a
   };
 }
@@ -323,7 +323,7 @@ export function updateC(value: C, changes: Partial<CInputParams>) {
   return value;
 }
 export interface D {
-  _name: 'testUpdateFunction.D';
+  _name: 'test-update-function.D';
   a: number;
 }
 export function isD(value: unknown): value is D {
@@ -333,7 +333,7 @@ export function isD(value: unknown): value is D {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'testUpdateFunction.D'
+      value['_name'] === 'test-update-function.D'
     )
   )
     return false;
@@ -346,7 +346,7 @@ export interface DInputParams {
 }
 export function D(params: DInputParams): D {
   return {
-    _name: 'testUpdateFunction.D',
+    _name: 'test-update-function.D',
     a: params['a']
   };
 }
@@ -370,7 +370,7 @@ export function decodeD(__d: IDeserializer): D | null {
    */
   a = __d.readFloat();
   return {
-    _name: 'testUpdateFunction.D',
+    _name: 'test-update-function.D',
     a
   };
 }
@@ -400,7 +400,7 @@ export function updateD(value: D, changes: Partial<DInputParams>) {
   return value;
 }
 export interface test {
-  _name: 'testUpdateFunction.test';
+  _name: 'test-update-function.test';
   traitParam: Readonly<E>;
 }
 export function isTest(value: unknown): value is test {
@@ -410,7 +410,7 @@ export function isTest(value: unknown): value is test {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'testUpdateFunction.test'
+      value['_name'] === 'test-update-function.test'
     )
   )
     return false;
@@ -425,7 +425,7 @@ export interface testInputParams {
 }
 export function test(params: testInputParams): test {
   return {
-    _name: 'testUpdateFunction.test',
+    _name: 'test-update-function.test',
     traitParam: params['traitParam']
   };
 }
@@ -451,7 +451,7 @@ export function decodeTest(__d: IDeserializer): test | null {
   if (__tmp1 === null) return null;
   traitParam = __tmp1;
   return {
-    _name: 'testUpdateFunction.test',
+    _name: 'test-update-function.test',
     traitParam
   };
 }
