@@ -6,6 +6,14 @@ export function lowerFirst(value: string) {
   return `${value[0]?.toLowerCase()}${value.substring(1)}`;
 }
 
+export function camelCase(value: string) {
+  return value.replace(/[-_](.)/g, (_, group) => group.toUpperCase());
+}
+
+export function dashCase(value: string) {
+  return value.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
+}
+
 export function enforceLocalImport(value: string) {
   if (!value.startsWith('.')) {
     return `./${value}`;

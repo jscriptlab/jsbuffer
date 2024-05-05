@@ -4,7 +4,7 @@ import {
   GetPostById,
   decodeGetPostById,
   encodeGetPostById
-} from '../out/schema';
+} from './generated/typescript/schema';
 
 test('Codec#encode: it should support encoding several times in a row', (t) => {
   const codec = new Codec({
@@ -17,7 +17,8 @@ test('Codec#encode: it should support encoding several times in a row', (t) => {
       postId: 100000
     })
   );
-  t.deepEqual(codec.decode(decodeGetPostById, result),
+  t.deepEqual(
+    codec.decode(decodeGetPostById, result),
     GetPostById({
       postId: 100000
     })
@@ -28,11 +29,12 @@ test('Codec#encode: it should support encoding several times in a row', (t) => {
       postId: 5
     })
   );
-  t.deepEqual(codec.decode(decodeGetPostById, result2),
+  t.deepEqual(
+    codec.decode(decodeGetPostById, result2),
     GetPostById({
       postId: 5
     })
-  )
+  );
 });
 
 test('Codec#decode: it should support decode', (t) => {

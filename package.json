@@ -1,7 +1,7 @@
 {
   "name": "jsbuffer",
   "license": "MIT",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "main": "./src/index.js",
   "bin": {
     "jsbuffer": "cli/index.js",
@@ -22,11 +22,11 @@
   },
   "scripts": {
     "lint:eslint": "npx eslint --fix src code-generator",
-    "lint:prettier": "npx prettier --write \"out/**/*.{ts,json}\" \"src/**/*.ts\" \"code-generator/**/*.ts\"",
+    "lint:prettier": "npx prettier --write \"test/**/*.{ts,json}\" \"src/**/*.ts\" \"code-generator/**/*.ts\"",
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "cli": "npx ts-node --project cli/tsconfig.json cli",
-    "schema": "npm run cli -- test/schema -o out --extends tsconfig.base.json --indentation-size 2",
-    "build": "npx tsc -b out cli code-generator src/generators src/core --force",
+    "schema": "npm run cli -- test/schema -o test/generated/typescript --no-ts-config --indentation-size 2",
+    "build": "npx tsc -b test cli code-generator src/generators src/core --force",
     "build:all": "npm run schema && npm run build && npm run lint",
     "prepublishOnly": "npm run build:all && npm run test",
     "test": "npx ava \"test/**/*.js\"",

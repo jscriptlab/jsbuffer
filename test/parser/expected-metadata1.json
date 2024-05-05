@@ -1,0 +1,105 @@
+[
+  {
+    "path": "parser/index.jsb",
+    "metadata": [
+      {
+        "kind": "type",
+        "id": 1607067092,
+        "globalName": "index.Message",
+        "name": "Message",
+        "params": [
+          { "name": "id", "type": { "type": "generic", "value": "ulong" } },
+          {
+            "name": "event",
+            "type": {
+              "type": "template",
+              "template": "vector",
+              "value": {
+                "type": "externalType",
+                "name": "Event",
+                "relativePath": "./Event.jsb"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "kind": "type",
+        "id": -1282210624,
+        "globalName": "index.AcknowledgeMessage",
+        "name": "AcknowledgeMessage",
+        "params": [
+          { "name": "id", "type": { "type": "generic", "value": "ulong" } }
+        ]
+      },
+      {
+        "kind": "type",
+        "id": 1331707981,
+        "globalName": "index.ImportLocalType",
+        "name": "ImportLocalType",
+        "params": [
+          {
+            "name": "message",
+            "type": { "type": "internalType", "interfaceName": "Message" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "path": "parser/schema_internal_test/internal.jsb",
+    "metadata": [
+      {
+        "kind": "type",
+        "id": 1543151611,
+        "globalName": "schema_internal_test.internal.ImportMeWithId",
+        "name": "ImportMeWithId",
+        "params": [
+          { "name": "id", "type": { "type": "generic", "value": "uint32" } },
+          {
+            "name": "data",
+            "type": {
+              "type": "externalType",
+              "name": "ImportMe",
+              "relativePath": "../Test.jsb"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "path": "parser/Event.jsb",
+    "metadata": [
+      {
+        "kind": "type",
+        "id": -56900045,
+        "globalName": "event.Event",
+        "name": "Event",
+        "params": [
+          { "name": "seconds", "type": { "type": "generic", "value": "long" } },
+          {
+            "name": "nanoseconds",
+            "type": { "type": "generic", "value": "long" }
+          },
+          { "name": "bit", "type": { "type": "generic", "value": "uint8" } }
+        ]
+      }
+    ]
+  },
+  {
+    "path": "parser/Test.jsb",
+    "metadata": [
+      {
+        "kind": "type",
+        "id": -1180620582,
+        "globalName": "test.ImportMe",
+        "name": "ImportMe",
+        "params": [
+          { "name": "value", "type": { "type": "generic", "value": "int" } },
+          { "name": "buffer", "type": { "type": "generic", "value": "bytes" } }
+        ]
+      }
+    ]
+  }
+]

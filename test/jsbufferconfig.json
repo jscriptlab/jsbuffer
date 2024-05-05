@@ -1,4 +1,4 @@
 {
-  "outDir": "../out",
+  "outDir": "generated/typescript",
   "mainFile": "schema"
 }

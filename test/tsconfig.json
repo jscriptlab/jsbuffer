@@ -8,7 +8,9 @@
     "Deserializer.ts",
     "stringUtilities.ts",
     "schema.ts",
+    "jsb.ts",
     "fruit-list.json",
+    "generated/typescript",
     "expected-tokens-1.json",
     "FileGenerator.ts",
     "ASTGenerator.ts"
@@ -21,7 +23,6 @@
   },
   "references": [
     { "path": "../helpers" },
-    { "path": "../out" },
     { "path": "../src/parser" },
     { "path": "../src/generators" },
     { "path": "../src/core" },

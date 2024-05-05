@@ -6,6 +6,10 @@ jsb::deserializer::deserializer(const std::vector<std::uint8_t>& buffer):
   buffer(buffer)
 {}
 
+const std::size_t& jsb::deserializer::get_offset() const {
+  return offset;
+}
+
 void jsb::deserializer::assert_remaining_bytes(
     std::size_t expected_byte_count
 ) const  {

@@ -27,6 +27,7 @@ static bool compareMessages(const index::Message& a, const index::Message& b) {
 
 int main() {
   jsb::serializer s;
+  s.write<std::int32_t>(1510581918);
   s.write<std::uint8_t>(240);
   s.write<std::int8_t>(100);
   s.write<std::uint32_t>(100);
@@ -34,6 +35,7 @@ int main() {
   s.write_string("Hello, World!");
 
   jsb::deserializer d(s.get_buffer());
+  assert(d.read<std::int32_t>() == 1510581918);
   assert(d.read<std::uint8_t>() == 240);
   assert(d.read<std::int8_t>() == 100);
   assert(d.read<std::uint32_t>() == 100);

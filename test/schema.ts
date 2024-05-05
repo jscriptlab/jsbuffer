@@ -28,25 +28,28 @@ import {
   compareTestSet,
   encodeTestSet,
   decodeTestSet
-} from '../out/schema';
+} from './generated/typescript/schema';
 import {
   defaultSuperTupleTupleTest,
   tupleTupleTest,
   updateSuperTupleTupleTest,
   updateTupleTupleTest
-} from '../out/tupleTest2';
+} from './generated/typescript/tupleTest2';
 import {
   A,
   defaultTest,
   test as initTest,
   updateTest
-} from '../out/testUpdateFunction';
+} from './generated/typescript/testUpdateFunction';
 import { Serializer, Deserializer, Codec } from '@jsbuffer/codec';
 import { TextDecoder, TextEncoder } from 'util';
 import assert from 'assert';
 import crypto from 'crypto';
-import { decodeRequestTrait, encodeRequestTrait } from '../out/Request';
-import { C } from '../out/testUpdateFunction';
+import {
+  decodeRequestTrait,
+  encodeRequestTrait
+} from './generated/typescript/Request';
+import { C } from './generated/typescript/testUpdateFunction';
 import test from 'ava';
 
 test('it should encode Request trait', (t) => {
@@ -568,7 +571,7 @@ test('it should update types with parameters that are using trait types', (t) =>
 
 test('it should encode types with parameters using long generic type', async (t) => {
   const { A, B, C, encodeA, encodeB, encodeC, decodeA, decodeB, decodeC } =
-    await import('../out/testLong');
+    await import('./generated/typescript/testLong');
   const s = new Serializer({
     textEncoder: new TextEncoder()
   });
