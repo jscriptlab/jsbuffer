@@ -1,9 +1,9 @@
-import Parser from '../../src/parser/Parser';
+import Parser, { IFileMetadata } from '../../src/parser/Parser';
 import fs from 'fs';
 import path from 'path';
 import test from 'ava';
 
-test('Parser test', async (t) => {
+test('it should generate file metadata list', async (t) => {
   const mainFilePath = path.resolve(__dirname, 'index.jsb');
   const configuration = {
     rootDir: __dirname,
@@ -25,6 +25,16 @@ test('Parser test', async (t) => {
     }
   );
 
-  console.log(await parser.parse());
-  t.pass();
+  let expectedFileMetadataList: IFileMetadata[] = JSON.parse(
+    await fs.promises.readFile(
+      path.resolve(__dirname, 'expected-metadata1.json'),
+      'utf8'
+    )
+  );
+  expectedFileMetadataList = expectedFileMetadataList.map((fileMetadata) => ({
+    ...fileMetadata,
+    path: path.resolve(path.dirname(__dirname), fileMetadata.path)
+  }));
+
+  t.deepEqual(await parser.parse(), expectedFileMetadataList);
 });

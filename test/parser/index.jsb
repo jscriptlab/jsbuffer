@@ -9,3 +9,7 @@ type Message {
 type AcknowledgeMessage {
   ulong id;
 }
+
+type ImportLocalType {
+  Message message;
+}
