@@ -18,7 +18,11 @@
     "failFast": true,
     "workerThreads": false,
     "utilizeParallelBuilds": false,
-    "concurrency": 1
+    "concurrency": 1,
+    "files": [
+      "test/**/*.js",
+      "!test/generated/**/*"
+    ]
   },
   "scripts": {
     "lint:eslint": "npx eslint --fix src code-generator",
@@ -29,7 +33,7 @@
     "build": "npx tsc -b test cli code-generator src/generators src/core --force",
     "build:all": "npm run schema && npm run build && npm run lint",
     "prepublishOnly": "npm run build:all && npm run test",
-    "test": "npx ava \"test/**/*.js\"",
+    "test": "npx ava",
     "test:coverage": "npx c8 npm test"
   },
   "dependencies": {
