@@ -9,13 +9,13 @@ export function isUserTrait(value: unknown): value is User {
 }
 export function encodeUserTrait(__s: ISerializer, value: User) {
   switch (value._name) {
-    case '-user.user':
+    case 'user.user':
       return encodeUser(__s, value);
-    case '-user.userDeleted':
+    case 'user.userDeleted':
       return encodeUserDeleted(__s, value);
   }
   throw new Error(
-    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- -user.user\n\t- -user.userDeleted\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
+    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- user.user\n\t- user.userDeleted\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
   );
 }
 export function decodeUserTrait(__d: IDeserializer) {
@@ -45,11 +45,11 @@ export function defaultUserTrait() {
 }
 export function compareUserTrait(__a: User, __b: User) {
   switch (__a._name) {
-    case '-user.user':
-      if (__b._name !== '-user.user') return false;
+    case 'user.user':
+      if (__b._name !== 'user.user') return false;
       return compareUser(__a, __b);
-    case '-user.userDeleted':
-      if (__b._name !== '-user.userDeleted') return false;
+    case 'user.userDeleted':
+      if (__b._name !== 'user.userDeleted') return false;
       return compareUserDeleted(__a, __b);
   }
 }
@@ -60,11 +60,11 @@ export function isTestTrait(value: unknown): value is Test {
 }
 export function encodeTestTrait(__s: ISerializer, value: Test) {
   switch (value._name) {
-    case '-user.test':
+    case 'user.test':
       return encodeTest(__s, value);
   }
   throw new Error(
-    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- -user.test\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
+    `Failed to encode: Received invalid value on "_name" property. We got "${value['_name']}" value, but this function was expecting to receive one of the following:\n\t- user.test\n\n\nPossible cause is that maybe this type simply does not extend this trait, and somehow the type-checking prevented you from calling this function wrongly.`
   );
 }
 export function decodeTestTrait(__d: IDeserializer) {
@@ -90,7 +90,7 @@ export function compareTestTrait(__a: Test, __b: Test) {
   return compareTest(__a, __b);
 }
 export interface user {
-  _name: '-user.user';
+  _name: 'user.user';
   firstName: string;
   aliases: ReadonlyArray<string>;
 }
@@ -101,7 +101,7 @@ export function isUser(value: unknown): value is user {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === '-user.user'
+      value['_name'] === 'user.user'
     )
   )
     return false;
@@ -129,7 +129,7 @@ export interface userInputParams {
 }
 export function user(params: userInputParams): user {
   return {
-    _name: '-user.user',
+    _name: 'user.user',
     firstName: params['firstName'],
     aliases: params['aliases']
   };
@@ -173,7 +173,7 @@ export function decodeUser(__d: IDeserializer): user | null {
     __o2[__i2] = __d.readString();
   }
   return {
-    _name: '-user.user',
+    _name: 'user.user',
     firstName,
     aliases
   };
@@ -241,7 +241,7 @@ export function updateUser(value: user, changes: Partial<userInputParams>) {
   return value;
 }
 export interface userDeleted {
-  _name: '-user.userDeleted';
+  _name: 'user.userDeleted';
   deletedAt: number;
 }
 export function isUserDeleted(value: unknown): value is userDeleted {
@@ -251,7 +251,7 @@ export function isUserDeleted(value: unknown): value is userDeleted {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === '-user.userDeleted'
+      value['_name'] === 'user.userDeleted'
     )
   )
     return false;
@@ -278,7 +278,7 @@ export interface userDeletedInputParams {
 }
 export function userDeleted(params: userDeletedInputParams): userDeleted {
   return {
-    _name: '-user.userDeleted',
+    _name: 'user.userDeleted',
     deletedAt: params['deletedAt']
   };
 }
@@ -302,7 +302,7 @@ export function decodeUserDeleted(__d: IDeserializer): userDeleted | null {
    */
   deletedAt = __d.readInt32();
   return {
-    _name: '-user.userDeleted',
+    _name: 'user.userDeleted',
     deletedAt
   };
 }
@@ -340,7 +340,7 @@ export function updateUserDeleted(
   return value;
 }
 export interface test {
-  _name: '-user.test';
+  _name: 'user.test';
   user: Readonly<user>;
   b: ReadonlyArray<ReadonlyArray<string | null>>;
 }
@@ -351,7 +351,7 @@ export function isTest(value: unknown): value is test {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === '-user.test'
+      value['_name'] === 'user.test'
     )
   )
     return false;
@@ -380,7 +380,7 @@ export interface testInputParams {
 }
 export function test(params: testInputParams): test {
   return {
-    _name: '-user.test',
+    _name: 'user.test',
     user: params['user'],
     b: params['b']
   };
@@ -444,7 +444,7 @@ export function decodeTest(__d: IDeserializer): test | null {
     }
   }
   return {
-    _name: '-user.test',
+    _name: 'user.test',
     user,
     b
   };

@@ -1,7 +1,7 @@
 import { ISerializer } from '../__types__';
 import { IDeserializer } from '../__types__';
 export interface User {
-  _name: 'conversation.-second-user.User';
+  _name: 'conversation.second-user.User';
   firstName: string;
 }
 export function isUser(value: unknown): value is User {
@@ -11,7 +11,7 @@ export function isUser(value: unknown): value is User {
       value !== null &&
       '_name' in value &&
       typeof value['_name'] === 'string' &&
-      value['_name'] === 'conversation.-second-user.User'
+      value['_name'] === 'conversation.second-user.User'
     )
   )
     return false;
@@ -29,7 +29,7 @@ export interface UserInputParams {
 }
 export function User(params: UserInputParams): User {
   return {
-    _name: 'conversation.-second-user.User',
+    _name: 'conversation.second-user.User',
     firstName: params['firstName']
   };
 }
@@ -53,7 +53,7 @@ export function decodeUser(__d: IDeserializer): User | null {
    */
   firstName = __d.readString();
   return {
-    _name: 'conversation.-second-user.User',
+    _name: 'conversation.second-user.User',
     firstName
   };
 }
