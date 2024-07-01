@@ -21,7 +21,6 @@ import {
   updateTestMap2,
   encodeTestMap3,
   testMap3,
-  defaultTestMap3,
   defaultTestMap2,
   decodeTestMap3,
   testSet,
@@ -51,6 +50,16 @@ import {
 } from './generated/typescript/Request';
 import { C } from './generated/typescript/testUpdateFunction';
 import test from 'ava';
+import { JSBExtensionTest } from './generated/typescript/jsb_extension.jsb';
+
+test('it should not include the .jsb extension in the namespace', (t) => {
+  t.deepEqual(
+    JSBExtensionTest({
+      a: 100
+    })._name,
+    'jsb-extension.JSBExtensionTest'
+  );
+});
 
 test('it should encode Request trait', (t) => {
   const s = new Serializer({

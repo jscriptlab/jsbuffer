@@ -6,6 +6,7 @@ import "./tupleTest2";
 import "./testLong";
 import "./testUpdateFunction";
 import "./testTraitOnParam";
+import "./jsb_extension.jsb";
 
 type testMap{
   map<string,string> a;

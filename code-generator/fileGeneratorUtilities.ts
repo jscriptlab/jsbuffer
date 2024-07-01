@@ -35,7 +35,12 @@ export function getTypeDefinitionOrCallDefinitionNamePropertyValue(
   node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition,
   file: string
 ) {
-  return `${file.split('/').map(dashCase).join('.')}.${node.name.value}`;
+  return `${file
+    // Remove the .jsb extension only if it is at the end of the string
+    .replace(/\.jsb$/, '')
+    .split('/')
+    .map(dashCase)
+    .join('.')}.${node.name.value}`;
 }
 
 export function getCompareFunctionName(

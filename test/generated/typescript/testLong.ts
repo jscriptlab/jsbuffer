@@ -1,38 +1,15 @@
-import JSBI from 'jsbi';
-import { ISerializer } from './__types__';
-import { IDeserializer } from './__types__';
-export interface A {
+import JSBI from "jsbi";
+import { ISerializer } from "./__types__";
+import { IDeserializer } from "./__types__";
+export interface A  {
   _name: 'test-long.A';
   a: string;
 }
 export function isA(value: unknown): value is A {
-  if (
-    !(
-      typeof value === 'object' &&
-      value !== null &&
-      '_name' in value &&
-      typeof value['_name'] === 'string' &&
-      value['_name'] === 'test-long.A'
-    )
-  )
-    return false;
-  if (
-    !(
-      'a' in value &&
-      ((__v0) =>
-        typeof __v0 === 'string' &&
-        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
-        JSBI.greaterThanOrEqual(
-          JSBI.BigInt(__v0),
-          JSBI.BigInt('-9223372036854775808')
-        ) &&
-        JSBI.lessThanOrEqual(
-          JSBI.BigInt(__v0),
-          JSBI.BigInt('9223372036854775807')
-        ))(value['a'])
-    )
-  )
-    return false;
+  if(!(typeof value === 'object' && value !== null && '_name' in value && typeof value['_name'] === 'string' && value['_name'] === "test-long.A")) return false;
+  if(!(
+    "a" in value && ((__v0) => (typeof __v0 === 'string' && JSBI.equal(JSBI.BigInt(__v0),JSBI.BigInt(__v0)) && JSBI.greaterThanOrEqual(JSBI.BigInt(__v0),JSBI.BigInt("-9223372036854775808")) && JSBI.lessThanOrEqual(JSBI.BigInt(__v0),JSBI.BigInt("9223372036854775807"))))(value['a'])
+  )) return false;
   return true;
 }
 export interface AInputParams {
@@ -57,7 +34,7 @@ export function decodeA(__d: IDeserializer): A | null {
   /**
    * decode header
    */
-  if (__id !== -1688212411) return null;
+  if(__id !== -1688212411) return null;
   let a: string;
   /**
    * decoding param: a
@@ -70,7 +47,7 @@ export function decodeA(__d: IDeserializer): A | null {
 }
 export function defaultA(params: Partial<AInputParams> = {}): A {
   return A({
-    a: '0',
+    a: "0",
     ...params
   });
 }
@@ -83,45 +60,25 @@ export function compareA(__a: A, __b: A): boolean {
   );
 }
 export function updateA(value: A, changes: Partial<AInputParams>) {
-  if (typeof changes['a'] !== 'undefined') {
-    if (!(changes['a'] === value['a'])) {
+  if(typeof changes['a'] !== 'undefined') {
+    if(!(changes['a'] === value['a'])) {
       value = A({
         ...value,
-        a: changes['a']
+        a: changes['a'],
       });
     }
   }
   return value;
 }
-export interface B {
+export interface B  {
   _name: 'test-long.B';
   a: string;
 }
 export function isB(value: unknown): value is B {
-  if (
-    !(
-      typeof value === 'object' &&
-      value !== null &&
-      '_name' in value &&
-      typeof value['_name'] === 'string' &&
-      value['_name'] === 'test-long.B'
-    )
-  )
-    return false;
-  if (
-    !(
-      'a' in value &&
-      ((__v0) =>
-        typeof __v0 === 'string' &&
-        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
-        JSBI.greaterThanOrEqual(JSBI.BigInt(__v0), JSBI.BigInt('0')) &&
-        JSBI.lessThanOrEqual(
-          JSBI.BigInt(__v0),
-          JSBI.BigInt('18446744073709551615')
-        ))(value['a'])
-    )
-  )
-    return false;
+  if(!(typeof value === 'object' && value !== null && '_name' in value && typeof value['_name'] === 'string' && value['_name'] === "test-long.B")) return false;
+  if(!(
+    "a" in value && ((__v0) => (typeof __v0 === 'string' && JSBI.equal(JSBI.BigInt(__v0),JSBI.BigInt(__v0)) && JSBI.greaterThanOrEqual(JSBI.BigInt(__v0),JSBI.BigInt("0")) && JSBI.lessThanOrEqual(JSBI.BigInt(__v0),JSBI.BigInt("18446744073709551615"))))(value['a'])
+  )) return false;
   return true;
 }
 export interface BInputParams {
@@ -146,7 +103,7 @@ export function decodeB(__d: IDeserializer): B | null {
   /**
    * decode header
    */
-  if (__id !== 1885886278) return null;
+  if(__id !== 1885886278) return null;
   let a: string;
   /**
    * decoding param: a
@@ -159,7 +116,7 @@ export function decodeB(__d: IDeserializer): B | null {
 }
 export function defaultB(params: Partial<BInputParams> = {}): B {
   return B({
-    a: '0',
+    a: "0",
     ...params
   });
 }
@@ -172,80 +129,33 @@ export function compareB(__a: B, __b: B): boolean {
   );
 }
 export function updateB(value: B, changes: Partial<BInputParams>) {
-  if (typeof changes['a'] !== 'undefined') {
-    if (!(changes['a'] === value['a'])) {
+  if(typeof changes['a'] !== 'undefined') {
+    if(!(changes['a'] === value['a'])) {
       value = B({
         ...value,
-        a: changes['a']
+        a: changes['a'],
       });
     }
   }
   return value;
 }
-export interface C {
+export interface C  {
   _name: 'test-long.C';
   a: string;
   b: string;
   c: number;
 }
 export function isC(value: unknown): value is C {
-  if (
-    !(
-      typeof value === 'object' &&
-      value !== null &&
-      '_name' in value &&
-      typeof value['_name'] === 'string' &&
-      value['_name'] === 'test-long.C'
-    )
-  )
-    return false;
-  if (
-    !(
-      'a' in value &&
-      ((__v0) =>
-        typeof __v0 === 'string' &&
-        JSBI.equal(JSBI.BigInt(__v0), JSBI.BigInt(__v0)) &&
-        JSBI.greaterThanOrEqual(
-          JSBI.BigInt(__v0),
-          JSBI.BigInt('-9223372036854775808')
-        ) &&
-        JSBI.lessThanOrEqual(
-          JSBI.BigInt(__v0),
-          JSBI.BigInt('9223372036854775807')
-        ))(value['a'])
-    )
-  )
-    return false;
-  if (
-    !(
-      'b' in value &&
-      ((__v1) =>
-        typeof __v1 === 'string' &&
-        JSBI.equal(JSBI.BigInt(__v1), JSBI.BigInt(__v1)) &&
-        JSBI.greaterThanOrEqual(JSBI.BigInt(__v1), JSBI.BigInt('0')) &&
-        JSBI.lessThanOrEqual(
-          JSBI.BigInt(__v1),
-          JSBI.BigInt('18446744073709551615')
-        ))(value['b'])
-    )
-  )
-    return false;
-  if (
-    !(
-      'c' in value &&
-      ((__v2) =>
-        typeof __v2 === 'number' &&
-        JSBI.equal(JSBI.BigInt(__v2), JSBI.BigInt(__v2)) &&
-        JSBI.greaterThanOrEqual(
-          JSBI.BigInt(__v2),
-          JSBI.BigInt('-2147483648')
-        ) &&
-        JSBI.lessThanOrEqual(JSBI.BigInt(__v2), JSBI.BigInt('2147483647')))(
-        value['c']
-      )
-    )
-  )
-    return false;
+  if(!(typeof value === 'object' && value !== null && '_name' in value && typeof value['_name'] === 'string' && value['_name'] === "test-long.C")) return false;
+  if(!(
+    "a" in value && ((__v0) => (typeof __v0 === 'string' && JSBI.equal(JSBI.BigInt(__v0),JSBI.BigInt(__v0)) && JSBI.greaterThanOrEqual(JSBI.BigInt(__v0),JSBI.BigInt("-9223372036854775808")) && JSBI.lessThanOrEqual(JSBI.BigInt(__v0),JSBI.BigInt("9223372036854775807"))))(value['a'])
+  )) return false;
+  if(!(
+    "b" in value && ((__v1) => (typeof __v1 === 'string' && JSBI.equal(JSBI.BigInt(__v1),JSBI.BigInt(__v1)) && JSBI.greaterThanOrEqual(JSBI.BigInt(__v1),JSBI.BigInt("0")) && JSBI.lessThanOrEqual(JSBI.BigInt(__v1),JSBI.BigInt("18446744073709551615"))))(value['b'])
+  )) return false;
+  if(!(
+    "c" in value && ((__v2) => (typeof __v2 === 'number' && JSBI.equal(JSBI.BigInt(__v2),JSBI.BigInt(__v2)) && JSBI.greaterThanOrEqual(JSBI.BigInt(__v2),JSBI.BigInt("-2147483648")) && JSBI.lessThanOrEqual(JSBI.BigInt(__v2),JSBI.BigInt("2147483647"))))(value['c'])
+  )) return false;
   return true;
 }
 export interface CInputParams {
@@ -284,7 +194,7 @@ export function decodeC(__d: IDeserializer): C | null {
   /**
    * decode header
    */
-  if (__id !== -523698750) return null;
+  if(__id !== -523698750) return null;
   let a: string;
   let b: string;
   let c: number;
@@ -309,8 +219,8 @@ export function decodeC(__d: IDeserializer): C | null {
 }
 export function defaultC(params: Partial<CInputParams> = {}): C {
   return C({
-    a: '0',
-    b: '0',
+    a: "0",
+    b: "0",
     c: 0,
     ...params
   });
@@ -332,27 +242,27 @@ export function compareC(__a: C, __b: C): boolean {
   );
 }
 export function updateC(value: C, changes: Partial<CInputParams>) {
-  if (typeof changes['a'] !== 'undefined') {
-    if (!(changes['a'] === value['a'])) {
+  if(typeof changes['a'] !== 'undefined') {
+    if(!(changes['a'] === value['a'])) {
       value = C({
         ...value,
-        a: changes['a']
+        a: changes['a'],
       });
     }
   }
-  if (typeof changes['b'] !== 'undefined') {
-    if (!(changes['b'] === value['b'])) {
+  if(typeof changes['b'] !== 'undefined') {
+    if(!(changes['b'] === value['b'])) {
       value = C({
         ...value,
-        b: changes['b']
+        b: changes['b'],
       });
     }
   }
-  if (typeof changes['c'] !== 'undefined') {
-    if (!(changes['c'] === value['c'])) {
+  if(typeof changes['c'] !== 'undefined') {
+    if(!(changes['c'] === value['c'])) {
       value = C({
         ...value,
-        c: changes['c']
+        c: changes['c'],
       });
     }
   }
