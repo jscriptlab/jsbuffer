@@ -1,14 +1,27 @@
-import { ISerializer } from "../__types__";
-import { IDeserializer } from "../__types__";
-export interface User  {
+import { ISerializer } from '../__types__';
+import { IDeserializer } from '../__types__';
+export interface User {
   _name: 'conversation.second-user.User';
   firstName: string;
 }
 export function isUser(value: unknown): value is User {
-  if(!(typeof value === 'object' && value !== null && '_name' in value && typeof value['_name'] === 'string' && value['_name'] === "conversation.second-user.User")) return false;
-  if(!(
-    "firstName" in value && ((__v0) => (typeof __v0 === 'string'))(value['firstName'])
-  )) return false;
+  if (
+    !(
+      typeof value === 'object' &&
+      value !== null &&
+      '_name' in value &&
+      typeof value['_name'] === 'string' &&
+      value['_name'] === 'conversation.second-user.User'
+    )
+  )
+    return false;
+  if (
+    !(
+      'firstName' in value &&
+      ((__v0) => typeof __v0 === 'string')(value['firstName'])
+    )
+  )
+    return false;
   return true;
 }
 export interface UserInputParams {
@@ -33,7 +46,7 @@ export function decodeUser(__d: IDeserializer): User | null {
   /**
    * decode header
    */
-  if(__id !== 1249778753) return null;
+  if (__id !== 1249778753) return null;
   let firstName: string;
   /**
    * decoding param: firstName
@@ -46,7 +59,7 @@ export function decodeUser(__d: IDeserializer): User | null {
 }
 export function defaultUser(params: Partial<UserInputParams> = {}): User {
   return User({
-    firstName: "",
+    firstName: '',
     ...params
   });
 }
@@ -59,11 +72,11 @@ export function compareUser(__a: User, __b: User): boolean {
   );
 }
 export function updateUser(value: User, changes: Partial<UserInputParams>) {
-  if(typeof changes['firstName'] !== 'undefined') {
-    if(!(changes['firstName'] === value['firstName'])) {
+  if (typeof changes['firstName'] !== 'undefined') {
+    if (!(changes['firstName'] === value['firstName'])) {
       value = User({
         ...value,
-        firstName: changes['firstName'],
+        firstName: changes['firstName']
       });
     }
   }
