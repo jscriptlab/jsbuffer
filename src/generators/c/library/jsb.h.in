@@ -1,0 +1,109 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifndef JSBUFFER_C_JSB_H
+#define JSBUFFER_C_JSB_H
+
+#cmakedefine HAS_SIZE_TYPE
+#cmakedefine HAS_UINT64_TYPE
+#cmakedefine HAS_VOID_TYPE
+#cmakedefine HAS_UINT32_TYPE
+#cmakedefine HAS_UINT16_TYPE
+#cmakedefine HAS_UINT8_TYPE
+#cmakedefine HAS_INT64_TYPE
+#cmakedefine HAS_INT32_TYPE
+#cmakedefine HAS_INT16_TYPE
+#cmakedefine HAS_INT8_TYPE
+#cmakedefine HEADER_FOUND_STDINT_H
+#cmakedefine HEADER_FOUND_STDDEF_H
+#cmakedefine HEADER_FOUND_INTTYPES_H
+#cmakedefine HEADER_FOUND_SYS_TYPEYPES_H
+
+#if defined(HEADER_FOUND_STDDEF_H)
+#include <stddef.h>
+#endif
+
+#if defined(HEADER_FOUND_STDINT_H)
+#include <stdint.h>
+#elif defined(HEADER_FOUND_INTTYPES_H)
+#include <inttypes.h>
+#elif defined(HEADER_FOUND_SYS_TYPES_H)
+#include <sys/types.h>
+#else
+#error "No suitable header found for standard integer types"
+#endif
+
+// Check if those headers exist using CMake
+#include <stddef.h>
+#include <stdint.h>
+
+enum jsb_result_t {
+  JSB_OK = 0,
+  // Out of bounds error
+  JSB_OUT_OF_BOUNDS = 1,
+  JSB_MEMORY_ALLOCATION_ERROR = 2,
+  // Buffer is too small to hold the data
+  JSB_BUFFER_OVERFLOW = 3,
+  JSB_INVALID_CRC_HEADER = 4,
+  JSB_INVALID_DECODED_VALUE = 5
+};
+
+/**
+ * Check if the expression results in an error and return it if it is.
+ */
+#define JSB_CHECK_ERROR(expr) do { \
+    enum jsb_result_t __result__ = (expr); \
+    if (__result__ != JSB_OK) { \
+        return __result__; \
+    } \
+} while (0)
+
+#ifdef HAS_UINT8_TYPE
+typedef uint8_t jsb_uint8_t;
+typedef jsb_uint8_t jsb_byte_t;
+typedef jsb_byte_t* jsb_bytes_t;
+#endif
+
+#ifdef HAS_INT64_TYPE
+typedef int64_t jsb_int64_t;
+#endif
+
+#ifdef HAS_UINT64_TYPE
+typedef uint64_t jsb_uint64_t;
+#endif
+
+#ifdef HAS_INT32_TYPE
+typedef int32_t jsb_int32_t;
+#endif
+
+#ifdef HAS_UINT32_TYPE
+typedef uint32_t jsb_uint32_t;
+#endif
+
+#ifdef HAS_UINT16_TYPE
+typedef uint16_t jsb_uint16_t;
+#endif
+
+#ifdef HAS_INT16_TYPE
+typedef int16_t jsb_int16_t;
+#endif
+
+#ifdef HAS_INT8_TYPE
+typedef const int8_t* jsb_string_t;
+typedef int8_t jsb_int8_t;
+#endif
+
+#ifdef HAS_SIZE_TYPE
+typedef size_t jsb_size_t;
+#endif
+
+#ifdef HAS_VOID_TYPE
+typedef void jsb_void_t;
+#endif
+
+#endif // JSBUFFER_C_JSB_H
+
+#ifdef __cplusplus
+}
+#endif

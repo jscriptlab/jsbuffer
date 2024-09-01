@@ -4,3 +4,6 @@ src/**/*.js
 codec/**/*.js
 code-generator/**/*.js
 .history
+
+# Remove this when the new TypeScript generator is ready
+src/generators/typescript

@@ -3,14 +3,17 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import Parser, { IConfiguration } from '../src/parser/Parser';
-import FileGeneratorCPP from '../src/generators/FileGeneratorCPP';
+import FileGeneratorCPP from '../src/generators/cpp/FileGeneratorCPP';
+import FileGeneratorC from '../src/generators/c/FileGeneratorC';
 import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
+import { IGeneratedFile } from '../src/core/File';
 
 (async () => {
   const args = process.argv.slice(2);
   if (args.length === 0) {
     console.error('Usage: jsb <main-file> -o <output-directory>');
     console.error('Usage: jsb -o <output-directory> <main-file>');
+    console.error('Usage: jsb --output <output-directory> <main-file>');
     return;
   }
 
@@ -19,7 +22,10 @@ import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
 
   const name = getNamedArgument(args, '--name', getString) ?? 'schema';
 
-  let outputDirectory = getNamedArgument(args, '-o', getString);
+  let outputDirectory =
+    getNamedArgument(args, '-o', getString) ??
+    getNamedArgument(args, '--output', getString) ??
+    null;
 
   if (outputDirectory === null) {
     throw new Error('Output directory should be defined');
@@ -80,14 +86,42 @@ import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
     }
   );
 
-  const generator = new FileGeneratorCPP(await parser.parse(), {
-    current: null,
-    rootDir: configuration.rootDir,
-    root: null,
-    cmake: {
-      project: name
-    }
-  });
+  enum Generator {
+    CPP = 'cpp',
+    C = 'c99'
+  }
+
+  const desiredGenerator =
+    getNamedArgument(args, '--generator', getString) ?? Generator.CPP;
+
+  let generator: {
+    generate: () => IGeneratedFile[] | null;
+  };
+
+  switch (desiredGenerator) {
+    case Generator.CPP:
+      generator = new FileGeneratorCPP(await parser.parse(), {
+        current: null,
+        rootDir: configuration.rootDir,
+        root: null,
+        cmake: {
+          project: name
+        }
+      });
+      break;
+    case Generator.C:
+      generator = new FileGeneratorC(await parser.parse(), {
+        current: null,
+        rootDir: configuration.rootDir,
+        root: null,
+        cmake: {
+          project: name
+        }
+      });
+      break;
+    default:
+      throw new Error(`Unknown generator "${desiredGenerator}"`);
+  }
 
   const result = generator.generate();
 

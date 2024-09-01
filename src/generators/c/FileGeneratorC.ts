@@ -6,7 +6,7 @@
  * generating header guards.
  */
 import CodeStream from 'textstreamjs';
-import { IFileMetadata } from '../parser/Parser';
+import { IFileMetadata } from '../../parser/Parser';
 import {
   MetadataParamTypeTemplate,
   MetadataParamType,
@@ -15,10 +15,16 @@ import {
   IMetadataTypeDefinition,
   IMetadataParamTypeGeneric,
   MetadataParamTypeDefinition
-} from '../parser/types/metadata';
-import GenericName from '../parser/types/GenericName';
-import Exception from '../../exception/Exception';
+} from '../../parser/types/metadata';
+import GenericName from '../../parser/types/GenericName';
+import Exception from '../../../exception/Exception';
 import path from 'path';
+import { IGeneratedFile } from '../../core/File';
+
+// Converts jsb_xx_t to xx
+function jsbTypeToCodecSuffix(value: string) {
+  return value.replace(/^jsb_/, '').replace(/_t$/, '');
+}
 
 function metadataToRelativePath(metadata: Metadata) {
   switch (metadata.kind) {
@@ -49,20 +55,15 @@ function metadataGlobalNameToNamespace(
   if (limit !== null) {
     slices = slices.slice(0, limit);
   }
-  return slices.join('::');
+  return `${slices.join('_')}`;
 }
 
-export interface IGeneratedFile {
-  path: string;
-  contents: string;
-}
-
-export interface IFileGeneratorCPPOptions {
+export interface IFileGeneratorCOptions {
   /**
    * Absolute path of the root directory of the schema
    * source files.
    */
-  root: FileGeneratorCPP | null;
+  root: FileGeneratorC | null;
   current: IFileMetadata | null;
   /**
    * Absolute path of the root directory of the schema
@@ -77,7 +78,7 @@ export interface IFileGeneratorCPPOptions {
   };
 }
 
-export default class FileGeneratorCPP extends CodeStream {
+export default class FileGeneratorC extends CodeStream {
   readonly #fileMetadataList;
   readonly #generators;
   readonly #current;
@@ -92,14 +93,14 @@ export default class FileGeneratorCPP extends CodeStream {
   };
   public constructor(
     fileMetadataList: ReadonlyArray<IFileMetadata>,
-    { current = null, root = null, cmake, rootDir }: IFileGeneratorCPPOptions
+    { current = null, root = null, cmake, rootDir }: IFileGeneratorCOptions
   ) {
     super();
     this.#root = root;
     this.#cmake = cmake ?? {
       project: 'schema'
     };
-    this.#generators = new Map<string, FileGeneratorCPP>();
+    this.#generators = new Map<string, FileGeneratorC>();
     this.#current = current;
     this.#rootDir = rootDir;
     this.#fileMetadataList = new Map<string, IFileMetadata>(
@@ -118,7 +119,7 @@ export default class FileGeneratorCPP extends CodeStream {
         }
         this.#generators.set(
           path,
-          new FileGeneratorCPP(Array.from(this.#fileMetadataList.values()), {
+          new FileGeneratorC(Array.from(this.#fileMetadataList.values()), {
             current: fileMetadata,
             root: this,
             rootDir: this.#rootDir,
@@ -154,8 +155,8 @@ export default class FileGeneratorCPP extends CodeStream {
 
     this.write('cmake_minimum_required(VERSION 3.5)\n');
     this.write(`project(${this.#cmake.project})\n`);
-    this.write('set(CMAKE_CXX_STANDARD 17)\n');
-    this.write('set(CMAKE_CXX_STANDARD_REQUIRED ON)\n');
+    this.write('set(CMAKE_C_STANDARD 99)\n');
+    this.write('set(CMAKE_C_STANDARD_REQUIRED ON)\n');
     this.write(
       'add_library(\n',
       () => {
@@ -186,7 +187,7 @@ export default class FileGeneratorCPP extends CodeStream {
       () => {
         this.write(`${this.#cmake.project}\n`);
         this.write('PUBLIC\n');
-        this.write('jsb\n');
+        this.write('jsb_c_static\n');
       },
       ')\n'
     );
@@ -214,8 +215,13 @@ export default class FileGeneratorCPP extends CodeStream {
         this.write(
           '{\n',
           () => {
-            this.write('const auto len = d.read<std::uint32_t>();\n');
-            this.write(`${key} = d.read_bytes(len);\n`);
+            this.write('jsb_uint32_t len;\n');
+            this.write(
+              'JSB_CHECK_ERROR(jsb_deserializer_read_uint32(d, &len));\n'
+            );
+            this.write(
+              `JSB_CHECK_ERROR(jsb_deserializer_read_buffer(d, len, ${key}));\n`
+            );
           },
           '}\n'
         );
@@ -230,16 +236,32 @@ export default class FileGeneratorCPP extends CodeStream {
       case GenericName.Uint8:
       case GenericName.Int8:
         this.write(
-          `${key} = d.read<${this.#genericNameToString(paramType.value)}>();\n`
+          `JSB_CHECK_ERROR(jsb_deserializer_read_${jsbTypeToCodecSuffix(
+            this.#genericNameToString(paramType.value)
+          )}(d, &${key}));\n`
         );
         break;
       case GenericName.Boolean:
+        this.write(
+          '{\n',
+          () => {
+            this.write('jsb_uint8_t value;\n');
+            this.write(
+              'JSB_CHECK_ERROR(jsb_deserializer_read_uint8(d, &value));\n'
+            );
+            this.write(
+              'if(value != 1 && value != 0) return JSB_INVALID_DECODED_VALUE;\n'
+            );
+            this.write(`${key} = value == 1 ? true : false;\n`);
+          },
+          '}\n'
+        );
+        break;
       case GenericName.Float:
       case GenericName.Double:
       case GenericName.NullTerminatedString:
-        throw new Exception('Not implemented');
       case GenericName.String:
-        this.write(`${key} = d.read_string();\n`);
+        throw new Exception('Not implemented');
         break;
     }
   }
@@ -254,7 +276,9 @@ export default class FileGeneratorCPP extends CodeStream {
         this.write(
           '{\n',
           () => {
-            this.write('const auto len = d.read<std::uint32_t>();\n');
+            this.write(
+              'const auto len = jsb_deserializer_read_uint32(d, &len);\n'
+            );
             this.write(`${key}.reserve(len);\n`);
             this.write(
               'for (std::uint32_t i = 0; i < len; i++) {\n',
@@ -300,7 +324,7 @@ export default class FileGeneratorCPP extends CodeStream {
   #resolveMetadataFromDefinitionReference(
     paramType: MetadataParamTypeDefinition
   ) {
-    let generator: FileGeneratorCPP;
+    let generator: FileGeneratorC;
     let identifier: string;
     switch (paramType.type) {
       case 'internalType':
@@ -341,7 +365,9 @@ export default class FileGeneratorCPP extends CodeStream {
         const metadata =
           this.#resolveMetadataFromDefinitionReference(paramType);
         this.write(
-          `${key} = ${metadataGlobalNameToNamespace(metadata)}::decode(d);\n`
+          `JSB_CHECK_ERROR(${metadataGlobalNameToNamespace(
+            metadata
+          )}_decode(d, &${key}));\n`
         );
         break;
       }
@@ -353,45 +379,53 @@ export default class FileGeneratorCPP extends CodeStream {
   #generateSourceFile(metadata: IMetadataTypeDefinition) {
     this.write(`#include "${metadataToRelativePath(metadata)}.h"\n`);
     this.write('\n');
-    this.write('#include <stdexcept>\n');
-    this.write('\n');
-    const completeTypeReference = metadataGlobalNameToNamespace(metadata);
+    const completeTypeReference = `struct ${metadataGlobalNameToNamespace(
+      metadata
+    )}`;
     this.write(
-      `enum jsb_result ${completeTypeReference}_decode(jsb_deserializer_t* d, ${completeTypeReference}* result) {\n`,
+      `enum jsb_result_t ${metadataGlobalNameToNamespace(
+        metadata
+      )}_decode(struct jsb_deserializer_t* d, ${completeTypeReference}* result) {\n`,
       () => {
         this.write(
           '{\n',
           () => {
+            this.write('jsb_int32_t header;\n');
             this.write(
-              'const int32_t header = jsb_deserializer_read_int32(d);\n'
+              'JSB_CHECK_ERROR(jsb_deserializer_read_int32(d, &header));\n'
             );
             this.write(
               `if(header != ${metadata.id.toString()}) {\n`,
               () => {
-                this.write('return JSB_OK;\n');
+                this.write('return JSB_INVALID_CRC_HEADER;\n');
               },
               '}\n'
             );
           },
           '}\n'
         );
-        this.write(`${completeTypeReference} result;\n`);
+        // this.write(`struct ${completeTypeReference} result;\n`);
         for (const param of metadata.params) {
           this.#deserializeParamType(param.type, `result->${param.name}`);
         }
-        this.write('return result;\n');
+        this.write('return JSB_OK;\n');
       },
       '}\n'
     );
     this.write('\n');
     this.write(
-      `enum jsb_result_t ${completeTypeReference}_encode(jsb_serializer_t* s) const {\n`
+      `enum jsb_result_t ${metadataGlobalNameToNamespace(
+        metadata
+      )}_encode(const ${completeTypeReference}* input, struct jsb_serializer_t* s) {\n`
     );
     this.indentBlock(() => {
-      this.write(`jsb_serializer_write_int32(s, ${metadata.id.toString()});\n`);
+      this.write(
+        `JSB_CHECK_ERROR(jsb_serializer_write_int32(s, ${metadata.id.toString()}));\n`
+      );
       for (const param of metadata.params) {
-        this.#serializeParamType(param.type, `${param.name}`);
+        this.#serializeParamType(param.type, `input->${param.name}`);
       }
+      this.write('return JSB_OK;\n');
     });
     this.write('}\n');
 
@@ -403,38 +437,38 @@ export default class FileGeneratorCPP extends CodeStream {
     });
   }
 
-  #serializeParamTypeTemplate(
-    paramType: MetadataParamTypeTemplate,
-    key: string
-  ) {
-    switch (paramType.template) {
-      case 'vector':
-      case 'set':
-        this.write(`s.write<std::uint32_t>(${key}.size());\n`);
-        this.write(
-          `for (const auto& item : ${key}) {\n`,
-          () => {
-            this.#serializeParamType(paramType.value, 'item');
-          },
-          '}\n'
-        );
-        break;
-      case 'optional':
-        this.write(`s.write<std::uint8_t>(${key}.has_value() ? 1 : 0);\n`);
-        this.write(
-          `if (${key}.has_value()) {\n`,
-          () => {
-            this.#serializeParamType(paramType.value, `${key}.value()`);
-          },
-          '}\n'
-        );
-        break;
-      case 'tuple':
-      case 'map':
-      case 'bigint':
-        throw new Exception('Not implemented');
-    }
-  }
+  // #serializeParamTypeTemplate(
+  //   paramType: MetadataParamTypeTemplate,
+  //   key: string
+  // ) {
+  //   switch (paramType.template) {
+  //     case 'vector':
+  //     case 'set':
+  //       this.write(`s.write<std::uint32_t>(${key}.size());\n`);
+  //       this.write(
+  //         `for (const auto& item : ${key}) {\n`,
+  //         () => {
+  //           this.#serializeParamType(paramType.value, 'item');
+  //         },
+  //         '}\n'
+  //       );
+  //       break;
+  //     case 'optional':
+  //       this.write(`s.write<std::uint8_t>(${key}.has_value() ? 1 : 0);\n`);
+  //       this.write(
+  //         `if (${key}.has_value()) {\n`,
+  //         () => {
+  //           this.#serializeParamType(paramType.value, `${key}.value()`);
+  //         },
+  //         '}\n'
+  //       );
+  //       break;
+  //     case 'tuple':
+  //     case 'map':
+  //     case 'bigint':
+  //       throw new Exception('Not implemented');
+  //   }
+  // }
 
   #serializeParamType(paramType: MetadataParamType, key: string) {
     switch (paramType.type) {
@@ -442,11 +476,19 @@ export default class FileGeneratorCPP extends CodeStream {
         this.#serializeParamTypeGeneric(paramType, key);
         break;
       case 'template':
-        this.#serializeParamTypeTemplate(paramType, key);
-        break;
+        // this.#serializeParamTypeTemplate(paramType, key);
+        // break;
+        throw new Exception(
+          'Templates are not implemented for the C generator'
+        );
       case 'internalType':
       case 'externalType':
-        this.write(`${key}.encode(s);\n`);
+        // this.write(`${key}.encode(s);\n`);
+        this.write(
+          `JSB_CHECK_ERROR(${metadataGlobalNameToNamespace(
+            this.#resolveMetadataFromDefinitionReference(paramType)
+          )}_encode(&${key}, s));\n`
+        );
         break;
       case 'externalModuleType':
         throw new Exception('Not implemented');
@@ -459,41 +501,49 @@ export default class FileGeneratorCPP extends CodeStream {
   ) {
     switch (paramType.value) {
       case GenericName.Bytes:
-        this.write(`jsb_serializer_write_bytes(${key});\n`);
+        this.write(`JSB_CHECK_ERROR(jsb_serializer_write_bytes(s, ${key}));\n`);
         break;
       case GenericName.Long:
-        this.write(`jsb_serializer_write_int64(s, ${key});\n`);
+        this.write(`JSB_CHECK_ERROR(jsb_serializer_write_int64(s, ${key}));\n`);
         break;
       case GenericName.UnsignedLong:
-        this.write(`jsb_serializer_write_uint64(s, ${key});\n`);
+        this.write(
+          `JSB_CHECK_ERROR(jsb_serializer_write_uint64(s, ${key}));\n`
+        );
         break;
       case GenericName.Integer:
       case GenericName.Int32:
-        this.write(`jsb_serializer_write_int32(s, ${key});\n`);
+        this.write(`JSB_CHECK_ERROR(jsb_serializer_write_int32(s, ${key}));\n`);
         break;
       case GenericName.Uint32:
-        this.write(`jsb_serializer_write_uint32(s, ${key});\n`);
+        this.write(
+          `JSB_CHECK_ERROR(jsb_serializer_write_uint32(s, ${key}));\n`
+        );
         break;
       case GenericName.Uint16:
-        this.write(`jsb_serializer_write_uint16(s, ${key});\n`);
+        this.write(
+          `JSB_CHECK_ERROR(jsb_serializer_write_uint16(s, ${key}));\n`
+        );
         break;
       case GenericName.Int16:
-        this.write(`jsb_serializer_write_int16(s, ${key});\n`);
+        this.write(`JSB_CHECK_ERROR(jsb_serializer_write_int16(s, ${key}));\n`);
         break;
       case GenericName.Uint8:
-        this.write(`jsb_serializer_write_uint8(s, ${key});\n`);
+        this.write(`JSB_CHECK_ERROR(jsb_serializer_write_uint8(s, ${key}));\n`);
         break;
       case GenericName.Int8:
-        this.write(`jsb_serializer_write_int8(s, ${key});\n`);
+        this.write(`JSB_CHECK_ERROR(jsb_serializer_write_int8(s, ${key}));\n`);
         break;
       case GenericName.Boolean:
+        this.write(
+          `JSB_CHECK_ERROR(jsb_serializer_write_uint8(s, ${key} ? 1 : 0));\n`
+        );
+        break;
       case GenericName.Float:
       case GenericName.Double:
       case GenericName.NullTerminatedString:
-        throw new Exception('Not implemented');
       case GenericName.String:
-        this.write(`jsb_serializer_write_string(s, ${key});\n`);
-        break;
+        throw new Exception(`Not implemented: ${paramType.value}`);
     }
   }
 
@@ -501,21 +551,29 @@ export default class FileGeneratorCPP extends CodeStream {
     const headerGuard = getHeaderGuard(
       `jsb-${metadataToRelativePath(metadata)}-h`
     );
+
+    this.write('#ifdef __cplusplus\n');
+    this.write('extern "C" {\n');
+    this.write('#endif // __cplusplus\n');
+
+    this.write('\n');
+
     this.write(`#ifndef ${headerGuard}\n`);
     this.write(`#define ${headerGuard}\n\n`);
     this.#includeMetadataDependenciesOnHeaderFile(metadata);
+
+    this.write('#include <stdbool.h>\n');
+    this.write('#include <jsb/serializer.h>\n');
+    this.write('#include <jsb/deserializer.h>\n');
     this.write('\n');
-    this.write('#include "jsb/serializer.h"\n');
-    this.write('#include "jsb/deserializer.h"\n');
-    this.write('\n');
-    const namespace = metadataGlobalNameToNamespace(metadata, -1);
-    if (namespace) {
-      this.write(
-        `namespace ${metadataGlobalNameToNamespace(metadata, -1)} {\n\n`
-      );
-    }
-    this.write(`struct ${metadata.name} {\n`);
-    this.write('public:\n');
+    // const namespace = metadataGlobalNameToNamespace(metadata, -1);
+    // if (namespace) {
+    //   this.write(
+    //     `namespace ${metadataGlobalNameToNamespace(metadata, -1)} {\n\n`
+    //   );
+    // }
+    this.write(`struct ${metadataGlobalNameToNamespace(metadata)} {\n`);
+    // this.write('public:\n');
     this.indentBlock(() => {
       for (const param of metadata.params) {
         this.write(
@@ -523,18 +581,31 @@ export default class FileGeneratorCPP extends CodeStream {
         );
       }
     });
-    this.write(
-      `enum jsb_result_t ${metadata.name} ${metadata.name}_decode(jsb_deserializer_t*, ${metadata.name}*);\n`
-    );
-    this.write(
-      `enum jsb_result_t  ${metadata.name}_encode(jsb_serializer_t*, ${metadata.name}*) const;\n`
-    );
     this.write('};\n');
-    if (namespace) {
-      this.append('\n');
-      this.write(`} // ${metadataGlobalNameToNamespace(metadata, -1)}\n`);
-    }
+    const completeTypeReference = `struct ${metadataGlobalNameToNamespace(
+      metadata
+    )}`;
+    this.write(
+      `enum jsb_result_t ${metadataGlobalNameToNamespace(
+        metadata
+      )}_decode(struct jsb_deserializer_t*, ${completeTypeReference}*);\n`
+    );
+    this.write(
+      `enum jsb_result_t ${metadataGlobalNameToNamespace(
+        metadata
+      )}_encode(const ${completeTypeReference}*, struct jsb_serializer_t*);\n`
+    );
+    // if (namespace) {
+    //   this.append('\n');
+    //   this.write(`} // ${metadataGlobalNameToNamespace(metadata, -1)}\n`);
+    // }
     this.write(`#endif // ${headerGuard}\n`);
+
+    this.write('\n');
+
+    this.write('#ifdef __cplusplus\n');
+    this.write('}\n');
+    this.write('#endif // __cplusplus\n');
 
     this.#files.push({
       path: `${metadataToRelativePath(metadata)}.h`,
@@ -549,42 +620,42 @@ export default class FileGeneratorCPP extends CodeStream {
     this.#includeMetadataDependenciesFromType(param.type, metadata);
   }
 
-  #includeMetadataDependenciesFromTemplateParamType(
-    paramType: MetadataParamTypeTemplate,
-    metadata: Metadata
-  ) {
-    switch (paramType.template) {
-      case 'tuple':
-        this.write('#include <tuple>\n');
-        for (const arg of paramType.args) {
-          this.#includeMetadataDependenciesFromType(arg, metadata);
-        }
-        break;
-      case 'map':
-        this.write('#include <unordered_map>\n');
-        this.#includeMetadataDependenciesFromType(paramType.key, metadata);
-        this.#includeMetadataDependenciesFromType(paramType.value, metadata);
-        break;
-      case 'bigint':
-        throw new Exception('`bigint` is not implemented');
-      case 'vector':
-      case 'optional':
-      case 'set':
-        this.#includeMetadataDependenciesFromType(paramType.value, metadata);
-        break;
-    }
-    switch (paramType.template) {
-      case 'vector':
-        this.write('#include <list>\n');
-        break;
-      case 'optional':
-        this.write('#include <optional>\n');
-        break;
-      case 'set':
-        this.write('#include <unordered_set>\n');
-        break;
-    }
-  }
+  // #includeMetadataDependenciesFromTemplateParamType(
+  //   paramType: MetadataParamTypeTemplate,
+  //   metadata: Metadata
+  // ) {
+  //   switch (paramType.template) {
+  //     case 'tuple':
+  //       this.write('#include <tuple>\n');
+  //       for (const arg of paramType.args) {
+  //         this.#includeMetadataDependenciesFromType(arg, metadata);
+  //       }
+  //       break;
+  //     case 'map':
+  //       this.write('#include <unordered_map>\n');
+  //       this.#includeMetadataDependenciesFromType(paramType.key, metadata);
+  //       this.#includeMetadataDependenciesFromType(paramType.value, metadata);
+  //       break;
+  //     case 'bigint':
+  //       throw new Exception('`bigint` is not implemented');
+  //     case 'vector':
+  //     case 'optional':
+  //     case 'set':
+  //       this.#includeMetadataDependenciesFromType(paramType.value, metadata);
+  //       break;
+  //   }
+  //   switch (paramType.template) {
+  //     case 'vector':
+  //       this.write('#include <list>\n');
+  //       break;
+  //     case 'optional':
+  //       this.write('#include <optional>\n');
+  //       break;
+  //     case 'set':
+  //       this.write('#include <unordered_set>\n');
+  //       break;
+  //   }
+  // }
 
   #fileMetadata() {
     if (this.#current === null) {
@@ -615,17 +686,19 @@ export default class FileGeneratorCPP extends CodeStream {
 
   #includeMetadataDependenciesFromType(
     paramType: MetadataParamType,
-    metadata: Metadata
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _: Metadata
   ) {
     switch (paramType.type) {
       case 'generic':
         break;
       case 'template':
-        this.#includeMetadataDependenciesFromTemplateParamType(
-          paramType,
-          metadata
-        );
-        break;
+        throw new Error('Template types are not implemented yet');
+      // this.#includeMetadataDependenciesFromTemplateParamType(
+      //   paramType,
+      //   metadata
+      // );
+      // break;
       case 'internalType': {
         const typeDefinition =
           this.#resolveMetadataFromDefinitionReference(paramType);
@@ -677,34 +750,35 @@ export default class FileGeneratorCPP extends CodeStream {
   #genericNameToString(genericName: GenericName) {
     switch (genericName) {
       case GenericName.Bytes:
-        return 'uint8_t*';
+        return 'jsb_bytes_t';
       case GenericName.Long:
-        return 'int64_t';
+        return 'jsb_int64_t';
       case GenericName.UnsignedLong:
-        return 'uint64_t';
+        return 'jsb_uint64_t';
       case GenericName.Float:
-        return 'float';
+        // return 'float';
+        throw new Error('Float is not implemented yet for the C generator');
       case GenericName.Boolean:
         return 'bool';
       case GenericName.Double:
-        return 'double_t';
+        // return 'double_t';
+        throw new Error('Double is not implemented yet for the C generator');
       case GenericName.Integer:
       case GenericName.Int32:
-        return 'int32_t';
+        return 'jsb_int32_t';
       case GenericName.Uint32:
-        return 'uint32_t';
+        return 'jsb_uint32_t';
       case GenericName.Uint16:
-        return 'uint16_t';
+        return 'jsb_uint16_t';
       case GenericName.Int16:
-        return 'int16_t';
+        return 'jsb_int16_t';
       case GenericName.Uint8:
-        return 'uint8_t';
+        return 'jsb_uint8_t';
       case GenericName.Int8:
-        return 'int8_t';
+        return 'jsb_int8_t';
       case GenericName.NullTerminatedString:
-        return 'const char*';
       case GenericName.String:
-        return 'string';
+        return 'const char*';
     }
   }
 
@@ -729,9 +803,9 @@ export default class FileGeneratorCPP extends CodeStream {
         return this.#templateParamTypeToString(paramType);
       case 'internalType':
       case 'externalType':
-        return metadataGlobalNameToNamespace(
+        return `struct ${metadataGlobalNameToNamespace(
           this.#resolveMetadataFromDefinitionReference(paramType)
-        );
+        )}`;
       case 'externalModuleType':
         throw new Exception('External modules are not implemented');
     }

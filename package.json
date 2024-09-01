@@ -1,7 +1,7 @@
 {
   "name": "jsbuffer",
   "license": "MIT",
-  "version": "1.0.36",
+  "version": "1.0.40",
   "main": "./src/index.js",
   "bin": {
     "jsbuffer": "cli/index.js",
@@ -30,7 +30,7 @@
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "cli": "npx ts-node --project cli/tsconfig.json cli",
     "schema": "npm run cli -- test/schema -o test/generated/typescript --no-ts-config --indentation-size 2",
-    "build": "npx tsc -b test cli code-generator src/generators src/core --force",
+    "build": "npx tsc -b test cli code-generator src/generators/c src/generators/cpp src/core --force",
     "build:all": "npm run schema && npm run build && npm run lint",
     "prepublishOnly": "npm run build:all && npm run test",
     "test": "npx ava",
@@ -55,6 +55,7 @@
     "ava": "^6.0.1",
     "c8": "^8.0.1",
     "child-process-utilities": "^0.0.10",
+    "cmake-js": "^7.3.0",
     "eslint": "^8.52.0",
     "glob": "^10.3.10",
     "jsbuffer": "^1.0.2",

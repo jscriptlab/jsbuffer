@@ -39,11 +39,13 @@ export interface INodeIdentifier extends INode {
   value: string;
 }
 
+export interface INodePosition {
+  start: IToken;
+  end: IToken;
+}
+
 export interface INode {
-  position: {
-    start: IToken;
-    end: IToken;
-  };
+  position: INodePosition;
 }
 
 export interface INodeTypeDefinition extends INode {

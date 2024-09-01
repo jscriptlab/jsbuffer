@@ -6,7 +6,7 @@
  * generating header guards.
  */
 import CodeStream from 'textstreamjs';
-import { IFileMetadata } from '../parser/Parser';
+import { IFileMetadata } from '../../parser/Parser';
 import {
   MetadataParamTypeTemplate,
   MetadataParamType,
@@ -15,10 +15,11 @@ import {
   IMetadataTypeDefinition,
   IMetadataParamTypeGeneric,
   MetadataParamTypeDefinition
-} from '../parser/types/metadata';
-import GenericName from '../parser/types/GenericName';
-import Exception from '../../exception/Exception';
+} from '../../parser/types/metadata';
+import GenericName from '../../parser/types/GenericName';
+import Exception from '../../../exception/Exception';
 import path from 'path';
+import { IGeneratedFile } from '../../core/File';
 
 function metadataToRelativePath(metadata: Metadata) {
   switch (metadata.kind) {
@@ -50,11 +51,6 @@ function metadataGlobalNameToNamespace(
     slices = slices.slice(0, limit);
   }
   return slices.join('::');
-}
-
-export interface IGeneratedFile {
-  path: string;
-  contents: string;
 }
 
 export interface IFileGeneratorCPPOptions {
