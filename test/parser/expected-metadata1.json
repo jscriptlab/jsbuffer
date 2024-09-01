@@ -1,21 +1,136 @@
 [
   {
-    "path": "parser/index.jsb",
+    "path": "/home/victorqueiroz/Personal/jsbuffer/test/parser/index.jsb",
     "metadata": [
       {
         "kind": "type",
         "id": 1607067092,
+        "position": {
+          "start": {
+            "type": 0,
+            "value": "type",
+            "position": {
+              "start": 84,
+              "end": 88
+            }
+          },
+          "end": {
+            "type": 6,
+            "value": "}",
+            "position": {
+              "start": 134,
+              "end": 135
+            }
+          }
+        },
         "globalName": "index.Message",
         "name": "Message",
+        "exported": false,
         "params": [
-          { "name": "id", "type": { "type": "generic", "value": "ulong" } },
+          {
+            "name": "id",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "ulong",
+                "position": {
+                  "start": 101,
+                  "end": 106
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ";",
+                "position": {
+                  "start": 109,
+                  "end": 110
+                }
+              }
+            },
+            "type": {
+              "type": "generic",
+              "value": "ulong",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "ulong",
+                  "position": {
+                    "start": 101,
+                    "end": 106
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "ulong",
+                  "position": {
+                    "start": 101,
+                    "end": 106
+                  }
+                }
+              }
+            }
+          },
           {
             "name": "event",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "vector",
+                "position": {
+                  "start": 113,
+                  "end": 119
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ";",
+                "position": {
+                  "start": 132,
+                  "end": 133
+                }
+              }
+            },
             "type": {
               "type": "template",
               "template": "vector",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "vector",
+                  "position": {
+                    "start": 113,
+                    "end": 119
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": ">",
+                  "position": {
+                    "start": 125,
+                    "end": 126
+                  }
+                }
+              },
               "value": {
                 "type": "externalType",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "Event",
+                    "position": {
+                      "start": 120,
+                      "end": 125
+                    }
+                  },
+                  "end": {
+                    "type": 1,
+                    "value": "Event",
+                    "position": {
+                      "start": 120,
+                      "end": 125
+                    }
+                  }
+                },
                 "name": "Event",
                 "relativePath": "./Event.jsb"
               }
@@ -26,40 +141,256 @@
       {
         "kind": "type",
         "id": -1282210624,
+        "position": {
+          "start": {
+            "type": 0,
+            "value": "type",
+            "position": {
+              "start": 137,
+              "end": 141
+            }
+          },
+          "end": {
+            "type": 6,
+            "value": "}",
+            "position": {
+              "start": 175,
+              "end": 176
+            }
+          }
+        },
         "globalName": "index.AcknowledgeMessage",
         "name": "AcknowledgeMessage",
+        "exported": false,
         "params": [
-          { "name": "id", "type": { "type": "generic", "value": "ulong" } }
+          {
+            "name": "id",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "ulong",
+                "position": {
+                  "start": 165,
+                  "end": 170
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ";",
+                "position": {
+                  "start": 173,
+                  "end": 174
+                }
+              }
+            },
+            "type": {
+              "type": "generic",
+              "value": "ulong",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "ulong",
+                  "position": {
+                    "start": 165,
+                    "end": 170
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "ulong",
+                  "position": {
+                    "start": 165,
+                    "end": 170
+                  }
+                }
+              }
+            }
+          }
         ]
       },
       {
         "kind": "type",
         "id": 1331707981,
+        "position": {
+          "start": {
+            "type": 0,
+            "value": "type",
+            "position": {
+              "start": 178,
+              "end": 182
+            }
+          },
+          "end": {
+            "type": 6,
+            "value": "}",
+            "position": {
+              "start": 220,
+              "end": 221
+            }
+          }
+        },
         "globalName": "index.ImportLocalType",
         "name": "ImportLocalType",
+        "exported": false,
         "params": [
           {
             "name": "message",
-            "type": { "type": "internalType", "interfaceName": "Message" }
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "Message",
+                "position": {
+                  "start": 203,
+                  "end": 210
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ";",
+                "position": {
+                  "start": 218,
+                  "end": 219
+                }
+              }
+            },
+            "type": {
+              "type": "internalType",
+              "position": {
+                "start": {
+                  "type": 0,
+                  "value": "type",
+                  "position": {
+                    "start": 84,
+                    "end": 88
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": "}",
+                  "position": {
+                    "start": 134,
+                    "end": 135
+                  }
+                }
+              },
+              "interfaceName": "Message"
+            }
           }
         ]
       }
     ]
   },
   {
-    "path": "parser/schema_internal_test/internal.jsb",
+    "path": "/home/victorqueiroz/Personal/jsbuffer/test/parser/schema_internal_test/internal.jsb",
     "metadata": [
       {
         "kind": "type",
         "id": 1543151611,
+        "position": {
+          "start": {
+            "type": 0,
+            "value": "type",
+            "position": {
+              "start": 48,
+              "end": 52
+            }
+          },
+          "end": {
+            "type": 6,
+            "value": "}",
+            "position": {
+              "start": 100,
+              "end": 101
+            }
+          }
+        },
         "globalName": "schema_internal_test.internal.ImportMeWithId",
         "name": "ImportMeWithId",
+        "exported": true,
         "params": [
-          { "name": "id", "type": { "type": "generic", "value": "uint32" } },
+          {
+            "name": "id",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "uint32",
+                "position": {
+                  "start": 72,
+                  "end": 78
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ";",
+                "position": {
+                  "start": 81,
+                  "end": 82
+                }
+              }
+            },
+            "type": {
+              "type": "generic",
+              "value": "uint32",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "uint32",
+                  "position": {
+                    "start": 72,
+                    "end": 78
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "uint32",
+                  "position": {
+                    "start": 72,
+                    "end": 78
+                  }
+                }
+              }
+            }
+          },
           {
             "name": "data",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "ImportMe",
+                "position": {
+                  "start": 85,
+                  "end": 93
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ";",
+                "position": {
+                  "start": 98,
+                  "end": 99
+                }
+              }
+            },
             "type": {
               "type": "externalType",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "ImportMe",
+                  "position": {
+                    "start": 85,
+                    "end": 93
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "ImportMe",
+                  "position": {
+                    "start": 85,
+                    "end": 93
+                  }
+                }
+              },
               "name": "ImportMe",
               "relativePath": "../Test.jsb"
             }
@@ -69,35 +400,280 @@
     ]
   },
   {
-    "path": "parser/Event.jsb",
+    "path": "/home/victorqueiroz/Personal/jsbuffer/test/parser/Event.jsb",
     "metadata": [
       {
         "kind": "type",
         "id": -56900045,
+        "position": {
+          "start": {
+            "type": 0,
+            "value": "type",
+            "position": {
+              "start": 7,
+              "end": 11
+            }
+          },
+          "end": {
+            "type": 6,
+            "value": "}",
+            "position": {
+              "start": 69,
+              "end": 70
+            }
+          }
+        },
         "globalName": "event.Event",
         "name": "Event",
+        "exported": true,
         "params": [
-          { "name": "seconds", "type": { "type": "generic", "value": "long" } },
+          {
+            "name": "seconds",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "long",
+                "position": {
+                  "start": 22,
+                  "end": 26
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ";",
+                "position": {
+                  "start": 34,
+                  "end": 35
+                }
+              }
+            },
+            "type": {
+              "type": "generic",
+              "value": "long",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "long",
+                  "position": {
+                    "start": 22,
+                    "end": 26
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "long",
+                  "position": {
+                    "start": 22,
+                    "end": 26
+                  }
+                }
+              }
+            }
+          },
           {
             "name": "nanoseconds",
-            "type": { "type": "generic", "value": "long" }
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "long",
+                "position": {
+                  "start": 38,
+                  "end": 42
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ";",
+                "position": {
+                  "start": 54,
+                  "end": 55
+                }
+              }
+            },
+            "type": {
+              "type": "generic",
+              "value": "long",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "long",
+                  "position": {
+                    "start": 38,
+                    "end": 42
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "long",
+                  "position": {
+                    "start": 38,
+                    "end": 42
+                  }
+                }
+              }
+            }
           },
-          { "name": "bit", "type": { "type": "generic", "value": "uint8" } }
+          {
+            "name": "bit",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "uint8",
+                "position": {
+                  "start": 58,
+                  "end": 63
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ";",
+                "position": {
+                  "start": 67,
+                  "end": 68
+                }
+              }
+            },
+            "type": {
+              "type": "generic",
+              "value": "uint8",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "uint8",
+                  "position": {
+                    "start": 58,
+                    "end": 63
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "uint8",
+                  "position": {
+                    "start": 58,
+                    "end": 63
+                  }
+                }
+              }
+            }
+          }
         ]
       }
     ]
   },
   {
-    "path": "parser/Test.jsb",
+    "path": "/home/victorqueiroz/Personal/jsbuffer/test/parser/Test.jsb",
     "metadata": [
       {
         "kind": "type",
         "id": -1180620582,
+        "position": {
+          "start": {
+            "type": 0,
+            "value": "type",
+            "position": {
+              "start": 7,
+              "end": 11
+            }
+          },
+          "end": {
+            "type": 6,
+            "value": "}",
+            "position": {
+              "start": 52,
+              "end": 53
+            }
+          }
+        },
         "globalName": "test.ImportMe",
         "name": "ImportMe",
+        "exported": true,
         "params": [
-          { "name": "value", "type": { "type": "generic", "value": "int" } },
-          { "name": "buffer", "type": { "type": "generic", "value": "bytes" } }
+          {
+            "name": "value",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "int",
+                "position": {
+                  "start": 25,
+                  "end": 28
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ";",
+                "position": {
+                  "start": 34,
+                  "end": 35
+                }
+              }
+            },
+            "type": {
+              "type": "generic",
+              "value": "int",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "int",
+                  "position": {
+                    "start": 25,
+                    "end": 28
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "int",
+                  "position": {
+                    "start": 25,
+                    "end": 28
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "buffer",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "bytes",
+                "position": {
+                  "start": 38,
+                  "end": 43
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ";",
+                "position": {
+                  "start": 50,
+                  "end": 51
+                }
+              }
+            },
+            "type": {
+              "type": "generic",
+              "value": "bytes",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "bytes",
+                  "position": {
+                    "start": 38,
+                    "end": 43
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "bytes",
+                  "position": {
+                    "start": 38,
+                    "end": 43
+                  }
+                }
+              }
+            }
+          }
         ]
       }
     ]

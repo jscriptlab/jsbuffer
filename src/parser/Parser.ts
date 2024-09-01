@@ -4,6 +4,7 @@ import ASTGenerator, {
   INodeExportStatement,
   INodeLiteralNumber,
   INodeParamDefinition,
+  INodePosition,
   INodeTraitDefinition,
   INodeTypeDefinition,
   Node,
@@ -64,30 +65,36 @@ export type ResolvedType =
   | {
       fileGenerator: Parser;
       identifier: string;
+      position: INodePosition;
     }
   | INodeTypeDefinition
   | INodeCallDefinition
   | INodeTraitDefinition
   | {
       generic: GenericName;
+      position: INodePosition;
     }
   | {
       template: 'vector' | 'set';
       expression: NodeTypeExpression;
+      position: INodePosition;
       type: ResolvedType;
     }
   | {
       template: 'optional';
       expression: NodeTypeExpression;
       type: ResolvedType;
+      position: INodePosition;
     }
   | {
       template: 'tuple';
       expressions: ReadonlyArray<NodeTypeExpression>;
       types: ResolvedType[];
+      position: INodePosition;
     }
   | {
       template: 'map';
+      position: INodePosition;
       key: {
         expression: NodeTypeExpression;
         resolved: ResolvedType;
@@ -100,6 +107,7 @@ export type ResolvedType =
   | {
       template: 'bigint';
       bits: INodeLiteralNumber;
+      position: INodePosition;
     };
 
 export type Requirement =
@@ -239,13 +247,13 @@ export default class Parser extends CodeStream {
     ];
   }
   async #updateMetadataObjects() {
-    this.#iterate((node) => {
+    this.#iterate((node, parent) => {
       switch (node.type) {
         case NodeType.CallDefinition:
         case NodeType.TraitDefinition:
         case NodeType.TypeDefinition:
           this.#metadataObjects.add(
-            this.#getMetadataFromCallOrTypeDefinition(node)
+            this.#getMetadataFromCallOrTypeDefinition(node, parent)
           );
           break;
       }
@@ -335,12 +343,17 @@ export default class Parser extends CodeStream {
      */
     this.#fillTraits();
   }
-  #iterate(fn: (node: ASTGeneratorOutputNode) => void) {
+  #iterate(
+    fn: (
+      node: ASTGeneratorOutputNode,
+      parent: INodeExportStatement | null
+    ) => void
+  ) {
     for (const node of this.#nodes) {
-      fn(node);
+      fn(node, null);
       switch (node.type) {
         case NodeType.ExportStatement:
-          fn(node.value);
+          fn(node.value, node);
           break;
         case NodeType.TraitDefinition:
         case NodeType.TypeDefinition:
@@ -484,6 +497,7 @@ export default class Parser extends CodeStream {
             }
             trait.nodes.push({
               fileGenerator: this,
+              position: n.position,
               identifier: n.name.value
             });
           }
@@ -642,7 +656,8 @@ export default class Parser extends CodeStream {
     if ('generic' in resolvedType) {
       return {
         type: 'generic',
-        value: resolvedType.generic
+        value: resolvedType.generic,
+        position: resolvedType.position
       };
     } else if ('template' in resolvedType) {
       switch (resolvedType.template) {
@@ -652,12 +667,14 @@ export default class Parser extends CodeStream {
           return {
             type: 'template',
             template: resolvedType.template,
+            position: resolvedType.position,
             value: this.#getMetadataFromResolvedType(resolvedType.type)
           };
         case 'map':
           return {
             type: 'template',
             template: 'map',
+            position: resolvedType.position,
             key: this.#getMetadataFromResolvedType(resolvedType.key.resolved),
             value: this.#getMetadataFromResolvedType(
               resolvedType.value.resolved
@@ -666,6 +683,7 @@ export default class Parser extends CodeStream {
         case 'tuple':
           return {
             type: 'template',
+            position: resolvedType.position,
             template: 'tuple',
             args: resolvedType.types.map((t) =>
               this.#getMetadataFromResolvedType(t)
@@ -675,6 +693,7 @@ export default class Parser extends CodeStream {
           return {
             type: 'template',
             template: 'bigint',
+            position: resolvedType.position,
             bits: resolvedType.bits.value
           };
         default:
@@ -688,32 +707,39 @@ export default class Parser extends CodeStream {
       if (resolvedType.fileGenerator.#externalModule) {
         return {
           type: 'externalModuleType',
+          position: resolvedType.position,
           importPath,
           name: resolvedType.identifier
         };
       }
       return {
         type: 'externalType',
+        position: resolvedType.position,
         name: resolvedType.identifier,
         relativePath: importPath
       };
     }
     return {
       type: 'internalType',
+      position: resolvedType.position,
       interfaceName: resolvedType.name.value
     };
   }
   #getMetadataFromParam(param: INodeParamDefinition): IMetadataParam {
     return {
       name: param.name.value,
+      position: param.position,
       type: this.#getMetadataFromResolvedType(
         this.#resolveTypeExpression(param.typeExpression)
       )
     };
   }
   #getMetadataFromCallOrTypeDefinition(
-    node: INodeCallDefinition | INodeTypeDefinition | INodeTraitDefinition
+    node: INodeCallDefinition | INodeTypeDefinition | INodeTraitDefinition,
+    parent: INodeExportStatement | null = null
   ): Metadata {
+    const exported =
+      parent !== null && parent.type === NodeType.ExportStatement;
     let kind: Metadata['kind'];
     switch (node.type) {
       case NodeType.CallDefinition:
@@ -729,7 +755,9 @@ export default class Parser extends CodeStream {
         }
         return {
           kind: 'trait',
+          position: node.position,
           name: node.name.value,
+          exported,
           // ! should be filled with correct metadata objects
           nodes: trait.nodes.map((resolvedType) =>
             this.#getMetadataFromResolvedType(resolvedType)
@@ -740,9 +768,11 @@ export default class Parser extends CodeStream {
     return {
       kind,
       id: this.#getUniqueHeader(node),
+      position: node.position,
       globalName:
         this.#getTypeDefinitionOrCallDefinitionNamePropertyValue(node),
       name: node.name.value,
+      exported,
       params: node.parameters.map((p) => this.#getMetadataFromParam(p))
     };
   }
@@ -858,12 +888,14 @@ export default class Parser extends CodeStream {
     }).format(message);
   }
   #resolveTypeExpression(typeExpression: NodeTypeExpression): ResolvedType {
+    const { position } = typeExpression;
     switch (typeExpression.type) {
       case NodeType.TemplateExpression:
         switch (typeExpression.name.value) {
           case 'tuple':
             return {
               template: 'tuple',
+              position,
               expressions: typeExpression.templateArguments,
               types: typeExpression.templateArguments.map((t) =>
                 this.#resolveTypeExpression(t)
@@ -882,6 +914,7 @@ export default class Parser extends CodeStream {
             return {
               template: 'optional',
               expression: optionalType,
+              position,
               type: this.#resolveTypeExpression(optionalType)
             };
           }
@@ -897,6 +930,7 @@ export default class Parser extends CodeStream {
             }
             return {
               template: 'map',
+              position,
               key: {
                 resolved: this.#resolveTypeExpression(key),
                 expression: key
@@ -920,6 +954,7 @@ export default class Parser extends CodeStream {
             }
             return {
               template: typeExpression.name.value,
+              position,
               expression: setOrVectorType,
               type: this.#resolveTypeExpression(setOrVectorType)
             };
@@ -933,6 +968,7 @@ export default class Parser extends CodeStream {
             }
             return {
               template: 'bigint',
+              position,
               bits
             };
           }
@@ -962,7 +998,8 @@ export default class Parser extends CodeStream {
           case GenericName.Long:
           case GenericName.UnsignedLong:
             return {
-              generic: typeExpression.value
+              generic: typeExpression.value,
+              position
             };
         }
         break;
@@ -985,6 +1022,7 @@ export default class Parser extends CodeStream {
     if (id instanceof Parser) {
       return {
         identifier: typeExpression.value,
+        position,
         fileGenerator: id
       };
     }
