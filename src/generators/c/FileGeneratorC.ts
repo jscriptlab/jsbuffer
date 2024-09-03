@@ -1,6 +1,6 @@
 /**
- * This file contains the implementation of the FileGeneratorCPP class,
- * which is responsible for generating CPP files based on file metadata.
+ * This file contains the implementation of the FileGeneratorC class,
+ * which is responsible for generating C99 files based on file metadata.
  *
  * It also includes helper functions for manipulating metadata, and
  * generating header guards.
@@ -14,12 +14,18 @@ import {
   IMetadataParam,
   IMetadataTypeDefinition,
   IMetadataParamTypeGeneric,
-  MetadataParamTypeDefinition
+  MetadataParamTypeDefinition,
+  IMetadataTraitDefinition
 } from '../../parser/types/metadata';
 import GenericName from '../../parser/types/GenericName';
 import Exception from '../../../exception/Exception';
 import path from 'path';
 import { IGeneratedFile } from '../../core/File';
+import snakeCase from '../../utilities/string/snakeCase';
+
+function getTraitUnionNodePropertyName(traitNode: Metadata) {
+  return snakeCase(traitNode.globalName);
+}
 
 // Converts jsb_xx_t to xx
 function jsbTypeToCodecSuffix(value: string) {
@@ -27,12 +33,16 @@ function jsbTypeToCodecSuffix(value: string) {
 }
 
 function metadataToRelativePath(metadata: Metadata) {
+  const transformedPath = metadata.globalName
+    .split('.')
+    .map((slice) => snakeCase(slice))
+    .join('/');
   switch (metadata.kind) {
     case 'call':
     case 'type':
-      return metadata.globalName.split('.').join('/');
+      return transformedPath;
     case 'trait':
-      throw new Exception('Not implemented');
+      return `${transformedPath}_trait`;
   }
 }
 
@@ -48,14 +58,15 @@ function getHeaderGuard(value: string) {
 }
 
 function metadataGlobalNameToNamespace(
-  metadata: IMetadataTypeDefinition,
+  metadata: Metadata,
   limit: number | null = null
 ) {
   let slices = metadata.globalName.split('.');
   if (limit !== null) {
     slices = slices.slice(0, limit);
   }
-  return `${slices.join('_')}`;
+
+  return snakeCase(slices.join('_'));
 }
 
 export interface IFileGeneratorCOptions {
@@ -142,10 +153,244 @@ export default class FileGeneratorC extends CodeStream {
           this.#generateSourceFile(metadata);
           break;
         case 'trait':
-          throw new Exception('Not implemented');
+          this.#generateTraitFileHeaderFile(metadata);
+          this.#generateTraitFileSourceFile(metadata);
       }
     }
     return null;
+  }
+
+  #getTraitEnumInformation(metadata: IMetadataTraitDefinition) {
+    const name = `${metadataGlobalNameToNamespace(metadata)}_type_t`;
+
+    const enumItems = new Map<
+      MetadataParamType,
+      {
+        name: string;
+        // 32-bit CRC of the definition
+        value: number;
+        metadata: IMetadataTypeDefinition;
+      }
+    >();
+
+    for (const param of metadata.nodes) {
+      if (param.type !== 'internalType' && param.type !== 'externalType') {
+        throw new Exception(
+          'Only internal and external types are allowed in traits'
+        );
+      }
+      const node = this.#resolveMetadataFromDefinitionReference(param);
+      if (node.kind === 'trait') {
+        throw new Exception(
+          'Currently it is not possible for a trait to import another'
+        );
+      }
+      const enumItemName = `${getTraitUnionNodePropertyName(
+        this.#resolveMetadataFromDefinitionReference(param)
+      )}_type`.toUpperCase();
+      enumItems.set(param, {
+        value: node.id,
+        name: enumItemName,
+        metadata: node
+      });
+    }
+
+    return {
+      /**
+       * Trait enum name
+       */
+      name,
+      /**
+       * Trait enum item names per param type
+       */
+      items: enumItems
+    };
+  }
+
+  #generateTraitFileSourceFile(metadata: IMetadataTraitDefinition) {
+    this.write(`#include "${metadataToRelativePath(metadata)}.h"\n`);
+
+    this.write('\n');
+
+    const completeTypeReference = getMetadataCompleteTypeReference(metadata);
+
+    this.write(
+      `enum jsb_result_t ${getMetadataPrefix(
+        metadata
+      )}_encode(const ${completeTypeReference}* input, struct jsb_serializer_t* s) {\n`,
+      () => {
+        this.write(
+          'switch(input->type) {\n',
+          () => {
+            const enumTrait = this.#getTraitEnumInformation(metadata);
+            for (const [, item] of enumTrait.items) {
+              const encodeKey = `&input->value.${getTraitUnionNodePropertyName(
+                item.metadata
+              )}`;
+              this.write(`case ${item.name}:\n`);
+              this.indentBlock(() => {
+                this.write(
+                  `JSB_CHECK_ERROR(${metadataGlobalNameToNamespace(
+                    item.metadata
+                  )}_encode(${encodeKey},s));\n`
+                );
+                this.write('break;\n');
+              });
+            }
+          },
+          '}\n'
+        );
+        this.write('return JSB_OK;\n');
+      },
+      '}\n'
+    );
+    this.write('\n');
+    this.write(
+      `enum jsb_result_t ${getMetadataPrefix(
+        metadata
+      )}_decode(struct jsb_deserializer_t* d, ${completeTypeReference}* output) {\n`,
+      () => {
+        this.write('jsb_int32_t header;\n');
+        this.write(
+          'JSB_CHECK_ERROR(jsb_deserializer_read_int32(d, &header));\n'
+        );
+        // Go back 4 bytes in order to allow the next type/call decoder to read the header
+        this.write('JSB_CHECK_ERROR(jsb_deserializer_rewind(d, 4));\n');
+        this.write(
+          'switch(header) {\n',
+          () => {
+            const enumTrait = this.#getTraitEnumInformation(metadata);
+            for (const [, item] of enumTrait.items) {
+              const outputKey = `&output->value.${getTraitUnionNodePropertyName(
+                item.metadata
+              )}`;
+              this.write(`case ${item.value}:\n`);
+              this.indentBlock(() => {
+                this.write(
+                  `JSB_CHECK_ERROR(${getMetadataPrefix(
+                    item.metadata
+                  )}_decode(d, ${outputKey}));\n`
+                );
+                this.write('break;\n');
+              });
+            }
+            this.write('default:\n');
+            this.indentBlock(() => {
+              this.write('return JSB_INVALID_CRC_HEADER;\n');
+            });
+          },
+          '}\n'
+        );
+        this.write('return JSB_OK;\n');
+      },
+      '}\n'
+    );
+
+    this.#files.push({
+      path: `${metadataToRelativePath(metadata)}.${
+        this.#options.sourceFileExtension
+      }`,
+      contents: this.value()
+    });
+  }
+
+  #generateTraitFileHeaderFile(metadata: IMetadataTraitDefinition) {
+    const headerGuard = getHeaderGuard(
+      `jsb-${metadataToRelativePath(metadata)}-h`
+    );
+
+    this.write(`#ifndef ${headerGuard}\n`);
+    this.write(`#define ${headerGuard}\n\n`);
+    this.#includeMetadataDependenciesOnHeaderFile(metadata);
+
+    this.write('\n');
+
+    this.write('#ifdef __cplusplus\n');
+    this.write('extern "C" {\n');
+    this.write('#endif // __cplusplus\n');
+
+    this.write('\n');
+
+    this.write('#include <stdbool.h>\n');
+    this.write('#include <jsb/serializer.h>\n');
+    this.write('#include <jsb/deserializer.h>\n');
+    this.write('\n');
+
+    const enumTrait = this.#getTraitEnumInformation(metadata);
+
+    this.write(
+      `enum ${enumTrait.name} {\n`,
+      () => {
+        for (const [, item] of enumTrait.items) {
+          this.write(`${item.name} = ${item.value},\n`);
+        }
+      },
+      '};\n'
+    );
+
+    this.write('\n');
+
+    this.write(
+      `union ${getMetadataPrefix(metadata)}_value_t {\n`,
+      () => {
+        for (const param of metadata.nodes) {
+          if (param.type !== 'internalType' && param.type !== 'externalType') {
+            throw new Exception(
+              'Only internal and external types are allowed in traits'
+            );
+          }
+          this.write(
+            `${this.#metadataParamTypeToString(
+              param
+            )} ${getTraitUnionNodePropertyName(
+              this.#resolveMetadataFromDefinitionReference(param)
+            )};\n`
+          );
+        }
+      },
+      '};\n'
+    );
+
+    this.write('\n');
+
+    this.write(
+      `${getMetadataCompleteTypeReference(metadata)} {\n`,
+      () => {
+        this.write(
+          `enum ${metadataGlobalNameToNamespace(metadata)}_type_t type;\n`
+        );
+        this.write(`union ${getMetadataPrefix(metadata)}_value_t value;\n`);
+      },
+      '};\n'
+    );
+
+    this.write('\n');
+
+    const completeTypeReference = getMetadataCompleteTypeReference(metadata);
+
+    this.write(
+      `enum jsb_result_t ${getMetadataPrefix(
+        metadata
+      )}_encode(const ${completeTypeReference}* input, struct jsb_serializer_t* s);\n`
+    );
+    this.write(
+      `enum jsb_result_t ${getMetadataPrefix(
+        metadata
+      )}_decode(struct jsb_deserializer_t* d, ${completeTypeReference}* result);\n`
+    );
+
+    this.write('#ifdef __cplusplus\n');
+    this.write('}\n');
+    this.write('#endif // __cplusplus\n');
+
+    this.write(`#endif // ${headerGuard}\n`);
+
+    this.write('\n');
+
+    this.#files.push({
+      path: `${metadataToRelativePath(metadata)}.h`,
+      contents: this.value()
+    });
   }
 
   #generateCMakeListsFile() {
@@ -154,7 +399,7 @@ export default class FileGeneratorC extends CodeStream {
     }
 
     this.write('cmake_minimum_required(VERSION 3.5)\n');
-    this.write(`project(${this.#cmake.project})\n`);
+    this.write(`project(${this.#cmake.project} C ASM)\n`);
     this.write('set(CMAKE_C_STANDARD 99)\n');
     this.write('set(CMAKE_C_STANDARD_REQUIRED ON)\n');
     this.write(
@@ -188,6 +433,18 @@ export default class FileGeneratorC extends CodeStream {
         this.write(`${this.#cmake.project}\n`);
         this.write('PUBLIC\n');
         this.write('jsb_c_static\n');
+      },
+      ')\n'
+    );
+    this.write(
+      'target_compile_options(\n',
+      () => {
+        this.write(`${this.#cmake.project}\n`);
+        this.write('PRIVATE\n');
+        this.write('-Wall\n');
+        this.write('-Wextra\n');
+        this.write('-Werror\n');
+        this.write('-pedantic\n');
       },
       ')\n'
     );
@@ -323,7 +580,7 @@ export default class FileGeneratorC extends CodeStream {
 
   #resolveMetadataFromDefinitionReference(
     paramType: MetadataParamTypeDefinition
-  ) {
+  ): Metadata {
     let generator: FileGeneratorC;
     let identifier: string;
     switch (paramType.type) {
@@ -346,9 +603,9 @@ export default class FileGeneratorC extends CodeStream {
     if (metadata === null) {
       throw new Exception('External type not found');
     }
-    if (metadata.kind === 'trait') {
-      throw new Exception('Trait is not supported yet');
-    }
+    // if (metadata.kind === 'trait') {
+    //   throw new Exception('Trait is not supported yet');
+    // }
     return metadata;
   }
 
@@ -365,7 +622,7 @@ export default class FileGeneratorC extends CodeStream {
         const metadata =
           this.#resolveMetadataFromDefinitionReference(paramType);
         this.write(
-          `JSB_CHECK_ERROR(${metadataGlobalNameToNamespace(
+          `JSB_CHECK_ERROR(${getMetadataPrefix(
             metadata
           )}_decode(d, &${key}));\n`
         );
@@ -379,9 +636,7 @@ export default class FileGeneratorC extends CodeStream {
   #generateSourceFile(metadata: IMetadataTypeDefinition) {
     this.write(`#include "${metadataToRelativePath(metadata)}.h"\n`);
     this.write('\n');
-    const completeTypeReference = `struct ${metadataGlobalNameToNamespace(
-      metadata
-    )}`;
+    const completeTypeReference = getMetadataCompleteTypeReference(metadata);
     this.write(
       `enum jsb_result_t ${metadataGlobalNameToNamespace(
         metadata
@@ -404,7 +659,6 @@ export default class FileGeneratorC extends CodeStream {
           },
           '}\n'
         );
-        // this.write(`struct ${completeTypeReference} result;\n`);
         for (const param of metadata.params) {
           this.#deserializeParamType(param.type, `result->${param.name}`);
         }
@@ -414,7 +668,7 @@ export default class FileGeneratorC extends CodeStream {
     );
     this.write('\n');
     this.write(
-      `enum jsb_result_t ${metadataGlobalNameToNamespace(
+      `enum jsb_result_t ${getMetadataPrefix(
         metadata
       )}_encode(const ${completeTypeReference}* input, struct jsb_serializer_t* s) {\n`
     );
@@ -485,7 +739,7 @@ export default class FileGeneratorC extends CodeStream {
       case 'externalType':
         // this.write(`${key}.encode(s);\n`);
         this.write(
-          `JSB_CHECK_ERROR(${metadataGlobalNameToNamespace(
+          `JSB_CHECK_ERROR(${getMetadataPrefix(
             this.#resolveMetadataFromDefinitionReference(paramType)
           )}_encode(&${key}, s));\n`
         );
@@ -552,15 +806,17 @@ export default class FileGeneratorC extends CodeStream {
       `jsb-${metadataToRelativePath(metadata)}-h`
     );
 
+    this.write(`#ifndef ${headerGuard}\n`);
+    this.write(`#define ${headerGuard}\n\n`);
+    this.#includeMetadataDependenciesOnHeaderFile(metadata);
+
+    this.write('\n');
+
     this.write('#ifdef __cplusplus\n');
     this.write('extern "C" {\n');
     this.write('#endif // __cplusplus\n');
 
     this.write('\n');
-
-    this.write(`#ifndef ${headerGuard}\n`);
-    this.write(`#define ${headerGuard}\n\n`);
-    this.#includeMetadataDependenciesOnHeaderFile(metadata);
 
     this.write('#include <stdbool.h>\n');
     this.write('#include <jsb/serializer.h>\n');
@@ -572,7 +828,7 @@ export default class FileGeneratorC extends CodeStream {
     //     `namespace ${metadataGlobalNameToNamespace(metadata, -1)} {\n\n`
     //   );
     // }
-    this.write(`struct ${metadataGlobalNameToNamespace(metadata)} {\n`);
+    this.write(`${getMetadataCompleteTypeReference(metadata)} {\n`);
     // this.write('public:\n');
     this.indentBlock(() => {
       for (const param of metadata.params) {
@@ -582,9 +838,7 @@ export default class FileGeneratorC extends CodeStream {
       }
     });
     this.write('};\n');
-    const completeTypeReference = `struct ${metadataGlobalNameToNamespace(
-      metadata
-    )}`;
+    const completeTypeReference = getMetadataCompleteTypeReference(metadata);
     this.write(
       `enum jsb_result_t ${metadataGlobalNameToNamespace(
         metadata
@@ -595,17 +849,18 @@ export default class FileGeneratorC extends CodeStream {
         metadata
       )}_encode(const ${completeTypeReference}*, struct jsb_serializer_t*);\n`
     );
+
+    this.write('#ifdef __cplusplus\n');
+    this.write('}\n');
+    this.write('#endif // __cplusplus\n');
+
+    this.write('\n');
+
     // if (namespace) {
     //   this.append('\n');
     //   this.write(`} // ${metadataGlobalNameToNamespace(metadata, -1)}\n`);
     // }
     this.write(`#endif // ${headerGuard}\n`);
-
-    this.write('\n');
-
-    this.write('#ifdef __cplusplus\n');
-    this.write('}\n');
-    this.write('#endif // __cplusplus\n');
 
     this.#files.push({
       path: `${metadataToRelativePath(metadata)}.h`,
@@ -743,6 +998,9 @@ export default class FileGeneratorC extends CodeStream {
         }
         break;
       case 'trait':
+        for (const param of metadata.nodes) {
+          this.#includeMetadataDependenciesFromType(param, metadata);
+        }
         break;
     }
   }
@@ -802,12 +1060,33 @@ export default class FileGeneratorC extends CodeStream {
       case 'template':
         return this.#templateParamTypeToString(paramType);
       case 'internalType':
-      case 'externalType':
-        return `struct ${metadataGlobalNameToNamespace(
-          this.#resolveMetadataFromDefinitionReference(paramType)
-        )}`;
+      case 'externalType': {
+        const metadata =
+          this.#resolveMetadataFromDefinitionReference(paramType);
+        switch (metadata.kind) {
+          case 'type':
+          case 'call':
+          case 'trait':
+            return getMetadataCompleteTypeReference(metadata);
+        }
+        break;
+      }
       case 'externalModuleType':
         throw new Exception('External modules are not implemented');
     }
+  }
+}
+
+function getMetadataCompleteTypeReference(metadata: Metadata) {
+  return `struct ${getMetadataPrefix(metadata)}_t`;
+}
+
+function getMetadataPrefix(metadata: Metadata) {
+  switch (metadata.kind) {
+    case 'type':
+    case 'call':
+      return `${metadataGlobalNameToNamespace(metadata)}`;
+    case 'trait':
+      return `${metadataGlobalNameToNamespace(metadata)}_trait`;
   }
 }

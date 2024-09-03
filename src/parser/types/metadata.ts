@@ -11,15 +11,16 @@ export interface IMetadataTypeDefinition {
   position: INodePosition;
 }
 
-export type Metadata =
-  | IMetadataTypeDefinition
-  | {
-      kind: 'trait';
-      name: string;
-      exported: boolean;
-      nodes: MetadataParamType[];
-      position: INodePosition;
-    };
+export interface IMetadataTraitDefinition {
+  kind: 'trait';
+  name: string;
+  globalName: string;
+  exported: boolean;
+  nodes: MetadataParamType[];
+  position: INodePosition;
+}
+
+export type Metadata = IMetadataTypeDefinition | IMetadataTraitDefinition;
 
 export interface IMetadataParam {
   name: string;
@@ -60,18 +61,22 @@ export interface IMetadataParamTypeGeneric {
   position: INodePosition;
 }
 
+export interface IMetadataInternalTypeParamTypeDefinition {
+  type: 'internalType';
+  interfaceName: string;
+  position: INodePosition;
+}
+
+export interface IMetadataExternalTypeParamTypeDefinition {
+  type: 'externalType';
+  name: string;
+  relativePath: string;
+  position: INodePosition;
+}
+
 export type MetadataParamTypeDefinition =
-  | {
-      type: 'internalType';
-      interfaceName: string;
-      position: INodePosition;
-    }
-  | {
-      type: 'externalType';
-      name: string;
-      relativePath: string;
-      position: INodePosition;
-    };
+  | IMetadataInternalTypeParamTypeDefinition
+  | IMetadataExternalTypeParamTypeDefinition;
 
 export type MetadataParamType =
   | IMetadataParamTypeGeneric

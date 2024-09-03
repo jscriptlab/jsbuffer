@@ -1,0 +1,24 @@
+#include "app/command_move_backwards.h"
+
+enum jsb_result_t app_command_move_backwards_decode(struct jsb_deserializer_t* d, struct app_command_move_backwards_t* result) {
+    {
+        jsb_int32_t header;
+        JSB_CHECK_ERROR(jsb_deserializer_read_int32(d, &header));
+        if(header != 494129866) {
+            return JSB_INVALID_CRC_HEADER;
+        }
+    }
+    {
+        jsb_uint8_t value;
+        JSB_CHECK_ERROR(jsb_deserializer_read_uint8(d, &value));
+        if(value != 1 && value != 0) return JSB_INVALID_DECODED_VALUE;
+        result->stop = value == 1 ? true : false;
+    }
+    return JSB_OK;
+}
+
+enum jsb_result_t app_command_move_backwards_encode(const struct app_command_move_backwards_t* input, struct jsb_serializer_t* s) {
+    JSB_CHECK_ERROR(jsb_serializer_write_int32(s, 494129866));
+    JSB_CHECK_ERROR(jsb_serializer_write_uint8(s, input->stop ? 1 : 0));
+    return JSB_OK;
+}

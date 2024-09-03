@@ -1,18 +1,27 @@
 cmake_minimum_required(VERSION 3.5)
-project(c_schema)
+project(app C ASM)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 add_library(
-    c_schema STATIC
-    c_schema/Message.h c_schema/Message.c c_schema/Command.h c_schema/Command.c
+    app STATIC
+    app/message.h app/message.c app/command_move_forward.h app/command_move_forward.c app/command_move_backwards.h
+    app/command_move_backwards.c app/command_trait.h app/command_trait.c
 )
 target_link_libraries(
-    c_schema
+    app
     PUBLIC
     jsb_c_static
 )
+target_compile_options(
+    app
+    PRIVATE
+    -Wall
+    -Wextra
+    -Werror
+    -pedantic
+)
 target_include_directories(
-    c_schema
+    app
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )

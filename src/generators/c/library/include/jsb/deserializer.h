@@ -12,6 +12,11 @@ struct jsb_deserializer_t {
 
 enum jsb_result_t jsb_deserializer_init(struct jsb_deserializer_t*, jsb_bytes_t buffer, jsb_uint32_t size);
 
+/**
+ * Go back a few bytes in the deserializer buffer.
+ */
+enum jsb_result_t jsb_deserializer_rewind(struct jsb_deserializer_t*, jsb_uint32_t position);
+
 enum jsb_result_t jsb_deserializer_read_int64(struct jsb_deserializer_t*, jsb_int64_t*);
 enum jsb_result_t jsb_deserializer_read_uint64(struct jsb_deserializer_t*, jsb_uint64_t*);
 enum jsb_result_t jsb_deserializer_read_int32(struct jsb_deserializer_t*, jsb_int32_t*);

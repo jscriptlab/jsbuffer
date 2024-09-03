@@ -1,4 +1,8 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["string/lowerFirst.ts"]
+  "include": [
+    "string/lowerFirst.ts",
+    "string/dashCase.ts",
+    "string/snakeCase.ts"
+  ]
 }

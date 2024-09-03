@@ -8,6 +8,9 @@
     {
       "path": "../../parser"
     },
+    {
+      "path": "../../utilities"
+    },
     { "path": "../../core" }
   ]
 }

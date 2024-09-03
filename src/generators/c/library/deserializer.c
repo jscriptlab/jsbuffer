@@ -17,6 +17,15 @@ enum jsb_result_t jsb_deserializer_assert_remaining_bytes(const struct jsb_deser
   return JSB_OK;
 }
 
+enum jsb_result_t jsb_deserializer_rewind(struct jsb_deserializer_t* d, jsb_uint32_t position) {
+  if(position > d->offset) {
+    return JSB_OUT_OF_BOUNDS;
+  }
+
+  d->offset -= position;
+  return JSB_OK;
+}
+
 enum jsb_result_t jsb_deserializer_read_int64(struct jsb_deserializer_t* d, jsb_int64_t* out) {
   JSB_CHECK_ERROR(jsb_deserializer_assert_remaining_bytes(d, 8));
   JSB_CHECK_ERROR(jsb_decode_int64(d->buffer + d->offset, out));

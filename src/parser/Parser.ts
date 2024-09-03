@@ -757,6 +757,8 @@ export default class Parser extends CodeStream {
           kind: 'trait',
           position: node.position,
           name: node.name.value,
+          globalName:
+            this.#getTypeDefinitionOrCallDefinitionNamePropertyValue(node),
           exported,
           // ! should be filled with correct metadata objects
           nodes: trait.nodes.map((resolvedType) =>
