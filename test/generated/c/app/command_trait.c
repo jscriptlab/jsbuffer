@@ -8,6 +8,8 @@ enum jsb_result_t app_command_trait_encode(const struct app_command_trait_t* inp
         case APP_COMMAND_MOVE_BACKWARDS_TYPE:
             JSB_CHECK_ERROR(app_command_move_backwards_encode(&input->value.app_command_move_backwards,s));
             break;
+        default:
+            return JSB_INVALID_CRC_HEADER;
     }
     return JSB_OK;
 }
@@ -20,7 +22,7 @@ enum jsb_result_t app_command_trait_decode(struct jsb_deserializer_t* d, struct 
         case -1007775659:
             JSB_CHECK_ERROR(app_command_move_forward_decode(d, &output->value.app_command_move_forward));
             break;
-        case 494129866:
+        case 1902029403:
             JSB_CHECK_ERROR(app_command_move_backwards_decode(d, &output->value.app_command_move_backwards));
             break;
         default:
@@ -28,3 +30,33 @@ enum jsb_result_t app_command_trait_decode(struct jsb_deserializer_t* d, struct 
     }
     return JSB_OK;
 }
+
+enum jsb_result_t app_command_trait_init(struct app_command_trait_t* input, enum app_command_type_t type) {
+    switch(type) {
+        case APP_COMMAND_MOVE_FORWARD_TYPE:
+            input->type = APP_COMMAND_MOVE_FORWARD_TYPE;
+            return app_command_move_forward_init(&input->value.app_command_move_forward);
+        case APP_COMMAND_MOVE_BACKWARDS_TYPE:
+            input->type = APP_COMMAND_MOVE_BACKWARDS_TYPE;
+            return app_command_move_backwards_init(&input->value.app_command_move_backwards);
+        default:
+            return JSB_INVALID_CRC_HEADER;
+    }
+    return JSB_OK;
+}
+
+void app_command_trait_free(struct app_command_trait_t* trait) {
+    if(trait == NULL) return;
+    switch(trait->type) {
+        case APP_COMMAND_MOVE_FORWARD_TYPE:
+            app_command_move_forward_free(&trait->value.app_command_move_forward);
+            break;
+        case APP_COMMAND_MOVE_BACKWARDS_TYPE:
+            app_command_move_backwards_free(&trait->value.app_command_move_backwards);
+            break;
+        // Unrecognized `trait->type` value
+        default:
+            break;
+    }
+}
+

@@ -2,7 +2,9 @@
 
 #include "codec.h"
 
-enum jsb_result_t jsb_deserializer_init(struct jsb_deserializer_t* d, jsb_bytes_t buffer, jsb_uint32_t size) {
+#include <string.h>
+
+enum jsb_result_t jsb_deserializer_init(struct jsb_deserializer_t* d, jsb_uint8_t* buffer, jsb_uint32_t size) {
   d->buffer = buffer;
   d->offset = 0;
   d->size = size;
@@ -88,11 +90,16 @@ enum jsb_result_t jsb_deserializer_read_int8(struct jsb_deserializer_t* d, jsb_i
  * @param out_buffer_ptr Pointer to pass a reference to the deserializer buffer to
  * @return JSB_OK if the buffer was read successfully, JSB_OUT_OF_BOUNDS_ERROR if the deserializer buffer does not have the necessary amount of bytes to read
  */
-enum jsb_result_t jsb_deserializer_read_buffer(struct jsb_deserializer_t* d, jsb_uint32_t size, jsb_bytes_t* out_buffer_ptr) {
-  JSB_CHECK_ERROR(jsb_deserializer_assert_remaining_bytes(d, size));
+enum jsb_result_t jsb_deserializer_read_buffer(struct jsb_deserializer_t* deserializer, jsb_uint32_t size, jsb_uint8_t* out_buffer_ptr) {
+  JSB_CHECK_ERROR(jsb_deserializer_assert_remaining_bytes(deserializer, size));
 
-  *out_buffer_ptr = d->buffer + d->offset;
-  d->offset += size;
+  // The size of the buffer is limited to JSB_MAX_STRING_SIZE
+  if(size > JSB_MAX_STRING_SIZE) {
+    return JSB_BUFFER_OVERFLOW;
+  }
+
+  memcpy(out_buffer_ptr, &deserializer->buffer[deserializer->offset], size * sizeof(jsb_uint8_t));
+  deserializer->offset += size;
 
   return JSB_OK;
 }

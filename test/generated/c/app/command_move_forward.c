@@ -22,3 +22,15 @@ enum jsb_result_t app_command_move_forward_encode(const struct app_command_move_
     JSB_CHECK_ERROR(jsb_serializer_write_uint8(s, input->stop ? 1 : 0));
     return JSB_OK;
 }
+
+enum jsb_result_t app_command_move_forward_init(struct app_command_move_forward_t* value) {
+    if(value == NULL) return JSB_BAD_ARGUMENT;
+    value->stop = false;
+    return JSB_OK;
+}
+
+void app_command_move_forward_free(struct app_command_move_forward_t* s) {
+    if(s == NULL) return;
+    (void)s;
+}
+

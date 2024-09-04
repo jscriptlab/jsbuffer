@@ -27,6 +27,10 @@ check_type_size("unsigned int" HAS_UNSIGNED_INT LANGUAGE C)
 check_type_size("unsigned long" HAS_UNSIGNED_LONG LANGUAGE C)
 check_type_size("unsigned long long" HAS_UNSIGNED_LONG_LONG LANGUAGE C)
 
+if(NOT DEFINED JSB_MAX_STRING_SIZE)
+  set(JSB_MAX_STRING_SIZE 64)
+endif()
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/jsb.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/jsb/jsb.h)
 
 add_library(
@@ -35,6 +39,7 @@ add_library(
   codec.h codec.c
   deserializer.c
   include/jsb/deserializer.h
+  jsb.c
 )
 target_include_directories(jsb_c_static PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

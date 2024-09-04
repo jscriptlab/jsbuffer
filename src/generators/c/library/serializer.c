@@ -16,6 +16,13 @@ enum jsb_result_t jsb_serializer_init(struct jsb_serializer_t* self, jsb_uint32_
   return JSB_OK;
 }
 
+
+enum jsb_result_t jsb_serializer_rewind(struct jsb_serializer_t* s) {
+  if(s == NULL) return JSB_BAD_ARGUMENT;
+  s->buffer_size = 0;
+  return JSB_OK;
+}
+
 // Make sure to reallocate the buffer or that the serializer buffer is big enough to write `required_size` bytes
 static enum jsb_result_t jsb_serializer_reallocate(struct jsb_serializer_t* s, jsb_uint32_t required_size) {
   const jsb_uint32_t remaining = s->buffer_capacity - s->buffer_size;
@@ -124,3 +131,10 @@ enum jsb_result_t jsb_serializer_write_buffer(struct jsb_serializer_t* s, const 
   return JSB_OK;
 }
 
+void jsb_serializer_free(struct jsb_serializer_t* s) {
+  if(s == NULL) return;
+#ifdef JSB_SERIALIZER_USE_MALLOC
+  if(s->buffer == NULL) return;
+  free(s->buffer);
+#endif
+}
