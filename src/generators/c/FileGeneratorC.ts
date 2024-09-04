@@ -991,8 +991,9 @@ export default class FileGeneratorC extends CodeStream {
 
   #initializeMetadataParamTemplate(
     paramType: MetadataParamTypeTemplate,
-    _: string
+    key: string
   ) {
+    key;
     switch (paramType.template) {
       // case 'optional':
       //   this.write(`${key} = NULL;\n`);
