@@ -14,6 +14,7 @@
 #include "protocol/main/void.h"
 #include "protocol/main/user.h"
 #include "protocol/main/get_user.h"
+#include "protocol/main/tuple_test.h"
 
 int main() {
     struct jsb_serializer_t s;
@@ -73,6 +74,15 @@ int main() {
         assert(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
         assert(protocol_main_get_user_decode(&d, &value) == JSB_OK);
         protocol_main_get_user_free(&value);
+    }
+    {
+        struct protocol_main_tuple_test_t value;
+        assert(jsb_serializer_rewind(&s) == JSB_OK);
+        assert(protocol_main_tuple_test_init(&value) == JSB_OK);
+        assert(protocol_main_tuple_test_encode(&value, &s) == JSB_OK);
+        assert(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+        assert(protocol_main_tuple_test_decode(&d, &value) == JSB_OK);
+        protocol_main_tuple_test_free(&value);
     }
     
     jsb_serializer_free(&s);

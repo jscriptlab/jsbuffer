@@ -7,21 +7,27 @@ extern "C" {
 
 #cmakedefine JSB_SERIALIZER_USE_MALLOC
 #cmakedefine JSB_SCHEMA_USE_MALLOC
-#cmakedefine HAS_SIZE_TYPE
-#cmakedefine HAS_UINT64_TYPE
-#cmakedefine HAS_VOID_TYPE
-#cmakedefine HAS_UINT32_TYPE
-#cmakedefine HAS_UINT16_TYPE
-#cmakedefine HAS_UINT8_TYPE
-#cmakedefine HAS_INT64_TYPE
-#cmakedefine HAS_INT32_TYPE
-#cmakedefine HAS_INT16_TYPE
-#cmakedefine HAS_INT8_TYPE
+#cmakedefine HAVE_SIZE_TYPE
+#cmakedefine HAVE_UINT64_TYPE
+#cmakedefine HAVE_VOID_TYPE
+#cmakedefine HAVE_UINT32_TYPE
+#cmakedefine HAVE_UINT16_TYPE
+#cmakedefine HAVE_UINT8_TYPE
+#cmakedefine HAVE_INT64_TYPE
+#cmakedefine HAVE_INT32_TYPE
+#cmakedefine HAVE_INT16_TYPE
+#cmakedefine HAVE_INT8_TYPE
 #cmakedefine HEADER_FOUND_STDINT_H
 #cmakedefine HEADER_FOUND_STDDEF_H
+#cmakedefine HEADER_FOUND_STRING_H
 #cmakedefine HEADER_FOUND_INTTYPES_H
 #cmakedefine HEADER_FOUND_SYS_TYPEYPES_H
 #cmakedefine JSB_MAX_STRING_SIZE @JSB_MAX_STRING_SIZE@
+
+// Standard C library functions
+#cmakedefine HAVE_STRLEN
+#cmakedefine HAVE_MEMCPY
+#cmakedefine HAVE_MEMSET
 
 #if defined(HEADER_FOUND_STDDEF_H)
 #include <stddef.h>
@@ -36,10 +42,6 @@ extern "C" {
 #else
 #error "No suitable header found for standard integer types"
 #endif
-
-// Check if those headers exist using CMake
-#include <stddef.h>
-#include <stdint.h>
 
 enum jsb_result_t {
   JSB_OK = 0,
@@ -64,53 +66,53 @@ enum jsb_result_t {
     } \
 } while (0)
 
-#ifdef HAS_UINT8_TYPE
+#ifdef HAVE_UINT8_TYPE
 typedef uint8_t jsb_uint8_t;
 typedef jsb_uint8_t jsb_byte_t;
 typedef jsb_byte_t jsb_bytes_t[JSB_MAX_STRING_SIZE + 1];
 typedef jsb_uint8_t jsb_string_t[JSB_MAX_STRING_SIZE + 1];
 #endif
 
-#ifdef HAS_INT64_TYPE
+#ifdef HAVE_INT64_TYPE
 typedef int64_t jsb_int64_t;
 #endif
 
-#ifdef HAS_UINT64_TYPE
+#ifdef HAVE_UINT64_TYPE
 typedef uint64_t jsb_uint64_t;
 #endif
 
-#ifdef HAS_INT32_TYPE
+#ifdef HAVE_INT32_TYPE
 typedef int32_t jsb_int32_t;
 #endif
 
-#ifdef HAS_UINT32_TYPE
+#ifdef HAVE_UINT32_TYPE
 typedef uint32_t jsb_uint32_t;
-#ifdef HAS_UINT8_TYPE
-jsb_uint32_t jsb_strlen(const jsb_string_t str);
 #else
-#error "uint8_t is required for jsb_strlen"
-#endif
+typedef unsigned int jsb_uint32_t;
 #endif
 
-#ifdef HAS_UINT16_TYPE
+#ifdef HAVE_UINT16_TYPE
 typedef uint16_t jsb_uint16_t;
 #endif
 
-#ifdef HAS_INT16_TYPE
+#ifdef HAVE_INT16_TYPE
 typedef int16_t jsb_int16_t;
 #endif
 
-#ifdef HAS_INT8_TYPE
+#ifdef HAVE_INT8_TYPE
 typedef int8_t jsb_int8_t;
 #endif
 
-#ifdef HAS_SIZE_TYPE
+#ifdef HAVE_SIZE_TYPE
 typedef size_t jsb_size_t;
 #endif
 
-#ifdef HAS_VOID_TYPE
+#ifdef HAVE_VOID_TYPE
 typedef void jsb_void_t;
 #endif
+
+jsb_uint32_t jsb_strlen(const jsb_string_t str);
+void* jsb_memcpy(void* dest, const void* src, jsb_uint32_t len);
 
 #endif // JSBUFFER_C_JSB_H
 

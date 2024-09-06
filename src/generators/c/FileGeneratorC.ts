@@ -15,13 +15,26 @@ import {
   IMetadataTypeDefinition,
   IMetadataParamTypeGeneric,
   MetadataParamTypeDefinition,
-  IMetadataTraitDefinition
+  IMetadataTraitDefinition,
+  IMetadataParamTypeTupleTemplate
 } from '../../parser/types/metadata';
 import GenericName from '../../parser/types/GenericName';
 import Exception from '../../../exception/Exception';
 import path from 'path';
 import { IGeneratedFile } from '../../core/File';
 import snakeCase from '../../utilities/string/snakeCase';
+
+function getTuplePropertyName(tupleItemIndex: number) {
+  return `item_${tupleItemIndex}`;
+}
+
+function getTupleStructName(parent: Metadata) {
+  return `${metadataGlobalNameToNamespace(parent)}_tuple_t`;
+}
+
+function getTupleStructTypeReference(parent: Metadata) {
+  return `struct ${getTupleStructName(parent)}`;
+}
 
 function getTraitUnionNodePropertyName(traitNode: Metadata) {
   return snakeCase(traitNode.globalName);
@@ -477,7 +490,6 @@ export default class FileGeneratorC extends CodeStream {
 
     this.write(`#ifndef ${headerGuard}\n`);
     this.write(`#define ${headerGuard}\n\n`);
-    this.#includeMetadataDependenciesOnHeaderFile(metadata);
 
     this.write('\n');
 
@@ -485,6 +497,9 @@ export default class FileGeneratorC extends CodeStream {
     this.write('extern "C" {\n');
     this.write('#endif // __cplusplus\n');
 
+    this.write('\n');
+
+    this.#includeMetadataDependenciesOnHeaderFile(metadata);
     this.write('\n');
 
     this.write('#include <stdbool.h>\n');
@@ -517,7 +532,8 @@ export default class FileGeneratorC extends CodeStream {
           }
           this.write(
             `${this.#metadataParamTypeToString(
-              param
+              param,
+              metadata
             )} ${getTraitUnionNodePropertyName(
               this.#resolveMetadataFromDefinitionReference(param)
             )};\n`
@@ -762,6 +778,17 @@ export default class FileGeneratorC extends CodeStream {
           '}\n'
         );
         break;
+      case 'tuple': {
+        let tupleItemIndex = 0;
+        for (const arg of paramType.args) {
+          this.#deserializeParamType(
+            arg,
+            `${key}.${getTuplePropertyName(tupleItemIndex)}`
+          );
+          tupleItemIndex++;
+        }
+        break;
+      }
       default:
         // case 'vector':
         // case 'set':
@@ -783,7 +810,6 @@ export default class FileGeneratorC extends CodeStream {
         //     '}\n'
         //   );
         //   break;
-        // case 'tuple':
         // case 'map':
         // case 'bigint':
         throw new Exception('Not implemented');
@@ -993,8 +1019,18 @@ export default class FileGeneratorC extends CodeStream {
     paramType: MetadataParamTypeTemplate,
     key: string
   ) {
-    key;
     switch (paramType.template) {
+      case 'tuple': {
+        let tupleItemIndex = 0;
+        for (const arg of paramType.args) {
+          this.#initializeMetadataParam(
+            arg,
+            `${key}.${getTuplePropertyName(tupleItemIndex)}`
+          );
+          tupleItemIndex++;
+        }
+        break;
+      }
       // case 'optional':
       //   this.write(`${key} = NULL;\n`);
       //   break;
@@ -1002,7 +1038,6 @@ export default class FileGeneratorC extends CodeStream {
       // case 'set':
       //   this.write(`${key}.clear();\n`);
       //   break;
-      // case 'tuple':
       // case 'map':
       // case 'bigint':
       default:
@@ -1048,6 +1083,9 @@ export default class FileGeneratorC extends CodeStream {
         break;
       }
       case 'externalModuleType':
+        throw new Exception(
+          'External modules are not supported by the C generator'
+        );
     }
   }
 
@@ -1067,6 +1105,14 @@ export default class FileGeneratorC extends CodeStream {
       //     '}\n'
       //   );
       //   break;
+      case 'tuple': {
+        let tupleItemIndex = 0;
+        for (const arg of paramType.args) {
+          this.#serializeParamType(arg, `${key}.item_${tupleItemIndex}`);
+          tupleItemIndex++;
+        }
+        break;
+      }
       case 'optional':
         this.write(
           `if(${key} != NULL) {\n`,
@@ -1085,7 +1131,6 @@ export default class FileGeneratorC extends CodeStream {
         //   '}\n'
         // );
         break;
-      // case 'tuple':
       // case 'map':
       // case 'bigint':
       default:
@@ -1188,36 +1233,25 @@ export default class FileGeneratorC extends CodeStream {
 
     this.write(`#ifndef ${headerGuard}\n`);
     this.write(`#define ${headerGuard}\n\n`);
-    this.#includeMetadataDependenciesOnHeaderFile(metadata);
-
     this.write('\n');
 
     this.write('#ifdef __cplusplus\n');
     this.write('extern "C" {\n');
     this.write('#endif // __cplusplus\n');
+    this.write('\n');
 
+    this.#includeMetadataDependenciesOnHeaderFile(metadata);
     this.write('\n');
 
     this.write('#include <stdbool.h>\n');
     this.write('#include <jsb/serializer.h>\n');
     this.write('#include <jsb/deserializer.h>\n');
     this.write('\n');
-    // const namespace = metadataGlobalNameToNamespace(metadata, -1);
-    // if (namespace) {
-    //   this.write(
-    //     `namespace ${metadataGlobalNameToNamespace(metadata, -1)} {\n\n`
-    //   );
-    // }
-    this.write(`${getMetadataCompleteTypeReference(metadata)} {\n`);
-    // this.write('public:\n');
-    this.indentBlock(() => {
-      for (const param of metadata.params) {
-        this.write(
-          `${this.#metadataParamTypeToString(param.type)} ${param.name};\n`
-        );
-      }
-    });
-    this.write('};\n');
+
+    this.#generateStructFromMetadata(metadata);
+
+    this.#generateTypeDefinitionStruct(metadata);
+
     const completeTypeReference = getMetadataCompleteTypeReference(metadata);
     this.write(
       `enum jsb_result_t ${getMetadataPrefix(
@@ -1257,6 +1291,106 @@ export default class FileGeneratorC extends CodeStream {
     });
   }
 
+  #generateStructFromMetadata(metadata: Metadata) {
+    switch (metadata.kind) {
+      case 'type':
+      case 'call':
+        for (const param of metadata.params) {
+          this.#generateStructFromMetadataParamType(param.type, metadata);
+        }
+        break;
+      case 'trait':
+        break;
+    }
+  }
+
+  #generateStructFromTupleTemplate(
+    metadataParamType: IMetadataParamTypeTupleTemplate,
+    parent: Metadata
+  ) {
+    this.write(`${getTupleStructTypeReference(parent)} {\n`);
+    this.indentBlock(() => {
+      for (let i = 0; i < metadataParamType.args.length; i++) {
+        const arg = metadataParamType.args[i] ?? null;
+        if (arg === null) {
+          throw new Exception('Tuple argument is null');
+        }
+        this.write(
+          `${this.#metadataParamTypeToString(arg, parent)} item_${i};\n`
+        );
+      }
+    });
+    this.write('};\n');
+  }
+
+  #generateStructFromMetadataParamTypeTemplate(
+    metadataParamType: MetadataParamTypeTemplate,
+    parent: Metadata
+  ) {
+    switch (metadataParamType.template) {
+      case 'tuple':
+        this.#generateStructFromTupleTemplate(metadataParamType, parent);
+        break;
+      case 'map':
+        this.#generateStructFromMetadataParamType(
+          metadataParamType.key,
+          parent
+        );
+        this.#generateStructFromMetadataParamType(
+          metadataParamType.value,
+          parent
+        );
+        break;
+      case 'bigint':
+        throw new Exception('`bigint` is not implemented');
+      case 'vector':
+      case 'optional':
+      case 'set':
+        this.#generateStructFromMetadataParamType(
+          metadataParamType.value,
+          parent
+        );
+        break;
+    }
+  }
+
+  #generateStructFromMetadataParamType(
+    metadataParamType: MetadataParamType,
+    parent: Metadata
+  ) {
+    switch (metadataParamType.type) {
+      case 'generic':
+        break;
+      case 'template':
+        this.#generateStructFromMetadataParamTypeTemplate(
+          metadataParamType,
+          parent
+        );
+        break;
+      case 'internalType':
+      case 'externalType': {
+        this.#resolveMetadataFromDefinitionReference(metadataParamType);
+        break;
+      }
+      case 'externalModuleType':
+        break;
+    }
+  }
+
+  #generateTypeDefinitionStruct(metadata: IMetadataTypeDefinition) {
+    this.write(`${getMetadataCompleteTypeReference(metadata)} {\n`);
+    this.indentBlock(() => {
+      for (const param of metadata.params) {
+        this.write(
+          `${this.#metadataParamTypeToString(param.type, metadata)} ${
+            param.name
+          };\n`
+        );
+      }
+    });
+    this.write('};\n');
+  }
+
   #includeMetadataDependenciesOnTypeFromParam(
     param: IMetadataParam,
     metadata: Metadata
@@ -1264,42 +1398,44 @@ export default class FileGeneratorC extends CodeStream {
     this.#includeMetadataDependenciesFromType(param.type, metadata);
   }
 
-  // #includeMetadataDependenciesFromTemplateParamType(
-  //   paramType: MetadataParamTypeTemplate,
-  //   metadata: Metadata
-  // ) {
-  //   switch (paramType.template) {
-  //     case 'tuple':
-  //       this.write('#include <tuple>\n');
-  //       for (const arg of paramType.args) {
-  //         this.#includeMetadataDependenciesFromType(arg, metadata);
-  //       }
-  //       break;
-  //     case 'map':
-  //       this.write('#include <unordered_map>\n');
-  //       this.#includeMetadataDependenciesFromType(paramType.key, metadata);
-  //       this.#includeMetadataDependenciesFromType(paramType.value, metadata);
-  //       break;
-  //     case 'bigint':
-  //       throw new Exception('`bigint` is not implemented');
-  //     case 'vector':
-  //     case 'optional':
-  //     case 'set':
-  //       this.#includeMetadataDependenciesFromType(paramType.value, metadata);
-  //       break;
-  //   }
-  //   switch (paramType.template) {
-  //     case 'vector':
-  //       this.write('#include <list>\n');
-  //       break;
-  //     case 'optional':
-  //       this.write('#include <optional>\n');
-  //       break;
-  //     case 'set':
-  //       this.write('#include <unordered_set>\n');
-  //       break;
-  //   }
-  // }
+  #includeMetadataDependenciesFromTemplateParamType(
+    paramType: MetadataParamTypeTemplate,
+    metadata: Metadata
+  ) {
+    switch (paramType.template) {
+      case 'tuple':
+        // this.write('#include <tuple>\n');
+        for (const arg of paramType.args) {
+          this.#includeMetadataDependenciesFromType(arg, metadata);
+        }
+        break;
+      // case 'map':
+      //   this.write('#include <unordered_map>\n');
+      //   this.#includeMetadataDependenciesFromType(paramType.key, metadata);
+      //   this.#includeMetadataDependenciesFromType(paramType.value, metadata);
+      //   break;
+      // case 'bigint':
+      //   throw new Exception('`bigint` is not implemented');
+      // case 'vector':
+      // case 'optional':
+      // case 'set':
+      //   this.#includeMetadataDependenciesFromType(paramType.value, metadata);
+      //   break;
+      default:
+        throw new Exception('Not implemented');
+    }
+    // switch (paramType.template) {
+    //   case 'vector':
+    //     this.write('#include <list>\n');
+    //     break;
+    //   case 'optional':
+    //     this.write('#include <optional>\n');
+    //     break;
+    //   case 'set':
+    //     this.write('#include <unordered_set>\n');
+    //     break;
+    // }
+  }
 
   #fileMetadata() {
     if (this.#current === null) {
@@ -1328,10 +1464,15 @@ export default class FileGeneratorC extends CodeStream {
     return generator;
   }
 
+  /**
+   * Include dependencies from a metadata param type. This method will include the necessary
+   * dependencies for a given param type.
+   * @param paramType Metadata param type
+   * @param metadata Parent metadata to which the param belongs
+   */
   #includeMetadataDependenciesFromType(
     paramType: MetadataParamType,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _: Metadata
+    metadata: Metadata
   ) {
     switch (paramType.type) {
       case 'generic':
@@ -1358,11 +1499,10 @@ export default class FileGeneratorC extends CodeStream {
         }
         break;
       case 'template':
-        // throw new Error('Template types are not implemented yet');
-        // this.#includeMetadataDependenciesFromTemplateParamType(
-        //   paramType,
-        //   metadata
-        // );
+        this.#includeMetadataDependenciesFromTemplateParamType(
+          paramType,
+          metadata
+        );
         break;
       case 'internalType': {
         const typeDefinition =
@@ -1450,24 +1590,28 @@ export default class FileGeneratorC extends CodeStream {
     }
   }
 
-  #templateParamTypeToString(paramType: MetadataParamTypeTemplate): string {
+  #templateParamTypeToString(
+    paramType: MetadataParamTypeTemplate,
+    parent: Metadata
+  ): string {
     switch (paramType.template) {
+      case 'tuple':
+        return getTupleStructTypeReference(parent);
       case 'vector':
       case 'optional':
       case 'map':
       case 'set':
-      case 'tuple':
       case 'bigint':
         throw new Exception(`Not implemented: ${paramType.template}`);
     }
   }
 
-  #metadataParamTypeToString(paramType: MetadataParamType) {
+  #metadataParamTypeToString(paramType: MetadataParamType, parent: Metadata) {
     switch (paramType.type) {
       case 'generic':
         return this.#genericNameToString(paramType.value);
       case 'template':
-        return this.#templateParamTypeToString(paramType);
+        return this.#templateParamTypeToString(paramType, parent);
       case 'internalType':
       case 'externalType': {
         const metadata =

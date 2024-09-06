@@ -1,12 +1,13 @@
 #ifndef JSB_APP_COMMAND_TRAIT_H
 #define JSB_APP_COMMAND_TRAIT_H
 
-#include "app/command_move_forward.h"
-#include "app/command_move_backwards.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
+
+#include "app/command_move_forward.h"
+#include "app/command_move_backwards.h"
 
 #include <stdbool.h>
 #include <jsb/serializer.h>

@@ -28,6 +28,13 @@ export interface IMetadataParam {
   position: INodePosition;
 }
 
+export interface IMetadataParamTypeTupleTemplate {
+  type: 'template';
+  template: 'tuple';
+  args: MetadataParamType[];
+  position: INodePosition;
+}
+
 export type MetadataParamTypeTemplate =
   | {
       type: 'template';
@@ -35,12 +42,7 @@ export type MetadataParamTypeTemplate =
       value: MetadataParamType;
       position: INodePosition;
     }
-  | {
-      type: 'template';
-      template: 'tuple';
-      args: MetadataParamType[];
-      position: INodePosition;
-    }
+  | IMetadataParamTypeTupleTemplate
   | {
       type: 'template';
       template: 'map';

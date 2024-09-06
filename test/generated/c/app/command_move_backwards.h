@@ -1,13 +1,14 @@
 #ifndef JSB_APP_COMMAND_MOVE_BACKWARDS_H
 #define JSB_APP_COMMAND_MOVE_BACKWARDS_H
 
-#include <string.h>
-// We are going to need JSB_MAX_STRING_SIZE
-#include <jsb/jsb.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
+
+#include <string.h>
+// We are going to need JSB_MAX_STRING_SIZE
+#include <jsb/jsb.h>
 
 #include <stdbool.h>
 #include <jsb/serializer.h>

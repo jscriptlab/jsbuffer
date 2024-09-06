@@ -1,12 +1,13 @@
 #ifndef JSB_PROTOCOL_MAIN_RESPONSE_TRAIT_H
 #define JSB_PROTOCOL_MAIN_RESPONSE_TRAIT_H
 
-#include "protocol/main/void.h"
-#include "protocol/main/user.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
+
+#include "protocol/main/void.h"
+#include "protocol/main/user.h"
 
 #include <stdbool.h>
 #include <jsb/serializer.h>

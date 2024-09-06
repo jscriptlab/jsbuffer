@@ -11,9 +11,13 @@ import { IGeneratedFile } from '../src/core/File';
 (async () => {
   const args = process.argv.slice(2);
   if (args.length === 0) {
-    console.error('Usage: jsb <main-file> -o <output-directory>');
-    console.error('Usage: jsb -o <output-directory> <main-file>');
-    console.error('Usage: jsb --output <output-directory> <main-file>');
+    console.log('Usage: jsb <main-file> -o <output-directory>');
+    console.log('Usage: jsb -o <output-directory> <main-file>');
+    console.log('Usage: jsb --output <output-directory> <main-file>');
+    console.log('Usage: jsb <main-file> -o <output-directory> --generator c99');
+    console.log(
+      'Usage: jsb <main-file> -o <output-directory> --generator c++17'
+    );
     return;
   }
 
@@ -87,19 +91,19 @@ import { IGeneratedFile } from '../src/core/File';
   );
 
   enum Generator {
-    CPP = 'cpp',
+    CPP_17 = 'c++17',
     C = 'c99'
   }
 
   const desiredGenerator =
-    getNamedArgument(args, '--generator', getString) ?? Generator.CPP;
+    getNamedArgument(args, '--generator', getString) ?? Generator.CPP_17;
 
   let generator: {
     generate: () => IGeneratedFile[] | null;
   };
 
   switch (desiredGenerator) {
-    case Generator.CPP:
+    case Generator.CPP_17:
       generator = new FileGeneratorCPP(await parser.parse(), {
         current: null,
         rootDir: configuration.rootDir,

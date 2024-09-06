@@ -1,11 +1,12 @@
 #ifndef JSB_APP_MESSAGE_H
 #define JSB_APP_MESSAGE_H
 
-#include "app/command_trait.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
+
+#include "app/command_trait.h"
 
 #include <stdbool.h>
 #include <jsb/serializer.h>

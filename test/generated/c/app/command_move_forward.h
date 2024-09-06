@@ -6,6 +6,7 @@
 extern "C" {
 #endif // __cplusplus
 
+
 #include <stdbool.h>
 #include <jsb/serializer.h>
 #include <jsb/deserializer.h>
