@@ -1,10 +1,11 @@
 #include <jsb/deserializer.h>
+#include <jsb/ieee754.h>
+#include <string.h>
 
 #include "codec.h"
 
-#include <string.h>
-
 enum jsb_result_t jsb_deserializer_init(struct jsb_deserializer_t* d, jsb_uint8_t* buffer, jsb_uint32_t size) {
+  if(d == NULL || buffer == NULL) return JSB_BAD_ARGUMENT;
   d->buffer = buffer;
   d->offset = 0;
   d->size = size;
@@ -81,6 +82,20 @@ enum jsb_result_t jsb_deserializer_read_int8(struct jsb_deserializer_t* d, jsb_i
   JSB_CHECK_ERROR(jsb_deserializer_assert_remaining_bytes(d, 1));
   JSB_CHECK_ERROR(jsb_decode_int8(d->buffer + d->offset, out));
   d->offset += 1;
+  return JSB_OK;
+}
+
+enum jsb_result_t jsb_deserializer_read_double(struct jsb_deserializer_t* d, jsb_double_t* out) {
+  JSB_CHECK_ERROR(jsb_deserializer_assert_remaining_bytes(d, 8));
+  JSB_CHECK_ERROR(jsb_decode_double(d->buffer + d->offset, out));
+  d->offset += 8;
+  return JSB_OK;
+}
+
+enum jsb_result_t jsb_deserializer_read_float(struct jsb_deserializer_t* d, jsb_float_t* out) {
+  JSB_CHECK_ERROR(jsb_deserializer_assert_remaining_bytes(d, 4));
+  JSB_CHECK_ERROR(jsb_decode_float(d->buffer + d->offset, out));
+  d->offset += 4;
   return JSB_OK;
 }
 

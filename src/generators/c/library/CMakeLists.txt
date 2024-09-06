@@ -22,6 +22,8 @@ find_headers("${STRING_HEADER_TYPES}" "STANDARD_TYPE_STRING")
 check_type_size("void" HAVE_VOID_TYPE LANGUAGE C)
 check_type_size("size_t" HAVE_SIZE_TYPE LANGUAGE C)
 check_type_size("uint64_t" HAVE_UINT64_TYPE LANGUAGE C)
+check_type_size("float" HAVE_FLOAT_TYPE LANGUAGE C)
+check_type_size("double" HAVE_DOUBLE_TYPE LANGUAGE C)
 check_type_size("uint32_t" HAVE_UINT32_TYPE LANGUAGE C)
 check_type_size("uint16_t" HAVE_UINT16_TYPE LANGUAGE C)
 check_type_size("uint8_t" HAVE_UINT8_TYPE LANGUAGE C)
@@ -47,6 +49,8 @@ add_library(
   deserializer.c
   include/jsb/deserializer.h
   jsb.c
+  ieee754.c
+  include/jsb/ieee754.h
 )
 target_include_directories(jsb_c_static PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

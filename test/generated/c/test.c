@@ -16,73 +16,266 @@
 #include "protocol/main/get_user.h"
 #include "protocol/main/tuple_test.h"
 
+#define JSB_ASSERT(expr) \
+    if((expr)) {} else { \
+        fprintf(stderr, "%s:%d: Assertion failed: %s\n", __FILE__, __LINE__, #expr); \
+        return 1; \
+    }
 int main() {
     struct jsb_serializer_t s;
     struct jsb_deserializer_t d;
-    assert(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);
+    JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);
+    JSB_ASSERT(jsb_serializer_init(NULL, JSB_SERIALIZER_BUFFER_SIZE) == JSB_BAD_ARGUMENT);
     
     {
         struct app_message_t value;
-        assert(jsb_serializer_rewind(&s) == JSB_OK);
-        assert(app_message_init(&value) == JSB_OK);
-        assert(app_message_encode(&value, &s) == JSB_OK);
-        assert(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-        assert(app_message_decode(&d, &value) == JSB_OK);
+        JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+        JSB_ASSERT(app_message_init(&value) == JSB_OK);
+        JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+        JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+        JSB_ASSERT(jsb_deserializer_init(NULL, NULL, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(jsb_deserializer_init(&d, NULL, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(app_message_decode(&d, &value) == JSB_OK);
         app_message_free(&value);
+        {
+            struct app_message_t new_value;
+            memset(&new_value, 0, sizeof(struct app_message_t));
+            memset(&value, 0, sizeof(struct app_message_t));
+            JSB_ASSERT(app_message_init(&value) == JSB_OK);
+            JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&new_value.command, &value.command, sizeof(value.command)) == 0);
+            printf("Test passed for command ✔\n");
+        }
     }
     {
         struct app_command_move_forward_t value;
-        assert(jsb_serializer_rewind(&s) == JSB_OK);
-        assert(app_command_move_forward_init(&value) == JSB_OK);
-        assert(app_command_move_forward_encode(&value, &s) == JSB_OK);
-        assert(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-        assert(app_command_move_forward_decode(&d, &value) == JSB_OK);
+        JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+        JSB_ASSERT(app_command_move_forward_init(&value) == JSB_OK);
+        JSB_ASSERT(app_command_move_forward_encode(&value, &s) == JSB_OK);
+        JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+        JSB_ASSERT(jsb_deserializer_init(NULL, NULL, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(jsb_deserializer_init(&d, NULL, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(app_command_move_forward_decode(&d, &value) == JSB_OK);
         app_command_move_forward_free(&value);
+        {
+            struct app_command_move_forward_t new_value;
+            memset(&new_value, 0, sizeof(struct app_command_move_forward_t));
+            memset(&value, 0, sizeof(struct app_command_move_forward_t));
+            JSB_ASSERT(app_command_move_forward_init(&value) == JSB_OK);
+            JSB_ASSERT(app_command_move_forward_init(&new_value) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            value.stop = true;
+            JSB_ASSERT(app_command_move_forward_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(app_command_move_forward_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&new_value.stop, &value.stop, sizeof(value.stop)) == 0);
+            printf("Test passed for stop ✔\n");
+        }
+        {
+            struct app_command_move_forward_t new_value;
+            memset(&new_value, 0, sizeof(struct app_command_move_forward_t));
+            memset(&value, 0, sizeof(struct app_command_move_forward_t));
+            JSB_ASSERT(app_command_move_forward_init(&value) == JSB_OK);
+            JSB_ASSERT(app_command_move_forward_init(&new_value) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            value.value2 = 0.1234567890;
+            JSB_ASSERT(app_command_move_forward_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(app_command_move_forward_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&new_value.value2, &value.value2, sizeof(value.value2)) == 0);
+            printf("Test passed for value2 ✔\n");
+        }
     }
     {
         struct app_command_move_backwards_t value;
-        assert(jsb_serializer_rewind(&s) == JSB_OK);
-        assert(app_command_move_backwards_init(&value) == JSB_OK);
-        assert(app_command_move_backwards_encode(&value, &s) == JSB_OK);
-        assert(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-        assert(app_command_move_backwards_decode(&d, &value) == JSB_OK);
+        JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+        JSB_ASSERT(app_command_move_backwards_init(&value) == JSB_OK);
+        JSB_ASSERT(app_command_move_backwards_encode(&value, &s) == JSB_OK);
+        JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+        JSB_ASSERT(jsb_deserializer_init(NULL, NULL, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(jsb_deserializer_init(&d, NULL, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(app_command_move_backwards_decode(&d, &value) == JSB_OK);
         app_command_move_backwards_free(&value);
+        {
+            struct app_command_move_backwards_t new_value;
+            memset(&new_value, 0, sizeof(struct app_command_move_backwards_t));
+            memset(&value, 0, sizeof(struct app_command_move_backwards_t));
+            JSB_ASSERT(app_command_move_backwards_init(&value) == JSB_OK);
+            JSB_ASSERT(app_command_move_backwards_init(&new_value) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            value.stop = true;
+            JSB_ASSERT(app_command_move_backwards_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(app_command_move_backwards_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&new_value.stop, &value.stop, sizeof(value.stop)) == 0);
+            printf("Test passed for stop ✔\n");
+        }
+        {
+            struct app_command_move_backwards_t new_value;
+            memset(&new_value, 0, sizeof(struct app_command_move_backwards_t));
+            memset(&value, 0, sizeof(struct app_command_move_backwards_t));
+            JSB_ASSERT(app_command_move_backwards_init(&value) == JSB_OK);
+            JSB_ASSERT(app_command_move_backwards_init(&new_value) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            {
+                const jsb_uint8_t bytes[1] = {0};
+                strcpy((char*)value.value, (const char *) bytes);
+            }
+            JSB_ASSERT(app_command_move_backwards_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(app_command_move_backwards_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&new_value.value, &value.value, sizeof(value.value)) == 0);
+            printf("Test passed for value ✔\n");
+        }
+        {
+            struct app_command_move_backwards_t new_value;
+            memset(&new_value, 0, sizeof(struct app_command_move_backwards_t));
+            memset(&value, 0, sizeof(struct app_command_move_backwards_t));
+            JSB_ASSERT(app_command_move_backwards_init(&value) == JSB_OK);
+            JSB_ASSERT(app_command_move_backwards_init(&new_value) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            value.value2 = 0.12345678f;
+            JSB_ASSERT(app_command_move_backwards_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(app_command_move_backwards_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&new_value.value2, &value.value2, sizeof(value.value2)) == 0);
+            printf("Test passed for value2 ✔\n");
+        }
     }
     {
         struct protocol_main_void_t value;
-        assert(jsb_serializer_rewind(&s) == JSB_OK);
-        assert(protocol_main_void_init(&value) == JSB_OK);
-        assert(protocol_main_void_encode(&value, &s) == JSB_OK);
-        assert(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-        assert(protocol_main_void_decode(&d, &value) == JSB_OK);
+        JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+        JSB_ASSERT(protocol_main_void_init(&value) == JSB_OK);
+        JSB_ASSERT(protocol_main_void_encode(&value, &s) == JSB_OK);
+        JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+        JSB_ASSERT(jsb_deserializer_init(NULL, NULL, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(jsb_deserializer_init(&d, NULL, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(protocol_main_void_decode(&d, &value) == JSB_OK);
         protocol_main_void_free(&value);
+        {
+            struct protocol_main_void_t new_value;
+            memset(&new_value, 0, sizeof(struct protocol_main_void_t));
+            memset(&value, 0, sizeof(struct protocol_main_void_t));
+            JSB_ASSERT(protocol_main_void_init(&value) == JSB_OK);
+            JSB_ASSERT(protocol_main_void_init(&new_value) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            value.value = 2147483647;
+            JSB_ASSERT(protocol_main_void_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(protocol_main_void_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&new_value.value, &value.value, sizeof(value.value)) == 0);
+            printf("Test passed for value ✔\n");
+        }
     }
     {
         struct protocol_main_user_t value;
-        assert(jsb_serializer_rewind(&s) == JSB_OK);
-        assert(protocol_main_user_init(&value) == JSB_OK);
-        assert(protocol_main_user_encode(&value, &s) == JSB_OK);
-        assert(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-        assert(protocol_main_user_decode(&d, &value) == JSB_OK);
+        JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+        JSB_ASSERT(protocol_main_user_init(&value) == JSB_OK);
+        JSB_ASSERT(protocol_main_user_encode(&value, &s) == JSB_OK);
+        JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+        JSB_ASSERT(jsb_deserializer_init(NULL, NULL, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(jsb_deserializer_init(&d, NULL, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(protocol_main_user_decode(&d, &value) == JSB_OK);
         protocol_main_user_free(&value);
+        {
+            struct protocol_main_user_t new_value;
+            memset(&new_value, 0, sizeof(struct protocol_main_user_t));
+            memset(&value, 0, sizeof(struct protocol_main_user_t));
+            JSB_ASSERT(protocol_main_user_init(&value) == JSB_OK);
+            JSB_ASSERT(protocol_main_user_init(&new_value) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            value.id = 2147483647;
+            JSB_ASSERT(protocol_main_user_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(protocol_main_user_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&new_value.id, &value.id, sizeof(value.id)) == 0);
+            printf("Test passed for id ✔\n");
+        }
+        {
+            struct protocol_main_user_t new_value;
+            memset(&new_value, 0, sizeof(struct protocol_main_user_t));
+            memset(&value, 0, sizeof(struct protocol_main_user_t));
+            JSB_ASSERT(protocol_main_user_init(&value) == JSB_OK);
+            JSB_ASSERT(protocol_main_user_init(&new_value) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            strcpy((char*)value.name, "Test string");
+            JSB_ASSERT(protocol_main_user_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(protocol_main_user_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&new_value.name, &value.name, sizeof(value.name)) == 0);
+            printf("Test passed for name ✔\n");
+        }
     }
     {
         struct protocol_main_get_user_t value;
-        assert(jsb_serializer_rewind(&s) == JSB_OK);
-        assert(protocol_main_get_user_init(&value) == JSB_OK);
-        assert(protocol_main_get_user_encode(&value, &s) == JSB_OK);
-        assert(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-        assert(protocol_main_get_user_decode(&d, &value) == JSB_OK);
+        JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+        JSB_ASSERT(protocol_main_get_user_init(&value) == JSB_OK);
+        JSB_ASSERT(protocol_main_get_user_encode(&value, &s) == JSB_OK);
+        JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+        JSB_ASSERT(jsb_deserializer_init(NULL, NULL, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(jsb_deserializer_init(&d, NULL, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(protocol_main_get_user_decode(&d, &value) == JSB_OK);
         protocol_main_get_user_free(&value);
+        {
+            struct protocol_main_get_user_t new_value;
+            memset(&new_value, 0, sizeof(struct protocol_main_get_user_t));
+            memset(&value, 0, sizeof(struct protocol_main_get_user_t));
+            JSB_ASSERT(protocol_main_get_user_init(&value) == JSB_OK);
+            JSB_ASSERT(protocol_main_get_user_init(&new_value) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            value.id = 2147483647;
+            JSB_ASSERT(protocol_main_get_user_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(protocol_main_get_user_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&new_value.id, &value.id, sizeof(value.id)) == 0);
+            printf("Test passed for id ✔\n");
+        }
     }
     {
         struct protocol_main_tuple_test_t value;
-        assert(jsb_serializer_rewind(&s) == JSB_OK);
-        assert(protocol_main_tuple_test_init(&value) == JSB_OK);
-        assert(protocol_main_tuple_test_encode(&value, &s) == JSB_OK);
-        assert(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-        assert(protocol_main_tuple_test_decode(&d, &value) == JSB_OK);
+        JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+        JSB_ASSERT(protocol_main_tuple_test_init(&value) == JSB_OK);
+        JSB_ASSERT(protocol_main_tuple_test_encode(&value, &s) == JSB_OK);
+        JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+        JSB_ASSERT(jsb_deserializer_init(NULL, NULL, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(jsb_deserializer_init(&d, NULL, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
+        JSB_ASSERT(protocol_main_tuple_test_decode(&d, &value) == JSB_OK);
         protocol_main_tuple_test_free(&value);
+        {
+            struct protocol_main_tuple_test_t new_value;
+            memset(&new_value, 0, sizeof(struct protocol_main_tuple_test_t));
+            memset(&value, 0, sizeof(struct protocol_main_tuple_test_t));
+            JSB_ASSERT(protocol_main_tuple_test_init(&value) == JSB_OK);
+            JSB_ASSERT(protocol_main_tuple_test_init(&new_value) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            value.values.item_0 = 2147483647;
+            strcpy((char*)value.values.item_1, "Test string");
+            value.values.item_2 = 2147483647;
+            value.values.item_3.id = 2147483647;
+            strcpy((char*)value.values.item_3.name, "Test string");
+            value.values.item_4.value = 2147483647;
+            value.values.item_5 = 65535;
+            value.values.item_6 = 4294967295;
+            value.values.item_7 = 32767;
+            value.values.item_8 = 127;
+            value.values.item_9 = 255;
+            JSB_ASSERT(protocol_main_tuple_test_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(protocol_main_tuple_test_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&new_value.values, &value.values, sizeof(value.values)) == 0);
+            printf("Test passed for values ✔\n");
+        }
     }
     
     jsb_serializer_free(&s);

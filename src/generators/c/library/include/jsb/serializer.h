@@ -26,6 +26,8 @@ enum jsb_result_t jsb_serializer_write_uint16(struct jsb_serializer_t*, jsb_uint
 enum jsb_result_t jsb_serializer_write_int16(struct jsb_serializer_t*, jsb_int16_t);
 enum jsb_result_t jsb_serializer_write_uint8(struct jsb_serializer_t*, jsb_uint8_t);
 enum jsb_result_t jsb_serializer_write_int8(struct jsb_serializer_t*, jsb_int8_t);
+enum jsb_result_t jsb_serializer_write_float(struct jsb_serializer_t*, jsb_float_t);
+enum jsb_result_t jsb_serializer_write_double(struct jsb_serializer_t*, jsb_double_t);
 enum jsb_result_t jsb_serializer_write_buffer(struct jsb_serializer_t* s, const jsb_uint8_t* buffer, jsb_uint32_t size);
 void jsb_serializer_free(struct jsb_serializer_t* s);
 

@@ -4,7 +4,7 @@ enum jsb_result_t app_command_move_forward_decode(struct jsb_deserializer_t* d, 
     {
         jsb_int32_t header;
         JSB_CHECK_ERROR(jsb_deserializer_read_int32(d, &header));
-        if(header != -1007775659) {
+        if(header != 1407274108) {
             return JSB_INVALID_CRC_HEADER;
         }
     }
@@ -14,18 +14,21 @@ enum jsb_result_t app_command_move_forward_decode(struct jsb_deserializer_t* d, 
         if(value != 1 && value != 0) return JSB_INVALID_DECODED_VALUE;
         result->stop = value == 1 ? true : false;
     }
+    JSB_CHECK_ERROR(jsb_deserializer_read_double(d, &result->value2));
     return JSB_OK;
 }
 
 enum jsb_result_t app_command_move_forward_encode(const struct app_command_move_forward_t* input, struct jsb_serializer_t* s) {
-    JSB_CHECK_ERROR(jsb_serializer_write_int32(s, -1007775659));
+    JSB_CHECK_ERROR(jsb_serializer_write_int32(s, 1407274108));
     JSB_CHECK_ERROR(jsb_serializer_write_uint8(s, input->stop ? 1 : 0));
+    JSB_CHECK_ERROR(jsb_serializer_write_double(s, input->value2));
     return JSB_OK;
 }
 
 enum jsb_result_t app_command_move_forward_init(struct app_command_move_forward_t* value) {
     if(value == NULL) return JSB_BAD_ARGUMENT;
     value->stop = false;
+    value->value2 = 0.0;
     return JSB_OK;
 }
 

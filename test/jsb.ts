@@ -1,5 +1,6 @@
 import test from 'ava';
 import { spawn } from 'child-process-utilities';
+import { glob } from 'glob';
 import path from 'path';
 
 test('it should successfully generate a CMake C and C++ project', async (t) => {
@@ -21,12 +22,27 @@ test('it should successfully generate a CMake C and C++ project', async (t) => {
     path.resolve(__dirname, 'generated/c')
   ]).wait();
 
-  await spawn('npx', ['cmake-js', 'reconfigure', '--debug'], {
-    cwd: path.resolve(__dirname, '../')
-  }).wait();
-  await spawn('npx', ['cmake-js', 'rebuild', '--debug'], {
-    cwd: path.resolve(__dirname, '../')
-  }).wait();
+  const buildDir = path.resolve(__dirname, '../build');
+
+  await spawn('cmake', [
+    '-B',
+    buildDir,
+    '-S',
+    path.resolve(__dirname, '..'),
+    '--fresh'
+  ]).wait();
+  await spawn('cmake', ['--build', buildDir]).wait();
+
+  const testExecutables = ['app_test', 'jsb_codec_test'];
+
+  const testFiles = await glob(path.resolve(buildDir, '**/*_test'));
+
+  for (const testFile of testFiles) {
+    if (!testExecutables.includes(path.basename(testFile))) {
+      continue;
+    }
+    await spawn(testFile).wait();
+  }
 
   t.pass();
 });

@@ -25,6 +25,8 @@ enum jsb_result_t jsb_deserializer_read_uint16(struct jsb_deserializer_t*, jsb_u
 enum jsb_result_t jsb_deserializer_read_int16(struct jsb_deserializer_t*, jsb_int16_t*);
 enum jsb_result_t jsb_deserializer_read_uint8(struct jsb_deserializer_t*, jsb_uint8_t*);
 enum jsb_result_t jsb_deserializer_read_int8(struct jsb_deserializer_t*, jsb_int8_t*);
+enum jsb_result_t jsb_deserializer_read_double(struct jsb_deserializer_t*, jsb_double_t*);
+enum jsb_result_t jsb_deserializer_read_float(struct jsb_deserializer_t*, jsb_float_t*);
 
 /**
  * Read a buffer from the deserializer buffer into `out_buffer`

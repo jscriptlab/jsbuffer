@@ -1,7 +1,10 @@
 #include "codec.h"
+#include "jsb/ieee754.h"
+
 #include <jsb/serializer.h>
 
 enum jsb_result_t jsb_serializer_init(struct jsb_serializer_t* self, jsb_uint32_t max_size) {
+  if(self == NULL) return JSB_BAD_ARGUMENT;
 #ifdef JSB_SERIALIZER_USE_MALLOC
   self->buffer = (jsb_uint8_t*) malloc(sizeof(jsb_uint8_t) * max_size);
   self->buffer_capacity = max_size;
@@ -114,6 +117,22 @@ enum jsb_result_t jsb_serializer_write_int8(struct jsb_serializer_t* s, const js
 
   s->buffer[s->buffer_size++] = (jsb_uint8_t) value;
 
+  return JSB_OK;
+}
+
+enum jsb_result_t jsb_serializer_write_float(struct jsb_serializer_t* s, const jsb_float_t value) {
+  JSB_CHECK_ERROR(jsb_serializer_reallocate(s, 4));
+  JSB_CHECK_ERROR(jsb_encode_float(&s->buffer[s->buffer_size], value));
+
+  s->buffer_size += 4;
+
+  return JSB_OK;
+}
+
+enum jsb_result_t jsb_serializer_write_double(struct jsb_serializer_t* s, jsb_double_t value) {
+  JSB_CHECK_ERROR(jsb_serializer_reallocate(s, 8));
+  JSB_CHECK_ERROR(jsb_encode_double(&s->buffer[s->buffer_size], value));
+  s->buffer_size += 8;
   return JSB_OK;
 }
 

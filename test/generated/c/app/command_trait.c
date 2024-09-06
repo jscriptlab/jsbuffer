@@ -19,10 +19,10 @@ enum jsb_result_t app_command_trait_decode(struct jsb_deserializer_t* d, struct 
     JSB_CHECK_ERROR(jsb_deserializer_read_int32(d, &header));
     JSB_CHECK_ERROR(jsb_deserializer_rewind(d, 4));
     switch(header) {
-        case -1007775659:
+        case 1407274108:
             JSB_CHECK_ERROR(app_command_move_forward_decode(d, &output->value.app_command_move_forward));
             break;
-        case 1902029403:
+        case 985001043:
             JSB_CHECK_ERROR(app_command_move_backwards_decode(d, &output->value.app_command_move_backwards));
             break;
         default:

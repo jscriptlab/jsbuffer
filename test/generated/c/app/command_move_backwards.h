@@ -17,6 +17,7 @@ extern "C" {
 struct app_command_move_backwards_t {
     bool stop;
     jsb_bytes_t value;
+    jsb_float_t value2;
 };
 enum jsb_result_t app_command_move_backwards_decode(struct jsb_deserializer_t*, struct app_command_move_backwards_t*);
 enum jsb_result_t app_command_move_backwards_encode(const struct app_command_move_backwards_t*, struct jsb_serializer_t*);

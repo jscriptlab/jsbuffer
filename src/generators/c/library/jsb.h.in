@@ -17,6 +17,8 @@ extern "C" {
 #cmakedefine HAVE_INT32_TYPE
 #cmakedefine HAVE_INT16_TYPE
 #cmakedefine HAVE_INT8_TYPE
+#cmakedefine HAVE_FLOAT_TYPE
+#cmakedefine HAVE_DOUBLE_TYPE
 #cmakedefine HEADER_FOUND_STDINT_H
 #cmakedefine HEADER_FOUND_STDDEF_H
 #cmakedefine HEADER_FOUND_STRING_H
@@ -83,6 +85,14 @@ typedef uint64_t jsb_uint64_t;
 
 #ifdef HAVE_INT32_TYPE
 typedef int32_t jsb_int32_t;
+#endif
+
+#ifdef HAVE_FLOAT_TYPE
+typedef float jsb_float_t;
+#endif
+
+#ifdef HAVE_DOUBLE_TYPE
+typedef double jsb_double_t;
 #endif
 
 #ifdef HAVE_UINT32_TYPE

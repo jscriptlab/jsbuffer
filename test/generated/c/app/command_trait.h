@@ -14,8 +14,8 @@ extern "C" {
 #include <jsb/deserializer.h>
 
 enum app_command_type_t {
-    APP_COMMAND_MOVE_FORWARD_TYPE = -1007775659,
-    APP_COMMAND_MOVE_BACKWARDS_TYPE = 1902029403,
+    APP_COMMAND_MOVE_FORWARD_TYPE = 1407274108,
+    APP_COMMAND_MOVE_BACKWARDS_TYPE = 985001043,
 };
 
 union app_command_trait_value_t {

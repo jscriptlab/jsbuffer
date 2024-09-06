@@ -4,6 +4,12 @@
 #include <stdio.h>
 #include <jsb/jsb.h>
 
+#define ASSERT_JSB(expr) \
+  if (!(expr)) { \
+    fprintf(stderr, "Assertion failed: %s\n", #expr); \
+    return 1; \
+  }
+
 #define ASSERT_JSB_OK(expr) \
   { \
     enum jsb_result_t result = expr; \

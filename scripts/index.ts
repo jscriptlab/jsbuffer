@@ -1,6 +1,7 @@
 import CodeStream from 'textstreamjs';
 import fs from 'fs';
 import path from 'node:path';
+import crypto from 'crypto';
 
 /**
  * Get the integer name without the jsb_ prefix and _t suffix
@@ -56,6 +57,16 @@ async function generateC99Codec() {
       name: 'jsb_uint8_t',
       signed: false,
       bits: 8
+    },
+    {
+      name: 'jsb_float_t',
+      ieee754: true,
+      bits: 32
+    },
+    {
+      name: 'jsb_double_t',
+      ieee754: true,
+      bits: 64
     }
   ];
 
@@ -77,12 +88,12 @@ async function generateC99Codec() {
   header.write('extern "C" {\n');
   header.write('#endif\n\n');
 
-  header.write('#include <jsb/jsb.h>\n\n');
-
   header.write('#ifndef JSB_CODEC_H\n');
   header.write('#define JSB_CODEC_H\n\n');
 
   source.write('#include "codec.h"\n\n');
+
+  header.write('#include <jsb/jsb.h>\n\n');
 
   // const printBits = (varName: string, bits: number) => {
   //   for (let i = 0; i < bits; i++) {
@@ -96,6 +107,8 @@ async function generateC99Codec() {
   testFile.write('#include "test.h"\n');
   testFile.write('#include "../codec.h"\n\n');
 
+  testFile.write('#include <jsb/ieee754.h>\n');
+  testFile.write('#include <float.h>\n');
   testFile.write('#include <assert.h>\n\n');
 
   testFile.write('int main() {\n');
@@ -116,14 +129,46 @@ async function generateC99Codec() {
           testFile.write(`jsb_uint8_t buffer[${integer.bits / 8}];\n`);
           testFile.write(`${integer.name} output;\n`);
 
-          const values = [maxMacroName, minMacroName];
+          const isIEEE754 = integer.ieee754;
 
-          for (let i = 0; i < integer.bits; i++) {
-            let bitCount = BigInt(i);
-            if (!integer.signed) {
-              bitCount++;
+          const values = isIEEE754
+            ? integer.bits === 32
+              ? ['FLT_MAX', 'FLT_MIN']
+              : ['DBL_MAX', 'DBL_MIN']
+            : [maxMacroName, minMacroName];
+
+          if (isIEEE754) {
+            const buffer = new ArrayBuffer(integer.bits / 8);
+            for (let i = 0; i < 100; i++) {
+              crypto.randomFillSync(new Uint8Array(buffer));
+              let n: number, value: string;
+              if (integer.bits === 32) {
+                n = new Float32Array(buffer)[0] ?? 0;
+                value = `${n}`;
+                if (!value.includes('.')) {
+                  value += '.0';
+                }
+                value = `${value}f`;
+              } else {
+                n = new Float64Array(buffer)[0] ?? 0;
+                value = `${n}`;
+                if (!value.includes('.')) {
+                  value += '.0';
+                }
+              }
+              if (Number.isNaN(n)) {
+                continue;
+              }
+              values.push(value);
             }
-            values.push(`${2n ** bitCount - 1n}`);
+          } else {
+            for (let i = 0; i < integer.bits; i++) {
+              let bitCount = BigInt(i);
+              if (!integer.signed) {
+                bitCount++;
+              }
+              values.push(`${2n ** bitCount - 1n}`);
+            }
           }
 
           for (const unsignedValue of values) {
@@ -139,7 +184,7 @@ async function generateC99Codec() {
             );
 
             testFile.write(
-              `assert(output == ${unsignedValue}${integerSuffix});\n`
+              `ASSERT_JSB(output == ${unsignedValue}${integerSuffix});\n`
             );
           }
 
@@ -162,45 +207,47 @@ async function generateC99Codec() {
       );
     });
 
-    const declaration = `enum jsb_result_t jsb_encode_${integerName}(jsb_uint8_t* buffer, const ${integer.name} value)`;
-    header.write(`${declaration};\n`);
-    source.write(
-      `${declaration} {\n`,
-      () => {
-        const byteLength = integer.bits / 8;
-        for (let i = 0; i < byteLength; i++) {
-          const reverseIndex = byteLength - 1 - i;
-          const bitShift = reverseIndex * 8;
-          source.write(
-            `buffer[${reverseIndex}] = (value >> ${bitShift}) & 0xFF;\n`
-          );
-        }
-        source.write('return JSB_OK;\n');
-      },
-      '}\n'
-    );
+    if (!integer.ieee754) {
+      const declaration = `enum jsb_result_t jsb_encode_${integerName}(jsb_uint8_t* buffer, const ${integer.name} value)`;
+      header.write(`${declaration};\n`);
+      source.write(
+        `${declaration} {\n`,
+        () => {
+          const byteLength = integer.bits / 8;
+          for (let i = 0; i < byteLength; i++) {
+            const reverseIndex = byteLength - 1 - i;
+            const bitShift = reverseIndex * 8;
+            source.write(
+              `buffer[${reverseIndex}] = (value >> ${bitShift}) & 0xFF;\n`
+            );
+          }
+          source.write('return JSB_OK;\n');
+        },
+        '}\n'
+      );
 
-    source.write('\n');
+      source.write('\n');
 
-    const decodeDeclaration = `enum jsb_result_t jsb_decode_${integerName}(const jsb_uint8_t* buffer, ${integer.name}* result)`;
-    header.write(`${decodeDeclaration};\n`);
-    source.write(
-      `${decodeDeclaration} {\n`,
-      () => {
-        source.write('*result = 0;\n');
-        const byteLength = integer.bits / 8;
-        for (let i = 0; i < byteLength; i++) {
-          const reverseByteIndex = byteLength - 1 - i;
-          const shift = reverseByteIndex * 8;
-          const byteValueVarName = `buffer[${reverseByteIndex}]`;
-          source.write(
-            `*result |= (${integer.name})(${byteValueVarName}) << ${shift};\n`
-          );
-        }
-        source.write('return JSB_OK;\n');
-      },
-      '}\n'
-    );
+      const decodeDeclaration = `enum jsb_result_t jsb_decode_${integerName}(const jsb_uint8_t* buffer, ${integer.name}* result)`;
+      header.write(`${decodeDeclaration};\n`);
+      source.write(
+        `${decodeDeclaration} {\n`,
+        () => {
+          source.write('*result = 0;\n');
+          const byteLength = integer.bits / 8;
+          for (let i = 0; i < byteLength; i++) {
+            const reverseByteIndex = byteLength - 1 - i;
+            const shift = reverseByteIndex * 8;
+            const byteValueVarName = `buffer[${reverseByteIndex}]`;
+            source.write(
+              `*result |= (${integer.name})(${byteValueVarName}) << ${shift};\n`
+            );
+          }
+          source.write('return JSB_OK;\n');
+        },
+        '}\n'
+      );
+    }
   }
 
   header.write('\n#endif\n');

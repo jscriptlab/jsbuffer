@@ -16,7 +16,9 @@ import {
   IMetadataParamTypeGeneric,
   MetadataParamTypeDefinition,
   IMetadataTraitDefinition,
-  IMetadataParamTypeTupleTemplate
+  IMetadataParamTypeTupleTemplate,
+  IMetadataExternalTypeParamTypeDefinition,
+  IMetadataInternalTypeParamTypeDefinition
 } from '../../parser/types/metadata';
 import GenericName from '../../parser/types/GenericName';
 import Exception from '../../../exception/Exception';
@@ -119,7 +121,7 @@ export default class FileGeneratorC extends CodeStream {
     fileMetadataList: ReadonlyArray<IFileMetadata>,
     { current = null, root = null, cmake, rootDir }: IFileGeneratorCOptions
   ) {
-    super();
+    super(root ? root : undefined);
     this.#root = root;
     this.#cmake = cmake ?? {
       project: 'schema'
@@ -189,12 +191,29 @@ export default class FileGeneratorC extends CodeStream {
       }
     }
     this.write('\n');
+    this.write('#define JSB_ASSERT(expr) \\\n');
+    this.indentBlock(() => {
+      this.write(
+        'if((expr)) {} else { \\\n',
+        () => {
+          this.write(
+            'fprintf(stderr, "%s:%d: Assertion failed: %s\\n", __FILE__, __LINE__, #expr); \\\n'
+          );
+          this.write('return 1; \\\n');
+        },
+        '}\n'
+      );
+    });
     this.write('int main() {\n');
     this.indentBlock(() => {
       this.write('struct jsb_serializer_t s;\n');
       this.write('struct jsb_deserializer_t d;\n');
       this.write(
-        'assert(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);\n'
+        'JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);\n'
+      );
+      // It should return JSB_BAD_ARGUMENT if s is NULL
+      this.write(
+        'JSB_ASSERT(jsb_serializer_init(NULL, JSB_SERIALIZER_BUFFER_SIZE) == JSB_BAD_ARGUMENT);\n'
       );
       this.write('\n');
       for (const fileMetadata of this.#fileMetadataList.values()) {
@@ -208,29 +227,108 @@ export default class FileGeneratorC extends CodeStream {
               this.write(
                 `${getMetadataCompleteTypeReference(metadata)} value;\n`
               );
-              this.write('assert(jsb_serializer_rewind(&s) == JSB_OK);\n');
+              this.write('JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);\n');
               switch (metadata.kind) {
                 case 'type':
                 case 'call':
                   this.write(
-                    `assert(${getMetadataPrefix(
+                    `JSB_ASSERT(${getMetadataPrefix(
                       metadata
                     )}_init(&value) == JSB_OK);\n`
                   );
                   this.write(
-                    `assert(${getMetadataPrefix(
+                    `JSB_ASSERT(${getMetadataPrefix(
                       metadata
                     )}_encode(&value, &s) == JSB_OK);\n`
                   );
                   this.write(
-                    'assert(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);\n'
+                    'JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);\n'
                   );
                   this.write(
-                    `assert(${getMetadataPrefix(
+                    'JSB_ASSERT(jsb_deserializer_init(NULL, NULL, 0) == JSB_BAD_ARGUMENT);\n'
+                  );
+                  this.write(
+                    'JSB_ASSERT(jsb_deserializer_init(&d, NULL, 0) == JSB_BAD_ARGUMENT);\n'
+                  );
+                  this.write(
+                    'JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);\n'
+                  );
+                  this.write(
+                    `JSB_ASSERT(${getMetadataPrefix(
                       metadata
                     )}_decode(&d, &value) == JSB_OK);\n`
                   );
                   this.write(`${getMetadataPrefix(metadata)}_free(&value);\n`);
+
+                  // Test the type with all sorts of values in its parameters
+                  for (const param of metadata.params) {
+                    this.write(
+                      '{\n',
+                      () => {
+                        this.write(
+                          `${getMetadataCompleteTypeReference(
+                            metadata
+                          )} new_value;\n`
+                        );
+                        this.write(
+                          `memset(&new_value, 0, sizeof(${getMetadataCompleteTypeReference(
+                            metadata
+                          )}));\n`
+                        );
+                        this.write(
+                          `memset(&value, 0, sizeof(${getMetadataCompleteTypeReference(
+                            metadata
+                          )}));\n`
+                        );
+                        this.write(
+                          `JSB_ASSERT(${getMetadataPrefix(
+                            metadata
+                          )}_init(&value) == JSB_OK);\n`
+                        );
+                        this.write(
+                          `JSB_ASSERT(${getMetadataPrefix(
+                            metadata
+                          )}_init(&new_value) == JSB_OK);\n`
+                        );
+                        this.write(
+                          'JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);\n'
+                        );
+                        const generator =
+                          this.#generators.get(fileMetadata.path) ?? null;
+                        if (generator === null) {
+                          throw new Exception(
+                            `Failed to find a generator: ${fileMetadata.path}`
+                          );
+                        }
+                        generator.#generateTestForParam(
+                          param.type,
+                          metadata,
+                          `value.${param.name}`
+                        );
+                        this.write(
+                          `JSB_ASSERT(${getMetadataPrefix(
+                            metadata
+                          )}_encode(&value, &s) == JSB_OK);\n`
+                        );
+                        this.write(
+                          'JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);\n'
+                        );
+                        this.write(
+                          `JSB_ASSERT(${getMetadataPrefix(
+                            metadata
+                          )}_decode(&d, &new_value) == JSB_OK);\n`
+                        );
+                        // Compare the parameter value using memcmp
+                        this.write(
+                          `JSB_ASSERT(memcmp(&new_value.${param.name}, &value.${param.name}, sizeof(value.${param.name})) == 0);\n`
+                        );
+                        this.write(
+                          `printf("Test passed for ${param.name} ✔\\n");\n`
+                        );
+                      },
+                      '}\n'
+                    );
+                  }
                   break;
                 // case 'trait': {
                 //   for(const node of metadata.nodes) {
@@ -239,7 +337,7 @@ export default class FileGeneratorC extends CodeStream {
                 //       case 'externalType': {
                 //         const metadata = this.#resolveMetadataFromDefinitionReference(node);
                 //         this.write(
-                //           `assert(${getMetadataPrefix(metadata)}_init(&value, ${
+                //           `JSB_ASSERT(${getMetadataPrefix(metadata)}_init(&value, ${
                 //             metadata
                 //           }) == JSB_OK);\n`
                 //         );
@@ -251,7 +349,7 @@ export default class FileGeneratorC extends CodeStream {
                 //   const enumTrait = this.#getTraitEnumInformation(metadata);
                 //   for (const enumItem of enumTrait.items) {
                 //     this.write(
-                //       `assert(${getMetadataPrefix(metadata)}_init(&value, ${
+                //       `JSB_ASSERT(${getMetadataPrefix(metadata)}_init(&value, ${
                 //         enumItem[1].name
                 //       }) == JSB_OK);\n`
                 //     );
@@ -273,6 +371,148 @@ export default class FileGeneratorC extends CodeStream {
       path: 'test.c',
       contents: this.value()
     });
+  }
+
+  #generateTestForGenericParam(
+    metadataParamType: IMetadataParamTypeGeneric,
+    _: Metadata,
+    key: string
+  ) {
+    switch (metadataParamType.value) {
+      case GenericName.Bytes:
+        this.write(
+          '{\n',
+          () => {
+            const byteLength = 0;
+            const values = new Array<string>();
+            for (let i = 0; i < byteLength; i++) {
+              values.push(crypto.getRandomValues(new Uint8Array(1)).join());
+            }
+            values.push('0');
+            this.write(
+              `const jsb_uint8_t bytes[${byteLength + 1}] = {${values.join(
+                ', '
+              )}};\n`
+            );
+            this.write(`strcpy((char*)${key}, (const char *) bytes);\n`);
+          },
+          '}\n'
+        );
+        break;
+      case GenericName.NullTerminatedString:
+      case GenericName.String:
+        this.write(`strcpy((char*)${key}, "Test string");\n`);
+        break;
+      case GenericName.Long:
+        this.write(`${key} = 1234567890L;\n`);
+        break;
+      case GenericName.UnsignedLong:
+        this.write(`${key} = 1234567890UL;\n`);
+        break;
+      case GenericName.Integer:
+      case GenericName.Int32:
+        this.write(`${key} = ${2 ** (32 - 1) - 1};\n`);
+        break;
+      case GenericName.Uint32:
+        this.write(`${key} = ${2 ** 32 - 1};\n`);
+        break;
+      case GenericName.Uint16:
+        this.write(`${key} = ${2 ** 16 - 1};\n`);
+        break;
+      case GenericName.Int16:
+        this.write(`${key} = ${2 ** (16 - 1) - 1};\n`);
+        break;
+      case GenericName.Uint8:
+        this.write(`${key} = ${2 ** 8 - 1};\n`);
+        break;
+      case GenericName.Int8:
+        this.write(`${key} = ${2 ** (8 - 1) - 1};\n`);
+        break;
+      case GenericName.Boolean:
+        this.write(`${key} = true;\n`);
+        break;
+      case GenericName.Float:
+        this.write(`${key} = 0.12345678f;\n`);
+        break;
+      case GenericName.Double:
+        this.write(`${key} = 0.1234567890;\n`);
+        break;
+    }
+  }
+
+  #generateTestForTemplateParam(
+    metadataParamType: MetadataParamTypeTemplate,
+    metadata: Metadata,
+    key: string
+  ) {
+    switch (metadataParamType.template) {
+      case 'tuple': {
+        let tupleItemIndex = 0;
+        for (const arg of metadataParamType.args) {
+          this.#generateTestForParam(
+            arg,
+            metadata,
+            `${key}.${getTuplePropertyName(tupleItemIndex)}`
+          );
+          tupleItemIndex++;
+        }
+        break;
+      }
+      default:
+        throw new Exception('Not implemented');
+    }
+  }
+
+  #generateTestForTypeDefinition(
+    metadataParamType:
+      | IMetadataExternalTypeParamTypeDefinition
+      | IMetadataInternalTypeParamTypeDefinition,
+    _: Metadata,
+    key: string
+  ) {
+    const metadata =
+      this.#resolveMetadataFromDefinitionReference(metadataParamType);
+    if (!('params' in metadata)) {
+      throw new Exception('Metadata is not a type or call');
+    }
+    for (const param of metadata.params) {
+      this.#generateTestForParam(param.type, metadata, `${key}.${param.name}`);
+    }
+  }
+
+  #generateTestForParam(
+    metadataParamType: MetadataParamType,
+    metadata: Metadata,
+    key: string
+  ) {
+    switch (metadataParamType.type) {
+      case 'generic':
+        this.#generateTestForGenericParam(metadataParamType, metadata, key);
+        break;
+      case 'template':
+        this.#generateTestForTemplateParam(metadataParamType, metadata, key);
+        break;
+      case 'internalType':
+      case 'externalType': {
+        const resolvedMetadata =
+          this.#resolveMetadataFromDefinitionReference(metadataParamType);
+        if (resolvedMetadata.kind === 'trait') {
+          console.error(
+            'Ignoring test-cases for trait: %s',
+            resolvedMetadata.name
+          );
+          break;
+        }
+        this.#generateTestForTypeDefinition(
+          metadataParamType,
+          resolvedMetadata,
+          key
+        );
+        break;
+      }
+      case 'externalModuleType':
+        throw new Exception('Not implemented');
+    }
   }
 
   #getTraitEnumInformation(metadata: IMetadataTraitDefinition) {
@@ -743,7 +983,15 @@ export default class FileGeneratorC extends CodeStream {
         );
         break;
       case GenericName.Float:
+        this.write(
+          `JSB_CHECK_ERROR(jsb_deserializer_read_float(d, &${key}));\n`
+        );
+        break;
       case GenericName.Double:
+        this.write(
+          `JSB_CHECK_ERROR(jsb_deserializer_read_double(d, &${key}));\n`
+        );
+        break;
       case GenericName.NullTerminatedString:
         throw new Exception('Not implemented');
         break;
@@ -1220,7 +1468,13 @@ export default class FileGeneratorC extends CodeStream {
         );
         break;
       case GenericName.Float:
+        this.write(`JSB_CHECK_ERROR(jsb_serializer_write_float(s, ${key}));\n`);
+        break;
       case GenericName.Double:
+        this.write(
+          `JSB_CHECK_ERROR(jsb_serializer_write_double(s, ${key}));\n`
+        );
+        break;
       case GenericName.NullTerminatedString:
         throw new Exception(`Not implemented: ${paramType.value}`);
     }
@@ -1564,13 +1818,11 @@ export default class FileGeneratorC extends CodeStream {
       case GenericName.UnsignedLong:
         return 'jsb_uint64_t';
       case GenericName.Float:
-        // return 'float';
-        throw new Error('Float is not implemented yet for the C generator');
+        return 'jsb_float_t';
       case GenericName.Boolean:
         return 'bool';
       case GenericName.Double:
-        // return 'double_t';
-        throw new Error('Double is not implemented yet for the C generator');
+        return 'jsb_double_t';
       case GenericName.Integer:
       case GenericName.Int32:
         return 'jsb_int32_t';
