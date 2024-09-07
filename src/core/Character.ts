@@ -8,6 +8,21 @@ export default class Character {
   static isWhiteSpace(ch: number) {
     return ch === 32;
   }
+  public static isCarriageReturn(ch: number) {
+    return ch === 13;
+  }
+  public static isVerticalTab(ch: number) {
+    return ch === 11;
+  }
+  public static isFormFeed(ch: number) {
+    return ch === 12;
+  }
+  public static isTab(ch: number) {
+    return ch === 9;
+  }
+  public static isBackspace(ch: number) {
+    return ch === 8;
+  }
   // "
   static isStringLiteralStart(ch: number) {
     return ch === 34;
