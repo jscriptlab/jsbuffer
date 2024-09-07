@@ -35,10 +35,18 @@ export interface IMetadataParamTypeTupleTemplate {
   position: INodePosition;
 }
 
+export interface IMetadataParamTypeTemplateOptional {
+  type: 'template';
+  template: 'optional';
+  value: MetadataParamType;
+  position: INodePosition;
+}
+
 export type MetadataParamTypeTemplate =
+  | IMetadataParamTypeTemplateOptional
   | {
       type: 'template';
-      template: 'vector' | 'set' | 'optional';
+      template: 'vector' | 'set';
       value: MetadataParamType;
       position: INodePosition;
     }

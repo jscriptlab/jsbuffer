@@ -142,6 +142,62 @@ int main() {
                         sizeof(value.command)) == 0);
       printf("Test passed for command ✔\n");
     }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(memcmp(&new_value.command1, &value.command1,
+                        sizeof(value.command1)) == 0);
+      printf("Test passed for command1 ✔\n");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(memcmp(&new_value.command2, &value.command2,
+                        sizeof(value.command2)) == 0);
+      printf("Test passed for command2 ✔\n");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(memcmp(&new_value.command3, &value.command3,
+                        sizeof(value.command3)) == 0);
+      printf("Test passed for command3 ✔\n");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(memcmp(&new_value.command4, &value.command4,
+                        sizeof(value.command4)) == 0);
+      printf("Test passed for command4 ✔\n");
+    }
   }
   {
     struct app_command_move_forward_t value;
