@@ -7,7 +7,8 @@
 #include <limits>
 #include <stdexcept>
 
-static bool compareMessages(const test_schema::Message& a, const test_schema::Message& b) {
+static bool compareMessages(const test_schema::Message& a,
+                            const test_schema::Message& b) {
   if (a.id != b.id) {
     return false;
   }

@@ -7,6 +7,8 @@ import FileGeneratorCPP from '../src/generators/cpp/FileGeneratorCPP';
 import FileGeneratorC from '../src/generators/c/FileGeneratorC';
 import { getInteger, getNamedArgument, getString } from 'cli-argument-helper';
 import { IGeneratedFile } from '../src/core/File';
+import Exception from '../exception/Exception';
+import { ASTGenerationException } from '../src/core/ASTGenerator';
 
 (async () => {
   const args = process.argv.slice(2);
@@ -16,13 +18,16 @@ import { IGeneratedFile } from '../src/core/File';
     console.log('Usage: jsb --output <output-directory> <main-file>');
     console.log('Usage: jsb <main-file> -o <output-directory> --generator c99');
     console.log(
+      'Usage: jsb <main-file> -o <output-directory> --indentation-size 4'
+    );
+    console.log(
       'Usage: jsb <main-file> -o <output-directory> --generator c++17'
     );
     return;
   }
 
   const indentationSize =
-    getNamedArgument(args, '--indentation-size', getInteger) ?? 4;
+    getNamedArgument(args, '--indentation-size', getInteger) ?? 2;
 
   const name = getNamedArgument(args, '--name', getString) ?? 'schema';
 
@@ -99,7 +104,7 @@ import { IGeneratedFile } from '../src/core/File';
     getNamedArgument(args, '--generator', getString) ?? Generator.CPP_17;
 
   let generator: {
-    generate: () => IGeneratedFile[] | null;
+    generate: () => Promise<IGeneratedFile[] | null>;
   };
 
   switch (desiredGenerator) {
@@ -127,7 +132,7 @@ import { IGeneratedFile } from '../src/core/File';
       throw new Error(`Unknown generator "${desiredGenerator}"`);
   }
 
-  const result = generator.generate();
+  const result = await generator.generate();
 
   if (result === null) {
     throw new Error('Uncommon: Failed to generate the files');
@@ -154,6 +159,10 @@ import { IGeneratedFile } from '../src/core/File';
     `Total of ${byteCount} bytes and ${fileCount} files written to "${configuration.outDir}".`
   );
 })().catch((reason) => {
-  console.error(reason);
+  if (reason instanceof Exception || reason instanceof ASTGenerationException) {
+    process.stderr.write(`${reason.what}\n`);
+  } else {
+    console.error(reason);
+  }
   process.exit(1);
 });

@@ -12,6 +12,7 @@ import { IGeneratedFile } from '../../core/File';
 import TestGeneratorC from './TestGeneratorC';
 import MetadataFileCCodeGenerator from './MetadataFileCCodeGenerator';
 import { Metadata } from '../../parser/types/metadata';
+import * as fs from 'fs';
 
 export interface IFileGeneratorCOptions {
   /**
@@ -70,7 +71,7 @@ export default class FileGeneratorC extends CodeStream {
     );
   }
 
-  public generate() {
+  public async generate() {
     const fileMetadata = this.#current;
     if (fileMetadata === null) {
       for (const [path, fileMetadata] of this.#fileMetadataList) {
@@ -81,6 +82,7 @@ export default class FileGeneratorC extends CodeStream {
           current: fileMetadata,
           sourceFileExtension: this.#options.sourceFileExtension,
           generators: this.#generators,
+          contents: await fs.promises.readFile(fileMetadata.path),
           parent: this
         });
         for (const metadata of fileMetadata.metadata) {

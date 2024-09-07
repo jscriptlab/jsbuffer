@@ -11,9 +11,9 @@ namespace jsb {
 class deserializer {
 public:
   explicit deserializer(const std::vector<std::uint8_t>& buffer);
-  deserializer(const deserializer&) = delete;
+  deserializer(const deserializer&)            = delete;
   deserializer& operator=(const deserializer&) = delete;
-  template<typename T, typename = std::enable_if<std::is_integral<T>::value>>
+  template <typename T, typename = std::enable_if<std::is_integral<T>::value>>
   T read() {
     const auto byte_length = sizeof(T);
     assert_remaining_bytes(byte_length);

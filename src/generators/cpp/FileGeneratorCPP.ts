@@ -100,7 +100,7 @@ export default class FileGeneratorCPP extends CodeStream {
     );
   }
 
-  public generate() {
+  public async generate() {
     const fileMetadata = this.#current;
     if (fileMetadata === null) {
       for (const [path, fileMetadata] of this.#fileMetadataList) {

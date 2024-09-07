@@ -1,5 +1,7 @@
 import Exception from '../../../exception/Exception';
+import ErrorFormatter from '../../core/ErrorFormatter';
 import { IGeneratedFile } from '../../core/File';
+import { IToken } from '../../core/Tokenizer';
 import GenericName from '../../parser/types/GenericName';
 import {
   IMetadataParam,
@@ -27,6 +29,7 @@ import {
 
 export interface IMetadataFileCCodeGeneratorOptions extends IResolverOptions {
   sourceFileExtension: string;
+  contents: Uint8Array;
 }
 
 export default class MetadataFileCCodeGenerator extends Resolver {
@@ -72,13 +75,15 @@ export default class MetadataFileCCodeGenerator extends Resolver {
 
     for (const param of metadata.nodes) {
       if (param.type !== 'internalType' && param.type !== 'externalType') {
-        throw new Exception(
+        throw new this.#Exception(
+          param.position.start,
           'Only internal and external types are allowed in traits'
         );
       }
       const node = this.resolveMetadataFromParamTypeDefinition(param);
       if (node.kind === 'trait') {
-        throw new Exception(
+        throw new this.#Exception(
+          node.position.start,
           'Currently it is not possible for a trait to import another'
         );
       }
@@ -102,6 +107,24 @@ export default class MetadataFileCCodeGenerator extends Resolver {
        */
       items: enumItems
     };
+  }
+
+  #Exception = (() => {
+    const self = this;
+    return class extends Exception {
+      constructor(token: IToken, message: string) {
+        super(self.#createErrorFormatter(token).format(message));
+      }
+    };
+  })();
+
+  #createErrorFormatter(token: IToken) {
+    return new ErrorFormatter({
+      contents: this.#options.contents,
+      offset: () => token.position.start,
+      textDecoder: new TextDecoder(),
+      file: this.fileMetadata().path
+    });
   }
 
   #deserializeParamTypeGeneric(
@@ -173,8 +196,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         );
         break;
       case GenericName.NullTerminatedString:
-        throw new Exception('Not implemented');
-        break;
+        throw new this.#Exception(paramType.position.start, 'Not implemented');
     }
   }
 
@@ -240,7 +262,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         //   break;
         // case 'map':
         // case 'bigint':
-        throw new Exception('Not implemented');
+        throw new this.#Exception(paramType.position.start, 'Not implemented');
     }
   }
 
@@ -428,7 +450,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       // case 'map':
       // case 'bigint':
       default:
-        throw new Exception('Not implemented');
+        throw new this.#Exception(paramType.position.start, 'Not implemented');
     }
   }
 
@@ -456,8 +478,12 @@ export default class MetadataFileCCodeGenerator extends Resolver {
           case 'trait': {
             const traitEnum = this.generateTraitEnumInformation(metadata);
             const node = Array.from(traitEnum.items)[0];
+
             if (!node) {
-              throw new Exception(`Trait ${metadata.globalName} has no nodes`);
+              throw new this.#Exception(
+                paramType.position.start,
+                `Trait ${metadata.globalName} has no nodes`
+              );
             }
             this.write(
               `JSB_CHECK_ERROR(${getMetadataPrefix(metadata)}_init(${pointer(
@@ -469,7 +495,8 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         break;
       }
       case 'externalModuleType':
-        throw new Exception(
+        throw new this.#Exception(
+          paramType.position.start,
           'External modules are not supported by the C generator'
         );
     }
@@ -679,7 +706,8 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       () => {
         for (const param of metadata.nodes) {
           if (param.type !== 'internalType' && param.type !== 'externalType') {
-            throw new Exception(
+            throw new this.#Exception(
+              param.position.start,
               'Only internal and external types are allowed in traits'
             );
           }
@@ -793,7 +821,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       // case 'map':
       // case 'bigint':
       default:
-        throw new Exception('Not implemented');
+        throw new this.#Exception(paramType.position.start, 'Not implemented');
     }
   }
 
@@ -816,7 +844,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         break;
       }
       case 'externalModuleType':
-        throw new Exception('Not implemented');
+        throw new this.#Exception(paramType.position.start, 'Not implemented');
     }
   }
 
@@ -842,7 +870,10 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       for (let i = 0; i < metadataParamType.args.length; i++) {
         const arg = metadataParamType.args[i] ?? null;
         if (arg === null) {
-          throw new Exception('Tuple argument is null');
+          throw new this.#Exception(
+            metadataParamType.position.start,
+            'Tuple argument is null'
+          );
         }
         this.write(
           `${this.#metadataParamTypeToString(arg, parent)} item_${i};\n`
@@ -871,7 +902,10 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         );
         break;
       case 'bigint':
-        throw new Exception('`bigint` is not implemented');
+        throw new this.#Exception(
+          metadataParamType.position.start,
+          '`bigint` is not implemented'
+        );
       case 'vector':
       case 'optional':
       case 'set':
@@ -984,7 +1018,10 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         break;
       }
       case 'externalModuleType':
-        throw new Exception('External modules are not implemented');
+        throw new this.#Exception(
+          paramType.position.start,
+          'External modules are not implemented'
+        );
     }
   }
 
@@ -1056,7 +1093,10 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       case 'map':
       case 'set':
       case 'bigint':
-        throw new Exception(`Not implemented: ${paramType.template}`);
+        throw new this.#Exception(
+          paramType.position.start,
+          `Not implemented: ${paramType.template}`
+        );
     }
   }
 
@@ -1078,7 +1118,10 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         break;
       }
       case 'externalModuleType':
-        throw new Exception('External modules are not implemented');
+        throw new this.#Exception(
+          paramType.position.start,
+          'External modules are not implemented'
+        );
     }
   }
 
@@ -1113,7 +1156,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       //   this.#includeMetadataDependenciesFromType(paramType.value, metadata);
       //   break;
       default:
-        throw new Exception('Not implemented');
+        throw new this.#Exception(paramType.position.start, 'Not implemented');
     }
     // switch (paramType.template) {
     //   case 'vector':
@@ -1135,6 +1178,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
     switch (paramType.value) {
       case GenericName.Bytes:
       case GenericName.String:
+      case GenericName.NullTerminatedString:
         this.write(
           '{\n',
           () => {
@@ -1194,8 +1238,6 @@ export default class MetadataFileCCodeGenerator extends Resolver {
           `JSB_CHECK_ERROR(jsb_serializer_write_double(s, ${key}));\n`
         );
         break;
-      case GenericName.NullTerminatedString:
-        throw new Exception(`Not implemented: ${paramType.value}`);
     }
   }
 
