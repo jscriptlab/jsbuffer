@@ -1,10 +1,10 @@
 [
   {
-    "path": "/home/victorqueiroz/Personal/jsbuffer/test/parser/index.jsb",
+    "path": "/home/victorqueiroz/Personal/jsbuffer/test/parser/test_schema.jsb",
     "metadata": [
       {
         "kind": "type",
-        "id": 1607067092,
+        "id": -1322944567,
         "position": {
           "start": {
             "type": 0,
@@ -23,7 +23,7 @@
             }
           }
         },
-        "globalName": "index.Message",
+        "globalName": "test_schema.Message",
         "name": "Message",
         "exported": false,
         "params": [
@@ -140,7 +140,7 @@
       },
       {
         "kind": "type",
-        "id": -1282210624,
+        "id": -61764891,
         "position": {
           "start": {
             "type": 0,
@@ -159,7 +159,7 @@
             }
           }
         },
-        "globalName": "index.AcknowledgeMessage",
+        "globalName": "test_schema.AcknowledgeMessage",
         "name": "AcknowledgeMessage",
         "exported": false,
         "params": [
@@ -210,7 +210,7 @@
       },
       {
         "kind": "type",
-        "id": 1331707981,
+        "id": -2079881379,
         "position": {
           "start": {
             "type": 0,
@@ -229,7 +229,7 @@
             }
           }
         },
-        "globalName": "index.ImportLocalType",
+        "globalName": "test_schema.ImportLocalType",
         "name": "ImportLocalType",
         "exported": false,
         "params": [

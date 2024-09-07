@@ -1,12 +1,20 @@
 {
   "extends": "../../../tsconfig.base.json",
-  "include": ["FileGeneratorC.ts"],
+  "include": [
+    "FileGeneratorC.ts",
+    "TestGeneratorC.ts",
+    "utilities.ts",
+    "MetadataFileCCodeGenerator.ts"
+  ],
   "compilerOptions": {
     "types": ["node"]
   },
   "references": [
     {
       "path": "../../parser"
+    },
+    {
+      "path": "../../resolver"
     },
     {
       "path": "../../utilities"

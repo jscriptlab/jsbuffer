@@ -13,11 +13,13 @@ check_function_exists(memcpy HAVE_MEMCPY)
 check_function_exists(memset HAVE_MEMSET)
 
 # List of headers to check
-set(INTEGER_HEADER_TYPES "stdint.h" "inttypes.h" "sys/types.h" "stddef.h")
-set(STRING_HEADER_TYPES "string.h")
+set(INTEGER_HEADERS "stdint.h" "inttypes.h" "sys/types.h" "stddef.h")
+set(STRING_HEADERS "string.h")
+set(STDIO_HEADERS "stdio.h")
 
-find_headers("${INTEGER_HEADER_TYPES}" "STANDARD_TYPE_INTEGERS")
-find_headers("${STRING_HEADER_TYPES}" "STANDARD_TYPE_STRING")
+find_headers("${INTEGER_HEADERS}" "STANDARD_TYPE_INTEGERS")
+find_headers("${STRING_HEADERS}" "STANDARD_TYPE_STRING")
+find_headers("${STDIO_HEADERS}" "STDIO_HEADERS")
 
 check_type_size("void" HAVE_VOID_TYPE LANGUAGE C)
 check_type_size("size_t" HAVE_SIZE_TYPE LANGUAGE C)

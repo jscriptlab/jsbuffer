@@ -1,11 +1,11 @@
-#ifndef JSB_INDEX_ACKNOWLEDGEMESSAGE_HPP
-#define JSB_INDEX_ACKNOWLEDGEMESSAGE_HPP
+#ifndef JSB_TEST_SCHEMA_ACKNOWLEDGEMESSAGE_HPP
+#define JSB_TEST_SCHEMA_ACKNOWLEDGEMESSAGE_HPP
 
 
 #include "jsb/serializer.hpp"
 #include "jsb/deserializer.hpp"
 
-namespace index {
+namespace test_schema {
 
 class AcknowledgeMessage {
 public:
@@ -14,5 +14,5 @@ public:
     void encode(jsb::serializer&) const;
 };
 
-} // index
-#endif // JSB_INDEX_ACKNOWLEDGEMESSAGE_HPP
+} // test_schema
+#endif // JSB_TEST_SCHEMA_ACKNOWLEDGEMESSAGE_HPP

@@ -21,14 +21,98 @@
         fprintf(stderr, "%s:%d: Assertion failed: %s\n", __FILE__, __LINE__, #expr); \
         return 1; \
     }
+
 int main() {
     struct jsb_serializer_t s;
     struct jsb_deserializer_t d;
     JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);
     JSB_ASSERT(jsb_serializer_init(NULL, JSB_SERIALIZER_BUFFER_SIZE) == JSB_BAD_ARGUMENT);
     
+    
+    #if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+    {
+        // It should blow up if the serializer goes beyond the maximum size
+        JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE + 1) == JSB_BUFFER_OVERFLOW);
+        JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);
+        enum jsb_result_t status;
+        {
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            do {
+                status = jsb_serializer_write_uint8(&s, 1);
+            } while(status != JSB_BUFFER_OVERFLOW);
+        }
+        {
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            do {
+                status = jsb_serializer_write_uint16(&s, 0xFF);
+            } while(status != JSB_BUFFER_OVERFLOW);
+        }
+        {
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            do {
+                status = jsb_serializer_write_uint32(&s, 0xFFFF);
+            } while(status != JSB_BUFFER_OVERFLOW);
+        }
+        {
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            do {
+                status = jsb_serializer_write_uint64(&s, 0xFFFFFFFF);
+            } while(status != JSB_BUFFER_OVERFLOW);
+        }
+        {
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            do {
+                status = jsb_serializer_write_int8(&s, -1);
+            } while(status != JSB_BUFFER_OVERFLOW);
+        }
+        {
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            do {
+                status = jsb_serializer_write_int16(&s, -10);
+            } while(status != JSB_BUFFER_OVERFLOW);
+        }
+        {
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            do {
+                status = jsb_serializer_write_int32(&s, -100);
+            } while(status != JSB_BUFFER_OVERFLOW);
+        }
+        {
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            do {
+                status = jsb_serializer_write_int64(&s, -1000);
+            } while(status != JSB_BUFFER_OVERFLOW);
+        }
+        {
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            do {
+                status = jsb_serializer_write_float(&s, 0.12345678f);
+            } while(status != JSB_BUFFER_OVERFLOW);
+        }
+        {
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            do {
+                status = jsb_serializer_write_double(&s, 0.1234567890);
+            } while(status != JSB_BUFFER_OVERFLOW);
+        }
+    }
+    #endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+    
+    
     {
         struct app_message_t value;
+        JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+        {
+            JSB_ASSERT(app_message_init(&value) == JSB_OK);
+            #if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+            // It should blow up when encoding a type is beyond the maximum size of the buffer
+            enum jsb_result_t status;
+            do {
+                status = app_message_encode(&value, &s);
+                status = app_message_encode(&value, &s);
+            } while(status != JSB_BUFFER_OVERFLOW);
+            #endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+        }
         JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
         JSB_ASSERT(app_message_init(&value) == JSB_OK);
         JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
@@ -38,6 +122,7 @@ int main() {
         JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
         JSB_ASSERT(app_message_decode(&d, &value) == JSB_OK);
         app_message_free(&value);
+        
         {
             struct app_message_t new_value;
             memset(&new_value, 0, sizeof(struct app_message_t));
@@ -55,6 +140,18 @@ int main() {
     {
         struct app_command_move_forward_t value;
         JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+        {
+            JSB_ASSERT(app_command_move_forward_init(&value) == JSB_OK);
+            #if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+            // It should blow up when encoding a type is beyond the maximum size of the buffer
+            enum jsb_result_t status;
+            do {
+                status = app_command_move_forward_encode(&value, &s);
+                status = app_command_move_forward_encode(&value, &s);
+            } while(status != JSB_BUFFER_OVERFLOW);
+            #endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+        }
+        JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
         JSB_ASSERT(app_command_move_forward_init(&value) == JSB_OK);
         JSB_ASSERT(app_command_move_forward_encode(&value, &s) == JSB_OK);
         JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
@@ -63,6 +160,7 @@ int main() {
         JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
         JSB_ASSERT(app_command_move_forward_decode(&d, &value) == JSB_OK);
         app_command_move_forward_free(&value);
+        
         {
             struct app_command_move_forward_t new_value;
             memset(&new_value, 0, sizeof(struct app_command_move_forward_t));
@@ -95,6 +193,18 @@ int main() {
     {
         struct app_command_move_backwards_t value;
         JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+        {
+            JSB_ASSERT(app_command_move_backwards_init(&value) == JSB_OK);
+            #if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+            // It should blow up when encoding a type is beyond the maximum size of the buffer
+            enum jsb_result_t status;
+            do {
+                status = app_command_move_backwards_encode(&value, &s);
+                status = app_command_move_backwards_encode(&value, &s);
+            } while(status != JSB_BUFFER_OVERFLOW);
+            #endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+        }
+        JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
         JSB_ASSERT(app_command_move_backwards_init(&value) == JSB_OK);
         JSB_ASSERT(app_command_move_backwards_encode(&value, &s) == JSB_OK);
         JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
@@ -103,6 +213,7 @@ int main() {
         JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
         JSB_ASSERT(app_command_move_backwards_decode(&d, &value) == JSB_OK);
         app_command_move_backwards_free(&value);
+        
         {
             struct app_command_move_backwards_t new_value;
             memset(&new_value, 0, sizeof(struct app_command_move_backwards_t));
@@ -150,7 +261,85 @@ int main() {
         }
     }
     {
+        {
+            struct app_command_trait_t value, new_value;
+            // Initialize the type struct again
+            JSB_ASSERT(app_command_trait_init(&value, APP_COMMAND_MOVE_FORWARD_TYPE) == JSB_OK);
+            JSB_ASSERT(app_command_trait_init(&new_value, APP_COMMAND_MOVE_FORWARD_TYPE) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);
+            JSB_ASSERT(app_command_trait_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(app_command_trait_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&value, &new_value, sizeof(struct app_command_trait_t)) == JSB_OK);
+        }
+        {
+            struct app_command_trait_t value, new_value;
+            // Initialize the type struct again
+            JSB_ASSERT(app_command_trait_init(&value, APP_COMMAND_MOVE_FORWARD_TYPE) == JSB_OK);
+            JSB_ASSERT(app_command_trait_init(&new_value, APP_COMMAND_MOVE_FORWARD_TYPE) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);
+            JSB_ASSERT(app_command_trait_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(app_command_trait_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&value, &new_value, sizeof(struct app_command_trait_t)) == JSB_OK);
+        }
+    }
+    {
+        {
+            struct protocol_main_request_trait_t value, new_value;
+            // Initialize the type struct again
+            JSB_ASSERT(protocol_main_request_trait_init(&value, PROTOCOL_MAIN_GET_USER_TYPE) == JSB_OK);
+            JSB_ASSERT(protocol_main_request_trait_init(&new_value, PROTOCOL_MAIN_GET_USER_TYPE) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);
+            JSB_ASSERT(protocol_main_request_trait_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(protocol_main_request_trait_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&value, &new_value, sizeof(struct protocol_main_request_trait_t)) == JSB_OK);
+        }
+    }
+    {
+        {
+            struct protocol_main_response_trait_t value, new_value;
+            // Initialize the type struct again
+            JSB_ASSERT(protocol_main_response_trait_init(&value, PROTOCOL_MAIN_VOID_TYPE) == JSB_OK);
+            JSB_ASSERT(protocol_main_response_trait_init(&new_value, PROTOCOL_MAIN_VOID_TYPE) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);
+            JSB_ASSERT(protocol_main_response_trait_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(protocol_main_response_trait_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&value, &new_value, sizeof(struct protocol_main_response_trait_t)) == JSB_OK);
+        }
+        {
+            struct protocol_main_response_trait_t value, new_value;
+            // Initialize the type struct again
+            JSB_ASSERT(protocol_main_response_trait_init(&value, PROTOCOL_MAIN_VOID_TYPE) == JSB_OK);
+            JSB_ASSERT(protocol_main_response_trait_init(&new_value, PROTOCOL_MAIN_VOID_TYPE) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+            JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);
+            JSB_ASSERT(protocol_main_response_trait_encode(&value, &s) == JSB_OK);
+            JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+            JSB_ASSERT(protocol_main_response_trait_decode(&d, &new_value) == JSB_OK);
+            JSB_ASSERT(memcmp(&value, &new_value, sizeof(struct protocol_main_response_trait_t)) == JSB_OK);
+        }
+    }
+    {
         struct protocol_main_void_t value;
+        JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+        {
+            JSB_ASSERT(protocol_main_void_init(&value) == JSB_OK);
+            #if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+            // It should blow up when encoding a type is beyond the maximum size of the buffer
+            enum jsb_result_t status;
+            do {
+                status = protocol_main_void_encode(&value, &s);
+                status = protocol_main_void_encode(&value, &s);
+            } while(status != JSB_BUFFER_OVERFLOW);
+            #endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+        }
         JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
         JSB_ASSERT(protocol_main_void_init(&value) == JSB_OK);
         JSB_ASSERT(protocol_main_void_encode(&value, &s) == JSB_OK);
@@ -160,6 +349,7 @@ int main() {
         JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
         JSB_ASSERT(protocol_main_void_decode(&d, &value) == JSB_OK);
         protocol_main_void_free(&value);
+        
         {
             struct protocol_main_void_t new_value;
             memset(&new_value, 0, sizeof(struct protocol_main_void_t));
@@ -178,6 +368,18 @@ int main() {
     {
         struct protocol_main_user_t value;
         JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+        {
+            JSB_ASSERT(protocol_main_user_init(&value) == JSB_OK);
+            #if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+            // It should blow up when encoding a type is beyond the maximum size of the buffer
+            enum jsb_result_t status;
+            do {
+                status = protocol_main_user_encode(&value, &s);
+                status = protocol_main_user_encode(&value, &s);
+            } while(status != JSB_BUFFER_OVERFLOW);
+            #endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+        }
+        JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
         JSB_ASSERT(protocol_main_user_init(&value) == JSB_OK);
         JSB_ASSERT(protocol_main_user_encode(&value, &s) == JSB_OK);
         JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
@@ -186,6 +388,7 @@ int main() {
         JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
         JSB_ASSERT(protocol_main_user_decode(&d, &value) == JSB_OK);
         protocol_main_user_free(&value);
+        
         {
             struct protocol_main_user_t new_value;
             memset(&new_value, 0, sizeof(struct protocol_main_user_t));
@@ -218,6 +421,18 @@ int main() {
     {
         struct protocol_main_get_user_t value;
         JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+        {
+            JSB_ASSERT(protocol_main_get_user_init(&value) == JSB_OK);
+            #if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+            // It should blow up when encoding a type is beyond the maximum size of the buffer
+            enum jsb_result_t status;
+            do {
+                status = protocol_main_get_user_encode(&value, &s);
+                status = protocol_main_get_user_encode(&value, &s);
+            } while(status != JSB_BUFFER_OVERFLOW);
+            #endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+        }
+        JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
         JSB_ASSERT(protocol_main_get_user_init(&value) == JSB_OK);
         JSB_ASSERT(protocol_main_get_user_encode(&value, &s) == JSB_OK);
         JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
@@ -226,6 +441,7 @@ int main() {
         JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
         JSB_ASSERT(protocol_main_get_user_decode(&d, &value) == JSB_OK);
         protocol_main_get_user_free(&value);
+        
         {
             struct protocol_main_get_user_t new_value;
             memset(&new_value, 0, sizeof(struct protocol_main_get_user_t));
@@ -244,6 +460,18 @@ int main() {
     {
         struct protocol_main_tuple_test_t value;
         JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+        {
+            JSB_ASSERT(protocol_main_tuple_test_init(&value) == JSB_OK);
+            #if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+            // It should blow up when encoding a type is beyond the maximum size of the buffer
+            enum jsb_result_t status;
+            do {
+                status = protocol_main_tuple_test_encode(&value, &s);
+                status = protocol_main_tuple_test_encode(&value, &s);
+            } while(status != JSB_BUFFER_OVERFLOW);
+            #endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+        }
+        JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
         JSB_ASSERT(protocol_main_tuple_test_init(&value) == JSB_OK);
         JSB_ASSERT(protocol_main_tuple_test_encode(&value, &s) == JSB_OK);
         JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
@@ -252,6 +480,7 @@ int main() {
         JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
         JSB_ASSERT(protocol_main_tuple_test_decode(&d, &value) == JSB_OK);
         protocol_main_tuple_test_free(&value);
+        
         {
             struct protocol_main_tuple_test_t new_value;
             memset(&new_value, 0, sizeof(struct protocol_main_tuple_test_t));

@@ -1,17 +1,17 @@
 #include "jsb/deserializer.hpp"
 #include "jsb/serializer.hpp"
 
-#include "index/Message.hpp"
+#include "test_schema/Message.hpp"
 
 #include <cassert>
 #include <limits>
 #include <stdexcept>
 
-static bool compareMessages(const index::Message& a, const index::Message& b) {
+static bool compareMessages(const test_schema::Message& a, const test_schema::Message& b) {
   if (a.id != b.id) {
     return false;
   }
-  for(size_t i = 0; i < a.event.size(); i++) {
+  for (size_t i = 0; i < a.event.size(); i++) {
     if (a.event[i].seconds != b.event[i].seconds) {
       return false;
     }
@@ -46,27 +46,16 @@ int main() {
   try {
     d.read<std::uint8_t>();
     assert(false);
-  } catch(const std::runtime_error& e) {
+  } catch (const std::runtime_error& e) {
     assert(true);
   }
 
-  index::Message msg = {
-    .id = 100000LU,
-    .event = {
-      {
-        .seconds = 100,
-        .nanoseconds = 100,
-        .bit = 100
-      },
-      {
-        .seconds = 200,
-        .nanoseconds = 200,
-        .bit = 200
-      }
-    }
-  };
+  test_schema::Message msg = {
+      .id    = 100000LU,
+      .event = {{.seconds = 100, .nanoseconds = 100, .bit = 100},
+                {.seconds = 200, .nanoseconds = 200, .bit = 200}}};
   msg.encode(s);
-  index::Message decoded = index::Message::decode(d);
+  test_schema::Message decoded = test_schema::Message::decode(d);
   assert(msg.id == decoded.id);
   assert(compareMessages(msg, decoded));
 

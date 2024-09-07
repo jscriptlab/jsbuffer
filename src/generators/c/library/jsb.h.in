@@ -22,9 +22,25 @@ extern "C" {
 #cmakedefine HEADER_FOUND_STDINT_H
 #cmakedefine HEADER_FOUND_STDDEF_H
 #cmakedefine HEADER_FOUND_STRING_H
+#cmakedefine HEADER_FOUND_STDIO_H
 #cmakedefine HEADER_FOUND_INTTYPES_H
 #cmakedefine HEADER_FOUND_SYS_TYPEYPES_H
 #cmakedefine JSB_MAX_STRING_SIZE @JSB_MAX_STRING_SIZE@
+#cmakedefine JSB_ENABLE_TRACE
+
+#if defined(JSB_ENABLE_TRACE) && !defined(HEADER_FOUND_STDIO_H)
+#warning "stdio.h not found, cannot enable trace"
+#undef JSB_ENABLE_TRACE
+#endif
+
+#ifdef JSB_ENABLE_TRACE
+#define JSB_TRACE(tag, ...) do { \
+    printf("%s:%d: %s: ", __FILE__, __LINE__, tag); \
+    printf(__VA_ARGS__); \
+} while (0)
+#else
+#define JSB_TRACE(...)
+#endif // JSB_ENABLE_TRACE
 
 // Standard C library functions
 #cmakedefine HAVE_STRLEN

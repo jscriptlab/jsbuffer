@@ -6,7 +6,7 @@ import path from 'path';
 test('it should successfully generate a CMake C and C++ project', async (t) => {
   await spawn('node', [
     path.resolve(__dirname, '../cli/jsb'),
-    'test/parser/index.jsb',
+    'test/parser/test_schema.jsb',
     '-o',
     path.resolve(__dirname, 'generated/cpp')
   ]).wait();

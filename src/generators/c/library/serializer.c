@@ -3,14 +3,16 @@
 
 #include <jsb/serializer.h>
 
-enum jsb_result_t jsb_serializer_init(struct jsb_serializer_t* self, jsb_uint32_t max_size) {
-  if(self == NULL) return JSB_BAD_ARGUMENT;
+enum jsb_result_t jsb_serializer_init(struct jsb_serializer_t* self,
+                                      jsb_uint32_t max_size) {
+  if (self == NULL)
+    return JSB_BAD_ARGUMENT;
 #ifdef JSB_SERIALIZER_USE_MALLOC
-  self->buffer = (jsb_uint8_t*) malloc(sizeof(jsb_uint8_t) * max_size);
+  self->buffer          = (jsb_uint8_t*)malloc(sizeof(jsb_uint8_t) * max_size);
   self->buffer_capacity = max_size;
 #else
   // If `max_size` is higher than `JSB_SERIALIZER_BUFFER_SIZE`, return an error
-  if(max_size > JSB_SERIALIZER_BUFFER_SIZE) {
+  if (max_size > JSB_SERIALIZER_BUFFER_SIZE) {
     return JSB_BUFFER_OVERFLOW;
   }
   self->buffer_capacity = JSB_SERIALIZER_BUFFER_SIZE;
@@ -19,23 +21,26 @@ enum jsb_result_t jsb_serializer_init(struct jsb_serializer_t* self, jsb_uint32_
   return JSB_OK;
 }
 
-
 enum jsb_result_t jsb_serializer_rewind(struct jsb_serializer_t* s) {
-  if(s == NULL) return JSB_BAD_ARGUMENT;
+  if (s == NULL)
+    return JSB_BAD_ARGUMENT;
   s->buffer_size = 0;
   return JSB_OK;
 }
 
-// Make sure to reallocate the buffer or that the serializer buffer is big enough to write `required_size` bytes
-static enum jsb_result_t jsb_serializer_reallocate(struct jsb_serializer_t* s, jsb_uint32_t required_size) {
+// Make sure to reallocate the buffer or that the serializer buffer is big
+// enough to write `required_size` bytes
+static enum jsb_result_t jsb_serializer_reallocate(struct jsb_serializer_t* s,
+                                                   jsb_uint32_t required_size) {
   const jsb_uint32_t remaining = s->buffer_capacity - s->buffer_size;
-  if(remaining < required_size) {
+  if (remaining < required_size) {
 #ifdef JSB_SERIALIZER_USE_MALLOC
-    jsb_uint8_t* new_buffer = (jsb_uint8_t*) realloc(s->buffer, sizeof(jsb_uint8_t) * required_size);
-    if(new_buffer == NULL) {
+    jsb_uint8_t* new_buffer =
+        (jsb_uint8_t*)realloc(s->buffer, sizeof(jsb_uint8_t) * required_size);
+    if (new_buffer == NULL) {
       return JSB_MEMORY_ALLOCATION_ERROR;
     }
-    s->buffer = new_buffer;
+    s->buffer          = new_buffer;
     s->buffer_capacity = required_size;
 #else
     return JSB_BUFFER_OVERFLOW;
@@ -44,7 +49,8 @@ static enum jsb_result_t jsb_serializer_reallocate(struct jsb_serializer_t* s, j
   return JSB_OK;
 }
 
-enum jsb_result_t jsb_serializer_write_int64(struct jsb_serializer_t* s, jsb_int64_t value) {
+enum jsb_result_t jsb_serializer_write_int64(struct jsb_serializer_t* s,
+                                             jsb_int64_t value) {
   JSB_CHECK_ERROR(jsb_serializer_reallocate(s, 8));
 
   JSB_CHECK_ERROR(jsb_encode_int64(&s->buffer[s->buffer_size], value));
@@ -54,7 +60,8 @@ enum jsb_result_t jsb_serializer_write_int64(struct jsb_serializer_t* s, jsb_int
   return JSB_OK;
 }
 
-enum jsb_result_t jsb_serializer_write_uint64(struct jsb_serializer_t* s, jsb_uint64_t value) {
+enum jsb_result_t jsb_serializer_write_uint64(struct jsb_serializer_t* s,
+                                              jsb_uint64_t value) {
   JSB_CHECK_ERROR(jsb_serializer_reallocate(s, 8));
 
   JSB_CHECK_ERROR(jsb_encode_uint64(&s->buffer[s->buffer_size], value));
@@ -64,7 +71,8 @@ enum jsb_result_t jsb_serializer_write_uint64(struct jsb_serializer_t* s, jsb_ui
   return JSB_OK;
 }
 
-enum jsb_result_t jsb_serializer_write_int32(struct jsb_serializer_t* s, jsb_int32_t value) {
+enum jsb_result_t jsb_serializer_write_int32(struct jsb_serializer_t* s,
+                                             jsb_int32_t value) {
   JSB_CHECK_ERROR(jsb_serializer_reallocate(s, 4));
 
   JSB_CHECK_ERROR(jsb_encode_int32(&s->buffer[s->buffer_size], value));
@@ -74,7 +82,8 @@ enum jsb_result_t jsb_serializer_write_int32(struct jsb_serializer_t* s, jsb_int
   return JSB_OK;
 }
 
-enum jsb_result_t jsb_serializer_write_uint32(struct jsb_serializer_t* s, jsb_uint32_t value) {
+enum jsb_result_t jsb_serializer_write_uint32(struct jsb_serializer_t* s,
+                                              jsb_uint32_t value) {
   JSB_CHECK_ERROR(jsb_serializer_reallocate(s, 4));
 
   JSB_CHECK_ERROR(jsb_encode_uint32(&s->buffer[s->buffer_size], value));
@@ -84,7 +93,8 @@ enum jsb_result_t jsb_serializer_write_uint32(struct jsb_serializer_t* s, jsb_ui
   return JSB_OK;
 }
 
-enum jsb_result_t jsb_serializer_write_uint16(struct jsb_serializer_t* s, jsb_uint16_t value) {
+enum jsb_result_t jsb_serializer_write_uint16(struct jsb_serializer_t* s,
+                                              jsb_uint16_t value) {
   JSB_CHECK_ERROR(jsb_serializer_reallocate(s, 2));
 
   JSB_CHECK_ERROR(jsb_encode_uint16(&s->buffer[s->buffer_size], value));
@@ -94,7 +104,8 @@ enum jsb_result_t jsb_serializer_write_uint16(struct jsb_serializer_t* s, jsb_ui
   return JSB_OK;
 }
 
-enum jsb_result_t jsb_serializer_write_int16(struct jsb_serializer_t* s, jsb_int16_t value) {
+enum jsb_result_t jsb_serializer_write_int16(struct jsb_serializer_t* s,
+                                             jsb_int16_t value) {
   JSB_CHECK_ERROR(jsb_serializer_reallocate(s, 2));
 
   JSB_CHECK_ERROR(jsb_encode_uint16(&s->buffer[s->buffer_size], value));
@@ -104,23 +115,26 @@ enum jsb_result_t jsb_serializer_write_int16(struct jsb_serializer_t* s, jsb_int
   return JSB_OK;
 }
 
-enum jsb_result_t jsb_serializer_write_uint8(struct jsb_serializer_t* s, const jsb_uint8_t value) {
+enum jsb_result_t jsb_serializer_write_uint8(struct jsb_serializer_t* s,
+                                             const jsb_uint8_t value) {
   JSB_CHECK_ERROR(jsb_serializer_reallocate(s, 1));
 
-  s->buffer[s->buffer_size++] = (jsb_uint8_t) value;
+  s->buffer[s->buffer_size++] = (jsb_uint8_t)value;
 
   return JSB_OK;
 }
 
-enum jsb_result_t jsb_serializer_write_int8(struct jsb_serializer_t* s, const jsb_int8_t value) {
+enum jsb_result_t jsb_serializer_write_int8(struct jsb_serializer_t* s,
+                                            const jsb_int8_t value) {
   JSB_CHECK_ERROR(jsb_serializer_reallocate(s, 1));
 
-  s->buffer[s->buffer_size++] = (jsb_uint8_t) value;
+  s->buffer[s->buffer_size++] = (jsb_uint8_t)value;
 
   return JSB_OK;
 }
 
-enum jsb_result_t jsb_serializer_write_float(struct jsb_serializer_t* s, const jsb_float_t value) {
+enum jsb_result_t jsb_serializer_write_float(struct jsb_serializer_t* s,
+                                             const jsb_float_t value) {
   JSB_CHECK_ERROR(jsb_serializer_reallocate(s, 4));
   JSB_CHECK_ERROR(jsb_encode_float(&s->buffer[s->buffer_size], value));
 
@@ -129,20 +143,23 @@ enum jsb_result_t jsb_serializer_write_float(struct jsb_serializer_t* s, const j
   return JSB_OK;
 }
 
-enum jsb_result_t jsb_serializer_write_double(struct jsb_serializer_t* s, jsb_double_t value) {
+enum jsb_result_t jsb_serializer_write_double(struct jsb_serializer_t* s,
+                                              jsb_double_t value) {
   JSB_CHECK_ERROR(jsb_serializer_reallocate(s, 8));
   JSB_CHECK_ERROR(jsb_encode_double(&s->buffer[s->buffer_size], value));
   s->buffer_size += 8;
   return JSB_OK;
 }
 
-enum jsb_result_t jsb_serializer_write_buffer(struct jsb_serializer_t* s, const jsb_uint8_t* buffer, jsb_uint32_t size) {
+enum jsb_result_t jsb_serializer_write_buffer(struct jsb_serializer_t* s,
+                                              const jsb_uint8_t* buffer,
+                                              jsb_uint32_t size) {
   JSB_CHECK_ERROR(jsb_serializer_reallocate(s, size));
 
 #ifdef JSB_SERIALIZER_USE_MALLOC
   memcpy(&s->buffer[s->buffer_size], buffer, size);
 #else
-  for(jsb_uint32_t i = 0; i < size; i++) {
+  for (jsb_uint32_t i = 0; i < size; i++) {
     s->buffer[s->buffer_size++] = buffer[i];
   }
 #endif
@@ -151,9 +168,11 @@ enum jsb_result_t jsb_serializer_write_buffer(struct jsb_serializer_t* s, const 
 }
 
 void jsb_serializer_free(struct jsb_serializer_t* s) {
-  if(s == NULL) return;
+  if (s == NULL)
+    return;
 #ifdef JSB_SERIALIZER_USE_MALLOC
-  if(s->buffer == NULL) return;
+  if (s->buffer == NULL)
+    return;
   free(s->buffer);
 #endif
 }

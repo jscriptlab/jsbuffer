@@ -4,7 +4,7 @@ import path from 'path';
 import test from 'ava';
 
 test('it should generate file metadata list', async (t) => {
-  const mainFilePath = path.resolve(__dirname, 'index.jsb');
+  const mainFilePath = path.resolve(__dirname, 'test_schema.jsb');
   const configuration = {
     rootDir: __dirname,
     outDir: path.resolve(__dirname, 'out'),

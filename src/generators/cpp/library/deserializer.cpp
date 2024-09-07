@@ -2,23 +2,21 @@
 
 #include <stdexcept>
 
-jsb::deserializer::deserializer(const std::vector<std::uint8_t>& buffer):
-  buffer(buffer)
-{}
+jsb::deserializer::deserializer(const std::vector<std::uint8_t>& buffer)
+    : buffer(buffer) {}
 
 const std::size_t& jsb::deserializer::get_offset() const {
   return offset;
 }
 
 void jsb::deserializer::assert_remaining_bytes(
-    std::size_t expected_byte_count
-) const  {
+    std::size_t expected_byte_count) const {
   std::size_t remaining_bytes = buffer.size() - offset;
-  if((remaining_bytes) < expected_byte_count) {
+  if ((remaining_bytes) < expected_byte_count) {
     throw std::runtime_error(
-      "Not enough bytes to read. Expected to read: " + std::to_string(expected_byte_count) + " bytes, but only " +
-      std::to_string(remaining_bytes) + " bytes are available."
-    );
+        "Not enough bytes to read. Expected to read: " +
+        std::to_string(expected_byte_count) + " bytes, but only " +
+        std::to_string(remaining_bytes) + " bytes are available.");
   }
 }
 

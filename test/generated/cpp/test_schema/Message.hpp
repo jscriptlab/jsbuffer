@@ -1,5 +1,5 @@
-#ifndef JSB_INDEX_MESSAGE_HPP
-#define JSB_INDEX_MESSAGE_HPP
+#ifndef JSB_TEST_SCHEMA_MESSAGE_HPP
+#define JSB_TEST_SCHEMA_MESSAGE_HPP
 
 #include "event/Event.hpp"
 #include <list>
@@ -7,7 +7,7 @@
 #include "jsb/serializer.hpp"
 #include "jsb/deserializer.hpp"
 
-namespace index {
+namespace test_schema {
 
 class Message {
 public:
@@ -17,5 +17,5 @@ public:
     void encode(jsb::serializer&) const;
 };
 
-} // index
-#endif // JSB_INDEX_MESSAGE_HPP
+} // test_schema
+#endif // JSB_TEST_SCHEMA_MESSAGE_HPP
