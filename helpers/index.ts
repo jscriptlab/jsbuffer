@@ -7,11 +7,38 @@ import { spawn } from 'child-process-utilities';
 import assert from 'assert';
 import SchemaTestCodeGenerator from './SchemaTestCodeGenerator';
 
+export async function generateTemporaryFiles({
+  files
+}: {
+  files: Record<string, string>;
+}) {
+  const rootDir = await fs.promises.mkdtemp(
+    path.resolve(__dirname, '../node_modules/.cache/jsbuffer')
+  );
+
+  for (const [k, v] of Object.entries(files)) {
+    const resolvedFilePath = path.resolve(rootDir, k);
+    await fs.promises.mkdir(path.dirname(resolvedFilePath), {
+      recursive: true
+    });
+    await fs.promises.writeFile(resolvedFilePath, v);
+  }
+
+  return {
+    rootDir,
+    destroy: async () => {
+      await fs.promises.rm(rootDir, {
+        recursive: true
+      });
+    }
+  };
+}
+
 export async function generateWithVirtualFs({
   mainFile,
   paths,
   runScript,
-  packageInfo = {},
+  packageInfo = {}
 }: {
   mainFile: string;
   packageInfo?: Record<string, unknown>;
@@ -25,7 +52,7 @@ export async function generateWithVirtualFs({
     assert.strict.ok((await fs.promises.stat(tmpFolder)).isDirectory());
   } catch (reason) {
     await fs.promises.mkdir(tmpFolder, {
-      recursive: true,
+      recursive: true
     });
   }
   const rootDir = await fs.promises.mkdtemp(
@@ -37,19 +64,19 @@ export async function generateWithVirtualFs({
     'jsbufferconfig.json': JSON.stringify(
       {
         outDir: path.relative(rootDir, outDir),
-        mainFile: path.relative(rootDir, path.resolve(rootDir, mainFile)),
+        mainFile: path.relative(rootDir, path.resolve(rootDir, mainFile))
       },
       null,
       2
     ),
     '.nycrc': JSON.stringify(
       {
-        all: true,
+        all: true
       },
       null,
       2
     ),
-    ...paths,
+    ...paths
   };
 
   const internalTestFile = path.resolve(
@@ -58,12 +85,12 @@ export async function generateWithVirtualFs({
   );
   const schemaTestGenerator = new SchemaTestCodeGenerator({
     outFile: internalTestFile,
-    indentationSize: 2,
+    indentationSize: 2
   });
 
   const runCommand = (command: string, args: string[]) =>
     spawn(command, args, {
-      cwd: rootDir,
+      cwd: rootDir
     }).wait();
   const pack = () => runCommand('npm', ['pack']);
   const test = async () => {
@@ -78,7 +105,7 @@ export async function generateWithVirtualFs({
     await runCommand('npx', [
       'tsc',
       '--project',
-      path.join(outDirBaseName, 'tsconfig.json'),
+      path.join(outDirBaseName, 'tsconfig.json')
     ]);
 
     // TODO: maybe remove this option
@@ -104,7 +131,7 @@ export async function generateWithVirtualFs({
      * return .tgz files
      */
     return {
-      tgzFiles: glob.sync(path.resolve(rootDir, '*.tgz')),
+      tgzFiles: glob.sync(path.resolve(rootDir, '*.tgz'))
     };
   };
 
@@ -120,7 +147,7 @@ export async function generateWithVirtualFs({
     for (const [k, v] of Object.entries(paths)) {
       const resolvedFilePath = path.resolve(rootDir, k);
       await fs.promises.mkdir(path.dirname(resolvedFilePath), {
-        recursive: true,
+        recursive: true
       });
       await fs.promises.writeFile(resolvedFilePath, v);
     }
@@ -128,12 +155,12 @@ export async function generateWithVirtualFs({
 
   const fileGenerator = new FileGenerator(
     {
-      path: path.resolve(rootDir, mainFile),
+      path: path.resolve(rootDir, mainFile)
     },
     {
       compilerOptions: {
         rootDir,
-        outDir,
+        outDir
       },
       root: null,
       indentationSize: 2,
@@ -145,9 +172,9 @@ export async function generateWithVirtualFs({
           strict: true,
           declaration: true,
           target: 'ESNext',
-          module: 'CommonJS',
-        },
-      },
+          module: 'CommonJS'
+        }
+      }
     }
   );
   /**
@@ -157,7 +184,7 @@ export async function generateWithVirtualFs({
     name: path.basename(rootDir),
     version: '0.0.1',
     files: [...Object.keys(paths), '__compiled__/**/*.{js,d.ts,json}'],
-    ...packageInfo,
+    ...packageInfo
   };
   await fs.promises.writeFile(
     path.resolve(rootDir, 'package.json'),
@@ -172,7 +199,7 @@ export async function generateWithVirtualFs({
     '--save-dev',
     '@jsbuffer/codec@^1',
     'typescript@^5',
-    'nyc@^15',
+    'nyc@^15'
   ]);
   return {
     test,
@@ -180,6 +207,6 @@ export async function generateWithVirtualFs({
     pack,
     fileGenerator,
     rootDir: rootDir,
-    outDir: outDir,
+    outDir: outDir
   };
 }

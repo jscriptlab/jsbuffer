@@ -661,9 +661,15 @@ export default class Parser extends CodeStream {
       };
     } else if ('template' in resolvedType) {
       switch (resolvedType.template) {
+        case 'optional':
+          return {
+            type: 'template',
+            template: resolvedType.template,
+            position: resolvedType.position,
+            value: this.#getMetadataFromResolvedType(resolvedType.type)
+          };
         case 'set':
         case 'vector':
-        case 'optional':
           return {
             type: 'template',
             template: resolvedType.template,

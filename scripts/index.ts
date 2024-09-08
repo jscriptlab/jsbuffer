@@ -2,6 +2,9 @@ import CodeStream from 'textstreamjs';
 import fs from 'fs';
 import path from 'node:path';
 import crypto from 'crypto';
+import { spawn } from 'child-process-utilities';
+import { glob } from 'glob';
+import { getArgument } from 'cli-argument-helper';
 
 /**
  * Get the integer name without the jsb_ prefix and _t suffix
@@ -187,21 +190,6 @@ async function generateC99Codec() {
               `ASSERT_JSB(output == ${unsignedValue}${integerSuffix});\n`
             );
           }
-
-          // if(!integer.signed) {
-          //   return;
-          // }
-
-          // testFile.write('// Encode signed integer\n');
-          // testFile.write(
-          //   `ASSERT_JSB_OK(jsb_encode_${integerName}(buffer, ${minMacroName}));\n`
-          // );
-
-          // testFile.write(
-          //   `ASSERT_JSB_OK(jsb_decode_${integerName}(buffer, &output));\n`
-          // );
-
-          // testFile.write(`assert(output == ${minMacroName});\n`);
         },
         '}\n'
       );
@@ -274,7 +262,21 @@ async function generateC99Codec() {
 }
 
 (async () => {
-  await generateC99Codec();
+  const args = process.argv.slice(2);
+  const generateC99CodecArg = getArgument(args, '--generate-c99-codec');
+  if (generateC99CodecArg !== null) {
+    await generateC99Codec();
+  }
+
+  if (getArgument(args, '--clang-format') !== null) {
+    await spawn(
+      'clang-format',
+      ['-i', ...(await glob(path.resolve(__dirname, '../**/*.{c,cpp,h,hpp}')))],
+      {
+        cwd: path.resolve(__dirname, '..')
+      }
+    ).wait();
+  }
 })().catch((reason) => {
   console.error(reason);
 });

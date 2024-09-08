@@ -481,6 +481,8 @@ export default class TestGeneratorC extends CodeStream {
     key: string
   ) {
     switch (metadataParamType.template) {
+      case 'optional':
+        break;
       case 'tuple': {
         let tupleItemIndex = 0;
         for (const arg of metadataParamType.args) {

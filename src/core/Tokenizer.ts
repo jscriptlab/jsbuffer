@@ -80,7 +80,15 @@ export default class Tokenizer {
     const comments = this.#comments;
     while (!this.#eof()) {
       const ch = this.#currentCharacter();
-      if (this.#peek('//')) {
+      if (Character.isCarriageReturn(ch)) {
+        throw new Exception(
+          this.#errorFormatter.format('Carriage is not supported')
+        );
+      } else if (Character.isVerticalTab(ch)) {
+        throw new Exception(
+          this.#errorFormatter.format('Vertical tab is not supported')
+        );
+      } else if (this.#peek('//')) {
         comments.push(this.#readSingleLineComment());
       } else if (this.#peek('/*')) {
         comments.push(this.#readMultiLineComment());
@@ -95,7 +103,11 @@ export default class Tokenizer {
         } else {
           tokens.push(id);
         }
-      } else if (Character.isWhiteSpace(ch)) {
+      } else if (
+        Character.isWhiteSpace(ch) ||
+        Character.isTab(ch) ||
+        Character.isBackspace(ch)
+      ) {
         this.#offset++;
       } else if (Character.isLineBreak(ch)) {
         this.#offset++;

@@ -1,5 +1,5 @@
 import Exception from '../../../exception/Exception';
-import { Metadata } from '../../parser/types/metadata';
+import { Metadata, MetadataParamType } from '../../parser/types/metadata';
 import snakeCase from '../../utilities/string/snakeCase';
 
 export function getTuplePropertyName(tupleItemIndex: number) {
@@ -8,6 +8,42 @@ export function getTuplePropertyName(tupleItemIndex: number) {
 
 export function getTupleStructName(parent: Metadata) {
   return `${metadataGlobalNameToNamespace(parent)}_tuple_t`;
+}
+
+export function getMetadataParamTypeName(param: MetadataParamType): string {
+  switch (param.type) {
+    case 'template':
+      switch (param.template) {
+        case 'optional':
+          return `${getMetadataParamTypeName(param.value)}_optional`;
+        default:
+          throw new Exception(`Unknown template type ${param.template}`);
+      }
+    case 'generic':
+      return param.value;
+    case 'internalType':
+      return param.interfaceName;
+    case 'externalType':
+      return param.name;
+    case 'externalModuleType':
+      throw new Exception('External module type is not supported');
+  }
+}
+
+export function getOptionalStructName(
+  parent: Metadata,
+  metadataParamType: MetadataParamType
+) {
+  return `${getMetadataPrefix(parent)}_${getMetadataParamTypeName(
+    metadataParamType
+  ).toLowerCase()}_optional_t`;
+}
+
+export function getOptionalStructTypeReference(
+  parent: Metadata,
+  metadataParamType: MetadataParamType
+) {
+  return `struct ${getOptionalStructName(parent, metadataParamType)}`;
 }
 
 export function getTupleStructTypeReference(parent: Metadata) {
