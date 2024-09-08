@@ -31,6 +31,6 @@ jobs:
         with:
           packages: cmake gcc g++
           version: 1.0
-      - run: ls
+      - run: npm run build
       - run: npm install
       - run: npm run test
