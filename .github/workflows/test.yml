@@ -23,12 +23,16 @@ jobs:
         node-version: [16.x, 18.x, 19.x, 20.x]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: apt install -y cmake gcc gdb g++
+      - name: Install OS dependencies
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: cmake gcc g++
+          version: 1.0
       - run: npm install
       - run: npm run test
