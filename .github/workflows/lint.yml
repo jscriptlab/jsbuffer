@@ -32,7 +32,10 @@ jobs:
       - name: 'Read slack message'
         id: slack_read_message
         run: |
-          echo "SLACK_MESSAGE=\"$(cat .github/workflows/lint-finished-slack-message.txt)\"" >> $GITHUB_ENV
+          SLACK_MESSAGE=$(cat .github/workflows/lint-finished-slack-message.txt)
+          echo 'SLACK_MESSAGE<<EOF' >> $GITHUB_ENV
+          cat $SLACK_MESSAGE >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
       - name: 'Slack notification'
         id: slack
         uses: slackapi/slack-github-action@v1.27.0
