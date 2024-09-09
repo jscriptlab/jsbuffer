@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Print environment variables
-        run: echo '${{ toJSON(github.event.head_commit.added) }}, ${{ toJSON(github.event.head_commit.modified) }}, ${{ toJSON(github.event.head_commit.removed) }}, ${{ github.event.head_commit.timestamp }}'
+        run: echo '${{ toJSON(github.event.commits.added) }}, ${{ toJSON(github.event.commits.modified) }}, ${{ toJSON(github.event.commits.removed) }}, ${{ github.event.commits.timestamp }}'
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -40,10 +40,10 @@ jobs:
       - name: Create Slack messages
         run: node scripts/create-slack-messages.js
         env:
-          COMMIT_ADDED_FILES: '${{ toJSON(github.event.head_commit.added) }}'
-          COMMIT_MODIFIED_FILES: '${{ toJSON(github.event.head_commit.modified) }}'
-          COMMIT_REMOVED_FILES: '${{ toJSON(github.event.head_commit.removed) }}'
-          COMMIT_TIMESTAMP: '${{ toJSON(github.event.head_commit.timestamp) }}'
+          COMMIT_ADDED_FILES: '${{ toJSON(github.event.commits.added) }}'
+          COMMIT_MODIFIED_FILES: '${{ toJSON(github.event.commits.modified) }}'
+          COMMIT_REMOVED_FILES: '${{ toJSON(github.event.commits.removed) }}'
+          COMMIT_TIMESTAMP: '${{ toJSON(github.event.commits.timestamp) }}'
       - name: 'Slack notification'
         id: slack
         uses: slackapi/slack-github-action@v1.27.0
