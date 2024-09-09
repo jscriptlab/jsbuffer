@@ -38,10 +38,10 @@ jobs:
       - name: Create Slack messages
         run: node scripts/create-slack-messages.js
         env:
-          COMMIT_ADDED_FILES: ${{ github.event.head_commit.added }}
-          COMMIT_MODIFIED_FILES: ${{ github.event.head_commit.modified }}
-          COMMIT_REMOVED_FILES: ${{ github.event.head_commit.removed }}
-          COMMIT_TIMESTAMP: ${{ github.event.head_commit.timestamp }}
+          COMMIT_ADDED_FILES: '${{ github.event.head_commit.added }}'
+          COMMIT_MODIFIED_FILES: '${{ github.event.head_commit.modified }}'
+          COMMIT_REMOVED_FILES: '${{ github.event.head_commit.removed }}'
+          COMMIT_TIMESTAMP: '${{ github.event.head_commit.timestamp }}'
       - name: 'Slack notification'
         id: slack
         uses: slackapi/slack-github-action@v1.27.0
