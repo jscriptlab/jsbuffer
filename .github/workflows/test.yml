@@ -37,3 +37,11 @@ jobs:
         run: npm run build
       - name: Run tests
         run: npm run test
+      - name: slack-send
+        id: slack
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          channel-id: 'jsbuffer'
+          message: 'Tests successfully concluded for commit: ${{github.sha}}.\n\nTriggered by ${{github.triggering_actor}}'
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
