@@ -1,13 +1,7 @@
 {
   "compilerOptions": {
-    "types": ["node"],
-    "resolveJsonModule": true
+    "types": ["node"]
   },
-  "include": [
-    "index.ts",
-    "create-slack-messages.ts",
-    "test-finished-slack-message.json"
-  ],
   "references": [
     {
       "path": "../code-generator"
