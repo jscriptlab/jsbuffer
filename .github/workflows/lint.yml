@@ -33,14 +33,15 @@ jobs:
         id: slack_read_message
         run: |
           SLACK_MESSAGE=$(cat .github/workflows/lint-finished-slack-message.txt | envsubst)
-          echo 'SLACK_MESSAGE<<EOF' >> $GITHUB_ENV
-          echo $SLACK_MESSAGE >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          echo 'SLACK_MESSAGE<<EOF' >> $GITHUB_OUTPUT
+          echo $SLACK_MESSAGE >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
       - name: 'Slack notification'
         id: slack
         uses: slackapi/slack-github-action@v1.27.0
         with:
           channel-id: 'jsbuffer'
-          slack-message: "${{ env.SLACK_MESSAGE }}"
+          slack-message: "${{ SLACK_MESSAGE }}"
         env:
+          SLACK_MESSAGE: ${{ steps.slack_read_message.outputs.SLACK_MESSAGE }}
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
