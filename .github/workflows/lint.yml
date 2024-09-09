@@ -29,19 +29,12 @@ jobs:
           cache: 'npm'
       - run: npm install
       - run: npm run build:all
-      - name: 'Read slack message'
-        id: slack_read_message
-        run: |
-          SLACK_MESSAGE=$(cat .github/workflows/lint-finished-slack-message.txt | envsubst)
-          echo 'SLACK_MESSAGE<<EOF' >> $GITHUB_OUTPUT
-          echo $SLACK_MESSAGE >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
       - name: 'Slack notification'
         id: slack
         uses: slackapi/slack-github-action@v1.27.0
         with:
           channel-id: 'jsbuffer'
-          slack-message: "$SLACK_MESSAGE"
+          payload-file-path: ".github/workflows/lint-finished-slack-message.json"
         env:
           SLACK_MESSAGE: ${{ steps.slack_read_message.outputs.SLACK_MESSAGE }}
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
