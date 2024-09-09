@@ -31,10 +31,16 @@ test('it should generate file metadata list', async (t) => {
       'utf8'
     )
   );
-  expectedFileMetadataList = expectedFileMetadataList.map((fileMetadata) => ({
+
+  let givenFileMetadataList = await parser.parse();
+
+  givenFileMetadataList = givenFileMetadataList.map((fileMetadata) => ({
     ...fileMetadata,
-    path: path.resolve(path.dirname(__dirname), fileMetadata.path)
+    path: fileMetadata.path.replace(
+      new RegExp(`^${path.dirname(mainFilePath)}/`),
+      ''
+    )
   }));
 
-  t.deepEqual(await parser.parse(), expectedFileMetadataList);
+  t.deepEqual(givenFileMetadataList, expectedFileMetadataList);
 });

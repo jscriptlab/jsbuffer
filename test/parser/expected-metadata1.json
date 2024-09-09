@@ -1,6 +1,6 @@
 [
   {
-    "path": "/home/victorqueiroz/Personal/jsbuffer/test/parser/test_schema.jsb",
+    "path": "test_schema.jsb",
     "metadata": [
       {
         "kind": "type",
@@ -281,7 +281,7 @@
     ]
   },
   {
-    "path": "/home/victorqueiroz/Personal/jsbuffer/test/parser/schema_internal_test/internal.jsb",
+    "path": "schema_internal_test/internal.jsb",
     "metadata": [
       {
         "kind": "type",
@@ -400,7 +400,7 @@
     ]
   },
   {
-    "path": "/home/victorqueiroz/Personal/jsbuffer/test/parser/Event.jsb",
+    "path": "Event.jsb",
     "metadata": [
       {
         "kind": "type",
@@ -561,7 +561,7 @@
     ]
   },
   {
-    "path": "/home/victorqueiroz/Personal/jsbuffer/test/parser/Test.jsb",
+    "path": "Test.jsb",
     "metadata": [
       {
         "kind": "type",
