@@ -9,7 +9,6 @@ extern "C" {
 
 #include <jsb/deserializer.h>
 #include <jsb/serializer.h>
-#include <stdbool.h>
 
 enum protocol_main_request_type_t {
   PROTOCOL_MAIN_GET_USER_TYPE = -1150313593,

@@ -4,8 +4,8 @@ import fs from 'fs';
 import * as glob from 'glob';
 import { FileGenerator } from '../code-generator';
 import { spawn } from 'child-process-utilities';
-import assert from 'assert';
 import SchemaTestCodeGenerator from './SchemaTestCodeGenerator';
+import configuration from '../src/configuration';
 
 export async function generateTemporaryFiles({
   files
@@ -13,7 +13,7 @@ export async function generateTemporaryFiles({
   files: Record<string, string>;
 }) {
   const rootDir = await fs.promises.mkdtemp(
-    path.resolve(__dirname, '../node_modules/.cache/jsbuffer')
+    path.resolve(await configuration.cache(), 'helpers-temporary-files-')
   );
 
   for (const [k, v] of Object.entries(files)) {
@@ -46,17 +46,8 @@ export async function generateWithVirtualFs({
   paths: Record<string, string>;
 }) {
   const outDirBaseName = '__compiled__';
-  const tmpFolder = path.resolve(__dirname, '../node_modules/.cache/jsbuffer');
-  try {
-    await fs.promises.access(tmpFolder, fs.constants.W_OK | fs.constants.R_OK);
-    assert.strict.ok((await fs.promises.stat(tmpFolder)).isDirectory());
-  } catch (reason) {
-    await fs.promises.mkdir(tmpFolder, {
-      recursive: true
-    });
-  }
   const rootDir = await fs.promises.mkdtemp(
-    path.resolve(tmpFolder, 'jsbuffer-')
+    path.resolve(await configuration.cache(), 'helpers-virtual-fs-')
   );
   const outDir = path.resolve(rootDir, outDirBaseName);
 

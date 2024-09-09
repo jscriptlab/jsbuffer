@@ -84,6 +84,30 @@ export function getHeaderGuard(value: string) {
     .replace(/[^_A-Z0-9]/g, '_');
 }
 
+export class RegularExpressions {
+  public static readonly literalTraceArgument = /^literal:/;
+}
+
+function isLiteralTraceArgument(arg: string) {
+  return RegularExpressions.literalTraceArgument.test(arg);
+}
+
+export function JSB_TRACE(name: string, ...args: string[]) {
+  if (typeof args[0] === 'string') {
+    // Add a period to the end of the trace message if it doesn't have one
+    if (!args[0].endsWith('.')) {
+      args[0] = `${args[0]}.`;
+    }
+  }
+  return `JSB_TRACE("${name}", ${args
+    .map((arg) =>
+      isLiteralTraceArgument(arg)
+        ? arg.replace(RegularExpressions.literalTraceArgument, '')
+        : `"${arg}"`
+    )
+    .join(', ')});\n`;
+}
+
 export function metadataGlobalNameToNamespace(
   metadata: Metadata,
   limit: number | null = null

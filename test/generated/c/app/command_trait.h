@@ -10,7 +10,6 @@ extern "C" {
 
 #include <jsb/deserializer.h>
 #include <jsb/serializer.h>
-#include <stdbool.h>
 
 enum app_command_type_t {
   APP_COMMAND_MOVE_FORWARD_TYPE   = 1407274108,

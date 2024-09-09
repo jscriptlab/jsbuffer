@@ -18,7 +18,10 @@ import { ASTGenerationException } from '../src/core/ASTGenerator';
     console.log('Usage: jsb --output <output-directory> <main-file>');
     console.log('Usage: jsb <main-file> -o <output-directory> --generator c99');
     console.log(
-      'Usage: jsb <main-file> -o <output-directory> --indentation-size 4'
+      'Usage: jsb <main-file> -o <output-directory> --indentation-size 1'
+    );
+    console.log(
+      'Usage: jsb <main-file> -o <output-directory> --name c_project_cmake_schema'
     );
     console.log(
       'Usage: jsb <main-file> -o <output-directory> --generator c++17'

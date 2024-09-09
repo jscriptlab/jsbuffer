@@ -7,8 +7,9 @@
 enum jsb_result_t jsb_deserializer_init(struct jsb_deserializer_t* d,
                                         jsb_uint8_t* buffer,
                                         jsb_uint32_t size) {
-  if (d == NULL || buffer == NULL)
+  if (d == NULL || buffer == NULL) {
     return JSB_BAD_ARGUMENT;
+  }
   d->buffer = buffer;
   d->offset = 0;
   d->size   = size;
@@ -19,7 +20,8 @@ enum jsb_result_t
 jsb_deserializer_assert_remaining_bytes(const struct jsb_deserializer_t* d,
                                         jsb_uint32_t expected_byte_count) {
   if (d->offset + expected_byte_count > d->size) {
-    JSB_TRACE("Expected %d bytes, but only %d bytes are available",
+    JSB_TRACE("jsb_deserializer_assert_remaining_bytes",
+              "Expected %d bytes, but only %d bytes are available",
               expected_byte_count, d->size - d->offset);
     return JSB_OUT_OF_BOUNDS;
   }
@@ -30,6 +32,11 @@ jsb_deserializer_assert_remaining_bytes(const struct jsb_deserializer_t* d,
 enum jsb_result_t jsb_deserializer_rewind(struct jsb_deserializer_t* d,
                                           jsb_uint32_t position) {
   if (position > d->offset) {
+    JSB_TRACE("jsb_deserializer_rewind",
+              "Failed to rewind %d bytes: "
+              "Rewind byte length is beyond current byte offset, "
+              "resulting in a negative value: %d",
+              d->offset);
     return JSB_OUT_OF_BOUNDS;
   }
 
@@ -131,8 +138,12 @@ jsb_deserializer_read_buffer(struct jsb_deserializer_t* deserializer,
                              jsb_uint32_t size, jsb_uint8_t* out_buffer_ptr) {
   JSB_CHECK_ERROR(jsb_deserializer_assert_remaining_bytes(deserializer, size));
 
+  // ! Change this behavior in case JSB_DESERIALIZER_USE_MALLOC is defined
   // The size of the buffer is limited to JSB_MAX_STRING_SIZE
   if (size > JSB_MAX_STRING_SIZE) {
+    JSB_TRACE("jsb_deserializer_read_buffer",
+              "Buffer size %d is greater than the maximum allowed size %d",
+              size, JSB_MAX_STRING_SIZE);
     return JSB_BUFFER_OVERFLOW;
   }
 

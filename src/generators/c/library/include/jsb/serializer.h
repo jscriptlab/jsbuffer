@@ -5,11 +5,8 @@
 
 struct jsb_serializer_t {
 #ifdef JSB_SERIALIZER_USE_MALLOC
-  jsb_bytes_t buffer;
+  jsb_byte_t* buffer;
 #else
-#ifndef JSB_SERIALIZER_BUFFER_SIZE
-#define JSB_SERIALIZER_BUFFER_SIZE 1024
-#endif
   jsb_byte_t buffer[JSB_SERIALIZER_BUFFER_SIZE];
 #endif
   jsb_uint32_t buffer_size;

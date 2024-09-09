@@ -5,9 +5,9 @@
 extern "C" {
 #endif // __cplusplus
 
-#include <string.h>
-// We are going to need JSB_MAX_STRING_SIZE
 #include <jsb/jsb.h>
+#include <stdbool.h>
+#include <string.h>
 
 #include <jsb/deserializer.h>
 #include <jsb/serializer.h>
