@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
@@ -35,6 +35,8 @@ jobs:
         run: npm run build
       - name: Run tests
         run: npm run test
+      - name: Print environment variables
+        run: echo '${{ github.event.head_commit.added }}, ${{ github.event.head_commit.modified }}, ${{ github.event.head_commit.removed }}, ${{ github.event.head_commit.timestamp }}'
       - name: Create Slack messages
         run: node scripts/create-slack-messages.js
         env:
