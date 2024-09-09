@@ -23,6 +23,7 @@ jobs:
     steps:
       - name: Print environment variables
         run: |
+          echo '${{ toJSON(github.event.push.commits) }}'
           echo '${{ toJSON(github.event.push.commits.added) }}'
           echo '${{ toJSON(github.event.push.commits.modified) }}'
           echo '${{ toJSON(github.event.push.commits.removed) }}'
