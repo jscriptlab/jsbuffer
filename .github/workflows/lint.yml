@@ -31,7 +31,11 @@ jobs:
       - run: npm run build:all
       - name: 'Read slack message'
         id: slack_read_message
-        run: echo "message=$(cat .github/workflows/lint-finished-slack-message.txt)" >> $GITHUB_ENV
+        run: |
+          message=$(cat .github/workflows/lint-finished-slack-message.txt)
+          echo "message<<EOF" >> $GITHUB_ENV
+          echo "$message" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
       - name: 'Slack notification'
         id: slack
         uses: slackapi/slack-github-action@v1.27.0
