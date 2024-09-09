@@ -28,3 +28,11 @@ jobs:
           cache: 'npm'
       - run: npm install
       - run: npm run build:all
+      - name: "Slack notification"
+        id: slack
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          channel-id: 'jsbuffer'
+          message: 'Linting successfully concluded for commit: ${{github.sha}}.\n\nTriggered by ${{github.triggering_actor}}'
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
