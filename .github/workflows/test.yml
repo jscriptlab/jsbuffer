@@ -32,7 +32,8 @@ jobs:
           echo 'toJSON(github.event.push.commits) -> ${{ toJSON(github.event.push.commits) }}'
           echo 'toJSON(github.event.push) -> ${{ toJSON(github.event.push) }}'
           echo 'toJSON(github.event) -> ${{ toJSON(github.event) }}'
-          echo ${{ toJSON(github.event) }}
+          echo '${{ toJSON(github.event) }}'
+          echo '${{ toJSON(github) }}'
           echo 'github.event.push.commits -> ${{ github.event.push.commits }}'
           echo 'github.event.push.head_commit.modified -> ${{ github.event.push.head_commit.modified }}'
           echo 'toJSON(github.event.push.head_commit.modified) -> ${{ toJSON(github.event.push.head_commit.modified) }}'
