@@ -34,7 +34,7 @@ jobs:
         run: |
           SLACK_MESSAGE=$(cat .github/workflows/lint-finished-slack-message.txt)
           echo 'SLACK_MESSAGE<<EOF' >> $GITHUB_ENV
-          cat $SLACK_MESSAGE >> $GITHUB_ENV
+          echo $SLACK_MESSAGE >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       - name: 'Slack notification'
         id: slack
