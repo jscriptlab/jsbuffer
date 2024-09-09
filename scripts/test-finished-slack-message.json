@@ -4,13 +4,13 @@
       "type": "header",
       "text": {
         "type": "plain_text",
-        "text": "Test"
+        "text": "Tests passed ✅"
       }
     },
     {
       "type": "section",
       "text": {
-        "text": "Tests passed for: `${{github.sha}}`! ✅",
+        "text": "<${{ github.event.head_commit.url }}|${{ github.event.head_commit.id }}>",
         "type": "mrkdwn"
       }
     },
@@ -18,13 +18,20 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "${{  github.event.push.head_commit.message }}"
+        "text": "${{ github.event.head_commit.message }}"
       }
     },
     {
       "type": "section",
       "text": {
-        "text": "<${{ github.event.push.head_commit.url }}|${{ github.event.push.head_commit.id }}>",
+        "text": "${{ github.event.head_commit.author.name }} <${{ github.event.head_commit.author.email }}>",
+        "type": "mrkdwn"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "text": "${{ github.event.head_commit.timestamp }}",
         "type": "mrkdwn"
       }
     }

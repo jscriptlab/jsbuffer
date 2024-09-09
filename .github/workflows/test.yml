@@ -5,6 +5,7 @@ on:
     branches:
       - 'master'
       - 'feature/**'
+      - 'develop'
   pull_request:
     branches:
       - 'master'
@@ -22,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
@@ -38,10 +39,15 @@ jobs:
       - name: Create Slack messages
         run: node scripts/create-slack-messages.js
         env:
-          COMMIT_ADDED_FILES: ${{ github.event.head_commit.added }}
-          COMMIT_MODIFIED_FILES: ${{ github.event.head_commit.modified }}
-          COMMIT_REMOVED_FILES: ${{ github.event.head_commit.removed }}
-          COMMIT_TIMESTAMP: ${{ github.event.head_commit.timestamp }}
+          EVENT_PUSHER_NAME: '${{ github.event.pusher.name }}'
+          EVENT_HEAD_COMMIT_ID: '${{ github.event.head_commit.id }}'
+          EVENT_HEAD_COMMIT_MESSAGE: '${{ github.event.head_commit.message }}'
+          EVENT_HEAD_COMMIT_TIMESTAMP: '${{ github.event.head_commit.timestamp }}'
+          EVENT_HEAD_COMMIT_URL: '${{ github.event.head_commit.url }}'
+          EVENT_REF: '${{ github.event.ref }}'
+          EVENT_AFTER_COMMIT: '${{ github.event.after }}'
+          EVENT_BEFORE_COMMIT: '${{ github.event.before }}'
+          EVENT_COMPARE_URL: '${{ github.event.compare }}'
       - name: 'Slack notification'
         id: slack
         uses: slackapi/slack-github-action@v1.27.0
