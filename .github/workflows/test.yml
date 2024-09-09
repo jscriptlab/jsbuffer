@@ -35,7 +35,7 @@ jobs:
         run: npm run build
       - name: Run tests
         run: npm run test
-      - name: Run tests
+      - name: Create Slack messages
         run: node scripts/create-slack-messages.ts
         env:
           COMMIT_ADDED_FILES: ${{ github.event.head_commit.added }}
