@@ -5,11 +5,12 @@ on:
     branches:
       - 'master'
       - 'feature/**'
-  pull_request:
-    branches:
-      - 'master'
       - 'develop'
-      - 'feature/**'
+  # pull_request:
+  #   branches:
+  #     - 'master'
+  #     - 'develop'
+  #     - 'feature/**'
 
 jobs:
   build:
@@ -21,7 +22,7 @@ jobs:
 
     steps:
       - name: Print environment variables
-        run: echo '${{ toJSON(github.event.commits.added) }}, ${{ toJSON(github.event.commits.modified) }}, ${{ toJSON(github.event.commits.removed) }}, ${{ github.event.commits.timestamp }}'
+        run: echo '${{ toJSON(github.event.push.commits.added) }}, ${{ toJSON(github.event.push.commits.modified) }}, ${{ toJSON(github.event.push.commits.removed) }}, ${{ github.event.push.commits.timestamp }}'
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -40,10 +41,10 @@ jobs:
       - name: Create Slack messages
         run: node scripts/create-slack-messages.js
         env:
-          COMMIT_ADDED_FILES: '${{ toJSON(github.event.commits.added) }}'
-          COMMIT_MODIFIED_FILES: '${{ toJSON(github.event.commits.modified) }}'
-          COMMIT_REMOVED_FILES: '${{ toJSON(github.event.commits.removed) }}'
-          COMMIT_TIMESTAMP: '${{ toJSON(github.event.commits.timestamp) }}'
+          COMMIT_ADDED_FILES: '${{ toJSON(github.event.push.commits.added) }}'
+          COMMIT_MODIFIED_FILES: '${{ toJSON(github.event.push.commits.modified) }}'
+          COMMIT_REMOVED_FILES: '${{ toJSON(github.event.push.commits.removed) }}'
+          COMMIT_TIMESTAMP: '${{ toJSON(github.event.push.commits.timestamp) }}'
       - name: 'Slack notification'
         id: slack
         uses: slackapi/slack-github-action@v1.27.0
