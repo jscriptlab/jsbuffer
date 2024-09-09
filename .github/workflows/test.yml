@@ -6,11 +6,11 @@ on:
       - 'master'
       - 'feature/**'
       - 'develop'
-  pull_request:
-    branches:
-      - 'master'
-      - 'develop'
-      - 'feature/**'
+  # pull_request:
+  #   branches:
+  #     - 'master'
+  #     - 'develop'
+  #     - 'feature/**'
 
 jobs:
   build:
@@ -27,6 +27,24 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+      - name: Print environment variables
+        run: |
+          echo 'toJSON(github.event.push.commits) -> ${{ toJSON(github.event.push.commits) }}'
+          echo 'toJSON(github.event.push) -> ${{ toJSON(github.event.push) }}'
+          echo 'toJSON(github.event) -> ${{ toJSON(github.event) }}'
+          echo '${{ toJSON(github.event) }}'
+          echo '${{ toJSON(github) }}'
+          echo 'github.event.push.commits -> ${{ github.event.push.commits }}'
+          echo 'github.event.push.head_commit.modified -> ${{ github.event.push.head_commit.modified }}'
+          echo 'toJSON(github.event.push.head_commit.modified) -> ${{ toJSON(github.event.push.head_commit.modified) }}'
+          echo 'toJSON(github.event.push.commits.added) -> ${{ toJSON(github.event.push.commits.added) }}'
+          echo 'toJSON(github.event.push.commits.modified) -> ${{ toJSON(github.event.push.commits.modified) }}'
+          echo 'toJSON(github.event.push.commits.removed) -> ${{ toJSON(github.event.push.commits.removed) }}'
+          echo 'github.event.push.commits.timestamp -> ${{ github.event.push.commits.timestamp }}'
+          echo 'github.event.push.commits.added -> ${{ github.event.push.commits.added }}'
+          echo 'github.event.push.commits.modified -> ${{ github.event.push.commits.modified }}'
+          echo 'github.event.push.commits.removed -> ${{ github.event.push.commits.removed }}'
+          echo 'github.event.push.commits.timestamp -> ${{ github.event.push.commits.timestamp }}'
       - name: Install OS dependencies
         run: |
           sudo apt install -y cmake gcc g++
