@@ -13,10 +13,7 @@ function makeList(values: string[]) {
   return values.map((file) => `- ${file}`).join('\n');
 }
 
-const workflowsDir = path.resolve(
-  __dirname,
-  '../.github/workflows/test-finished-slack-message.json'
-);
+const workflowsDir = path.resolve(__dirname, '../.github/workflows');
 
 (async () => {
   console.log(process.env['COMMIT_ADDED_FILES']);
