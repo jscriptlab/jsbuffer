@@ -32,7 +32,7 @@ jobs:
       - name: 'Read slack message'
         id: slack_read_message
         run: |
-          SLACK_MESSAGE=$(cat .github/workflows/lint-finished-slack-message.txt)
+          SLACK_MESSAGE=$(cat .github/workflows/lint-finished-slack-message.txt | envsubst)
           echo 'SLACK_MESSAGE<<EOF' >> $GITHUB_ENV
           echo $SLACK_MESSAGE >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
