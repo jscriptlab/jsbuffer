@@ -19,6 +19,19 @@ import {
 import Exception from '../../../exception/Exception';
 import MetadataFileCCodeGenerator from './MetadataFileCCodeGenerator';
 
+export const genericTypeNames = [
+  'uint8',
+  'uint16',
+  'uint32',
+  'uint64',
+  'int8',
+  'int16',
+  'int32',
+  'int64',
+  'float',
+  'double'
+] as const;
+
 export default class TestGeneratorC extends CodeStream {
   readonly #files;
   readonly #fileMetadataList;
@@ -65,9 +78,7 @@ export default class TestGeneratorC extends CodeStream {
       this.write(
         'if((expr)) {} else { \\\n',
         () => {
-          this.write(
-            'fprintf(stderr, "%s:%d: Assertion failed: %s\\n", __FILE__, __LINE__, #expr); \\\n'
-          );
+          this.write('JSB_TRACE("test", "Assertion failed: %s", #expr); \\\n');
           this.write('return 1; \\\n');
         },
         '}\n'
@@ -78,16 +89,52 @@ export default class TestGeneratorC extends CodeStream {
     this.indentBlock(() => {
       this.write('struct jsb_serializer_t s;\n');
       this.write('struct jsb_deserializer_t d;\n');
+      this.write('\n');
+
+      this.write('// It should return JSB_BAD_ARGUMENT if s is NULL\n');
       this.write(
-        'JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);\n'
-      );
-      // It should return JSB_BAD_ARGUMENT if s is NULL
-      this.write(
-        'JSB_ASSERT(jsb_serializer_init(NULL, JSB_SERIALIZER_BUFFER_SIZE) == JSB_BAD_ARGUMENT);\n'
+        'JSB_ASSERT(jsb_serializer_init(NULL, 1) == JSB_BAD_ARGUMENT);\n'
       );
       this.write('\n');
-      this.write('\n');
+
       this.write(
+        '// It should return JSB_BAD_ARGUMENT if buffer size is zero\n'
+      );
+      this.write(
+        'JSB_ASSERT(jsb_serializer_init(&s, 0) == JSB_BAD_ARGUMENT);\n'
+      );
+      this.write('\n');
+
+      this.write(
+        '// Initialize the serializer again in order to pass a valid buffer to the deserializer\n'
+      );
+      this.write('JSB_ASSERT(jsb_serializer_init(&s, 200) == JSB_OK);\n');
+      this.write('\n');
+
+      this.write(
+        '// It should not return JSB_BAD_ARGUMENT if buffer size is zero\n'
+      );
+      this.write(
+        'JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);\n'
+      );
+      this.write('\n');
+
+      this.write(
+        '// It should return JSB_BAD_ARGUMENT if deserializer is NULL\n'
+      );
+      this.write(
+        'JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, s.buffer_size) == JSB_BAD_ARGUMENT);\n'
+      );
+      this.write('\n');
+
+      this.write('// It should return JSB_BAD_ARGUMENT if buffer is NULL\n');
+      this.write(
+        'JSB_ASSERT(jsb_deserializer_init(&d, NULL, s.buffer_size) == JSB_BAD_ARGUMENT);\n'
+      );
+      this.write('\n');
+
+      this.write('\n');
+      this.append(
         '#if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)\n'
       );
       this.write(
@@ -103,52 +150,8 @@ export default class TestGeneratorC extends CodeStream {
             'JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);\n'
           );
           this.write('enum jsb_result_t status;\n');
-          const typeNames = [
-            'uint8',
-            'uint16',
-            'uint32',
-            'uint64',
-            'int8',
-            'int16',
-            'int32',
-            'int64',
-            'float',
-            'double'
-          ] as const;
-          for (const typeName of typeNames) {
-            let value: string;
-            switch (typeName) {
-              case 'uint8':
-                value = '1';
-                break;
-              case 'uint16':
-                value = '0xFF';
-                break;
-              case 'uint32':
-                value = '0xFFFF';
-                break;
-              case 'uint64':
-                value = '0xFFFFFFFF';
-                break;
-              case 'int8':
-                value = '-1';
-                break;
-              case 'int16':
-                value = '-10';
-                break;
-              case 'int32':
-                value = '-100';
-                break;
-              case 'int64':
-                value = '-1000';
-                break;
-              case 'float':
-                value = '0.12345678f';
-                break;
-              case 'double':
-                value = '0.1234567890';
-                break;
-            }
+          for (const typeName of genericTypeNames) {
+            const value = this.#getValueFromGenericName(typeName);
             this.write(
               '{\n',
               () => {
@@ -171,7 +174,31 @@ export default class TestGeneratorC extends CodeStream {
         },
         '}\n'
       );
+      this.append(
+        '#elif !defined(JSB_SERIALIZER_BUFFER_SIZE) && defined(JSB_SERIALIZER_USE_MALLOC)\n'
+      );
       this.write(
+        '// It should reallocate the buffer when it goes beyond the maximum size\n'
+      );
+      for (const typeName of genericTypeNames) {
+        this.write(
+          '{\n',
+          () => {
+            const value = this.#getValueFromGenericName(typeName);
+            this.write('JSB_ASSERT(jsb_serializer_init(&s, 1) == JSB_OK);\n');
+            this.write(
+              `JSB_ASSERT(jsb_serializer_write_${typeName}(&s, ${value}) == JSB_OK);\n`
+            );
+            this.write('s.buffer_capacity = 1;\n');
+          },
+          '}\n'
+        );
+      }
+      this.append('#else\n');
+      this.append(
+        '#error "Either JSB_SERIALIZER_BUFFER_SIZE or JSB_SERIALIZER_USE_MALLOC should be defined"\n'
+      );
+      this.append(
         '#endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)\n'
       );
       this.write('\n');
@@ -199,7 +226,7 @@ export default class TestGeneratorC extends CodeStream {
                         )}_init(&value) == JSB_OK);\n`
                       );
 
-                      this.write(
+                      this.append(
                         '#if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)\n'
                       );
                       this.write(
@@ -222,7 +249,7 @@ export default class TestGeneratorC extends CodeStream {
                         },
                         '} while(status != JSB_BUFFER_OVERFLOW);\n'
                       );
-                      this.write(
+                      this.append(
                         '#endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)\n'
                       );
                     },
@@ -345,6 +372,45 @@ export default class TestGeneratorC extends CodeStream {
     });
   }
 
+  #getValueFromGenericName(
+    typeName: typeof genericTypeNames extends ReadonlyArray<infer T> ? T : never
+  ) {
+    let value: string;
+    switch (typeName) {
+      case 'uint8':
+        value = '1';
+        break;
+      case 'uint16':
+        value = '0xFF';
+        break;
+      case 'uint32':
+        value = '0xFFFF';
+        break;
+      case 'uint64':
+        value = '0xFFFFFFFF';
+        break;
+      case 'int8':
+        value = '-1';
+        break;
+      case 'int16':
+        value = '-10';
+        break;
+      case 'int32':
+        value = '-100';
+        break;
+      case 'int64':
+        value = '-1000';
+        break;
+      case 'float':
+        value = '0.12345678f';
+        break;
+      case 'double':
+        value = '0.1234567890';
+        break;
+    }
+    return value;
+  }
+
   #generateTraitTest(metadata: IMetadataTraitDefinition) {
     const resolver = this.#resolverByMetadataObject.get(metadata) ?? null;
     if (resolver === null) {
@@ -377,9 +443,17 @@ export default class TestGeneratorC extends CodeStream {
                 this.write(
                   'JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);\n'
                 );
+                this.append(
+                  '#if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)\n'
+                );
                 this.write(
                   'JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);\n'
                 );
+                this.append('#else\n');
+                this.write(
+                  'JSB_ASSERT(jsb_serializer_init(&s, 200) == JSB_OK);\n'
+                );
+                this.append('#endif\n');
                 this.write(
                   `JSB_ASSERT(${getMetadataPrefix(
                     metadata

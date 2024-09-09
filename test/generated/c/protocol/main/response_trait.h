@@ -10,7 +10,6 @@ extern "C" {
 
 #include <jsb/deserializer.h>
 #include <jsb/serializer.h>
-#include <stdbool.h>
 
 enum protocol_main_response_type_t {
   PROTOCOL_MAIN_VOID_TYPE = 357013552,

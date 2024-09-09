@@ -24,6 +24,7 @@ import {
   getTraitUnionNodePropertyName,
   getTuplePropertyName,
   getTupleStructTypeReference,
+  JSB_TRACE,
   jsbTypeToCodecSuffix,
   metadataGlobalNameToNamespace,
   metadataToRelativePath,
@@ -145,9 +146,15 @@ export default class MetadataFileCCodeGenerator extends Resolver {
             this.write(
               'JSB_CHECK_ERROR(jsb_deserializer_read_uint32(d, &len));\n'
             );
+            this.append('#ifdef JSB_TOLERATE_TYPE_OVERFLOW\n');
+            this.write(
+              'if(len > JSB_MAX_STRING_SIZE) len = JSB_MAX_STRING_SIZE;\n'
+            );
+            this.append('#else\n');
             this.write(
               'if(len > JSB_MAX_STRING_SIZE) return JSB_BUFFER_OVERFLOW;\n'
             );
+            this.append('#endif\n');
             this.write(
               `JSB_CHECK_ERROR(jsb_deserializer_read_buffer(d, len, ${key}));\n`
             );
@@ -313,15 +320,25 @@ export default class MetadataFileCCodeGenerator extends Resolver {
   #generateSourceFile(metadata: IMetadataTypeDefinition) {
     this.write(`#include "${metadataToRelativePath(metadata)}.h"\n`);
     this.write('\n');
+
     const completeTypeReference = getMetadataCompleteTypeReference(metadata);
+    const memberNames = {
+      initialize: `${getMetadataPrefix(metadata)}_init`,
+      decode: `${metadataGlobalNameToNamespace(metadata)}_decode`,
+      encode: `${getMetadataPrefix(metadata)}_encode`
+    };
     this.write(
-      `enum jsb_result_t ${metadataGlobalNameToNamespace(
-        metadata
-      )}_decode(struct jsb_deserializer_t* d, ${completeTypeReference}* result) {\n`,
+      `enum jsb_result_t ${memberNames.decode}(struct jsb_deserializer_t* d, ${completeTypeReference}* result) {\n`,
       () => {
         this.write(
           '{\n',
           () => {
+            this.write(
+              JSB_TRACE(
+                memberNames.decode,
+                `Decoding ${metadata.globalName}...`
+              )
+            );
             this.write('jsb_int32_t header;\n');
             this.write(
               'JSB_CHECK_ERROR(jsb_deserializer_read_int32(d, &header));\n'
@@ -329,6 +346,14 @@ export default class MetadataFileCCodeGenerator extends Resolver {
             this.write(
               `if(header != ${metadata.id.toString()}) {\n`,
               () => {
+                this.write(
+                  JSB_TRACE(
+                    memberNames.decode,
+                    `Invalid CRC header for ${metadata.globalName}. ` +
+                      `Expected ${metadata.id}, but got %d instead`,
+                    'literal:header'
+                  )
+                );
                 this.write('return JSB_INVALID_CRC_HEADER;\n');
               },
               '}\n'
@@ -337,6 +362,9 @@ export default class MetadataFileCCodeGenerator extends Resolver {
           '}\n'
         );
         for (const param of metadata.params) {
+          this.write(
+            JSB_TRACE(memberNames.decode, `Decoding ${param.name}...`)
+          );
           this.#deserializeParamType(param.type, `result->${param.name}`);
         }
         this.write('return JSB_OK;\n');
@@ -345,11 +373,12 @@ export default class MetadataFileCCodeGenerator extends Resolver {
     );
     this.write('\n');
     this.write(
-      `enum jsb_result_t ${getMetadataPrefix(
-        metadata
-      )}_encode(const ${completeTypeReference}* input, struct jsb_serializer_t* s) {\n`
+      `enum jsb_result_t ${memberNames.encode}(const ${completeTypeReference}* input, struct jsb_serializer_t* s) {\n`
     );
     this.indentBlock(() => {
+      this.write(
+        JSB_TRACE(memberNames.encode, `Encoding ${metadata.globalName}...`)
+      );
       this.write(
         `JSB_CHECK_ERROR(jsb_serializer_write_int32(s, ${metadata.id.toString()}));\n`
       );
@@ -363,12 +392,22 @@ export default class MetadataFileCCodeGenerator extends Resolver {
     this.write('\n');
 
     this.write(
-      `enum jsb_result_t ${getMetadataPrefix(
-        metadata
-      )}_init(${completeTypeReference}* value) {\n`
+      `enum jsb_result_t ${memberNames.initialize}(${completeTypeReference}* value) {\n`
     );
     this.indentBlock(() => {
-      this.write('if(value == NULL) return JSB_BAD_ARGUMENT;\n');
+      this.write(
+        'if(value == NULL) {\n',
+        () => {
+          this.write(
+            JSB_TRACE(
+              memberNames.initialize,
+              `Failed to initialize ${metadata.globalName}, received value = NULL`
+            )
+          );
+          this.write('return JSB_BAD_ARGUMENT;\n');
+        },
+        '}\n'
+      );
     });
     // this.write('#ifdef JSB_SCHEMA_USE_MALLOC\n');
     // this.indentBlock(() => {
@@ -384,7 +423,16 @@ export default class MetadataFileCCodeGenerator extends Resolver {
 
     this.indentBlock(() => {
       for (const param of metadata.params) {
+        this.write(
+          JSB_TRACE(
+            memberNames.initialize,
+            `Initializing param ${param.name}...`
+          )
+        );
         this.#initializeMetadataParam(param.type, `value->${param.name}`);
+        this.write(
+          JSB_TRACE(memberNames.initialize, `Initialized param ${param.name}`)
+        );
       }
       this.write('return JSB_OK;\n');
     });
@@ -530,15 +578,19 @@ export default class MetadataFileCCodeGenerator extends Resolver {
 
   #generateTraitFileSourceFile(metadata: IMetadataTraitDefinition) {
     this.write(`#include "${metadataToRelativePath(metadata)}.h"\n`);
-
     this.write('\n');
 
     const completeTypeReference = getMetadataCompleteTypeReference(metadata);
+    const memberNames = {
+      initialize: `${getMetadataPrefix(metadata)}_init`,
+      decode: `${getMetadataPrefix(metadata)}_decode`,
+      encode: `${getMetadataPrefix(metadata)}_encode`,
+      freeTrait: `${getMetadataPrefix(metadata)}_free`
+    };
+    const traitEnum = this.generateTraitEnumInformation(metadata);
 
     this.write(
-      `enum jsb_result_t ${getMetadataPrefix(
-        metadata
-      )}_encode(const ${completeTypeReference}* input, struct jsb_serializer_t* s) {\n`,
+      `enum jsb_result_t ${memberNames.encode}(const ${completeTypeReference}* input, struct jsb_serializer_t* s) {\n`,
       () => {
         this.write(
           'switch(input->type) {\n',
@@ -551,6 +603,12 @@ export default class MetadataFileCCodeGenerator extends Resolver {
               this.write(`case ${item.name}:\n`);
               this.indentBlock(() => {
                 this.write(
+                  JSB_TRACE(
+                    `${memberNames.encode}/${metadata.globalName}`,
+                    `Encoding ${item.metadata.globalName}...`
+                  )
+                );
+                this.write(
                   `JSB_CHECK_ERROR(${getMetadataPrefix(
                     item.metadata
                   )}_encode(${pointer(encodeKey)},s));\n`
@@ -560,6 +618,12 @@ export default class MetadataFileCCodeGenerator extends Resolver {
             }
             this.write('default:\n');
             this.indentBlock(() => {
+              this.write(
+                `JSB_TRACE("${memberNames.encode}/${metadata.globalName}", "Invalid type: %d. ` +
+                  `Maybe you've forgot to initialize \`${getMetadataCompleteTypeReference(
+                    metadata
+                  )}\`?\\n", input->type);\n`
+              );
               this.write('return JSB_INVALID_CRC_HEADER;\n');
             });
           },
@@ -570,11 +634,36 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       '}\n'
     );
     this.write('\n');
+
     this.write(
-      `enum jsb_result_t ${getMetadataPrefix(
-        metadata
-      )}_decode(struct jsb_deserializer_t* d, ${completeTypeReference}* output) {\n`,
+      `enum jsb_result_t ${memberNames.decode}(struct jsb_deserializer_t* d, ${completeTypeReference}* output) {\n`,
       () => {
+        this.write(
+          'if(d == NULL) {\n',
+          () => {
+            this.write(
+              JSB_TRACE(
+                memberNames.decode,
+                `Failed to decode ${metadata.globalName}, received NULL pointer for the deserializer parameter`
+              )
+            );
+            this.write('return JSB_BAD_ARGUMENT;\n');
+          },
+          '}\n'
+        );
+        this.write(
+          'if(output == NULL) {\n',
+          () => {
+            this.write(
+              JSB_TRACE(
+                memberNames.decode,
+                `Failed to decode ${metadata.globalName}, received NULL pointer for the output parameter`
+              )
+            );
+            this.write('return JSB_BAD_ARGUMENT;\n');
+          },
+          '}\n'
+        );
         this.write('jsb_int32_t header;\n');
         this.write(
           'JSB_CHECK_ERROR(jsb_deserializer_read_int32(d, &header));\n'
@@ -592,6 +681,12 @@ export default class MetadataFileCCodeGenerator extends Resolver {
               this.write(`case ${item.value}:\n`);
               this.indentBlock(() => {
                 this.write(
+                  JSB_TRACE(
+                    `${memberNames.decode}/${metadata.globalName}`,
+                    `Decoding ${item.metadata.globalName}...`
+                  )
+                );
+                this.write(
                   `JSB_CHECK_ERROR(${getMetadataPrefix(
                     item.metadata
                   )}_decode(d, ${outputKey}));\n`
@@ -601,6 +696,10 @@ export default class MetadataFileCCodeGenerator extends Resolver {
             }
             this.write('default:\n');
             this.indentBlock(() => {
+              this.write(
+                `JSB_TRACE("${metadata.globalName}/decode", "Invalid decoded header: %d. ` +
+                  'Maybe you are decoding an incompatible or corrupted buffer?\\n", header);\n'
+              );
               this.write('return JSB_INVALID_CRC_HEADER;\n');
             });
           },
@@ -611,20 +710,36 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       '}\n'
     );
     this.write('\n');
-    const traitEnum = this.generateTraitEnumInformation(metadata);
+
     this.write(
-      `enum jsb_result_t ${getMetadataPrefix(
-        metadata
-      )}_init(${completeTypeReference}* input, enum ${
-        traitEnum.name
-      } type) {\n`,
+      `enum jsb_result_t ${memberNames.initialize}(${completeTypeReference}* input, enum ${traitEnum.name} type) {\n`,
       () => {
+        this.write(
+          'if(input == NULL) {\n',
+          () => {
+            this.write(
+              JSB_TRACE(
+                memberNames.initialize,
+                `Failed to initialize ${metadata.globalName}, received NULL pointer for the input parameter`
+              )
+            );
+            this.write('return JSB_BAD_ARGUMENT;\n');
+          },
+          '}\n'
+        );
         this.write(
           'switch(type) {\n',
           () => {
             for (const [, item] of traitEnum.items) {
               this.write(`case ${item.name}:\n`);
               this.indentBlock(() => {
+                this.write(
+                  JSB_TRACE(
+                    memberNames.initialize,
+                    `Initializing with the given header (%d): ${item.metadata.globalName}...`,
+                    'literal:type'
+                  )
+                );
                 this.write(`input->type = ${item.name};\n`);
                 this.write(
                   `return ${getMetadataPrefix(
@@ -637,6 +752,14 @@ export default class MetadataFileCCodeGenerator extends Resolver {
             }
             this.write('default:\n');
             this.indentBlock(() => {
+              this.write(
+                JSB_TRACE(
+                  `${metadata.globalName}/initialize`,
+                  'Invalid type: %d. ' +
+                    'Maybe you are initializing with an invalid header?',
+                  'literal:type'
+                )
+              );
               this.write('return JSB_INVALID_CRC_HEADER;\n');
             });
           },
@@ -647,12 +770,29 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       '}\n'
     );
     this.write('\n');
+
     this.write(
-      `void ${getMetadataPrefix(
-        metadata
-      )}_free(${completeTypeReference}* trait) {\n`,
+      `void ${memberNames.freeTrait}(${completeTypeReference}* trait) {\n`,
       () => {
-        this.write('if(trait == NULL) return;\n');
+        this.write(
+          'if(trait == NULL) {\n',
+          () => {
+            this.write(
+              JSB_TRACE(
+                memberNames.freeTrait,
+                `Failed to free '${metadata.globalName}', received NULL pointer`
+              )
+            );
+            this.write('return;\n');
+          },
+          '}\n'
+        );
+        this.write(
+          JSB_TRACE(
+            memberNames.freeTrait,
+            `Freeing trait: ${metadata.globalName}`
+          )
+        );
         this.write(
           'switch(trait->type) {\n',
           () => {
@@ -663,14 +803,23 @@ export default class MetadataFileCCodeGenerator extends Resolver {
               this.write(`case ${item.name}:\n`);
               this.indentBlock(() => {
                 this.write(
+                  JSB_TRACE(
+                    memberNames.freeTrait,
+                    `Identified ${metadata.globalName} trait to have its value as: ${item.metadata.globalName}`
+                  )
+                );
+                this.write(
                   `${getMetadataPrefix(item.metadata)}_free(${key});\n`
                 );
                 this.write('break;\n');
               });
             }
-            this.write('// Unrecognized `trait->type` value\n');
             this.write('default:\n');
             this.indentBlock(() => {
+              this.write(
+                `JSB_TRACE("${metadata.globalName}/free", "Invalid type: %d. ` +
+                  'Maybe you are freeing an uninitialized or corrupted buffer?\\n", trait->type);\n'
+              );
               this.write('break;\n');
             });
           },
@@ -708,7 +857,6 @@ export default class MetadataFileCCodeGenerator extends Resolver {
     this.#includeMetadataDependenciesOnHeaderFile(metadata);
     this.write('\n');
 
-    this.write('#include <stdbool.h>\n');
     this.write('#include <jsb/serializer.h>\n');
     this.write('#include <jsb/deserializer.h>\n');
     this.write('\n');
@@ -830,12 +978,14 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         this.write(
           `if(${key}.has_value) {\n`,
           () => {
+            this.write(JSB_TRACE('', `Optional value of ${key} is set.`));
             this.write('JSB_CHECK_ERROR(jsb_serializer_write_uint8(s, 1));\n');
             this.#serializeParamType(paramType.value, `${key}.value`);
           },
           '} else {\n'
         );
         this.indentBlock(() => {
+          this.write(JSB_TRACE('', `Optional value of ${key} is empty.`));
           this.write('JSB_CHECK_ERROR(jsb_serializer_write_uint8(s, 0));\n');
         });
         this.write('}\n');
@@ -866,7 +1016,8 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         break;
       case 'internalType':
       case 'externalType': {
-        // this.write(`${key}.encode(s);\n`);
+        const metadata = this.resolveMetadataFromParamTypeDefinition(paramType);
+        this.write(JSB_TRACE('', `Encoding ${metadata.globalName}...`));
         this.write(
           `JSB_CHECK_ERROR(${getMetadataPrefix(
             this.resolveMetadataFromParamTypeDefinition(paramType)
@@ -1041,13 +1192,14 @@ export default class MetadataFileCCodeGenerator extends Resolver {
           case GenericName.Bytes:
           case GenericName.String:
             this.write('#include <string.h>\n');
-            this.write('// We are going to need JSB_MAX_STRING_SIZE\n');
             this.write('#include <jsb/jsb.h>\n');
+            break;
+          case GenericName.Boolean:
+            this.write('#include <stdbool.h>\n');
             break;
           case GenericName.Long:
           case GenericName.UnsignedLong:
           case GenericName.Float:
-          case GenericName.Boolean:
           case GenericName.Double:
           case GenericName.Integer:
           case GenericName.Uint32:

@@ -24,6 +24,7 @@
   "references": [
     { "path": "../helpers" },
     { "path": "../src/parser" },
+    { "path": "../src/configuration" },
     { "path": "../src/generators/c" },
     { "path": "../src/generators/cpp" },
     { "path": "../src/core" },

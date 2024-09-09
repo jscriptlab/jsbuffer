@@ -7,52 +7,48 @@
 #define DOUBLE_EXP_MASK 0x7FF0000000000000ULL
 #define DOUBLE_FRAC_MASK 0x000FFFFFFFFFFFFFULL
 
-enum jsb_result_t jsb_encode_float(jsb_uint8_t* buffer, const float value) {
+enum jsb_result_t jsb_encode_float(jsb_uint8_t* buffer,
+                                   const jsb_float_t value) {
   if (!buffer) {
     return JSB_BAD_ARGUMENT;
   }
 
   jsb_uint32_t bits;
-  jsb_memcpy(&bits, &value, sizeof(float)); // Copy float bits
+  jsb_memcpy(&bits, &value, sizeof(jsb_float_t)); // Copy float bits
 
-  const jsb_uint8_t sign = (bits & FLOAT_SIGN_MASK) >> 31; // Extract sign
-  const jsb_uint8_t exponent =
-      (bits & FLOAT_EXP_MASK) >> 23;                    // Extract exponent
-  const jsb_uint32_t mantissa = bits & FLOAT_FRAC_MASK; // Extract mantissa
-
-  buffer[0] = sign;
-  buffer[1] = exponent;
-  buffer[2] = (mantissa >> 16) & 0xFF;
-  buffer[3] = (mantissa >> 8) & 0xFF;
-  buffer[4] = mantissa & 0xFF;
+  // Store 32-bit float in 4 bytes
+  buffer[0] = (bits >> 24) & 0xFF; // Most significant byte
+  buffer[1] = (bits >> 16) & 0xFF;
+  buffer[2] = (bits >> 8) & 0xFF;
+  buffer[3] = bits & 0xFF; // Least significant byte
 
   return JSB_OK;
 }
 
-enum jsb_result_t jsb_decode_float(const jsb_uint8_t* buffer, float* result) {
+enum jsb_result_t jsb_decode_float(const jsb_uint8_t* buffer,
+                                   jsb_float_t* result) {
   if (!buffer || !result) {
     return JSB_BAD_ARGUMENT;
   }
 
-  const jsb_uint32_t sign     = (jsb_uint32_t)buffer[0] << 31;
-  const jsb_uint32_t exponent = (jsb_uint32_t)buffer[1] << 23;
-  const jsb_uint32_t mantissa = ((jsb_uint32_t)buffer[2] << 16) |
-                                ((jsb_uint32_t)buffer[3] << 8) |
-                                (jsb_uint32_t)buffer[4];
+  // Reconstruct 32-bit float from 4 bytes
+  jsb_uint32_t bits = ((jsb_uint32_t)buffer[0] << 24) |
+                      ((jsb_uint32_t)buffer[1] << 16) |
+                      ((jsb_uint32_t)buffer[2] << 8) | (jsb_uint32_t)buffer[3];
 
-  const jsb_uint32_t float_bits = sign | exponent | mantissa;
-  jsb_memcpy(result, &float_bits, sizeof(jsb_float_t));
+  jsb_memcpy(result, &bits, sizeof(jsb_float_t));
 
   return JSB_OK;
 }
 
-enum jsb_result_t jsb_encode_double(jsb_uint8_t* buffer, const double value) {
+enum jsb_result_t jsb_encode_double(jsb_uint8_t* buffer,
+                                    const jsb_double_t value) {
   if (!buffer) {
     return JSB_BAD_ARGUMENT;
   }
 
   jsb_uint64_t bits;
-  jsb_memcpy(&bits, &value, sizeof(double)); // Copy double bits
+  jsb_memcpy(&bits, &value, sizeof(jsb_double_t)); // Copy double bits
 
   const jsb_uint8_t sign      = (bits >> 63) & 0x1;   // Extract sign bit
   const jsb_uint16_t exponent = (bits >> 52) & 0x7FF; // Extract exponent bits
@@ -74,7 +70,8 @@ enum jsb_result_t jsb_encode_double(jsb_uint8_t* buffer, const double value) {
   return JSB_OK;
 }
 
-enum jsb_result_t jsb_decode_double(const jsb_uint8_t* buffer, double* result) {
+enum jsb_result_t jsb_decode_double(const jsb_uint8_t* buffer,
+                                    jsb_double_t* result) {
   if (!buffer || !result) {
     return JSB_BAD_ARGUMENT;
   }
@@ -91,7 +88,7 @@ enum jsb_result_t jsb_decode_double(const jsb_uint8_t* buffer, double* result) {
       ((jsb_uint64_t)buffer[6] << 8) | (jsb_uint64_t)buffer[7];
 
   const jsb_uint64_t double_bits = (sign << 63) | (exponent << 52) | mantissa;
-  jsb_memcpy(result, &double_bits, sizeof(double));
+  jsb_memcpy(result, &double_bits, sizeof(jsb_double_t));
 
   return JSB_OK;
 }

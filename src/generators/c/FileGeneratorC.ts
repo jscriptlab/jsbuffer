@@ -88,16 +88,7 @@ export default class FileGeneratorC extends CodeStream {
         for (const metadata of fileMetadata.metadata) {
           this.#resolverByMetadataObject.set(metadata, codeGenerator);
         }
-        this.#generators.set(
-          path,
-          codeGenerator
-          // new MetadataFileCCodeGenerator(Array.from(this.#fileMetadataList.values()), {
-          //   current: fileMetadata,
-          //   root: this,
-          //   rootDir: this.#rootDir,
-          //   cmake: this.#cmake
-          // })
-        );
+        this.#generators.set(path, codeGenerator);
       }
       for (const generator of this.#generators.values()) {
         generator.generate();

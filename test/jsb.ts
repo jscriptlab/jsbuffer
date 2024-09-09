@@ -2,7 +2,10 @@ import test from 'ava';
 import { spawn } from 'child-process-utilities';
 import { glob } from 'glob';
 import path from 'path';
+import fs from 'fs';
+import os from 'os';
 import { generateTemporaryFiles } from '../helpers';
+import configuration from '../src/configuration';
 
 test("FileGeneratorC: it should throw a detailed error in case there's an invalid token", async (t) => {
   const temp = await generateTemporaryFiles({
@@ -74,26 +77,103 @@ test('it should successfully generate a CMake C and C++ project', async (t) => {
     path.resolve(__dirname, 'generated/c')
   ]).wait();
 
-  const buildDir = path.resolve(__dirname, '../build');
+  const cmakeOptions: ReadonlyArray<ReadonlyArray<string>> = [
+    [
+      '-DJSB_TOLERATE_TYPE_OVERFLOW=ON',
+      '-DJSB_SERIALIZER_BUFFER_SIZE=1024',
+      '-DJSB_MAX_STRING_SIZE=100',
+      '-DJSB_ENABLE_TRACE=ON'
+    ],
+    [
+      '-DJSB_TOLERATE_TYPE_OVERFLOW=ON',
+      '-DJSB_SERIALIZER_BUFFER_SIZE=1024',
+      '-DJSB_MAX_STRING_SIZE=100'
+    ],
+    ['-DJSB_SERIALIZER_BUFFER_SIZE=1024', '-DJSB_MAX_STRING_SIZE=100'],
+    [
+      '-DJSB_SERIALIZER_USE_MALLOC=ON',
+      '-DJSB_MAX_STRING_SIZE=100',
+      '-DJSB_ENABLE_TRACE=ON'
+    ],
+    [
+      '-DJSB_TOLERATE_TYPE_OVERFLOW=ON',
+      '-DJSB_SERIALIZER_BUFFER_SIZE=1024',
+      '-DJSB_MAX_STRING_SIZE=100',
+      '-DJSB_ENABLE_TRACE=ON'
+    ],
+    [
+      '-DJSB_SERIALIZER_USE_MALLOC=ON',
+      '-DJSB_MAX_STRING_SIZE=100',
+      '-DJSB_ENABLE_TRACE=ON'
+    ],
+    [
+      '-DJSB_SERIALIZER_USE_MALLOC=ON',
+      '-DJSB_MAX_STRING_SIZE=100',
+      '-DJSB_ENABLE_TRACE=ON'
+    ]
+    // ['-DJSB_SCHEMA_USE_MALLOC'],
+    // ['-DJSB_SCHEMA_USE_MALLOC', '-DJSB_DISABLE_ERROR_ASSERTION'],
+    // ['-DJSB_SCHEMA_USE_MALLOC', '-DJSB_SERIALIZER_USE_MALLOC'],
+    // [
+    //   '-DJSB_SCHEMA_USE_MALLOC',
+    //   '-DJSB_SERIALIZER_USE_MALLOC',
+    //   '-DJSB_DISABLE_ERROR_ASSERTION'
+    // ],
+  ];
 
-  await spawn('cmake', [
-    '-B',
-    buildDir,
-    '-S',
-    path.resolve(__dirname, '..'),
-    '--fresh'
-  ]).wait();
-  await spawn('cmake', ['--build', buildDir]).wait();
+  const tmpFolders = new Array<string>();
 
-  const testExecutables = ['app_test', 'jsb_codec_test'];
+  try {
+    for (const options of cmakeOptions) {
+      const buildDir = await fs.promises.mkdtemp(
+        path.resolve(await configuration.cache(), 'cmake-build-test-jsb-')
+      );
 
-  const testFiles = await glob(path.resolve(buildDir, '**/*_test'));
+      tmpFolders.push(buildDir);
 
-  for (const testFile of testFiles) {
-    if (!testExecutables.includes(path.basename(testFile))) {
-      continue;
+      await spawn('cmake', [
+        '-B',
+        buildDir,
+        ...options,
+        '-S',
+        path.resolve(__dirname, '..'),
+        '--fresh'
+      ]).wait();
+      await spawn('cmake', [
+        '--build',
+        buildDir,
+        '-j',
+        `${os.cpus().length}`
+      ]).wait();
+
+      const testExecutables = ['app_test', 'jsb_codec_test'];
+
+      const testFiles = await glob(path.resolve(buildDir, '**/*_test'));
+
+      for (const testFile of testFiles) {
+        if (!testExecutables.includes(path.basename(testFile))) {
+          continue;
+        }
+        await spawn(testFile).wait();
+      }
     }
-    await spawn(testFile).wait();
+  } catch (err) {
+    if (
+      typeof err === 'object' &&
+      err !== null &&
+      'message' in err &&
+      typeof err.message === 'string'
+    ) {
+      t.fail(err.message);
+    } else {
+      console.error(err);
+      t.fail(`${err}`);
+    }
+  }
+
+  for (const tmpFolder of tmpFolders) {
+    console.log(`Removing ${tmpFolder}`);
+    await fs.promises.rmdir(tmpFolder, { recursive: true });
   }
 
   t.pass();
