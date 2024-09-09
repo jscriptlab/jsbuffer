@@ -27,21 +27,26 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Install OS dependencies
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: cmake gcc g++
-          version: 1.0
+        run: |
+          sudo apt install -y cmake gcc g++
       - name: Install Node.js packages
         run: npm install
       - name: Build the project
         run: npm run build
       - name: Run tests
         run: npm run test
-      - name: slack-send
+      - name: Run tests
+        run: node scripts/create-slack-messages.ts
+        env:
+          COMMIT_ADDED_FILES: ${{ github.event.head_commit.added }}
+          COMMIT_MODIFIED_FILES: ${{ github.event.head_commit.modified }}
+          COMMIT_REMOVED_FILES: ${{ github.event.head_commit.removed }}
+          COMMIT_TIMESTAMP: ${{ github.event.head_commit.timestamp }}
+      - name: 'Slack notification'
         id: slack
         uses: slackapi/slack-github-action@v1.27.0
         with:
           channel-id: 'jsbuffer'
-          message: 'Tests successfully concluded for commit: ${{github.sha}}.\n\nTriggered by ${{github.triggering_actor}}'
+          payload-file-path: '.github/workflows/test-finished-slack-message.json'
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

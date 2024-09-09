@@ -136,8 +136,7 @@ test('it should successfully generate a CMake C and C++ project', async (t) => {
         buildDir,
         ...options,
         '-S',
-        path.resolve(__dirname, '..'),
-        '--fresh'
+        path.resolve(__dirname, '..')
       ]).wait();
       await spawn('cmake', [
         '--build',

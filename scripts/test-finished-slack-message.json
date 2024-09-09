@@ -1,0 +1,32 @@
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "Test"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "text": "Tests passed for: `${{github.sha}}`! ✅",
+        "type": "mrkdwn"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "${{  github.event.push.head_commit.message }}"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "text": "<${{ github.event.push.head_commit.url }}|${{ github.event.push.head_commit.id }}>",
+        "type": "mrkdwn"
+      }
+    }
+  ]
+}
