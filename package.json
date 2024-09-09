@@ -25,7 +25,6 @@
     ]
   },
   "scripts": {
-    "postinstall": "nvm use",
     "lint:eslint": "npx eslint --fix src code-generator",
     "lint:prettier": "npx prettier --write \"test/**/*.{ts,json}\" \"src/**/*.ts\" \"code-generator/**/*.ts\"",
     "lint": "npm run lint:eslint && npm run lint:prettier",
