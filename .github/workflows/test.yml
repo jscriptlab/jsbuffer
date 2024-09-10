@@ -37,6 +37,7 @@ jobs:
       - name: Send Slack message about test results
         run: node scripts/notify.js --notification-type test-finished
         env:
+          TRIGGERING_ACTOR: '${{ github.triggering_actor }}'
           EVENT_PUSHER_NAME: '${{ github.event.pusher.name }}'
           EVENT_PUSHER_EMAIL: '${{ github.event.pusher.email }}'
           EVENT_HEAD_COMMIT_ID: '${{ github.event.head_commit.id }}'

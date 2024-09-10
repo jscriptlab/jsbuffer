@@ -50,6 +50,7 @@ const initialPayload = ({
 
 function context() {
   return {
+    TRIGGERING_ACTOR: env('TRIGGERING_ACTOR'),
     EVENT_HEAD_COMMIT_MESSAGE: env('EVENT_HEAD_COMMIT_MESSAGE'),
     EVENT_HEAD_COMMIT_URL: env('EVENT_HEAD_COMMIT_URL'),
     EVENT_HEAD_COMMIT_TIMESTAMP: env('EVENT_HEAD_COMMIT_TIMESTAMP'),
@@ -69,6 +70,7 @@ export default () => {
   const {
     EVENT_HEAD_COMMIT_URL,
     EVENT_REF,
+    TRIGGERING_ACTOR,
     EVENT_COMPARE_URL,
     EVENT_BEFORE_COMMIT,
     EVENT_AFTER_COMMIT,
@@ -109,7 +111,7 @@ export default () => {
     {
       type: 'section',
       text: {
-        text: 'Triggered by **${{ github.triggering_actor }}**',
+        text: `Triggered by **${TRIGGERING_ACTOR}**`,
         type: 'mrkdwn'
       }
     }
