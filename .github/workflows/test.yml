@@ -38,6 +38,7 @@ jobs:
         run: node scripts/notify.js --notification-type test-finished
         env:
           EVENT_PUSHER_NAME: '${{ github.event.pusher.name }}'
+          EVENT_PUSHER_EMAIL: '${{ github.event.pusher.email }}'
           EVENT_HEAD_COMMIT_ID: '${{ github.event.head_commit.id }}'
           EVENT_HEAD_COMMIT_MESSAGE: '${{ github.event.head_commit.message }}'
           EVENT_HEAD_COMMIT_TIMESTAMP: '${{ github.event.head_commit.timestamp }}'
