@@ -81,8 +81,7 @@ test('it should successfully generate a CMake C and C++ project', async (t) => {
     [
       '-DJSB_TOLERATE_TYPE_OVERFLOW=ON',
       '-DJSB_SERIALIZER_BUFFER_SIZE=1024',
-      '-DJSB_MAX_STRING_SIZE=100',
-      '-DJSB_ENABLE_TRACE=ON'
+      '-DJSB_MAX_STRING_SIZE=100'
     ],
     [
       '-DJSB_TOLERATE_TYPE_OVERFLOW=ON',
@@ -90,27 +89,14 @@ test('it should successfully generate a CMake C and C++ project', async (t) => {
       '-DJSB_MAX_STRING_SIZE=100'
     ],
     ['-DJSB_SERIALIZER_BUFFER_SIZE=1024', '-DJSB_MAX_STRING_SIZE=100'],
-    [
-      '-DJSB_SERIALIZER_USE_MALLOC=ON',
-      '-DJSB_MAX_STRING_SIZE=100',
-      '-DJSB_ENABLE_TRACE=ON'
-    ],
+    ['-DJSB_SERIALIZER_USE_MALLOC=ON', '-DJSB_MAX_STRING_SIZE=100'],
     [
       '-DJSB_TOLERATE_TYPE_OVERFLOW=ON',
       '-DJSB_SERIALIZER_BUFFER_SIZE=1024',
-      '-DJSB_MAX_STRING_SIZE=100',
-      '-DJSB_ENABLE_TRACE=ON'
+      '-DJSB_MAX_STRING_SIZE=100'
     ],
-    [
-      '-DJSB_SERIALIZER_USE_MALLOC=ON',
-      '-DJSB_MAX_STRING_SIZE=100',
-      '-DJSB_ENABLE_TRACE=ON'
-    ],
-    [
-      '-DJSB_SERIALIZER_USE_MALLOC=ON',
-      '-DJSB_MAX_STRING_SIZE=100',
-      '-DJSB_ENABLE_TRACE=ON'
-    ]
+    ['-DJSB_SERIALIZER_USE_MALLOC=ON', '-DJSB_MAX_STRING_SIZE=100'],
+    ['-DJSB_SERIALIZER_USE_MALLOC=ON', '-DJSB_MAX_STRING_SIZE=100']
     // ['-DJSB_SCHEMA_USE_MALLOC'],
     // ['-DJSB_SCHEMA_USE_MALLOC', '-DJSB_DISABLE_ERROR_ASSERTION'],
     // ['-DJSB_SCHEMA_USE_MALLOC', '-DJSB_SERIALIZER_USE_MALLOC'],
@@ -136,8 +122,7 @@ test('it should successfully generate a CMake C and C++ project', async (t) => {
         buildDir,
         ...options,
         '-S',
-        path.resolve(__dirname, '..'),
-        '--fresh'
+        path.resolve(__dirname, '..')
       ]).wait();
       await spawn('cmake', [
         '--build',

@@ -5,11 +5,12 @@ on:
     branches:
       - 'master'
       - 'feature/**'
-  pull_request:
-    branches:
-      - 'master'
       - 'develop'
-      - 'feature/**'
+  # pull_request:
+  #   branches:
+  #     - 'master'
+  #     - 'develop'
+  #     - 'feature/**'
 
 jobs:
   build:
@@ -17,31 +18,34 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 19.x, 20.x]
+        node-version: [20.x]
 
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - name: Install OS dependencies
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: cmake gcc g++
-          version: 1.0
+        run: |
+          sudo apt install -y cmake gcc g++
       - name: Install Node.js packages
         run: npm install
       - name: Build the project
         run: npm run build
       - name: Run tests
         run: npm run test
-      - name: slack-send
-        id: slack
-        uses: slackapi/slack-github-action@v1.27.0
-        with:
-          channel-id: 'jsbuffer'
-          message: 'Tests successfully concluded for commit: ${{github.sha}}.\n\nTriggered by ${{github.triggering_actor}}'
+      - name: Send Slack message about test results
+        run: node scripts/notify.js --notification-type test-finished
         env:
+          EVENT_PUSHER_NAME: '${{ github.event.pusher.name }}'
+          EVENT_PUSHER_EMAIL: '${{ github.event.pusher.email }}'
+          EVENT_HEAD_COMMIT_ID: '${{ github.event.head_commit.id }}'
+          EVENT_HEAD_COMMIT_MESSAGE: '${{ github.event.head_commit.message }}'
+          EVENT_HEAD_COMMIT_TIMESTAMP: '${{ github.event.head_commit.timestamp }}'
+          EVENT_HEAD_COMMIT_URL: '${{ github.event.head_commit.url }}'
+          EVENT_REF: '${{ github.event.ref }}'
+          EVENT_AFTER_COMMIT: '${{ github.event.after }}'
+          EVENT_BEFORE_COMMIT: '${{ github.event.before }}'
+          EVENT_COMPARE_URL: '${{ github.event.compare }}'
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_SIGNING_SECRET: ${{ secrets.SLACK_SIGNING_SECRET }}
