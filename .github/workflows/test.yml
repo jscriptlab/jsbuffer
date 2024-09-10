@@ -34,7 +34,7 @@ jobs:
         run: npm run build
       - name: Run tests
         run: npm run test
-      - name: Create Slack messages
+      - name: Send Slack message about test results
         run: node scripts/notify.js --notification-type test-finished
         env:
           EVENT_PUSHER_NAME: '${{ github.event.pusher.name }}'
@@ -46,11 +46,5 @@ jobs:
           EVENT_AFTER_COMMIT: '${{ github.event.after }}'
           EVENT_BEFORE_COMMIT: '${{ github.event.before }}'
           EVENT_COMPARE_URL: '${{ github.event.compare }}'
-      - name: 'Slack notification'
-        id: slack
-        uses: slackapi/slack-github-action@v1.27.0
-        with:
-          channel-id: 'jsbuffer'
-          payload-file-path: '.github/workflows/slack-messages/testFinishedSlackMessage.json'
-        env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_SIGNING_SECRET: ${{ secrets.SLACK_SIGNING_SECRET }}
