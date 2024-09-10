@@ -35,7 +35,7 @@ jobs:
       - name: Run tests
         run: npm run test
       - name: Create Slack messages
-        run: node scripts/create-slack-messages.js
+        run: node scripts/notify.js --notification-type test-finished
         env:
           EVENT_PUSHER_NAME: '${{ github.event.pusher.name }}'
           EVENT_HEAD_COMMIT_ID: '${{ github.event.head_commit.id }}'
