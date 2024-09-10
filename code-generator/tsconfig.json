@@ -19,7 +19,7 @@
     "types": ["node"]
   },
   "references": [
-    { "path": "../src" },
+    { "path": "../src/core" },
     {
       "path": "../exception"
     }

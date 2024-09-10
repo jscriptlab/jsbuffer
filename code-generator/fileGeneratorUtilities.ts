@@ -4,18 +4,18 @@ import {
   INodeTraitDefinition,
   INodeTypeDefinition,
   NodeType
-} from '../src/ASTGenerator';
-import { lowerFirst, upperFirst } from './stringUtilities';
+} from '../src/core/ASTGenerator';
+import { camelCase, dashCase, upperFirst } from './stringUtilities';
 
 export function getEncodeFunctionName(
   node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
   switch (node.type) {
     case NodeType.TraitDefinition:
-      return `encode${upperFirst(node.name.value)}Trait`;
+      return `encode${transformNodeNameValue(node.name.value)}Trait`;
     case NodeType.TypeDefinition:
     case NodeType.CallDefinition:
-      return `encode${upperFirst(node.name.value)}`;
+      return `encode${transformNodeNameValue(node.name.value)}`;
   }
 }
 
@@ -24,10 +24,10 @@ export function getDecodeFunctionName(
 ) {
   switch (node.type) {
     case NodeType.TraitDefinition:
-      return `decode${upperFirst(node.name.value)}Trait`;
+      return `decode${transformNodeNameValue(node.name.value)}Trait`;
     case NodeType.TypeDefinition:
     case NodeType.CallDefinition:
-      return `decode${upperFirst(node.name.value)}`;
+      return `decode${transformNodeNameValue(node.name.value)}`;
   }
 }
 
@@ -35,7 +35,12 @@ export function getTypeDefinitionOrCallDefinitionNamePropertyValue(
   node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition,
   file: string
 ) {
-  return `${file.split('/').map(lowerFirst).join('.')}.${node.name.value}`;
+  return `${file
+    // Remove the .jsb extension only if it is at the end of the string
+    .replace(/\.jsb$/, '')
+    .split('/')
+    .map(dashCase)
+    .join('.')}.${node.name.value}`;
 }
 
 export function getCompareFunctionName(
@@ -44,16 +49,16 @@ export function getCompareFunctionName(
   switch (node.type) {
     case NodeType.CallDefinition:
     case NodeType.TypeDefinition:
-      return `compare${upperFirst(node.name.value)}`;
+      return `compare${transformNodeNameValue(node.name.value)}`;
     case NodeType.TraitDefinition:
-      return `compare${upperFirst(node.name.value)}Trait`;
+      return `compare${transformNodeNameValue(node.name.value)}Trait`;
   }
 }
 
 export function getUpdateFunctionName(
   node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
-  return `update${upperFirst(node.name.value)}`;
+  return `update${transformNodeNameValue(node.name.value)}`;
 }
 
 export function integerRangeFromBits({
@@ -88,7 +93,7 @@ export function getTypeDefinitionOrCallDefinitionObjectCreator(
 ) {
   switch (value.type) {
     case NodeType.CallDefinition:
-      return upperFirst(value.name.value);
+      return transformNodeNameValue(value.name.value);
     case NodeType.TypeDefinition:
       return value.name.value;
   }
@@ -97,7 +102,7 @@ export function getTypeDefinitionOrCallDefinitionObjectCreator(
 export function getValidateDefinitionFunctionName(
   value: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
-  let out = `is${upperFirst(value.name.value)}`;
+  let out = `is${transformNodeNameValue(value.name.value)}`;
   switch (value.type) {
     case NodeType.TraitDefinition:
       out = `${out}Trait`;
@@ -118,9 +123,9 @@ export function getDefaultFunctionName(
   switch (node.type) {
     case NodeType.CallDefinition:
     case NodeType.TypeDefinition:
-      return `default${upperFirst(node.name.value)}`;
+      return `default${transformNodeNameValue(node.name.value)}`;
     case NodeType.TraitDefinition:
-      return `default${upperFirst(node.name.value)}Trait`;
+      return `default${transformNodeNameValue(node.name.value)}Trait`;
   }
 }
 
@@ -128,4 +133,8 @@ export function getTypeInputParamsInterfaceName(
   value: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
 ) {
   return `${value.name.value}InputParams`;
+}
+
+function transformNodeNameValue(value: string) {
+  return upperFirst(camelCase(value));
 }

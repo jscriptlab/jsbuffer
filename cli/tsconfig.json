@@ -3,6 +3,10 @@
   "compilerOptions": {
     "types": ["node"]
   },
-  "references": [{ "path": "../code-generator" }],
-  "include": ["index.ts"]
+  "references": [
+    { "path": "../code-generator" },
+    { "path": "../src/generators/cpp" },
+    { "path": "../src/generators/c" }
+  ],
+  "include": ["index.ts", "jsb.ts"]
 }

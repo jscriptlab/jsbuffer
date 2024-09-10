@@ -4,7 +4,7 @@ import {
   INodeExportStatement,
   INodeTraitDefinition,
   NodeTypeExpression
-} from '../src/ASTGenerator';
+} from '../src/core/ASTGenerator';
 import FileGenerator from './FileGenerator';
 import { ResolvedType } from './types';
 

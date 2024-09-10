@@ -5,12 +5,10 @@ import path from 'path';
 import { FileGenerator } from '../code-generator';
 import fs from 'fs';
 import { TextDecoder, TextEncoder } from 'util';
-import {
-  getArgument,
-  getInteger,
-  getNamedArgument,
-  getString,
-} from 'cli-argument-helper';
+import { getArgument } from 'cli-argument-helper';
+import { getString } from 'cli-argument-helper/string';
+import { getInteger } from 'cli-argument-helper/number';
+import getNamedArgument from 'cli-argument-helper/getNamedArgument';
 import Exception from '../exception/Exception';
 import CodeStream from 'textstreamjs';
 import chalk from 'chalk';
@@ -23,7 +21,7 @@ function getHelpText() {
   cs.write(
     [
       'Be aware that directories and files are going to be resolved from the directory the command-line tool is being called.',
-      'For instance, if you pass src/tsconfig.json to --extends arguments, it will resolved to $PWD/src/tsconfig.json, given that $PWD is the directory the command-line tool is being called from.',
+      'For instance, if you pass src/tsconfig.json to --extends arguments, it will resolved to $PWD/src/tsconfig.json, given that $PWD is the directory the command-line tool is being called from.'
     ].join(' ')
   );
   cs.append(`\n\n`);
@@ -34,7 +32,7 @@ function getHelpText() {
         name: '--unique-name-property-name',
         args: ['string'],
         description:
-          'Specify the unique property name for the generated classes or interfaces. Default is undefined.',
+          'Specify the unique property name for the generated classes or interfaces. Default is undefined.'
       },
       {
         name: '--extends',
@@ -43,27 +41,27 @@ function getHelpText() {
           'Specify a base class or interface that generated classes or interfaces will extend.',
           'This will add an "extends" keyword to the generated tsconfig.json file that is going inside the output directory.',
           'The path will be resolved as absolute, but will be written as relative to the generated TypeScript configuration for semantic reasons.',
-          'Default is undefined.',
-        ].join(' '),
+          'Default is undefined.'
+        ].join(' ')
       },
       {
         name: '--indentation-size',
         args: ['integer'],
         description:
-          'Set the size of indentation in the generated code. Default is 4.',
+          'Set the size of indentation in the generated code. Default is 4.'
       },
       {
         name: ['-o', '--output'],
         args: ['string'],
         description: [
           'Specify the output directory for generated files.',
-          "Default is 'schema'.",
-        ].join(' '),
+          "Default is 'schema'."
+        ].join(' ')
       },
       {
         name: '--no-ts-config',
         description:
-          'If present, no TypeScript configuration file will be generated.',
+          'If present, no TypeScript configuration file will be generated.'
       },
       {
         name: ['--sort-properties', '-s'],
@@ -71,9 +69,9 @@ function getHelpText() {
           'If present, the properties within generated classes or interfaces will be sorted alphabetically.',
           'This argument changes the CRC header of each type/call.',
           'If you are generating the same schema on another project, to keep the CRC headers between projects, you need to apply this argument on all',
-          'sides during schema compilation to make sure you are able to decode/encode it correctly.',
-        ].join(' '),
-      },
+          'sides during schema compilation to make sure you are able to decode/encode it correctly.'
+        ].join(' ')
+      }
     ];
     for (const arg of args) {
       let name = arg.name;
@@ -167,7 +165,7 @@ function getHelpText() {
     if (tsExtends !== null) {
       typeScriptConfiguration = {
         ...typeScriptConfiguration,
-        extends: path.relative(outDir, path.resolve(process.cwd(), tsExtends)),
+        extends: path.relative(outDir, path.resolve(process.cwd(), tsExtends))
       };
     }
   }
@@ -176,12 +174,12 @@ function getHelpText() {
 
   const compilerOptions = {
     outDir,
-    rootDir,
+    rootDir
   };
 
   const generator = new FileGenerator(
     {
-      path: mainFile,
+      path: mainFile
     },
     {
       root: null,
@@ -191,7 +189,7 @@ function getHelpText() {
       uniqueNamePropertyName,
       compilerOptions,
       typeScriptConfiguration,
-      indentationSize,
+      indentationSize
     }
   );
 
@@ -200,7 +198,7 @@ function getHelpText() {
     JSON.stringify(
       {
         outDir: path.relative(rootDir, outDir),
-        mainFile: path.relative(rootDir, mainFile),
+        mainFile: path.relative(rootDir, mainFile)
       },
       null,
       indentationSize

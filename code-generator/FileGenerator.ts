@@ -1,6 +1,5 @@
 import ASTGenerator, {
   ASTGeneratorOutputNode,
-  EOF,
   INodeCallDefinition,
   INodeExportStatement,
   INodeParamDefinition,
@@ -8,11 +7,11 @@ import ASTGenerator, {
   INodeTypeDefinition,
   NodeType,
   NodeTypeExpression
-} from '../src/ASTGenerator';
+} from '../src/core/ASTGenerator';
 import CodeStream from 'textstreamjs';
 import fs from 'fs';
 import path from 'path';
-import Tokenizer from '../src/Tokenizer';
+import Tokenizer from '../src/core/Tokenizer';
 import Exception from '../exception/Exception';
 import {
   getDecodeFunctionName,
@@ -270,12 +269,19 @@ export default class FileGenerator extends CodeStream {
     }
   }
   async #preprocess() {
+    const contents = await fs.promises.readFile(this.#file.path);
     const tokenizer = new Tokenizer({
+      file: this.#file.path,
       textDecoder: this.#textDecoder,
       textEncoder: this.#textEncoder,
-      contents: await fs.promises.readFile(this.#file.path)
+      contents
     });
-    this.#nodes = new ASTGenerator(tokenizer.tokenize().tokens()).generate();
+    this.#nodes = new ASTGenerator({
+      contents,
+      file: this.#file.path,
+      textDecoder: this.#textDecoder,
+      tokens: tokenizer.tokenize().tokens()
+    }).generate();
     if (this.#sortProperties) {
       this.#iterate((node) => {
         switch (node.type) {
@@ -2756,7 +2762,7 @@ export default class FileGenerator extends CodeStream {
   #node() {
     const node = this.#nodes[this.#offset];
     if (typeof node === 'undefined') {
-      throw new EOF();
+      throw new Exception('Tried to get node, but it was undefined');
     }
     return node;
   }

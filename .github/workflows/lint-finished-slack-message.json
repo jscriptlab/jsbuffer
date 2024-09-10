@@ -1,0 +1,32 @@
+{
+	"blocks": [
+		{
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": "Lint"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"text": "🚀 Linting completed successfully for commit: `${{github.sha}}`!",
+				"type": "mrkdwn"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Great job, ${{github.triggering_actor}}! Your changes have passed all linting checks on the `${{github.ref}}` branch. Keep up the great work! 🎉"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"text": "If you have any questions or need help, feel free to reach out. We're here to help! 👍",
+				"type": "mrkdwn"
+			}
+		}
+	]
+}

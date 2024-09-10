@@ -1,0 +1,58 @@
+{
+  "A": {
+    "kind": "type",
+    "id": -1688212411,
+    "globalName": "test-long.A",
+    "name": "A",
+    "params": [{ "name": "a", "type": { "type": "generic", "value": "long" } }]
+  },
+  "B": {
+    "kind": "type",
+    "id": 1885886278,
+    "globalName": "test-long.B",
+    "name": "B",
+    "params": [{ "name": "a", "type": { "type": "generic", "value": "ulong" } }]
+  },
+  "C": {
+    "kind": "type",
+    "id": -523698750,
+    "globalName": "test-long.C",
+    "name": "C",
+    "params": [
+      { "name": "a", "type": { "type": "generic", "value": "long" } },
+      { "name": "b", "type": { "type": "generic", "value": "ulong" } },
+      { "name": "c", "type": { "type": "generic", "value": "int" } }
+    ]
+  },
+  "__all": [
+    {
+      "kind": "type",
+      "id": -1688212411,
+      "globalName": "test-long.A",
+      "name": "A",
+      "params": [
+        { "name": "a", "type": { "type": "generic", "value": "long" } }
+      ]
+    },
+    {
+      "kind": "type",
+      "id": 1885886278,
+      "globalName": "test-long.B",
+      "name": "B",
+      "params": [
+        { "name": "a", "type": { "type": "generic", "value": "ulong" } }
+      ]
+    },
+    {
+      "kind": "type",
+      "id": -523698750,
+      "globalName": "test-long.C",
+      "name": "C",
+      "params": [
+        { "name": "a", "type": { "type": "generic", "value": "long" } },
+        { "name": "b", "type": { "type": "generic", "value": "ulong" } },
+        { "name": "c", "type": { "type": "generic", "value": "int" } }
+      ]
+    }
+  ]
+}

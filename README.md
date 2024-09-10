@@ -1,10 +1,43 @@
 # jsbuffer
 
+## Installation
+
+```
+yarn add jsbuffer
+npm i jsbuffer
+```
+
+## Usage
+
+```
+npm install -g jsbuffer
+jsbuffer schema/src -o schema
+jsbuffer schema/src -o schema --extends tsconfig.base.json
+```
+
 ## Description
 
 jsbuffer is the implementation of a type language. We offer tools for you to generate TypeScript interfaces and functions to encode and decode your data, and more.
 
-## Usage
+## Demo
+
+You can try jsbuffer online in the [online playground](https://jsbufferviewerdemo-app.onrender.com/), still in very early progress, but it works.
+
+## jsb: Support for other languages
+
+The new `jsb` command-line tool supports generating code for additional languages, currently, the CLI offer experimental support for the following languages:
+
+- C99
+- C++17
+
+### Usage
+
+```bash
+npm i -g jsbuffer@^2
+jsb -h
+```
+
+## Examples
 
 ### Example with command-line tool
 
@@ -106,7 +139,7 @@ export function decodeUser(__d: IDeserializer): user | null {
   return {
     _name: 'schema.user',
     id,
-    name,
+    name
   };
 }
 ```
@@ -131,7 +164,7 @@ export function defaultUser(params: Partial<userInputParams> = {}): user {
   return user({
     id: 0,
     name: '',
-    ...params,
+    ...params
   });
 }
 ```
@@ -251,35 +284,35 @@ const a1 = testMap2({
   a: new Map([
     ['a', '1'],
     ['b', '2'],
-    ['c', '3'],
+    ['c', '3']
   ]),
-  b: new Map([['a', ['', new Map([[1, 2]])]]]),
+  b: new Map([['a', ['', new Map([[1, 2]])]]])
 });
 
 assert.strict.equal(updateTestMap2(a1, {}), a1);
 assert.strict.equal(
   updateTestMap2(a1, {
-    b: new Map([['a', ['', new Map([[1, 2]])]]]),
+    b: new Map([['a', ['', new Map([[1, 2]])]]])
   }),
   a1
 );
 assert.strict.notEqual(
   updateTestMap2(a1, {
-    b: new Map([['a', ['', new Map([[1, 3]])]]]),
+    b: new Map([['a', ['', new Map([[1, 3]])]]])
   }),
   a1
 );
 assert.strict.deepEqual(
   updateTestMap2(a1, {
-    b: new Map([['a', ['', new Map([[1, 3]])]]]),
+    b: new Map([['a', ['', new Map([[1, 3]])]]])
   }),
   testMap2({
     a: new Map([
       ['a', '1'],
       ['b', '2'],
-      ['c', '3'],
+      ['c', '3']
     ]),
-    b: new Map([['a', ['', new Map([[1, 3]])]]]),
+    b: new Map([['a', ['', new Map([[1, 3]])]]])
   })
 );
 ```
@@ -344,22 +377,3 @@ type user {
 - `uint16`
 - `int8`
 - `uint8`
-
-## Demo
-
-You can try jsbuffer online in the [online playground](https://jsbufferviewerdemo-app.onrender.com/), still in very early progress, but it works.
-
-## Installation
-
-```
-yarn add jsbuffer
-npm i jsbuffer
-```
-
-## Usage
-
-```
-npm install -g jsbuffer
-jsbuffer schema/src -o schema
-jsbuffer schema/src -o schema --extends tsconfig.base.json
-```

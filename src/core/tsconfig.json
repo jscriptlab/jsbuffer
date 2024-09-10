@@ -1,0 +1,12 @@
+{
+  "include": [
+    "Tokenizer.ts",
+    "ErrorFormatter.ts",
+    "Character.ts",
+    "File.ts",
+    "tokenTypeToString.ts",
+    "ASTGenerator.ts"
+  ],
+  "references": [{ "path": "../../exception" }],
+  "extends": "../../tsconfig.base.json"
+}

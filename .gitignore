@@ -8,3 +8,8 @@ tsconfig.tsbuildinfo
 /.history
 /yarn-error.log
 /.vscode/settings.json
+/coverage
+/build
+
+/cmake-build-*
+/.idea

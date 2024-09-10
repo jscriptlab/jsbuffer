@@ -1,34 +1,44 @@
 {
   "name": "jsbuffer",
   "license": "MIT",
-  "version": "1.0.28",
+  "version": "2.0.7",
   "main": "./src/index.js",
   "bin": {
-    "jsbuffer": "cli/index.js"
+    "jsbuffer": "cli/index.js",
+    "jsb": "cli/jsb.js"
   },
   "files": [
     "cli/**/*.{d.ts,map,js}",
     "exception/**/*.{d.ts,map,js}",
-    "src/**/*.{d.ts,map,js}",
+    "src/**/*.{d.ts,map,js,txt,cpp,hpp}",
     "code-generator/**/*.{d.ts,map,js}",
     "codec/**/*.{d.ts,map,js}"
   ],
+  "ava": {
+    "failFast": true,
+    "workerThreads": false,
+    "utilizeParallelBuilds": false,
+    "concurrency": 1,
+    "files": [
+      "test/**/*.js",
+      "!test/generated/**/*"
+    ]
+  },
   "scripts": {
     "lint:eslint": "npx eslint --fix src code-generator",
-    "lint:prettier": "npx prettier --write \"out/**/*.{ts,json}\" \"src/**/*.ts\" \"code-generator/**/*.ts\"",
+    "lint:prettier": "npx prettier --write \"test/**/*.{ts,json}\" \"src/**/*.ts\" \"code-generator/**/*.ts\"",
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "cli": "npx ts-node --project cli/tsconfig.json cli",
-    "schema": "npm run cli -- test/schema -o out --extends tsconfig.base.json --indentation-size 2",
-    "build": "npx tsc -b out cli code-generator src --force",
+    "schema": "npm run cli -- test/schema -o test/generated/typescript --no-ts-config --indentation-size 2",
+    "build": "npx tsc -b test scripts cli code-generator src/generators/c src/generators/cpp src/core --force",
     "build:all": "npm run schema && npm run build && npm run lint",
     "prepublishOnly": "npm run build:all && npm run test",
-    "test": "TS_NODE_PROJECT=test/tsconfig.json npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
-    "test:coverage": "npx nyc npm test"
+    "test": "npx ava --fail-fast && npx ts-node scripts --generate-c99-codec --clang-format",
+    "test:coverage": "npx c8 npm test"
   },
   "dependencies": {
     "bn.js": "^5.2.1",
     "chalk": "^4.1.2",
-    "cli-argument-helper": "0.x",
     "crc": "4.x",
     "jsbi": "4.x",
     "long": "5.x",
@@ -37,19 +47,23 @@
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@jsbuffer/codec": "^1.0.7",
+    "@slack/bolt": "^3.21.2",
     "@types/bn.js": "^5.1.3",
-    "@types/chai": "^4.3.9",
-    "@types/node": "^20.8.7",
+    "@types/luxon": "^3.4.2",
+    "@types/node": "^20.12.7",
     "@typescript-eslint/eslint-plugin": "^6.8.0",
     "@typescript-eslint/parser": "^6.8.0",
-    "chai": "^4.3.10",
+    "ava": "^6.0.1",
+    "c8": "^8.0.1",
     "child-process-utilities": "^0.0.10",
+    "cli-argument-helper": "^1.0.2",
+    "cmake-js": "^7.3.0",
     "eslint": "^8.52.0",
-    "glob": "^10.3.10",
+    "glob": "^11.0.0",
     "jsbuffer": "^1.0.2",
+    "luxon": "^3.5.0",
     "nyc": "^15.1.0",
     "prettier": "^3.0.3",
-    "sarg": "^5.0.12",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   }
