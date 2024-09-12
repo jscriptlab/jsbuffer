@@ -39,6 +39,14 @@ export interface IMetadataFileCCodeGeneratorOptions extends IResolverOptions {
 export default class MetadataFileCCodeGenerator extends Resolver {
   readonly #files = new Array<IGeneratedFile>();
   readonly #options;
+  readonly #Exception = (() => {
+    const self = this;
+    return class extends Exception {
+      constructor(token: IToken, message: string) {
+        super(self.#createErrorFormatter(token).format(message));
+      }
+    };
+  })();
 
   public constructor(options: IMetadataFileCCodeGeneratorOptions) {
     super(options);
@@ -112,15 +120,6 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       items: enumItems
     };
   }
-
-  #Exception = (() => {
-    const self = this;
-    return class extends Exception {
-      constructor(token: IToken, message: string) {
-        super(self.#createErrorFormatter(token).format(message));
-      }
-    };
-  })();
 
   #createErrorFormatter(token: IToken) {
     return new ErrorFormatter({
