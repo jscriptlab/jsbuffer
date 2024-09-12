@@ -58,9 +58,29 @@ enum jsb_result_t jsb_serializer_rewind(struct jsb_serializer_t* s) {
 // enough to write `required_size` bytes
 static enum jsb_result_t jsb_serializer_reallocate(struct jsb_serializer_t* s,
                                                    jsb_uint32_t required_size) {
+  JSB_ASSERT_ARGUMENT(s != NULL, "jsb_serializer_reallocate",
+                      "Serializer is NULL");
+
+#ifdef JSB_SERIALIZER_USE_MALLOC
+  JSB_ASSERT_ARGUMENT(s->buffer != NULL, "jsb_serializer_reallocate",
+                      "Buffer is NULL");
+#endif
+
   const jsb_uint32_t remaining = s->buffer_capacity - s->buffer_size;
+
+  JSB_ASSERT_ARGUMENT(
+      remaining <= s->buffer_capacity, "jsb_serializer_reallocate",
+      "Possibly memory corruption: "
+      "Remaining buffer size is higher than the buffer capacity");
+
   JSB_TRACE("jsb_serializer_reallocate", "Remaining: %d, Required: %d",
             remaining, required_size);
+  if (remaining > s->buffer_capacity) {
+    JSB_TRACE(
+        "jsb_serializer_reallocate",
+        "FATAL: Remaining buffer size is higher than the buffer capacity");
+    return JSB_BUFFER_OVERFLOW;
+  }
   if (remaining < required_size) {
 #ifdef JSB_SERIALIZER_USE_MALLOC
     jsb_uint32_t new_buffer_capacity = (s->buffer_capacity * 2) + required_size;

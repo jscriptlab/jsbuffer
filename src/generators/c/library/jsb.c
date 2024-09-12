@@ -13,6 +13,7 @@ void* jsb_memcpy(void* dest, const void* src, jsb_uint32_t len) {
   if (dest == NULL || src == NULL) {
     return 0;
   }
+  // memcpy(NULL, NULL, 0);
   jsb_uint32_t i = 0;
   while (--len) {
     ((jsb_uint8_t*)dest)[i] = ((jsb_uint8_t*)src)[i];

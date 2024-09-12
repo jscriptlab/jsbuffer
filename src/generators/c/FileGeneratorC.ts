@@ -122,8 +122,11 @@ export default class FileGeneratorC extends CodeStream {
 
     this.write('cmake_minimum_required(VERSION 3.5)\n');
     this.write(`project(${this.#cmake.project} C ASM)\n`);
+    this.write('\n');
     this.write('set(CMAKE_C_STANDARD 99)\n');
     this.write('set(CMAKE_C_STANDARD_REQUIRED ON)\n');
+    this.write('set(CMAKE_C_EXTENSIONS ON)\n');
+    this.write('\n');
     this.write(
       'add_library(\n',
       () => {
@@ -180,24 +183,32 @@ export default class FileGeneratorC extends CodeStream {
       ')\n'
     );
     this.write('\n');
-    this.write(`add_executable(${this.#cmake.project}_test test.c)\n`);
-    this.write(
-      'target_compile_options(\n',
-      () => {
-        this.write(`${this.#cmake.project}_test\n`);
-        this.write('PRIVATE\n');
-        this.write('-Wall\n');
-        this.write('-Wextra\n');
-        this.write('-Werror\n');
-        this.write('-pedantic\n');
-      },
-      ')\n'
-    );
-    this.write(
-      `target_link_libraries(${this.#cmake.project}_test PRIVATE ${
-        this.#cmake.project
-      })\n`
-    );
+    this.write('\n');
+
+    this.write('if(JSB_SCHEMA_TESTS MATCHES ON)\n');
+    this.indentBlock(() => {
+      this.write(`add_executable(${this.#cmake.project}_test test.c)\n`);
+      this.write(
+        'target_compile_options(\n',
+        () => {
+          this.write(`${this.#cmake.project}_test\n`);
+          this.write('PRIVATE\n');
+          this.write('-Wall\n');
+          this.write('-Wextra\n');
+          this.write('-Werror\n');
+          this.write('-pedantic\n');
+        },
+        ')\n'
+      );
+      this.write(
+        `target_link_libraries(${this.#cmake.project}_test PRIVATE ${
+          this.#cmake.project
+        })\n`
+      );
+    });
+    this.write('endif()\n');
+    this.write('\n');
+
     this.#files.push({
       path: 'CMakeLists.txt',
       contents: this.value()

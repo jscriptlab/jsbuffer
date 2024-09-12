@@ -866,9 +866,15 @@ export default class MetadataFileCCodeGenerator extends Resolver {
     this.write(
       `enum ${traitEnum.name} {\n`,
       () => {
+        this.append('#ifdef JSB_SCHEMA_NO_ASSIGNMENT_ENUMS\n');
+        for (const [, item] of traitEnum.items) {
+          this.write(`${item.name},\n`);
+        }
+        this.append('#else\n');
         for (const [, item] of traitEnum.items) {
           this.write(`${item.name} = ${item.value},\n`);
         }
+        this.append('#endif\n');
       },
       '};\n'
     );

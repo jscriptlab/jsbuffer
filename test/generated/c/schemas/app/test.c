@@ -1,9 +1,10 @@
-#include <assert.h>
+#ifdef __AVR__
+#include <avr/sleep.h>
+#endif
+
 #include <jsb/deserializer.h>
+#include <jsb/jsb.h>
 #include <jsb/serializer.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "app/command_move_backwards.h"
 #include "app/command_move_forward.h"
@@ -23,7 +24,7 @@
     return 1;                                                                  \
   }
 
-int main() {
+int main(void) {
   struct jsb_serializer_t s;
   struct jsb_deserializer_t d;
 
@@ -59,60 +60,90 @@ int main() {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
       do {
         status = jsb_serializer_write_uint8(&s, 1);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
       do {
         status = jsb_serializer_write_uint16(&s, 0xFF);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
       do {
         status = jsb_serializer_write_uint32(&s, 0xFFFF);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
       do {
         status = jsb_serializer_write_uint64(&s, 0xFFFFFFFF);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
       do {
         status = jsb_serializer_write_int8(&s, -1);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
       do {
         status = jsb_serializer_write_int16(&s, -10);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
       do {
         status = jsb_serializer_write_int32(&s, -100);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
       do {
         status = jsb_serializer_write_int64(&s, -1000);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
       do {
         status = jsb_serializer_write_float(&s, 0.12345678f);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
       do {
         status = jsb_serializer_write_double(&s, 0.1234567890);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
     }
   }
@@ -186,6 +217,9 @@ int main() {
       do {
         status = app_message_encode(&value, &s);
         status = app_message_encode(&value, &s);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
 #endif // defined(JSB_SERIALIZER_BUFFER_SIZE) &&
        // !defined(JSB_SERIALIZER_USE_MALLOC)
@@ -212,7 +246,7 @@ int main() {
       JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(memcmp(&new_value.command, &value.command,
                         sizeof(value.command)) == 0);
-      printf("Test passed for command ✔\n");
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "command");
     }
     {
       struct app_message_t new_value;
@@ -226,7 +260,7 @@ int main() {
       JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(memcmp(&new_value.command1, &value.command1,
                         sizeof(value.command1)) == 0);
-      printf("Test passed for command1 ✔\n");
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "command1");
     }
     {
       struct app_message_t new_value;
@@ -240,7 +274,7 @@ int main() {
       JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(memcmp(&new_value.command2, &value.command2,
                         sizeof(value.command2)) == 0);
-      printf("Test passed for command2 ✔\n");
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "command2");
     }
     {
       struct app_message_t new_value;
@@ -254,7 +288,7 @@ int main() {
       JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(memcmp(&new_value.command3, &value.command3,
                         sizeof(value.command3)) == 0);
-      printf("Test passed for command3 ✔\n");
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "command3");
     }
     {
       struct app_message_t new_value;
@@ -268,7 +302,7 @@ int main() {
       JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(memcmp(&new_value.command4, &value.command4,
                         sizeof(value.command4)) == 0);
-      printf("Test passed for command4 ✔\n");
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "command4");
     }
   }
   {
@@ -283,6 +317,9 @@ int main() {
       do {
         status = app_command_move_forward_encode(&value, &s);
         status = app_command_move_forward_encode(&value, &s);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
 #endif // defined(JSB_SERIALIZER_BUFFER_SIZE) &&
        // !defined(JSB_SERIALIZER_USE_MALLOC)
@@ -309,7 +346,7 @@ int main() {
       JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
       JSB_ASSERT(app_command_move_forward_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(memcmp(&new_value.stop, &value.stop, sizeof(value.stop)) == 0);
-      printf("Test passed for stop ✔\n");
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "stop");
     }
     {
       struct app_command_move_forward_t new_value;
@@ -324,7 +361,7 @@ int main() {
       JSB_ASSERT(app_command_move_forward_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(
           memcmp(&new_value.value2, &value.value2, sizeof(value.value2)) == 0);
-      printf("Test passed for value2 ✔\n");
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value2");
     }
   }
   {
@@ -339,6 +376,9 @@ int main() {
       do {
         status = app_command_move_backwards_encode(&value, &s);
         status = app_command_move_backwards_encode(&value, &s);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
 #endif // defined(JSB_SERIALIZER_BUFFER_SIZE) &&
        // !defined(JSB_SERIALIZER_USE_MALLOC)
@@ -365,7 +405,7 @@ int main() {
       JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
       JSB_ASSERT(app_command_move_backwards_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(memcmp(&new_value.stop, &value.stop, sizeof(value.stop)) == 0);
-      printf("Test passed for stop ✔\n");
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "stop");
     }
     {
       struct app_command_move_backwards_t new_value;
@@ -377,13 +417,14 @@ int main() {
       {
         const jsb_uint8_t bytes[1] = {0};
         strcpy((char*)value.value, (const char*)bytes);
+        JSB_ASSERT(strcmp((const char*)value.value, (const char*)bytes) == 0);
       }
       JSB_ASSERT(app_command_move_backwards_encode(&value, &s) == JSB_OK);
       JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
       JSB_ASSERT(app_command_move_backwards_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(memcmp(&new_value.value, &value.value, sizeof(value.value)) ==
                  0);
-      printf("Test passed for value ✔\n");
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value");
     }
     {
       struct app_command_move_backwards_t new_value;
@@ -398,7 +439,7 @@ int main() {
       JSB_ASSERT(app_command_move_backwards_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(
           memcmp(&new_value.value2, &value.value2, sizeof(value.value2)) == 0);
-      printf("Test passed for value2 ✔\n");
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value2");
     }
   }
   {
@@ -517,6 +558,9 @@ int main() {
       do {
         status = protocol_main_void_encode(&value, &s);
         status = protocol_main_void_encode(&value, &s);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
 #endif // defined(JSB_SERIALIZER_BUFFER_SIZE) &&
        // !defined(JSB_SERIALIZER_USE_MALLOC)
@@ -544,7 +588,7 @@ int main() {
       JSB_ASSERT(protocol_main_void_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(memcmp(&new_value.value, &value.value, sizeof(value.value)) ==
                  0);
-      printf("Test passed for value ✔\n");
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value");
     }
   }
   {
@@ -559,6 +603,9 @@ int main() {
       do {
         status = protocol_main_user_encode(&value, &s);
         status = protocol_main_user_encode(&value, &s);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
 #endif // defined(JSB_SERIALIZER_BUFFER_SIZE) &&
        // !defined(JSB_SERIALIZER_USE_MALLOC)
@@ -585,7 +632,7 @@ int main() {
       JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
       JSB_ASSERT(protocol_main_user_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(memcmp(&new_value.id, &value.id, sizeof(value.id)) == 0);
-      printf("Test passed for id ✔\n");
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "id");
     }
     {
       struct protocol_main_user_t new_value;
@@ -599,7 +646,7 @@ int main() {
       JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
       JSB_ASSERT(protocol_main_user_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(memcmp(&new_value.name, &value.name, sizeof(value.name)) == 0);
-      printf("Test passed for name ✔\n");
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "name");
     }
   }
   {
@@ -614,6 +661,9 @@ int main() {
       do {
         status = protocol_main_get_user_encode(&value, &s);
         status = protocol_main_get_user_encode(&value, &s);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
 #endif // defined(JSB_SERIALIZER_BUFFER_SIZE) &&
        // !defined(JSB_SERIALIZER_USE_MALLOC)
@@ -640,7 +690,7 @@ int main() {
       JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
       JSB_ASSERT(protocol_main_get_user_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(memcmp(&new_value.id, &value.id, sizeof(value.id)) == 0);
-      printf("Test passed for id ✔\n");
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "id");
     }
   }
   {
@@ -655,6 +705,9 @@ int main() {
       do {
         status = protocol_main_tuple_test_encode(&value, &s);
         status = protocol_main_tuple_test_encode(&value, &s);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
       } while (status != JSB_BUFFER_OVERFLOW);
 #endif // defined(JSB_SERIALIZER_BUFFER_SIZE) &&
        // !defined(JSB_SERIALIZER_USE_MALLOC)
@@ -692,10 +745,20 @@ int main() {
       JSB_ASSERT(protocol_main_tuple_test_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(
           memcmp(&new_value.values, &value.values, sizeof(value.values)) == 0);
-      printf("Test passed for values ✔\n");
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "values");
     }
   }
 
   jsb_serializer_free(&s);
+
+  JSB_TRACE("test", "All tests passed ✔");
+
+#ifdef __AVR__
+  // Put AVR MCUs to sleep
+  // Note: `asm("sleep")` would also work
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  sleep_mode();
+#endif
+
   return 0;
 }

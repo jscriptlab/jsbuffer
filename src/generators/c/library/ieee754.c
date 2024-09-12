@@ -1,3 +1,4 @@
+#include <jsb/ieee754.h>
 #include <jsb/jsb.h>
 
 #define FLOAT_SIGN_MASK 0x80000000

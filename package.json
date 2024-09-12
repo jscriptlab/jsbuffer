@@ -21,7 +21,8 @@
     "concurrency": 1,
     "files": [
       "test/**/*.js",
-      "!test/generated/**/*"
+      "!test/generated/**/*",
+      "!test/helpers/**/*"
     ]
   },
   "scripts": {

@@ -18,6 +18,7 @@ import {
 } from '../../parser/types/metadata';
 import Exception from '../../../exception/Exception';
 import MetadataFileCCodeGenerator from './MetadataFileCCodeGenerator';
+import assert from 'assert';
 
 export const genericTypeNames = [
   'uint8',
@@ -60,10 +61,12 @@ export default class TestGeneratorC extends CodeStream {
 
   // Generate a test.c file based on the metadata, calling `_encode` and `_decode` functions. Create the serializer and deserializer once
   public generate() {
-    this.write('#include <stdio.h>\n');
-    this.write('#include <assert.h>\n');
-    this.write('#include <stdlib.h>\n');
-    this.write('#include <string.h>\n');
+    this.append('#ifdef __AVR__\n');
+    this.write('#include <avr/sleep.h>\n');
+    this.append('#endif\n');
+    this.write('\n');
+
+    this.write('#include <jsb/jsb.h>\n');
     this.write('#include <jsb/serializer.h>\n');
     this.write('#include <jsb/deserializer.h>\n');
     this.write('\n');
@@ -85,7 +88,7 @@ export default class TestGeneratorC extends CodeStream {
       );
     });
     this.write('\n');
-    this.write('int main() {\n');
+    this.write('int main(void) {\n');
     this.indentBlock(() => {
       this.write('struct jsb_serializer_t s;\n');
       this.write('struct jsb_deserializer_t d;\n');
@@ -164,6 +167,10 @@ export default class TestGeneratorC extends CodeStream {
                     this.write(
                       `status = jsb_serializer_write_${typeName}(&s, ${value});\n`
                     );
+                    this.#writeStatusCheck('status', [
+                      'JSB_OK',
+                      'JSB_BUFFER_OVERFLOW'
+                    ]);
                   },
                   '} while(status != JSB_BUFFER_OVERFLOW);\n'
                 );
@@ -246,6 +253,10 @@ export default class TestGeneratorC extends CodeStream {
                               metadata
                             )}_encode(&value, &s);\n`
                           );
+                          this.#writeStatusCheck('status', [
+                            'JSB_OK',
+                            'JSB_BUFFER_OVERFLOW'
+                          ]);
                         },
                         '} while(status != JSB_BUFFER_OVERFLOW);\n'
                       );
@@ -345,7 +356,7 @@ export default class TestGeneratorC extends CodeStream {
                           `JSB_ASSERT(memcmp(&new_value.${param.name}, &value.${param.name}, sizeof(value.${param.name})) == 0);\n`
                         );
                         this.write(
-                          `printf("Test passed for ${param.name} ✔\\n");\n`
+                          `JSB_TRACE("test", "Test passed ✔ for param: %s", "${param.name}");\n`
                         );
                       },
                       '}\n'
@@ -362,7 +373,21 @@ export default class TestGeneratorC extends CodeStream {
         }
       }
       this.write('\n');
+
       this.write('jsb_serializer_free(&s);\n');
+      this.write('\n');
+
+      this.write('JSB_TRACE("test", "All tests passed ✔");\n');
+      this.write('\n');
+
+      this.append('#ifdef __AVR__\n');
+      this.write('// Put AVR MCUs to sleep\n');
+      this.write('// Note: `asm("sleep")` would also work\n');
+      this.write('set_sleep_mode(SLEEP_MODE_PWR_DOWN);\n');
+      this.write('sleep_mode();\n');
+      this.append('#endif\n');
+      this.write('\n');
+
       this.write('return 0;\n');
     });
     this.write('}\n');
@@ -370,6 +395,22 @@ export default class TestGeneratorC extends CodeStream {
       path: 'test.c',
       contents: this.value()
     });
+  }
+
+  #writeStatusCheck(status: string, expected: string[]) {
+    assert.strict.ok(expected.length > 0, '`expected` array cannot be empty');
+
+    this.write(
+      '// If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.\n'
+    );
+    this.write(
+      '// Otherwise, some other issue has happened during execution.\n'
+    );
+    this.write(
+      `JSB_ASSERT(${expected
+        .map((arg) => `${status} == ${arg}`)
+        .join(' || ')});\n`
+    );
   }
 
   #getValueFromGenericName(
@@ -504,6 +545,10 @@ export default class TestGeneratorC extends CodeStream {
               )}};\n`
             );
             this.write(`strcpy((char*)${key}, (const char *) bytes);\n`);
+            // Test the string values with strcmp
+            this.write(
+              `JSB_ASSERT(strcmp((const char*)${key}, (const char*)bytes) == 0);\n`
+            );
           },
           '}\n'
         );
