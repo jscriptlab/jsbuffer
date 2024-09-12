@@ -28,8 +28,8 @@ jobs:
       - name: Install OS dependencies
         run: |
           sudo apt install -y \
-            cmake gcc g++ gcc-avr simavr avr-libc build-essential \
-            libc6-dev gcc-11 g++-11
+            cmake gcc g++ gcc-avr simavr avr-libc \
+            gcc-multilib g++-multilib
       - name: Install Node.js packages
         run: npm install
       - name: Build the project
