@@ -27,9 +27,10 @@ jobs:
           cache: 'npm'
       - name: Install OS dependencies
         run: |
-          sudo apt install -y \
-            cmake gcc g++ gcc-avr simavr avr-libc \
-            gcc-multilib g++-multilib
+          sudo apt install \
+            -y --install-recommends \
+              cmake gcc g++ gcc-avr simavr avr-libc \
+              gcc-multilib g++-multilib
       - name: Install Node.js packages
         run: npm install
       - name: Build the project
