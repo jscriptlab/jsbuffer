@@ -100,7 +100,7 @@ int main(void) {
     jsb_uint8_t buffer[4];
     jsb_float_t output, decoded_value;
     for (i = 0; i < JSB_CODEC_TEST_ITERATION_COUNT; i++) {
-      rand_fill(&output, sizeof(jsb_float_t));
+      rand_fill_float(&output, 1);
       ASSERT_JSB_OK(jsb_encode_float(buffer, output));
       ASSERT_JSB_OK(jsb_decode_float(buffer, &decoded_value));
       ASSERT_JSB(decoded_value == output);
@@ -110,7 +110,7 @@ int main(void) {
     jsb_uint8_t buffer[8];
     jsb_double_t output, decoded_value;
     for (i = 0; i < JSB_CODEC_TEST_ITERATION_COUNT; i++) {
-      rand_fill(&output, sizeof(jsb_double_t));
+      rand_fill_double(&output, 1);
       ASSERT_JSB_OK(jsb_encode_double(buffer, output));
       ASSERT_JSB_OK(jsb_decode_double(buffer, &decoded_value));
       ASSERT_JSB(decoded_value == output);

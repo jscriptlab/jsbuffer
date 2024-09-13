@@ -157,7 +157,26 @@ async function generateC99Codec() {
           testFile.write(
             'for(i = 0; i < JSB_CODEC_TEST_ITERATION_COUNT; i++) {\n',
             () => {
-              testFile.write(`rand_fill(&output, sizeof(${integer.name}));\n`);
+              switch (integer.type) {
+                case NumberTypeId.Int8:
+                case NumberTypeId.Int16:
+                case NumberTypeId.Int32:
+                case NumberTypeId.Int64:
+                case NumberTypeId.UInt64:
+                case NumberTypeId.UInt32:
+                case NumberTypeId.UInt16:
+                case NumberTypeId.UInt8:
+                  testFile.write(
+                    `rand_fill(&output, sizeof(${integer.name}));\n`
+                  );
+                  break;
+                case NumberTypeId.Float:
+                  testFile.write('rand_fill_float(&output, 1);\n');
+                  break;
+                case NumberTypeId.Double:
+                  testFile.write('rand_fill_double(&output, 1);\n');
+                  break;
+              }
 
               testFile.write(
                 `ASSERT_JSB_OK(jsb_encode_${integerName}(buffer, output));\n`
