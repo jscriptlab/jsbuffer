@@ -8,8 +8,8 @@ test_schema::ImportLocalType::decode(jsb::deserializer& d) {
     const auto header = d.read<std::int32_t>();
     if (header != -2079881379) {
       throw std::runtime_error(
-          "Invalid CRC header: Expected -2079881379, but got " +
-          std::to_string(header) + " instead");
+          "Invalid CRC header: Expected -2079881379, but got " + header +
+          " instead");
     }
   }
   test_schema::ImportLocalType result;

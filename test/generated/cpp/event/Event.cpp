@@ -7,8 +7,8 @@ event::Event event::Event::decode(jsb::deserializer& d) {
     const auto header = d.read<std::int32_t>();
     if (header != -56900045) {
       throw std::runtime_error(
-          "Invalid CRC header: Expected -56900045, but got " +
-          std::to_string(header) + " instead");
+          "Invalid CRC header: Expected -56900045, but got " + header +
+          " instead");
     }
   }
   event::Event result;

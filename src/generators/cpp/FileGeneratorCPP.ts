@@ -246,7 +246,7 @@ export default class FileGeneratorCPP extends CodeStream {
           '{\n',
           () => {
             this.write('const auto len = d.read<std::uint32_t>();\n');
-            this.write(`${key}.reserve(len);\n`);
+            this.write(`${key}.resize(len);\n`);
             this.write(
               'for (std::uint32_t i = 0; i < len; i++) {\n',
               () => {

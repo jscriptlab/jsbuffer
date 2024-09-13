@@ -7,15 +7,15 @@ test_schema::Message test_schema::Message::decode(jsb::deserializer& d) {
     const auto header = d.read<std::int32_t>();
     if (header != -1322944567) {
       throw std::runtime_error(
-          "Invalid CRC header: Expected -1322944567, but got " +
-          std::to_string(header) + " instead");
+          "Invalid CRC header: Expected -1322944567, but got " + header +
+          " instead");
     }
   }
   test_schema::Message result;
   result.id = d.read<std::uint64_t>();
   {
     const auto len = d.read<std::uint32_t>();
-    result.event.reserve(len);
+    result.event.resize(len);
     for (std::uint32_t i = 0; i < len; i++) {
       result.event[i] = event::Event::decode(d);
     }

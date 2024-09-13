@@ -8,8 +8,8 @@ schema_internal_test::internal::ImportMeWithId::decode(jsb::deserializer& d) {
     const auto header = d.read<std::int32_t>();
     if (header != 1543151611) {
       throw std::runtime_error(
-          "Invalid CRC header: Expected 1543151611, but got " +
-          std::to_string(header) + " instead");
+          "Invalid CRC header: Expected 1543151611, but got " + header +
+          " instead");
     }
   }
   schema_internal_test::internal::ImportMeWithId result;
