@@ -152,11 +152,11 @@ async function generateC99Codec() {
       testFile.write(
         '{\n',
         () => {
-          testFile.write(`jsb_uint8_t buffer[${integer.bits / 8}];\n`);
           testFile.write(`${integer.name} output, decoded_value;\n`);
           testFile.write(
             'for(i = 0; i < JSB_CODEC_TEST_ITERATION_COUNT; i++) {\n',
             () => {
+              testFile.write(`jsb_uint8_t buffer[${integer.bits / 8}];\n`);
               switch (integer.type) {
                 case NumberTypeId.Int8:
                 case NumberTypeId.Int16:
