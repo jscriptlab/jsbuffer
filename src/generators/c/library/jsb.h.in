@@ -262,6 +262,16 @@ typedef signed char jsb_int8_t;
 
 #ifdef HAVE_SIZE_TYPE
 typedef size_t jsb_size_t;
+#elif defined(HAVE_UINT64_TYPE)
+typedef jsb_uint64_t jsb_size_t;
+#elif defined(HAVE_UINT32_TYPE)
+typedef jsb_uint32_t jsb_size_t;
+#elif defined(HAVE_UINT16_TYPE)
+typedef jsb_uint16_t jsb_size_t;
+#elif defined(HAVE_UINT8_TYPE)
+typedef jsb_uint8_t jsb_size_t;
+#else
+#error "No suitable type found for size_t"
 #endif // HAVE_SIZE_TYPE
 
 #ifdef HAVE_VOID_TYPE
