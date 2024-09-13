@@ -4,6 +4,25 @@ import path from 'node:path';
 import { generateTemporaryFiles } from '../helpers';
 import Time from './helpers/Time';
 import runNativeSchemaTests, { ISchema } from './helpers/runNativeSchemaTests';
+import generateSchema from './helpers/generateSchema';
+
+const schemas: ReadonlyArray<ISchema> = [
+  {
+    type: 'avr',
+    secondary: null,
+    mainFile: 'src/generators/c/test/simple_schema.jsb',
+    name: 'avr_simple_schema',
+    outDir: path.resolve(__dirname, 'generated/c/schemas/avr')
+  },
+  {
+    mainFile: 'src/generators/c/test/app.jsb',
+    name: 'app',
+    // 64-bit and 32-bit
+    type: 'x86_64',
+    secondary: ['i386'],
+    outDir: path.resolve(__dirname, 'generated/c/schemas/app')
+  }
+];
 
 test("FileGeneratorC: it should throw a detailed error in case there's an invalid token", async (t) => {
   const temp = await generateTemporaryFiles({
@@ -66,42 +85,11 @@ test('it should successfully generate a CMake C and C++ project', async (t) => {
     path.resolve(__dirname, 'generated/cpp')
   ]).wait();
 
-  const schemas: ISchema[] = [
-    {
-      type: 'avr',
-      secondary: null,
-      mainFile: 'src/generators/c/test/simple_schema.jsb',
-      name: 'avr_simple_schema',
-      outDir: path.resolve(__dirname, 'generated/c/schemas/avr')
-    },
-    {
-      mainFile: 'src/generators/c/test/app.jsb',
-      name: 'app',
-      // 64-bit and 32-bit
-      type: 'x86_64',
-      secondary: ['i386'],
-      outDir: path.resolve(__dirname, 'generated/c/schemas/app')
-    }
-  ];
-
-  for (const schema of schemas) {
-    await spawn(
-      'node',
-      [
-        path.resolve(__dirname, '../cli/jsb'),
-        schema.mainFile,
-        '--name',
-        schema.name,
-        '--generator',
-        'c99',
-        '-o',
-        schema.outDir
-      ],
-      { timeout: Time.milliseconds.Minute * 2 }
-    ).wait();
+  for (const schema of Array.from(schemas).reverse()) {
+    await generateSchema(schema);
   }
 
-  for (const schema of schemas) {
+  for (const schema of Array.from(schemas).reverse()) {
     await runNativeSchemaTests(schema);
   }
 

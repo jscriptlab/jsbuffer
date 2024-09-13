@@ -63,6 +63,7 @@ export default async function runNativeSchemaTests(schema: ISchema) {
           '-DJSB_MAX_STRING_SIZE=100',
           '-DJSB_TOLERATE_TYPE_OVERFLOW=OFF'
         ]
+        // ! Add support for JSB_SCHEMA_USE_MALLOC
         // ['-DJSB_SCHEMA_USE_MALLOC'],
         // ['-DJSB_SCHEMA_USE_MALLOC', '-DJSB_DISABLE_ERROR_ASSERTION'],
         // ['-DJSB_SCHEMA_USE_MALLOC', '-DJSB_SERIALIZER_USE_MALLOC'],
@@ -72,7 +73,7 @@ export default async function runNativeSchemaTests(schema: ISchema) {
         //   '-DJSB_DISABLE_ERROR_ASSERTION'
         // ],
       ];
-      for (const cmakeArgs of cmakePredefinedArguments) {
+      for (const cmakeArgs of Array.from(cmakePredefinedArguments)) {
         if (schema.secondary === null) {
           break;
         }
@@ -89,7 +90,10 @@ export default async function runNativeSchemaTests(schema: ISchema) {
                 'CMAKE_C_FLAGS is already set. This is not supported yet'
               );
 
-              cmakeArgs.push('-DCMAKE_C_FLAGS=-m32');
+              cmakePredefinedArguments.push([
+                ...cmakeArgs,
+                '-DCMAKE_C_FLAGS=-m32'
+              ]);
               break;
             }
           }
@@ -98,8 +102,10 @@ export default async function runNativeSchemaTests(schema: ISchema) {
       for (const cmakeArgs of cmakePredefinedArguments) {
         for (const cmakeBuildType of cmakeBuildTypes) {
           // Add test for testing it with C++ disabled
-          cmakeOptions.unshift([
+          cmakeOptions.push([
             `-DCMAKE_BUILD_TYPE=${cmakeBuildType}`,
+            '-DJSB_CPP=OFF',
+            '-DJSB_SCHEMA_CPP=OFF',
             ...cmakeArgs
           ]);
         }
@@ -107,24 +113,6 @@ export default async function runNativeSchemaTests(schema: ISchema) {
       break;
     }
     case 'avr':
-      // for (const cmakeBuildType of cmakeBuildTypes) {
-      //   // Test with all sorts of build types
-      //   cmakeOptions.unshift([
-      //     cmakeBuildType,
-      //     '-G',
-      //     'Unix Makefiles',
-      //     `-DCMAKE_BUILD_TYPE=${cmakeBuildType}`
-      //   ]);
-
-      //   // Add test for testing it with C++ disabled
-      //   cmakeOptions.unshift([
-      //     cmakeBuildType,
-      //     '-G',
-      //     'Unix Makefiles',
-      //     `-DCMAKE_BUILD_TYPE=${cmakeBuildType}`,
-      //     '-DJSB_SCHEMA_CPP=OFF',
-      //   ]);
-      // }
       for (const avrOptions of [
         ['-DMCU=atmega2560', '-DF_CPU=16000000UL'],
         ['-DMCU=atmega1281', '-DF_CPU=16000000UL'],
@@ -163,7 +151,7 @@ export default async function runNativeSchemaTests(schema: ISchema) {
 
             // Make a build type for each on and off for the tests
             for (const cmakeBuildType of ['Release' /*, 'MinSizeRel'*/]) {
-              cmakeOptions.unshift([
+              cmakeOptions.push([
                 ...currentArgs,
                 `-DCMAKE_BUILD_TYPE=${cmakeBuildType}`
               ]);
@@ -233,10 +221,11 @@ export default async function runNativeSchemaTests(schema: ISchema) {
           case 'x86_64':
             try {
               await fs.promises.access(testFile, fs.constants.X_OK);
-              await spawn(testFile).wait();
             } catch (reason) {
               console.error('Skipping %s due to error: %s', testFile, reason);
+              break;
             }
+            await spawn(testFile).wait();
             break;
           case 'avr': {
             assert.strict.ok(F_CPU !== null);
