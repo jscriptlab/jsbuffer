@@ -8,8 +8,8 @@ test_schema::AcknowledgeMessage::decode(jsb::deserializer& d) {
     const auto header = d.read<std::int32_t>();
     if (header != -61764891) {
       throw std::runtime_error(
-          "Invalid CRC header: Expected -61764891, but got " + header +
-          " instead");
+          "Invalid CRC header: Expected -61764891, but got " +
+          std::to_string(header) + " instead");
     }
   }
   test_schema::AcknowledgeMessage result;

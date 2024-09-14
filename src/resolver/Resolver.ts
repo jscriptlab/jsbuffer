@@ -12,6 +12,7 @@ export interface IResolverOptions {
 
 /**
  * Represents the entity of an individual schema file
+ * TODO: Do not extend `CodeStream`
  */
 export default class Resolver extends CodeStream {
   readonly #generators: Map<string, Resolver>;
@@ -21,6 +22,21 @@ export default class Resolver extends CodeStream {
     super(parent ?? undefined);
     this.#generators = generators;
     this.#current = current;
+  }
+
+  // TODO: Move this to a separate class
+  public writeMultiLineComment(lines: (string | (() => void))[]) {
+    this.write('/**\n');
+    for (const writeLine of lines) {
+      this.write(' * ');
+      if (typeof writeLine === 'string') {
+        this.append(writeLine);
+      } else {
+        writeLine();
+      }
+      this.append('\n');
+    }
+    this.write(' */\n');
   }
 
   public fileMetadata() {

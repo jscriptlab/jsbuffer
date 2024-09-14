@@ -78,3 +78,15 @@ void simple_schema_user_free(struct simple_schema_user_t* s) {
     return;
   (void)s;
 }
+
+enum jsb_result_t simple_schema_user_last_post_init(
+    struct simple_schema_user_t* user,
+    const struct simple_schema_post_trait_t* last_post) {
+  user->last_post.has_value = last_post != NULL;
+  if (user->last_post.has_value) {
+    if (last_post != NULL) {
+      user->last_post.value = *last_post;
+    }
+  }
+  return JSB_OK;
+}

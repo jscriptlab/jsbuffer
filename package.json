@@ -29,21 +29,19 @@
     "lint:eslint": "npx eslint --fix src code-generator",
     "lint:prettier": "npx prettier --write \"test/**/*.{ts,json}\" \"src/**/*.ts\" \"code-generator/**/*.ts\"",
     "lint": "npm run lint:eslint && npm run lint:prettier",
-    "cli": "npx ts-node --project cli/tsconfig.json cli",
-    "schema": "npm run cli -- test/schema -o test/generated/typescript --no-ts-config --indentation-size 2",
+    "cli": "node cli/index.js",
+    "cli:new": "node $NODE_ARGUMENTS cli/jsb.js",
+    "metadata:c99:advanced": "npm run cli:new -- --metadata-only src/generators/c/test/app.jsb --generator c99 -o test/generated/c/metadata/app --indentation-size 2 --name app",
+    "schema": "npm run schema:typescript && npm run schema:cpp17 && npm run schema:c99:simple && npm run schema:c99:advanced",
+    "schema:typescript": "npm run cli -- test/schema -o test/generated/typescript --no-ts-config --indentation-size 2",
+    "schema:cpp17": "npm run cli:new -- test/parser/test_schema.jsb -o test/generated/cpp --indentation-size 2",
+    "schema:c99:simple": "npm run cli:new -- src/generators/c/test/simple_schema.jsb --generator c99 -o test/generated/c/schemas/avr --indentation-size 2 --name avr_simple_schema",
+    "schema:c99:advanced": "npm run cli:new -- src/generators/c/test/app.jsb --generator c99 -o test/generated/c/schemas/app --indentation-size 2 --name app",
     "build": "npx tsc -b test scripts cli code-generator src/generators/c src/generators/cpp src/core --force",
     "build:all": "npm run schema && npm run build && npm run lint",
     "prepublishOnly": "npm run build:all && npm run test",
     "test": "npx ava --fail-fast && npx ts-node scripts --generate-c99-codec --clang-format",
     "test:coverage": "npx c8 npm test"
-  },
-  "dependencies": {
-    "bn.js": "^5.2.1",
-    "chalk": "^4.1.2",
-    "crc": "4.x",
-    "jsbi": "4.x",
-    "long": "5.x",
-    "textstreamjs": "0.x"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
@@ -57,7 +55,7 @@
     "ava": "^6.0.1",
     "c8": "^8.0.1",
     "child-process-utilities": "^0.0.10",
-    "cli-argument-helper": "^1.0.2",
+    "cli-argument-helper": "^1.0.6",
     "cmake-js": "^7.3.0",
     "eslint": "^8.52.0",
     "glob": "^11.0.0",
@@ -67,5 +65,13 @@
     "prettier": "^3.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "bn.js": "^5.2.1",
+    "chalk": "^4.1.2",
+    "crc": "^4.3.2",
+    "jsbi": "^4.3.0",
+    "long": "^5.2.3",
+    "textstreamjs": "^0.0.4"
   }
 }

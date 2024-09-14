@@ -9,6 +9,7 @@
 #include "app/command_move_backwards.h"
 #include "app/command_move_forward.h"
 #include "app/command_trait.h"
+#include "app/deep_optional.h"
 #include "app/message.h"
 #include "protocol/main/get_user.h"
 #include "protocol/main/request_trait.h"
@@ -206,6 +207,66 @@ int main(void) {
        // !defined(JSB_SERIALIZER_USE_MALLOC)
 
   {
+    struct app_deep_optional_t value;
+    JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+    {
+      JSB_ASSERT(app_deep_optional_init(&value) == JSB_OK);
+#if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+      // It should blow up when encoding a type is beyond the maximum size of
+      // the buffer
+      enum jsb_result_t status;
+      do {
+        status = app_deep_optional_encode(&value, &s);
+        status = app_deep_optional_encode(&value, &s);
+        // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
+        // Otherwise, some other issue has happened during execution.
+        JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
+      } while (status != JSB_BUFFER_OVERFLOW);
+#endif // defined(JSB_SERIALIZER_BUFFER_SIZE) &&
+       // !defined(JSB_SERIALIZER_USE_MALLOC)
+    }
+    JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+    JSB_ASSERT(app_deep_optional_init(&value) == JSB_OK);
+    JSB_ASSERT(app_deep_optional_encode(&value, &s) == JSB_OK);
+    JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+    JSB_ASSERT(jsb_deserializer_init(NULL, NULL, 0) == JSB_BAD_ARGUMENT);
+    JSB_ASSERT(jsb_deserializer_init(&d, NULL, 0) == JSB_BAD_ARGUMENT);
+    JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
+    JSB_ASSERT(app_deep_optional_decode(&d, &value) == JSB_OK);
+    app_deep_optional_free(&value);
+
+    {
+      struct app_deep_optional_t new_value;
+      memset(&new_value, 0, sizeof(struct app_deep_optional_t));
+      memset(&value, 0, sizeof(struct app_deep_optional_t));
+      JSB_ASSERT(app_deep_optional_init(&value) == JSB_OK);
+      JSB_ASSERT(app_deep_optional_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_deep_optional_value_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_deep_optional_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_deep_optional_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(memcmp(&new_value.value, &value.value, sizeof(value.value)) ==
+                 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value");
+    }
+    {
+      struct app_deep_optional_t new_value;
+      memset(&new_value, 0, sizeof(struct app_deep_optional_t));
+      memset(&value, 0, sizeof(struct app_deep_optional_t));
+      JSB_ASSERT(app_deep_optional_init(&value) == JSB_OK);
+      JSB_ASSERT(app_deep_optional_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_deep_optional_value2_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_deep_optional_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_deep_optional_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(
+          memcmp(&new_value.value2, &value.value2, sizeof(value.value2)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value2");
+    }
+  }
+  {
     struct app_message_t value;
     JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
     {
@@ -255,6 +316,7 @@ int main(void) {
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_command1_init(&value, NULL) == JSB_OK);
       JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
       JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
       JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
@@ -269,6 +331,7 @@ int main(void) {
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_command2_init(&value, NULL) == JSB_OK);
       JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
       JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
       JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
@@ -283,6 +346,7 @@ int main(void) {
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_command3_init(&value, NULL) == JSB_OK);
       JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
       JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
       JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
@@ -297,12 +361,268 @@ int main(void) {
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_command4_init(&value, NULL) == JSB_OK);
       JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
       JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
       JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
       JSB_ASSERT(memcmp(&new_value.command4, &value.command4,
                         sizeof(value.command4)) == 0);
       JSB_TRACE("test", "Test passed ✔ for param: %s", "command4");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value1_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(
+          memcmp(&new_value.value1, &value.value1, sizeof(value.value1)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value1");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value2_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(
+          memcmp(&new_value.value2, &value.value2, sizeof(value.value2)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value2");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value3_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(
+          memcmp(&new_value.value3, &value.value3, sizeof(value.value3)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value3");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value4_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(
+          memcmp(&new_value.value4, &value.value4, sizeof(value.value4)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value4");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value5_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(
+          memcmp(&new_value.value5, &value.value5, sizeof(value.value5)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value5");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value6_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(
+          memcmp(&new_value.value6, &value.value6, sizeof(value.value6)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value6");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value7_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(
+          memcmp(&new_value.value7, &value.value7, sizeof(value.value7)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value7");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value8_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(
+          memcmp(&new_value.value8, &value.value8, sizeof(value.value8)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value8");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value9_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(
+          memcmp(&new_value.value9, &value.value9, sizeof(value.value9)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value9");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value10_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(memcmp(&new_value.value10, &value.value10,
+                        sizeof(value.value10)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value10");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value11_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(memcmp(&new_value.value11, &value.value11,
+                        sizeof(value.value11)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value11");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value12_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(memcmp(&new_value.value12, &value.value12,
+                        sizeof(value.value12)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value12");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value13_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(memcmp(&new_value.value13, &value.value13,
+                        sizeof(value.value13)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value13");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value14_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(memcmp(&new_value.value14, &value.value14,
+                        sizeof(value.value14)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value14");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value15_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(memcmp(&new_value.value15, &value.value15,
+                        sizeof(value.value15)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value15");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value16_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(memcmp(&new_value.value16, &value.value16,
+                        sizeof(value.value16)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value16");
+    }
+    {
+      struct app_message_t new_value;
+      memset(&new_value, 0, sizeof(struct app_message_t));
+      memset(&value, 0, sizeof(struct app_message_t));
+      JSB_ASSERT(app_message_init(&value) == JSB_OK);
+      JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
+      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+      JSB_ASSERT(app_message_value17_init(&value, NULL) == JSB_OK);
+      JSB_ASSERT(app_message_encode(&value, &s) == JSB_OK);
+      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+      JSB_ASSERT(app_message_decode(&d, &new_value) == JSB_OK);
+      JSB_ASSERT(memcmp(&new_value.value17, &value.value17,
+                        sizeof(value.value17)) == 0);
+      JSB_TRACE("test", "Test passed ✔ for param: %s", "value17");
     }
   }
   {

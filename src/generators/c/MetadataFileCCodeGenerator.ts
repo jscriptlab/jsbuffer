@@ -16,8 +16,11 @@ import {
 } from '../../parser/types/metadata';
 import Resolver, { IResolverOptions } from '../../resolver/Resolver';
 import {
+  dereference,
   getHeaderGuard,
+  getInitOptionalParameterFunctionName,
   getMetadataCompleteTypeReference,
+  getMetadataName,
   getMetadataPrefix,
   getOptionalStructName,
   getOptionalStructTypeReference,
@@ -30,6 +33,17 @@ import {
   metadataToRelativePath,
   pointer
 } from './utilities';
+
+interface IParamBasedFunctionGenerationContext {
+  metadata: Metadata;
+  param: IMetadataParam;
+  paramKey: string;
+  /**
+   * Whether the function implementation should be generated
+   */
+  implementation: boolean;
+  metadataParamTypePath: MetadataParamType[];
+}
 
 export interface IMetadataFileCCodeGeneratorOptions extends IResolverOptions {
   sourceFileExtension: string;
@@ -408,6 +422,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         '}\n'
       );
     });
+
     // this.write('#ifdef JSB_SCHEMA_USE_MALLOC\n');
     // this.indentBlock(() => {
     //   this.write(`memset(value, 0, sizeof(${completeTypeReference}));\n`);
@@ -449,6 +464,8 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       '}\n'
     );
     this.write('\n');
+
+    this.#generateParamBasedFunction(metadata, true);
 
     this.#files.push({
       path: `${metadataToRelativePath(metadata)}.${
@@ -1078,11 +1095,30 @@ export default class MetadataFileCCodeGenerator extends Resolver {
 
   #generateStructFromMetadataParamTypeTemplateOptional(
     optionalTemplate: IMetadataParamTypeTemplateOptional,
-    parent: Metadata
+    parent: Metadata,
+    name: string
   ) {
     const optionalType = optionalTemplate.value;
     if (this.#identifiers.has(getOptionalStructName(parent, optionalType))) {
       return;
+    }
+    switch (optionalType.type) {
+      case 'template':
+        this.#generateStructFromMetadataParamTypeTemplate(
+          optionalType,
+          parent,
+          name
+        );
+        break;
+      case 'generic':
+      case 'internalType':
+      case 'externalType':
+        break;
+      case 'externalModuleType':
+        throw new this.#Exception(
+          optionalType.position.start,
+          'External module types are not supported by the C generator'
+        );
     }
     this.#identifiers.add(getOptionalStructName(parent, optionalType));
     this.write(
@@ -1127,7 +1163,8 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       case 'optional':
         this.#generateStructFromMetadataParamTypeTemplateOptional(
           metadataParamType,
-          parent
+          parent,
+          name
         );
         break;
       case 'vector':
@@ -1158,10 +1195,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         break;
       case 'internalType':
       case 'externalType':
-        // {
-        //   this.resolveMetadataFromDefinitionReference(metadataParamType);
         break;
-      // }
       case 'externalModuleType':
         break;
     }
@@ -1513,9 +1547,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       `void ${getMetadataPrefix(metadata)}_free(${completeTypeReference}*);\n`
     );
 
-    // ? Enable this again so the user doesn't have to set `has_value` himself.
-    this.#generateAdditionalMethods;
-    // this.#generateAdditionalMethods(metadata);
+    this.#generateParamBasedFunction(metadata, false);
 
     this.write('#ifdef __cplusplus\n');
     this.write('}\n');
@@ -1523,10 +1555,6 @@ export default class MetadataFileCCodeGenerator extends Resolver {
 
     this.write('\n');
 
-    // if (namespace) {
-    //   this.append('\n');
-    //   this.write(`} // ${metadataGlobalNameToNamespace(metadata, -1)}\n`);
-    // }
     this.write(`#endif // ${headerGuard}\n`);
 
     this.#files.push({
@@ -1535,49 +1563,298 @@ export default class MetadataFileCCodeGenerator extends Resolver {
     });
   }
 
-  #generateAdditionalMethodsBasedOnMetadataParamTypeTemplate(
-    metadata: Metadata,
+  // We're generating the source file for the given metadata
+  #generateParamBasedFunctionBasedOnMetadataParamTypeTemplateOptional(
+    metadataParamType: IMetadataParamTypeTemplateOptional,
+    generationContext: IParamBasedFunctionGenerationContext
+  ) {
+    const optionalType = metadataParamType.value;
+    const { metadata, param } = generationContext;
+    switch (optionalType.type) {
+      case 'template':
+        this.#generateParamBasedFunctionBasedOnMetadataParamTypeTemplate(
+          optionalType,
+          {
+            ...generationContext,
+            metadataParamTypePath: [
+              ...generationContext.metadataParamTypePath,
+              metadataParamType
+            ]
+          }
+        );
+        break;
+      case 'generic':
+      case 'internalType':
+      case 'externalType': {
+        if (!generationContext.implementation) {
+          this.writeMultiLineComment([
+            () =>
+              this.append(
+                `@brief Initialize the optional value on ${
+                  param.name
+                } parameter of ${getMetadataCompleteTypeReference(metadata)}`
+              ),
+            () =>
+              this.append(
+                `@param[in] ${getMetadataName(
+                  metadata
+                )} The struct to set the property on`
+              ),
+            () =>
+              this.append(
+                `@param[in] ${param.name} The optional value to initialize. Pass NULL to unset the optional value`
+              ),
+            () =>
+              this.append(
+                '@return JSB_OK on success, otherwise an `enum jsb_result_t` code'
+              )
+          ]);
+        }
+        const paramNames: [string, string] = [
+          getMetadataName(metadata),
+          param.name
+        ];
+        this.write(
+          `enum jsb_result_t ${getInitOptionalParameterFunctionName(
+            metadata,
+            param
+          )}(${getMetadataCompleteTypeReference(metadata)}* ${
+            paramNames[0]
+          }, const ${this.#metadataParamTypeToString(
+            optionalType,
+            metadata
+          )}* ${paramNames[1]})`
+        );
+        if (!generationContext.implementation) {
+          this.append(';\n');
+          this.write('\n');
+          break;
+        }
+
+        this.append('{\n');
+        this.indentBlock(() => {
+          const metadataParamTypeFullPath =
+            generationContext.metadataParamTypePath;
+          const firstMetadataParamType = metadataParamTypeFullPath[0] ?? null;
+          if (firstMetadataParamType === null) {
+            throw new this.#Exception(
+              metadataParamType.position.start,
+              'First metadata param type is null'
+            );
+          }
+
+          this.#generateInitOptionalExpression(
+            firstMetadataParamType,
+            `${getMetadataName(metadata)}->${param.name}`,
+            generationContext
+          );
+          this.write('return JSB_OK;\n');
+        });
+        this.write('}\n');
+        this.write('\n');
+        break;
+      }
+      case 'externalModuleType':
+        throw new this.#Exception(
+          metadataParamType.position.start,
+          'Not implemented'
+        );
+    }
+  }
+
+  #generateInitOptionalExpressionGeneric(
+    genericName: GenericName,
+    key: string,
+    generationContext: IParamBasedFunctionGenerationContext
+  ) {
+    switch (genericName) {
+      case GenericName.Bytes:
+      case GenericName.String:
+      case GenericName.NullTerminatedString:
+        this.append('#ifdef JSB_SCHEMA_USE_MALLOC\n');
+        this.append('#error "JSB_SCHEMA_USE_MALLOC is not supported yet"\n');
+        this.append('#else\n');
+        this.write(
+          `memcpy(${pointer(key)}, ${pointer(
+            generationContext.param.name
+          )}, jsb_strlen(${dereference(generationContext.param.name)}));\n`
+        );
+        this.append('#endif // JSB_SCHEMA_USE_MALLOC\n');
+        break;
+      case GenericName.Boolean:
+        this.write(`${key} = ${dereference(generationContext.param.name)};\n`);
+        break;
+      case GenericName.Long:
+      case GenericName.UnsignedLong:
+      case GenericName.Float:
+      case GenericName.Double:
+      case GenericName.Integer:
+      case GenericName.Uint32:
+      case GenericName.Int32:
+      case GenericName.Uint16:
+      case GenericName.Int16:
+      case GenericName.Uint8:
+      case GenericName.Int8:
+        this.write(`${key} = ${dereference(generationContext.param.name)};\n`);
+        break;
+    }
+  }
+
+  #generateInitOptionalExpression(
+    metadataParamType: MetadataParamType,
+    key: string,
+    generationContext: IParamBasedFunctionGenerationContext
+  ) {
+    switch (metadataParamType.type) {
+      case 'internalType':
+      case 'externalType':
+        this.write(
+          `if(${pointer(generationContext.paramKey)} != NULL) {\n`,
+          () => {
+            this.write(
+              `${key} = ${dereference(generationContext.paramKey)};\n`
+            );
+          },
+          '}\n'
+        );
+        break;
+      case 'generic':
+        this.#generateInitOptionalExpressionGeneric(
+          metadataParamType.value,
+          key,
+          generationContext
+        );
+        break;
+      case 'template':
+        switch (metadataParamType.template) {
+          case 'optional':
+            /**
+             * In this case here, if `paramKey` is prefixed with &, it would be undefined behavior. So,
+             * it's better to throw an exception
+             */
+            if (generationContext.paramKey.startsWith('&')) {
+              throw new this.#Exception(
+                metadataParamType.position.start,
+                `Invalid optional value: ${generationContext.paramKey}`
+              );
+            }
+            this.write(
+              // We still use `pointer(...)` here, just in case something changes in the future
+              `${key}.has_value = ${pointer(
+                generationContext.paramKey
+              )} != NULL;\n`
+            );
+            this.write(
+              `if(${key}.has_value) {\n`,
+              () => {
+                this.#generateInitOptionalExpression(
+                  metadataParamType.value,
+                  `${key}.value`,
+                  generationContext
+                );
+              },
+              '}\n'
+            );
+            break;
+          case 'bigint':
+          case 'vector':
+          case 'set':
+          case 'tuple':
+          case 'map':
+            throw new this.#Exception(
+              metadataParamType.position.start,
+              `Not implemented: ${metadataParamType.template}`
+            );
+        }
+        break;
+    }
+  }
+
+  #generateParamBasedFunctionBasedOnMetadataParamTypeTemplate(
     metadataParamType: MetadataParamTypeTemplate,
-    param: IMetadataParam
+    generationContext: IParamBasedFunctionGenerationContext
   ) {
     switch (metadataParamType.template) {
       case 'tuple':
         break;
       case 'optional':
-        this.write(
-          `enum jsb_result_t ${getMetadataPrefix(metadata)}_${
-            param.name
-          }_init(${getMetadataCompleteTypeReference(metadata)}*);\n`
+        this.#generateParamBasedFunctionBasedOnMetadataParamTypeTemplateOptional(
+          metadataParamType,
+          {
+            ...generationContext,
+            metadataParamTypePath: [
+              ...generationContext.metadataParamTypePath,
+              metadataParamType
+            ]
+          }
         );
+        // this.writeMultiLineComment([
+        //   () =>
+        //     this.append(
+        //       `@brief Initialize the optional value on ${
+        //         param.name
+        //       } parameter of ${getMetadataCompleteTypeReference(metadata)}`
+        //     ),
+        //   () =>
+        //     this.append(
+        //       `@param[in] ${getMetadataName(
+        //         metadata
+        //       )} The struct to set the property on`
+        //     ),
+        //   () =>
+        //     this.append(
+        //       `@param[in] ${param.name} The optional value to initialize. Pass NULL to unset the optional value`
+        //     ),
+        //   () =>
+        //     this.append(
+        //       '@return JSB_OK on success, otherwise an `enum jsb_result_t` code'
+        //     )
+        // ]);
+        // this.write(
+        //   `enum jsb_result_t ${getMetadataPrefix(metadata)}_${
+        //     param.name
+        //   }_init(${getMetadataCompleteTypeReference(
+        //     metadata
+        //   )}* ${getMetadataName(
+        //     metadata
+        //   )}, const ${this.#metadataParamTypeToString(
+        //     metadataParamType.value,
+        //     metadata
+        //   )}* ${param.name});\n`
+        // );
+        // this.write('\n');
         break;
     }
   }
 
-  #generateAdditionalMethodsBasedOnMetadataParamType(
-    metadata: Metadata,
+  #generateParamBasedFunctionBasedOnMetadataParamType(
     metadataParamType: MetadataParamType,
-    param: IMetadataParam
+    generationContext: IParamBasedFunctionGenerationContext
   ) {
     switch (metadataParamType.type) {
       case 'generic':
         break;
       case 'template':
-        this.#generateAdditionalMethodsBasedOnMetadataParamTypeTemplate(
-          metadata,
+        this.#generateParamBasedFunctionBasedOnMetadataParamTypeTemplate(
           metadataParamType,
-          param
+          generationContext
         );
         break;
     }
   }
 
-  #generateAdditionalMethods(metadata: IMetadataTypeDefinition) {
+  #generateParamBasedFunction(
+    metadata: IMetadataTypeDefinition,
+    implementation: boolean
+  ) {
     for (const param of metadata.params) {
-      this.#generateAdditionalMethodsBasedOnMetadataParamType(
+      this.#generateParamBasedFunctionBasedOnMetadataParamType(param.type, {
         metadata,
-        param.type,
-        param
-      );
+        paramKey: `*${param.name}`,
+        param,
+        implementation,
+        metadataParamTypePath: []
+      });
     }
   }
 }

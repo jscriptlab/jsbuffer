@@ -1,5 +1,9 @@
 import Exception from '../../../exception/Exception';
-import { Metadata, MetadataParamType } from '../../parser/types/metadata';
+import {
+  IMetadataParam,
+  Metadata,
+  MetadataParamType
+} from '../../parser/types/metadata';
 import snakeCase from '../../utilities/string/snakeCase';
 
 export function getTuplePropertyName(tupleItemIndex: number) {
@@ -124,6 +128,15 @@ export function getMetadataCompleteTypeReference(metadata: Metadata) {
   return `struct ${getMetadataPrefix(metadata)}_t`;
 }
 
+export function getMetadataName(metadata: Metadata) {
+  switch (metadata.kind) {
+    case 'type':
+    case 'call':
+    case 'trait':
+      return snakeCase(metadata.name);
+  }
+}
+
 export function getMetadataPrefix(metadata: Metadata) {
   switch (metadata.kind) {
     case 'type':
@@ -134,10 +147,52 @@ export function getMetadataPrefix(metadata: Metadata) {
   }
 }
 
+export function getInitOptionalParameterFunctionName(
+  metadata: Metadata,
+  param: IMetadataParam
+) {
+  return `${getMetadataPrefix(metadata)}_${param.name}_init`;
+}
+
+/**
+ * If `key` is prefixed with a asterisk, it will be removed. Otherwise, it will be prefixed with an ampersand.
+ *
+ * **Example:**
+ *
+ * ```typescript
+ * pointer('key') // Returns "&key"
+ * pointer('*key') // Returns "key"
+ * ```
+ * @param key Key to be transformed into a pointer
+ * @returns Returns a pointer to the `key`
+ */
 export function pointer(key: string) {
   if (key.startsWith('*')) {
     return key.substring(1);
-  } else {
-    return `&${key}`;
   }
+  return `&${key}`;
+}
+
+/**
+ * If `key` is prefixed with an ampersand, it will be removed. Otherwise, it will be prefixed with an asterisk.
+ * @param key Key to be dereferenced
+ * @returns Returns a dereferenced key
+ * @example dereference('key') // Returns "*key"
+ * @example dereference('&key') // Returns "key"
+ * @example dereference('*key') // Returns "*key"
+ */
+export function dereference(key: string) {
+  if (key.startsWith('&')) {
+    return key.substring(1);
+  }
+  /**
+   * If it is already a pointer, then we don't need to do anything.
+   * The prefix to be used with this function (prefixing `key` with an asterisk to determine a pointer, or an ampersand to determine a made pointer)
+   * already does what we want, which is to get the actual value of `key`. So we just return *key if it starts with an asterisk.
+   */
+  if (key.startsWith('*')) {
+    return key;
+  }
+  // If it has no * or &, then it means it is not a pointer, which is exactly what we want
+  return `*${key}`;
 }

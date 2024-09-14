@@ -2,6 +2,7 @@ import CodeStream from 'textstreamjs';
 import { IGeneratedFile } from '../../core/File';
 import { IFileMetadata } from '../../parser/Parser';
 import {
+  getInitOptionalParameterFunctionName,
   getMetadataCompleteTypeReference,
   getMetadataPrefix,
   getTuplePropertyName
@@ -10,6 +11,7 @@ import GenericName from '../../parser/types/GenericName';
 import {
   IMetadataExternalTypeParamTypeDefinition,
   IMetadataInternalTypeParamTypeDefinition,
+  IMetadataParam,
   IMetadataParamTypeGeneric,
   IMetadataTraitDefinition,
   Metadata,
@@ -336,6 +338,7 @@ export default class TestGeneratorC extends CodeStream {
                         this.#generateTestForParam(
                           param.type,
                           metadata,
+                          param,
                           `value.${param.name}`
                         );
                         this.write(
@@ -597,10 +600,35 @@ export default class TestGeneratorC extends CodeStream {
   #generateTestForTemplateParam(
     metadataParamType: MetadataParamTypeTemplate,
     metadata: Metadata,
+    param: IMetadataParam,
     key: string
   ) {
     switch (metadataParamType.template) {
       case 'optional':
+        // this.#generateTestForParam(
+        //   metadataParamType.value,
+        //   metadata,
+        //   param,
+        //   `${key}.value`
+        // );
+        // this.write(
+        //   `JSB_ASSERT(${getInitOptionalParameterFunctionName(
+        //     metadata,
+        //     param
+        //   )}(&value, ${pointer(`${key}.value`)}) == JSB_OK);\n`
+        // );
+        // this.#generateTestForParam(
+        //   metadataParamType.value,
+        //   metadata,
+        //   param,
+        //   `${key}.value`
+        // );
+        this.write(
+          `JSB_ASSERT(${getInitOptionalParameterFunctionName(
+            metadata,
+            param
+          )}(&value, NULL) == JSB_OK);\n`
+        );
         break;
       case 'tuple': {
         let tupleItemIndex = 0;
@@ -608,6 +636,7 @@ export default class TestGeneratorC extends CodeStream {
           this.#generateTestForParam(
             arg,
             metadata,
+            param,
             `${key}.${getTuplePropertyName(tupleItemIndex)}`
           );
           tupleItemIndex++;
@@ -641,13 +670,19 @@ export default class TestGeneratorC extends CodeStream {
       throw new Exception('Metadata is not a type or call');
     }
     for (const param of metadata.params) {
-      this.#generateTestForParam(param.type, metadata, `${key}.${param.name}`);
+      this.#generateTestForParam(
+        param.type,
+        metadata,
+        param,
+        `${key}.${param.name}`
+      );
     }
   }
 
   #generateTestForParam(
     metadataParamType: MetadataParamType,
     root: Metadata,
+    param: IMetadataParam,
     key: string
   ) {
     switch (metadataParamType.type) {
@@ -655,7 +690,7 @@ export default class TestGeneratorC extends CodeStream {
         this.#generateTestForGenericParam(metadataParamType, root, key);
         break;
       case 'template':
-        this.#generateTestForTemplateParam(metadataParamType, root, key);
+        this.#generateTestForTemplateParam(metadataParamType, root, param, key);
         break;
       case 'internalType':
       case 'externalType': {

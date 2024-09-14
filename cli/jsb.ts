@@ -11,24 +11,37 @@ import getNamedArgument from 'cli-argument-helper/getNamedArgument';
 import { IGeneratedFile } from '../src/core/File';
 import Exception from '../exception/Exception';
 import { ASTGenerationException } from '../src/core/ASTGenerator';
+import { getArgument } from 'cli-argument-helper';
+import getBoolean from 'cli-argument-helper/boolean/getBoolean';
+import inspector from 'inspector';
+
+function printHelp() {
+  fs.createReadStream(path.resolve(__dirname, 'jsb.HELP.txt')).pipe(
+    process.stdout
+  );
+}
 
 (async () => {
   const args = process.argv.slice(2);
-  if (args.length === 0) {
-    console.log('Usage: jsb <main-file> -o <output-directory>');
-    console.log('Usage: jsb -o <output-directory> <main-file>');
-    console.log('Usage: jsb --output <output-directory> <main-file>');
-    console.log('Usage: jsb <main-file> -o <output-directory> --generator c99');
-    console.log(
-      'Usage: jsb <main-file> -o <output-directory> --indentation-size 1'
-    );
-    console.log(
-      'Usage: jsb <main-file> -o <output-directory> --name c_project_cmake_schema'
-    );
-    console.log(
-      'Usage: jsb <main-file> -o <output-directory> --generator c++17'
-    );
+
+  if (
+    getArgument(args, '-h') ??
+    getArgument(args, '--help') ??
+    args.length === 0
+  ) {
+    printHelp();
     return;
+  }
+
+  if (process.env['NODE_ENV'] !== 'production') {
+    const inspect = getArgument(args, '--inspect') !== null;
+    const port = getNamedArgument(args, '--inspect.port', getInteger) ?? 9229;
+    const host =
+      getNamedArgument(args, '--inspect.host', getString) ?? '0.0.0.0';
+    const wait = getNamedArgument(args, '--inspect.wait', getBoolean) ?? true;
+    if (inspect) {
+      inspector.open(port, host, wait);
+    }
   }
 
   const indentationSize =
@@ -40,6 +53,11 @@ import { ASTGenerationException } from '../src/core/ASTGenerator';
     getNamedArgument(args, '-o', getString) ??
     getNamedArgument(args, '--output', getString) ??
     null;
+
+  /**
+   * If the metadata-only flag is set, we will dump the metadata to the output directory
+   */
+  const metadataOnly = getArgument(args, '--metadata-only');
 
   if (outputDirectory === null) {
     throw new Error('Output directory should be defined');
@@ -101,7 +119,7 @@ import { ASTGenerationException } from '../src/core/ASTGenerator';
   );
 
   enum Generator {
-    CPP_17 = 'c++17',
+    CPP_17 = 'cpp17',
     C = 'c99'
   }
 
@@ -112,9 +130,32 @@ import { ASTGenerationException } from '../src/core/ASTGenerator';
     generate: () => Promise<IGeneratedFile[] | null>;
   };
 
+  const fileMetadataList = await parser.parse();
+
+  if (metadataOnly !== null) {
+    for (const metadata of fileMetadataList) {
+      const relativePath = metadata.path
+        .replace(new RegExp(`^${configuration.rootDir}/`), '')
+        .replace(/(\.jsb)?$/, '.metadata.json');
+      const metadataFilePath = path.resolve(configuration.outDir, relativePath);
+
+      // Make sure the directory exists
+      await fs.promises.mkdir(path.dirname(metadataFilePath), {
+        recursive: true
+      });
+
+      // Write the metadata to the file
+      await fs.promises.writeFile(
+        metadataFilePath,
+        JSON.stringify(metadata, null, indentationSize)
+      );
+    }
+    return;
+  }
+
   switch (desiredGenerator) {
     case Generator.CPP_17:
-      generator = new FileGeneratorCPP(await parser.parse(), {
+      generator = new FileGeneratorCPP(fileMetadataList, {
         current: null,
         rootDir: configuration.rootDir,
         root: null,
@@ -124,7 +165,7 @@ import { ASTGenerationException } from '../src/core/ASTGenerator';
       });
       break;
     case Generator.C:
-      generator = new FileGeneratorC(await parser.parse(), {
+      generator = new FileGeneratorC(fileMetadataList, {
         current: null,
         rootDir: configuration.rootDir,
         root: null,
@@ -169,5 +210,8 @@ import { ASTGenerationException } from '../src/core/ASTGenerator';
   } else {
     console.error(reason);
   }
-  process.exit(1);
+
+  printHelp();
+
+  process.exitCode = 1;
 });

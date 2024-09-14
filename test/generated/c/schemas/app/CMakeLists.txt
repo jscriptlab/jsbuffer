@@ -7,11 +7,12 @@ set(CMAKE_C_EXTENSIONS ON)
 
 add_library(
     app STATIC
-    app/message.h app/message.c app/command_move_forward.h app/command_move_forward.c app/command_move_backwards.h
-    app/command_move_backwards.c app/command_trait.h app/command_trait.c protocol/main/request_trait.h
-    protocol/main/request_trait.c protocol/main/response_trait.h protocol/main/response_trait.c
-    protocol/main/void.h protocol/main/void.c protocol/main/user.h protocol/main/user.c protocol/main/get_user.h
-    protocol/main/get_user.c protocol/main/tuple_test.h protocol/main/tuple_test.c
+    app/deep_optional.h app/deep_optional.c app/message.h app/message.c app/command_move_forward.h
+    app/command_move_forward.c app/command_move_backwards.h app/command_move_backwards.c
+    app/command_trait.h app/command_trait.c protocol/main/request_trait.h protocol/main/request_trait.c
+    protocol/main/response_trait.h protocol/main/response_trait.c protocol/main/void.h protocol/main/void.c
+    protocol/main/user.h protocol/main/user.c protocol/main/get_user.h protocol/main/get_user.c
+    protocol/main/tuple_test.h protocol/main/tuple_test.c
 )
 target_link_libraries(
     app
