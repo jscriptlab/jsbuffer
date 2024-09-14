@@ -38,7 +38,7 @@
     "schema:c99:simple": "npm run cli:new -- src/generators/c/test/simple_schema.jsb --generator c99 -o test/generated/c/schemas/avr --indentation-size 2 --name avr_simple_schema",
     "schema:c99:advanced": "npm run cli:new -- src/generators/c/test/app.jsb --generator c99 -o test/generated/c/schemas/app --indentation-size 2 --name app",
     "build": "npx tsc -b test scripts cli code-generator src/generators/c src/generators/cpp src/core --force",
-    "build:all": "npm run schema && npm run build && npm run lint",
+    "build:all": "npm run build && npm run schema && npm run lint",
     "prepublishOnly": "npm run build:all && npm run test",
     "test": "npx ava --fail-fast && npx ts-node scripts --generate-c99-codec --clang-format",
     "test:coverage": "npx c8 npm test"
