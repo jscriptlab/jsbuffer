@@ -71,3 +71,20 @@ jsb_uint32_t jsb_strlen(const jsb_string_t str) {
   return len;
 }
 #endif
+
+#ifdef HAVE_MEMSET
+void* jsb_memset(void* dest, jsb_uint8_t value, jsb_uint32_t len) {
+  return memset(dest, value, len);
+}
+#else
+void* jsb_memset(void* dest, jsb_uint8_t value, jsb_uint32_t len) {
+  if (dest == NULL) {
+    return NULL;
+  }
+  jsb_uint32_t i = 0;
+  while (--len) {
+    ((jsb_uint8_t*)dest)[i] = value;
+  }
+  return dest;
+}
+#endif // HAVE_MEMSET
