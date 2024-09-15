@@ -313,12 +313,12 @@ export default class TestGeneratorC extends CodeStream {
                           )} new_value;\n`
                         );
                         this.write(
-                          `memset(&new_value, 0, sizeof(${getMetadataCompleteTypeReference(
+                          `jsb_memset(&new_value, 0, sizeof(${getMetadataCompleteTypeReference(
                             metadata
                           )}));\n`
                         );
                         this.write(
-                          `memset(&value, 0, sizeof(${getMetadataCompleteTypeReference(
+                          `jsb_memset(&value, 0, sizeof(${getMetadataCompleteTypeReference(
                             metadata
                           )}));\n`
                         );

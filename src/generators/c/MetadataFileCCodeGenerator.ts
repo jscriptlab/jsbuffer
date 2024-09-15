@@ -135,6 +135,34 @@ export default class MetadataFileCCodeGenerator extends Resolver {
     };
   }
 
+  public metadataParamTypeToString(
+    paramType: MetadataParamType,
+    parent: Metadata
+  ) {
+    switch (paramType.type) {
+      case 'generic':
+        return this.#genericNameToString(paramType.value);
+      case 'template':
+        return this.#templateParamTypeToString(paramType, parent);
+      case 'internalType':
+      case 'externalType': {
+        const metadata = this.resolveMetadataFromParamTypeDefinition(paramType);
+        switch (metadata.kind) {
+          case 'type':
+          case 'call':
+          case 'trait':
+            return getMetadataCompleteTypeReference(metadata);
+        }
+        break;
+      }
+      case 'externalModuleType':
+        throw new this.#Exception(
+          paramType.position.start,
+          'External modules are not implemented'
+        );
+    }
+  }
+
   #createErrorFormatter(token: IToken) {
     return new ErrorFormatter({
       contents: this.#options.contents,
@@ -908,7 +936,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
             );
           }
           this.write(
-            `${this.#metadataParamTypeToString(
+            `${this.metadataParamTypeToString(
               param,
               metadata
             )} ${getTraitUnionNodePropertyName(
@@ -1084,7 +1112,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
           );
         }
         this.write(
-          `${this.#metadataParamTypeToString(arg, parent)} item_${i};\n`
+          `${this.metadataParamTypeToString(arg, parent)} item_${i};\n`
         );
       }
     });
@@ -1126,7 +1154,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       () => {
         this.write('jsb_uint8_t has_value;\n');
         this.write(
-          `${this.#metadataParamTypeToString(optionalType, parent)} value;\n`
+          `${this.metadataParamTypeToString(optionalType, parent)} value;\n`
         );
       },
       '};\n'
@@ -1206,7 +1234,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
     this.indentBlock(() => {
       for (const param of metadata.params) {
         this.write(
-          `${this.#metadataParamTypeToString(param.type, metadata)} ${
+          `${this.metadataParamTypeToString(param.type, metadata)} ${
             param.name
           };\n`
         );
@@ -1353,31 +1381,6 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         return getOptionalStructTypeReference(parent, paramType.value);
       default:
         throw new this.#Exception(paramType.position.start, 'Not implemented');
-    }
-  }
-
-  #metadataParamTypeToString(paramType: MetadataParamType, parent: Metadata) {
-    switch (paramType.type) {
-      case 'generic':
-        return this.#genericNameToString(paramType.value);
-      case 'template':
-        return this.#templateParamTypeToString(paramType, parent);
-      case 'internalType':
-      case 'externalType': {
-        const metadata = this.resolveMetadataFromParamTypeDefinition(paramType);
-        switch (metadata.kind) {
-          case 'type':
-          case 'call':
-          case 'trait':
-            return getMetadataCompleteTypeReference(metadata);
-        }
-        break;
-      }
-      case 'externalModuleType':
-        throw new this.#Exception(
-          paramType.position.start,
-          'External modules are not implemented'
-        );
     }
   }
 
@@ -1620,10 +1623,9 @@ export default class MetadataFileCCodeGenerator extends Resolver {
             param
           )}(${getMetadataCompleteTypeReference(metadata)}* ${
             paramNames[0]
-          }, const ${this.#metadataParamTypeToString(
-            optionalType,
-            metadata
-          )}* ${paramNames[1]})`
+          }, const ${this.metadataParamTypeToString(optionalType, metadata)}* ${
+            paramNames[1]
+          })`
         );
         if (!generationContext.implementation) {
           this.append(';\n');

@@ -1,7 +1,10 @@
 import path from 'path';
 import Exception from '../../exception/Exception';
 import { IFileMetadata } from '../parser/Parser';
-import { MetadataParamTypeDefinition } from '../parser/types/metadata';
+import {
+  Metadata,
+  MetadataParamTypeDefinition
+} from '../parser/types/metadata';
 import CodeStream from 'textstreamjs';
 
 export interface IResolverOptions {
@@ -77,7 +80,7 @@ export default class Resolver extends CodeStream {
 
   public resolveMetadataFromParamTypeDefinition(
     paramType: MetadataParamTypeDefinition
-  ) {
+  ): Metadata {
     const generator = this.resolveMetadataParamTypeDefinition(paramType);
     let identifier: string;
     switch (paramType.type) {

@@ -27,12 +27,16 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/FindHeaders.cmake)
 #check_function_exists(malloc HAVE_MALLOC)
 
 include(CheckSymbolExists)
+check_symbol_exists(printf "stdio.h" HAVE_PRINTF)
 check_symbol_exists(strlen "string.h" HAVE_STRLEN)
 check_symbol_exists(memcpy "string.h" HAVE_MEMCPY)
 check_symbol_exists(memset "string.h" HAVE_MEMSET)
-check_symbol_exists(printf "stdio.h" HAVE_PRINTF)
-check_symbol_exists(free "stdlib.h" HAVE_FREE)
+check_symbol_exists(strcpy "string.h" HAVE_STRCPY)
+check_symbol_exists(strncmp "string.h" HAVE_STRNCMP)
+check_symbol_exists(strcmp "string.h" HAVE_STRCMP)
+check_symbol_exists(strncpy "string.h" HAVE_STRNCPY)
 check_symbol_exists(malloc "stdlib.h" HAVE_MALLOC)
+check_symbol_exists(free "stdlib.h" HAVE_FREE)
 
 # List of headers to check
 set(INTEGER_HEADERS "stdint.h" "inttypes.h" "sys/types.h" "stddef.h")

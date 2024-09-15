@@ -6,12 +6,16 @@ extern "C" {
 #define JSBUFFER_C_JSB_H
 
 // Standard C library functions
-#cmakedefine HAVE_STRLEN
-#cmakedefine HAVE_PRINTF
-#cmakedefine HAVE_MEMCPY
-#cmakedefine HAVE_MEMSET
-#cmakedefine HAVE_FREE
-#cmakedefine HAVE_MALLOC
+#cmakedefine HAVE_STRLEN @HAVE_STRLEN@
+#cmakedefine HAVE_PRINTF @HAVE_PRINTF@
+#cmakedefine HAVE_MEMCPY @HAVE_MEMCPY@
+#cmakedefine HAVE_MEMSET @HAVE_MEMSET@
+#cmakedefine HAVE_FREE @HAVE_FREE@
+#cmakedefine HAVE_MALLOC @HAVE_MALLOC@
+#cmakedefine HAVE_STRCPY @HAVE_STRCPY@
+#cmakedefine HAVE_STRNCPY @HAVE_STRNCPY@
+#cmakedefine HAVE_STRNCMP @HAVE_STRNCMP@
+#cmakedefine HAVE_STRCMP @HAVE_STRCMP@
 
 #cmakedefine HAVE_SIZE_TYPE @HAVE_SIZE_TYPE@
 #cmakedefine HAVE_UINT64_TYPE @HAVE_UINT64_TYPE@
@@ -43,13 +47,13 @@ extern "C" {
 /**
  * Standard library headers
  */
-#cmakedefine HEADER_FOUND_STDINT_H
-#cmakedefine HEADER_FOUND_STDDEF_H
-#cmakedefine HEADER_FOUND_STRING_H
-#cmakedefine HEADER_FOUND_STDLIB_H
-#cmakedefine HEADER_FOUND_STDIO_H
-#cmakedefine HEADER_FOUND_INTTYPES_H
-#cmakedefine HEADER_FOUND_SYS_TYPEYPES_H
+#cmakedefine HEADER_FOUND_STDINT_H @HEADER_FOUND_STDINT_H@
+#cmakedefine HEADER_FOUND_STDDEF_H @HEADER_FOUND_STDDEF_H@
+#cmakedefine HEADER_FOUND_STRING_H @HEADER_FOUND_STRING_H@
+#cmakedefine HEADER_FOUND_STDLIB_H @HEADER_FOUND_STDLIB_H@
+#cmakedefine HEADER_FOUND_STDIO_H @HEADER_FOUND_STDIO_H@
+#cmakedefine HEADER_FOUND_INTTYPES_H @HEADER_FOUND_INTTYPES_H@
+#cmakedefine HEADER_FOUND_SYS_TYPEYPES_H @HEADER_FOUND_SYS_TYPEYPES_H@
 
 /**
  * JSBuffer options
@@ -286,6 +290,9 @@ typedef void jsb_void_t;
 
 jsb_uint32_t jsb_strlen(const jsb_string_t str);
 void* jsb_memcpy(void* dest, const void* src, jsb_uint32_t len);
+void* jsb_strncpy(jsb_string_t dest, const jsb_string_t src, jsb_uint32_t len);
+void* jsb_strcpy(jsb_string_t dest, const jsb_string_t src);
+void* jsb_memset(void* dest, jsb_uint8_t value, jsb_uint32_t len);
 
 #ifndef JSB_ASSERT_ARGUMENT
 /**

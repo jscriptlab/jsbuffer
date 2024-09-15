@@ -13,7 +13,6 @@ void* jsb_memcpy(void* dest, const void* src, jsb_uint32_t len) {
   if (dest == NULL || src == NULL) {
     return 0;
   }
-  // memcpy(NULL, NULL, 0);
   jsb_uint32_t i = 0;
   while (--len) {
     ((jsb_uint8_t*)dest)[i] = ((jsb_uint8_t*)src)[i];
@@ -21,6 +20,40 @@ void* jsb_memcpy(void* dest, const void* src, jsb_uint32_t len) {
   return dest;
 }
 #endif
+
+#ifdef HAVE_STRNCPY
+void* jsb_strncpy(jsb_string_t dest, const jsb_string_t src, const jsb_uint32_t len) {
+  return strncpy(dest, src, len);
+}
+#else
+void* jsb_strncpy(
+  jsb_string_t dest,
+  const jsb_string_t src,
+  const jsb_uint32_t len
+)
+{
+  if (dest == NULL || src == NULL) {
+    return NULL;
+  }
+  jsb_memcpy(dest, src, len);
+  dest[len] = '\0';
+  return dest;
+}
+#endif // HAVE_STRNCPY
+
+#ifdef HAVE_STRCPY
+void* jsb_strcpy(jsb_string_t dest, const jsb_string_t src) {
+  return strcpy(dest, src);
+}
+#else
+void* jsb_strcpy(jsb_string_t dest, const jsb_string_t src) {
+  if (dest == NULL || src == NULL) {
+    return NULL;
+  }
+  jsb_strncpy(dest, src, jsb_strlen(src));
+  return dest;
+}
+#endif // HAVE_STRCPY
 
 #ifdef HAVE_STRLEN
 jsb_uint32_t jsb_strlen(const jsb_string_t str) {
