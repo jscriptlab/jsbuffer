@@ -25,6 +25,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           cache: 'npm'
+          node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
       - name: Install OS dependencies
         run: |
           sudo apt install \
