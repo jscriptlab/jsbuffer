@@ -43,7 +43,7 @@ void* jsb_strncpy(
 
 #ifdef HAVE_STRCPY
 void* jsb_strcpy(jsb_string_t dest, const jsb_string_t src) {
-  return strcpy(dest, src);
+  return jsb_strncpy(dest, src, jsb_strlen(src));
 }
 #else
 void* jsb_strcpy(jsb_string_t dest, const jsb_string_t src) {
@@ -73,17 +73,16 @@ jsb_uint32_t jsb_strlen(const jsb_string_t str) {
 #endif
 
 #ifdef HAVE_MEMSET
-void* jsb_memset(void* dest, jsb_uint8_t value, jsb_uint32_t len) {
+void* jsb_memset(void* dest, const jsb_uint8_t value, const jsb_uint32_t len) {
   return memset(dest, value, len);
 }
 #else
-void* jsb_memset(void* dest, jsb_uint8_t value, jsb_uint32_t len) {
+void* jsb_memset(void* dest, const jsb_uint8_t value, const jsb_uint32_t len) {
   if (dest == NULL) {
     return NULL;
   }
-  jsb_uint32_t i = 0;
   while (--len) {
-    ((jsb_uint8_t*)dest)[i] = value;
+    ((jsb_uint8_t*)dest)[len] = value;
   }
   return dest;
 }
