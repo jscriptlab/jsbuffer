@@ -60,8 +60,12 @@ enum jsb_result_t protocol_main_user_init(struct protocol_main_user_t* value) {
   value->id = 0;
   JSB_TRACE("protocol_main_user_init", "Initialized param id.");
   JSB_TRACE("protocol_main_user_init", "Initializing param name...");
-  // Initialize string
-  value->name[0] = '\0';
+#ifdef JSB_SCHEMA_MALLOC
+  jsb_memset(value->name, 0, jsb_strlen(value->name));
+#else
+  jsb_memset(&value->name, 0, JSB_MAX_STRING_SIZE);
+  value->name[JSB_MAX_STRING_SIZE] = 0;
+#endif // JSB_SCHEMA_MALLOC
   JSB_TRACE("protocol_main_user_init", "Initialized param name.");
   return JSB_OK;
 }

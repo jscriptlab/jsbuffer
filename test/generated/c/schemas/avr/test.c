@@ -11,12 +11,24 @@
 #include "simple_schema/post_trait.h"
 #include "simple_schema/user.h"
 
+#if !defined(__AVR__) && defined(HAVE_FPRINTF)
+#include <stdio.h>
+
+#define JSB_ASSERT(expr)                                                       \
+  if ((expr)) {                                                                \
+  } else {                                                                     \
+    fprintf(stderr, "%s:%d: Assertion failed: %s", __FILE__, __LINE__, #expr); \
+    JSB_TRACE("test", "Assertion failed: %s", #expr);                          \
+    return 1;                                                                  \
+  }
+#else
 #define JSB_ASSERT(expr)                                                       \
   if ((expr)) {                                                                \
   } else {                                                                     \
     JSB_TRACE("test", "Assertion failed: %s", #expr);                          \
     return 1;                                                                  \
   }
+#endif // !defined(__AVR__) && defined(HAVE_FPRINTF)
 
 int main(void) {
   struct jsb_serializer_t s;
@@ -230,8 +242,8 @@ int main(void) {
 
     {
       struct simple_schema_user_t new_value;
-      memset(&new_value, 0, sizeof(struct simple_schema_user_t));
-      memset(&value, 0, sizeof(struct simple_schema_user_t));
+      jsb_memset(&new_value, 0, sizeof(struct simple_schema_user_t));
+      jsb_memset(&value, 0, sizeof(struct simple_schema_user_t));
       JSB_ASSERT(simple_schema_user_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_user_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -244,8 +256,8 @@ int main(void) {
     }
     {
       struct simple_schema_user_t new_value;
-      memset(&new_value, 0, sizeof(struct simple_schema_user_t));
-      memset(&value, 0, sizeof(struct simple_schema_user_t));
+      jsb_memset(&new_value, 0, sizeof(struct simple_schema_user_t));
+      jsb_memset(&value, 0, sizeof(struct simple_schema_user_t));
       JSB_ASSERT(simple_schema_user_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_user_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -329,8 +341,8 @@ int main(void) {
 
     {
       struct simple_schema_post_active_t new_value;
-      memset(&new_value, 0, sizeof(struct simple_schema_post_active_t));
-      memset(&value, 0, sizeof(struct simple_schema_post_active_t));
+      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_active_t));
+      jsb_memset(&value, 0, sizeof(struct simple_schema_post_active_t));
       JSB_ASSERT(simple_schema_post_active_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_post_active_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -343,8 +355,8 @@ int main(void) {
     }
     {
       struct simple_schema_post_active_t new_value;
-      memset(&new_value, 0, sizeof(struct simple_schema_post_active_t));
-      memset(&value, 0, sizeof(struct simple_schema_post_active_t));
+      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_active_t));
+      jsb_memset(&value, 0, sizeof(struct simple_schema_post_active_t));
       JSB_ASSERT(simple_schema_post_active_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_post_active_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -358,12 +370,15 @@ int main(void) {
     }
     {
       struct simple_schema_post_active_t new_value;
-      memset(&new_value, 0, sizeof(struct simple_schema_post_active_t));
-      memset(&value, 0, sizeof(struct simple_schema_post_active_t));
+      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_active_t));
+      jsb_memset(&value, 0, sizeof(struct simple_schema_post_active_t));
       JSB_ASSERT(simple_schema_post_active_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_post_active_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
-      strcpy((char*)value.title, "Test string");
+      {
+        jsb_uint8_t test_value[21] = "This is a test string";
+        jsb_strncpy(value.title, test_value, 21);
+      }
       JSB_ASSERT(simple_schema_post_active_encode(&value, &s) == JSB_OK);
       JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
       JSB_ASSERT(simple_schema_post_active_decode(&d, &new_value) == JSB_OK);
@@ -403,8 +418,8 @@ int main(void) {
 
     {
       struct simple_schema_post_deleted_t new_value;
-      memset(&new_value, 0, sizeof(struct simple_schema_post_deleted_t));
-      memset(&value, 0, sizeof(struct simple_schema_post_deleted_t));
+      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_deleted_t));
+      jsb_memset(&value, 0, sizeof(struct simple_schema_post_deleted_t));
       JSB_ASSERT(simple_schema_post_deleted_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_post_deleted_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -417,8 +432,8 @@ int main(void) {
     }
     {
       struct simple_schema_post_deleted_t new_value;
-      memset(&new_value, 0, sizeof(struct simple_schema_post_deleted_t));
-      memset(&value, 0, sizeof(struct simple_schema_post_deleted_t));
+      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_deleted_t));
+      jsb_memset(&value, 0, sizeof(struct simple_schema_post_deleted_t));
       JSB_ASSERT(simple_schema_post_deleted_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_post_deleted_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -432,12 +447,15 @@ int main(void) {
     }
     {
       struct simple_schema_post_deleted_t new_value;
-      memset(&new_value, 0, sizeof(struct simple_schema_post_deleted_t));
-      memset(&value, 0, sizeof(struct simple_schema_post_deleted_t));
+      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_deleted_t));
+      jsb_memset(&value, 0, sizeof(struct simple_schema_post_deleted_t));
       JSB_ASSERT(simple_schema_post_deleted_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_post_deleted_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
-      strcpy((char*)value.title, "Test string");
+      {
+        jsb_uint8_t test_value[21] = "This is a test string";
+        jsb_strncpy(value.title, test_value, 21);
+      }
       JSB_ASSERT(simple_schema_post_deleted_encode(&value, &s) == JSB_OK);
       JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
       JSB_ASSERT(simple_schema_post_deleted_decode(&d, &new_value) == JSB_OK);

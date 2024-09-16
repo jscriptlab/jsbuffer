@@ -54,7 +54,7 @@
     "@typescript-eslint/parser": "^6.8.0",
     "ava": "^6.0.1",
     "c8": "^8.0.1",
-    "child-process-utilities": "^0.0.10",
+    "child-process-utilities": "^0.1.2",
     "cli-argument-helper": "^1.0.6",
     "cmake-js": "^7.3.0",
     "eslint": "^8.52.0",

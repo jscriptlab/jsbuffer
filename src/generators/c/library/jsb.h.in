@@ -1,21 +1,22 @@
+#ifndef JSBUFFER_C_JSB_H
+#define JSBUFFER_C_JSB_H
+
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-#ifndef JSBUFFER_C_JSB_H
-#define JSBUFFER_C_JSB_H
-
 // Standard C library functions
-#cmakedefine HAVE_STRLEN @HAVE_STRLEN@
 #cmakedefine HAVE_PRINTF @HAVE_PRINTF@
+#cmakedefine HAVE_FPRINTF @HAVE_FPRINTF@
+#cmakedefine HAVE_STRLEN @HAVE_STRLEN@
 #cmakedefine HAVE_MEMCPY @HAVE_MEMCPY@
 #cmakedefine HAVE_MEMSET @HAVE_MEMSET@
-#cmakedefine HAVE_FREE @HAVE_FREE@
-#cmakedefine HAVE_MALLOC @HAVE_MALLOC@
 #cmakedefine HAVE_STRCPY @HAVE_STRCPY@
-#cmakedefine HAVE_STRNCPY @HAVE_STRNCPY@
 #cmakedefine HAVE_STRNCMP @HAVE_STRNCMP@
 #cmakedefine HAVE_STRCMP @HAVE_STRCMP@
+#cmakedefine HAVE_STRNCPY @HAVE_STRNCPY@
+#cmakedefine HAVE_MALLOC @HAVE_MALLOC@
+#cmakedefine HAVE_FREE @HAVE_FREE@
 
 #cmakedefine HAVE_SIZE_TYPE @HAVE_SIZE_TYPE@
 #cmakedefine HAVE_UINT64_TYPE @HAVE_UINT64_TYPE@
@@ -87,14 +88,14 @@ extern "C" {
  * JSBuffer generated schema specific options
  */
 /**
- * Maximum string size. This option is only used if JSB_SCHEMA_USE_MALLOC is enabled.
+ * Maximum string size. This option is only used if JSB_SCHEMA_MALLOC is enabled.
  */
 #cmakedefine JSB_MAX_STRING_SIZE @JSB_MAX_STRING_SIZE@
 /**
  * Use malloc for schema buffer. If this option is set, it is recommended to also set JSB_MAX_STRING_SIZE,
  * otherwise it will default to a predefined size.
  */
-#cmakedefine JSB_SCHEMA_USE_MALLOC
+#cmakedefine JSB_SCHEMA_MALLOC
 /**
  * Enable trace output to stdout
  */
@@ -111,21 +112,21 @@ extern "C" {
  * Define JSB_DMA_ENABLED if any of the macros to enable dynamic memory allocation
  * are set.
  */
-#if defined(JSB_SERIALIZER_USE_MALLOC) || defined(JSB_SCHEMA_USE_MALLOC)
+#if defined(JSB_SERIALIZER_USE_MALLOC) || defined(JSB_SCHEMA_MALLOC)
 #define JSB_DMA_ENABLED
-#endif // defined(JSB_SERIALIZER_USE_MALLOC) || defined(JSB_SCHEMA_USE_MALLOC)
+#endif // defined(JSB_SERIALIZER_USE_MALLOC) || defined(JSB_SCHEMA_MALLOC)
 
 /**
- * If JSB_SCHEMA_USE_MALLOC is enabled, stdlib.h is required.
+ * If JSB_SCHEMA_MALLOC is enabled, stdlib.h is required.
  */
-#if defined(JSB_SCHEMA_USE_MALLOC) && !defined(HEADER_FOUND_STDLIB_H)
-#error "JSB_SCHEMA_USE_MALLOC is enabled, but stdlib.h is not found. Cannot use malloc."
-#endif // defined(JSB_SCHEMA_USE_MALLOC) && !defined(HEADER_FOUND_STDLIB_H)
+#if defined(JSB_SCHEMA_MALLOC) && !defined(HEADER_FOUND_STDLIB_H)
+#error "JSB_SCHEMA_MALLOC is enabled, but stdlib.h is not found. Cannot use malloc."
+#endif // defined(JSB_SCHEMA_MALLOC) && !defined(HEADER_FOUND_STDLIB_H)
 
-#if !defined(JSB_SCHEMA_USE_MALLOC) && !defined(JSB_MAX_STRING_SIZE)
-#pragma message "JSB_SCHEMA_USE_MALLOC is enabled, but JSB_MAX_STRING_SIZE is not defined. Using default value of 64."
+#if !defined(JSB_SCHEMA_MALLOC) && !defined(JSB_MAX_STRING_SIZE)
+#pragma message "JSB_SCHEMA_MALLOC is enabled, but JSB_MAX_STRING_SIZE is not defined. Using default value of 64."
 #define JSB_MAX_STRING_SIZE 64
-#endif // !defined(JSB_SCHEMA_USE_MALLOC) && !defined(JSB_MAX_STRING_SIZE)
+#endif // !defined(JSB_SCHEMA_MALLOC) && !defined(JSB_MAX_STRING_SIZE)
 
 #if !defined(JSB_SERIALIZER_USE_MALLOC) && !defined(JSB_SERIALIZER_BUFFER_SIZE)
 #pragma message "JSB_SERIALIZER_USE_MALLOC is enabled, but JSB_SERIALIZER_BUFFER_SIZE is not defined. Using default value of 256."
@@ -179,26 +180,27 @@ extern "C" {
 #error "No suitable header found for standard integer types"
 #endif // HEADER_FOUND_STDINT_H
 
-#ifdef JSB_SCHEMA_USE_MALLOC
-#error "JSB_SCHEMA_USE_MALLOC is not supported yet"
-#endif // JSB_SCHEMA_USE_MALLOC
+#ifdef JSB_SCHEMA_MALLOC
+#error "JSB_SCHEMA_MALLOC is not supported yet"
+#endif // JSB_SCHEMA_MALLOC
 
 #ifdef HAVE_UINT8_TYPE
 typedef uint8_t jsb_uint8_t;
 typedef jsb_uint8_t jsb_byte_t;
+#else
+#error "No suitable type found for uint8_t"
+#endif // HAVE_UINT8_TYPE
+
+#ifdef JSB_SCHEMA_MALLOC
 /**
- * If JSB_SCHEMA_USE_MALLOC is enabled, use pointers for strings and bytes.
+ * If JSB_SCHEMA_MALLOC is enabled, use pointers for strings and bytes.
  */
-#ifdef JSB_SCHEMA_USE_MALLOC
 typedef jsb_byte_t* jsb_bytes_t;
 typedef jsb_uint8_t* jsb_string_t;
 #else
 typedef jsb_byte_t jsb_bytes_t[JSB_MAX_STRING_SIZE + 1];
 typedef jsb_uint8_t jsb_string_t[JSB_MAX_STRING_SIZE + 1];
-#endif // JSB_SCHEMA_USE_MALLOC
-#else
-#error "No suitable type found for uint8_t"
-#endif // HAVE_UINT8_TYPE
+#endif // JSB_SCHEMA_MALLOC
 
 #ifdef HAVE_INT64_TYPE
 typedef int64_t jsb_int64_t;
@@ -290,8 +292,8 @@ typedef void jsb_void_t;
 
 jsb_uint32_t jsb_strlen(const jsb_string_t str);
 void* jsb_memcpy(void* dest, const void* src, jsb_uint32_t len);
-void* jsb_strncpy(jsb_string_t dest, const jsb_string_t src, jsb_uint32_t len);
-void* jsb_strcpy(jsb_string_t dest, const jsb_string_t src);
+void* jsb_strncpy(jsb_uint8_t* dest, const jsb_uint8_t* src, const jsb_uint32_t len);
+void* jsb_strcpy(jsb_uint8_t* dest, const jsb_uint8_t* src);
 void* jsb_memset(void* dest, jsb_uint8_t value, jsb_uint32_t len);
 
 #ifndef JSB_ASSERT_ARGUMENT
@@ -339,20 +341,31 @@ enum jsb_result_t {
 /**
  * Sizes of built-in types
  */
+// @deprecated
 #define JSB_DOUBLE_SIZE (sizeof(jsb_double_t))
+// @deprecated
 #define JSB_FLOAT_SIZE (sizeof(jsb_float_t))
+// @deprecated
 #define JSB_UINT32_SIZE (sizeof(jsb_uint32_t))
+// @deprecated
 #define JSB_INT64_SIZE (sizeof(jsb_int64_t))
+// @deprecated
 #define JSB_INT32_SIZE (sizeof(jsb_int32_t))
+// @deprecated
 #define JSB_UINT64_SIZE (sizeof(jsb_uint64_t))
+// @deprecated
 #define JSB_UINT16_SIZE (sizeof(jsb_uint16_t))
+// @deprecated
 #define JSB_INT16_SIZE (sizeof(jsb_int16_t))
+// @deprecated
 #define JSB_UINT8_SIZE (sizeof(jsb_uint8_t))
+// @deprecated
 #define JSB_INT8_SIZE (sizeof(jsb_int8_t))
+// @deprecated
 #define JSB_VOID_SIZE (sizeof(jsb_void_t))
-
-#endif // JSBUFFER_C_JSB_H
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
+
+#endif // JSBUFFER_C_JSB_H

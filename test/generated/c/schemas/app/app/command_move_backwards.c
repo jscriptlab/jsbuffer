@@ -71,8 +71,12 @@ app_command_move_backwards_init(struct app_command_move_backwards_t* value) {
   value->stop = false;
   JSB_TRACE("app_command_move_backwards_init", "Initialized param stop.");
   JSB_TRACE("app_command_move_backwards_init", "Initializing param value...");
-  // Initialize string
-  value->value[0] = '\0';
+#ifdef JSB_SCHEMA_MALLOC
+  jsb_memset(value->value, 0, jsb_strlen(value->value));
+#else
+  jsb_memset(&value->value, 0, JSB_MAX_STRING_SIZE);
+  value->value[JSB_MAX_STRING_SIZE] = 0;
+#endif // JSB_SCHEMA_MALLOC
   JSB_TRACE("app_command_move_backwards_init", "Initialized param value.");
   JSB_TRACE("app_command_move_backwards_init", "Initializing param value2...");
   value->value2 = 0.0f;

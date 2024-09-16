@@ -112,6 +112,14 @@ export function JSB_TRACE(name: string, ...args: string[]) {
     .join(', ')});\n`;
 }
 
+export function getTraitUnionName(metadata: Metadata) {
+  return `${getMetadataPrefix(metadata)}_value_t`;
+}
+
+export function getTraitUnionCompleteTypeReference(metadata: Metadata) {
+  return `union ${getTraitUnionName(metadata)}`;
+}
+
 export function metadataGlobalNameToNamespace(
   metadata: Metadata,
   limit: number | null = null

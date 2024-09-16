@@ -26,7 +26,6 @@ endif()
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED true)
 set(CMAKE_C_COMPILER ${AVR_TOOLCHAIN_PATH}/bin/avr-gcc)
-set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_C_EXTENSIONS ON)
 set(AVR_C_FLAGS "-mmcu=${MCU} -DF_CPU=${F_CPU} -fshort-enums -Wl,--gc-sections,-Map,output.map -fstack-usage")
 

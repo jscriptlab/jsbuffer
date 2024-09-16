@@ -79,9 +79,13 @@ protocol_main_tuple_test_init(struct protocol_main_tuple_test_t* value) {
   }
   JSB_TRACE("protocol_main_tuple_test_init", "Initializing param values...");
   value->values.item_0 = 0;
-  // Initialize string
-  value->values.item_1[0] = '\0';
-  value->values.item_2    = 0;
+#ifdef JSB_SCHEMA_MALLOC
+  jsb_memset(value->values.item_1, 0, jsb_strlen(value->values.item_1));
+#else
+  jsb_memset(&value->values.item_1, 0, JSB_MAX_STRING_SIZE);
+  value->values.item_1[JSB_MAX_STRING_SIZE] = 0;
+#endif // JSB_SCHEMA_MALLOC
+  value->values.item_2 = 0;
   JSB_CHECK_ERROR(protocol_main_user_init(&value->values.item_3));
   JSB_CHECK_ERROR(protocol_main_void_init(&value->values.item_4));
   value->values.item_5 = 0;

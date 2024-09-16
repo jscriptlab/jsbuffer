@@ -78,18 +78,100 @@ export default class TestGeneratorC extends CodeStream {
       }
     }
     this.write('\n');
-    this.write('#define JSB_ASSERT(expr) \\\n');
-    this.indentBlock(() => {
-      this.write(
-        'if((expr)) {} else { \\\n',
-        () => {
-          this.write('JSB_TRACE("test", "Assertion failed: %s", #expr); \\\n');
-          this.write('return 1; \\\n');
+    const assertFunctionImplementations: (
+      | {
+          type: 'custom';
+          includes: () => void;
+          condition: () => void;
+          error: () => void;
+        }
+      | {
+          type: 'original';
+        }
+    )[] = [
+      {
+        type: 'custom',
+        includes: () => {
+          this.append('#include <stdio.h>\n');
         },
-        '}\n'
-      );
-    });
+        condition: () => {
+          this.append('!defined(__AVR__) && defined(HAVE_FPRINTF)');
+        },
+        error: () => {
+          this.write(
+            'fprintf(stderr, "%s:%d: Assertion failed: %s", __FILE__, __LINE__, #expr); \\\n'
+          );
+        }
+      },
+      { type: 'original' }
+    ];
+    const lastAssertFunctionImplementation =
+      assertFunctionImplementations[assertFunctionImplementations.length - 1] ??
+      null;
+    const firstAssertFunctionImplementation =
+      assertFunctionImplementations[0] ?? null;
+    assert.strict.ok(lastAssertFunctionImplementation !== null);
+    assert.strict.ok(firstAssertFunctionImplementation !== null);
+    for (const fns of assertFunctionImplementations) {
+      // assert.strict.ok(
+      //   fns !== firstAssertFunctionImplementation && fns.type === 'original',
+      //   'The original implementation must be at the end. ' +
+      //     "It's the only one that fits inside an #else " +
+      //     "(that doesn't need a condition)"
+      // );
+      switch (fns.type) {
+        case 'original':
+          this.append('#else');
+          break;
+        case 'custom':
+          if (fns === firstAssertFunctionImplementation) {
+            this.append('#if');
+          } else if (fns !== lastAssertFunctionImplementation) {
+            this.append('#elif');
+          }
+          this.append(' ');
+          fns.condition();
+      }
+      this.append('\n');
+      switch (fns.type) {
+        case 'custom':
+          fns.includes();
+          this.append('\n');
+          break;
+        case 'original':
+      }
+      this.write('#define JSB_ASSERT(expr) \\\n');
+      this.indentBlock(() => {
+        this.write(
+          'if((expr)) {} else { \\\n',
+          () => {
+            if (fns.type === 'custom') {
+              fns.error();
+            }
+            this.write(
+              'JSB_TRACE("test", "Assertion failed: %s", #expr); \\\n'
+            );
+            this.write('return 1; \\\n');
+          },
+          '}\n'
+        );
+      });
+      if (fns === lastAssertFunctionImplementation) {
+        const previousAssertFunctionImplementation =
+          assertFunctionImplementations[
+            assertFunctionImplementations.indexOf(fns) - 1
+          ] ?? null;
+        assert.strict.ok(previousAssertFunctionImplementation !== null);
+        this.append('#endif ');
+        this.append('// ');
+        if (previousAssertFunctionImplementation.type === 'custom') {
+          previousAssertFunctionImplementation.condition();
+        }
+        this.append('\n');
+      }
+    }
     this.write('\n');
+
     this.write('int main(void) {\n');
     this.indentBlock(() => {
       this.write('struct jsb_serializer_t s;\n');
@@ -547,7 +629,7 @@ export default class TestGeneratorC extends CodeStream {
                 ', '
               )}};\n`
             );
-            this.write(`strcpy((char*)${key}, (const char *) bytes);\n`);
+            this.write(`jsb_strncpy(${key}, bytes, ${byteLength});\n`);
             // Test the string values with strcmp
             this.write(
               `JSB_ASSERT(strcmp((const char*)${key}, (const char*)bytes) == 0);\n`
@@ -557,9 +639,20 @@ export default class TestGeneratorC extends CodeStream {
         );
         break;
       case GenericName.NullTerminatedString:
-      case GenericName.String:
-        this.write(`strcpy((char*)${key}, "Test string");\n`);
+      case GenericName.String: {
+        this.write(
+          '{\n',
+          () => {
+            const value = 'This is a test string';
+            this.write(
+              `jsb_uint8_t test_value[${value.length}] = "${value}";\n`
+            );
+            this.write(`jsb_strncpy(${key}, test_value, ${value.length});\n`);
+          },
+          '}\n'
+        );
         break;
+      }
       case GenericName.Long:
         this.write(`${key} = 1234567890L;\n`);
         break;

@@ -69,8 +69,12 @@ simple_schema_post_active_init(struct simple_schema_post_active_t* value) {
   value->authorId = 0;
   JSB_TRACE("simple_schema_post_active_init", "Initialized param authorId.");
   JSB_TRACE("simple_schema_post_active_init", "Initializing param title...");
-  // Initialize string
-  value->title[0] = '\0';
+#ifdef JSB_SCHEMA_MALLOC
+  jsb_memset(value->title, 0, jsb_strlen(value->title));
+#else
+  jsb_memset(&value->title, 0, JSB_MAX_STRING_SIZE);
+  value->title[JSB_MAX_STRING_SIZE] = 0;
+#endif // JSB_SCHEMA_MALLOC
   JSB_TRACE("simple_schema_post_active_init", "Initialized param title.");
   return JSB_OK;
 }

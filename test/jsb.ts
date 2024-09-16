@@ -37,7 +37,7 @@ test("FileGeneratorC: it should throw a detailed error in case there's an invali
     }
   });
 
-  const childProcess = spawn(
+  const { stderr } = spawn(
     'node',
     [
       path.resolve(__dirname, '../cli/jsb'),
@@ -50,27 +50,14 @@ test("FileGeneratorC: it should throw a detailed error in case there's an invali
       path.resolve(temp.rootDir, 'schema')
     ],
     { stdio: 'pipe' }
-  );
+  ).output();
 
-  let stderr = '';
-
-  childProcess.childProcess.stderr?.on('data', (chunk) => {
-    if (!Buffer.isBuffer(chunk)) {
-      return;
-    }
-    stderr += chunk.toString('utf8');
-  });
-
-  try {
-    await childProcess.wait();
-  } catch (reason) {}
-
-  t.assert(/\^ Expected ";", got "}" instead\n/.test(stderr));
-  t.assert(/\tExpected ";", got "}" instead\n/.test(stderr));
-  t.assert(/another_file\.jsb/.test(stderr));
-  t.assert(/export type Response {\n/.test(stderr));
-  t.assert(/string message\n/.test(stderr));
-  t.assert(/Detailed:/.test(stderr));
+  t.assert(/\^ Expected ";", got "}" instead\n/.test(await stderr.utf8()));
+  t.assert(/\tExpected ";", got "}" instead\n/.test(await stderr.utf8()));
+  t.assert(/another_file\.jsb/.test(await stderr.utf8()));
+  t.assert(/export type Response {\n/.test(await stderr.utf8()));
+  t.assert(/string message\n/.test(await stderr.utf8()));
+  t.assert(/Detailed:/.test(await stderr.utf8()));
 
   await temp.destroy();
 });
@@ -85,11 +72,11 @@ test('it should successfully generate a CMake C and C++ project', async (t) => {
     path.resolve(__dirname, 'generated/cpp')
   ]).wait();
 
-  for (const schema of Array.from(schemas).reverse()) {
+  for (const schema of Array.from(schemas)) {
     await generateSchema(schema);
   }
 
-  for (const schema of Array.from(schemas).reverse()) {
+  for (const schema of Array.from(schemas)) {
     await runNativeSchemaTests(schema);
   }
 

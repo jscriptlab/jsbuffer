@@ -1386,8 +1386,13 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   value->value8.value.has_value             = 0;
   value->value8.value.value.has_value       = 0;
   value->value8.value.value.value.has_value = 0;
-  // Initialize string
-  value->value8.value.value.value.value[0] = '\0';
+#ifdef JSB_SCHEMA_MALLOC
+  jsb_memset(value->value8.value.value.value.value, 0,
+             jsb_strlen(value->value8.value.value.value.value));
+#else
+  jsb_memset(&value->value8.value.value.value.value, 0, JSB_MAX_STRING_SIZE);
+  value->value8.value.value.value.value[JSB_MAX_STRING_SIZE] = 0;
+#endif // JSB_SCHEMA_MALLOC
   JSB_TRACE("app_message_init", "Initialized param value8.");
   JSB_TRACE("app_message_init", "Initializing param value9...");
   value->value9.has_value = 0;
@@ -1419,8 +1424,12 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   JSB_TRACE("app_message_init", "Initialized param value15.");
   JSB_TRACE("app_message_init", "Initializing param value16...");
   value->value16.has_value = 0;
-  // Initialize string
-  value->value16.value[0] = '\0';
+#ifdef JSB_SCHEMA_MALLOC
+  jsb_memset(value->value16.value, 0, jsb_strlen(value->value16.value));
+#else
+  jsb_memset(&value->value16.value, 0, JSB_MAX_STRING_SIZE);
+  value->value16.value[JSB_MAX_STRING_SIZE] = 0;
+#endif // JSB_SCHEMA_MALLOC
   JSB_TRACE("app_message_init", "Initialized param value16.");
   JSB_TRACE("app_message_init", "Initializing param value17...");
   value->value17.has_value                   = 0;
@@ -1641,12 +1650,8 @@ enum jsb_result_t app_message_value8_init(struct app_message_t* message,
       if (message->value8.value.value.has_value) {
         message->value8.value.value.value.has_value = value8 != NULL;
         if (message->value8.value.value.value.has_value) {
-#ifdef JSB_SCHEMA_USE_MALLOC
-#error "JSB_SCHEMA_USE_MALLOC is not supported yet"
-#else
-          memcpy(&message->value8.value.value.value.value, &value8,
-                 jsb_strlen(*value8));
-#endif // JSB_SCHEMA_USE_MALLOC
+          jsb_memcpy(&message->value8.value.value.value.value, &value8,
+                     jsb_strlen(*value8));
         }
       }
     }
@@ -1721,11 +1726,7 @@ enum jsb_result_t app_message_value16_init(struct app_message_t* message,
                                            const jsb_string_t* value16) {
   message->value16.has_value = value16 != NULL;
   if (message->value16.has_value) {
-#ifdef JSB_SCHEMA_USE_MALLOC
-#error "JSB_SCHEMA_USE_MALLOC is not supported yet"
-#else
-    memcpy(&message->value16.value, &value16, jsb_strlen(*value16));
-#endif // JSB_SCHEMA_USE_MALLOC
+    jsb_memcpy(&message->value16.value, &value16, jsb_strlen(*value16));
   }
   return JSB_OK;
 }

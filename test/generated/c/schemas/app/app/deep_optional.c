@@ -117,8 +117,12 @@ enum jsb_result_t app_deep_optional_init(struct app_deep_optional_t* value) {
   }
   JSB_TRACE("app_deep_optional_init", "Initializing param value...");
   value->value.has_value = 0;
-  // Initialize string
-  value->value.value[0] = '\0';
+#ifdef JSB_SCHEMA_MALLOC
+  jsb_memset(value->value.value, 0, jsb_strlen(value->value.value));
+#else
+  jsb_memset(&value->value.value, 0, JSB_MAX_STRING_SIZE);
+  value->value.value[JSB_MAX_STRING_SIZE] = 0;
+#endif // JSB_SCHEMA_MALLOC
   JSB_TRACE("app_deep_optional_init", "Initialized param value.");
   JSB_TRACE("app_deep_optional_init", "Initializing param value2...");
   value->value2.has_value       = 0;
@@ -139,11 +143,7 @@ app_deep_optional_value_init(struct app_deep_optional_t* deep_optional,
                              const jsb_string_t* value) {
   deep_optional->value.has_value = value != NULL;
   if (deep_optional->value.has_value) {
-#ifdef JSB_SCHEMA_USE_MALLOC
-#error "JSB_SCHEMA_USE_MALLOC is not supported yet"
-#else
-    memcpy(&deep_optional->value.value, &value, jsb_strlen(*value));
-#endif // JSB_SCHEMA_USE_MALLOC
+    jsb_memcpy(&deep_optional->value.value, &value, jsb_strlen(*value));
   }
   return JSB_OK;
 }

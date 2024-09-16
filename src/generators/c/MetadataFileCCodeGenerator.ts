@@ -24,6 +24,7 @@ import {
   getMetadataPrefix,
   getOptionalStructName,
   getOptionalStructTypeReference,
+  getTraitUnionCompleteTypeReference,
   getTraitUnionNodePropertyName,
   getTuplePropertyName,
   getTupleStructTypeReference,
@@ -451,7 +452,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       );
     });
 
-    // this.write('#ifdef JSB_SCHEMA_USE_MALLOC\n');
+    // this.write('#ifdef JSB_SCHEMA_MALLOC\n');
     // this.indentBlock(() => {
     //   this.write(`memset(value, 0, sizeof(${completeTypeReference}));\n`);
     // });
@@ -461,7 +462,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
     //     this.#initializeMetadataParam(param.type, `value->${param.name}`);
     //   }
     // });
-    // this.write('#endif // JSB_SCHEMA_USE_MALLOC\n');
+    // this.write('#endif // JSB_SCHEMA_MALLOC\n');
 
     this.indentBlock(() => {
       for (const param of metadata.params) {
@@ -531,8 +532,12 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       case GenericName.NullTerminatedString:
       case GenericName.Bytes:
       case GenericName.String:
-        this.write('// Initialize string\n');
-        this.write(`${key}[0] = '\\0';\n`);
+        this.append('#ifdef JSB_SCHEMA_MALLOC\n');
+        this.write(`jsb_memset(${key}, 0, jsb_strlen(${key}));\n`);
+        this.append('#else\n');
+        this.write(`jsb_memset(${pointer(key)}, 0, JSB_MAX_STRING_SIZE);\n`);
+        this.write(`${key}[JSB_MAX_STRING_SIZE] = 0;\n`);
+        this.append('#endif // JSB_SCHEMA_MALLOC\n');
         break;
     }
   }
@@ -771,6 +776,12 @@ export default class MetadataFileCCodeGenerator extends Resolver {
           },
           '}\n'
         );
+        this.write('// Apply zeroes on every byte of the union\n');
+        this.write(
+          `jsb_memset(&input->value, 0, sizeof(${getTraitUnionCompleteTypeReference(
+            metadata
+          )}));\n`
+        );
         this.write(
           'switch(type) {\n',
           () => {
@@ -926,7 +937,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
     this.write('\n');
 
     this.write(
-      `union ${getMetadataPrefix(metadata)}_value_t {\n`,
+      `${getTraitUnionCompleteTypeReference(metadata)} {\n`,
       () => {
         for (const param of metadata.nodes) {
           if (param.type !== 'internalType' && param.type !== 'externalType') {
@@ -956,7 +967,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         this.write(
           `enum ${metadataGlobalNameToNamespace(metadata)}_type_t type;\n`
         );
-        this.write(`union ${getMetadataPrefix(metadata)}_value_t value;\n`);
+        this.write(`${getTraitUnionCompleteTypeReference(metadata)} value;\n`);
       },
       '};\n'
     );
@@ -1673,15 +1684,20 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       case GenericName.Bytes:
       case GenericName.String:
       case GenericName.NullTerminatedString:
-        this.append('#ifdef JSB_SCHEMA_USE_MALLOC\n');
-        this.append('#error "JSB_SCHEMA_USE_MALLOC is not supported yet"\n');
-        this.append('#else\n');
+        // this.append('#ifdef JSB_SCHEMA_MALLOC\n');
+        // this.append('#error "JSB_SCHEMA_MALLOC is not supported yet"\n');
+        // this.append('#else\n');
+        // this.write(
+        //   `jsb_memcpy(${pointer(key)}, ${pointer(
+        //     generationContext.param.name
+        //   )}, jsb_strlen(${dereference(generationContext.param.name)}));\n`
+        // );
+        // this.append('#endif // JSB_SCHEMA_MALLOC\n');
         this.write(
-          `memcpy(${pointer(key)}, ${pointer(
+          `jsb_memcpy(${pointer(key)}, ${pointer(
             generationContext.param.name
           )}, jsb_strlen(${dereference(generationContext.param.name)}));\n`
         );
-        this.append('#endif // JSB_SCHEMA_USE_MALLOC\n');
         break;
       case GenericName.Boolean:
         this.write(`${key} = ${dereference(generationContext.param.name)};\n`);

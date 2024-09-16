@@ -76,6 +76,8 @@ simple_schema_post_trait_init(struct simple_schema_post_trait_t* input,
               "for the input parameter.");
     return JSB_BAD_ARGUMENT;
   }
+  // Apply zeroes on every byte of the union
+  jsb_memset(&input->value, 0, sizeof(union simple_schema_post_trait_value_t));
   switch (type) {
   case SIMPLE_SCHEMA_POST_ACTIVE_TYPE:
     JSB_TRACE(

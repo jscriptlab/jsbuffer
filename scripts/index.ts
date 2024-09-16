@@ -5,6 +5,7 @@ import { spawn } from 'child-process-utilities';
 import { glob } from 'glob';
 import { getArgument } from 'cli-argument-helper';
 import { NumberInfo, NumberTypeId } from './NumberInfo';
+import getTypeSizeMacroNameFromNumberTypeId from './getTypeSizeMacroNameFromNumberTypeId';
 // import getTypeSizeMacroNameFromNumberTypeId from './getTypeSizeMacroNameFromNumberTypeId';
 // import generateRandomValues from './generateRandomValues';
 
@@ -156,7 +157,11 @@ async function generateC99Codec() {
           testFile.write(
             'for(i = 0; i < JSB_CODEC_TEST_ITERATION_COUNT; i++) {\n',
             () => {
-              testFile.write(`jsb_uint8_t buffer[${integer.bits / 8}];\n`);
+              testFile.write(
+                `jsb_uint8_t buffer[${getTypeSizeMacroNameFromNumberTypeId(
+                  integer.type
+                )}];\n`
+              );
               switch (integer.type) {
                 case NumberTypeId.Int8:
                 case NumberTypeId.Int16:
@@ -171,10 +176,14 @@ async function generateC99Codec() {
                   );
                   break;
                 case NumberTypeId.Float:
-                  testFile.write('rand_fill_float(&output, 1);\n');
+                  testFile.write(
+                    `rand_fill_float(&output, sizeof(${integer.name}));\n`
+                  );
                   break;
                 case NumberTypeId.Double:
-                  testFile.write('rand_fill_double(&output, 1);\n');
+                  testFile.write(
+                    `rand_fill_double(&output, sizeof(${integer.name}));\n`
+                  );
                   break;
               }
 
@@ -398,11 +407,20 @@ async function generateC99Codec() {
   }
 
   if (getArgument(args, '--clang-format') !== null) {
+    const projectDir = path.dirname(__dirname);
     await spawn(
       'clang-format',
-      ['-i', ...(await glob(path.resolve(__dirname, '../**/*.{c,cpp,h,hpp}')))],
+      [
+        '-i',
+        ...(await glob(path.resolve(projectDir, '**/*.{c,cpp,h,hpp}'), {
+          ignore: [
+            path.resolve(projectDir, 'cmake-build-*/**'),
+            path.resolve(projectDir, 'node_modules/**')
+          ]
+        }))
+      ],
       {
-        cwd: path.resolve(__dirname, '..')
+        cwd: projectDir
       }
     ).wait();
   }

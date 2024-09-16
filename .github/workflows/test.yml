@@ -33,7 +33,15 @@ jobs:
           sudo apt install \
             -y --install-recommends \
               cmake gcc g++ gcc-avr simavr avr-libc \
-              gcc-multilib g++-multilib
+              gcc-multilib g++-multilib clang
+      - name: Print C/C++ compiler versions
+        run: |
+          clang --version
+          clang++ --version
+          gcc --version
+          g++ --version
+          avr-gcc --version
+          avr-g++ --version
       - name: Install Node.js packages
         run: npm install
       - name: Build the project

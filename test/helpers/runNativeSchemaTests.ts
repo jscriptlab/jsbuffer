@@ -18,12 +18,36 @@ export interface ISchema {
   type: 'x86_64' | 'avr';
 }
 
+export enum CMakeLogLevel {
+  Error = 'ERROR',
+  Warning = 'WARNING',
+  Notice = 'NOTICE',
+  // This is the default one
+  Status = 'STATUS',
+  Verbose = 'VERBOSE',
+  Debug = 'DEBUG',
+  Trace = 'TRACE'
+}
+
 const avrToolchainDir = `/usr`;
 
 const cmakeBuildTypes = ['Release', 'MinSizeRel', 'RelWithDebInfo', 'Debug'];
 
 export default async function runNativeSchemaTests(schema: ISchema) {
   const cmakeOptions: string[][] = [];
+
+  const clangExecutables = {
+    c: (
+      await spawn('which', ['clang'], { stdio: 'pipe' }).output().stdout.utf8()
+    ).replace(/\n$/, ''),
+    cxx: (
+      await spawn('which', ['clang++'], { stdio: 'pipe' })
+        .output()
+        .stdout.utf8()
+    ).replace(/\n$/, '')
+  };
+
+  console.log(clangExecutables);
 
   switch (schema.type) {
     case 'x86_64': {
@@ -63,12 +87,12 @@ export default async function runNativeSchemaTests(schema: ISchema) {
           '-DJSB_MAX_STRING_SIZE=100',
           '-DJSB_TOLERATE_TYPE_OVERFLOW=OFF'
         ]
-        // ! Add support for JSB_SCHEMA_USE_MALLOC
-        // ['-DJSB_SCHEMA_USE_MALLOC'],
-        // ['-DJSB_SCHEMA_USE_MALLOC', '-DJSB_DISABLE_ERROR_ASSERTION'],
-        // ['-DJSB_SCHEMA_USE_MALLOC', '-DJSB_SERIALIZER_USE_MALLOC'],
+        // ! Add support for JSB_SCHEMA_MALLOC
+        // ['-DJSB_SCHEMA_MALLOC'],
+        // ['-DJSB_SCHEMA_MALLOC', '-DJSB_DISABLE_ERROR_ASSERTION'],
+        // ['-DJSB_SCHEMA_MALLOC', '-DJSB_SERIALIZER_USE_MALLOC'],
         // [
-        //   '-DJSB_SCHEMA_USE_MALLOC',
+        //   '-DJSB_SCHEMA_MALLOC',
         //   '-DJSB_SERIALIZER_USE_MALLOC',
         //   '-DJSB_DISABLE_ERROR_ASSERTION'
         // ],
@@ -92,7 +116,8 @@ export default async function runNativeSchemaTests(schema: ISchema) {
 
               cmakePredefinedArguments.push([
                 ...cmakeArgs,
-                '-DCMAKE_C_FLAGS=-m32'
+                '-DCMAKE_C_FLAGS=-m32',
+                '-DCMAKE_CXX_FLAGS=-m32'
               ]);
               break;
             }
@@ -109,6 +134,17 @@ export default async function runNativeSchemaTests(schema: ISchema) {
             ...cmakeArgs
           ]);
         }
+      }
+
+      /**
+       * Use Clang for each item in `cmakeOptions` array
+       */
+      for (const cmakeArgs of Array.from(cmakeOptions)) {
+        cmakeOptions.unshift([
+          ...cmakeArgs,
+          `-DCMAKE_C_COMPILER=${clangExecutables.c}`,
+          `-DCMAKE_CXX_COMPILER=${clangExecutables.cxx}`
+        ]);
       }
       break;
     }
@@ -165,7 +201,9 @@ export default async function runNativeSchemaTests(schema: ISchema) {
   const tmpFolders = new Array<string>();
 
   try {
-    for (const options of cmakeOptions) {
+    for (let options of cmakeOptions) {
+      options = [...options, `--log-level=${CMakeLogLevel.Notice}`];
+
       const buildDir = await fs.promises.mkdtemp(
         path.resolve(await configuration.cache(), 'cmake-build-test-jsb-')
       );
@@ -181,7 +219,7 @@ export default async function runNativeSchemaTests(schema: ISchema) {
       ];
 
       console.log(
-        `Running cmake with args:\n${args
+        `Running CMake with args:\n${args
           .map((arg) => `\t* ${arg}`)
           .join('\n')}`
       );
@@ -284,7 +322,7 @@ export default async function runNativeSchemaTests(schema: ISchema) {
     if (isErrorLike(err)) {
       throw new Error(err.message);
     } else {
-      throw new Error(`${err}`);
+      throw err;
     }
   }
 
