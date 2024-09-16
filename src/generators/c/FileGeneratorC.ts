@@ -122,11 +122,11 @@ export default class FileGeneratorC extends CodeStream {
 
     this.write('cmake_minimum_required(VERSION 3.5)\n');
     this.write(`project(${this.#cmake.project} C ASM)\n`);
-    this.write('\n');
+    this.append('\n');
     this.write('set(CMAKE_C_STANDARD 99)\n');
     this.write('set(CMAKE_C_STANDARD_REQUIRED ON)\n');
     this.write('set(CMAKE_C_EXTENSIONS ON)\n');
-    this.write('\n');
+    this.append('\n');
     this.write(
       'add_library(\n',
       () => {
@@ -182,8 +182,8 @@ export default class FileGeneratorC extends CodeStream {
       },
       ')\n'
     );
-    this.write('\n');
-    this.write('\n');
+    this.append('\n');
+    this.append('\n');
 
     this.write('if(JSB_SCHEMA_TESTS MATCHES ON)\n');
     this.indentBlock(() => {
@@ -207,7 +207,7 @@ export default class FileGeneratorC extends CodeStream {
       );
     });
     this.write('endif()\n');
-    this.write('\n');
+    this.append('\n');
 
     this.#files.push({
       path: 'CMakeLists.txt',

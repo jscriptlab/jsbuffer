@@ -62,14 +62,39 @@ enum jsb_result_t simple_schema_user_init(struct simple_schema_user_t* value) {
         "Failed to initialize simple_schema.User, received value = NULL.");
     return JSB_BAD_ARGUMENT;
   }
-  JSB_TRACE("simple_schema_user_init", "Initializing param id...");
+
+#ifdef JSB_SCHEMA_MALLOC
+  /**
+   * When JSB_SCHEMA_MALLOC is defined, we need to check for pointers before
+   * calling memset. Otherwise, the allocated memory will be corrupted.
+   */
+#error "JSB_SCHEMA_MALLOC is not yet implemented"
+#else
+  jsb_memset(value, 0, sizeof(struct simple_schema_user_t));
+#endif
+
+  JSB_TRACE("simple_schema_user_init",
+            "Initializing param of type \"jsb_int32_t\": id.");
+  /**
+   * jsb_int32_t
+   */
   value->id = 0;
-  JSB_TRACE("simple_schema_user_init", "Initialized param id.");
-  JSB_TRACE("simple_schema_user_init", "Initializing param last_post...");
+  JSB_TRACE("simple_schema_user_init", "Initialized param: id.");
+
+  JSB_TRACE("simple_schema_user_init",
+            "Initializing param of type \"struct "
+            "simple_schema_user_post_optional_t\": last_post.");
+  /**
+   * struct simple_schema_user_post_optional_t
+   */
+  jsb_memset(&value->last_post, 0,
+             sizeof(struct simple_schema_user_post_optional_t));
+
   value->last_post.has_value = 0;
   JSB_CHECK_ERROR(simple_schema_post_trait_init(
       &value->last_post.value, SIMPLE_SCHEMA_POST_ACTIVE_TYPE));
-  JSB_TRACE("simple_schema_user_init", "Initialized param last_post.");
+  JSB_TRACE("simple_schema_user_init", "Initialized param: last_post.");
+
   return JSB_OK;
 }
 

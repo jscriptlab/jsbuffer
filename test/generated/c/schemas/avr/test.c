@@ -242,8 +242,6 @@ int main(void) {
 
     {
       struct simple_schema_user_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_user_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_user_t));
       JSB_ASSERT(simple_schema_user_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_user_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -256,8 +254,6 @@ int main(void) {
     }
     {
       struct simple_schema_user_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_user_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_user_t));
       JSB_ASSERT(simple_schema_user_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_user_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -341,8 +337,6 @@ int main(void) {
 
     {
       struct simple_schema_post_active_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_active_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_post_active_t));
       JSB_ASSERT(simple_schema_post_active_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_post_active_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -355,8 +349,6 @@ int main(void) {
     }
     {
       struct simple_schema_post_active_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_active_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_post_active_t));
       JSB_ASSERT(simple_schema_post_active_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_post_active_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -370,8 +362,6 @@ int main(void) {
     }
     {
       struct simple_schema_post_active_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_active_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_post_active_t));
       JSB_ASSERT(simple_schema_post_active_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_post_active_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -418,8 +408,6 @@ int main(void) {
 
     {
       struct simple_schema_post_deleted_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_deleted_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_post_deleted_t));
       JSB_ASSERT(simple_schema_post_deleted_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_post_deleted_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -432,8 +420,6 @@ int main(void) {
     }
     {
       struct simple_schema_post_deleted_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_deleted_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_post_deleted_t));
       JSB_ASSERT(simple_schema_post_deleted_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_post_deleted_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -447,8 +433,6 @@ int main(void) {
     }
     {
       struct simple_schema_post_deleted_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_deleted_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_post_deleted_t));
       JSB_ASSERT(simple_schema_post_deleted_init(&value) == JSB_OK);
       JSB_ASSERT(simple_schema_post_deleted_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);

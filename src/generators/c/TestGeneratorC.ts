@@ -66,18 +66,18 @@ export default class TestGeneratorC extends CodeStream {
     this.append('#ifdef __AVR__\n');
     this.write('#include <avr/sleep.h>\n');
     this.append('#endif\n');
-    this.write('\n');
+    this.append('\n');
 
     this.write('#include <jsb/jsb.h>\n');
     this.write('#include <jsb/serializer.h>\n');
     this.write('#include <jsb/deserializer.h>\n');
-    this.write('\n');
+    this.append('\n');
     for (const file of this.#files) {
       if (file.path.endsWith('.h')) {
         this.write(`#include "${file.path}"\n`);
       }
     }
-    this.write('\n');
+    this.append('\n');
     const assertFunctionImplementations: (
       | {
           type: 'custom';
@@ -170,19 +170,19 @@ export default class TestGeneratorC extends CodeStream {
         this.append('\n');
       }
     }
-    this.write('\n');
+    this.append('\n');
 
     this.write('int main(void) {\n');
     this.indentBlock(() => {
       this.write('struct jsb_serializer_t s;\n');
       this.write('struct jsb_deserializer_t d;\n');
-      this.write('\n');
+      this.append('\n');
 
       this.write('// It should return JSB_BAD_ARGUMENT if s is NULL\n');
       this.write(
         'JSB_ASSERT(jsb_serializer_init(NULL, 1) == JSB_BAD_ARGUMENT);\n'
       );
-      this.write('\n');
+      this.append('\n');
 
       this.write(
         '// It should return JSB_BAD_ARGUMENT if buffer size is zero\n'
@@ -190,13 +190,13 @@ export default class TestGeneratorC extends CodeStream {
       this.write(
         'JSB_ASSERT(jsb_serializer_init(&s, 0) == JSB_BAD_ARGUMENT);\n'
       );
-      this.write('\n');
+      this.append('\n');
 
       this.write(
         '// Initialize the serializer again in order to pass a valid buffer to the deserializer\n'
       );
       this.write('JSB_ASSERT(jsb_serializer_init(&s, 200) == JSB_OK);\n');
-      this.write('\n');
+      this.append('\n');
 
       this.write(
         '// It should not return JSB_BAD_ARGUMENT if buffer size is zero\n'
@@ -204,7 +204,7 @@ export default class TestGeneratorC extends CodeStream {
       this.write(
         'JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);\n'
       );
-      this.write('\n');
+      this.append('\n');
 
       this.write(
         '// It should return JSB_BAD_ARGUMENT if deserializer is NULL\n'
@@ -212,15 +212,15 @@ export default class TestGeneratorC extends CodeStream {
       this.write(
         'JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, s.buffer_size) == JSB_BAD_ARGUMENT);\n'
       );
-      this.write('\n');
+      this.append('\n');
 
       this.write('// It should return JSB_BAD_ARGUMENT if buffer is NULL\n');
       this.write(
         'JSB_ASSERT(jsb_deserializer_init(&d, NULL, s.buffer_size) == JSB_BAD_ARGUMENT);\n'
       );
-      this.write('\n');
+      this.append('\n');
 
-      this.write('\n');
+      this.append('\n');
       this.append(
         '#if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)\n'
       );
@@ -292,8 +292,8 @@ export default class TestGeneratorC extends CodeStream {
       this.append(
         '#endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)\n'
       );
-      this.write('\n');
-      this.write('\n');
+      this.append('\n');
+      this.append('\n');
       for (const fileMetadata of this.#fileMetadataList.values()) {
         for (const metadata of fileMetadata.metadata) {
           this.write(
@@ -382,7 +382,7 @@ export default class TestGeneratorC extends CodeStream {
                   );
                   this.write(`${getMetadataPrefix(metadata)}_free(&value);\n`);
 
-                  this.write('\n');
+                  this.append('\n');
 
                   // Test the type with all sorts of values in its parameters
                   for (const param of metadata.params) {
@@ -457,13 +457,13 @@ export default class TestGeneratorC extends CodeStream {
           );
         }
       }
-      this.write('\n');
+      this.append('\n');
 
       this.write('jsb_serializer_free(&s);\n');
-      this.write('\n');
+      this.append('\n');
 
       this.write('JSB_TRACE("test", "All tests passed ✔");\n');
-      this.write('\n');
+      this.append('\n');
 
       this.append('#ifdef __AVR__\n');
       this.write('// Put AVR MCUs to sleep\n');
@@ -471,7 +471,7 @@ export default class TestGeneratorC extends CodeStream {
       this.write('set_sleep_mode(SLEEP_MODE_PWR_DOWN);\n');
       this.write('sleep_mode();\n');
       this.append('#endif\n');
-      this.write('\n');
+      this.append('\n');
 
       this.write('return 0;\n');
     });

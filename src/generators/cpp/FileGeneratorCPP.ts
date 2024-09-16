@@ -343,9 +343,9 @@ export default class FileGeneratorCPP extends CodeStream {
 
   #generateSourceFile(metadata: IMetadataTypeDefinition) {
     this.write(`#include "${metadataToRelativePath(metadata)}.hpp"\n`);
-    this.write('\n');
+    this.append('\n');
     this.write('#include <stdexcept>\n');
-    this.write('\n');
+    this.append('\n');
     const completeTypeReference = metadataGlobalNameToNamespace(metadata);
     this.write(
       `${completeTypeReference} ${completeTypeReference}::decode(jsb::deserializer& d) {\n`,
@@ -374,7 +374,7 @@ export default class FileGeneratorCPP extends CodeStream {
       },
       '}\n'
     );
-    this.write('\n');
+    this.append('\n');
     this.write(
       `void ${completeTypeReference}::encode(jsb::serializer& s) const {\n`
     );
@@ -479,10 +479,10 @@ export default class FileGeneratorCPP extends CodeStream {
     this.write(`#ifndef ${headerGuard}\n`);
     this.write(`#define ${headerGuard}\n\n`);
     this.#includeMetadataDependenciesOnHeaderFile(metadata);
-    this.write('\n');
+    this.append('\n');
     this.write('#include "jsb/serializer.hpp"\n');
     this.write('#include "jsb/deserializer.hpp"\n');
-    this.write('\n');
+    this.append('\n');
     const namespace = metadataGlobalNameToNamespace(metadata, -1);
     if (namespace) {
       this.write(

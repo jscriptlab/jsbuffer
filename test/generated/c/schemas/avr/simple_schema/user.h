@@ -27,12 +27,12 @@ enum jsb_result_t simple_schema_user_encode(const struct simple_schema_user_t*,
 enum jsb_result_t simple_schema_user_init(struct simple_schema_user_t*);
 void simple_schema_user_free(struct simple_schema_user_t*);
 /**
- * @brief Initialize the optional value on last_post parameter of struct
- * simple_schema_user_t
- * @param[in] user The struct to set the property on
- * @param[in] last_post The optional value to initialize. Pass NULL to unset the
- * optional value
- * @return JSB_OK on success, otherwise an `enum jsb_result_t` code
+ *@brief Initialize the optional value on last_post parameter of struct
+ *simple_schema_user_t
+ *@param[in] user The struct to set the property on
+ *@param[in] last_post The optional value to initialize. Pass NULL to unset the
+ *optional value
+ *@return JSB_OK on success, otherwise an `enum jsb_result_t` code
  */
 enum jsb_result_t simple_schema_user_last_post_init(
     struct simple_schema_user_t* user,

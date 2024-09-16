@@ -115,20 +115,74 @@ enum jsb_result_t app_deep_optional_init(struct app_deep_optional_t* value) {
               "Failed to initialize app.DeepOptional, received value = NULL.");
     return JSB_BAD_ARGUMENT;
   }
-  JSB_TRACE("app_deep_optional_init", "Initializing param value...");
-  value->value.has_value = 0;
+
 #ifdef JSB_SCHEMA_MALLOC
-  jsb_memset(value->value.value, 0, jsb_strlen(value->value.value));
+  /**
+   * When JSB_SCHEMA_MALLOC is defined, we need to check for pointers before
+   * calling memset. Otherwise, the allocated memory will be corrupted.
+   */
+#error "JSB_SCHEMA_MALLOC is not yet implemented"
+#else
+  jsb_memset(value, 0, sizeof(struct app_deep_optional_t));
+#endif
+
+  JSB_TRACE("app_deep_optional_init",
+            "Initializing param of type \"struct "
+            "app_deep_optional_string_optional_t\": value.");
+  /**
+   * struct app_deep_optional_string_optional_t
+   */
+  jsb_memset(&value->value, 0,
+             sizeof(struct app_deep_optional_string_optional_t));
+
+  value->value.has_value = 0;
+  /**
+   * jsb_string_t
+   */
+#ifdef JSB_SCHEMA_MALLOC
+  /**
+   * Here we should have something similar the following options:
+   *
+   * 1. Have additional value->value.value_len and value->value.value_capacity
+   * members in order to control the maximum capacity of the memory block and be
+   * able to fully set it to zero.
+   *
+   * 2. We could simply stick to the null-terminated string in order to keep it
+   * simple.
+   *
+   * 3. Whenever JSB_SCHEMA_MALLOC is defined, we could implement both of the
+   * behaviors above, if feasible.
+   */
+#error "JSB_SCHEMA_MALLOC is not implemented yet"
 #else
   jsb_memset(&value->value.value, 0, JSB_MAX_STRING_SIZE);
   value->value.value[JSB_MAX_STRING_SIZE] = 0;
 #endif // JSB_SCHEMA_MALLOC
-  JSB_TRACE("app_deep_optional_init", "Initialized param value.");
-  JSB_TRACE("app_deep_optional_init", "Initializing param value2...");
-  value->value2.has_value       = 0;
+  JSB_TRACE("app_deep_optional_init", "Initialized param: value.");
+
+  JSB_TRACE("app_deep_optional_init",
+            "Initializing param of type \"struct "
+            "app_deep_optional_int_optional_optional_t\": value2.");
+  /**
+   * struct app_deep_optional_int_optional_optional_t
+   */
+  jsb_memset(&value->value2, 0,
+             sizeof(struct app_deep_optional_int_optional_optional_t));
+
+  value->value2.has_value = 0;
+  /**
+   * struct app_deep_optional_int_optional_t
+   */
+  jsb_memset(&value->value2.value, 0,
+             sizeof(struct app_deep_optional_int_optional_t));
+
   value->value2.value.has_value = 0;
-  value->value2.value.value     = 0;
-  JSB_TRACE("app_deep_optional_init", "Initialized param value2.");
+  /**
+   * jsb_int32_t
+   */
+  value->value2.value.value = 0;
+  JSB_TRACE("app_deep_optional_init", "Initialized param: value2.");
+
   return JSB_OK;
 }
 

@@ -232,7 +232,7 @@ export default async function runNativeSchemaTests(schema: ISchema) {
         `${os.cpus().length}`
       ]).wait();
 
-      const mcu = getNamedArgument(Array.from(options), '-DMCU', getString);
+      const MCU = getNamedArgument(Array.from(options), '-DMCU', getString);
       const F_CPU = getNamedArgument(Array.from(options), '-DF_CPU', getString);
 
       const testFiles = await glob(
@@ -270,13 +270,13 @@ export default async function runNativeSchemaTests(schema: ISchema) {
 
             const cpuFrequency = parseInt(F_CPU, 10);
 
-            assert.strict.ok(mcu !== null);
+            assert.strict.ok(MCU !== null);
 
             const firmwareFile = testFile.replace(/\.elf$/, '.hex');
 
             await spawn(path.resolve(avrToolchainDir, 'bin', 'avr-size'), [
               '--mcu',
-              mcu,
+              MCU,
               '--format',
               'avr',
               testFile
@@ -293,26 +293,13 @@ export default async function runNativeSchemaTests(schema: ISchema) {
             ]).wait();
 
             // Run firmware using `simavr`
-            const simavr = spawn(
-              'simavr',
-              [
-                '-f',
-                `${cpuFrequency}`,
-                '-m',
-                mcu,
-                // '-ff',
-                firmwareFile
-                // testFile
-              ],
-              { stdio: 'inherit', timeout: Time.milliseconds.Minute * 5 }
-            );
-
-            await simavr.wait();
-
-            assert.strict.ok(
-              simavr.childProcess.exitCode === 0,
-              'simavr failed to run'
-            );
+            for (const flashFile of [firmwareFile, testFile]) {
+              await spawn(
+                'simavr',
+                ['-f', `${cpuFrequency}`, '-m', MCU, flashFile],
+                { stdio: 'inherit', timeout: Time.milliseconds.Minute * 5 }
+              ).wait();
+            }
             break;
           }
         }

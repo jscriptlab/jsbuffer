@@ -1302,143 +1302,621 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
               "Failed to initialize app.Message, received value = NULL.");
     return JSB_BAD_ARGUMENT;
   }
-  JSB_TRACE("app_message_init", "Initializing param command...");
+
+#ifdef JSB_SCHEMA_MALLOC
+  /**
+   * When JSB_SCHEMA_MALLOC is defined, we need to check for pointers before
+   * calling memset. Otherwise, the allocated memory will be corrupted.
+   */
+#error "JSB_SCHEMA_MALLOC is not yet implemented"
+#else
+  jsb_memset(value, 0, sizeof(struct app_message_t));
+#endif
+
+  JSB_TRACE(
+      "app_message_init",
+      "Initializing param of type \"struct app_command_trait_t\": command.");
   JSB_CHECK_ERROR(
       app_command_trait_init(&value->command, APP_COMMAND_MOVE_FORWARD_TYPE));
-  JSB_TRACE("app_message_init", "Initialized param command.");
-  JSB_TRACE("app_message_init", "Initializing param command1...");
+  JSB_TRACE("app_message_init", "Initialized param: command.");
+
+  JSB_TRACE("app_message_init", "Initializing param of type \"struct "
+                                "app_message_command_optional_t\": command1.");
+  /**
+   * struct app_message_command_optional_t
+   */
+  jsb_memset(&value->command1, 0,
+             sizeof(struct app_message_command_optional_t));
+
   value->command1.has_value = 0;
   JSB_CHECK_ERROR(app_command_trait_init(&value->command1.value,
                                          APP_COMMAND_MOVE_FORWARD_TYPE));
-  JSB_TRACE("app_message_init", "Initialized param command1.");
-  JSB_TRACE("app_message_init", "Initializing param command2...");
-  value->command2.has_value       = 0;
+  JSB_TRACE("app_message_init", "Initialized param: command1.");
+
+  JSB_TRACE("app_message_init",
+            "Initializing param of type \"struct "
+            "app_message_command_optional_optional_t\": command2.");
+  /**
+   * struct app_message_command_optional_optional_t
+   */
+  jsb_memset(&value->command2, 0,
+             sizeof(struct app_message_command_optional_optional_t));
+
+  value->command2.has_value = 0;
+  /**
+   * struct app_message_command_optional_t
+   */
+  jsb_memset(&value->command2.value, 0,
+             sizeof(struct app_message_command_optional_t));
+
   value->command2.value.has_value = 0;
   JSB_CHECK_ERROR(app_command_trait_init(&value->command2.value.value,
                                          APP_COMMAND_MOVE_FORWARD_TYPE));
-  JSB_TRACE("app_message_init", "Initialized param command2.");
-  JSB_TRACE("app_message_init", "Initializing param command3...");
-  value->command3.has_value             = 0;
-  value->command3.value.has_value       = 0;
+  JSB_TRACE("app_message_init", "Initialized param: command2.");
+
+  JSB_TRACE("app_message_init",
+            "Initializing param of type \"struct "
+            "app_message_command_optional_optional_optional_t\": command3.");
+  /**
+   * struct app_message_command_optional_optional_optional_t
+   */
+  jsb_memset(&value->command3, 0,
+             sizeof(struct app_message_command_optional_optional_optional_t));
+
+  value->command3.has_value = 0;
+  /**
+   * struct app_message_command_optional_optional_t
+   */
+  jsb_memset(&value->command3.value, 0,
+             sizeof(struct app_message_command_optional_optional_t));
+
+  value->command3.value.has_value = 0;
+  /**
+   * struct app_message_command_optional_t
+   */
+  jsb_memset(&value->command3.value.value, 0,
+             sizeof(struct app_message_command_optional_t));
+
   value->command3.value.value.has_value = 0;
   JSB_CHECK_ERROR(app_command_trait_init(&value->command3.value.value.value,
                                          APP_COMMAND_MOVE_FORWARD_TYPE));
-  JSB_TRACE("app_message_init", "Initialized param command3.");
-  JSB_TRACE("app_message_init", "Initializing param command4...");
-  value->command4.has_value                   = 0;
-  value->command4.value.has_value             = 0;
-  value->command4.value.value.has_value       = 0;
+  JSB_TRACE("app_message_init", "Initialized param: command3.");
+
+  JSB_TRACE(
+      "app_message_init",
+      "Initializing param of type \"struct "
+      "app_message_command_optional_optional_optional_optional_t\": command4.");
+  /**
+   * struct app_message_command_optional_optional_optional_optional_t
+   */
+  jsb_memset(
+      &value->command4, 0,
+      sizeof(struct app_message_command_optional_optional_optional_optional_t));
+
+  value->command4.has_value = 0;
+  /**
+   * struct app_message_command_optional_optional_optional_t
+   */
+  jsb_memset(&value->command4.value, 0,
+             sizeof(struct app_message_command_optional_optional_optional_t));
+
+  value->command4.value.has_value = 0;
+  /**
+   * struct app_message_command_optional_optional_t
+   */
+  jsb_memset(&value->command4.value.value, 0,
+             sizeof(struct app_message_command_optional_optional_t));
+
+  value->command4.value.value.has_value = 0;
+  /**
+   * struct app_message_command_optional_t
+   */
+  jsb_memset(&value->command4.value.value.value, 0,
+             sizeof(struct app_message_command_optional_t));
+
   value->command4.value.value.value.has_value = 0;
   JSB_CHECK_ERROR(app_command_trait_init(
       &value->command4.value.value.value.value, APP_COMMAND_MOVE_FORWARD_TYPE));
-  JSB_TRACE("app_message_init", "Initialized param command4.");
-  JSB_TRACE("app_message_init", "Initializing param value1...");
-  value->value1.has_value                   = 0;
-  value->value1.value.has_value             = 0;
-  value->value1.value.value.has_value       = 0;
+  JSB_TRACE("app_message_init", "Initialized param: command4.");
+
+  JSB_TRACE("app_message_init",
+            "Initializing param of type \"struct "
+            "app_message_int_optional_optional_optional_optional_t\": value1.");
+  /**
+   * struct app_message_int_optional_optional_optional_optional_t
+   */
+  jsb_memset(
+      &value->value1, 0,
+      sizeof(struct app_message_int_optional_optional_optional_optional_t));
+
+  value->value1.has_value = 0;
+  /**
+   * struct app_message_int_optional_optional_optional_t
+   */
+  jsb_memset(&value->value1.value, 0,
+             sizeof(struct app_message_int_optional_optional_optional_t));
+
+  value->value1.value.has_value = 0;
+  /**
+   * struct app_message_int_optional_optional_t
+   */
+  jsb_memset(&value->value1.value.value, 0,
+             sizeof(struct app_message_int_optional_optional_t));
+
+  value->value1.value.value.has_value = 0;
+  /**
+   * struct app_message_int_optional_t
+   */
+  jsb_memset(&value->value1.value.value.value, 0,
+             sizeof(struct app_message_int_optional_t));
+
   value->value1.value.value.value.has_value = 0;
-  value->value1.value.value.value.value     = 0;
-  JSB_TRACE("app_message_init", "Initialized param value1.");
-  JSB_TRACE("app_message_init", "Initializing param value2...");
-  value->value2.has_value                   = 0;
-  value->value2.value.has_value             = 0;
-  value->value2.value.value.has_value       = 0;
+  /**
+   * jsb_int32_t
+   */
+  value->value1.value.value.value.value = 0;
+  JSB_TRACE("app_message_init", "Initialized param: value1.");
+
+  JSB_TRACE(
+      "app_message_init",
+      "Initializing param of type \"struct "
+      "app_message_int16_optional_optional_optional_optional_t\": value2.");
+  /**
+   * struct app_message_int16_optional_optional_optional_optional_t
+   */
+  jsb_memset(
+      &value->value2, 0,
+      sizeof(struct app_message_int16_optional_optional_optional_optional_t));
+
+  value->value2.has_value = 0;
+  /**
+   * struct app_message_int16_optional_optional_optional_t
+   */
+  jsb_memset(&value->value2.value, 0,
+             sizeof(struct app_message_int16_optional_optional_optional_t));
+
+  value->value2.value.has_value = 0;
+  /**
+   * struct app_message_int16_optional_optional_t
+   */
+  jsb_memset(&value->value2.value.value, 0,
+             sizeof(struct app_message_int16_optional_optional_t));
+
+  value->value2.value.value.has_value = 0;
+  /**
+   * struct app_message_int16_optional_t
+   */
+  jsb_memset(&value->value2.value.value.value, 0,
+             sizeof(struct app_message_int16_optional_t));
+
   value->value2.value.value.value.has_value = 0;
-  value->value2.value.value.value.value     = 0;
-  JSB_TRACE("app_message_init", "Initialized param value2.");
-  JSB_TRACE("app_message_init", "Initializing param value3...");
-  value->value3.has_value                   = 0;
-  value->value3.value.has_value             = 0;
-  value->value3.value.value.has_value       = 0;
+  /**
+   * jsb_int16_t
+   */
+  value->value2.value.value.value.value = 0;
+  JSB_TRACE("app_message_init", "Initialized param: value2.");
+
+  JSB_TRACE(
+      "app_message_init",
+      "Initializing param of type \"struct "
+      "app_message_int8_optional_optional_optional_optional_t\": value3.");
+  /**
+   * struct app_message_int8_optional_optional_optional_optional_t
+   */
+  jsb_memset(
+      &value->value3, 0,
+      sizeof(struct app_message_int8_optional_optional_optional_optional_t));
+
+  value->value3.has_value = 0;
+  /**
+   * struct app_message_int8_optional_optional_optional_t
+   */
+  jsb_memset(&value->value3.value, 0,
+             sizeof(struct app_message_int8_optional_optional_optional_t));
+
+  value->value3.value.has_value = 0;
+  /**
+   * struct app_message_int8_optional_optional_t
+   */
+  jsb_memset(&value->value3.value.value, 0,
+             sizeof(struct app_message_int8_optional_optional_t));
+
+  value->value3.value.value.has_value = 0;
+  /**
+   * struct app_message_int8_optional_t
+   */
+  jsb_memset(&value->value3.value.value.value, 0,
+             sizeof(struct app_message_int8_optional_t));
+
   value->value3.value.value.value.has_value = 0;
-  value->value3.value.value.value.value     = 0;
-  JSB_TRACE("app_message_init", "Initialized param value3.");
-  JSB_TRACE("app_message_init", "Initializing param value4...");
-  value->value4.has_value                   = 0;
-  value->value4.value.has_value             = 0;
-  value->value4.value.value.has_value       = 0;
+  /**
+   * jsb_int8_t
+   */
+  value->value3.value.value.value.value = 0;
+  JSB_TRACE("app_message_init", "Initialized param: value3.");
+
+  JSB_TRACE(
+      "app_message_init",
+      "Initializing param of type \"struct "
+      "app_message_int32_optional_optional_optional_optional_t\": value4.");
+  /**
+   * struct app_message_int32_optional_optional_optional_optional_t
+   */
+  jsb_memset(
+      &value->value4, 0,
+      sizeof(struct app_message_int32_optional_optional_optional_optional_t));
+
+  value->value4.has_value = 0;
+  /**
+   * struct app_message_int32_optional_optional_optional_t
+   */
+  jsb_memset(&value->value4.value, 0,
+             sizeof(struct app_message_int32_optional_optional_optional_t));
+
+  value->value4.value.has_value = 0;
+  /**
+   * struct app_message_int32_optional_optional_t
+   */
+  jsb_memset(&value->value4.value.value, 0,
+             sizeof(struct app_message_int32_optional_optional_t));
+
+  value->value4.value.value.has_value = 0;
+  /**
+   * struct app_message_int32_optional_t
+   */
+  jsb_memset(&value->value4.value.value.value, 0,
+             sizeof(struct app_message_int32_optional_t));
+
   value->value4.value.value.value.has_value = 0;
-  value->value4.value.value.value.value     = 0;
-  JSB_TRACE("app_message_init", "Initialized param value4.");
-  JSB_TRACE("app_message_init", "Initializing param value5...");
-  value->value5.has_value                   = 0;
-  value->value5.value.has_value             = 0;
-  value->value5.value.value.has_value       = 0;
+  /**
+   * jsb_int32_t
+   */
+  value->value4.value.value.value.value = 0;
+  JSB_TRACE("app_message_init", "Initialized param: value4.");
+
+  JSB_TRACE(
+      "app_message_init",
+      "Initializing param of type \"struct "
+      "app_message_uint8_optional_optional_optional_optional_t\": value5.");
+  /**
+   * struct app_message_uint8_optional_optional_optional_optional_t
+   */
+  jsb_memset(
+      &value->value5, 0,
+      sizeof(struct app_message_uint8_optional_optional_optional_optional_t));
+
+  value->value5.has_value = 0;
+  /**
+   * struct app_message_uint8_optional_optional_optional_t
+   */
+  jsb_memset(&value->value5.value, 0,
+             sizeof(struct app_message_uint8_optional_optional_optional_t));
+
+  value->value5.value.has_value = 0;
+  /**
+   * struct app_message_uint8_optional_optional_t
+   */
+  jsb_memset(&value->value5.value.value, 0,
+             sizeof(struct app_message_uint8_optional_optional_t));
+
+  value->value5.value.value.has_value = 0;
+  /**
+   * struct app_message_uint8_optional_t
+   */
+  jsb_memset(&value->value5.value.value.value, 0,
+             sizeof(struct app_message_uint8_optional_t));
+
   value->value5.value.value.value.has_value = 0;
-  value->value5.value.value.value.value     = 0;
-  JSB_TRACE("app_message_init", "Initialized param value5.");
-  JSB_TRACE("app_message_init", "Initializing param value6...");
-  value->value6.has_value                   = 0;
-  value->value6.value.has_value             = 0;
-  value->value6.value.value.has_value       = 0;
+  /**
+   * jsb_uint8_t
+   */
+  value->value5.value.value.value.value = 0;
+  JSB_TRACE("app_message_init", "Initialized param: value5.");
+
+  JSB_TRACE(
+      "app_message_init",
+      "Initializing param of type \"struct "
+      "app_message_uint16_optional_optional_optional_optional_t\": value6.");
+  /**
+   * struct app_message_uint16_optional_optional_optional_optional_t
+   */
+  jsb_memset(
+      &value->value6, 0,
+      sizeof(struct app_message_uint16_optional_optional_optional_optional_t));
+
+  value->value6.has_value = 0;
+  /**
+   * struct app_message_uint16_optional_optional_optional_t
+   */
+  jsb_memset(&value->value6.value, 0,
+             sizeof(struct app_message_uint16_optional_optional_optional_t));
+
+  value->value6.value.has_value = 0;
+  /**
+   * struct app_message_uint16_optional_optional_t
+   */
+  jsb_memset(&value->value6.value.value, 0,
+             sizeof(struct app_message_uint16_optional_optional_t));
+
+  value->value6.value.value.has_value = 0;
+  /**
+   * struct app_message_uint16_optional_t
+   */
+  jsb_memset(&value->value6.value.value.value, 0,
+             sizeof(struct app_message_uint16_optional_t));
+
   value->value6.value.value.value.has_value = 0;
-  value->value6.value.value.value.value     = 0;
-  JSB_TRACE("app_message_init", "Initialized param value6.");
-  JSB_TRACE("app_message_init", "Initializing param value7...");
-  value->value7.has_value                   = 0;
-  value->value7.value.has_value             = 0;
-  value->value7.value.value.has_value       = 0;
+  /**
+   * jsb_uint16_t
+   */
+  value->value6.value.value.value.value = 0;
+  JSB_TRACE("app_message_init", "Initialized param: value6.");
+
+  JSB_TRACE(
+      "app_message_init",
+      "Initializing param of type \"struct "
+      "app_message_uint32_optional_optional_optional_optional_t\": value7.");
+  /**
+   * struct app_message_uint32_optional_optional_optional_optional_t
+   */
+  jsb_memset(
+      &value->value7, 0,
+      sizeof(struct app_message_uint32_optional_optional_optional_optional_t));
+
+  value->value7.has_value = 0;
+  /**
+   * struct app_message_uint32_optional_optional_optional_t
+   */
+  jsb_memset(&value->value7.value, 0,
+             sizeof(struct app_message_uint32_optional_optional_optional_t));
+
+  value->value7.value.has_value = 0;
+  /**
+   * struct app_message_uint32_optional_optional_t
+   */
+  jsb_memset(&value->value7.value.value, 0,
+             sizeof(struct app_message_uint32_optional_optional_t));
+
+  value->value7.value.value.has_value = 0;
+  /**
+   * struct app_message_uint32_optional_t
+   */
+  jsb_memset(&value->value7.value.value.value, 0,
+             sizeof(struct app_message_uint32_optional_t));
+
   value->value7.value.value.value.has_value = 0;
-  value->value7.value.value.value.value     = 0;
-  JSB_TRACE("app_message_init", "Initialized param value7.");
-  JSB_TRACE("app_message_init", "Initializing param value8...");
-  value->value8.has_value                   = 0;
-  value->value8.value.has_value             = 0;
-  value->value8.value.value.has_value       = 0;
+  /**
+   * jsb_uint32_t
+   */
+  value->value7.value.value.value.value = 0;
+  JSB_TRACE("app_message_init", "Initialized param: value7.");
+
+  JSB_TRACE(
+      "app_message_init",
+      "Initializing param of type \"struct "
+      "app_message_string_optional_optional_optional_optional_t\": value8.");
+  /**
+   * struct app_message_string_optional_optional_optional_optional_t
+   */
+  jsb_memset(
+      &value->value8, 0,
+      sizeof(struct app_message_string_optional_optional_optional_optional_t));
+
+  value->value8.has_value = 0;
+  /**
+   * struct app_message_string_optional_optional_optional_t
+   */
+  jsb_memset(&value->value8.value, 0,
+             sizeof(struct app_message_string_optional_optional_optional_t));
+
+  value->value8.value.has_value = 0;
+  /**
+   * struct app_message_string_optional_optional_t
+   */
+  jsb_memset(&value->value8.value.value, 0,
+             sizeof(struct app_message_string_optional_optional_t));
+
+  value->value8.value.value.has_value = 0;
+  /**
+   * struct app_message_string_optional_t
+   */
+  jsb_memset(&value->value8.value.value.value, 0,
+             sizeof(struct app_message_string_optional_t));
+
   value->value8.value.value.value.has_value = 0;
+  /**
+   * jsb_string_t
+   */
 #ifdef JSB_SCHEMA_MALLOC
-  jsb_memset(value->value8.value.value.value.value, 0,
-             jsb_strlen(value->value8.value.value.value.value));
+  /**
+   * Here we should have something similar the following options:
+   *
+   * 1. Have additional value->value8.value.value.value.value_len and
+   * value->value8.value.value.value.value_capacity members in order to control
+   * the maximum capacity of the memory block and be able to fully set it to
+   * zero.
+   *
+   * 2. We could simply stick to the null-terminated string in order to keep it
+   * simple.
+   *
+   * 3. Whenever JSB_SCHEMA_MALLOC is defined, we could implement both of the
+   * behaviors above, if feasible.
+   */
+#error "JSB_SCHEMA_MALLOC is not implemented yet"
 #else
   jsb_memset(&value->value8.value.value.value.value, 0, JSB_MAX_STRING_SIZE);
   value->value8.value.value.value.value[JSB_MAX_STRING_SIZE] = 0;
 #endif // JSB_SCHEMA_MALLOC
-  JSB_TRACE("app_message_init", "Initialized param value8.");
-  JSB_TRACE("app_message_init", "Initializing param value9...");
+  JSB_TRACE("app_message_init", "Initialized param: value8.");
+
+  JSB_TRACE("app_message_init", "Initializing param of type \"struct "
+                                "app_message_int_optional_t\": value9.");
+  /**
+   * struct app_message_int_optional_t
+   */
+  jsb_memset(&value->value9, 0, sizeof(struct app_message_int_optional_t));
+
   value->value9.has_value = 0;
-  value->value9.value     = 0;
-  JSB_TRACE("app_message_init", "Initialized param value9.");
-  JSB_TRACE("app_message_init", "Initializing param value10...");
+  /**
+   * jsb_int32_t
+   */
+  value->value9.value = 0;
+  JSB_TRACE("app_message_init", "Initialized param: value9.");
+
+  JSB_TRACE("app_message_init", "Initializing param of type \"struct "
+                                "app_message_int16_optional_t\": value10.");
+  /**
+   * struct app_message_int16_optional_t
+   */
+  jsb_memset(&value->value10, 0, sizeof(struct app_message_int16_optional_t));
+
   value->value10.has_value = 0;
-  value->value10.value     = 0;
-  JSB_TRACE("app_message_init", "Initialized param value10.");
-  JSB_TRACE("app_message_init", "Initializing param value11...");
+  /**
+   * jsb_int16_t
+   */
+  value->value10.value = 0;
+  JSB_TRACE("app_message_init", "Initialized param: value10.");
+
+  JSB_TRACE("app_message_init", "Initializing param of type \"struct "
+                                "app_message_int8_optional_t\": value11.");
+  /**
+   * struct app_message_int8_optional_t
+   */
+  jsb_memset(&value->value11, 0, sizeof(struct app_message_int8_optional_t));
+
   value->value11.has_value = 0;
-  value->value11.value     = 0;
-  JSB_TRACE("app_message_init", "Initialized param value11.");
-  JSB_TRACE("app_message_init", "Initializing param value12...");
+  /**
+   * jsb_int8_t
+   */
+  value->value11.value = 0;
+  JSB_TRACE("app_message_init", "Initialized param: value11.");
+
+  JSB_TRACE("app_message_init", "Initializing param of type \"struct "
+                                "app_message_int32_optional_t\": value12.");
+  /**
+   * struct app_message_int32_optional_t
+   */
+  jsb_memset(&value->value12, 0, sizeof(struct app_message_int32_optional_t));
+
   value->value12.has_value = 0;
-  value->value12.value     = 0;
-  JSB_TRACE("app_message_init", "Initialized param value12.");
-  JSB_TRACE("app_message_init", "Initializing param value13...");
+  /**
+   * jsb_int32_t
+   */
+  value->value12.value = 0;
+  JSB_TRACE("app_message_init", "Initialized param: value12.");
+
+  JSB_TRACE("app_message_init", "Initializing param of type \"struct "
+                                "app_message_uint8_optional_t\": value13.");
+  /**
+   * struct app_message_uint8_optional_t
+   */
+  jsb_memset(&value->value13, 0, sizeof(struct app_message_uint8_optional_t));
+
   value->value13.has_value = 0;
-  value->value13.value     = 0;
-  JSB_TRACE("app_message_init", "Initialized param value13.");
-  JSB_TRACE("app_message_init", "Initializing param value14...");
+  /**
+   * jsb_uint8_t
+   */
+  value->value13.value = 0;
+  JSB_TRACE("app_message_init", "Initialized param: value13.");
+
+  JSB_TRACE("app_message_init", "Initializing param of type \"struct "
+                                "app_message_uint16_optional_t\": value14.");
+  /**
+   * struct app_message_uint16_optional_t
+   */
+  jsb_memset(&value->value14, 0, sizeof(struct app_message_uint16_optional_t));
+
   value->value14.has_value = 0;
-  value->value14.value     = 0;
-  JSB_TRACE("app_message_init", "Initialized param value14.");
-  JSB_TRACE("app_message_init", "Initializing param value15...");
+  /**
+   * jsb_uint16_t
+   */
+  value->value14.value = 0;
+  JSB_TRACE("app_message_init", "Initialized param: value14.");
+
+  JSB_TRACE("app_message_init", "Initializing param of type \"struct "
+                                "app_message_uint32_optional_t\": value15.");
+  /**
+   * struct app_message_uint32_optional_t
+   */
+  jsb_memset(&value->value15, 0, sizeof(struct app_message_uint32_optional_t));
+
   value->value15.has_value = 0;
-  value->value15.value     = 0;
-  JSB_TRACE("app_message_init", "Initialized param value15.");
-  JSB_TRACE("app_message_init", "Initializing param value16...");
+  /**
+   * jsb_uint32_t
+   */
+  value->value15.value = 0;
+  JSB_TRACE("app_message_init", "Initialized param: value15.");
+
+  JSB_TRACE("app_message_init", "Initializing param of type \"struct "
+                                "app_message_string_optional_t\": value16.");
+  /**
+   * struct app_message_string_optional_t
+   */
+  jsb_memset(&value->value16, 0, sizeof(struct app_message_string_optional_t));
+
   value->value16.has_value = 0;
+  /**
+   * jsb_string_t
+   */
 #ifdef JSB_SCHEMA_MALLOC
-  jsb_memset(value->value16.value, 0, jsb_strlen(value->value16.value));
+  /**
+   * Here we should have something similar the following options:
+   *
+   * 1. Have additional value->value16.value_len and
+   * value->value16.value_capacity members in order to control the maximum
+   * capacity of the memory block and be able to fully set it to zero.
+   *
+   * 2. We could simply stick to the null-terminated string in order to keep it
+   * simple.
+   *
+   * 3. Whenever JSB_SCHEMA_MALLOC is defined, we could implement both of the
+   * behaviors above, if feasible.
+   */
+#error "JSB_SCHEMA_MALLOC is not implemented yet"
 #else
   jsb_memset(&value->value16.value, 0, JSB_MAX_STRING_SIZE);
   value->value16.value[JSB_MAX_STRING_SIZE] = 0;
 #endif // JSB_SCHEMA_MALLOC
-  JSB_TRACE("app_message_init", "Initialized param value16.");
-  JSB_TRACE("app_message_init", "Initializing param value17...");
-  value->value17.has_value                   = 0;
-  value->value17.value.has_value             = 0;
-  value->value17.value.value.has_value       = 0;
+  JSB_TRACE("app_message_init", "Initialized param: value16.");
+
+  JSB_TRACE("app_message_init", "Initializing param of type \"struct "
+                                "app_message_deepoptional_optional_optional_"
+                                "optional_optional_t\": value17.");
+  /**
+   * struct app_message_deepoptional_optional_optional_optional_optional_t
+   */
+  jsb_memset(
+      &value->value17, 0,
+      sizeof(struct
+             app_message_deepoptional_optional_optional_optional_optional_t));
+
+  value->value17.has_value = 0;
+  /**
+   * struct app_message_deepoptional_optional_optional_optional_t
+   */
+  jsb_memset(
+      &value->value17.value, 0,
+      sizeof(struct app_message_deepoptional_optional_optional_optional_t));
+
+  value->value17.value.has_value = 0;
+  /**
+   * struct app_message_deepoptional_optional_optional_t
+   */
+  jsb_memset(&value->value17.value.value, 0,
+             sizeof(struct app_message_deepoptional_optional_optional_t));
+
+  value->value17.value.value.has_value = 0;
+  /**
+   * struct app_message_deepoptional_optional_t
+   */
+  jsb_memset(&value->value17.value.value.value, 0,
+             sizeof(struct app_message_deepoptional_optional_t));
+
   value->value17.value.value.value.has_value = 0;
   JSB_CHECK_ERROR(
       app_deep_optional_init(&value->value17.value.value.value.value));
-  JSB_TRACE("app_message_init", "Initialized param value17.");
+  JSB_TRACE("app_message_init", "Initialized param: value17.");
+
   return JSB_OK;
 }
 

@@ -103,13 +103,14 @@ export function JSB_TRACE(name: string, ...args: string[]) {
       args[0] = `${args[0]}.`;
     }
   }
-  return `JSB_TRACE("${name}", ${args
-    .map((arg) =>
-      isLiteralTraceArgument(arg)
-        ? arg.replace(RegularExpressions.literalTraceArgument, '')
-        : `"${arg}"`
-    )
-    .join(', ')});\n`;
+  const traceArgs = [name, ...args].map((arg) => {
+    arg = arg.replace(/(")/g, '\\$1');
+    arg = isLiteralTraceArgument(arg)
+      ? arg.replace(RegularExpressions.literalTraceArgument, '')
+      : `"${arg}"`;
+    return arg;
+  });
+  return `JSB_TRACE(${traceArgs.join(', ')});\n`;
 }
 
 export function getTraitUnionName(metadata: Metadata) {

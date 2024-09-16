@@ -249,8 +249,6 @@ int main(void) {
 
     {
       struct app_deep_optional_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_deep_optional_t));
-      jsb_memset(&value, 0, sizeof(struct app_deep_optional_t));
       JSB_ASSERT(app_deep_optional_init(&value) == JSB_OK);
       JSB_ASSERT(app_deep_optional_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -264,8 +262,6 @@ int main(void) {
     }
     {
       struct app_deep_optional_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_deep_optional_t));
-      jsb_memset(&value, 0, sizeof(struct app_deep_optional_t));
       JSB_ASSERT(app_deep_optional_init(&value) == JSB_OK);
       JSB_ASSERT(app_deep_optional_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -309,8 +305,6 @@ int main(void) {
 
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -323,8 +317,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -338,8 +330,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -353,8 +343,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -368,8 +356,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -383,8 +369,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -398,8 +382,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -413,8 +395,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -428,8 +408,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -443,8 +421,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -458,8 +434,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -473,8 +447,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -488,8 +460,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -503,8 +473,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -518,8 +486,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -533,8 +499,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -548,8 +512,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -563,8 +525,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -578,8 +538,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -593,8 +551,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -608,8 +564,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -623,8 +577,6 @@ int main(void) {
     }
     {
       struct app_message_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_message_t));
-      jsb_memset(&value, 0, sizeof(struct app_message_t));
       JSB_ASSERT(app_message_init(&value) == JSB_OK);
       JSB_ASSERT(app_message_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -668,8 +620,6 @@ int main(void) {
 
     {
       struct app_command_move_forward_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_command_move_forward_t));
-      jsb_memset(&value, 0, sizeof(struct app_command_move_forward_t));
       JSB_ASSERT(app_command_move_forward_init(&value) == JSB_OK);
       JSB_ASSERT(app_command_move_forward_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -682,8 +632,6 @@ int main(void) {
     }
     {
       struct app_command_move_forward_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_command_move_forward_t));
-      jsb_memset(&value, 0, sizeof(struct app_command_move_forward_t));
       JSB_ASSERT(app_command_move_forward_init(&value) == JSB_OK);
       JSB_ASSERT(app_command_move_forward_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -727,8 +675,6 @@ int main(void) {
 
     {
       struct app_command_move_backwards_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_command_move_backwards_t));
-      jsb_memset(&value, 0, sizeof(struct app_command_move_backwards_t));
       JSB_ASSERT(app_command_move_backwards_init(&value) == JSB_OK);
       JSB_ASSERT(app_command_move_backwards_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -741,8 +687,6 @@ int main(void) {
     }
     {
       struct app_command_move_backwards_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_command_move_backwards_t));
-      jsb_memset(&value, 0, sizeof(struct app_command_move_backwards_t));
       JSB_ASSERT(app_command_move_backwards_init(&value) == JSB_OK);
       JSB_ASSERT(app_command_move_backwards_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -760,8 +704,6 @@ int main(void) {
     }
     {
       struct app_command_move_backwards_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct app_command_move_backwards_t));
-      jsb_memset(&value, 0, sizeof(struct app_command_move_backwards_t));
       JSB_ASSERT(app_command_move_backwards_init(&value) == JSB_OK);
       JSB_ASSERT(app_command_move_backwards_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -909,8 +851,6 @@ int main(void) {
 
     {
       struct protocol_main_void_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct protocol_main_void_t));
-      jsb_memset(&value, 0, sizeof(struct protocol_main_void_t));
       JSB_ASSERT(protocol_main_void_init(&value) == JSB_OK);
       JSB_ASSERT(protocol_main_void_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -954,8 +894,6 @@ int main(void) {
 
     {
       struct protocol_main_user_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct protocol_main_user_t));
-      jsb_memset(&value, 0, sizeof(struct protocol_main_user_t));
       JSB_ASSERT(protocol_main_user_init(&value) == JSB_OK);
       JSB_ASSERT(protocol_main_user_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -968,8 +906,6 @@ int main(void) {
     }
     {
       struct protocol_main_user_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct protocol_main_user_t));
-      jsb_memset(&value, 0, sizeof(struct protocol_main_user_t));
       JSB_ASSERT(protocol_main_user_init(&value) == JSB_OK);
       JSB_ASSERT(protocol_main_user_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -1015,8 +951,6 @@ int main(void) {
 
     {
       struct protocol_main_get_user_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct protocol_main_get_user_t));
-      jsb_memset(&value, 0, sizeof(struct protocol_main_get_user_t));
       JSB_ASSERT(protocol_main_get_user_init(&value) == JSB_OK);
       JSB_ASSERT(protocol_main_get_user_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -1059,8 +993,6 @@ int main(void) {
 
     {
       struct protocol_main_tuple_test_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct protocol_main_tuple_test_t));
-      jsb_memset(&value, 0, sizeof(struct protocol_main_tuple_test_t));
       JSB_ASSERT(protocol_main_tuple_test_init(&value) == JSB_OK);
       JSB_ASSERT(protocol_main_tuple_test_init(&new_value) == JSB_OK);
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);

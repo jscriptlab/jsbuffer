@@ -361,7 +361,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
 
   #generateSourceFile(metadata: IMetadataTypeDefinition) {
     this.write(`#include "${metadataToRelativePath(metadata)}.h"\n`);
-    this.write('\n');
+    this.append('\n');
 
     const completeTypeReference = getMetadataCompleteTypeReference(metadata);
     const memberNames = {
@@ -413,7 +413,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       },
       '}\n'
     );
-    this.write('\n');
+    this.append('\n');
     this.write(
       `enum jsb_result_t ${memberNames.encode}(const ${completeTypeReference}* input, struct jsb_serializer_t* s) {\n`
     );
@@ -431,7 +431,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
     });
     this.write('}\n');
 
-    this.write('\n');
+    this.append('\n');
 
     this.write(
       `enum jsb_result_t ${memberNames.initialize}(${completeTypeReference}* value) {\n`
@@ -450,6 +450,17 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         },
         '}\n'
       );
+      // this.append('\n');
+      // this.append('#ifdef JSB_SCHEMA_MALLOC\n');
+      // this.writeMultiLineComment([
+      //   'When JSB_SCHEMA_MALLOC is defined, we need to check for pointers before calling memset.',
+      //   'Otherwise, the allocated memory will be corrupted.'
+      // ]);
+      // this.append('#error "JSB_SCHEMA_MALLOC is not yet implemented"\n');
+      // this.append('#else\n');
+      // this.write(`jsb_memset(value, 0, sizeof(${completeTypeReference}));\n`);
+      // this.append('#endif\n');
+      // this.append('\n');
     });
 
     // this.write('#ifdef JSB_SCHEMA_MALLOC\n');
@@ -469,18 +480,26 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         this.write(
           JSB_TRACE(
             memberNames.initialize,
-            `Initializing param ${param.name}...`
+            `Initializing param of type "${this.metadataParamTypeToString(
+              param.type,
+              metadata
+            )}": ${param.name}`
           )
         );
-        this.#initializeMetadataParam(param.type, `value->${param.name}`);
-        this.write(
-          JSB_TRACE(memberNames.initialize, `Initialized param ${param.name}`)
+        this.#initializeMetadataParam(
+          param.type,
+          `value->${param.name}`,
+          metadata
         );
+        this.write(
+          JSB_TRACE(memberNames.initialize, `Initialized param: ${param.name}`)
+        );
+        this.append('\n');
       }
       this.write('return JSB_OK;\n');
     });
     this.write('}\n');
-    this.write('\n');
+    this.append('\n');
     this.write(
       `void ${getMetadataPrefix(
         metadata
@@ -492,7 +511,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       },
       '}\n'
     );
-    this.write('\n');
+    this.append('\n');
 
     this.#generateParamBasedFunction(metadata, true);
 
@@ -506,8 +525,12 @@ export default class MetadataFileCCodeGenerator extends Resolver {
 
   #initializeMetadataParamGeneric(
     paramType: IMetadataParamTypeGeneric,
-    key: string
+    key: string,
+    metadata: Metadata
   ) {
+    this.writeMultiLineComment([
+      this.metadataParamTypeToString(paramType, metadata)
+    ]);
     switch (paramType.value) {
       case GenericName.Long:
       case GenericName.UnsignedLong:
@@ -533,10 +556,21 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       case GenericName.Bytes:
       case GenericName.String:
         this.append('#ifdef JSB_SCHEMA_MALLOC\n');
-        this.write(`jsb_memset(${key}, 0, jsb_strlen(${key}));\n`);
+        // this.write(`jsb_memset(${key}, 0, jsb_strlen(${key}));\n`);
+        this.writeMultiLineComment([
+          'Here we should have something similar the following options:',
+          '',
+          `1. Have additional ${key}_len and ${key}_capacity members`,
+          'in order to control the maximum capacity of the memory block and be able to fully set it to zero.',
+          '',
+          '2. We could simply stick to the null-terminated string in order to keep it simple.',
+          '',
+          '3. Whenever JSB_SCHEMA_MALLOC is defined, we could implement both of the behaviors above, if feasible.'
+        ]);
+        this.append('#error "JSB_SCHEMA_MALLOC is not implemented yet"\n');
         this.append('#else\n');
-        this.write(`jsb_memset(${pointer(key)}, 0, JSB_MAX_STRING_SIZE);\n`);
-        this.write(`${key}[JSB_MAX_STRING_SIZE] = 0;\n`);
+        this.write(`jsb_memset(${pointer(key)}, 0, sizeof(jsb_string_t));\n`);
+        // this.write(`${key}[JSB_MAX_STRING_SIZE] = 0;\n`);
         this.append('#endif // JSB_SCHEMA_MALLOC\n');
         break;
     }
@@ -544,20 +578,37 @@ export default class MetadataFileCCodeGenerator extends Resolver {
 
   #initializeMetadataParamTemplate(
     paramType: MetadataParamTypeTemplate,
-    key: string
+    key: string,
+    metadata: Metadata
   ) {
+    this.writeMultiLineComment([
+      this.metadataParamTypeToString(paramType, metadata)
+    ]);
     switch (paramType.template) {
-      case 'optional': {
-        this.write(`${key}.has_value = 0;\n`);
-        this.#initializeMetadataParam(paramType.value, `${key}.value`);
+      case 'optional':
+        // this.write(
+        //   `jsb_memset(${pointer(
+        //     key
+        //   )}, 0, sizeof(${this.metadataParamTypeToString(
+        //     paramType,
+        //     metadata
+        //   )}));\n`
+        // );
+        // this.append('\n');
+        this.write(`${key}.has_value = false;\n`);
+        this.#initializeMetadataParam(
+          paramType.value,
+          `${key}.value`,
+          metadata
+        );
         break;
-      }
       case 'tuple': {
         let tupleItemIndex = 0;
         for (const arg of paramType.args) {
           this.#initializeMetadataParam(
             arg,
-            `${key}.${getTuplePropertyName(tupleItemIndex)}`
+            `${key}.${getTuplePropertyName(tupleItemIndex)}`,
+            metadata
           );
           tupleItemIndex++;
         }
@@ -577,13 +628,17 @@ export default class MetadataFileCCodeGenerator extends Resolver {
     }
   }
 
-  #initializeMetadataParam(paramType: MetadataParamType, key: string) {
+  #initializeMetadataParam(
+    paramType: MetadataParamType,
+    key: string,
+    metadata: Metadata
+  ) {
     switch (paramType.type) {
       case 'generic':
-        this.#initializeMetadataParamGeneric(paramType, key);
+        this.#initializeMetadataParamGeneric(paramType, key, metadata);
         break;
       case 'template':
-        this.#initializeMetadataParamTemplate(paramType, key);
+        this.#initializeMetadataParamTemplate(paramType, key, metadata);
         break;
       case 'internalType':
       case 'externalType': {
@@ -627,7 +682,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
 
   #generateTraitFileSourceFile(metadata: IMetadataTraitDefinition) {
     this.write(`#include "${metadataToRelativePath(metadata)}.h"\n`);
-    this.write('\n');
+    this.append('\n');
 
     const completeTypeReference = getMetadataCompleteTypeReference(metadata);
     const memberNames = {
@@ -682,7 +737,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       },
       '}\n'
     );
-    this.write('\n');
+    this.append('\n');
 
     this.write(
       `enum jsb_result_t ${memberNames.decode}(struct jsb_deserializer_t* d, ${completeTypeReference}* output) {\n`,
@@ -758,7 +813,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       },
       '}\n'
     );
-    this.write('\n');
+    this.append('\n');
 
     this.write(
       `enum jsb_result_t ${memberNames.initialize}(${completeTypeReference}* input, enum ${traitEnum.name} type) {\n`,
@@ -775,12 +830,6 @@ export default class MetadataFileCCodeGenerator extends Resolver {
             this.write('return JSB_BAD_ARGUMENT;\n');
           },
           '}\n'
-        );
-        this.write('// Apply zeroes on every byte of the union\n');
-        this.write(
-          `jsb_memset(&input->value, 0, sizeof(${getTraitUnionCompleteTypeReference(
-            metadata
-          )}));\n`
         );
         this.write(
           'switch(type) {\n',
@@ -824,7 +873,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       },
       '}\n'
     );
-    this.write('\n');
+    this.append('\n');
 
     this.write(
       `void ${memberNames.freeTrait}(${completeTypeReference}* trait) {\n`,
@@ -883,7 +932,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       },
       '}\n'
     );
-    this.write('\n');
+    this.append('\n');
 
     this.#files.push({
       path: `${metadataToRelativePath(metadata)}.${
@@ -901,20 +950,20 @@ export default class MetadataFileCCodeGenerator extends Resolver {
     this.write(`#ifndef ${headerGuard}\n`);
     this.write(`#define ${headerGuard}\n\n`);
 
-    this.write('\n');
+    this.append('\n');
 
     this.write('#ifdef __cplusplus\n');
     this.write('extern "C" {\n');
     this.write('#endif // __cplusplus\n');
 
-    this.write('\n');
+    this.append('\n');
 
     this.#includeMetadataDependenciesOnHeaderFile(metadata);
-    this.write('\n');
+    this.append('\n');
 
     this.write('#include <jsb/serializer.h>\n');
     this.write('#include <jsb/deserializer.h>\n');
-    this.write('\n');
+    this.append('\n');
 
     const traitEnum = this.generateTraitEnumInformation(metadata);
 
@@ -934,7 +983,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       '};\n'
     );
 
-    this.write('\n');
+    this.append('\n');
 
     this.write(
       `${getTraitUnionCompleteTypeReference(metadata)} {\n`,
@@ -959,7 +1008,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       '};\n'
     );
 
-    this.write('\n');
+    this.append('\n');
 
     this.write(
       `${getMetadataCompleteTypeReference(metadata)} {\n`,
@@ -972,7 +1021,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       '};\n'
     );
 
-    this.write('\n');
+    this.append('\n');
 
     const completeTypeReference = getMetadataCompleteTypeReference(metadata);
 
@@ -1003,7 +1052,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
 
     this.write(`#endif // ${headerGuard}\n`);
 
-    this.write('\n');
+    this.append('\n');
 
     this.#files.push({
       path: `${metadataToRelativePath(metadata)}.h`,
@@ -1170,7 +1219,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
       },
       '};\n'
     );
-    this.write('\n');
+    this.append('\n');
   }
 
   #generateStructFromMetadataParamTypeTemplate(
@@ -1521,20 +1570,20 @@ export default class MetadataFileCCodeGenerator extends Resolver {
 
     this.write(`#ifndef ${headerGuard}\n`);
     this.write(`#define ${headerGuard}\n\n`);
-    this.write('\n');
+    this.append('\n');
 
     this.write('#ifdef __cplusplus\n');
     this.write('extern "C" {\n');
     this.write('#endif // __cplusplus\n');
-    this.write('\n');
+    this.append('\n');
 
     this.#includeMetadataDependenciesOnHeaderFile(metadata);
-    this.write('\n');
+    this.append('\n');
 
     this.write('#include <stdbool.h>\n');
     this.write('#include <jsb/serializer.h>\n');
     this.write('#include <jsb/deserializer.h>\n');
-    this.write('\n');
+    this.append('\n');
 
     this.#generateStructFromMetadata(metadata);
 
@@ -1567,7 +1616,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
     this.write('}\n');
     this.write('#endif // __cplusplus\n');
 
-    this.write('\n');
+    this.append('\n');
 
     this.write(`#endif // ${headerGuard}\n`);
 
@@ -1640,7 +1689,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         );
         if (!generationContext.implementation) {
           this.append(';\n');
-          this.write('\n');
+          this.append('\n');
           break;
         }
 
@@ -1664,7 +1713,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
           this.write('return JSB_OK;\n');
         });
         this.write('}\n');
-        this.write('\n');
+        this.append('\n');
         break;
       }
       case 'externalModuleType':
@@ -1840,7 +1889,7 @@ export default class MetadataFileCCodeGenerator extends Resolver {
         //     metadata
         //   )}* ${param.name});\n`
         // );
-        // this.write('\n');
+        // this.append('\n');
         break;
     }
   }
