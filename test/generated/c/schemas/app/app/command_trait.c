@@ -74,8 +74,6 @@ enum jsb_result_t app_command_trait_init(struct app_command_trait_t* input,
               "input parameter.");
     return JSB_BAD_ARGUMENT;
   }
-  // Apply zeroes on every byte of the union
-  jsb_memset(&input->value, 0, sizeof(union app_command_trait_value_t));
   switch (type) {
   case APP_COMMAND_MOVE_FORWARD_TYPE:
     JSB_TRACE(

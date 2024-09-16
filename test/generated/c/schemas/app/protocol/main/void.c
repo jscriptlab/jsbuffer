@@ -36,17 +36,6 @@ enum jsb_result_t protocol_main_void_init(struct protocol_main_void_t* value) {
         "Failed to initialize protocol.main.Void, received value = NULL.");
     return JSB_BAD_ARGUMENT;
   }
-
-#ifdef JSB_SCHEMA_MALLOC
-  /**
-   * When JSB_SCHEMA_MALLOC is defined, we need to check for pointers before
-   * calling memset. Otherwise, the allocated memory will be corrupted.
-   */
-#error "JSB_SCHEMA_MALLOC is not yet implemented"
-#else
-  jsb_memset(value, 0, sizeof(struct protocol_main_void_t));
-#endif
-
   JSB_TRACE("protocol_main_void_init",
             "Initializing param of type \"jsb_int32_t\": value.");
   /**

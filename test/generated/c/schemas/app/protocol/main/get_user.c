@@ -39,17 +39,6 @@ protocol_main_get_user_init(struct protocol_main_get_user_t* value) {
         "Failed to initialize protocol.main.GetUser, received value = NULL.");
     return JSB_BAD_ARGUMENT;
   }
-
-#ifdef JSB_SCHEMA_MALLOC
-  /**
-   * When JSB_SCHEMA_MALLOC is defined, we need to check for pointers before
-   * calling memset. Otherwise, the allocated memory will be corrupted.
-   */
-#error "JSB_SCHEMA_MALLOC is not yet implemented"
-#else
-  jsb_memset(value, 0, sizeof(struct protocol_main_get_user_t));
-#endif
-
   JSB_TRACE("protocol_main_get_user_init",
             "Initializing param of type \"jsb_int32_t\": id.");
   /**

@@ -66,7 +66,7 @@ static enum jsb_result_t jsb_serializer_reallocate(struct jsb_serializer_t* s,
                       "Buffer is NULL");
 #endif
 
-  const jsb_uint32_t remaining = s->buffer_capacity - s->buffer_size;
+  const jsb_uint32_t remaining = JSB_SERIALIZER_CALCULATE_REMAINING(s);
 
   JSB_ASSERT_ARGUMENT(
       remaining <= s->buffer_capacity, "jsb_serializer_reallocate",

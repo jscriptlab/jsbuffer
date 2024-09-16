@@ -1302,17 +1302,6 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
               "Failed to initialize app.Message, received value = NULL.");
     return JSB_BAD_ARGUMENT;
   }
-
-#ifdef JSB_SCHEMA_MALLOC
-  /**
-   * When JSB_SCHEMA_MALLOC is defined, we need to check for pointers before
-   * calling memset. Otherwise, the allocated memory will be corrupted.
-   */
-#error "JSB_SCHEMA_MALLOC is not yet implemented"
-#else
-  jsb_memset(value, 0, sizeof(struct app_message_t));
-#endif
-
   JSB_TRACE(
       "app_message_init",
       "Initializing param of type \"struct app_command_trait_t\": command.");
@@ -1325,10 +1314,7 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_command_optional_t
    */
-  jsb_memset(&value->command1, 0,
-             sizeof(struct app_message_command_optional_t));
-
-  value->command1.has_value = 0;
+  value->command1.has_value = false;
   JSB_CHECK_ERROR(app_command_trait_init(&value->command1.value,
                                          APP_COMMAND_MOVE_FORWARD_TYPE));
   JSB_TRACE("app_message_init", "Initialized param: command1.");
@@ -1339,17 +1325,11 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_command_optional_optional_t
    */
-  jsb_memset(&value->command2, 0,
-             sizeof(struct app_message_command_optional_optional_t));
-
-  value->command2.has_value = 0;
+  value->command2.has_value = false;
   /**
    * struct app_message_command_optional_t
    */
-  jsb_memset(&value->command2.value, 0,
-             sizeof(struct app_message_command_optional_t));
-
-  value->command2.value.has_value = 0;
+  value->command2.value.has_value = false;
   JSB_CHECK_ERROR(app_command_trait_init(&value->command2.value.value,
                                          APP_COMMAND_MOVE_FORWARD_TYPE));
   JSB_TRACE("app_message_init", "Initialized param: command2.");
@@ -1360,24 +1340,15 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_command_optional_optional_optional_t
    */
-  jsb_memset(&value->command3, 0,
-             sizeof(struct app_message_command_optional_optional_optional_t));
-
-  value->command3.has_value = 0;
+  value->command3.has_value = false;
   /**
    * struct app_message_command_optional_optional_t
    */
-  jsb_memset(&value->command3.value, 0,
-             sizeof(struct app_message_command_optional_optional_t));
-
-  value->command3.value.has_value = 0;
+  value->command3.value.has_value = false;
   /**
    * struct app_message_command_optional_t
    */
-  jsb_memset(&value->command3.value.value, 0,
-             sizeof(struct app_message_command_optional_t));
-
-  value->command3.value.value.has_value = 0;
+  value->command3.value.value.has_value = false;
   JSB_CHECK_ERROR(app_command_trait_init(&value->command3.value.value.value,
                                          APP_COMMAND_MOVE_FORWARD_TYPE));
   JSB_TRACE("app_message_init", "Initialized param: command3.");
@@ -1389,32 +1360,19 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_command_optional_optional_optional_optional_t
    */
-  jsb_memset(
-      &value->command4, 0,
-      sizeof(struct app_message_command_optional_optional_optional_optional_t));
-
-  value->command4.has_value = 0;
+  value->command4.has_value = false;
   /**
    * struct app_message_command_optional_optional_optional_t
    */
-  jsb_memset(&value->command4.value, 0,
-             sizeof(struct app_message_command_optional_optional_optional_t));
-
-  value->command4.value.has_value = 0;
+  value->command4.value.has_value = false;
   /**
    * struct app_message_command_optional_optional_t
    */
-  jsb_memset(&value->command4.value.value, 0,
-             sizeof(struct app_message_command_optional_optional_t));
-
-  value->command4.value.value.has_value = 0;
+  value->command4.value.value.has_value = false;
   /**
    * struct app_message_command_optional_t
    */
-  jsb_memset(&value->command4.value.value.value, 0,
-             sizeof(struct app_message_command_optional_t));
-
-  value->command4.value.value.value.has_value = 0;
+  value->command4.value.value.value.has_value = false;
   JSB_CHECK_ERROR(app_command_trait_init(
       &value->command4.value.value.value.value, APP_COMMAND_MOVE_FORWARD_TYPE));
   JSB_TRACE("app_message_init", "Initialized param: command4.");
@@ -1425,32 +1383,19 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_int_optional_optional_optional_optional_t
    */
-  jsb_memset(
-      &value->value1, 0,
-      sizeof(struct app_message_int_optional_optional_optional_optional_t));
-
-  value->value1.has_value = 0;
+  value->value1.has_value = false;
   /**
    * struct app_message_int_optional_optional_optional_t
    */
-  jsb_memset(&value->value1.value, 0,
-             sizeof(struct app_message_int_optional_optional_optional_t));
-
-  value->value1.value.has_value = 0;
+  value->value1.value.has_value = false;
   /**
    * struct app_message_int_optional_optional_t
    */
-  jsb_memset(&value->value1.value.value, 0,
-             sizeof(struct app_message_int_optional_optional_t));
-
-  value->value1.value.value.has_value = 0;
+  value->value1.value.value.has_value = false;
   /**
    * struct app_message_int_optional_t
    */
-  jsb_memset(&value->value1.value.value.value, 0,
-             sizeof(struct app_message_int_optional_t));
-
-  value->value1.value.value.value.has_value = 0;
+  value->value1.value.value.value.has_value = false;
   /**
    * jsb_int32_t
    */
@@ -1464,32 +1409,19 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_int16_optional_optional_optional_optional_t
    */
-  jsb_memset(
-      &value->value2, 0,
-      sizeof(struct app_message_int16_optional_optional_optional_optional_t));
-
-  value->value2.has_value = 0;
+  value->value2.has_value = false;
   /**
    * struct app_message_int16_optional_optional_optional_t
    */
-  jsb_memset(&value->value2.value, 0,
-             sizeof(struct app_message_int16_optional_optional_optional_t));
-
-  value->value2.value.has_value = 0;
+  value->value2.value.has_value = false;
   /**
    * struct app_message_int16_optional_optional_t
    */
-  jsb_memset(&value->value2.value.value, 0,
-             sizeof(struct app_message_int16_optional_optional_t));
-
-  value->value2.value.value.has_value = 0;
+  value->value2.value.value.has_value = false;
   /**
    * struct app_message_int16_optional_t
    */
-  jsb_memset(&value->value2.value.value.value, 0,
-             sizeof(struct app_message_int16_optional_t));
-
-  value->value2.value.value.value.has_value = 0;
+  value->value2.value.value.value.has_value = false;
   /**
    * jsb_int16_t
    */
@@ -1503,32 +1435,19 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_int8_optional_optional_optional_optional_t
    */
-  jsb_memset(
-      &value->value3, 0,
-      sizeof(struct app_message_int8_optional_optional_optional_optional_t));
-
-  value->value3.has_value = 0;
+  value->value3.has_value = false;
   /**
    * struct app_message_int8_optional_optional_optional_t
    */
-  jsb_memset(&value->value3.value, 0,
-             sizeof(struct app_message_int8_optional_optional_optional_t));
-
-  value->value3.value.has_value = 0;
+  value->value3.value.has_value = false;
   /**
    * struct app_message_int8_optional_optional_t
    */
-  jsb_memset(&value->value3.value.value, 0,
-             sizeof(struct app_message_int8_optional_optional_t));
-
-  value->value3.value.value.has_value = 0;
+  value->value3.value.value.has_value = false;
   /**
    * struct app_message_int8_optional_t
    */
-  jsb_memset(&value->value3.value.value.value, 0,
-             sizeof(struct app_message_int8_optional_t));
-
-  value->value3.value.value.value.has_value = 0;
+  value->value3.value.value.value.has_value = false;
   /**
    * jsb_int8_t
    */
@@ -1542,32 +1461,19 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_int32_optional_optional_optional_optional_t
    */
-  jsb_memset(
-      &value->value4, 0,
-      sizeof(struct app_message_int32_optional_optional_optional_optional_t));
-
-  value->value4.has_value = 0;
+  value->value4.has_value = false;
   /**
    * struct app_message_int32_optional_optional_optional_t
    */
-  jsb_memset(&value->value4.value, 0,
-             sizeof(struct app_message_int32_optional_optional_optional_t));
-
-  value->value4.value.has_value = 0;
+  value->value4.value.has_value = false;
   /**
    * struct app_message_int32_optional_optional_t
    */
-  jsb_memset(&value->value4.value.value, 0,
-             sizeof(struct app_message_int32_optional_optional_t));
-
-  value->value4.value.value.has_value = 0;
+  value->value4.value.value.has_value = false;
   /**
    * struct app_message_int32_optional_t
    */
-  jsb_memset(&value->value4.value.value.value, 0,
-             sizeof(struct app_message_int32_optional_t));
-
-  value->value4.value.value.value.has_value = 0;
+  value->value4.value.value.value.has_value = false;
   /**
    * jsb_int32_t
    */
@@ -1581,32 +1487,19 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_uint8_optional_optional_optional_optional_t
    */
-  jsb_memset(
-      &value->value5, 0,
-      sizeof(struct app_message_uint8_optional_optional_optional_optional_t));
-
-  value->value5.has_value = 0;
+  value->value5.has_value = false;
   /**
    * struct app_message_uint8_optional_optional_optional_t
    */
-  jsb_memset(&value->value5.value, 0,
-             sizeof(struct app_message_uint8_optional_optional_optional_t));
-
-  value->value5.value.has_value = 0;
+  value->value5.value.has_value = false;
   /**
    * struct app_message_uint8_optional_optional_t
    */
-  jsb_memset(&value->value5.value.value, 0,
-             sizeof(struct app_message_uint8_optional_optional_t));
-
-  value->value5.value.value.has_value = 0;
+  value->value5.value.value.has_value = false;
   /**
    * struct app_message_uint8_optional_t
    */
-  jsb_memset(&value->value5.value.value.value, 0,
-             sizeof(struct app_message_uint8_optional_t));
-
-  value->value5.value.value.value.has_value = 0;
+  value->value5.value.value.value.has_value = false;
   /**
    * jsb_uint8_t
    */
@@ -1620,32 +1513,19 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_uint16_optional_optional_optional_optional_t
    */
-  jsb_memset(
-      &value->value6, 0,
-      sizeof(struct app_message_uint16_optional_optional_optional_optional_t));
-
-  value->value6.has_value = 0;
+  value->value6.has_value = false;
   /**
    * struct app_message_uint16_optional_optional_optional_t
    */
-  jsb_memset(&value->value6.value, 0,
-             sizeof(struct app_message_uint16_optional_optional_optional_t));
-
-  value->value6.value.has_value = 0;
+  value->value6.value.has_value = false;
   /**
    * struct app_message_uint16_optional_optional_t
    */
-  jsb_memset(&value->value6.value.value, 0,
-             sizeof(struct app_message_uint16_optional_optional_t));
-
-  value->value6.value.value.has_value = 0;
+  value->value6.value.value.has_value = false;
   /**
    * struct app_message_uint16_optional_t
    */
-  jsb_memset(&value->value6.value.value.value, 0,
-             sizeof(struct app_message_uint16_optional_t));
-
-  value->value6.value.value.value.has_value = 0;
+  value->value6.value.value.value.has_value = false;
   /**
    * jsb_uint16_t
    */
@@ -1659,32 +1539,19 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_uint32_optional_optional_optional_optional_t
    */
-  jsb_memset(
-      &value->value7, 0,
-      sizeof(struct app_message_uint32_optional_optional_optional_optional_t));
-
-  value->value7.has_value = 0;
+  value->value7.has_value = false;
   /**
    * struct app_message_uint32_optional_optional_optional_t
    */
-  jsb_memset(&value->value7.value, 0,
-             sizeof(struct app_message_uint32_optional_optional_optional_t));
-
-  value->value7.value.has_value = 0;
+  value->value7.value.has_value = false;
   /**
    * struct app_message_uint32_optional_optional_t
    */
-  jsb_memset(&value->value7.value.value, 0,
-             sizeof(struct app_message_uint32_optional_optional_t));
-
-  value->value7.value.value.has_value = 0;
+  value->value7.value.value.has_value = false;
   /**
    * struct app_message_uint32_optional_t
    */
-  jsb_memset(&value->value7.value.value.value, 0,
-             sizeof(struct app_message_uint32_optional_t));
-
-  value->value7.value.value.value.has_value = 0;
+  value->value7.value.value.value.has_value = false;
   /**
    * jsb_uint32_t
    */
@@ -1698,32 +1565,19 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_string_optional_optional_optional_optional_t
    */
-  jsb_memset(
-      &value->value8, 0,
-      sizeof(struct app_message_string_optional_optional_optional_optional_t));
-
-  value->value8.has_value = 0;
+  value->value8.has_value = false;
   /**
    * struct app_message_string_optional_optional_optional_t
    */
-  jsb_memset(&value->value8.value, 0,
-             sizeof(struct app_message_string_optional_optional_optional_t));
-
-  value->value8.value.has_value = 0;
+  value->value8.value.has_value = false;
   /**
    * struct app_message_string_optional_optional_t
    */
-  jsb_memset(&value->value8.value.value, 0,
-             sizeof(struct app_message_string_optional_optional_t));
-
-  value->value8.value.value.has_value = 0;
+  value->value8.value.value.has_value = false;
   /**
    * struct app_message_string_optional_t
    */
-  jsb_memset(&value->value8.value.value.value, 0,
-             sizeof(struct app_message_string_optional_t));
-
-  value->value8.value.value.value.has_value = 0;
+  value->value8.value.value.value.has_value = false;
   /**
    * jsb_string_t
    */
@@ -1744,8 +1598,7 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
    */
 #error "JSB_SCHEMA_MALLOC is not implemented yet"
 #else
-  jsb_memset(&value->value8.value.value.value.value, 0, JSB_MAX_STRING_SIZE);
-  value->value8.value.value.value.value[JSB_MAX_STRING_SIZE] = 0;
+  jsb_memset(&value->value8.value.value.value.value, 0, sizeof(jsb_string_t));
 #endif // JSB_SCHEMA_MALLOC
   JSB_TRACE("app_message_init", "Initialized param: value8.");
 
@@ -1754,9 +1607,7 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_int_optional_t
    */
-  jsb_memset(&value->value9, 0, sizeof(struct app_message_int_optional_t));
-
-  value->value9.has_value = 0;
+  value->value9.has_value = false;
   /**
    * jsb_int32_t
    */
@@ -1768,9 +1619,7 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_int16_optional_t
    */
-  jsb_memset(&value->value10, 0, sizeof(struct app_message_int16_optional_t));
-
-  value->value10.has_value = 0;
+  value->value10.has_value = false;
   /**
    * jsb_int16_t
    */
@@ -1782,9 +1631,7 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_int8_optional_t
    */
-  jsb_memset(&value->value11, 0, sizeof(struct app_message_int8_optional_t));
-
-  value->value11.has_value = 0;
+  value->value11.has_value = false;
   /**
    * jsb_int8_t
    */
@@ -1796,9 +1643,7 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_int32_optional_t
    */
-  jsb_memset(&value->value12, 0, sizeof(struct app_message_int32_optional_t));
-
-  value->value12.has_value = 0;
+  value->value12.has_value = false;
   /**
    * jsb_int32_t
    */
@@ -1810,9 +1655,7 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_uint8_optional_t
    */
-  jsb_memset(&value->value13, 0, sizeof(struct app_message_uint8_optional_t));
-
-  value->value13.has_value = 0;
+  value->value13.has_value = false;
   /**
    * jsb_uint8_t
    */
@@ -1824,9 +1667,7 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_uint16_optional_t
    */
-  jsb_memset(&value->value14, 0, sizeof(struct app_message_uint16_optional_t));
-
-  value->value14.has_value = 0;
+  value->value14.has_value = false;
   /**
    * jsb_uint16_t
    */
@@ -1838,9 +1679,7 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_uint32_optional_t
    */
-  jsb_memset(&value->value15, 0, sizeof(struct app_message_uint32_optional_t));
-
-  value->value15.has_value = 0;
+  value->value15.has_value = false;
   /**
    * jsb_uint32_t
    */
@@ -1852,9 +1691,7 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_string_optional_t
    */
-  jsb_memset(&value->value16, 0, sizeof(struct app_message_string_optional_t));
-
-  value->value16.has_value = 0;
+  value->value16.has_value = false;
   /**
    * jsb_string_t
    */
@@ -1874,8 +1711,7 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
    */
 #error "JSB_SCHEMA_MALLOC is not implemented yet"
 #else
-  jsb_memset(&value->value16.value, 0, JSB_MAX_STRING_SIZE);
-  value->value16.value[JSB_MAX_STRING_SIZE] = 0;
+  jsb_memset(&value->value16.value, 0, sizeof(jsb_string_t));
 #endif // JSB_SCHEMA_MALLOC
   JSB_TRACE("app_message_init", "Initialized param: value16.");
 
@@ -1885,34 +1721,19 @@ enum jsb_result_t app_message_init(struct app_message_t* value) {
   /**
    * struct app_message_deepoptional_optional_optional_optional_optional_t
    */
-  jsb_memset(
-      &value->value17, 0,
-      sizeof(struct
-             app_message_deepoptional_optional_optional_optional_optional_t));
-
-  value->value17.has_value = 0;
+  value->value17.has_value = false;
   /**
    * struct app_message_deepoptional_optional_optional_optional_t
    */
-  jsb_memset(
-      &value->value17.value, 0,
-      sizeof(struct app_message_deepoptional_optional_optional_optional_t));
-
-  value->value17.value.has_value = 0;
+  value->value17.value.has_value = false;
   /**
    * struct app_message_deepoptional_optional_optional_t
    */
-  jsb_memset(&value->value17.value.value, 0,
-             sizeof(struct app_message_deepoptional_optional_optional_t));
-
-  value->value17.value.value.has_value = 0;
+  value->value17.value.value.has_value = false;
   /**
    * struct app_message_deepoptional_optional_t
    */
-  jsb_memset(&value->value17.value.value.value, 0,
-             sizeof(struct app_message_deepoptional_optional_t));
-
-  value->value17.value.value.value.has_value = 0;
+  value->value17.value.value.value.has_value = false;
   JSB_CHECK_ERROR(
       app_deep_optional_init(&value->value17.value.value.value.value));
   JSB_TRACE("app_message_init", "Initialized param: value17.");

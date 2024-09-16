@@ -77,17 +77,6 @@ protocol_main_tuple_test_init(struct protocol_main_tuple_test_t* value) {
         "Failed to initialize protocol.main.TupleTest, received value = NULL.");
     return JSB_BAD_ARGUMENT;
   }
-
-#ifdef JSB_SCHEMA_MALLOC
-  /**
-   * When JSB_SCHEMA_MALLOC is defined, we need to check for pointers before
-   * calling memset. Otherwise, the allocated memory will be corrupted.
-   */
-#error "JSB_SCHEMA_MALLOC is not yet implemented"
-#else
-  jsb_memset(value, 0, sizeof(struct protocol_main_tuple_test_t));
-#endif
-
   JSB_TRACE("protocol_main_tuple_test_init",
             "Initializing param of type \"struct "
             "protocol_main_tuple_test_tuple_t\": values.");
@@ -117,8 +106,7 @@ protocol_main_tuple_test_init(struct protocol_main_tuple_test_t* value) {
    */
 #error "JSB_SCHEMA_MALLOC is not implemented yet"
 #else
-  jsb_memset(&value->values.item_1, 0, JSB_MAX_STRING_SIZE);
-  value->values.item_1[JSB_MAX_STRING_SIZE] = 0;
+  jsb_memset(&value->values.item_1, 0, sizeof(jsb_string_t));
 #endif // JSB_SCHEMA_MALLOC
   /**
    * jsb_int32_t

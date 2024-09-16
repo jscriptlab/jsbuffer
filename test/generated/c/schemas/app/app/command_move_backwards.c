@@ -67,17 +67,6 @@ app_command_move_backwards_init(struct app_command_move_backwards_t* value) {
               "NULL.");
     return JSB_BAD_ARGUMENT;
   }
-
-#ifdef JSB_SCHEMA_MALLOC
-  /**
-   * When JSB_SCHEMA_MALLOC is defined, we need to check for pointers before
-   * calling memset. Otherwise, the allocated memory will be corrupted.
-   */
-#error "JSB_SCHEMA_MALLOC is not yet implemented"
-#else
-  jsb_memset(value, 0, sizeof(struct app_command_move_backwards_t));
-#endif
-
   JSB_TRACE("app_command_move_backwards_init",
             "Initializing param of type \"bool\": stop.");
   /**
@@ -107,8 +96,7 @@ app_command_move_backwards_init(struct app_command_move_backwards_t* value) {
    */
 #error "JSB_SCHEMA_MALLOC is not implemented yet"
 #else
-  jsb_memset(&value->value, 0, JSB_MAX_STRING_SIZE);
-  value->value[JSB_MAX_STRING_SIZE] = 0;
+  jsb_memset(&value->value, 0, sizeof(jsb_string_t));
 #endif // JSB_SCHEMA_MALLOC
   JSB_TRACE("app_command_move_backwards_init", "Initialized param: value.");
 

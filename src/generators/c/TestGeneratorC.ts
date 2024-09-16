@@ -5,7 +5,8 @@ import {
   getInitOptionalParameterFunctionName,
   getMetadataCompleteTypeReference,
   getMetadataPrefix,
-  getTuplePropertyName
+  getTuplePropertyName,
+  pointer
 } from './utilities';
 import GenericName from '../../parser/types/GenericName';
 import {
@@ -561,11 +562,29 @@ export default class TestGeneratorC extends CodeStream {
                 this.write('// Initialize the type struct again\n');
                 for (const prop of ['value', 'new_value']) {
                   this.write(
-                    `JSB_ASSERT(${getMetadataPrefix(metadata)}_init(&${prop}, ${
-                      item[1].name
-                    }) == JSB_OK);\n`
+                    `jsb_memset(${pointer(prop)}, 0, sizeof(${prop}));\n`
+                  );
+                  this.write(
+                    `JSB_ASSERT(${getMetadataPrefix(metadata)}_init(${pointer(
+                      prop
+                    )}, ${item[1].name}) == JSB_OK);\n`
                   );
                 }
+                this.write('/**\n');
+                this.write(
+                  ' * If we are not using dynamic memory allocation for the serializer\n'
+                );
+                this.write(
+                  ' * we need to make sure that we have enough memory left. To avoid inconclusive tests.\n'
+                );
+                this.write(' */\n');
+                this.append('#if !defined(JSB_SERIALIZER_USE_MALLOC)\n');
+                this.write(
+                  `JSB_ASSERT(JSB_SERIALIZER_CALCULATE_REMAINING((&s)) >= sizeof(${getMetadataCompleteTypeReference(
+                    metadata
+                  )}));\n`
+                );
+                this.append('#endif // !defined(JSB_SERIALIZER_USE_MALLOC)\n');
                 this.write(
                   'JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);\n'
                 );

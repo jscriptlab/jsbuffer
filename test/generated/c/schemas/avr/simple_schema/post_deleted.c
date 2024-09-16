@@ -62,17 +62,6 @@ simple_schema_post_deleted_init(struct simple_schema_post_deleted_t* value) {
               "= NULL.");
     return JSB_BAD_ARGUMENT;
   }
-
-#ifdef JSB_SCHEMA_MALLOC
-  /**
-   * When JSB_SCHEMA_MALLOC is defined, we need to check for pointers before
-   * calling memset. Otherwise, the allocated memory will be corrupted.
-   */
-#error "JSB_SCHEMA_MALLOC is not yet implemented"
-#else
-  jsb_memset(value, 0, sizeof(struct simple_schema_post_deleted_t));
-#endif
-
   JSB_TRACE("simple_schema_post_deleted_init",
             "Initializing param of type \"jsb_int32_t\": id.");
   /**
@@ -110,8 +99,7 @@ simple_schema_post_deleted_init(struct simple_schema_post_deleted_t* value) {
    */
 #error "JSB_SCHEMA_MALLOC is not implemented yet"
 #else
-  jsb_memset(&value->title, 0, JSB_MAX_STRING_SIZE);
-  value->title[JSB_MAX_STRING_SIZE] = 0;
+  jsb_memset(&value->title, 0, sizeof(jsb_string_t));
 #endif // JSB_SCHEMA_MALLOC
   JSB_TRACE("simple_schema_post_deleted_init", "Initialized param: title.");
 
