@@ -31,9 +31,12 @@ export default class Resolver extends CodeStream {
   public writeMultiLineComment(lines: (string | (() => void))[]) {
     this.write('/**\n');
     for (const writeLine of lines) {
-      this.write(' * ');
+      this.write(' *');
       if (typeof writeLine === 'string') {
-        this.append(writeLine);
+        if (writeLine.length > 0) {
+          this.append(' ');
+          this.append(writeLine);
+        }
       } else {
         writeLine();
       }
