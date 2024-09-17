@@ -40,6 +40,7 @@
     "build": "npx tsc -b test scripts cli code-generator src/generators/c src/generators/cpp src/core --force",
     "build:all": "npm run build && npm run schema && npm run lint",
     "prepublishOnly": "npm run build:all && npm run test",
+    "build:watch": "npm run build -- --watch --preserveWatchOutput",
     "test": "npx ava --fail-fast && npx ts-node scripts --generate-c99-codec --clang-format",
     "test:coverage": "npx c8 npm test"
   },
