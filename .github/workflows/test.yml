@@ -30,6 +30,9 @@ jobs:
             -y --install-recommends \
               cmake gcc g++ gcc-avr simavr avr-libc \
               gcc-multilib g++-multilib clang
+      - name: Print GitHub Context
+        run: |
+          echo "${{ toJson(github) }}"
       - name: Print C/C++ compiler versions
         run: |
           clang --version
