@@ -14,6 +14,7 @@ const initialPayload = ({
       type: 'header',
       text: {
         type: 'plain_text',
+        emoji: true,
         text: 'Tests passed ✅'
       }
     },
@@ -66,7 +67,9 @@ function context() {
 
 type Context = ReturnType<typeof context>;
 
-export default () => {
+export const text = () => 'Tests passed!';
+
+export const blocks = () => {
   const {
     EVENT_HEAD_COMMIT_URL,
     EVENT_REF,
@@ -104,7 +107,6 @@ export default () => {
         )}...${EVENT_AFTER_COMMIT.substring(0, 7)}>`
       }
     },
-    // ! Maybe convert `test-finished-slack-message.json` to a `.ts` file
     {
       type: 'divider'
     },
