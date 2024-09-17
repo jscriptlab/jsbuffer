@@ -46,8 +46,11 @@ export default class TestGeneratorC extends CodeStream {
     files: IGeneratedFile[];
     fileMetadataList: Map<string, IFileMetadata>;
     resolverByMetadataObject: Map<Metadata, MetadataFileCCodeGenerator>;
+    indentationSize: number;
   }) {
-    super(options.parent);
+    super(options.parent, {
+      indentationSize: options.indentationSize
+    });
     this.#files = options.files;
     this.#fileMetadataList = options.fileMetadataList;
     this.#resolverByMetadataObject = options.resolverByMetadataObject;

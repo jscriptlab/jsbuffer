@@ -158,6 +158,7 @@ function printHelp() {
       generator = new FileGeneratorCPP(fileMetadataList, {
         current: null,
         rootDir: configuration.rootDir,
+        indentationSize,
         root: null,
         cmake: {
           project: name
@@ -169,6 +170,7 @@ function printHelp() {
         current: null,
         rootDir: configuration.rootDir,
         root: null,
+        indentationSize,
         cmake: {
           project: name
         }

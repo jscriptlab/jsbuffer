@@ -32,14 +32,14 @@ export interface IFileGeneratorCOptions {
   cmake: {
     project: string;
   };
+  indentationSize: number;
 }
 
 export default class FileGeneratorC extends CodeStream {
   readonly #fileMetadataList;
   readonly #generators;
   readonly #current;
-  // readonly #rootDir;
-  // readonly #root;
+  readonly #indentationSize;
   readonly #resolverByMetadataObject = new Map<
     Metadata,
     MetadataFileCCodeGenerator
@@ -54,16 +54,22 @@ export default class FileGeneratorC extends CodeStream {
   };
   public constructor(
     fileMetadataList: ReadonlyArray<IFileMetadata>,
-    { current = null, root = null, cmake }: IFileGeneratorCOptions
+    {
+      current = null,
+      root = null,
+      cmake,
+      indentationSize
+    }: IFileGeneratorCOptions
   ) {
-    super(root ? root : undefined);
-    // this.#root = root;
+    super(root ? root : undefined, {
+      indentationSize
+    });
     this.#cmake = cmake ?? {
       project: 'schema'
     };
+    this.#indentationSize = indentationSize;
     this.#generators = new Map<string, MetadataFileCCodeGenerator>();
     this.#current = current;
-    // this.#rootDir = rootDir;
     this.#fileMetadataList = new Map<string, IFileMetadata>(
       fileMetadataList.map(
         (fileMetadata) => [fileMetadata.path, fileMetadata] as const
@@ -79,6 +85,7 @@ export default class FileGeneratorC extends CodeStream {
           throw new Exception('Generator already exists');
         }
         const codeGenerator = new MetadataFileCCodeGenerator({
+          indentationSize: this.#indentationSize,
           current: fileMetadata,
           sourceFileExtension: this.#options.sourceFileExtension,
           generators: this.#generators,
@@ -104,7 +111,8 @@ export default class FileGeneratorC extends CodeStream {
         files: this.#files,
         resolverByMetadataObject: this.#resolverByMetadataObject,
         fileMetadataList: this.#fileMetadataList,
-        parent: this
+        parent: this,
+        indentationSize: this.#indentationSize
       });
       testGenerator.generate();
 
