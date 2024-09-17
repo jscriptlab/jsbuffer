@@ -45,7 +45,11 @@ jobs:
       - name: Run tests
         run: npm run test
       - name: Send Slack message about test results
-        run: node scripts/notify.js --notification-type test-finished
+        run: |
+          node scripts/notify.js \
+            --notification-type test-finished --dump-json && \
+          node scripts/notify.js \
+            --notification-type test-finished
         env:
           TRIGGERING_ACTOR: '${{ github.triggering_actor }}'
           EVENT_PUSHER_NAME: '${{ github.event.pusher.name }}'
