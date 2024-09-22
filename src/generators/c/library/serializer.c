@@ -22,6 +22,7 @@ enum jsb_result_t jsb_serializer_init(struct jsb_serializer_t* self,
     return JSB_BAD_ARGUMENT;
   }
 #ifdef JSB_SERIALIZER_USE_MALLOC
+  // Free any existing memory before allocating more, in ordet to avoid a memory leak
   self->buffer          = (jsb_uint8_t*)malloc(sizeof(jsb_uint8_t) * max_size);
   self->buffer_capacity = max_size;
 #elif defined(JSB_SERIALIZER_BUFFER_SIZE)
