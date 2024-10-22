@@ -15,15 +15,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-24.04
-
     steps:
-      - uses: actions/checkout@v4
-      - run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_OUTPUT
-        id: nvm
-      - uses: actions/setup-node@v4
-        with:
-          cache: 'npm'
-          node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
+      - name: Print GitHub Context
+        run: |
+          sudo apt install -y --install-recommends yajl-tools
+          echo $GITHUB_VAR_JSON | json_reformat -m
+        env:
+          GITHUB_VAR_JSON: "${{ toJson(github) }}"
       - name: Install OS dependencies
         run: |
           sudo apt install \
@@ -38,6 +36,13 @@ jobs:
           g++ --version
           avr-gcc --version
           avr-g++ --version
+      - uses: actions/checkout@v4
+      - run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+        id: nvm
+      - uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
+          node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
       - name: Install Node.js packages
         run: npm install
       - name: Build the project
