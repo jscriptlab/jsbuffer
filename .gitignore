@@ -21,3 +21,6 @@ tsconfig.tsbuildinfo
 /cmake-error.log
 
 *.plist
+
+/Binary
+/Build

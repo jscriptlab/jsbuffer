@@ -123,22 +123,16 @@ export default class FileGeneratorC extends CodeStream {
     return null;
   }
 
-  #generateCMakeListsFile() {
-    if (!this.#files.length) {
-      throw new Exception('No files to generate CMakeLists.txt from');
-    }
-
-    this.write('cmake_minimum_required(VERSION 3.5)\n');
-    this.write(`project(${this.#cmake.project} C ASM)\n`);
-    this.append('\n');
-    this.write('set(CMAKE_C_STANDARD 99)\n');
-    this.write('set(CMAKE_C_STANDARD_REQUIRED ON)\n');
-    this.write('set(CMAKE_C_EXTENSIONS ON)\n');
-    this.append('\n');
+  /**
+   * Generate the schema CMake library
+   * @param suffix Library name suffix (.e.g. _static)
+   */
+  #generateCMakeTarget(suffix: string, libraryType: 'STATIC' | 'SHARED') {
+    const targetName = `${this.#cmake.project}${suffix}`;
     this.write(
       'add_library(\n',
       () => {
-        this.write(`${this.#cmake.project} STATIC\n`);
+        this.write(`${targetName} ${libraryType}\n`);
         let lineWidth = 0;
         this.write('');
         const lastFile = this.#files[this.#files.length - 1];
@@ -163,7 +157,7 @@ export default class FileGeneratorC extends CodeStream {
     this.write(
       'target_link_libraries(\n',
       () => {
-        this.write(`${this.#cmake.project}\n`);
+        this.write(`${targetName}\n`);
         this.write('PUBLIC\n');
         this.write('jsb_c_static\n');
       },
@@ -172,7 +166,7 @@ export default class FileGeneratorC extends CodeStream {
     this.write(
       'target_compile_options(\n',
       () => {
-        this.write(`${this.#cmake.project}\n`);
+        this.write(`${targetName}\n`);
         this.write('PRIVATE\n');
         this.write('-Wall\n');
         this.write('-Wextra\n');
@@ -184,12 +178,32 @@ export default class FileGeneratorC extends CodeStream {
     this.write(
       'target_include_directories(\n',
       () => {
-        this.write(`${this.#cmake.project}\n`);
+        this.write(`${targetName}\n`);
         this.write('PUBLIC\n');
         this.write('${CMAKE_CURRENT_SOURCE_DIR}\n');
       },
       ')\n'
     );
+
+    return targetName;
+  }
+
+  #generateCMakeListsFile() {
+    if (!this.#files.length) {
+      throw new Exception('No files to generate CMakeLists.txt from');
+    }
+
+    this.write('cmake_minimum_required(VERSION 3.5)\n');
+    this.write(`project(${this.#cmake.project} C)\n`);
+    this.append('\n');
+    this.write('set(CMAKE_C_STANDARD 99)\n');
+    this.write('set(CMAKE_C_STANDARD_REQUIRED ON)\n');
+    this.write('set(CMAKE_C_EXTENSIONS ON)\n');
+    this.append('\n');
+
+    const staticTargetName = this.#generateCMakeTarget('_static', 'STATIC');
+    this.#generateCMakeTarget('', 'SHARED');
+
     this.append('\n');
     this.append('\n');
 
@@ -209,9 +223,9 @@ export default class FileGeneratorC extends CodeStream {
         ')\n'
       );
       this.write(
-        `target_link_libraries(${this.#cmake.project}_test PRIVATE ${
+        `target_link_libraries(${
           this.#cmake.project
-        })\n`
+        }_test PRIVATE ${staticTargetName})\n`
       );
     });
     this.write('endif()\n');

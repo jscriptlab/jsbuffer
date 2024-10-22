@@ -7,7 +7,7 @@ extern "C" {
 
 #include <jsb/jsb.h>
 
-#ifdef HAVE_PRINTF
+#ifdef PRINTF_TYPE
 #include <stdio.h>
 
 #define JSB_TESTS_PRINT(...) fprintf(stderr, __VA_ARGS__)

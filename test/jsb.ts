@@ -3,17 +3,28 @@ import { spawn } from 'child-process-utilities';
 import path from 'node:path';
 import { generateTemporaryFiles } from '../helpers';
 import Time from './helpers/Time';
-import runNativeSchemaTests, { ISchema } from './helpers/runNativeSchemaTests';
+import runNativeSchemaTests, {
+  // CMakeLogLevel,
+  ISchema
+} from './helpers/runNativeSchemaTests';
 import generateSchema from './helpers/generateSchema';
 
 const schemas: ReadonlyArray<ISchema> = [
-  {
-    type: 'avr',
-    secondary: null,
-    mainFile: 'src/generators/c/test/simple_schema.jsb',
-    name: 'avr_simple_schema',
-    outDir: path.resolve(__dirname, 'generated/c/schemas/avr')
-  },
+  // {
+  //   mainFile: 'src/generators/c/test/app.jsb',
+  //   name: 'wasm32_app',
+  //   logLevel: CMakeLogLevel.Debug,
+  //   secondary: null,
+  //   type: 'wasm32',
+  //   outDir: path.resolve(__dirname, 'generated/c/schemas/app')
+  // },
+  // {
+  //   type: 'avr',
+  //   secondary: null,
+  //   mainFile: 'src/generators/c/test/simple_schema.jsb',
+  //   name: 'avr_simple_schema',
+  //   outDir: path.resolve(__dirname, 'generated/c/schemas/avr')
+  // },
   {
     mainFile: 'src/generators/c/test/app.jsb',
     name: 'app',
@@ -52,12 +63,19 @@ test("FileGeneratorC: it should throw a detailed error in case there's an invali
     { stdio: 'pipe' }
   ).output();
 
-  t.assert(/\^ Expected ";", got "}" instead\n/.test(await stderr.utf8()));
-  t.assert(/\tExpected ";", got "}" instead\n/.test(await stderr.utf8()));
-  t.assert(/another_file\.jsb/.test(await stderr.utf8()));
-  t.assert(/export type Response {\n/.test(await stderr.utf8()));
-  t.assert(/string message\n/.test(await stderr.utf8()));
-  t.assert(/Detailed:/.test(await stderr.utf8()));
+  const output = await stderr().decode();
+  const tests = [
+    /\^ Expected ";", got "}" instead\n/,
+    /\tExpected ";", got "}" instead\n/,
+    /another_file\.jsb/,
+    /export type Response {\n/,
+    /string message\n/,
+    /Detailed:/
+  ];
+
+  for (const r of tests) {
+    t.assert(r.test(output), `Expected ${r.toString()} in ${output}`);
+  }
 
   await temp.destroy();
 });

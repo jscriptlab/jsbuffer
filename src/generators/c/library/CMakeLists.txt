@@ -1,9 +1,20 @@
 cmake_minimum_required(VERSION 3.10)
-project(jsb_c C)
+
+project(jsb_c LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED true)
 set(CMAKE_C_EXTENSIONS ON)
+
+include(CheckTypeSize)
+include(CheckSymbolExists)
+include(${CMAKE_CURRENT_SOURCE_DIR}/FindSymbols.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/CheckTypeSize.cmake)
+
+set(INTEGER_HEADERS "stdint.h" "inttypes.h" "sys/types.h" "stddef.h" "sys/inttypes.h" "stdbool.h" "float.h" "math.h")
+
+set(HEADERS ${INTEGER_HEADERS} "malloc.h" "string.h" "stdio.h" "stdlib.h")
+set(SYMBOL_NAMES "NULL" "printf" "fprintf" "strlen" "memcpy" "memset" "strcpy" "strncmp" "strcmp" "strncpy" "malloc" "free")
 
 # JSB_TRACE option
 option(JSB_TRACE "Enable trace messages" OFF)
@@ -15,55 +26,32 @@ option(JSB_SCHEMA_NO_ASSIGNMENT_ENUMS "If this option is enabled, the generated 
 option(JSB_SCHEMA_TESTS "If this option is disable, the generated schema will not have tests." ON)
 option(JSB_CODEC_TESTS "If this option is disable, the generated codec will not have tests." ON)
 
-include(CheckTypeSize)
-include(${CMAKE_CURRENT_SOURCE_DIR}/FindHeaders.cmake)
-
-include(CheckSymbolExists)
-check_symbol_exists(printf "stdio.h" HAVE_PRINTF)
-check_symbol_exists(fprintf "stdio.h" HAVE_FPRINTF)
-check_symbol_exists(strlen "string.h" HAVE_STRLEN)
-check_symbol_exists(memcpy "string.h" HAVE_MEMCPY)
-check_symbol_exists(memset "string.h" HAVE_MEMSET)
-check_symbol_exists(strcpy "string.h" HAVE_STRCPY)
-check_symbol_exists(strncmp "string.h" HAVE_STRNCMP)
-check_symbol_exists(strcmp "string.h" HAVE_STRCMP)
-check_symbol_exists(strncpy "string.h" HAVE_STRNCPY)
-check_symbol_exists(malloc "stdlib.h" HAVE_MALLOC)
-check_symbol_exists(free "stdlib.h" HAVE_FREE)
-
-# List of headers to check
-set(INTEGER_HEADERS "stdint.h" "inttypes.h" "sys/types.h" "stddef.h")
-set(STRING_HEADERS "string.h")
-set(STDLIB_HEADERS "stdio.h" "stdlib.h")
-
-find_headers("${INTEGER_HEADERS}" "STANDARD_TYPE_INTEGERS")
-find_headers("${STRING_HEADERS}" "STANDARD_TYPE_STRING")
-find_headers("${STDLIB_HEADERS}" "STDLIB_HEADERS")
-
-check_type_size("void" HAVE_VOID_TYPE LANGUAGE C)
-check_type_size("size_t" HAVE_SIZE_TYPE LANGUAGE C)
-check_type_size("uint64_t" HAVE_UINT64_TYPE LANGUAGE C)
-check_type_size("float" HAVE_FLOAT_TYPE LANGUAGE C)
-check_type_size("double" HAVE_DOUBLE_TYPE LANGUAGE C)
-check_type_size("uint32_t" HAVE_UINT32_TYPE LANGUAGE C)
-check_type_size("uint16_t" HAVE_UINT16_TYPE LANGUAGE C)
-check_type_size("uint8_t" HAVE_UINT8_TYPE LANGUAGE C)
-check_type_size("int64_t" HAVE_INT64_TYPE LANGUAGE C)
-check_type_size("int32_t" HAVE_INT32_TYPE LANGUAGE C)
-check_type_size("int16_t" HAVE_INT16_TYPE LANGUAGE C)
-check_type_size("int8_t" HAVE_INT8_TYPE LANGUAGE C)
+jsb_check_type_size("size_t" SIZE_T_TYPE CATEGORY_NAME "JSB_INTEGER_TYPE" HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("uint64_t" UINT64_TYPE CATEGORY_NAME "JSB_INTEGER_TYPE" HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("uint32_t" UINT32_TYPE CATEGORY_NAME "JSB_INTEGER_TYPE" HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("uint16_t" UINT16_TYPE CATEGORY_NAME "JSB_INTEGER_TYPE" HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("uint8_t" UINT8_TYPE CATEGORY_NAME "JSB_INTEGER_TYPE" HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("int64_t" INT64_TYPE CATEGORY_NAME "JSB_INTEGER_TYPE" HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("int32_t" INT32_TYPE CATEGORY_NAME "JSB_INTEGER_TYPE" HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("int16_t" INT16_TYPE CATEGORY_NAME "JSB_INTEGER_TYPE" HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("int8_t" INT8_TYPE CATEGORY_NAME "JSB_INTEGER_TYPE" HEADERS ${INTEGER_HEADERS})
 
 # Check for built-in types
-check_type_size("signed char" HAVE_SIGNED_CHAR LANGUAGE C)
-check_type_size("unsigned char" HAVE_UNSIGNED_CHAR LANGUAGE C)
-check_type_size("signed int" HAVE_SIGNED_INT LANGUAGE C)
-check_type_size("unsigned int" HAVE_UNSIGNED_INT LANGUAGE C)
-check_type_size("signed long" HAVE_SIGNED_LONG LANGUAGE C)
-check_type_size("unsigned long" HAVE_UNSIGNED_LONG LANGUAGE C)
-check_type_size("signed short" HAVE_SIGNED_SHORT LANGUAGE C)
-check_type_size("unsigned short" HAVE_UNSIGNED_SHORT LANGUAGE C)
-check_type_size("signed long long" HAVE_SIGNED_LONG_LONG LANGUAGE C)
-check_type_size("unsigned long long" HAVE_UNSIGNED_LONG_LONG LANGUAGE C)
+jsb_check_type_size("void" VOID_TYPE CATEGORY_NAME "JSB_INTEGER_BUILTIN_TYPE" BUILTIN_TYPES_ONLY HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("float" FLOAT_TYPE CATEGORY_NAME "JSB_INTEGER_BUILTIN_TYPE" BUILTIN_TYPES_ONLY HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("double" DOUBLE_TYPE CATEGORY_NAME "JSB_INTEGER_BUILTIN_TYPE" BUILTIN_TYPES_ONLY HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("signed char" SIGNED_CHAR_TYPE CATEGORY_NAME "JSB_INTEGER_BUILTIN_TYPE" BUILTIN_TYPES_ONLY HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("unsigned char" UNSIGNED_CHAR_TYPE CATEGORY_NAME "JSB_INTEGER_BUILTIN_TYPE" BUILTIN_TYPES_ONLY HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("signed int" SIGNED_INT_TYPE CATEGORY_NAME "JSB_INTEGER_BUILTIN_TYPE" BUILTIN_TYPES_ONLY HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("unsigned int" UNSIGNED_INT_TYPE CATEGORY_NAME "JSB_INTEGER_BUILTIN_TYPE" BUILTIN_TYPES_ONLY HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("signed long" SIGNED_LONG_TYPE CATEGORY_NAME "JSB_INTEGER_BUILTIN_TYPE" BUILTIN_TYPES_ONLY HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("unsigned long" UNSIGNED_LONG_TYPE CATEGORY_NAME "JSB_INTEGER_BUILTIN_TYPE" BUILTIN_TYPES_ONLY HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("signed short" SIGNED_SHORT_TYPE CATEGORY_NAME "JSB_INTEGER_BUILTIN_TYPE" BUILTIN_TYPES_ONLY HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("unsigned short" UNSIGNED_SHORT_TYPE CATEGORY_NAME "JSB_INTEGER_BUILTIN_TYPE" BUILTIN_TYPES_ONLY HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("signed long long" SIGNED_LONG_LONG_TYPE CATEGORY_NAME "JSB_INTEGER_BUILTIN_TYPE" BUILTIN_TYPES_ONLY HEADERS ${INTEGER_HEADERS})
+jsb_check_type_size("unsigned long long" UNSIGNED_LONG_LONG_TYPE CATEGORY_NAME "JSB_INTEGER_BUILTIN_TYPE" BUILTIN_TYPES_ONLY HEADERS ${INTEGER_HEADERS})
+
+jsb_find_symbols("${SYMBOL_NAMES}" "${HEADERS}" CATEGORY_NAME "")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/jsb.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/jsb/jsb.h)
 
@@ -77,7 +65,9 @@ add_library(
   ieee754.c
   include/jsb/ieee754.h
 )
-target_include_directories(jsb_c_static PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(jsb_c_static
+  PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 
 if(JSB_CODEC_TESTS MATCHES ON)
   add_subdirectory(test)

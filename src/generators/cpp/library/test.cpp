@@ -3,7 +3,7 @@
 
 #include "test_schema/Message.hpp"
 
-// #include <cassert>
+#include <iostream>
 #include <limits>
 #include <stdexcept>
 
@@ -63,13 +63,18 @@ int main() {
   }
 
   test_schema::Message msg = {
-      .id    = 100000LU,
-      .event = {{.seconds = 100, .nanoseconds = 100, .bit = 100},
-                {.seconds = 200, .nanoseconds = 200, .bit = 200}}};
+    100000LU,
+    {
+      {100, 100, 100},
+      {200, 200, 200}
+    }
+  };
   msg.encode(s);
   test_schema::Message decoded = test_schema::Message::decode(d);
   jsb::assert(msg.id == decoded.id);
   jsb::assert(compareMessages(msg, decoded));
+
+  std::cout << "Ok" << std::endl;
 
   return 0;
 }

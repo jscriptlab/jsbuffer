@@ -96,10 +96,10 @@ export default class TestGeneratorC extends CodeStream {
       {
         type: 'custom',
         includes: () => {
-          this.append('#include <stdio.h>\n');
+          this.append('#include FPRINTF_HEADER\n');
         },
         condition: () => {
-          this.append('!defined(__AVR__) && defined(HAVE_FPRINTF)');
+          this.append('!defined(__AVR__) && defined(FPRINTF_FOUND)');
         },
         error: () => {
           this.write(
@@ -300,165 +300,7 @@ export default class TestGeneratorC extends CodeStream {
       this.append('\n');
       for (const fileMetadata of this.#fileMetadataList.values()) {
         for (const metadata of fileMetadata.metadata) {
-          this.write(
-            '{\n',
-            () => {
-              switch (metadata.kind) {
-                case 'type':
-                case 'call':
-                  this.write(
-                    `${getMetadataCompleteTypeReference(metadata)} value;\n`
-                  );
-                  this.write(
-                    'JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);\n'
-                  );
-                  this.write(
-                    '{\n',
-                    () => {
-                      this.write(
-                        `JSB_ASSERT(${getMetadataPrefix(
-                          metadata
-                        )}_init(&value) == JSB_OK);\n`
-                      );
-
-                      this.append(
-                        '#if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)\n'
-                      );
-                      this.write(
-                        '// It should blow up when encoding a type is beyond the maximum size of the buffer\n'
-                      );
-                      this.write('enum jsb_result_t status;\n');
-                      this.write(
-                        'do {\n',
-                        () => {
-                          this.write(
-                            `status = ${getMetadataPrefix(
-                              metadata
-                            )}_encode(&value, &s);\n`
-                          );
-                          this.write(
-                            `status = ${getMetadataPrefix(
-                              metadata
-                            )}_encode(&value, &s);\n`
-                          );
-                          this.#writeStatusCheck('status', [
-                            'JSB_OK',
-                            'JSB_BUFFER_OVERFLOW'
-                          ]);
-                        },
-                        '} while(status != JSB_BUFFER_OVERFLOW);\n'
-                      );
-                      this.append(
-                        '#endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)\n'
-                      );
-                    },
-                    '}\n'
-                  );
-                  this.write(
-                    'JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);\n'
-                  );
-                  this.write(
-                    `JSB_ASSERT(${getMetadataPrefix(
-                      metadata
-                    )}_init(&value) == JSB_OK);\n`
-                  );
-                  this.write(
-                    `JSB_ASSERT(${getMetadataPrefix(
-                      metadata
-                    )}_encode(&value, &s) == JSB_OK);\n`
-                  );
-                  this.write(
-                    'JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);\n'
-                  );
-                  this.write(
-                    'JSB_ASSERT(jsb_deserializer_init(NULL, NULL, 0) == JSB_BAD_ARGUMENT);\n'
-                  );
-                  this.write(
-                    'JSB_ASSERT(jsb_deserializer_init(&d, NULL, 0) == JSB_BAD_ARGUMENT);\n'
-                  );
-                  this.write(
-                    'JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);\n'
-                  );
-                  this.write(
-                    `JSB_ASSERT(${getMetadataPrefix(
-                      metadata
-                    )}_decode(&d, &value) == JSB_OK);\n`
-                  );
-                  this.write(`${getMetadataPrefix(metadata)}_free(&value);\n`);
-
-                  this.append('\n');
-
-                  // Test the type with all sorts of values in its parameters
-                  for (const param of metadata.params) {
-                    this.write(
-                      '{\n',
-                      () => {
-                        this.write(
-                          `${getMetadataCompleteTypeReference(
-                            metadata
-                          )} new_value;\n`
-                        );
-                        this.write(
-                          `jsb_memset(&new_value, 0, sizeof(${getMetadataCompleteTypeReference(
-                            metadata
-                          )}));\n`
-                        );
-                        this.write(
-                          `jsb_memset(&value, 0, sizeof(${getMetadataCompleteTypeReference(
-                            metadata
-                          )}));\n`
-                        );
-                        this.write(
-                          `JSB_ASSERT(${getMetadataPrefix(
-                            metadata
-                          )}_init(&value) == JSB_OK);\n`
-                        );
-                        this.write(
-                          `JSB_ASSERT(${getMetadataPrefix(
-                            metadata
-                          )}_init(&new_value) == JSB_OK);\n`
-                        );
-                        this.write(
-                          'JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);\n'
-                        );
-                        this.#generateTestForParam(
-                          param.type,
-                          metadata,
-                          param,
-                          `value.${param.name}`
-                        );
-                        this.write(
-                          `JSB_ASSERT(${getMetadataPrefix(
-                            metadata
-                          )}_encode(&value, &s) == JSB_OK);\n`
-                        );
-                        this.write(
-                          'JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);\n'
-                        );
-                        this.write(
-                          `JSB_ASSERT(${getMetadataPrefix(
-                            metadata
-                          )}_decode(&d, &new_value) == JSB_OK);\n`
-                        );
-                        // Compare the parameter value using memcmp
-                        this.write(
-                          `JSB_ASSERT(memcmp(&new_value.${param.name}, &value.${param.name}, sizeof(value.${param.name})) == 0);\n`
-                        );
-                        this.write(
-                          `JSB_TRACE("test", "Test passed ✔ for param: %s", "${param.name}");\n`
-                        );
-                      },
-                      '}\n'
-                    );
-                  }
-                  break;
-                case 'trait':
-                  this.#generateTraitTest(metadata);
-                  break;
-              }
-            },
-            '}\n'
-          );
+          this.#generateTestCodeFromMetadata(metadata);
         }
       }
       this.append('\n');
@@ -484,6 +326,148 @@ export default class TestGeneratorC extends CodeStream {
       path: 'test.c',
       contents: this.value()
     });
+  }
+
+  // #id = 0;
+
+  // #makeIdentifier() {
+  //   return `_value_${this.#id++}`;
+  // }
+
+  #generateTestCodeFromMetadata(metadata: Metadata) {
+    switch (metadata.kind) {
+      case 'type':
+      case 'call':
+        this.#generateBasicTestFromMetadata(metadata);
+        this.write(
+          '{\n',
+          () => {
+            this.write(
+              `${getMetadataCompleteTypeReference(metadata)} value;\n`
+            );
+            // Init value
+            this.write(
+              `JSB_ASSERT(${getMetadataPrefix(
+                metadata
+              )}_init(&value) == JSB_OK);\n`
+            );
+            for (const param of metadata.params) {
+              this.#generateTestForParam(
+                param.type,
+                metadata,
+                param,
+                `value.${param.name}`
+              );
+            }
+            // Rewind the serializer
+            this.write('JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);\n');
+            // Encode
+            this.write(
+              `JSB_ASSERT(${getMetadataPrefix(
+                metadata
+              )}_encode(&value, &s) == JSB_OK);\n`
+            );
+            // Decode
+            this.write(
+              'JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);\n'
+            );
+            this.write(
+              `JSB_ASSERT(${getMetadataPrefix(
+                metadata
+              )}_decode(&d, &value) == JSB_OK);\n`
+            );
+            // Free
+            this.write(`${getMetadataPrefix(metadata)}_free(&value);\n`);
+          },
+          '}\n'
+        );
+        break;
+      case 'trait':
+        this.#generateTraitTest(metadata);
+        break;
+    }
+  }
+
+  #generateBasicTestFromMetadata(metadata: Metadata) {
+    this.write(
+      '{\n',
+      () => {
+        this.write(`${getMetadataCompleteTypeReference(metadata)} value;\n`);
+        this.write('JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);\n');
+        this.write(
+          '{\n',
+          () => {
+            this.write(
+              `JSB_ASSERT(${getMetadataPrefix(
+                metadata
+              )}_init(&value) == JSB_OK);\n`
+            );
+
+            this.append(
+              '#if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)\n'
+            );
+            this.write(
+              '// It should blow up when encoding a type is beyond the maximum size of the buffer\n'
+            );
+            this.write('enum jsb_result_t status;\n');
+            this.write(
+              'do {\n',
+              () => {
+                this.write(
+                  `status = ${getMetadataPrefix(
+                    metadata
+                  )}_encode(&value, &s);\n`
+                );
+                this.write(
+                  `status = ${getMetadataPrefix(
+                    metadata
+                  )}_encode(&value, &s);\n`
+                );
+                this.#writeStatusCheck('status', [
+                  'JSB_OK',
+                  'JSB_BUFFER_OVERFLOW'
+                ]);
+              },
+              '} while(status != JSB_BUFFER_OVERFLOW);\n'
+            );
+            this.append(
+              '#endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)\n'
+            );
+          },
+          '}\n'
+        );
+        this.write('JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);\n');
+        this.write(
+          `JSB_ASSERT(${getMetadataPrefix(metadata)}_init(&value) == JSB_OK);\n`
+        );
+        this.write(
+          `JSB_ASSERT(${getMetadataPrefix(
+            metadata
+          )}_encode(&value, &s) == JSB_OK);\n`
+        );
+        this.write(
+          'JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);\n'
+        );
+        this.write(
+          'JSB_ASSERT(jsb_deserializer_init(NULL, NULL, 0) == JSB_BAD_ARGUMENT);\n'
+        );
+        this.write(
+          'JSB_ASSERT(jsb_deserializer_init(&d, NULL, 0) == JSB_BAD_ARGUMENT);\n'
+        );
+        this.write(
+          'JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);\n'
+        );
+        this.write(
+          `JSB_ASSERT(${getMetadataPrefix(
+            metadata
+          )}_decode(&d, &value) == JSB_OK);\n`
+        );
+        this.write(`${getMetadataPrefix(metadata)}_free(&value);\n`);
+      },
+      '}\n'
+    );
+
+    this.append('\n');
   }
 
   #writeStatusCheck(status: string, expected: string[]) {

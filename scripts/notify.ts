@@ -1,13 +1,15 @@
 import { App } from '@slack/bolt';
 import { ChatPostMessageArguments } from '@slack/web-api';
 import * as testFinished from './slack-messages/testFinished';
-import env from './env';
+import env from '../src/utilities/env';
 import { getString } from 'cli-argument-helper/string';
 import getNamedArgument from 'cli-argument-helper/getNamedArgument';
 import { getArgument } from 'cli-argument-helper';
 import assert from 'node:assert';
+import github from '@actions/github';
 
 (async () => {
+  github;
   const args = process.argv.slice(2);
 
   const app = new App({
@@ -52,12 +54,16 @@ import assert from 'node:assert';
 
   await app.start(3000);
 
-  await app.client.chat.postMessage({
-    ...chatPostMessageArguments
-  });
+  try {
+    await app.client.chat.postMessage({
+      ...chatPostMessageArguments
+    });
+  } catch (err) {
+    console.error(err);
+  }
 
   await app.stop();
-})().catch((reason) => {
-  console.error(reason);
+})().catch((err) => {
+  console.error(err);
   process.exit(1);
 });

@@ -1795,8 +1795,8 @@ export default class FileGeneratorTypeScript
     if ('fileGenerator' in exp) {
       const result =
         exp.fileGenerator === this
-          ? this.#definitions.get(exp.identifier) ??
-            this.#exports.get(exp.identifier)
+          ? (this.#definitions.get(exp.identifier) ??
+            this.#exports.get(exp.identifier))
           : exp.fileGenerator.#exports.get(exp.identifier);
       if (!result) {
         throw new TypeExpressionNotExported(exp);

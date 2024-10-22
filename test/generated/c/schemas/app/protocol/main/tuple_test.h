@@ -1,18 +1,19 @@
 #ifndef JSB_PROTOCOL_MAIN_TUPLE_TEST_H
 #define JSB_PROTOCOL_MAIN_TUPLE_TEST_H
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
+#include <string.h>
+#include <jsb/jsb.h>
 #include "protocol/main/user.h"
 #include "protocol/main/void.h"
-#include <jsb/jsb.h>
-#include <string.h>
 
-#include <jsb/deserializer.h>
-#include <jsb/serializer.h>
 #include <stdbool.h>
+#include <jsb/serializer.h>
+#include <jsb/deserializer.h>
 
 struct protocol_main_tuple_test_tuple_t {
   jsb_int32_t item_0;
@@ -29,14 +30,9 @@ struct protocol_main_tuple_test_tuple_t {
 struct protocol_main_tuple_test_t {
   struct protocol_main_tuple_test_tuple_t values;
 };
-enum jsb_result_t
-protocol_main_tuple_test_decode(struct jsb_deserializer_t*,
-                                struct protocol_main_tuple_test_t*);
-enum jsb_result_t
-protocol_main_tuple_test_encode(const struct protocol_main_tuple_test_t*,
-                                struct jsb_serializer_t*);
-enum jsb_result_t
-protocol_main_tuple_test_init(struct protocol_main_tuple_test_t*);
+enum jsb_result_t protocol_main_tuple_test_decode(struct jsb_deserializer_t*, struct protocol_main_tuple_test_t*);
+enum jsb_result_t protocol_main_tuple_test_encode(const struct protocol_main_tuple_test_t*, struct jsb_serializer_t*);
+enum jsb_result_t protocol_main_tuple_test_init(struct protocol_main_tuple_test_t*);
 void protocol_main_tuple_test_free(struct protocol_main_tuple_test_t*);
 #ifdef __cplusplus
 }

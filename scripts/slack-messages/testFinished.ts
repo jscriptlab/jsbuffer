@@ -1,5 +1,5 @@
 import { SayArguments } from '@slack/bolt';
-import env from '../env';
+import env from '../../src/utilities/env';
 
 const initialPayload = ({
   EVENT_HEAD_COMMIT_TIMESTAMP,
@@ -42,7 +42,7 @@ const initialPayload = ({
     {
       type: 'section',
       text: {
-        text: EVENT_HEAD_COMMIT_TIMESTAMP,
+        text: `${EVENT_HEAD_COMMIT_TIMESTAMP}`,
         type: 'mrkdwn'
       }
     }

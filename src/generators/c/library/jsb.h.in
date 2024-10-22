@@ -5,22 +5,60 @@
 extern "C" {
 #endif // __cplusplus
 
-// Standard C library functions
-#cmakedefine HAVE_PRINTF @HAVE_PRINTF@
-#cmakedefine HAVE_FPRINTF @HAVE_FPRINTF@
-#cmakedefine HAVE_STRLEN @HAVE_STRLEN@
-#cmakedefine HAVE_MEMCPY @HAVE_MEMCPY@
-#cmakedefine HAVE_MEMSET @HAVE_MEMSET@
-#cmakedefine HAVE_STRCPY @HAVE_STRCPY@
-#cmakedefine HAVE_STRNCMP @HAVE_STRNCMP@
-#cmakedefine HAVE_STRCMP @HAVE_STRCMP@
-#cmakedefine HAVE_STRNCPY @HAVE_STRNCPY@
-#cmakedefine HAVE_MALLOC @HAVE_MALLOC@
-#cmakedefine HAVE_FREE @HAVE_FREE@
+enum jsb_result_t {
+  JSB_OK = 0,
+  // Out of bounds error
+  JSB_OUT_OF_BOUNDS = 1,
+  JSB_MEMORY_ALLOCATION_ERROR = 2,
+  // Buffer is too small to hold the data
+  JSB_BUFFER_OVERFLOW = 3,
+  JSB_INVALID_CRC_HEADER = 4,
+  JSB_INVALID_DECODED_VALUE = 5,
+  JSB_BAD_ARGUMENT = 6,
+  JSB_NOT_SUPPORTED = 7
+};
 
-#cmakedefine HAVE_SIZE_TYPE @HAVE_SIZE_TYPE@
-#cmakedefine HAVE_UINT64_TYPE @HAVE_UINT64_TYPE@
+// Standard C library functions
+#cmakedefine NULL_FOUND @NULL_FOUND@
+#cmakedefine NULL_HEADER @NULL_HEADER@
+#cmakedefine PRINTF_FOUND @PRINTF_FOUND@
+#cmakedefine PRINTF_HEADER @PRINTF_HEADER@
+#cmakedefine FPRINTF_FOUND @FPRINTF_FOUND@
+#cmakedefine FPRINTF_HEADER @FPRINTF_HEADER@
+#cmakedefine STRLEN_FOUND @STRLEN_FOUND@
+#cmakedefine STRLEN_HEADER @STRLEN_HEADER@
+#cmakedefine MEMCPY_FOUND @MEMCPY_FOUND@
+#cmakedefine MEMCPY_HEADER @MEMCPY_HEADER@
+#cmakedefine MEMSET_FOUND @MEMSET_FOUND@
+#cmakedefine MEMSET_HEADER @MEMSET_HEADER@
+#cmakedefine STRCPY_FOUND @STRCPY_FOUND@
+#cmakedefine STRCPY_HEADER @STRCPY_HEADER@
+#cmakedefine STRNCMP_FOUND @STRNCMP_FOUND@
+#cmakedefine STRNCMP_HEADER @STRNCMP_HEADER@
+#cmakedefine STRCMP_FOUND @STRCMP_FOUND@
+#cmakedefine STRCMP_HEADER @STRCMP_HEADER@
+#cmakedefine STRNCPY_FOUND @STRNCPY_FOUND@
+#cmakedefine STRNCPY_HEADER @STRNCPY_HEADER@
+#cmakedefine MALLOC_FOUND @MALLOC_FOUND@
+#cmakedefine MALLOC_HEADER @MALLOC_HEADER@
+#cmakedefine FREE_FOUND @FREE_FOUND@
+#cmakedefine FREE_HEADER @FREE_HEADER@
+
+/**
+ * Macros that determine whether an integer was found or not
+ */
+#cmakedefine JSB_INTEGER_TYPE_FOUND @JSB_INTEGER_TYPE_FOUND@
+#cmakedefine JSB_INTEGER_BUILTIN_TYPE_FOUND @JSB_INTEGER_BUILTIN_TYPE_FOUND@
+#cmakedefine JSB_INTEGER_TYPE_HEADER @JSB_INTEGER_TYPE_HEADER@
+
+/**
+ * Types
+ */
 #cmakedefine HAVE_VOID_TYPE @HAVE_VOID_TYPE@
+#cmakedefine HAVE_SIZE_T_TYPE @HAVE_SIZE_T_TYPE@
+#cmakedefine HAVE_UINT64_TYPE @HAVE_UINT64_TYPE@
+#cmakedefine HAVE_FLOAT_TYPE @HAVE_FLOAT_TYPE@
+#cmakedefine HAVE_DOUBLE_TYPE @HAVE_DOUBLE_TYPE@
 #cmakedefine HAVE_UINT32_TYPE @HAVE_UINT32_TYPE@
 #cmakedefine HAVE_UINT16_TYPE @HAVE_UINT16_TYPE@
 #cmakedefine HAVE_UINT8_TYPE @HAVE_UINT8_TYPE@
@@ -28,33 +66,132 @@ extern "C" {
 #cmakedefine HAVE_INT32_TYPE @HAVE_INT32_TYPE@
 #cmakedefine HAVE_INT16_TYPE @HAVE_INT16_TYPE@
 #cmakedefine HAVE_INT8_TYPE @HAVE_INT8_TYPE@
-#cmakedefine HAVE_FLOAT_TYPE @HAVE_FLOAT_TYPE@
-#cmakedefine HAVE_DOUBLE_TYPE @HAVE_DOUBLE_TYPE@
+
+/**
+ * Headers
+ */
+#cmakedefine SIZE_T_TYPE_HEADER_FOUND @SIZE_T_TYPE_HEADER_FOUND@
+#cmakedefine SIZE_T_TYPE_HEADER @SIZE_T_TYPE_HEADER@
+#cmakedefine UINT64_TYPE_HEADER_FOUND @UINT64_TYPE_HEADER_FOUND@
+#cmakedefine UINT64_TYPE_HEADER @UINT64_TYPE_HEADER@
+#cmakedefine UINT32_TYPE_HEADER_FOUND @UINT32_TYPE_HEADER_FOUND@
+#cmakedefine UINT32_TYPE_HEADER @UINT32_TYPE_HEADER@
+#cmakedefine UINT16_TYPE_HEADER_FOUND @UINT16_TYPE_HEADER_FOUND@
+#cmakedefine UINT16_TYPE_HEADER @UINT16_TYPE_HEADER@
+#cmakedefine UINT8_TYPE_HEADER_FOUND @UINT8_TYPE_HEADER_FOUND@
+#cmakedefine UINT8_TYPE_HEADER @UINT8_TYPE_HEADER@
+#cmakedefine INT64_TYPE_HEADER_FOUND @INT64_TYPE_HEADER_FOUND@
+#cmakedefine INT64_TYPE_HEADER @INT64_TYPE_HEADER@
+#cmakedefine INT32_TYPE_HEADER_FOUND @INT32_TYPE_HEADER_FOUND@
+#cmakedefine INT32_TYPE_HEADER @INT32_TYPE_HEADER@
+#cmakedefine INT16_TYPE_HEADER_FOUND @INT16_TYPE_HEADER_FOUND@
+#cmakedefine INT16_TYPE_HEADER @INT16_TYPE_HEADER@
+#cmakedefine INT8_TYPE_HEADER_FOUND @INT8_TYPE_HEADER_FOUND@
+#cmakedefine INT8_TYPE_HEADER @INT8_TYPE_HEADER@
+#cmakedefine VOID_TYPE_HEADER_FOUND @VOID_TYPE_HEADER_FOUND@
+#cmakedefine VOID_TYPE_HEADER @VOID_TYPE_HEADER@
+#cmakedefine FLOAT_TYPE_HEADER_FOUND @FLOAT_TYPE_HEADER_FOUND@
+#cmakedefine FLOAT_TYPE_HEADER @FLOAT_TYPE_HEADER@
+#cmakedefine DOUBLE_TYPE_HEADER_FOUND @DOUBLE_TYPE_HEADER_FOUND@
+#cmakedefine DOUBLE_TYPE_HEADER @DOUBLE_TYPE_HEADER@
+#cmakedefine SIGNED_CHAR_TYPE_HEADER_FOUND @SIGNED_CHAR_TYPE_HEADER_FOUND@
+#cmakedefine SIGNED_CHAR_TYPE_HEADER @SIGNED_CHAR_TYPE_HEADER@
+#cmakedefine UNSIGNED_CHAR_TYPE_HEADER_FOUND @UNSIGNED_CHAR_TYPE_HEADER_FOUND@
+#cmakedefine UNSIGNED_CHAR_TYPE_HEADER @UNSIGNED_CHAR_TYPE_HEADER@
+#cmakedefine SIGNED_INT_TYPE_HEADER_FOUND @SIGNED_INT_TYPE_HEADER_FOUND@
+#cmakedefine SIGNED_INT_TYPE_HEADER @SIGNED_INT_TYPE_HEADER@
+#cmakedefine UNSIGNED_INT_TYPE_HEADER_FOUND @UNSIGNED_INT_TYPE_HEADER_FOUND@
+#cmakedefine UNSIGNED_INT_TYPE_HEADER @UNSIGNED_INT_TYPE_HEADER@
+#cmakedefine SIGNED_LONG_TYPE_HEADER_FOUND @SIGNED_LONG_TYPE_HEADER_FOUND@
+#cmakedefine SIGNED_LONG_TYPE_HEADER @SIGNED_LONG_TYPE_HEADER@
+#cmakedefine UNSIGNED_LONG_TYPE_HEADER_FOUND @UNSIGNED_LONG_TYPE_HEADER_FOUND@
+#cmakedefine UNSIGNED_LONG_TYPE_HEADER @UNSIGNED_LONG_TYPE_HEADER@
+#cmakedefine SIGNED_SHORT_TYPE_HEADER_FOUND @SIGNED_SHORT_TYPE_HEADER_FOUND@
+#cmakedefine SIGNED_SHORT_TYPE_HEADER @SIGNED_SHORT_TYPE_HEADER@
+#cmakedefine UNSIGNED_SHORT_TYPE_HEADER_FOUND @UNSIGNED_SHORT_TYPE_HEADER_FOUND@
+#cmakedefine UNSIGNED_SHORT_TYPE_HEADER @UNSIGNED_SHORT_TYPE_HEADER@
+#cmakedefine SIGNED_LONG_LONG_TYPE_HEADER_FOUND @SIGNED_LONG_LONG_TYPE_HEADER_FOUND@
+#cmakedefine SIGNED_LONG_LONG_TYPE_HEADER @SIGNED_LONG_LONG_TYPE_HEADER@
+#cmakedefine UNSIGNED_LONG_LONG_TYPE_HEADER_FOUND @UNSIGNED_LONG_LONG_TYPE_HEADER_FOUND@
+#cmakedefine UNSIGNED_LONG_LONG_TYPE_HEADER @UNSIGNED_LONG_LONG_TYPE_HEADER@
+
+/**
+ * Type sizes
+ */
+#cmakedefine JSB_VOID_TYPE_SIZE @JSB_VOID_TYPE_SIZE@
+#cmakedefine JSB_SIZE_T_TYPE_SIZE @JSB_SIZE_T_TYPE_SIZE@
+#cmakedefine JSB_UINT64_TYPE_SIZE @JSB_UINT64_TYPE_SIZE@
+#cmakedefine JSB_FLOAT_TYPE_SIZE @JSB_FLOAT_TYPE_SIZE@
+#cmakedefine JSB_DOUBLE_TYPE_SIZE @JSB_DOUBLE_TYPE_SIZE@
+#cmakedefine JSB_UINT32_TYPE_SIZE @JSB_UINT32_TYPE_SIZE@
+#cmakedefine JSB_UINT16_TYPE_SIZE @JSB_UINT16_TYPE_SIZE@
+#cmakedefine JSB_UINT8_TYPE_SIZE @JSB_UINT8_TYPE_SIZE@
+#cmakedefine JSB_INT64_TYPE_SIZE @JSB_INT64_TYPE_SIZE@
+#cmakedefine JSB_INT32_TYPE_SIZE @JSB_INT32_TYPE_SIZE@
+#cmakedefine JSB_INT16_TYPE_SIZE @JSB_INT16_TYPE_SIZE@
+#cmakedefine JSB_INT8_TYPE_SIZE @JSB_INT8_TYPE_SIZE@
+
+/**
+ * Built-in type sizes
+ */
+#cmakedefine JSB_SIGNED_CHAR_TYPE_SIZE @JSB_SIGNED_CHAR_TYPE_SIZE@
+#cmakedefine JSB_UNSIGNED_CHAR_TYPE_SIZE @JSB_UNSIGNED_CHAR_TYPE_SIZE@
+#cmakedefine JSB_SIGNED_INT_TYPE_SIZE @JSB_SIGNED_INT_TYPE_SIZE@
+#cmakedefine JSB_UNSIGNED_INT_TYPE_SIZE @JSB_UNSIGNED_INT_TYPE_SIZE@
+#cmakedefine JSB_SIGNED_LONG_TYPE_SIZE @JSB_SIGNED_LONG_TYPE_SIZE@
+#cmakedefine JSB_UNSIGNED_LONG_TYPE_SIZE @JSB_UNSIGNED_LONG_TYPE_SIZE@
+#cmakedefine JSB_SIGNED_SHORT_TYPE_SIZE @JSB_SIGNED_SHORT_TYPE_SIZE@
+#cmakedefine JSB_UNSIGNED_SHORT_TYPE_SIZE @JSB_UNSIGNED_SHORT_TYPE_SIZE@
+#cmakedefine JSB_SIGNED_LONG_LONG_TYPE_SIZE @JSB_SIGNED_LONG_LONG_TYPE_SIZE@
+#cmakedefine JSB_UNSIGNED_LONG_LONG_TYPE_SIZE @JSB_UNSIGNED_LONG_LONG_TYPE_SIZE@
 
 /**
  * Built-in types
  */
-#cmakedefine SIGNED_CHAR @SIGNED_CHAR@
-#cmakedefine HAVE_UNSIGNED_CHAR @HAVE_UNSIGNED_CHAR@
-#cmakedefine HAVE_SIGNED_INT @HAVE_SIGNED_INT@
-#cmakedefine HAVE_UNSIGNED_INT @HAVE_UNSIGNED_INT@
-#cmakedefine HAVE_SIGNED_LONG @HAVE_SIGNED_LONG@
-#cmakedefine HAVE_UNSIGNED_LONG @HAVE_UNSIGNED_LONG@
-#cmakedefine HAVE_SIGNED_SHORT @HAVE_SIGNED_SHORT@
-#cmakedefine HAVE_UNSIGNED_SHORT @HAVE_UNSIGNED_SHORT@
-#cmakedefine HAVE_SIGNED_LONG_LONG @HAVE_SIGNED_LONG_LONG@
-#cmakedefine HAVE_UNSIGNED_LONG_LONG @HAVE_UNSIGNED_LONG_LONG@
+#cmakedefine HAVE_SIGNED_CHAR_TYPE @HAVE_SIGNED_CHAR_TYPE@
+#cmakedefine HAVE_UNSIGNED_CHAR_TYPE @HAVE_UNSIGNED_CHAR_TYPE@
+#cmakedefine HAVE_SIGNED_INT_TYPE @HAVE_SIGNED_INT_TYPE@
+#cmakedefine HAVE_UNSIGNED_INT_TYPE @HAVE_UNSIGNED_INT_TYPE@
+#cmakedefine HAVE_SIGNED_LONG_TYPE @HAVE_SIGNED_LONG_TYPE@
+#cmakedefine HAVE_UNSIGNED_LONG_TYPE @HAVE_UNSIGNED_LONG_TYPE@
+#cmakedefine HAVE_SIGNED_SHORT_TYPE @HAVE_SIGNED_SHORT_TYPE@
+#cmakedefine HAVE_UNSIGNED_SHORT_TYPE @HAVE_UNSIGNED_SHORT_TYPE@
+#cmakedefine HAVE_SIGNED_LONG_LONG_TYPE @HAVE_SIGNED_LONG_LONG_TYPE@
+#cmakedefine HAVE_UNSIGNED_LONG_LONG_TYPE @HAVE_UNSIGNED_LONG_LONG_TYPE@
 
 /**
- * Standard library headers
+ * Integer headers
  */
-#cmakedefine HEADER_FOUND_STDINT_H @HEADER_FOUND_STDINT_H@
-#cmakedefine HEADER_FOUND_STDDEF_H @HEADER_FOUND_STDDEF_H@
-#cmakedefine HEADER_FOUND_STRING_H @HEADER_FOUND_STRING_H@
-#cmakedefine HEADER_FOUND_STDLIB_H @HEADER_FOUND_STDLIB_H@
-#cmakedefine HEADER_FOUND_STDIO_H @HEADER_FOUND_STDIO_H@
-#cmakedefine HEADER_FOUND_INTTYPES_H @HEADER_FOUND_INTTYPES_H@
-#cmakedefine HEADER_FOUND_SYS_TYPEYPES_H @HEADER_FOUND_SYS_TYPEYPES_H@
+#cmakedefine VOID_TYPE_HEADER @VOID_TYPE_HEADER@
+#cmakedefine SIZE_T_TYPE_HEADER @SIZE_T_TYPE_HEADER@
+#cmakedefine UINT64_TYPE_HEADER @UINT64_TYPE_HEADER@
+#cmakedefine FLOAT_TYPE_HEADER @FLOAT_TYPE_HEADER@
+#cmakedefine DOUBLE_TYPE_HEADER @DOUBLE_TYPE_HEADER@
+#cmakedefine UINT32_TYPE_HEADER @UINT32_TYPE_HEADER@
+#cmakedefine UINT16_TYPE_HEADER @UINT16_TYPE_HEADER@
+#cmakedefine UINT8_TYPE_HEADER @UINT8_TYPE_HEADER@
+#cmakedefine INT64_TYPE_HEADER @INT64_TYPE_HEADER@
+#cmakedefine INT32_TYPE_HEADER @INT32_TYPE_HEADER@
+#cmakedefine INT16_TYPE_HEADER @INT16_TYPE_HEADER@
+#cmakedefine INT8_TYPE_HEADER @INT8_TYPE_HEADER@
+#cmakedefine SIGNED_CHAR_TYPE_HEADER @SIGNED_CHAR_TYPE_HEADER@
+#cmakedefine UNSIGNED_CHAR_TYPE_HEADER @UNSIGNED_CHAR_TYPE_HEADER@
+#cmakedefine SIGNED_INT_TYPE_HEADER @SIGNED_INT_TYPE_HEADER@
+#cmakedefine UNSIGNED_INT_TYPE_HEADER @UNSIGNED_INT_TYPE_HEADER@
+#cmakedefine SIGNED_LONG_TYPE_HEADER @SIGNED_LONG_TYPE_HEADER@
+#cmakedefine UNSIGNED_LONG_TYPE_HEADER @UNSIGNED_LONG_TYPE_HEADER@
+#cmakedefine SIGNED_SHORT_TYPE_HEADER @SIGNED_SHORT_TYPE_HEADER@
+#cmakedefine UNSIGNED_SHORT_TYPE_HEADER @UNSIGNED_SHORT_TYPE_HEADER@
+#cmakedefine SIGNED_LONG_LONG_TYPE_HEADER @SIGNED_LONG_LONG_TYPE_HEADER@
+#cmakedefine UNSIGNED_LONG_LONG_TYPE_HEADER @UNSIGNED_LONG_LONG_TYPE_HEADER@
+
+#if defined(JSB_INTEGER_TYPE_FOUND)
+#include @JSB_INTEGER_TYPE_HEADER@
+#elif defined(JSB_INTEGER_BUILTIN_TYPE_FOUND) // defined(JSB_INTEGER_TYPE_FOUND)
+#include @JSB_INTEGER_BUILTIN_TYPE_HEADER@
+#else // defined(JSB_INTEGER_BUILTIN_TYPE_FOUND)
+#error "No suitable header for integer type found"
+#endif
 
 /**
  * JSBuffer options
@@ -108,20 +245,24 @@ extern "C" {
  */
 #cmakedefine JSB_DISABLE_ERROR_ASSERTION
 
+#ifdef JSB_SCHEMA_MALLOC
+#error "JSB_SCHEMA_MALLOC is not supported yet"
+#endif // JSB_SCHEMA_MALLOC
+
 /**
- * Define JSB_DMA_ENABLED if any of the macros to enable dynamic memory allocation
+ * Define JSB_DYNAMIC_MEMORY_ALLOCATION if any of the macros to enable dynamic memory allocation
  * are set.
  */
 #if defined(JSB_SERIALIZER_USE_MALLOC) || defined(JSB_SCHEMA_MALLOC)
-#define JSB_DMA_ENABLED
+#define JSB_DYNAMIC_MEMORY_ALLOCATION
 #endif // defined(JSB_SERIALIZER_USE_MALLOC) || defined(JSB_SCHEMA_MALLOC)
 
 /**
- * If JSB_SCHEMA_MALLOC is enabled, stdlib.h is required.
+ * If JSB_SCHEMA_MALLOC is enabled, `malloc` symbol is required.
  */
-#if defined(JSB_SCHEMA_MALLOC) && !defined(HEADER_FOUND_STDLIB_H)
-#error "JSB_SCHEMA_MALLOC is enabled, but stdlib.h is not found. Cannot use malloc."
-#endif // defined(JSB_SCHEMA_MALLOC) && !defined(HEADER_FOUND_STDLIB_H)
+#if defined(JSB_SCHEMA_MALLOC) && !defined(MALLOC_FOUND)
+#error "JSB_SCHEMA_MALLOC is enabled, but malloc symbol was not found. Cannot use malloc."
+#endif // defined(JSB_SCHEMA_MALLOC) && !defined(MALLOC_FOUND)
 
 #if !defined(JSB_SCHEMA_MALLOC) && !defined(JSB_MAX_STRING_SIZE)
 #pragma message "JSB_SCHEMA_MALLOC is enabled, but JSB_MAX_STRING_SIZE is not defined. Using default value of 64."
@@ -139,21 +280,11 @@ extern "C" {
 #endif // JSB_DISABLE_ERROR_ASSERTION
 
 #ifdef JSB_TRACE
-// If `printf` function wasn't found, disable trace
-#ifndef HAVE_PRINTF
-#pragma message "printf() not found, cannot enable trace"
-#undef JSB_TRACE
-#endif // HAVE_PRINTF
+#if defined(JSB_TRACE) && !defined(PRINTF_FOUND)
+#error "printf() not found, cannot enable trace"
+#endif // PRINTF_FOUND
 
-// If `stdio.h` header wasn't found, disable trace
-#ifndef HEADER_FOUND_STDIO_H
-#pragma message "stdio.h not found, cannot enable trace"
-#undef JSB_TRACE
-#endif // HEADER_FOUND_STDIO_H
-#endif // JSB_TRACE
-
-#ifdef JSB_TRACE
-#include <stdio.h>
+#include @PRINTF_HEADER@
 
 #define JSB_TRACE(tag, ...) do { \
   printf("[%s]: %s:%d: ", tag, __FILE__, __LINE__); \
@@ -166,135 +297,113 @@ extern "C" {
 #define JSB_TRACE(...) do {} while (0)
 #endif // JSB_TRACE
 
-#if defined(HEADER_FOUND_STDDEF_H)
-#include <stddef.h>
-#endif // HEADER_FOUND_STDDEF_H
-
-#if defined(HEADER_FOUND_STDINT_H)
-#include <stdint.h>
-#elif defined(HEADER_FOUND_INTTYPES_H)
-#include <inttypes.h>
-#elif defined(HEADER_FOUND_SYS_TYPES_H)
-#include <sys/types.h>
+#ifndef HAVE_NULL
+#include @NULL_HEADER@
 #else
-#error "No suitable header found for standard integer types"
-#endif // HEADER_FOUND_STDINT_H
+#define NULL ((void*)0)
+#endif // HAVE_NULL
 
-#ifdef JSB_SCHEMA_MALLOC
-#error "JSB_SCHEMA_MALLOC is not supported yet"
-#endif // JSB_SCHEMA_MALLOC
+#if defined(JSB_DYNAMIC_MEMORY_ALLOCATION) && !defined(MALLOC_FOUND)
+#error "JSB_DYNAMIC_MEMORY_ALLOCATION is enabled, but malloc symbol was not found. Cannot use malloc."
+#endif // defined(JSB_DYNAMIC_MEMORY_ALLOCATION) && !defined(MALLOC_FOUND)
 
-#ifdef HAVE_UINT8_TYPE
-typedef uint8_t jsb_uint8_t;
-typedef jsb_uint8_t jsb_byte_t;
-#else
-#error "No suitable type found for uint8_t"
-#endif // HAVE_UINT8_TYPE
+// #ifdef HAVE_UINT8_TYPE
+// typedef uint8_t jsb_uint8_t;
+// typedef jsb_uint8_t jsb_byte_t;
+// #elif defined(HAVE_UNSIGNED_CHAR_TYPE)
+// typedef unsigned char jsb_uint8_t;
+// #else
+// #error "No suitable type found for uint8_t"
+// #endif // HAVE_UINT8_TYPE
+// #ifdef HAVE_INT64_TYPE
+// typedef int64_t jsb_int64_t;
+// #elif defined(HAVE_SIGNED_LONG)
+// typedef signed long jsb_int64_t;
+// #elif
+// #error "No suitable type found for int64_t"
+// #endif // HAVE_INT64_TYPE
+//
+// #ifdef HAVE_UINT64_TYPE
+// typedef uint64_t jsb_uint64_t;
+// #elif defined(HAVE_UNSIGNED_LONG_TYPE)
+// typedef unsigned long jsb_uint64_t;
+// #else
+// #error "No suitable type found for uint64_t"
+// #endif // HAVE_UINT64_TYPE
+//
+// #ifdef HAVE_INT32_TYPE
+// typedef int32_t jsb_int32_t;
+// #elif defined(HAVE_SIGNED_INT_TYPE)
+// typedef signed int jsb_int32_t;
+// #else
+// #error "No suitable type found for int32_t"
+// #endif // HAVE_INT32_TYPE
+//
+// #ifdef HAVE_FLOAT_TYPE
+// typedef float jsb_float_t;
+// #endif // HAVE_FLOAT_TYPE
+//
+// #ifdef HAVE_DOUBLE_TYPE
+// typedef double jsb_double_t;
+// #endif // HAVE_DOUBLE_TYPE
+//
+// #if defined(HAVE_UINT32_TYPE)
+// typedef uint32_t jsb_uint32_t;
+// #elif defined(HAVE_UNSIGNED_INT_TYPE)
+// typedef unsigned int jsb_uint32_t;
+// #else
+// #error "No suitable type found for uint32_t"
+// #endif // HAVE_UINT32_TYPE
+//
+// #ifdef HAVE_UINT16_TYPE
+// typedef uint16_t jsb_uint16_t;
+// #elif defined(HAVE_UNSIGNED_SHORT_TYPE)
+// typedef unsigned short jsb_uint16_t;
+// #else
+// #error "No suitable type found for uint16_t"
+// #endif // HAVE_UINT16_TYPE
+//
+// #ifdef HAVE_INT16_TYPE
+// typedef int16_t jsb_int16_t;
+// #elif defined(HAVE_SIGNED_SHORT_TYPE)
+// typedef signed short jsb_int16_t;
+// #else
+// #error "No suitable type found for int16_t"
+// #endif // HAVE_INT16_TYPE
+//
+// #ifdef HAVE_INT8_TYPE
+// typedef int8_t jsb_int8_t;
+// #elif defined(HAVE_SIGNED_CHAR_TYPE)
+// typedef signed char jsb_int8_t;
+// #else
+// #error "No suitable type found for int8_t"
+// #endif // HAVE_INT8_TYPE
+//
+// #ifdef HAVE_SIZE_T_TYPE
+// typedef size_t jsb_size_t;
+// #elif defined(HAVE_UINT64_TYPE)
+// typedef jsb_uint64_t jsb_size_t;
+// #elif defined(HAVE_UINT32_TYPE)
+// typedef jsb_uint32_t jsb_size_t;
+// #elif defined(HAVE_UINT16_TYPE)
+// typedef jsb_uint16_t jsb_size_t;
+// #elif defined(HAVE_UINT8_TYPE)
+// typedef jsb_uint8_t jsb_size_t;
+// #else
+// #error "No suitable type found for size_t"
+// #endif // SIZE_T_TYPE
+//
+// #ifdef HAVE_VOID_TYPE
+// typedef void jsb_void_t;
+// #else
+// #error "No suitable type found for void"
+// #endif // HAVE_VOID_TYPE
 
-#ifdef JSB_SCHEMA_MALLOC
-/**
- * If JSB_SCHEMA_MALLOC is enabled, use pointers for strings and bytes.
- */
-typedef jsb_byte_t* jsb_bytes_t;
-typedef jsb_uint8_t* jsb_string_t;
-#else
-typedef jsb_byte_t jsb_bytes_t[JSB_MAX_STRING_SIZE + 1];
-typedef jsb_uint8_t jsb_string_t[JSB_MAX_STRING_SIZE + 1];
-#endif // JSB_SCHEMA_MALLOC
-
-#ifdef HAVE_INT64_TYPE
-typedef int64_t jsb_int64_t;
-#elif defined(HAVE_SIGNED_LONG)
-typedef signed long jsb_int64_t;
-#else
-#error "No suitable type found for int64_t"
-#endif // HAVE_INT64_TYPE
-
-#ifdef HAVE_UINT64_TYPE
-typedef uint64_t jsb_uint64_t;
-#elif defined(HAVE_UNSIGNED_LONG)
-typedef unsigned long jsb_uint64_t;
-#else
-#error "No suitable type found for uint64_t"
-#endif // HAVE_UINT64_TYPE
-
-#ifdef HAVE_INT32_TYPE
-typedef int32_t jsb_int32_t;
-#elif defined(HAVE_SIGNED_INT)
-typedef signed int jsb_int32_t;
-#else
-#error "No suitable type found for int32_t"
-#endif // HAVE_INT32_TYPE
-
-#ifdef HAVE_FLOAT_TYPE
-typedef float jsb_float_t;
-#endif // HAVE_FLOAT_TYPE
-
-#ifdef HAVE_DOUBLE_TYPE
-typedef double jsb_double_t;
-#endif // HAVE_DOUBLE_TYPE
-
-#if defined(HAVE_UINT32_TYPE)
-typedef uint32_t jsb_uint32_t;
-#elif defined(HAVE_UNSIGNED_INT)
-typedef unsigned int jsb_uint32_t;
-#else
-#error "No suitable type found for uint32_t"
-#endif // HAVE_UINT32_TYPE
-
-#ifdef HAVE_UINT16_TYPE
-typedef uint16_t jsb_uint16_t;
-#elif defined(HAVE_UNSIGNED_SHORT)
-typedef unsigned short jsb_uint16_t;
-#else
-#error "No suitable type found for uint16_t"
-#endif // HAVE_UINT16_TYPE
-
-#ifdef HAVE_INT16_TYPE
-typedef int16_t jsb_int16_t;
-#elif defined(HAVE_SIGNED_SHORT)
-typedef signed short jsb_int16_t;
-#else
-#error "No suitable type found for int16_t"
-#endif // HAVE_INT16_TYPE
-
-#ifdef HAVE_INT8_TYPE
-typedef int8_t jsb_int8_t;
-#elif defined(HAVE_SIGNED_CHAR)
-typedef signed char jsb_int8_t;
-#else
-#error "No suitable type found for int8_t"
-#endif // HAVE_INT8_TYPE
-
-#ifdef HAVE_SIZE_TYPE
-typedef size_t jsb_size_t;
-#elif defined(HAVE_UINT64_TYPE)
-typedef jsb_uint64_t jsb_size_t;
-#elif defined(HAVE_UINT32_TYPE)
-typedef jsb_uint32_t jsb_size_t;
-#elif defined(HAVE_UINT16_TYPE)
-typedef jsb_uint16_t jsb_size_t;
-#elif defined(HAVE_UINT8_TYPE)
-typedef jsb_uint8_t jsb_size_t;
-#else
-#error "No suitable type found for size_t"
-#endif // HAVE_SIZE_TYPE
-
-#ifdef HAVE_VOID_TYPE
-typedef void jsb_void_t;
-#endif // HAVE_VOID_TYPE
-
-#if defined(HAVE_FREE) && defined(JSB_DMA_ENABLED)
+#if defined(FREE_FOUND) && defined(JSB_DYNAMIC_MEMORY_ALLOCATION)
 #define jsb_free free
-#elif defined(JSB_DMA_ENABLED)
-#error "free() not found. Please disable all dynamic memory allocation features."
-#endif // defined(HAVE_FREE) && defined(JSB_DMA_ENABLED)
-
-jsb_uint32_t jsb_strlen(const jsb_string_t str);
-void* jsb_memcpy(void* dest, const void* src, jsb_uint32_t len);
-void* jsb_strncpy(jsb_uint8_t* dest, const jsb_uint8_t* src, const jsb_uint32_t len);
-void* jsb_strcpy(jsb_uint8_t* dest, const jsb_uint8_t* src);
-void* jsb_memset(void* dest, jsb_uint8_t value, jsb_uint32_t len);
+#elif defined(JSB_DYNAMIC_MEMORY_ALLOCATION)
+#error "free() symbol wasn't found. Please disable all dynamic memory allocation features."
+#endif // defined(FREE_FOUND) && defined(JSB_DYNAMIC_MEMORY_ALLOCATION)
 
 #ifndef JSB_ASSERT_ARGUMENT
 /**
@@ -325,44 +434,55 @@ void* jsb_memset(void* dest, jsb_uint8_t value, jsb_uint32_t len);
 } while (0)
 #endif // JSB_CHECK_ERROR
 
-enum jsb_result_t {
-  JSB_OK = 0,
-  // Out of bounds error
-  JSB_OUT_OF_BOUNDS = 1,
-  JSB_MEMORY_ALLOCATION_ERROR = 2,
-  // Buffer is too small to hold the data
-  JSB_BUFFER_OVERFLOW = 3,
-  JSB_INVALID_CRC_HEADER = 4,
-  JSB_INVALID_DECODED_VALUE = 5,
-  JSB_BAD_ARGUMENT = 6,
-  JSB_NOT_SUPPORTED = 7
-};
+#include <jsb/jsb_internal.h>
 
 /**
- * Sizes of built-in types
+ * Everything that depends on the header above, goes below.
  */
-// @deprecated
-#define JSB_DOUBLE_SIZE (sizeof(jsb_double_t))
-// @deprecated
-#define JSB_FLOAT_SIZE (sizeof(jsb_float_t))
-// @deprecated
-#define JSB_UINT32_SIZE (sizeof(jsb_uint32_t))
-// @deprecated
-#define JSB_INT64_SIZE (sizeof(jsb_int64_t))
-// @deprecated
-#define JSB_INT32_SIZE (sizeof(jsb_int32_t))
-// @deprecated
-#define JSB_UINT64_SIZE (sizeof(jsb_uint64_t))
-// @deprecated
-#define JSB_UINT16_SIZE (sizeof(jsb_uint16_t))
-// @deprecated
-#define JSB_INT16_SIZE (sizeof(jsb_int16_t))
-// @deprecated
-#define JSB_UINT8_SIZE (sizeof(jsb_uint8_t))
-// @deprecated
-#define JSB_INT8_SIZE (sizeof(jsb_int8_t))
-// @deprecated
-#define JSB_VOID_SIZE (sizeof(jsb_void_t))
+
+// ! Not ready yet
+#ifdef JSB_DYNAMIC_MEMORY_ALLOCATION
+void* jsb_malloc(jsb_size_t size);
+void* jsb_realloc(void* ptr, jsb_size_t size);
+void jsb_free(void* ptr);
+#endif // JSB_DYNAMIC_MEMORY_ALLOCATION
+
+#ifdef JSB_UINT8_FOUND
+typedef jsb_uint8_t jsb_byte_t;
+#else
+#error "uint8_t is required"
+#endif // JSB_UINT8_FOUND
+
+#ifdef JSB_SCHEMA_MALLOC
+#include @MALLOC_HEADER@
+
+/**
+ * If JSB_SCHEMA_MALLOC is enabled, use pointers for strings and bytes.
+ */
+typedef jsb_byte_t* jsb_bytes_t;
+typedef jsb_uint8_t* jsb_string_t;
+#else
+typedef jsb_byte_t jsb_bytes_t[JSB_MAX_STRING_SIZE + 1];
+typedef jsb_uint8_t jsb_string_t[JSB_MAX_STRING_SIZE + 1];
+#endif // JSB_SCHEMA_MALLOC
+
+#ifdef HAVE_FLOAT_TYPE
+typedef float jsb_float_t;
+#else
+#error "Couldn't find a type for builtin-type float"
+#endif // HAVE_FLOAT_TYPE
+
+#ifdef HAVE_DOUBLE_TYPE
+typedef double jsb_double_t;
+#else
+#error "Couldn't find a type for builtin-type double"
+#endif // HAVE_DOUBLE_TYPE
+
+jsb_uint32_t jsb_strlen(const jsb_string_t str);
+void* jsb_memcpy(void* dest, const void* src, jsb_uint32_t len);
+void* jsb_strncpy(jsb_uint8_t* dest, const jsb_uint8_t* src, const jsb_uint32_t len);
+void* jsb_strcpy(jsb_uint8_t* dest, const jsb_uint8_t* src);
+void* jsb_memset(void* dest, jsb_uint8_t value, jsb_uint32_t len);
 
 #ifdef __cplusplus
 }

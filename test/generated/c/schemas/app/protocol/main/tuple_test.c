@@ -1,18 +1,12 @@
 #include "protocol/main/tuple_test.h"
 
-enum jsb_result_t
-protocol_main_tuple_test_decode(struct jsb_deserializer_t* d,
-                                struct protocol_main_tuple_test_t* result) {
+enum jsb_result_t protocol_main_tuple_test_decode(struct jsb_deserializer_t* d, struct protocol_main_tuple_test_t* result) {
   {
-    JSB_TRACE("protocol_main_tuple_test_decode",
-              "Decoding protocol.main.TupleTest...");
+    JSB_TRACE("protocol_main_tuple_test_decode", "Decoding protocol.main.TupleTest...");
     jsb_int32_t header;
     JSB_CHECK_ERROR(jsb_deserializer_read_int32(d, &header));
-    if (header != -1894699296) {
-      JSB_TRACE("protocol_main_tuple_test_decode",
-                "Invalid CRC header for protocol.main.TupleTest. Expected "
-                "-1894699296, but got %d instead.",
-                header);
+    if(header != -1894699296) {
+      JSB_TRACE("protocol_main_tuple_test_decode", "Invalid CRC header for protocol.main.TupleTest. Expected -1894699296, but got %d instead.", header);
       return JSB_INVALID_CRC_HEADER;
     }
   }
@@ -22,14 +16,11 @@ protocol_main_tuple_test_decode(struct jsb_deserializer_t* d,
     jsb_uint32_t len;
     JSB_CHECK_ERROR(jsb_deserializer_read_uint32(d, &len));
 #ifdef JSB_TOLERATE_TYPE_OVERFLOW
-    if (len > JSB_MAX_STRING_SIZE)
-      len = JSB_MAX_STRING_SIZE;
+    if(len > JSB_MAX_STRING_SIZE) len = JSB_MAX_STRING_SIZE;
 #else
-    if (len > JSB_MAX_STRING_SIZE)
-      return JSB_BUFFER_OVERFLOW;
+    if(len > JSB_MAX_STRING_SIZE) return JSB_BUFFER_OVERFLOW;
 #endif
-    JSB_CHECK_ERROR(
-        jsb_deserializer_read_buffer(d, len, result->values.item_1));
+    JSB_CHECK_ERROR(jsb_deserializer_read_buffer(d, len, result->values.item_1));
     result->values.item_1[len] = '\0';
   }
   JSB_CHECK_ERROR(jsb_deserializer_read_int32(d, &result->values.item_2));
@@ -43,11 +34,8 @@ protocol_main_tuple_test_decode(struct jsb_deserializer_t* d,
   return JSB_OK;
 }
 
-enum jsb_result_t
-protocol_main_tuple_test_encode(const struct protocol_main_tuple_test_t* input,
-                                struct jsb_serializer_t* s) {
-  JSB_TRACE("protocol_main_tuple_test_encode",
-            "Encoding protocol.main.TupleTest...");
+enum jsb_result_t protocol_main_tuple_test_encode(const struct protocol_main_tuple_test_t* input, struct jsb_serializer_t* s) {
+  JSB_TRACE("protocol_main_tuple_test_encode", "Encoding protocol.main.TupleTest...");
   JSB_CHECK_ERROR(jsb_serializer_write_int32(s, -1894699296));
   JSB_CHECK_ERROR(jsb_serializer_write_int32(s, input->values.item_0));
   {
@@ -69,17 +57,12 @@ protocol_main_tuple_test_encode(const struct protocol_main_tuple_test_t* input,
   return JSB_OK;
 }
 
-enum jsb_result_t
-protocol_main_tuple_test_init(struct protocol_main_tuple_test_t* value) {
-  if (value == NULL) {
-    JSB_TRACE(
-        "protocol_main_tuple_test_init",
-        "Failed to initialize protocol.main.TupleTest, received value = NULL.");
+enum jsb_result_t protocol_main_tuple_test_init(struct protocol_main_tuple_test_t* value) {
+  if(value == NULL) {
+    JSB_TRACE("protocol_main_tuple_test_init", "Failed to initialize protocol.main.TupleTest, received value = NULL.");
     return JSB_BAD_ARGUMENT;
   }
-  JSB_TRACE("protocol_main_tuple_test_init",
-            "Initializing param of type \"struct "
-            "protocol_main_tuple_test_tuple_t\": values.");
+  JSB_TRACE("protocol_main_tuple_test_init", "Initializing param of type \"struct protocol_main_tuple_test_tuple_t\": values.");
   /**
    * struct protocol_main_tuple_test_tuple_t
    */
@@ -94,15 +77,12 @@ protocol_main_tuple_test_init(struct protocol_main_tuple_test_t* value) {
   /**
    * Here we should have something similar the following options:
    *
-   * 1. Have additional value->values.item_1_len and
-   * value->values.item_1_capacity members in order to control the maximum
-   * capacity of the memory block and be able to fully set it to zero.
+   * 1. Have additional value->values.item_1_len and value->values.item_1_capacity members
+   * in order to control the maximum capacity of the memory block and be able to fully set it to zero.
    *
-   * 2. We could simply stick to the null-terminated string in order to keep it
-   * simple.
+   * 2. We could simply stick to the null-terminated string in order to keep it simple.
    *
-   * 3. Whenever JSB_SCHEMA_MALLOC is defined, we could implement both of the
-   * behaviors above, if feasible.
+   * 3. Whenever JSB_SCHEMA_MALLOC is defined, we could implement both of the behaviors above, if feasible.
    */
 #error "JSB_SCHEMA_MALLOC is not implemented yet"
 #else
@@ -140,7 +120,7 @@ protocol_main_tuple_test_init(struct protocol_main_tuple_test_t* value) {
 }
 
 void protocol_main_tuple_test_free(struct protocol_main_tuple_test_t* s) {
-  if (s == NULL)
-    return;
+  if(s == NULL) return;
   (void)s;
 }
+

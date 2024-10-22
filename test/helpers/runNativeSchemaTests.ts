@@ -1,4 +1,4 @@
-import path from 'node:path';
+import path, { format } from 'node:path';
 import fs from 'node:fs';
 import os from 'node:os';
 import configuration from '../../src/configuration';
@@ -9,13 +9,16 @@ import assert from 'node:assert';
 import isErrorLike from './isErrorLike';
 import Time from './Time';
 import { glob } from 'glob';
+import env from '../../src/utilities/env';
+import escapeAndWrap from '../../src/utilities/escapeAndWrap';
 
 export interface ISchema {
   mainFile: string;
   name: string;
+  logLevel?: CMakeLogLevel;
   outDir: string;
   secondary: 'i386'[] | null;
-  type: 'x86_64' | 'avr';
+  type: 'x86_64' | 'avr' | 'wasm32';
 }
 
 export enum CMakeLogLevel {
@@ -33,70 +36,120 @@ const avrToolchainDir = `/usr`;
 
 const cmakeBuildTypes = ['Release', 'MinSizeRel', 'RelWithDebInfo', 'Debug'];
 
+function makeWhich(additionalEnv: Record<string, string> | null = null) {
+  return async (...args: string[]) => {
+    return (
+      await spawn
+        .pipe('which', args, {
+          env:
+            additionalEnv === null
+              ? process.env
+              : {
+                  ...process.env,
+                  ...additionalEnv
+                }
+        })
+        .output()
+        .stdout()
+        .decode()
+    ).replace(/\n$/, '');
+  };
+}
+
+export function nonNullable<T = unknown>(prev: T[], acc: T | T[] | null): T[] {
+  if (acc === null) {
+    return prev;
+  }
+
+  if (Array.isArray(acc)) {
+    prev = [...prev, ...acc];
+  } else {
+    prev = [...prev, acc];
+  }
+
+  return prev;
+}
+
 export default async function runNativeSchemaTests(schema: ISchema) {
   const cmakeOptions: string[][] = [];
+  const EMSCRIPTEN_PATH =
+    schema.type === 'avr' || schema.type === 'wasm32'
+      ? env('EMSCRIPTEN_PATH')
+      : null;
+  const transformedPath = [
+    env.optional('PATH')?.split(':') ?? null,
+    EMSCRIPTEN_PATH
+  ]
+    .reduce(nonNullable, new Array<string>())
+    .join(':');
 
-  const clangExecutables = {
-    c: (
-      await spawn('which', ['clang'], { stdio: 'pipe' }).output().stdout.utf8()
-    ).replace(/\n$/, ''),
-    cxx: (
-      await spawn('which', ['clang++'], { stdio: 'pipe' })
-        .output()
-        .stdout.utf8()
-    ).replace(/\n$/, '')
+  const which = makeWhich({
+    PATH: transformedPath
+  });
+
+  const executables = {
+    emcmake: await which('emcmake'),
+    clang: {
+      c: await which('clang'),
+      cxx: await which('clang++')
+    },
+    gcc: {
+      c: await which('gcc'),
+      cxx: await which('g++')
+    },
+    cmake: await which('cmake')
   };
 
-  console.log(clangExecutables);
+  const jsBufferBasicCmakeConfigurations = [
+    [
+      '-DJSB_TOLERATE_TYPE_OVERFLOW=ON',
+      '-DJSB_SERIALIZER_BUFFER_SIZE=1024',
+      '-DJSB_MAX_STRING_SIZE=100'
+    ],
+    [
+      '-DJSB_TOLERATE_TYPE_OVERFLOW=ON',
+      '-DJSB_SERIALIZER_BUFFER_SIZE=1024',
+      '-DJSB_MAX_STRING_SIZE=100'
+    ],
+    [
+      '-DJSB_SERIALIZER_BUFFER_SIZE=1024',
+      '-DJSB_MAX_STRING_SIZE=100',
+      '-DJSB_TOLERATE_TYPE_OVERFLOW=OFF'
+    ],
+    [
+      '-DJSB_SERIALIZER_USE_MALLOC=ON',
+      '-DJSB_MAX_STRING_SIZE=100',
+      '-DJSB_TOLERATE_TYPE_OVERFLOW=OFF'
+    ],
+    [
+      '-DJSB_TOLERATE_TYPE_OVERFLOW=ON',
+      '-DJSB_SERIALIZER_BUFFER_SIZE=1024',
+      '-DJSB_MAX_STRING_SIZE=100'
+    ],
+    [
+      '-DJSB_SERIALIZER_USE_MALLOC=ON',
+      '-DJSB_MAX_STRING_SIZE=100',
+      '-DJSB_TOLERATE_TYPE_OVERFLOW=OFF'
+    ],
+    [
+      '-DJSB_SERIALIZER_USE_MALLOC=ON',
+      '-DJSB_MAX_STRING_SIZE=100',
+      '-DJSB_TOLERATE_TYPE_OVERFLOW=OFF'
+    ]
+    // ! Add support for JSB_SCHEMA_MALLOC
+    // ['-DJSB_SCHEMA_MALLOC'],
+    // ['-DJSB_SCHEMA_MALLOC', '-DJSB_DISABLE_ERROR_ASSERTION'],
+    // ['-DJSB_SCHEMA_MALLOC', '-DJSB_SERIALIZER_USE_MALLOC'],
+    // [
+    //   '-DJSB_SCHEMA_MALLOC',
+    //   '-DJSB_SERIALIZER_USE_MALLOC',
+    //   '-DJSB_DISABLE_ERROR_ASSERTION'
+    // ],
+  ];
 
   switch (schema.type) {
     case 'x86_64': {
-      const cmakePredefinedArguments = [
-        [
-          '-DJSB_TOLERATE_TYPE_OVERFLOW=ON',
-          '-DJSB_SERIALIZER_BUFFER_SIZE=1024',
-          '-DJSB_MAX_STRING_SIZE=100'
-        ],
-        [
-          '-DJSB_TOLERATE_TYPE_OVERFLOW=ON',
-          '-DJSB_SERIALIZER_BUFFER_SIZE=1024',
-          '-DJSB_MAX_STRING_SIZE=100'
-        ],
-        [
-          '-DJSB_SERIALIZER_BUFFER_SIZE=1024',
-          '-DJSB_MAX_STRING_SIZE=100',
-          '-DJSB_TOLERATE_TYPE_OVERFLOW=OFF'
-        ],
-        [
-          '-DJSB_SERIALIZER_USE_MALLOC=ON',
-          '-DJSB_MAX_STRING_SIZE=100',
-          '-DJSB_TOLERATE_TYPE_OVERFLOW=OFF'
-        ],
-        [
-          '-DJSB_TOLERATE_TYPE_OVERFLOW=ON',
-          '-DJSB_SERIALIZER_BUFFER_SIZE=1024',
-          '-DJSB_MAX_STRING_SIZE=100'
-        ],
-        [
-          '-DJSB_SERIALIZER_USE_MALLOC=ON',
-          '-DJSB_MAX_STRING_SIZE=100',
-          '-DJSB_TOLERATE_TYPE_OVERFLOW=OFF'
-        ],
-        [
-          '-DJSB_SERIALIZER_USE_MALLOC=ON',
-          '-DJSB_MAX_STRING_SIZE=100',
-          '-DJSB_TOLERATE_TYPE_OVERFLOW=OFF'
-        ]
-        // ! Add support for JSB_SCHEMA_MALLOC
-        // ['-DJSB_SCHEMA_MALLOC'],
-        // ['-DJSB_SCHEMA_MALLOC', '-DJSB_DISABLE_ERROR_ASSERTION'],
-        // ['-DJSB_SCHEMA_MALLOC', '-DJSB_SERIALIZER_USE_MALLOC'],
-        // [
-        //   '-DJSB_SCHEMA_MALLOC',
-        //   '-DJSB_SERIALIZER_USE_MALLOC',
-        //   '-DJSB_DISABLE_ERROR_ASSERTION'
-        // ],
-      ];
+      const cmakePredefinedArguments = [...jsBufferBasicCmakeConfigurations];
       for (const cmakeArgs of Array.from(cmakePredefinedArguments)) {
         if (schema.secondary === null) {
           break;
@@ -129,8 +182,8 @@ export default async function runNativeSchemaTests(schema: ISchema) {
           // Add test for testing it with C++ disabled
           cmakeOptions.push([
             `-DCMAKE_BUILD_TYPE=${cmakeBuildType}`,
-            '-DJSB_CPP=OFF',
-            '-DJSB_SCHEMA_CPP=OFF',
+            '-DJSB_CPP:BOOL=OFF',
+            '-DJSB_SCHEMA_CPP:BOOL=OFF',
             ...cmakeArgs
           ]);
         }
@@ -142,8 +195,8 @@ export default async function runNativeSchemaTests(schema: ISchema) {
       for (const cmakeArgs of Array.from(cmakeOptions)) {
         cmakeOptions.unshift([
           ...cmakeArgs,
-          `-DCMAKE_C_COMPILER=${clangExecutables.c}`,
-          `-DCMAKE_CXX_COMPILER=${clangExecutables.cxx}`
+          `-DCMAKE_C_COMPILER:STRING=${executables.clang.c}`,
+          `-DCMAKE_CXX_COMPILER:STRING=${executables.clang.cxx}`
         ]);
       }
       break;
@@ -157,15 +210,15 @@ export default async function runNativeSchemaTests(schema: ISchema) {
       ]) {
         const cmakeProjectOptions = [
           ...avrOptions,
-          '-DJSB_TOLERATE_TYPE_OVERFLOW=OFF',
+          '-DJSB_TOLERATE_TYPE_OVERFLOW:BOOL=OFF',
           '-DJSB_SERIALIZER_BUFFER_SIZE=200',
           '-DJSB_MAX_STRING_SIZE=30',
-          '-DJSB_CPP=OFF',
-          '-DJSB_TRACE=OFF',
-          '-DJSB_SCHEMA_CPP=OFF',
-          '-DJSB_SCHEMA_NO_ASSIGNMENT_ENUMS=ON',
-          `-DAVR_TOOLCHAIN_PATH=${avrToolchainDir}`,
-          `-DCMAKE_TOOLCHAIN_FILE=${path.resolve(
+          '-DJSB_CPP:BOOL=OFF',
+          '-DJSB_TRACE:BOOL=OFF',
+          '-DJSB_SCHEMA_CPP:BOOL=OFF',
+          '-DJSB_SCHEMA_NO_ASSIGNMENT_ENUMS:BOOL=ON',
+          `-DAVR_TOOLCHAIN_PATH:STRING=${avrToolchainDir}`,
+          `-DCMAKE_TOOLCHAIN_FILE:STRING=${path.resolve(
             __dirname,
             '../toolchains/AVR.cmake'
           )}`,
@@ -173,7 +226,7 @@ export default async function runNativeSchemaTests(schema: ISchema) {
           'Unix Makefiles'
         ];
 
-        for (const optionNames of [
+        for (const optionName of [
           'JSB_SCHEMA_TESTS',
           'JSB_CODEC_TESTS',
           'JSB_SCHEMA_C99_LARGE_SCHEMA',
@@ -182,17 +235,35 @@ export default async function runNativeSchemaTests(schema: ISchema) {
           for (const value of ['ON', 'OFF']) {
             const currentArgs = [
               ...cmakeProjectOptions,
-              `-D${optionNames}=${value}`
+              `-D${optionName}:BOOL=${value}`
             ];
 
             // Make a build type for each on and off for the tests
-            for (const cmakeBuildType of ['Release' /*, 'MinSizeRel'*/]) {
+            for (const cmakeBuildType of ['Release']) {
               cmakeOptions.push([
                 ...currentArgs,
-                `-DCMAKE_BUILD_TYPE=${cmakeBuildType}`
+                `-DCMAKE_BUILD_TYPE:STRING=${cmakeBuildType}`,
+                // Enable CMake verbose output
+                '-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON',
+                '-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON'
               ]);
             }
           }
+        }
+      }
+      break;
+    case 'wasm32':
+      for (const currentArgs of jsBufferBasicCmakeConfigurations) {
+        for (const cmakeBuildType of [
+          'Debug',
+          'Release',
+          'MinSizeRel',
+          'RelWithDebugInfo'
+        ]) {
+          cmakeOptions.push([
+            ...currentArgs,
+            `-DCMAKE_BUILD_TYPE:STRING=${cmakeBuildType}`
+          ]);
         }
       }
       break;
@@ -202,7 +273,7 @@ export default async function runNativeSchemaTests(schema: ISchema) {
 
   try {
     for (let options of cmakeOptions) {
-      options = [...options, `--log-level=${CMakeLogLevel.Notice}`];
+      options = Array.from(options);
 
       const buildDir = await fs.promises.mkdtemp(
         path.resolve(await configuration.cache(), 'cmake-build-test-jsb-')
@@ -210,8 +281,106 @@ export default async function runNativeSchemaTests(schema: ISchema) {
 
       tmpFolders.push(buildDir);
 
-      const args = [
+      const postCommandArgs = new Array<string>();
+
+      let cmakeExecutable: string;
+      //  = schema.type === 'wasm32' ? executables.emcmake : executables.cmake;
+      switch (schema.type) {
+        case 'x86_64':
+        case 'avr':
+          cmakeExecutable = executables.cmake;
+          break;
+        case 'wasm32': {
+          const exportedFunctions = ['_main'];
+          const emscriptenOptions: Record<string, unknown> = {
+            // ENVIRONMENT: 'literal:node',
+            // STRICT: true,
+            // ASSERTIONS: true,
+            // PRECISE_F32: true,
+            // INCLUDE_FULL_LIBRARY: true,
+            // // RETAIN_COMPILER_SETTINGS: true,
+            // VERBOSE: true,
+            // STACK_OVERFLOW_CHECK: true,
+            NO_DISABLE_EXCEPTION_CATCHING: true,
+            // INVOKE_RUN: true,
+            // EXIT_RUNTIME: true,
+            // DEFAULT_LIBRARY_FUNCS_TO_INCLUDE:
+            //   'memcpy,memmove,memset,memcmp,strcpy,printf'.split(',')
+            // // MAIN_MODULE: 1,
+            EXPORTED_FUNCTIONS: ['_main']
+          };
+          const emscriptenFormattedOptions = [];
+          for (const [key, value] of Object.entries(emscriptenOptions)) {
+            let formattedValue: string | null;
+            if (Array.isArray(value)) {
+              // formattedValue = escapeAndWrap(
+              //   `[${value
+              //     .map((v) =>
+              //       typeof v === 'string' ? escapeAndWrap(v, '"') : v
+              //     )
+              //     .join(',')}]`,
+              //   "'"
+              // );
+              formattedValue = escapeAndWrap(
+                `${value
+                  .map((v) =>
+                    typeof v === 'string' ? escapeAndWrap(v, '"') : v
+                  )
+                  .join(',')}`,
+                '[]'
+              );
+              console.log(formattedValue);
+            } else if (typeof value === 'string') {
+              if (!value.startsWith('literal:')) {
+                formattedValue = escapeAndWrap(value, "'");
+              } else {
+                formattedValue = value.replace(/^literal:/, '');
+              }
+            } else if (typeof value === 'number') {
+              formattedValue = value.toString();
+            } else if (typeof value === 'boolean') {
+              // f
+              formattedValue = value ? '1' : '0';
+              // if (value) {
+              //   formattedValue = null;
+              // } else {
+              //   formattedValue = '0';
+              // }
+            } else {
+              throw new Error(`Unexpected value for ${key}: ${value}`);
+            }
+            emscriptenFormattedOptions.push(
+              // `-s ${key}=${formattedValue}`
+              formattedValue !== null
+                ? `-s${key}=${formattedValue}`
+                : // ? `-s${key}=${escapeAndWrap(formattedValue, "'")}`
+                  `-s${key}`
+            );
+          }
+          console.log('Formatted options:', emscriptenFormattedOptions);
+          options.push(
+            // `-DEMSCRIPTEN_OPTIONS=${escapeAndWrap(
+            //   emscriptenFormattedOptions.join(' '),
+            //   '"'
+            // )}`
+            // `-D${escapeAndWrap(
+            //   `CMAKE_EXE_LINKER_FLAGS=${emscriptenFormattedOptions.join(' ')}`,
+            //   '"'
+            // )}`
+            '-D',
+            `CMAKE_EXE_LINKER_FLAGS:STRING=${emscriptenFormattedOptions.join(
+              ' '
+            )}`
+          );
+          postCommandArgs.unshift('cmake');
+          cmakeExecutable = executables.emcmake;
+          break;
+        }
+      }
+
+      const configureArgs = [
         ...options,
+        `--log-level=${schema.logLevel ?? CMakeLogLevel.Notice}`,
         '-B',
         buildDir,
         '-S',
@@ -219,28 +388,44 @@ export default async function runNativeSchemaTests(schema: ISchema) {
       ];
 
       console.log(
-        `Running CMake with args:\n${args
+        `Running CMake with args:\n${configureArgs
           .map((arg) => `\t* ${arg}`)
           .join('\n')}`
       );
 
-      await spawn('cmake', Array.from(args)).wait();
-      await spawn('cmake', [
+      const buildArgs = [
         '--build',
         buildDir,
+        '-v',
+        '--',
         '-j',
         `${os.cpus().length}`
-      ]).wait();
+      ];
+
+      await spawn(
+        cmakeExecutable,
+        Array.from([...postCommandArgs, ...configureArgs])
+      ).wait();
+      await spawn(executables.cmake, buildArgs).wait();
 
       const MCU = getNamedArgument(Array.from(options), '-DMCU', getString);
       const F_CPU = getNamedArgument(Array.from(options), '-DF_CPU', getString);
 
-      const testFiles = await glob(
-        path.resolve(
-          buildDir,
-          schema.type === 'avr' ? '**/*_test.elf' : '**/*_test'
-        )
-      );
+      let testFilesPattern: string;
+
+      switch (schema.type) {
+        case 'x86_64':
+          testFilesPattern = '**/*_test';
+          break;
+        case 'avr':
+          testFilesPattern = '**/*_test.elf';
+          break;
+        case 'wasm32':
+          testFilesPattern = '**/*_test.js';
+          break;
+      }
+
+      const testFiles = await glob(path.resolve(buildDir, testFilesPattern));
 
       assert.strict.ok(
         testFiles.length > 0,
@@ -256,6 +441,10 @@ export default async function runNativeSchemaTests(schema: ISchema) {
           continue;
         }
         switch (schema.type) {
+          case 'wasm32':
+            console.log('Found test file: %s', testFile);
+            await spawn('node', [testFile]).wait();
+            break;
           case 'x86_64':
             try {
               await fs.promises.access(testFile, fs.constants.X_OK);

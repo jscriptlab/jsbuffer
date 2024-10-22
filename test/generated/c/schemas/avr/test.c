@@ -2,33 +2,31 @@
 #include <avr/sleep.h>
 #endif
 
-#include <jsb/deserializer.h>
 #include <jsb/jsb.h>
 #include <jsb/serializer.h>
+#include <jsb/deserializer.h>
 
+#include "simple_schema/user.h"
+#include "simple_schema/post_trait.h"
 #include "simple_schema/post_active.h"
 #include "simple_schema/post_deleted.h"
-#include "simple_schema/post_trait.h"
-#include "simple_schema/user.h"
 
-#if !defined(__AVR__) && defined(HAVE_FPRINTF)
-#include <stdio.h>
+#if !defined(__AVR__) && defined(FPRINTF_FOUND)
+#include FPRINTF_HEADER
 
-#define JSB_ASSERT(expr)                                                       \
-  if ((expr)) {                                                                \
-  } else {                                                                     \
+#define JSB_ASSERT(expr) \
+  if((expr)) {} else { \
     fprintf(stderr, "%s:%d: Assertion failed: %s", __FILE__, __LINE__, #expr); \
-    JSB_TRACE("test", "Assertion failed: %s", #expr);                          \
-    return 1;                                                                  \
+    JSB_TRACE("test", "Assertion failed: %s", #expr); \
+    return 1; \
   }
 #else
-#define JSB_ASSERT(expr)                                                       \
-  if ((expr)) {                                                                \
-  } else {                                                                     \
-    JSB_TRACE("test", "Assertion failed: %s", #expr);                          \
-    return 1;                                                                  \
+#define JSB_ASSERT(expr) \
+  if((expr)) {} else { \
+    JSB_TRACE("test", "Assertion failed: %s", #expr); \
+    return 1; \
   }
-#endif // !defined(__AVR__) && defined(HAVE_FPRINTF)
+#endif // !defined(__AVR__) && defined(FPRINTF_FOUND)
 
 int main(void) {
   struct jsb_serializer_t s;
@@ -40,26 +38,23 @@ int main(void) {
   // It should return JSB_BAD_ARGUMENT if buffer size is zero
   JSB_ASSERT(jsb_serializer_init(&s, 0) == JSB_BAD_ARGUMENT);
 
-  // Initialize the serializer again in order to pass a valid buffer to the
-  // deserializer
+  // Initialize the serializer again in order to pass a valid buffer to the deserializer
   JSB_ASSERT(jsb_serializer_init(&s, 200) == JSB_OK);
 
   // It should not return JSB_BAD_ARGUMENT if buffer size is zero
   JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
 
   // It should return JSB_BAD_ARGUMENT if deserializer is NULL
-  JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, s.buffer_size) ==
-             JSB_BAD_ARGUMENT);
+  JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, s.buffer_size) == JSB_BAD_ARGUMENT);
 
   // It should return JSB_BAD_ARGUMENT if buffer is NULL
-  JSB_ASSERT(jsb_deserializer_init(&d, NULL, s.buffer_size) ==
-             JSB_BAD_ARGUMENT);
+  JSB_ASSERT(jsb_deserializer_init(&d, NULL, s.buffer_size) == JSB_BAD_ARGUMENT);
+
 
 #if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
   {
     // It should blow up if the serializer goes beyond the maximum size
-    JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE + 1) ==
-               JSB_BUFFER_OVERFLOW);
+    JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE + 1) == JSB_BUFFER_OVERFLOW);
     JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);
     enum jsb_result_t status;
     {
@@ -69,7 +64,7 @@ int main(void) {
         // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
         // Otherwise, some other issue has happened during execution.
         JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
-      } while (status != JSB_BUFFER_OVERFLOW);
+      } while(status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -78,7 +73,7 @@ int main(void) {
         // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
         // Otherwise, some other issue has happened during execution.
         JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
-      } while (status != JSB_BUFFER_OVERFLOW);
+      } while(status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -87,7 +82,7 @@ int main(void) {
         // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
         // Otherwise, some other issue has happened during execution.
         JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
-      } while (status != JSB_BUFFER_OVERFLOW);
+      } while(status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -96,7 +91,7 @@ int main(void) {
         // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
         // Otherwise, some other issue has happened during execution.
         JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
-      } while (status != JSB_BUFFER_OVERFLOW);
+      } while(status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -105,7 +100,7 @@ int main(void) {
         // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
         // Otherwise, some other issue has happened during execution.
         JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
-      } while (status != JSB_BUFFER_OVERFLOW);
+      } while(status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -114,7 +109,7 @@ int main(void) {
         // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
         // Otherwise, some other issue has happened during execution.
         JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
-      } while (status != JSB_BUFFER_OVERFLOW);
+      } while(status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -123,7 +118,7 @@ int main(void) {
         // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
         // Otherwise, some other issue has happened during execution.
         JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
-      } while (status != JSB_BUFFER_OVERFLOW);
+      } while(status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -132,7 +127,7 @@ int main(void) {
         // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
         // Otherwise, some other issue has happened during execution.
         JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
-      } while (status != JSB_BUFFER_OVERFLOW);
+      } while(status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -141,7 +136,7 @@ int main(void) {
         // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
         // Otherwise, some other issue has happened during execution.
         JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
-      } while (status != JSB_BUFFER_OVERFLOW);
+      } while(status != JSB_BUFFER_OVERFLOW);
     }
     {
       JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
@@ -150,7 +145,7 @@ int main(void) {
         // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
         // Otherwise, some other issue has happened during execution.
         JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
-      } while (status != JSB_BUFFER_OVERFLOW);
+      } while(status != JSB_BUFFER_OVERFLOW);
     }
   }
 #elif !defined(JSB_SERIALIZER_BUFFER_SIZE) && defined(JSB_SERIALIZER_USE_MALLOC)
@@ -206,10 +201,9 @@ int main(void) {
     s.buffer_capacity = 1;
   }
 #else
-#error                                                                         \
-    "Either JSB_SERIALIZER_BUFFER_SIZE or JSB_SERIALIZER_USE_MALLOC should be defined"
-#endif // defined(JSB_SERIALIZER_BUFFER_SIZE) &&
-       // !defined(JSB_SERIALIZER_USE_MALLOC)
+#error "Either JSB_SERIALIZER_BUFFER_SIZE or JSB_SERIALIZER_USE_MALLOC should be defined"
+#endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
+
 
   {
     struct simple_schema_user_t value;
@@ -217,8 +211,7 @@ int main(void) {
     {
       JSB_ASSERT(simple_schema_user_init(&value) == JSB_OK);
 #if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
-      // It should blow up when encoding a type is beyond the maximum size of
-      // the buffer
+      // It should blow up when encoding a type is beyond the maximum size of the buffer
       enum jsb_result_t status;
       do {
         status = simple_schema_user_encode(&value, &s);
@@ -226,9 +219,8 @@ int main(void) {
         // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
         // Otherwise, some other issue has happened during execution.
         JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
-      } while (status != JSB_BUFFER_OVERFLOW);
-#endif // defined(JSB_SERIALIZER_BUFFER_SIZE) &&
-       // !defined(JSB_SERIALIZER_USE_MALLOC)
+      } while(status != JSB_BUFFER_OVERFLOW);
+#endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
     }
     JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
     JSB_ASSERT(simple_schema_user_init(&value) == JSB_OK);
@@ -239,98 +231,68 @@ int main(void) {
     JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
     JSB_ASSERT(simple_schema_user_decode(&d, &value) == JSB_OK);
     simple_schema_user_free(&value);
+  }
 
-    {
-      struct simple_schema_user_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_user_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_user_t));
-      JSB_ASSERT(simple_schema_user_init(&value) == JSB_OK);
-      JSB_ASSERT(simple_schema_user_init(&new_value) == JSB_OK);
-      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
-      value.id = 2147483647;
-      JSB_ASSERT(simple_schema_user_encode(&value, &s) == JSB_OK);
-      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-      JSB_ASSERT(simple_schema_user_decode(&d, &new_value) == JSB_OK);
-      JSB_ASSERT(memcmp(&new_value.id, &value.id, sizeof(value.id)) == 0);
-      JSB_TRACE("test", "Test passed ✔ for param: %s", "id");
-    }
-    {
-      struct simple_schema_user_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_user_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_user_t));
-      JSB_ASSERT(simple_schema_user_init(&value) == JSB_OK);
-      JSB_ASSERT(simple_schema_user_init(&new_value) == JSB_OK);
-      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
-      JSB_ASSERT(simple_schema_user_last_post_init(&value, NULL) == JSB_OK);
-      JSB_ASSERT(simple_schema_user_encode(&value, &s) == JSB_OK);
-      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-      JSB_ASSERT(simple_schema_user_decode(&d, &new_value) == JSB_OK);
-      JSB_ASSERT(memcmp(&new_value.last_post, &value.last_post,
-                        sizeof(value.last_post)) == 0);
-      JSB_TRACE("test", "Test passed ✔ for param: %s", "last_post");
-    }
+  {
+    struct simple_schema_user_t value;
+    JSB_ASSERT(simple_schema_user_init(&value) == JSB_OK);
+    value.id = 2147483647;
+    JSB_ASSERT(simple_schema_user_last_post_init(&value, NULL) == JSB_OK);
+    JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+    JSB_ASSERT(simple_schema_user_encode(&value, &s) == JSB_OK);
+    JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+    JSB_ASSERT(simple_schema_user_decode(&d, &value) == JSB_OK);
+    simple_schema_user_free(&value);
   }
   {
-    {
-      struct simple_schema_post_trait_t value, new_value;
-      // Initialize the type struct again
-      jsb_memset(&value, 0, sizeof(value));
-      JSB_ASSERT(simple_schema_post_trait_init(
-                     &value, SIMPLE_SCHEMA_POST_ACTIVE_TYPE) == JSB_OK);
-      jsb_memset(&new_value, 0, sizeof(new_value));
-      JSB_ASSERT(simple_schema_post_trait_init(
-                     &new_value, SIMPLE_SCHEMA_POST_ACTIVE_TYPE) == JSB_OK);
-      /**
-       * If we are not using dynamic memory allocation for the serializer
-       * we need to make sure that we have enough memory left. To avoid
-       * inconclusive tests.
-       */
+    struct simple_schema_post_trait_t value, new_value;
+    // Initialize the type struct again
+    jsb_memset(&value, 0, sizeof(value));
+    JSB_ASSERT(simple_schema_post_trait_init(&value, SIMPLE_SCHEMA_POST_ACTIVE_TYPE) == JSB_OK);
+    jsb_memset(&new_value, 0, sizeof(new_value));
+    JSB_ASSERT(simple_schema_post_trait_init(&new_value, SIMPLE_SCHEMA_POST_ACTIVE_TYPE) == JSB_OK);
+    /**
+     * If we are not using dynamic memory allocation for the serializer
+     * we need to make sure that we have enough memory left. To avoid inconclusive tests.
+     */
 #if !defined(JSB_SERIALIZER_USE_MALLOC)
-      JSB_ASSERT(JSB_SERIALIZER_CALCULATE_REMAINING((&s)) >=
-                 sizeof(struct simple_schema_post_trait_t));
+    JSB_ASSERT(JSB_SERIALIZER_CALCULATE_REMAINING((&s)) >= sizeof(struct simple_schema_post_trait_t));
 #endif // !defined(JSB_SERIALIZER_USE_MALLOC)
-      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+    JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
 #if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
-      JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);
+    JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);
 #else
-      JSB_ASSERT(jsb_serializer_init(&s, 200) == JSB_OK);
+    JSB_ASSERT(jsb_serializer_init(&s, 200) == JSB_OK);
 #endif
-      JSB_ASSERT(simple_schema_post_trait_encode(&value, &s) == JSB_OK);
-      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-      JSB_ASSERT(simple_schema_post_trait_decode(&d, &new_value) == JSB_OK);
-      JSB_ASSERT(memcmp(&value, &new_value,
-                        sizeof(struct simple_schema_post_trait_t)) == JSB_OK);
-    }
-    {
-      struct simple_schema_post_trait_t value, new_value;
-      // Initialize the type struct again
-      jsb_memset(&value, 0, sizeof(value));
-      JSB_ASSERT(simple_schema_post_trait_init(
-                     &value, SIMPLE_SCHEMA_POST_ACTIVE_TYPE) == JSB_OK);
-      jsb_memset(&new_value, 0, sizeof(new_value));
-      JSB_ASSERT(simple_schema_post_trait_init(
-                     &new_value, SIMPLE_SCHEMA_POST_ACTIVE_TYPE) == JSB_OK);
-      /**
-       * If we are not using dynamic memory allocation for the serializer
-       * we need to make sure that we have enough memory left. To avoid
-       * inconclusive tests.
-       */
+    JSB_ASSERT(simple_schema_post_trait_encode(&value, &s) == JSB_OK);
+    JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+    JSB_ASSERT(simple_schema_post_trait_decode(&d, &new_value) == JSB_OK);
+    JSB_ASSERT(memcmp(&value, &new_value, sizeof(struct simple_schema_post_trait_t)) == JSB_OK);
+  }
+  {
+    struct simple_schema_post_trait_t value, new_value;
+    // Initialize the type struct again
+    jsb_memset(&value, 0, sizeof(value));
+    JSB_ASSERT(simple_schema_post_trait_init(&value, SIMPLE_SCHEMA_POST_ACTIVE_TYPE) == JSB_OK);
+    jsb_memset(&new_value, 0, sizeof(new_value));
+    JSB_ASSERT(simple_schema_post_trait_init(&new_value, SIMPLE_SCHEMA_POST_ACTIVE_TYPE) == JSB_OK);
+    /**
+     * If we are not using dynamic memory allocation for the serializer
+     * we need to make sure that we have enough memory left. To avoid inconclusive tests.
+     */
 #if !defined(JSB_SERIALIZER_USE_MALLOC)
-      JSB_ASSERT(JSB_SERIALIZER_CALCULATE_REMAINING((&s)) >=
-                 sizeof(struct simple_schema_post_trait_t));
+    JSB_ASSERT(JSB_SERIALIZER_CALCULATE_REMAINING((&s)) >= sizeof(struct simple_schema_post_trait_t));
 #endif // !defined(JSB_SERIALIZER_USE_MALLOC)
-      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+    JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
 #if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
-      JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);
+    JSB_ASSERT(jsb_serializer_init(&s, JSB_SERIALIZER_BUFFER_SIZE) == JSB_OK);
 #else
-      JSB_ASSERT(jsb_serializer_init(&s, 200) == JSB_OK);
+    JSB_ASSERT(jsb_serializer_init(&s, 200) == JSB_OK);
 #endif
-      JSB_ASSERT(simple_schema_post_trait_encode(&value, &s) == JSB_OK);
-      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-      JSB_ASSERT(simple_schema_post_trait_decode(&d, &new_value) == JSB_OK);
-      JSB_ASSERT(memcmp(&value, &new_value,
-                        sizeof(struct simple_schema_post_trait_t)) == JSB_OK);
-    }
+    JSB_ASSERT(simple_schema_post_trait_encode(&value, &s) == JSB_OK);
+    JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+    JSB_ASSERT(simple_schema_post_trait_decode(&d, &new_value) == JSB_OK);
+    JSB_ASSERT(memcmp(&value, &new_value, sizeof(struct simple_schema_post_trait_t)) == JSB_OK);
   }
   {
     struct simple_schema_post_active_t value;
@@ -338,8 +300,7 @@ int main(void) {
     {
       JSB_ASSERT(simple_schema_post_active_init(&value) == JSB_OK);
 #if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
-      // It should blow up when encoding a type is beyond the maximum size of
-      // the buffer
+      // It should blow up when encoding a type is beyond the maximum size of the buffer
       enum jsb_result_t status;
       do {
         status = simple_schema_post_active_encode(&value, &s);
@@ -347,9 +308,8 @@ int main(void) {
         // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
         // Otherwise, some other issue has happened during execution.
         JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
-      } while (status != JSB_BUFFER_OVERFLOW);
-#endif // defined(JSB_SERIALIZER_BUFFER_SIZE) &&
-       // !defined(JSB_SERIALIZER_USE_MALLOC)
+      } while(status != JSB_BUFFER_OVERFLOW);
+#endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
     }
     JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
     JSB_ASSERT(simple_schema_post_active_init(&value) == JSB_OK);
@@ -360,54 +320,22 @@ int main(void) {
     JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
     JSB_ASSERT(simple_schema_post_active_decode(&d, &value) == JSB_OK);
     simple_schema_post_active_free(&value);
+  }
 
+  {
+    struct simple_schema_post_active_t value;
+    JSB_ASSERT(simple_schema_post_active_init(&value) == JSB_OK);
+    value.id = 2147483647;
+    value.authorId = 2147483647;
     {
-      struct simple_schema_post_active_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_active_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_post_active_t));
-      JSB_ASSERT(simple_schema_post_active_init(&value) == JSB_OK);
-      JSB_ASSERT(simple_schema_post_active_init(&new_value) == JSB_OK);
-      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
-      value.id = 2147483647;
-      JSB_ASSERT(simple_schema_post_active_encode(&value, &s) == JSB_OK);
-      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-      JSB_ASSERT(simple_schema_post_active_decode(&d, &new_value) == JSB_OK);
-      JSB_ASSERT(memcmp(&new_value.id, &value.id, sizeof(value.id)) == 0);
-      JSB_TRACE("test", "Test passed ✔ for param: %s", "id");
+      jsb_uint8_t test_value[21] = "This is a test string";
+      jsb_strncpy(value.title, test_value, 21);
     }
-    {
-      struct simple_schema_post_active_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_active_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_post_active_t));
-      JSB_ASSERT(simple_schema_post_active_init(&value) == JSB_OK);
-      JSB_ASSERT(simple_schema_post_active_init(&new_value) == JSB_OK);
-      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
-      value.authorId = 2147483647;
-      JSB_ASSERT(simple_schema_post_active_encode(&value, &s) == JSB_OK);
-      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-      JSB_ASSERT(simple_schema_post_active_decode(&d, &new_value) == JSB_OK);
-      JSB_ASSERT(memcmp(&new_value.authorId, &value.authorId,
-                        sizeof(value.authorId)) == 0);
-      JSB_TRACE("test", "Test passed ✔ for param: %s", "authorId");
-    }
-    {
-      struct simple_schema_post_active_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_active_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_post_active_t));
-      JSB_ASSERT(simple_schema_post_active_init(&value) == JSB_OK);
-      JSB_ASSERT(simple_schema_post_active_init(&new_value) == JSB_OK);
-      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
-      {
-        jsb_uint8_t test_value[21] = "This is a test string";
-        jsb_strncpy(value.title, test_value, 21);
-      }
-      JSB_ASSERT(simple_schema_post_active_encode(&value, &s) == JSB_OK);
-      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-      JSB_ASSERT(simple_schema_post_active_decode(&d, &new_value) == JSB_OK);
-      JSB_ASSERT(memcmp(&new_value.title, &value.title, sizeof(value.title)) ==
-                 0);
-      JSB_TRACE("test", "Test passed ✔ for param: %s", "title");
-    }
+    JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+    JSB_ASSERT(simple_schema_post_active_encode(&value, &s) == JSB_OK);
+    JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+    JSB_ASSERT(simple_schema_post_active_decode(&d, &value) == JSB_OK);
+    simple_schema_post_active_free(&value);
   }
   {
     struct simple_schema_post_deleted_t value;
@@ -415,8 +343,7 @@ int main(void) {
     {
       JSB_ASSERT(simple_schema_post_deleted_init(&value) == JSB_OK);
 #if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
-      // It should blow up when encoding a type is beyond the maximum size of
-      // the buffer
+      // It should blow up when encoding a type is beyond the maximum size of the buffer
       enum jsb_result_t status;
       do {
         status = simple_schema_post_deleted_encode(&value, &s);
@@ -424,9 +351,8 @@ int main(void) {
         // If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.
         // Otherwise, some other issue has happened during execution.
         JSB_ASSERT(status == JSB_OK || status == JSB_BUFFER_OVERFLOW);
-      } while (status != JSB_BUFFER_OVERFLOW);
-#endif // defined(JSB_SERIALIZER_BUFFER_SIZE) &&
-       // !defined(JSB_SERIALIZER_USE_MALLOC)
+      } while(status != JSB_BUFFER_OVERFLOW);
+#endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)
     }
     JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
     JSB_ASSERT(simple_schema_post_deleted_init(&value) == JSB_OK);
@@ -437,54 +363,22 @@ int main(void) {
     JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, 0) == JSB_BAD_ARGUMENT);
     JSB_ASSERT(simple_schema_post_deleted_decode(&d, &value) == JSB_OK);
     simple_schema_post_deleted_free(&value);
+  }
 
+  {
+    struct simple_schema_post_deleted_t value;
+    JSB_ASSERT(simple_schema_post_deleted_init(&value) == JSB_OK);
+    value.id = 2147483647;
+    value.authorId = 2147483647;
     {
-      struct simple_schema_post_deleted_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_deleted_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_post_deleted_t));
-      JSB_ASSERT(simple_schema_post_deleted_init(&value) == JSB_OK);
-      JSB_ASSERT(simple_schema_post_deleted_init(&new_value) == JSB_OK);
-      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
-      value.id = 2147483647;
-      JSB_ASSERT(simple_schema_post_deleted_encode(&value, &s) == JSB_OK);
-      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-      JSB_ASSERT(simple_schema_post_deleted_decode(&d, &new_value) == JSB_OK);
-      JSB_ASSERT(memcmp(&new_value.id, &value.id, sizeof(value.id)) == 0);
-      JSB_TRACE("test", "Test passed ✔ for param: %s", "id");
+      jsb_uint8_t test_value[21] = "This is a test string";
+      jsb_strncpy(value.title, test_value, 21);
     }
-    {
-      struct simple_schema_post_deleted_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_deleted_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_post_deleted_t));
-      JSB_ASSERT(simple_schema_post_deleted_init(&value) == JSB_OK);
-      JSB_ASSERT(simple_schema_post_deleted_init(&new_value) == JSB_OK);
-      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
-      value.authorId = 2147483647;
-      JSB_ASSERT(simple_schema_post_deleted_encode(&value, &s) == JSB_OK);
-      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-      JSB_ASSERT(simple_schema_post_deleted_decode(&d, &new_value) == JSB_OK);
-      JSB_ASSERT(memcmp(&new_value.authorId, &value.authorId,
-                        sizeof(value.authorId)) == 0);
-      JSB_TRACE("test", "Test passed ✔ for param: %s", "authorId");
-    }
-    {
-      struct simple_schema_post_deleted_t new_value;
-      jsb_memset(&new_value, 0, sizeof(struct simple_schema_post_deleted_t));
-      jsb_memset(&value, 0, sizeof(struct simple_schema_post_deleted_t));
-      JSB_ASSERT(simple_schema_post_deleted_init(&value) == JSB_OK);
-      JSB_ASSERT(simple_schema_post_deleted_init(&new_value) == JSB_OK);
-      JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
-      {
-        jsb_uint8_t test_value[21] = "This is a test string";
-        jsb_strncpy(value.title, test_value, 21);
-      }
-      JSB_ASSERT(simple_schema_post_deleted_encode(&value, &s) == JSB_OK);
-      JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
-      JSB_ASSERT(simple_schema_post_deleted_decode(&d, &new_value) == JSB_OK);
-      JSB_ASSERT(memcmp(&new_value.title, &value.title, sizeof(value.title)) ==
-                 0);
-      JSB_TRACE("test", "Test passed ✔ for param: %s", "title");
-    }
+    JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);
+    JSB_ASSERT(simple_schema_post_deleted_encode(&value, &s) == JSB_OK);
+    JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);
+    JSB_ASSERT(simple_schema_post_deleted_decode(&d, &value) == JSB_OK);
+    simple_schema_post_deleted_free(&value);
   }
 
   jsb_serializer_free(&s);
