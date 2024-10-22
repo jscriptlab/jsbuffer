@@ -1,0 +1,31 @@
+Usage: jsb [options] <main-file> [options]
+Usage: jsb -o <output-directory> <main-file>
+Usage: jsb --output <output-directory> <main-file>
+Usage: jsb <main-file> -o <output-directory> --generator c99
+Usage: jsb <main-file> -o <output-directory> --generator c99 --indentation-size 4
+Usage: jsb <main-file> -o <output-directory> --generator c99 --indentation-size 4 --name c_project
+Usage: jsb <main-file> -o <output-directory> --indentation-size 2
+Usage: jsb <main-file> -o <output-directory> --indentation-size 8
+Usage: jsb <main-file> -o <output-directory> --name c_project_cmake_schema
+Usage: jsb <main-file> -o <output-directory> --generator c++17
+
+Options:
+
+  -h, --help
+    Print this help message and exit.
+
+  -o, --output <output-directory>
+    Output directory for generated files.
+
+  --generator <generator> (default: cpp17)
+    Generator to use. Available generators: c99, cpp17.
+
+  --indentation-size <indentation-size>
+    Indentation size for generated files.
+
+  --name <name>
+    Name of the CMake project.
+
+  --metadata-only
+    Generate metadata files using the same structure as the root directory, defined by the directory in which the <main-file> is,
+    the generated files will be dumped on <output-directory>/**.

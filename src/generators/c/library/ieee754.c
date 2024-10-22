@@ -1,3 +1,4 @@
+#include <jsb/ieee754.h>
 #include <jsb/jsb.h>
 
 #define FLOAT_SIGN_MASK 0x80000000
@@ -32,9 +33,9 @@ enum jsb_result_t jsb_decode_float(const jsb_uint8_t* buffer,
   }
 
   // Reconstruct 32-bit float from 4 bytes
-  jsb_uint32_t bits = ((jsb_uint32_t)buffer[0] << 24) |
-                      ((jsb_uint32_t)buffer[1] << 16) |
-                      ((jsb_uint32_t)buffer[2] << 8) | (jsb_uint32_t)buffer[3];
+  const jsb_uint32_t bits =
+      ((jsb_uint32_t)buffer[0] << 24) | ((jsb_uint32_t)buffer[1] << 16) |
+      ((jsb_uint32_t)buffer[2] << 8) | (jsb_uint32_t)buffer[3];
 
   jsb_memcpy(result, &bits, sizeof(jsb_float_t));
 

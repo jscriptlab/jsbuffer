@@ -1,20 +1,7 @@
 {
   "extends": "../tsconfig.base.json",
-  "include": [
-    "parser/Parser.ts",
-    "Tokenizer.ts",
-    "Serializer.ts",
-    "Codec.ts",
-    "Deserializer.ts",
-    "stringUtilities.ts",
-    "schema.ts",
-    "jsb.ts",
-    "fruit-list.json",
-    "generated/typescript",
-    "expected-tokens-1.json",
-    "FileGenerator.ts",
-    "ASTGenerator.ts"
-  ],
+  "include": ["**/*.ts", "**/*.json"],
+  "exclude": ["**/*.d.ts", "**/*.js", "**/*.map"],
   "compilerOptions": {
     "lib": ["ESNext"],
     "target": "ESNext",
@@ -27,6 +14,7 @@
     { "path": "../src/configuration" },
     { "path": "../src/generators/c" },
     { "path": "../src/generators/cpp" },
+    { "path": "../src/utilities" },
     { "path": "../src/core" },
     {
       "path": "../code-generator"

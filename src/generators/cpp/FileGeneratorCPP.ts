@@ -71,6 +71,7 @@ export interface IFileGeneratorCPPOptions {
   cmake: {
     project: string;
   };
+  indentationSize: number;
 }
 
 export default class FileGeneratorCPP extends CodeStream {
@@ -81,15 +82,26 @@ export default class FileGeneratorCPP extends CodeStream {
   readonly #root;
   readonly #files: IGeneratedFile[] = [];
   readonly #cmake;
+  /**
+   * Maps a file path to a FileGeneratorCPP instance
+   */
+  readonly #indentationSize;
   public constructor(
     fileMetadataList: ReadonlyArray<IFileMetadata>,
-    { current = null, root = null, cmake, rootDir }: IFileGeneratorCPPOptions
+    {
+      current = null,
+      root = null,
+      cmake,
+      rootDir,
+      indentationSize
+    }: IFileGeneratorCPPOptions
   ) {
     super();
     this.#root = root;
     this.#cmake = cmake ?? {
       project: 'schema'
     };
+    this.#indentationSize = indentationSize;
     this.#generators = new Map<string, FileGeneratorCPP>();
     this.#current = current;
     this.#rootDir = rootDir;
@@ -110,6 +122,7 @@ export default class FileGeneratorCPP extends CodeStream {
         this.#generators.set(
           path,
           new FileGeneratorCPP(Array.from(this.#fileMetadataList.values()), {
+            indentationSize: this.#indentationSize,
             current: fileMetadata,
             root: this,
             rootDir: this.#rootDir,
@@ -246,7 +259,7 @@ export default class FileGeneratorCPP extends CodeStream {
           '{\n',
           () => {
             this.write('const auto len = d.read<std::uint32_t>();\n');
-            this.write(`${key}.reserve(len);\n`);
+            this.write(`${key}.resize(len);\n`);
             this.write(
               'for (std::uint32_t i = 0; i < len; i++) {\n',
               () => {
@@ -343,9 +356,9 @@ export default class FileGeneratorCPP extends CodeStream {
 
   #generateSourceFile(metadata: IMetadataTypeDefinition) {
     this.write(`#include "${metadataToRelativePath(metadata)}.hpp"\n`);
-    this.write('\n');
+    this.append('\n');
     this.write('#include <stdexcept>\n');
-    this.write('\n');
+    this.append('\n');
     const completeTypeReference = metadataGlobalNameToNamespace(metadata);
     this.write(
       `${completeTypeReference} ${completeTypeReference}::decode(jsb::deserializer& d) {\n`,
@@ -374,7 +387,7 @@ export default class FileGeneratorCPP extends CodeStream {
       },
       '}\n'
     );
-    this.write('\n');
+    this.append('\n');
     this.write(
       `void ${completeTypeReference}::encode(jsb::serializer& s) const {\n`
     );
@@ -479,10 +492,10 @@ export default class FileGeneratorCPP extends CodeStream {
     this.write(`#ifndef ${headerGuard}\n`);
     this.write(`#define ${headerGuard}\n\n`);
     this.#includeMetadataDependenciesOnHeaderFile(metadata);
-    this.write('\n');
+    this.append('\n');
     this.write('#include "jsb/serializer.hpp"\n');
     this.write('#include "jsb/deserializer.hpp"\n');
-    this.write('\n');
+    this.append('\n');
     const namespace = metadataGlobalNameToNamespace(metadata, -1);
     if (namespace) {
       this.write(

@@ -1,6 +1,13 @@
 {
   "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["node"]
+  },
   "include": [
+    "env.ts",
+    "escapeAndWrap.ts",
+    "string/isString.ts",
+    "string/isEmptyString.ts",
     "string/lowerFirst.ts",
     "string/dashCase.ts",
     "string/snakeCase.ts"

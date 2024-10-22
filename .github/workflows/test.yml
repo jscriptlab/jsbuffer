@@ -6,28 +6,43 @@ on:
       - 'master'
       - 'feature/**'
       - 'develop'
-  # pull_request:
-  #   branches:
-  #     - 'master'
-  #     - 'develop'
-  #     - 'feature/**'
+  pull_request:
+    branches:
+      - 'master'
+      - 'develop'
+      - 'feature/**'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [20.x]
-
+  test:
+    runs-on: ubuntu-24.04
     steps:
+      - name: Print GitHub Context
+        run: |
+          sudo apt install -y --install-recommends yajl-tools
+          echo $GITHUB_VAR_JSON | json_reformat -m
+        env:
+          GITHUB_VAR_JSON: "${{ toJson(github) }}"
+      - name: Install OS dependencies
+        run: |
+          sudo apt install \
+            -y --install-recommends \
+              cmake gcc g++ gcc-avr simavr avr-libc \
+              gcc-multilib g++-multilib clang
+      - name: Print C/C++ compiler versions
+        run: |
+          clang --version
+          clang++ --version
+          gcc --version
+          g++ --version
+          avr-gcc --version
+          avr-g++ --version
       - uses: actions/checkout@v4
+      - run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+        id: nvm
       - uses: actions/setup-node@v4
         with:
           cache: 'npm'
-      - name: Install OS dependencies
-        run: |
-          sudo apt install -y cmake gcc g++
+          node-version: ${{ steps.nvm.outputs.NODE_VERSION }}
       - name: Install Node.js packages
         run: npm install
       - name: Build the project
@@ -35,7 +50,11 @@ jobs:
       - name: Run tests
         run: npm run test
       - name: Send Slack message about test results
-        run: node scripts/notify.js --notification-type test-finished
+        run: |
+          node scripts/notify.js \
+            --notification-type test-finished --dump-json && \
+          node scripts/notify.js \
+            --notification-type test-finished
         env:
           TRIGGERING_ACTOR: '${{ github.triggering_actor }}'
           EVENT_PUSHER_NAME: '${{ github.event.pusher.name }}'
