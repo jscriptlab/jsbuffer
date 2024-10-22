@@ -1,9 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(jsbuffer CXX)
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+project(jsbuffer)
 
 add_subdirectory(src)
-add_subdirectory(test/generated/c)
-add_subdirectory(test/generated/cpp)
+add_subdirectory(test)

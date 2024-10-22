@@ -11,7 +11,11 @@ extern "C" {
 #include <jsb/serializer.h>
 
 enum protocol_main_request_type_t {
+#ifdef JSB_SCHEMA_NO_ASSIGNMENT_ENUMS
+  PROTOCOL_MAIN_GET_USER_TYPE,
+#else
   PROTOCOL_MAIN_GET_USER_TYPE = -1150313593,
+#endif
 };
 
 union protocol_main_request_trait_value_t {

@@ -1,7 +1,14 @@
 #ifndef JSBUFFER_SERIALIZER_H
 #define JSBUFFER_SERIALIZER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 #include <jsb/jsb.h>
+
+#define JSB_SERIALIZER_CALCULATE_REMAINING(s)                                  \
+  (s->buffer_capacity - s->buffer_size)
 
 struct jsb_serializer_t {
 #ifdef JSB_SERIALIZER_USE_MALLOC
@@ -40,5 +47,9 @@ enum jsb_result_t jsb_serializer_write_buffer(struct jsb_serializer_t* s,
                                               const jsb_uint8_t* buffer,
                                               jsb_uint32_t size);
 void jsb_serializer_free(struct jsb_serializer_t* s);
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
 
 #endif // JSBUFFER_SERIALIZER_H

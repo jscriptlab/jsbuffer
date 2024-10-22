@@ -12,8 +12,13 @@ extern "C" {
 #include <jsb/serializer.h>
 
 enum app_command_type_t {
+#ifdef JSB_SCHEMA_NO_ASSIGNMENT_ENUMS
+  APP_COMMAND_MOVE_FORWARD_TYPE,
+  APP_COMMAND_MOVE_BACKWARDS_TYPE,
+#else
   APP_COMMAND_MOVE_FORWARD_TYPE   = 1407274108,
   APP_COMMAND_MOVE_BACKWARDS_TYPE = 985001043,
+#endif
 };
 
 union app_command_trait_value_t {

@@ -12,8 +12,13 @@ extern "C" {
 #include <jsb/serializer.h>
 
 enum protocol_main_response_type_t {
+#ifdef JSB_SCHEMA_NO_ASSIGNMENT_ENUMS
+  PROTOCOL_MAIN_VOID_TYPE,
+  PROTOCOL_MAIN_USER_TYPE,
+#else
   PROTOCOL_MAIN_VOID_TYPE = 357013552,
   PROTOCOL_MAIN_USER_TYPE = 1081421617,
+#endif
 };
 
 union protocol_main_response_trait_value_t {

@@ -36,9 +36,14 @@ enum jsb_result_t protocol_main_void_init(struct protocol_main_void_t* value) {
         "Failed to initialize protocol.main.Void, received value = NULL.");
     return JSB_BAD_ARGUMENT;
   }
-  JSB_TRACE("protocol_main_void_init", "Initializing param value...");
+  JSB_TRACE("protocol_main_void_init",
+            "Initializing param of type \"jsb_int32_t\": value.");
+  /**
+   * jsb_int32_t
+   */
   value->value = 0;
-  JSB_TRACE("protocol_main_void_init", "Initialized param value.");
+  JSB_TRACE("protocol_main_void_init", "Initialized param: value.");
+
   return JSB_OK;
 }
 

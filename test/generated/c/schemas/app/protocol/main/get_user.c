@@ -39,9 +39,14 @@ protocol_main_get_user_init(struct protocol_main_get_user_t* value) {
         "Failed to initialize protocol.main.GetUser, received value = NULL.");
     return JSB_BAD_ARGUMENT;
   }
-  JSB_TRACE("protocol_main_get_user_init", "Initializing param id...");
+  JSB_TRACE("protocol_main_get_user_init",
+            "Initializing param of type \"jsb_int32_t\": id.");
+  /**
+   * jsb_int32_t
+   */
   value->id = 0;
-  JSB_TRACE("protocol_main_get_user_init", "Initialized param id.");
+  JSB_TRACE("protocol_main_get_user_init", "Initialized param: id.");
+
   return JSB_OK;
 }
 

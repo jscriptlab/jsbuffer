@@ -16,7 +16,7 @@ enum jsb_result_t jsb_deserializer_init(struct jsb_deserializer_t* d,
   return JSB_OK;
 }
 
-enum jsb_result_t
+static enum jsb_result_t
 jsb_deserializer_assert_remaining_bytes(const struct jsb_deserializer_t* d,
                                         jsb_uint32_t expected_byte_count) {
   if (d->offset + expected_byte_count > d->size) {

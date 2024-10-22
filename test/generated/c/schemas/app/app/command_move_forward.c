@@ -48,12 +48,22 @@ app_command_move_forward_init(struct app_command_move_forward_t* value) {
         "Failed to initialize app.CommandMoveForward, received value = NULL.");
     return JSB_BAD_ARGUMENT;
   }
-  JSB_TRACE("app_command_move_forward_init", "Initializing param stop...");
+  JSB_TRACE("app_command_move_forward_init",
+            "Initializing param of type \"bool\": stop.");
+  /**
+   * bool
+   */
   value->stop = false;
-  JSB_TRACE("app_command_move_forward_init", "Initialized param stop.");
-  JSB_TRACE("app_command_move_forward_init", "Initializing param value2...");
+  JSB_TRACE("app_command_move_forward_init", "Initialized param: stop.");
+
+  JSB_TRACE("app_command_move_forward_init",
+            "Initializing param of type \"jsb_double_t\": value2.");
+  /**
+   * jsb_double_t
+   */
   value->value2 = 0.0;
-  JSB_TRACE("app_command_move_forward_init", "Initialized param value2.");
+  JSB_TRACE("app_command_move_forward_init", "Initialized param: value2.");
+
   return JSB_OK;
 }
 

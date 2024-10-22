@@ -72,12 +72,14 @@ export interface IMetadataParamTypeGeneric {
 }
 
 export interface IMetadataInternalTypeParamTypeDefinition {
+  // TODO: Rename this to `internalReference`
   type: 'internalType';
   interfaceName: string;
   position: INodePosition;
 }
 
 export interface IMetadataExternalTypeParamTypeDefinition {
+  // TODO: Rename this to `externalReference`
   type: 'externalType';
   name: string;
   relativePath: string;

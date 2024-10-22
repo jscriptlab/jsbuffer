@@ -56,13 +56,39 @@ enum jsb_result_t protocol_main_user_init(struct protocol_main_user_t* value) {
         "Failed to initialize protocol.main.User, received value = NULL.");
     return JSB_BAD_ARGUMENT;
   }
-  JSB_TRACE("protocol_main_user_init", "Initializing param id...");
+  JSB_TRACE("protocol_main_user_init",
+            "Initializing param of type \"jsb_int32_t\": id.");
+  /**
+   * jsb_int32_t
+   */
   value->id = 0;
-  JSB_TRACE("protocol_main_user_init", "Initialized param id.");
-  JSB_TRACE("protocol_main_user_init", "Initializing param name...");
-  // Initialize string
-  value->name[0] = '\0';
-  JSB_TRACE("protocol_main_user_init", "Initialized param name.");
+  JSB_TRACE("protocol_main_user_init", "Initialized param: id.");
+
+  JSB_TRACE("protocol_main_user_init",
+            "Initializing param of type \"jsb_string_t\": name.");
+  /**
+   * jsb_string_t
+   */
+#ifdef JSB_SCHEMA_MALLOC
+  /**
+   * Here we should have something similar the following options:
+   *
+   * 1. Have additional value->name_len and value->name_capacity members
+   * in order to control the maximum capacity of the memory block and be able to
+   * fully set it to zero.
+   *
+   * 2. We could simply stick to the null-terminated string in order to keep it
+   * simple.
+   *
+   * 3. Whenever JSB_SCHEMA_MALLOC is defined, we could implement both of the
+   * behaviors above, if feasible.
+   */
+#error "JSB_SCHEMA_MALLOC is not implemented yet"
+#else
+  jsb_memset(&value->name, 0, sizeof(jsb_string_t));
+#endif // JSB_SCHEMA_MALLOC
+  JSB_TRACE("protocol_main_user_init", "Initialized param: name.");
+
   return JSB_OK;
 }
 

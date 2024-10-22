@@ -1,17 +1,22 @@
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifndef JSBUFFER_C_JSB_H
 #define JSBUFFER_C_JSB_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 // Standard C library functions
-#cmakedefine HAVE_STRLEN
-#cmakedefine HAVE_PRINTF
-#cmakedefine HAVE_MEMCPY
-#cmakedefine HAVE_MEMSET
-#cmakedefine HAVE_FREE
-#cmakedefine HAVE_MALLOC
+#cmakedefine HAVE_PRINTF @HAVE_PRINTF@
+#cmakedefine HAVE_FPRINTF @HAVE_FPRINTF@
+#cmakedefine HAVE_STRLEN @HAVE_STRLEN@
+#cmakedefine HAVE_MEMCPY @HAVE_MEMCPY@
+#cmakedefine HAVE_MEMSET @HAVE_MEMSET@
+#cmakedefine HAVE_STRCPY @HAVE_STRCPY@
+#cmakedefine HAVE_STRNCMP @HAVE_STRNCMP@
+#cmakedefine HAVE_STRCMP @HAVE_STRCMP@
+#cmakedefine HAVE_STRNCPY @HAVE_STRNCPY@
+#cmakedefine HAVE_MALLOC @HAVE_MALLOC@
+#cmakedefine HAVE_FREE @HAVE_FREE@
 
 #cmakedefine HAVE_SIZE_TYPE @HAVE_SIZE_TYPE@
 #cmakedefine HAVE_UINT64_TYPE @HAVE_UINT64_TYPE@
@@ -27,19 +32,43 @@ extern "C" {
 #cmakedefine HAVE_DOUBLE_TYPE @HAVE_DOUBLE_TYPE@
 
 /**
+ * Built-in types
+ */
+#cmakedefine SIGNED_CHAR @SIGNED_CHAR@
+#cmakedefine HAVE_UNSIGNED_CHAR @HAVE_UNSIGNED_CHAR@
+#cmakedefine HAVE_SIGNED_INT @HAVE_SIGNED_INT@
+#cmakedefine HAVE_UNSIGNED_INT @HAVE_UNSIGNED_INT@
+#cmakedefine HAVE_SIGNED_LONG @HAVE_SIGNED_LONG@
+#cmakedefine HAVE_UNSIGNED_LONG @HAVE_UNSIGNED_LONG@
+#cmakedefine HAVE_SIGNED_SHORT @HAVE_SIGNED_SHORT@
+#cmakedefine HAVE_UNSIGNED_SHORT @HAVE_UNSIGNED_SHORT@
+#cmakedefine HAVE_SIGNED_LONG_LONG @HAVE_SIGNED_LONG_LONG@
+#cmakedefine HAVE_UNSIGNED_LONG_LONG @HAVE_UNSIGNED_LONG_LONG@
+
+/**
  * Standard library headers
  */
-#cmakedefine HEADER_FOUND_STDINT_H
-#cmakedefine HEADER_FOUND_STDDEF_H
-#cmakedefine HEADER_FOUND_STRING_H
-#cmakedefine HEADER_FOUND_STDLIB_H
-#cmakedefine HEADER_FOUND_STDIO_H
-#cmakedefine HEADER_FOUND_INTTYPES_H
-#cmakedefine HEADER_FOUND_SYS_TYPEYPES_H
+#cmakedefine HEADER_FOUND_STDINT_H @HEADER_FOUND_STDINT_H@
+#cmakedefine HEADER_FOUND_STDDEF_H @HEADER_FOUND_STDDEF_H@
+#cmakedefine HEADER_FOUND_STRING_H @HEADER_FOUND_STRING_H@
+#cmakedefine HEADER_FOUND_STDLIB_H @HEADER_FOUND_STDLIB_H@
+#cmakedefine HEADER_FOUND_STDIO_H @HEADER_FOUND_STDIO_H@
+#cmakedefine HEADER_FOUND_INTTYPES_H @HEADER_FOUND_INTTYPES_H@
+#cmakedefine HEADER_FOUND_SYS_TYPEYPES_H @HEADER_FOUND_SYS_TYPEYPES_H@
 
 /**
  * JSBuffer options
  */
+/**
+ * If this option is enabled, it will not assign values to enums, avoiding errors like this:
+ *
+ * ```
+ * test/generated/c/protocol/main/request_trait.h:15:35: error: ISO C restricts enumerator values to range of 'int' before C23 [-Werror=pedantic]
+ * 15 |     PROTOCOL_MAIN_GET_USER_TYPE = -1150313593,
+ *    |                                   ^
+ * ```
+ */
+#cmakedefine JSB_SCHEMA_NO_ASSIGNMENT_ENUMS
 /**
  * If this option is enabled, instead of returning JSB_BUFFER_OVERFLOW, it will trim the string or buffer
  * of a type or call definition.
@@ -59,18 +88,18 @@ extern "C" {
  * JSBuffer generated schema specific options
  */
 /**
- * Maximum string size. This option is only used if JSB_SCHEMA_USE_MALLOC is enabled.
+ * Maximum string size. This option is only used if JSB_SCHEMA_MALLOC is enabled.
  */
 #cmakedefine JSB_MAX_STRING_SIZE @JSB_MAX_STRING_SIZE@
 /**
  * Use malloc for schema buffer. If this option is set, it is recommended to also set JSB_MAX_STRING_SIZE,
  * otherwise it will default to a predefined size.
  */
-#cmakedefine JSB_SCHEMA_USE_MALLOC
+#cmakedefine JSB_SCHEMA_MALLOC
 /**
  * Enable trace output to stdout
  */
-#cmakedefine JSB_ENABLE_TRACE
+#cmakedefine JSB_TRACE
 /**
  * Disable error checking on every function call. This might reduce final binary size, but
  * it is not recommended to disable it.
@@ -83,46 +112,47 @@ extern "C" {
  * Define JSB_DMA_ENABLED if any of the macros to enable dynamic memory allocation
  * are set.
  */
-#if defined(JSB_SERIALIZER_USE_MALLOC) || defined(JSB_SCHEMA_USE_MALLOC)
+#if defined(JSB_SERIALIZER_USE_MALLOC) || defined(JSB_SCHEMA_MALLOC)
 #define JSB_DMA_ENABLED
-#endif
+#endif // defined(JSB_SERIALIZER_USE_MALLOC) || defined(JSB_SCHEMA_MALLOC)
 
 /**
- * If JSB_SCHEMA_USE_MALLOC is enabled, stdlib.h is required.
+ * If JSB_SCHEMA_MALLOC is enabled, stdlib.h is required.
  */
-#if defined(JSB_SCHEMA_USE_MALLOC) && !defined(HEADER_FOUND_STDLIB_H)
-#error "JSB_SCHEMA_USE_MALLOC is enabled, but stdlib.h is not found. Cannot use malloc."
-#endif
+#if defined(JSB_SCHEMA_MALLOC) && !defined(HEADER_FOUND_STDLIB_H)
+#error "JSB_SCHEMA_MALLOC is enabled, but stdlib.h is not found. Cannot use malloc."
+#endif // defined(JSB_SCHEMA_MALLOC) && !defined(HEADER_FOUND_STDLIB_H)
 
-#if !defined(JSB_SCHEMA_USE_MALLOC) && !defined(JSB_MAX_STRING_SIZE)
-#pragma message "JSB_SCHEMA_USE_MALLOC is enabled, but JSB_MAX_STRING_SIZE is not defined. Using default value of 64."
+#if !defined(JSB_SCHEMA_MALLOC) && !defined(JSB_MAX_STRING_SIZE)
+#pragma message "JSB_SCHEMA_MALLOC is enabled, but JSB_MAX_STRING_SIZE is not defined. Using default value of 64."
 #define JSB_MAX_STRING_SIZE 64
-#endif
+#endif // !defined(JSB_SCHEMA_MALLOC) && !defined(JSB_MAX_STRING_SIZE)
 
 #if !defined(JSB_SERIALIZER_USE_MALLOC) && !defined(JSB_SERIALIZER_BUFFER_SIZE)
 #pragma message "JSB_SERIALIZER_USE_MALLOC is enabled, but JSB_SERIALIZER_BUFFER_SIZE is not defined. Using default value of 256."
 #define JSB_SERIALIZER_BUFFER_SIZE 256
-#endif
+#endif // !defined(JSB_SERIALIZER_USE_MALLOC) && !defined(JSB_SERIALIZER_BUFFER_SIZE)
 
 #ifdef JSB_DISABLE_ERROR_ASSERTION
+#pragma message "JSB_DISABLE_ERROR_ASSERTION is enabled. Error checking is disabled. This is NOT recommended."
 #define JSB_CHECK_ERROR(expr) expr
-#endif
+#endif // JSB_DISABLE_ERROR_ASSERTION
 
-#ifdef JSB_ENABLE_TRACE
+#ifdef JSB_TRACE
 // If `printf` function wasn't found, disable trace
 #ifndef HAVE_PRINTF
 #pragma message "printf() not found, cannot enable trace"
-#undef JSB_ENABLE_TRACE
+#undef JSB_TRACE
 #endif // HAVE_PRINTF
 
 // If `stdio.h` header wasn't found, disable trace
 #ifndef HEADER_FOUND_STDIO_H
 #pragma message "stdio.h not found, cannot enable trace"
-#undef JSB_ENABLE_TRACE
+#undef JSB_TRACE
 #endif // HEADER_FOUND_STDIO_H
-#endif // JSB_ENABLE_TRACE
+#endif // JSB_TRACE
 
-#ifdef JSB_ENABLE_TRACE
+#ifdef JSB_TRACE
 #include <stdio.h>
 
 #define JSB_TRACE(tag, ...) do { \
@@ -130,13 +160,15 @@ extern "C" {
   printf(__VA_ARGS__); \
   printf("\n"); \
 } while (0)
+
+#pragma message "JSB_TRACE is enabled. This is not recommended for production code."
 #else
-#define JSB_TRACE(...)
-#endif // JSB_ENABLE_TRACE
+#define JSB_TRACE(...) do {} while (0)
+#endif // JSB_TRACE
 
 #if defined(HEADER_FOUND_STDDEF_H)
 #include <stddef.h>
-#endif
+#endif // HEADER_FOUND_STDDEF_H
 
 #if defined(HEADER_FOUND_STDINT_H)
 #include <stdint.h>
@@ -146,74 +178,111 @@ extern "C" {
 #include <sys/types.h>
 #else
 #error "No suitable header found for standard integer types"
-#endif
+#endif // HEADER_FOUND_STDINT_H
 
-#ifdef JSB_SCHEMA_USE_MALLOC
-#error "JSB_SCHEMA_USE_MALLOC is not supported yet"
-#endif
+#ifdef JSB_SCHEMA_MALLOC
+#error "JSB_SCHEMA_MALLOC is not supported yet"
+#endif // JSB_SCHEMA_MALLOC
 
 #ifdef HAVE_UINT8_TYPE
 typedef uint8_t jsb_uint8_t;
 typedef jsb_uint8_t jsb_byte_t;
+#else
+#error "No suitable type found for uint8_t"
+#endif // HAVE_UINT8_TYPE
+
+#ifdef JSB_SCHEMA_MALLOC
 /**
- * If JSB_SCHEMA_USE_MALLOC is enabled, use pointers for strings and bytes.
+ * If JSB_SCHEMA_MALLOC is enabled, use pointers for strings and bytes.
  */
-#ifdef JSB_SCHEMA_USE_MALLOC
 typedef jsb_byte_t* jsb_bytes_t;
 typedef jsb_uint8_t* jsb_string_t;
 #else
 typedef jsb_byte_t jsb_bytes_t[JSB_MAX_STRING_SIZE + 1];
 typedef jsb_uint8_t jsb_string_t[JSB_MAX_STRING_SIZE + 1];
-#endif // JSB_SCHEMA_USE_MALLOC
-#else
-#error "No suitable type found for uint8_t"
-#endif
+#endif // JSB_SCHEMA_MALLOC
 
 #ifdef HAVE_INT64_TYPE
 typedef int64_t jsb_int64_t;
-#endif
+#elif defined(HAVE_SIGNED_LONG)
+typedef signed long jsb_int64_t;
+#else
+#error "No suitable type found for int64_t"
+#endif // HAVE_INT64_TYPE
 
 #ifdef HAVE_UINT64_TYPE
 typedef uint64_t jsb_uint64_t;
-#endif
+#elif defined(HAVE_UNSIGNED_LONG)
+typedef unsigned long jsb_uint64_t;
+#else
+#error "No suitable type found for uint64_t"
+#endif // HAVE_UINT64_TYPE
 
 #ifdef HAVE_INT32_TYPE
 typedef int32_t jsb_int32_t;
-#endif
+#elif defined(HAVE_SIGNED_INT)
+typedef signed int jsb_int32_t;
+#else
+#error "No suitable type found for int32_t"
+#endif // HAVE_INT32_TYPE
 
 #ifdef HAVE_FLOAT_TYPE
 typedef float jsb_float_t;
-#endif
+#endif // HAVE_FLOAT_TYPE
 
 #ifdef HAVE_DOUBLE_TYPE
 typedef double jsb_double_t;
-#endif
+#endif // HAVE_DOUBLE_TYPE
 
-#ifdef HAVE_UINT32_TYPE
+#if defined(HAVE_UINT32_TYPE)
 typedef uint32_t jsb_uint32_t;
-#else
+#elif defined(HAVE_UNSIGNED_INT)
 typedef unsigned int jsb_uint32_t;
-#endif
+#else
+#error "No suitable type found for uint32_t"
+#endif // HAVE_UINT32_TYPE
 
 #ifdef HAVE_UINT16_TYPE
 typedef uint16_t jsb_uint16_t;
-#endif
+#elif defined(HAVE_UNSIGNED_SHORT)
+typedef unsigned short jsb_uint16_t;
+#else
+#error "No suitable type found for uint16_t"
+#endif // HAVE_UINT16_TYPE
 
 #ifdef HAVE_INT16_TYPE
 typedef int16_t jsb_int16_t;
-#endif
+#elif defined(HAVE_SIGNED_SHORT)
+typedef signed short jsb_int16_t;
+#else
+#error "No suitable type found for int16_t"
+#endif // HAVE_INT16_TYPE
 
 #ifdef HAVE_INT8_TYPE
 typedef int8_t jsb_int8_t;
-#endif
+#elif defined(HAVE_SIGNED_CHAR)
+typedef signed char jsb_int8_t;
+#else
+#error "No suitable type found for int8_t"
+#endif // HAVE_INT8_TYPE
 
 #ifdef HAVE_SIZE_TYPE
 typedef size_t jsb_size_t;
-#endif
+#elif defined(HAVE_UINT64_TYPE)
+typedef jsb_uint64_t jsb_size_t;
+#elif defined(HAVE_UINT32_TYPE)
+typedef jsb_uint32_t jsb_size_t;
+#elif defined(HAVE_UINT16_TYPE)
+typedef jsb_uint16_t jsb_size_t;
+#elif defined(HAVE_UINT8_TYPE)
+typedef jsb_uint8_t jsb_size_t;
+#else
+#error "No suitable type found for size_t"
+#endif // HAVE_SIZE_TYPE
 
 #ifdef HAVE_VOID_TYPE
 typedef void jsb_void_t;
-#endif
+#endif // HAVE_VOID_TYPE
 
 #if defined(HAVE_FREE) && defined(JSB_DMA_ENABLED)
 #define jsb_free free
@@ -223,6 +292,21 @@ typedef void jsb_void_t;
 
 jsb_uint32_t jsb_strlen(const jsb_string_t str);
 void* jsb_memcpy(void* dest, const void* src, jsb_uint32_t len);
+void* jsb_strncpy(jsb_uint8_t* dest, const jsb_uint8_t* src, const jsb_uint32_t len);
+void* jsb_strcpy(jsb_uint8_t* dest, const jsb_uint8_t* src);
+void* jsb_memset(void* dest, jsb_uint8_t value, jsb_uint32_t len);
+
+#ifndef JSB_ASSERT_ARGUMENT
+/**
+ * Check if the value is not NULL and return JSB_BAD_ARGUMENT if it is.
+ */
+#define JSB_ASSERT_ARGUMENT(expr, ...) do { \
+  if (expr) {} else { \
+    JSB_TRACE(__VA_ARGS__); \
+    return JSB_BAD_ARGUMENT; \
+  } \
+} while (0)
+#endif // JSB_ASSERT_ARGUMENT
 
 /**
  * If JSB_CHECK_ERROR is not defined, define it.
@@ -234,7 +318,7 @@ void* jsb_memcpy(void* dest, const void* src, jsb_uint32_t len);
 #define JSB_CHECK_ERROR(expr) do { \
   enum jsb_result_t __result__ = (expr); \
   if (__result__ != JSB_OK) { \
-    /* It's safe to call it here, since JSB_TRACE will not do anything if `JSB_ENABLE_TRACE` is not defined */ \
+    /* It's safe to call it here, since JSB_TRACE will not do anything if `JSB_TRACE` is not defined */ \
     JSB_TRACE("JSB_CHECK_ERROR", "Expression failed: %s -> %d", #expr, __result__); \
     return __result__; \
   } \
@@ -254,8 +338,34 @@ enum jsb_result_t {
   JSB_NOT_SUPPORTED = 7
 };
 
-#endif // JSBUFFER_C_JSB_H
+/**
+ * Sizes of built-in types
+ */
+// @deprecated
+#define JSB_DOUBLE_SIZE (sizeof(jsb_double_t))
+// @deprecated
+#define JSB_FLOAT_SIZE (sizeof(jsb_float_t))
+// @deprecated
+#define JSB_UINT32_SIZE (sizeof(jsb_uint32_t))
+// @deprecated
+#define JSB_INT64_SIZE (sizeof(jsb_int64_t))
+// @deprecated
+#define JSB_INT32_SIZE (sizeof(jsb_int32_t))
+// @deprecated
+#define JSB_UINT64_SIZE (sizeof(jsb_uint64_t))
+// @deprecated
+#define JSB_UINT16_SIZE (sizeof(jsb_uint16_t))
+// @deprecated
+#define JSB_INT16_SIZE (sizeof(jsb_int16_t))
+// @deprecated
+#define JSB_UINT8_SIZE (sizeof(jsb_uint8_t))
+// @deprecated
+#define JSB_INT8_SIZE (sizeof(jsb_int8_t))
+// @deprecated
+#define JSB_VOID_SIZE (sizeof(jsb_void_t))
 
 #ifdef __cplusplus
 }
-#endif
+#endif // __cplusplus
+
+#endif // JSBUFFER_C_JSB_H
