@@ -2,7 +2,7 @@ import { App, KnownBlock, Block } from '@slack/bolt';
 import testFinished from './slack-messages/testFinished';
 import env from './env';
 import { getString } from 'cli-argument-helper/string';
-import getNamedArgument from 'cli-argument-helper/getNamedArgument';
+import getArgumentAssignment from 'cli-argument-helper/getArgumentAssignment';
 
 (async () => {
   const args = process.argv.slice(2);
@@ -12,7 +12,7 @@ import getNamedArgument from 'cli-argument-helper/getNamedArgument';
   });
 
   await app.start(3000);
-  const notificationType = getNamedArgument(
+  const notificationType = getArgumentAssignment(
     args,
     '--notification-type',
     getString

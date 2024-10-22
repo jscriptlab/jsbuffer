@@ -7,7 +7,7 @@ import FileGeneratorCPP from '../src/generators/cpp/FileGeneratorCPP';
 import FileGeneratorC from '../src/generators/c/FileGeneratorC';
 import { getString } from 'cli-argument-helper/string';
 import { getInteger } from 'cli-argument-helper/number';
-import getNamedArgument from 'cli-argument-helper/getNamedArgument';
+import getArgumentAssignment from 'cli-argument-helper/getArgumentAssignment';
 import { IGeneratedFile } from '../src/core/File';
 import Exception from '../exception/Exception';
 import { ASTGenerationException } from '../src/core/ASTGenerator';
@@ -35,23 +35,25 @@ function printHelp() {
 
   if (process.env['NODE_ENV'] !== 'production') {
     const inspect = getArgument(args, '--inspect') !== null;
-    const port = getNamedArgument(args, '--inspect.port', getInteger) ?? 9229;
+    const port =
+      getArgumentAssignment(args, '--inspect.port', getInteger) ?? 9229;
     const host =
-      getNamedArgument(args, '--inspect.host', getString) ?? '0.0.0.0';
-    const wait = getNamedArgument(args, '--inspect.wait', getBoolean) ?? true;
+      getArgumentAssignment(args, '--inspect.host', getString) ?? '0.0.0.0';
+    const wait =
+      getArgumentAssignment(args, '--inspect.wait', getBoolean) ?? true;
     if (inspect) {
       inspector.open(port, host, wait);
     }
   }
 
   const indentationSize =
-    getNamedArgument(args, '--indentation-size', getInteger) ?? 2;
+    getArgumentAssignment(args, '--indentation-size', getInteger) ?? 2;
 
-  const name = getNamedArgument(args, '--name', getString) ?? 'schema';
+  const name = getArgumentAssignment(args, '--name', getString) ?? 'schema';
 
   let outputDirectory =
-    getNamedArgument(args, '-o', getString) ??
-    getNamedArgument(args, '--output', getString) ??
+    getArgumentAssignment(args, '-o', getString) ??
+    getArgumentAssignment(args, '--output', getString) ??
     null;
 
   /**
@@ -124,7 +126,7 @@ function printHelp() {
   }
 
   const desiredGenerator =
-    getNamedArgument(args, '--generator', getString) ?? Generator.CPP_17;
+    getArgumentAssignment(args, '--generator', getString) ?? Generator.CPP_17;
 
   let generator: {
     generate: () => Promise<IGeneratedFile[] | null>;

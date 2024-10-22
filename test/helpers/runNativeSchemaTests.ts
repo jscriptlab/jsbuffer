@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import configuration from '../../src/configuration';
 import { spawn } from 'child-process-utilities';
-import getNamedArgument from 'cli-argument-helper/getNamedArgument';
+import getArgumentAssignment from 'cli-argument-helper/getArgumentAssignment';
 import { getString } from 'cli-argument-helper/string';
 import assert from 'node:assert';
 import isErrorLike from './isErrorLike';
@@ -38,12 +38,16 @@ export default async function runNativeSchemaTests(schema: ISchema) {
 
   const clangExecutables = {
     c: (
-      await spawn('which', ['clang'], { stdio: 'pipe' }).output().stdout.utf8()
+      await spawn('which', ['clang'], { stdio: 'pipe' })
+        .output()
+        .stdout()
+        .decode('utf8')
     ).replace(/\n$/, ''),
     cxx: (
       await spawn('which', ['clang++'], { stdio: 'pipe' })
         .output()
-        .stdout.utf8()
+        .stdout()
+        .decode('utf8')
     ).replace(/\n$/, '')
   };
 
@@ -104,7 +108,7 @@ export default async function runNativeSchemaTests(schema: ISchema) {
         for (const secondary of schema.secondary) {
           switch (secondary) {
             case 'i386': {
-              const CMAKE_C_FLAGS = getNamedArgument(
+              const CMAKE_C_FLAGS = getArgumentAssignment(
                 cmakeArgs,
                 '-DCMAKE_C_FLAGS',
                 getString
@@ -232,8 +236,16 @@ export default async function runNativeSchemaTests(schema: ISchema) {
         `${os.cpus().length}`
       ]).wait();
 
-      const MCU = getNamedArgument(Array.from(options), '-DMCU', getString);
-      const F_CPU = getNamedArgument(Array.from(options), '-DF_CPU', getString);
+      const MCU = getArgumentAssignment(
+        Array.from(options),
+        '-DMCU',
+        getString
+      );
+      const F_CPU = getArgumentAssignment(
+        Array.from(options),
+        '-DF_CPU',
+        getString
+      );
 
       const testFiles = await glob(
         path.resolve(

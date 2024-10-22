@@ -1,7 +1,0 @@
-{
-  "extends": "../tsconfig.base.json",
-  "compilerOptions": {
-    "types": ["node"]
-  },
-  "references": [{ "path": "../codec" }, { "path": "../out" }]
-}

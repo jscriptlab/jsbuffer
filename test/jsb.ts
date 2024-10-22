@@ -52,12 +52,14 @@ test("FileGeneratorC: it should throw a detailed error in case there's an invali
     { stdio: 'pipe' }
   ).output();
 
-  t.assert(/\^ Expected ";", got "}" instead\n/.test(await stderr.utf8()));
-  t.assert(/\tExpected ";", got "}" instead\n/.test(await stderr.utf8()));
-  t.assert(/another_file\.jsb/.test(await stderr.utf8()));
-  t.assert(/export type Response {\n/.test(await stderr.utf8()));
-  t.assert(/string message\n/.test(await stderr.utf8()));
-  t.assert(/Detailed:/.test(await stderr.utf8()));
+  const text = await stderr().decode('utf8');
+
+  t.assert(/\^ Expected ";", got "}" instead\n/.test(text));
+  t.assert(/\tExpected ";", got "}" instead\n/.test(text));
+  t.assert(/another_file\.jsb/.test(text));
+  t.assert(/export type Response {\n/.test(text));
+  t.assert(/string message\n/.test(text));
+  t.assert(/Detailed:/.test(text));
 
   await temp.destroy();
 });
