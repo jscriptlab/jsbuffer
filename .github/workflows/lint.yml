@@ -1,0 +1,31 @@
+# Lint and formatting checks. Runs ESLint and Prettier in check-only mode
+# (no auto-fixing) so pull requests fail if code is not properly formatted.
+
+name: Lint
+
+on:
+  push:
+    branches: ['master']
+  # Run on every pull request, regardless of the target branch.
+  pull_request:
+
+# Least-privilege GITHUB_TOKEN: these jobs only need to read the repo.
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+      - run: npm ci
+      - name: ESLint
+        run: npx eslint src code-generator
+      - name: Prettier
+        run: npx prettier --check "out/**/*.{ts,json}" "src/**/*.ts" "code-generator/**/*.ts"

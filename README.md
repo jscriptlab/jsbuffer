@@ -352,7 +352,6 @@ You can try jsbuffer online in the [online playground](https://jsbufferviewerdem
 ## Installation
 
 ```
-yarn add jsbuffer
 npm i jsbuffer
 ```
 
