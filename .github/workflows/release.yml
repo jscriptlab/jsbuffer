@@ -52,4 +52,9 @@ jobs:
           title: 'chore: release jsbuffer'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # setup-node's `registry-url` writes a temp .npmrc (via
+          # NPM_CONFIG_USERCONFIG) that reads the token from NODE_AUTH_TOKEN and
+          # takes precedence over ~/.npmrc, so the publish must expose the token
+          # under that name. NPM_TOKEN is kept for changesets/action's own use.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
