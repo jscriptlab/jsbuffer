@@ -29,6 +29,8 @@ The new `jsb` command-line tool supports generating code for additional language
 
 - C99
 - C++17
+- TypeScript (`--generator typescript`, byte-identical to the original `jsbuffer` CLI)
+- Kotlin (`--generator kotlin`; `--name` is the Kotlin package name)
 
 ### Usage
 
@@ -36,6 +38,27 @@ The new `jsb` command-line tool supports generating code for additional language
 npm i -g jsbuffer@^2
 jsb -h
 ```
+
+### Generating code from metadata JSON files
+
+The `jsb` CLI separates **parsing** a schema from **generating** source code.
+You can dump the parsed schema as language-agnostic metadata JSON files and then
+generate code straight from those files, without re-parsing the original `.jsb`
+schema:
+
+```bash
+# 1. Parse the schema once and dump the metadata JSON files (plus an ordered
+#    metadata.index.json manifest) into out/metadata.
+jsb schema/main.jsb --metadata-only -o out/metadata --name app
+
+# 2. Generate code for any supported language straight from the metadata files.
+jsb --from-metadata out/metadata -o out/cpp --generator cpp17 --name app
+jsb --from-metadata out/metadata -o out/c   --generator c99   --name app
+```
+
+Generating from the metadata files is **byte-identical** to generating directly
+from the schema (enforced by the `test/fromMetadata.ts` round-trip tests), which
+makes code generation reproducible from a committed set of metadata files.
 
 ## Examples
 

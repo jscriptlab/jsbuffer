@@ -781,6 +781,20 @@ export default class Parser extends CodeStream {
         this.#getTypeDefinitionOrCallDefinitionNamePropertyValue(node),
       name: node.name.value,
       exported,
+      /**
+       * Traits this type/call belongs to, resolved to metadata param types so
+       * that generators can reference the trait definitions across files.
+       */
+      traits: node.traits.map((trait) =>
+        this.#getMetadataFromResolvedType(this.#resolveTypeExpression(trait))
+      ),
+      ...(node.type === NodeType.CallDefinition
+        ? {
+            returnType: this.#getMetadataFromResolvedType(
+              this.#resolveTypeExpression(node.returnType)
+            )
+          }
+        : {}),
       params: node.parameters.map((p) => this.#getMetadataFromParam(p))
     };
   }

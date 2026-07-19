@@ -1,7 +1,10 @@
 import path from 'path';
 import Exception from '../../exception/Exception';
 import { IFileMetadata } from '../parser/Parser';
-import { MetadataParamTypeDefinition } from '../parser/types/metadata';
+import {
+  Metadata,
+  MetadataParamTypeDefinition
+} from '../parser/types/metadata';
 import CodeStream from 'textstreamjs';
 
 export interface IResolverOptions {
@@ -12,6 +15,7 @@ export interface IResolverOptions {
 
 /**
  * Represents the entity of an individual schema file
+ * TODO: Do not extend `CodeStream`
  */
 export default class Resolver extends CodeStream {
   readonly #generators: Map<string, Resolver>;
@@ -21,6 +25,24 @@ export default class Resolver extends CodeStream {
     super(parent ?? undefined);
     this.#generators = generators;
     this.#current = current;
+  }
+
+  // TODO: Move this to a separate class
+  public writeMultiLineComment(lines: (string | (() => void))[]) {
+    this.write('/**\n');
+    for (const writeLine of lines) {
+      this.write(' *');
+      if (typeof writeLine === 'string') {
+        if (writeLine.length > 0) {
+          this.append(' ');
+          this.append(writeLine);
+        }
+      } else {
+        writeLine();
+      }
+      this.append('\n');
+    }
+    this.write(' */\n');
   }
 
   public fileMetadata() {
@@ -61,7 +83,7 @@ export default class Resolver extends CodeStream {
 
   public resolveMetadataFromParamTypeDefinition(
     paramType: MetadataParamTypeDefinition
-  ) {
+  ): Metadata {
     const generator = this.resolveMetadataParamTypeDefinition(paramType);
     let identifier: string;
     switch (paramType.type) {

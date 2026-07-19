@@ -3,9 +3,19 @@
 
 #include "test_schema/Message.hpp"
 
-#include <cassert>
+// #include <cassert>
 #include <limits>
 #include <stdexcept>
+
+namespace jsb {
+inline void assert(bool expr);
+}
+
+void jsb::assert(bool expr) {
+  if (!expr) {
+    throw std::runtime_error("Assertion failed");
+  }
+}
 
 static bool compareMessages(const test_schema::Message& a,
                             const test_schema::Message& b) {
@@ -36,19 +46,20 @@ int main() {
   s.write_string("Hello, World!");
 
   jsb::deserializer d(s.get_buffer());
-  assert(d.read<std::int32_t>() == 1510581918);
-  assert(d.read<std::uint8_t>() == 240);
-  assert(d.read<std::int8_t>() == 100);
-  assert(d.read<std::uint32_t>() == 100);
-  assert(d.read<std::uint32_t>() == std::numeric_limits<std::uint32_t>::max());
-  assert(d.read_string() == "Hello, World!");
+  jsb::assert(d.read<std::int32_t>() == 1510581918);
+  jsb::assert(d.read<std::uint8_t>() == 240);
+  jsb::assert(d.read<std::int8_t>() == 100);
+  jsb::assert(d.read<std::uint32_t>() == 100);
+  jsb::assert(d.read<std::uint32_t>() ==
+              std::numeric_limits<std::uint32_t>::max());
+  jsb::assert(d.read_string() == "Hello, World!");
 
   // Throw if we try to read more than the buffer has
   try {
     d.read<std::uint8_t>();
-    assert(false);
+    jsb::assert(false);
   } catch (const std::runtime_error& e) {
-    assert(true);
+    jsb::assert(true);
   }
 
   test_schema::Message msg = {
@@ -57,8 +68,8 @@ int main() {
                 {.seconds = 200, .nanoseconds = 200, .bit = 200}}};
   msg.encode(s);
   test_schema::Message decoded = test_schema::Message::decode(d);
-  assert(msg.id == decoded.id);
-  assert(compareMessages(msg, decoded));
+  jsb::assert(msg.id == decoded.id);
+  jsb::assert(compareMessages(msg, decoded));
 
   return 0;
 }

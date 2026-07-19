@@ -1,0 +1,119 @@
+{
+  "path": "/home/user/jsbuffer/test/parser/Test.jsb",
+  "metadata": [
+    {
+      "kind": "type",
+      "id": -1180620582,
+      "position": {
+        "start": {
+          "type": 0,
+          "value": "type",
+          "position": {
+            "start": 7,
+            "end": 11
+          }
+        },
+        "end": {
+          "type": 6,
+          "value": "}",
+          "position": {
+            "start": 52,
+            "end": 53
+          }
+        }
+      },
+      "globalName": "test.ImportMe",
+      "name": "ImportMe",
+      "exported": true,
+      "traits": [],
+      "params": [
+        {
+          "name": "value",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "int",
+              "position": {
+                "start": 25,
+                "end": 28
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 34,
+                "end": 35
+              }
+            }
+          },
+          "type": {
+            "type": "generic",
+            "value": "int",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "int",
+                "position": {
+                  "start": 25,
+                  "end": 28
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "int",
+                "position": {
+                  "start": 25,
+                  "end": 28
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "buffer",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "bytes",
+              "position": {
+                "start": 38,
+                "end": 43
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 50,
+                "end": 51
+              }
+            }
+          },
+          "type": {
+            "type": "generic",
+            "value": "bytes",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "bytes",
+                "position": {
+                  "start": 38,
+                  "end": 43
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "bytes",
+                "position": {
+                  "start": 38,
+                  "end": 43
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

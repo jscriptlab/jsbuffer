@@ -14,6 +14,29 @@ import MetadataFileCCodeGenerator from './MetadataFileCCodeGenerator';
 import { Metadata } from '../../parser/types/metadata';
 import * as fs from 'fs';
 
+/**
+ * Read the original schema file contents, returning an empty buffer when the
+ * file does not exist. The contents are only needed to render source snippets
+ * in error messages, so their absence (e.g. when generating from metadata JSON
+ * files alone) must not prevent code generation.
+ */
+async function readSourceContentsOrEmpty(
+  filePath: string
+): Promise<Uint8Array> {
+  try {
+    return await fs.promises.readFile(filePath);
+  } catch (reason) {
+    if (
+      typeof reason === 'object' &&
+      reason !== null &&
+      (reason as { code?: unknown }).code === 'ENOENT'
+    ) {
+      return new Uint8Array();
+    }
+    throw reason;
+  }
+}
+
 export interface IFileGeneratorCOptions {
   /**
    * Absolute path of the root directory of the schema
@@ -82,7 +105,13 @@ export default class FileGeneratorC extends CodeStream {
           current: fileMetadata,
           sourceFileExtension: this.#options.sourceFileExtension,
           generators: this.#generators,
-          contents: await fs.promises.readFile(fileMetadata.path),
+          /**
+           * The original schema contents are only used to render source
+           * snippets in error messages. When generating straight from metadata
+           * JSON files (`jsb --from-metadata`), the `.jsb` sources may not be
+           * present, so fall back to an empty buffer instead of failing.
+           */
+          contents: await readSourceContentsOrEmpty(fileMetadata.path),
           parent: this
         });
         for (const metadata of fileMetadata.metadata) {
@@ -122,8 +151,11 @@ export default class FileGeneratorC extends CodeStream {
 
     this.write('cmake_minimum_required(VERSION 3.5)\n');
     this.write(`project(${this.#cmake.project} C ASM)\n`);
+    this.append('\n');
     this.write('set(CMAKE_C_STANDARD 99)\n');
     this.write('set(CMAKE_C_STANDARD_REQUIRED ON)\n');
+    this.write('set(CMAKE_C_EXTENSIONS ON)\n');
+    this.append('\n');
     this.write(
       'add_library(\n',
       () => {
@@ -179,25 +211,33 @@ export default class FileGeneratorC extends CodeStream {
       },
       ')\n'
     );
-    this.write('\n');
-    this.write(`add_executable(${this.#cmake.project}_test test.c)\n`);
-    this.write(
-      'target_compile_options(\n',
-      () => {
-        this.write(`${this.#cmake.project}_test\n`);
-        this.write('PRIVATE\n');
-        this.write('-Wall\n');
-        this.write('-Wextra\n');
-        this.write('-Werror\n');
-        this.write('-pedantic\n');
-      },
-      ')\n'
-    );
-    this.write(
-      `target_link_libraries(${this.#cmake.project}_test PRIVATE ${
-        this.#cmake.project
-      })\n`
-    );
+    this.append('\n');
+    this.append('\n');
+
+    this.write('if(JSB_SCHEMA_TESTS MATCHES ON)\n');
+    this.indentBlock(() => {
+      this.write(`add_executable(${this.#cmake.project}_test test.c)\n`);
+      this.write(
+        'target_compile_options(\n',
+        () => {
+          this.write(`${this.#cmake.project}_test\n`);
+          this.write('PRIVATE\n');
+          this.write('-Wall\n');
+          this.write('-Wextra\n');
+          this.write('-Werror\n');
+          this.write('-pedantic\n');
+        },
+        ')\n'
+      );
+      this.write(
+        `target_link_libraries(${this.#cmake.project}_test PRIVATE ${
+          this.#cmake.project
+        })\n`
+      );
+    });
+    this.write('endif()\n');
+    this.append('\n');
+
     this.#files.push({
       path: 'CMakeLists.txt',
       contents: this.value()

@@ -13,3 +13,11 @@ tsconfig.tsbuildinfo
 
 /cmake-build-*
 /.idea
+
+# clangd cache
+/.cache
+
+# CMake error log
+/cmake-error.log
+
+*.plist

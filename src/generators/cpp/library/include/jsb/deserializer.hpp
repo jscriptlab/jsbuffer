@@ -30,7 +30,7 @@ public:
 
   std::vector<std::uint8_t> read_bytes(std::size_t length);
 
-  const std::size_t& get_offset() const;
+  [[nodiscard]] const std::size_t& get_offset() const;
 
 private:
   const std::vector<std::uint8_t>& buffer;

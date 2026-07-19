@@ -15,7 +15,7 @@ test_schema::Message test_schema::Message::decode(jsb::deserializer& d) {
   result.id = d.read<std::uint64_t>();
   {
     const auto len = d.read<std::uint32_t>();
-    result.event.reserve(len);
+    result.event.resize(len);
     for (std::uint32_t i = 0; i < len; i++) {
       result.event[i] = event::Event::decode(d);
     }

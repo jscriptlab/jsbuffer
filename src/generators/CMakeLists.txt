@@ -1,2 +1,7 @@
 add_subdirectory(c)
-add_subdirectory(cpp)
+
+option(JSB_CPP "Enable C++ generator" ON)
+
+if(JSB_CPP MATCHES ON)
+  add_subdirectory(cpp)
+endif()

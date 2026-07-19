@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
 #ifndef IEEE754_H
 #define IEEE754_H
 
@@ -9,3 +13,7 @@ enum jsb_result_t jsb_encode_double(jsb_uint8_t* buffer, double value);
 enum jsb_result_t jsb_decode_double(const jsb_uint8_t* buffer, double* result);
 
 #endif // IEEE754_H
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus

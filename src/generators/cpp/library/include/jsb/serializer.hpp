@@ -33,7 +33,9 @@ public:
 
   void write_bytes(const std::vector<std::uint8_t>& value);
 
-  const std::vector<std::uint8_t>& get_buffer() const { return buffer; }
+  [[nodiscard]] const std::vector<std::uint8_t>& get_buffer() const {
+    return buffer;
+  }
 
 private:
   std::vector<std::uint8_t> buffer;

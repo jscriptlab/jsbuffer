@@ -1,0 +1,1263 @@
+import path from 'path';
+import CodeStream from 'textstreamjs';
+import {
+  IMetadataCall,
+  IMetadataFileContents,
+  IMetadataType,
+  IParamTypeMetadataExternalType,
+  IParamTypeMetadataInternalType,
+  ITraitMetadata,
+  Metadata,
+  MetadataImport,
+  TypeExpressionMetadata
+} from './types';
+import GenericName from './GenericName';
+import Exception from '../../../exception/Exception';
+import assert from 'assert';
+import { lowerFirst, upperFirst } from './stringUtilities';
+import { IFileMetadata } from '../../parser/Parser';
+import {
+  Metadata as UnifiedMetadata,
+  MetadataParamType as UnifiedMetadataParamType
+} from '../../parser/types/metadata';
+
+export interface IOutputFile {
+  path: string;
+  contents: string;
+}
+
+type KotlinTypeImport =
+  | string
+  | {
+      id: string;
+      filePath: string;
+    }
+  | Metadata;
+
+function getVarName(prefix: string, value: string, depth: number) {
+  return `${prefix}${upperFirst(value)}${depth}`;
+}
+
+export function getImportPath(packageName: string[], metadata: Metadata) {
+  return `${packageName.join('.')}.${getClassName(metadata)}`;
+}
+
+export function getPackageName(schemaName: string, metadata: Metadata) {
+  switch (metadata.kind) {
+    case 'trait':
+    case 'type':
+    case 'call': {
+      const globalNameSlices = metadata.globalName.split('.');
+      return [
+        schemaName,
+        ...globalNameSlices.slice(0, globalNameSlices.length - 1)
+      ];
+    }
+  }
+}
+
+export function getClassName(
+  metadata:
+    | Metadata
+    | IParamTypeMetadataExternalType
+    | IParamTypeMetadataInternalType
+) {
+  if ('type' in metadata) {
+    switch (metadata.type) {
+      case 'externalType':
+        return upperFirst(metadata.name);
+      case 'internalType':
+        return upperFirst(metadata.interfaceName);
+    }
+  }
+  switch (metadata.kind) {
+    case 'call':
+    case 'type':
+    case 'trait':
+      return upperFirst(metadata.name);
+  }
+}
+
+function getTraitClassTypeDiscriminatorPropertyName(metadata: ITraitMetadata) {
+  switch (metadata.kind) {
+    case 'trait':
+      return `${lowerFirst(metadata.name)}Type`;
+  }
+}
+
+export function getTypeDefinitionTraitClassName(
+  metadata: Metadata
+): string | null {
+  switch (metadata.kind) {
+    case 'trait':
+    case 'type':
+    case 'call':
+      return `${getClassName(metadata)}Type`;
+  }
+}
+
+/**
+ * Build the in-memory metadata-file key for a schema source path.
+ *
+ * The original Kotlin generator resolved cross-file references by reading
+ * `${relativePath}.metadata.json` files off disk. To preserve that resolution
+ * logic unchanged while feeding it an in-memory metadata list, we key every
+ * file by the exact path the old code would have resolved to: the source path
+ * (with any `.jsb` extension stripped) plus a `.metadata.json` suffix.
+ */
+function metadataKeyForPath(sourcePath: string) {
+  return `${sourcePath.replace(/\.jsb$/, '')}.metadata.json`;
+}
+
+/**
+ * Collect every `externalType.relativePath` referenced anywhere within a single
+ * type expression, walking templates recursively. This lets us reconstruct a
+ * file's `__imports` list from its own metadata.
+ */
+function collectExternalRelativePaths(
+  node: UnifiedMetadataParamType,
+  out: Set<string>
+) {
+  switch (node.type) {
+    case 'externalType':
+      out.add(node.relativePath);
+      break;
+    case 'template':
+      switch (node.template) {
+        case 'optional':
+        case 'vector':
+        case 'set':
+          collectExternalRelativePaths(node.value, out);
+          break;
+        case 'map':
+          collectExternalRelativePaths(node.key, out);
+          collectExternalRelativePaths(node.value, out);
+          break;
+        case 'tuple':
+          for (const arg of node.args) {
+            collectExternalRelativePaths(arg, out);
+          }
+          break;
+        case 'bigint':
+          break;
+      }
+      break;
+    case 'generic':
+    case 'internalType':
+    case 'externalModuleType':
+      break;
+  }
+}
+
+export default class FileGeneratorKotlin extends CodeStream {
+  readonly #metadata;
+  readonly #kind;
+  /**
+   * kt file identifier
+   */
+  readonly #filePath;
+  readonly #schemaName;
+  readonly #indentationSize;
+  readonly #files = new Array<IOutputFile>();
+  readonly #fileGenerators = new Map<string | Metadata, FileGeneratorKotlin>();
+  readonly #imports = new Set<KotlinTypeImport>();
+  readonly #importMetadataList = new Array<MetadataImport>();
+  /**
+   * In-memory metadata files, keyed by {@link metadataKeyForPath}. Only set on
+   * the root generator; child generators reach it through {@link #root}.
+   */
+  readonly #fileContentsByPath: Map<string, IMetadataFileContents> | null;
+  public constructor({
+    filePath,
+    metadata,
+    schemaName,
+    kind = null,
+    indentationSize = 2,
+    fileContents = null
+  }: {
+    filePath: string;
+    schemaName: string;
+    metadata: IMetadataFileContents;
+    /**
+     * null is root
+     */
+    kind?:
+      | {
+          root: FileGeneratorKotlin;
+          metadata: Metadata;
+        }
+      /**
+       * a file that is a subtree, which means it's not root, but also, not targeting
+       * a specific metadata type
+       */
+      | {
+          root: FileGeneratorKotlin;
+        }
+      | null;
+    indentationSize?: number;
+    /**
+     * When provided (root only), cross-file references are resolved from this
+     * in-memory map instead of from disk.
+     */
+    fileContents?: Map<string, IMetadataFileContents> | null;
+  }) {
+    super(undefined, {
+      indentationSize
+    });
+    this.#metadata = metadata.__all;
+    this.#importMetadataList = metadata.__imports;
+    this.#schemaName = schemaName;
+    this.#filePath = filePath;
+    this.#kind = kind;
+    this.#indentationSize = indentationSize;
+    this.#fileContentsByPath = fileContents;
+  }
+  /**
+   * Build a root generator that resolves all cross-file references from the
+   * in-memory unified metadata list produced by the parser, rather than from
+   * on-disk `*.metadata.json` files.
+   */
+  public static fromFileMetadataList(
+    fileMetadataList: ReadonlyArray<IFileMetadata>,
+    {
+      schemaName,
+      indentationSize = 2
+    }: { schemaName: string; indentationSize?: number }
+  ): FileGeneratorKotlin {
+    const fileContents = new Map<string, IMetadataFileContents>();
+    for (const fileMetadata of fileMetadataList) {
+      fileContents.set(
+        metadataKeyForPath(fileMetadata.path),
+        FileGeneratorKotlin.#toFileContents(fileMetadata)
+      );
+    }
+    const rootFileMetadata = fileMetadataList[0];
+    if (rootFileMetadata === undefined) {
+      return new FileGeneratorKotlin({
+        filePath: '',
+        metadata: { __all: [], __imports: [] },
+        schemaName,
+        indentationSize,
+        fileContents
+      });
+    }
+    const rootPath = metadataKeyForPath(rootFileMetadata.path);
+    const rootContents = fileContents.get(rootPath);
+    assert.strict.ok(rootContents);
+    return new FileGeneratorKotlin({
+      filePath: rootPath,
+      metadata: rootContents,
+      schemaName,
+      indentationSize,
+      fileContents
+    });
+  }
+  /**
+   * Convert a single unified {@link IFileMetadata} into the old-architecture
+   * {@link IMetadataFileContents} the Kotlin generator consumes, reconstructing
+   * the file's `__imports` from the set of external references it makes.
+   */
+  static #toFileContents(fileMetadata: IFileMetadata): IMetadataFileContents {
+    const relativePaths = new Set<string>();
+    for (const metadata of fileMetadata.metadata as ReadonlyArray<UnifiedMetadata>) {
+      switch (metadata.kind) {
+        case 'type':
+        case 'call':
+          for (const trait of metadata.traits) {
+            collectExternalRelativePaths(trait, relativePaths);
+          }
+          for (const param of metadata.params) {
+            collectExternalRelativePaths(param.type, relativePaths);
+          }
+          if (metadata.returnType) {
+            collectExternalRelativePaths(metadata.returnType, relativePaths);
+          }
+          break;
+        case 'trait':
+          for (const node of metadata.nodes) {
+            collectExternalRelativePaths(node, relativePaths);
+          }
+          break;
+      }
+    }
+    return {
+      __all: fileMetadata.metadata as unknown as Metadata[],
+      __imports: Array.from(relativePaths).map((relativePath) => ({
+        relativePath
+      }))
+    };
+  }
+  /**
+   * Resolve the contents of an in-memory metadata file by its key. Replaces the
+   * disk-based `readJSONFile` used by the original generator.
+   */
+  #loadFileContents(filePath: string): IMetadataFileContents {
+    const fileContents = this.#root().#fileContentsByPath;
+    assert.strict.ok(
+      fileContents !== null,
+      'In-memory metadata file map is not available'
+    );
+    const contents = fileContents.get(filePath);
+    assert.strict.ok(
+      contents,
+      `Metadata file not found in memory: ${filePath}`
+    );
+    return contents;
+  }
+  public async generate(): Promise<IOutputFile[]> {
+    /**
+     * set root file generator in case it's imported
+     */
+    this.#fileGenerators.set(this.#filePath, this);
+
+    /**
+     * In aggregate mode, pre-register a subtree generator for every known file
+     * so that ALL files are generated, mirroring FileGeneratorCPP. This matters
+     * because side-effect imports (e.g. `import "./tests";`) do not surface as
+     * external type references and would otherwise be unreachable.
+     */
+    if (this.#fileContentsByPath !== null) {
+      for (const [filePath, contents] of this.#fileContentsByPath) {
+        if (this.#fileGenerators.has(filePath)) {
+          continue;
+        }
+        this.#fileGenerators.set(
+          filePath,
+          new FileGeneratorKotlin({
+            filePath,
+            metadata: contents,
+            kind: {
+              root: this
+            },
+            schemaName: this.#schemaName,
+            indentationSize: this.#indentationSize
+          })
+        );
+      }
+    }
+
+    await this.#createFileGenerators();
+
+    /**
+     * Make sure every pre-registered subtree file generator has created its own
+     * per-metadata generators (root.#createFileGenerators only recurses into
+     * files reachable through the import graph).
+     */
+    for (const gen of Array.from(this.#fileGenerators.values())) {
+      if (gen === this) {
+        continue;
+      }
+      const kind = gen.#kind;
+      if (kind !== null && !('metadata' in kind)) {
+        await gen.#createFileGenerators();
+      }
+    }
+
+    for (const gen of this.#fileGenerators.values()) {
+      await gen.#preprocess();
+    }
+
+    for (const gen of this.#fileGenerators.values()) {
+      await gen.#preprocess();
+    }
+
+    this.#files.push(this.#generateDeserializerInterface());
+    this.#files.push(this.#generateSerializerInterface());
+    this.#files.push(this.#generateEncodableInterface());
+
+    /**
+     * call iterator again, because now the #fileGenerators of the root file was generated
+     */
+    for (const [key, gen] of this.#fileGenerators) {
+      if (!gen.#kind || !('metadata' in gen.#kind)) {
+        continue;
+      }
+      const file = await gen.#generateMetadataFile();
+      if (!file) {
+        throw new Error(
+          `Failed to generate metadata file: ${key} at ${this.#filePath}`
+        );
+      }
+      this.#files.push(file);
+    }
+    return this.#files;
+  }
+  #generateDeserializerInterface() {
+    this.write(`package ${this.#schemaName}.internal\n\n`);
+    this.write(
+      'interface Deserializer {\n',
+      () => {
+        this.write('fun readInt(): Int\n');
+        this.write('fun mark(): Unit\n');
+        this.write('fun reset(): Unit\n');
+        this.write('fun readLong(): Long\n');
+        this.write('fun readDouble(): Double\n');
+        this.write('fun readFloat(): Float\n');
+        this.write('fun readShort(): Short\n');
+        this.write('fun readByte(): Byte\n');
+        this.write('fun read(value: ByteArray): Unit\n');
+      },
+      '}\n'
+    );
+    return {
+      path: this.#internalModuleNameOutPath('Deserializer'),
+      contents: this.value()
+    };
+  }
+  #generateSerializerInterface() {
+    this.write(`package ${this.#schemaName}.internal\n\n`);
+    this.write(
+      'interface Serializer {\n',
+      () => {
+        this.write('fun writeInt(value: Int): Unit\n');
+        this.write('fun writeLong(value: Long): Unit\n');
+        this.write('fun writeDouble(value: Double): Unit\n');
+        this.write('fun writeFloat(value: Float): Unit\n');
+        this.write('fun writeShort(value: Short): Unit\n');
+        this.write('fun writeByte(value: Byte): Unit\n');
+        this.write('fun write(value: ByteArray): Unit\n');
+      },
+      '}\n'
+    );
+    return {
+      path: this.#internalModuleNameOutPath('Serializer'),
+      contents: this.value()
+    };
+  }
+  #generateEncodableInterface() {
+    this.write(`package ${this.#schemaName}.internal\n\n`);
+    this.write(`import ${this.#schemaName}.internal.Serializer\n\n`);
+    this.write(
+      'abstract class Encodable {\n',
+      () => {
+        this.write('abstract fun encode(serializer: Serializer)\n');
+      },
+      '}\n'
+    );
+    return {
+      path: this.#internalModuleNameOutPath('Encodable'),
+      contents: this.value()
+    };
+  }
+  #internalModuleNameOutPath(name: string) {
+    return `${this.#schemaName.split('.').join('/')}/internal/${name}.kt`;
+  }
+  #root(): FileGeneratorKotlin {
+    return this.#kind === null ? this : this.#kind.root;
+  }
+  async #createFileGeneratorsFromParamTypeMetadata(
+    paramTypeMetadata: TypeExpressionMetadata
+  ) {
+    const root = this.#root();
+    switch (paramTypeMetadata.type) {
+      case 'internalType':
+      case 'externalType': {
+        const filePath =
+          this.#metadataFilePathFromParamTypeMetadata(paramTypeMetadata);
+        const existingGenerator = root.#fileGenerators.get(filePath) ?? null;
+        if (existingGenerator) {
+          break;
+        }
+        const metadata = this.#loadFileContents(filePath);
+        const generator = new FileGeneratorKotlin({
+          filePath,
+          kind: {
+            root
+          },
+          schemaName: this.#schemaName,
+          metadata,
+          indentationSize: this.#indentationSize
+        });
+        root.#fileGenerators.set(filePath, generator);
+        await generator.#createFileGenerators();
+        break;
+      }
+      case 'template':
+        switch (paramTypeMetadata.template) {
+          case 'optional':
+          case 'vector':
+          case 'set':
+            await this.#createFileGeneratorsFromParamTypeMetadata(
+              paramTypeMetadata.value
+            );
+            break;
+          case 'map':
+            await this.#createFileGeneratorsFromParamTypeMetadata(
+              paramTypeMetadata.key
+            );
+            await this.#createFileGeneratorsFromParamTypeMetadata(
+              paramTypeMetadata.value
+            );
+            break;
+          case 'bigint':
+          case 'tuple':
+            break;
+        }
+        break;
+      case 'generic':
+      case 'externalModuleType':
+        break;
+    }
+  }
+  async #createFileGenerators() {
+    const kind = this.#kind;
+    if (kind !== null && 'metadata' in kind) {
+      return;
+    }
+    const root = this.#root();
+    for (const i of this.#importMetadataList) {
+      const key = path.resolve(
+        path.dirname(this.#filePath),
+        `${i.relativePath}.metadata.json`
+      );
+      let gen = root.#fileGenerators.get(key);
+      if (!gen) {
+        const fileContents = this.#loadFileContents(key);
+        gen = new FileGeneratorKotlin({
+          filePath: key,
+          metadata: fileContents,
+          kind: {
+            root
+          },
+          schemaName: this.#schemaName,
+          indentationSize: this.#indentationSize
+        });
+        root.#fileGenerators.set(key, gen);
+        await gen.#createFileGenerators();
+      }
+    }
+    for (const metadata of this.#metadata) {
+      switch (metadata.kind) {
+        case 'trait':
+        case 'type':
+        case 'call': {
+          const fg = root.#fileGenerators.get(metadata);
+          if (fg) {
+            break;
+          }
+          const generator = new FileGeneratorKotlin({
+            filePath: this.#filePath,
+            kind: {
+              metadata,
+              root
+            },
+            metadata: {
+              __all: this.#metadata,
+              __imports: this.#importMetadataList
+            },
+            schemaName: this.#schemaName,
+            indentationSize: this.#indentationSize
+          });
+          root.#fileGenerators.set(metadata, generator);
+          const expMetadataList = new Array<TypeExpressionMetadata>();
+          switch (metadata.kind) {
+            case 'call':
+              expMetadataList.push(metadata.returnType);
+              break;
+            case 'type':
+            case 'trait':
+          }
+          switch (metadata.kind) {
+            case 'trait':
+              expMetadataList.push(...metadata.nodes);
+              break;
+            case 'call':
+            case 'type':
+              expMetadataList.push(...metadata.traits);
+              expMetadataList.push(...metadata.params.map((p) => p.type));
+          }
+          for (const metadata of expMetadataList) {
+            await this.#createFileGeneratorsFromParamTypeMetadata(metadata);
+          }
+          break;
+        }
+      }
+    }
+  }
+  /**
+   * fill in #imports of this file, should only be run on metadata file generators
+   */
+  async #preprocess() {
+    for (const metadata of this.#metadata) {
+      const gen = this.#root().#fileGenerators.get(metadata);
+      assert.strict.ok(gen);
+      await gen.#preprocessMetadata(metadata);
+    }
+  }
+  async #preprocessMetadata(metadata: Metadata) {
+    switch (metadata.kind) {
+      case 'call':
+      case 'type':
+      case 'trait':
+        this.#imports.add(`${this.#schemaName}.internal.Encodable`);
+        this.#imports.add(`${this.#schemaName}.internal.Deserializer`);
+        this.#imports.add(`${this.#schemaName}.internal.Serializer`);
+        break;
+    }
+    switch (metadata.kind) {
+      case 'call':
+      case 'type':
+        for (const t of metadata.traits) {
+          await this.#preprocessMetadataParam(t);
+        }
+        for (const p of metadata.params) {
+          await this.#preprocessMetadataParam(p.type);
+        }
+        break;
+      case 'trait':
+        for (const node of metadata.nodes) {
+          await this.#preprocessMetadataParam(node);
+        }
+    }
+  }
+  #metadataFilePathFromParamTypeMetadata(
+    metadataType:
+      | IParamTypeMetadataInternalType
+      | IParamTypeMetadataExternalType
+  ) {
+    switch (metadataType.type) {
+      case 'internalType':
+        return this.#filePath;
+      case 'externalType': {
+        const currentDir = path.dirname(this.#filePath);
+        return path.resolve(
+          currentDir,
+          `${metadataType.relativePath}.metadata.json`
+        );
+      }
+    }
+  }
+  async #preprocessMetadataParam(metadataType: TypeExpressionMetadata) {
+    switch (metadataType.type) {
+      case 'template':
+        switch (metadataType.template) {
+          case 'vector':
+          case 'optional':
+          case 'set':
+            await this.#preprocessMetadataParam(metadataType.value);
+            break;
+          case 'map':
+            await this.#preprocessMetadataParam(metadataType.key);
+            await this.#preprocessMetadataParam(metadataType.value);
+            break;
+          case 'bigint':
+          case 'tuple':
+            break;
+        }
+        break;
+      case 'generic':
+        break;
+      case 'internalType': {
+        const metadata = this.#metadata.find(
+          (m) => m.name === metadataType.interfaceName
+        );
+        assert.strict.ok(metadata);
+        break;
+      }
+      case 'externalType': {
+        const filePath =
+          this.#metadataFilePathFromParamTypeMetadata(metadataType);
+        const imports = this.#imports;
+        const i = Array.from(imports).find((j) =>
+          typeof j === 'string'
+            ? false
+            : 'filePath' in j
+            ? j.filePath === filePath && j.id === metadataType.name
+            : false
+        );
+        if (!i) {
+          imports.add({
+            filePath,
+            id: metadataType.name
+          });
+        }
+        break;
+      }
+      case 'externalModuleType':
+        throw new Exception(
+          'External module types are not supported for Kotlin generator'
+        );
+    }
+  }
+  #currentMetadata() {
+    const kind = this.#kind;
+    assert.strict.ok(kind !== null && 'metadata' in kind);
+    const { metadata } = kind;
+    return metadata;
+  }
+  #packageName() {
+    const metadata = this.#currentMetadata();
+    assert.strict.ok(this.#metadata.includes(metadata));
+    return getPackageName(this.#schemaName, metadata);
+  }
+  #outRelativeFilePath() {
+    const metadata = this.#currentMetadata();
+    switch (metadata.kind) {
+      case 'call':
+      case 'type':
+      case 'trait': {
+        return [
+          ...this.#schemaName.split('.'),
+          ...metadata.globalName
+            .split('.')
+            .map((a, index, list) =>
+              index === list.length - 1 ? upperFirst(a) : a
+            )
+        ];
+      }
+    }
+  }
+  async #generateMetadataFile() {
+    const metadata = this.#currentMetadata();
+    switch (metadata.kind) {
+      case 'trait':
+      case 'type':
+      case 'call': {
+        const packageName = this.#packageName();
+        this.write(`package ${packageName.join('.')}\n`);
+        const filePath = `${path.join(...this.#outRelativeFilePath())}.kt`;
+        const root = this.#root();
+        for (const i of this.#imports) {
+          let id: string;
+          let rootFileGen: FileGeneratorKotlin | null;
+          if (typeof i === 'string') {
+            this.write(`import ${i}\n`);
+            continue;
+          }
+          if ('name' in i) {
+            id = i.name;
+            rootFileGen = root.#fileGenerators.get(i) ?? null;
+          } else {
+            id = i.id;
+            rootFileGen = root.#fileGenerators.get(i.filePath) ?? null;
+          }
+          assert.strict.ok(rootFileGen);
+          const importedMetadata = rootFileGen.#metadata.find(
+            (m) => m.name === id
+          );
+          assert.strict.ok(importedMetadata);
+          const gen = root.#fileGenerators.get(importedMetadata);
+          assert.strict.ok(gen);
+          switch (gen.#currentMetadata().kind) {
+            case 'call':
+            case 'type':
+            case 'trait':
+              this.write(
+                `import ${getImportPath(
+                  getPackageName(this.#schemaName, importedMetadata),
+                  importedMetadata
+                )}\n`
+              );
+              break;
+          }
+        }
+        await this.#generateCode(metadata);
+        return {
+          path: filePath,
+          contents: this.value()
+        };
+      }
+    }
+    return null;
+  }
+  async #generateCode(metadata: Metadata) {
+    switch (metadata.kind) {
+      case 'call':
+      case 'type': {
+        this.write(
+          `class ${getClassName(metadata)}(\n`,
+          () => {
+            for (const param of metadata.params) {
+              this.write(
+                `val ${param.name}: ${this.#resolveMetadataParamType(
+                  param.type
+                )}`
+              );
+              if (param !== metadata.params[metadata.params.length - 1]) {
+                this.append(',');
+              }
+              this.append('\n');
+            }
+          },
+          ') : Encodable() {\n'
+        );
+        this.indentBlock(() => {
+          this.write(
+            'companion object {\n',
+            () => {
+              this.write(
+                `fun decode(deserializer: Deserializer): ${getClassName(
+                  metadata
+                )}? {\n`,
+                () => {
+                  this.write(
+                    `if(deserializer.readInt() != ${metadata.id}) return null\n`
+                  );
+                  let depth = 0;
+                  for (const p of metadata.params) {
+                    depth = this.#writeDecodeCall(p.type, p.name, depth + 1);
+                  }
+                  this.write(
+                    `return ${getClassName(metadata)}(\n`,
+                    () => {
+                      for (const p of metadata.params) {
+                        this.write(`${p.name}`);
+                        if (p !== metadata.params[metadata.params.length - 1]) {
+                          this.append(',');
+                        }
+                        this.append('\n');
+                      }
+                    },
+                    ')\n'
+                  );
+                },
+                '}\n'
+              );
+            },
+            '}\n'
+          );
+          this.write(
+            'override fun encode(serializer: Serializer) {\n',
+            () => {
+              this.write(`serializer.writeInt(${metadata.id})\n`);
+              let depth = 0;
+              for (const p of metadata.params) {
+                depth = this.#writeEncodeCall(p.type, p.name, depth + 1);
+              }
+            },
+            '}\n'
+          );
+        });
+        this.write('}\n');
+        break;
+      }
+      case 'trait': {
+        interface IParam {
+          classParamName: string;
+          typeName: string;
+          private: boolean;
+          nonOptionalTypeName: string;
+          node: TypeExpressionMetadata | null;
+        }
+        const params: IParam[] = metadata.nodes.map((node) => {
+          const gen = this.#fileGeneratorFromParamTypeMetadata(node);
+          return {
+            private: false,
+            node,
+            nonOptionalTypeName: getClassName(gen.#currentMetadata()),
+            classParamName: lowerFirst(gen.#currentMetadata().name),
+            typeName: `${getClassName(gen.#currentMetadata())}?`
+          };
+        });
+        const traitTypePropName =
+          getTraitClassTypeDiscriminatorPropertyName(metadata);
+        params.unshift({
+          node: null,
+          typeName: 'Int',
+          nonOptionalTypeName: 'Int',
+          private: true,
+          classParamName: traitTypePropName
+        });
+        const traitClassName = getClassName(metadata);
+        const nodes = new Array<{
+          node: IMetadataCall | IMetadataType;
+          param: IParam;
+        }>();
+        for (const param of params) {
+          if (param.node === null) continue;
+          const fg = this.#fileGeneratorFromParamTypeMetadata(param.node);
+          const currentMetadata = fg.#currentMetadata();
+          assert.strict.ok(!('nodes' in currentMetadata));
+          nodes.push({ node: currentMetadata, param });
+        }
+        this.write(
+          `sealed class ${traitClassName} : Encodable() {\n`,
+          () => {
+            this.write(
+              'companion object {\n',
+              () => {
+                this.write(
+                  `fun decode(deserializer: Deserializer): ${traitClassName}? {\n`,
+                  () => {
+                    this.write('deserializer.mark()\n');
+                    this.write('val id = deserializer.readInt()\n');
+                    this.write('deserializer.reset()\n');
+                    this.write(
+                      'when(id) {\n',
+                      () => {
+                        for (const { node: nodeMetadata } of nodes) {
+                          this.write(
+                            `${nodeMetadata.id} -> {\n`,
+                            () => {
+                              this.write(
+                                `val result = ${getClassName(
+                                  nodeMetadata
+                                )}.decode(deserializer)\n`
+                              );
+                              this.write(
+                                `if(result != null) return ${getTypeDefinitionTraitClassName(
+                                  nodeMetadata
+                                )}(result)\n`
+                              );
+                            },
+                            '}\n'
+                          );
+                        }
+                      },
+                      '}\n'
+                    );
+                    this.write('return null\n');
+                  },
+                  '}\n'
+                );
+              },
+              '}\n'
+            );
+
+            for (const node of nodes) {
+              this.write(
+                `data class ${getTypeDefinitionTraitClassName(
+                  node.node
+                )}(val value: ${node.param.typeName.replace(
+                  /\?$/,
+                  ''
+                )}) : ${traitClassName}() {\n`,
+                () => {
+                  this.write(
+                    'override fun encode(serializer: Serializer) {\n',
+                    () => {
+                      this.write('value.encode(serializer)\n');
+                    },
+                    '}\n'
+                  );
+                },
+                '}\n'
+              );
+            }
+          },
+          '}\n'
+        );
+        break;
+      }
+    }
+  }
+  #fileGeneratorFromParamTypeMetadata(metadata: TypeExpressionMetadata) {
+    let key: Metadata;
+    switch (metadata.type) {
+      case 'generic':
+      case 'template':
+      case 'externalModuleType':
+        throw new Exception('Not implemented');
+      case 'internalType': {
+        const item = this.#metadata.find(
+          (m) => m.name === metadata.interfaceName
+        );
+        assert.strict.ok(item);
+        key = item;
+        break;
+      }
+      case 'externalType': {
+        const gen = this.#root().#fileGenerators.get(
+          this.#metadataFilePathFromParamTypeMetadata(metadata)
+        );
+        assert.strict.ok(gen);
+        const target = gen.#metadata.find((m) => m.name === metadata.name);
+        assert.strict.ok(target);
+        key = target;
+        break;
+      }
+    }
+    const gen = this.#root().#fileGenerators.get(key);
+    assert.strict.ok(gen);
+    return gen;
+  }
+  #writeEncodeCall(
+    paramType: TypeExpressionMetadata,
+    value: string,
+    depth = 0
+  ) {
+    switch (paramType.type) {
+      case 'generic':
+        switch (paramType.value) {
+          case GenericName.Uint16:
+          case GenericName.UnsignedLong:
+          case GenericName.Uint32:
+          case GenericName.Uint8:
+            throw new Exception('Unsigned integers are not supported');
+          case GenericName.Long:
+            this.write(`serializer.writeLong(${value})\n`);
+            break;
+          case GenericName.Bytes:
+            this.write(`serializer.writeInt(${value}.size)\n`);
+            this.write(`serializer.write(${value})\n`);
+            break;
+          case GenericName.Boolean:
+            this.write(`serializer.writeByte(if(${value}) 1 else 0)\n`);
+            break;
+          case GenericName.Float:
+            this.write(`serializer.writeFloat(${value})\n`);
+            break;
+          case GenericName.Double:
+            this.write(`serializer.writeDouble(${value})\n`);
+            break;
+          case GenericName.Integer:
+          case GenericName.Int32:
+            this.write(`serializer.writeInt(${value})\n`);
+            break;
+          case GenericName.Int16:
+            this.write(`serializer.writeShort(${value})\n`);
+            break;
+          case GenericName.Int8:
+            this.write(`serializer.writeByte(${value})\n`);
+            break;
+          case GenericName.String: {
+            const byteArrayVarName = `ba${value}${depth}`;
+            this.write(
+              `val ${byteArrayVarName} = ${value}.toByteArray(Charsets.UTF_8)\n`
+            );
+            this.write(`serializer.writeInt(${byteArrayVarName}.size)\n`);
+            this.write(`serializer.write(${byteArrayVarName})\n`);
+            break;
+          }
+          case GenericName.NullTerminatedString:
+            this.write(
+              `serializer.write(${value}.toByteArray(Charsets.UTF_8))\n`
+            );
+            this.write('serializer.writeByte(0)\n');
+        }
+        break;
+      case 'template':
+        depth++;
+        switch (paramType.template) {
+          case 'vector':
+          case 'set': {
+            this.write(`serializer.writeInt(${value}.size)\n`);
+            const itemVarName = `item${upperFirst(value)}${depth}`;
+            this.write(
+              `for(${itemVarName} in ${value}) {\n`,
+              () => {
+                depth = this.#writeEncodeCall(
+                  paramType.value,
+                  itemVarName,
+                  depth
+                );
+              },
+              '}\n'
+            );
+            break;
+          }
+          case 'optional':
+            this.write(
+              `if(${value} != null) {\n`,
+              () => {
+                depth = this.#writeEncodeCall(paramType.value, value, depth);
+              },
+              '}\n'
+            );
+            break;
+          case 'bigint':
+          case 'tuple':
+          case 'map':
+            throw new Exception('Not implemented');
+        }
+        break;
+      case 'internalType':
+      case 'externalType':
+        this.write(`${value}.encode(serializer)\n`);
+        break;
+      case 'externalModuleType':
+    }
+    return depth;
+  }
+  #writeDecodeCall(
+    paramType: TypeExpressionMetadata,
+    value: string,
+    depth = 0
+  ) {
+    switch (paramType.type) {
+      case 'generic':
+        switch (paramType.value) {
+          case GenericName.Uint16:
+          case GenericName.UnsignedLong:
+          case GenericName.Uint32:
+          case GenericName.Uint8:
+            throw new Exception('Unsigned integers are not supported');
+          case GenericName.Long:
+            this.write(`val ${value} = deserializer.readLong()\n`);
+            break;
+          case GenericName.Boolean:
+            this.write(`val ${value} = deserializer.readByte().toInt() == 1\n`);
+            break;
+          case GenericName.Float:
+            this.write(`val ${value} = deserializer.readFloat()\n`);
+            break;
+          case GenericName.Double:
+            this.write(`val ${value} = deserializer.readDouble()\n`);
+            break;
+          case GenericName.Integer:
+          case GenericName.Int32:
+            this.write(`val ${value} = deserializer.readInt()\n`);
+            break;
+          case GenericName.Int16:
+            this.write(`val ${value} = deserializer.readShort()\n`);
+            break;
+          case GenericName.Int8:
+            this.write(`val ${value} = deserializer.readByte()\n`);
+            break;
+          case GenericName.String:
+          case GenericName.Bytes: {
+            const varName =
+              paramType.value === GenericName.Bytes
+                ? value
+                : `${value}AsByteArray${depth}`;
+            this.write(`val ${varName} = ByteArray(deserializer.readInt())\n`);
+            this.write(`deserializer.read(${varName})\n`);
+            if (paramType.value === GenericName.String) {
+              this.write(`val ${value} = String(${varName}, Charsets.UTF_8)\n`);
+            }
+            break;
+          }
+          case GenericName.NullTerminatedString:
+            throw new Exception('Not implemented');
+        }
+        break;
+      case 'template':
+        depth++;
+        switch (paramType.template) {
+          case 'vector':
+          case 'set': {
+            const lengthVarName = getVarName('length', value, depth);
+            const itemVarName = getVarName('item', value, depth);
+            this.write(`val ${lengthVarName} = deserializer.readInt()\n`);
+            this.write(
+              `val ${value} = (0 until ${lengthVarName}).map {\n`,
+              () => {
+                depth = this.#writeDecodeCall(
+                  paramType.value,
+                  itemVarName,
+                  depth
+                );
+                this.write(`${itemVarName}\n`);
+              },
+              '}\n'
+            );
+            break;
+          }
+          case 'optional': {
+            // const optionalVarName = getVarName('optionalValue', value, depth);
+            const actualValueVarName = getVarName('actualValue', value, depth);
+            const optionalByteVarName = getVarName(
+              'optionalByte',
+              value,
+              depth
+            );
+            this.write(
+              `val ${optionalByteVarName} = deserializer.readByte().toInt()\n`
+            );
+            this.write(
+              `var ${value}: ${this.#resolveMetadataParamType(paramType)}\n`
+            );
+            this.write(
+              `if(${optionalByteVarName} == 1) {\n`,
+              () => {
+                depth = this.#writeDecodeCall(
+                  paramType.value,
+                  actualValueVarName,
+                  depth
+                );
+                this.write(`${value} = ${actualValueVarName}\n`);
+              },
+              `} else if(${optionalByteVarName} == 0) {\n`
+            );
+            this.indentBlock(() => {
+              this.write(`${value} = null\n`);
+            });
+            this.write('} else {\n');
+            this.indentBlock(() => {
+              this.write('return null\n');
+            });
+            this.write('}\n');
+            break;
+          }
+          case 'bigint':
+          case 'tuple':
+          case 'map':
+            throw new Exception('Not implemented');
+        }
+        break;
+      case 'internalType':
+      case 'externalType':
+        this.write(
+          `val ${value} = ${getClassName(
+            paramType
+          )}.decode(deserializer) ?: return null\n`
+        );
+        break;
+      case 'externalModuleType':
+        throw new Exception('Not implemented');
+    }
+    return depth;
+  }
+  #resolveMetadataParamType(paramType: TypeExpressionMetadata): string {
+    switch (paramType.type) {
+      case 'generic':
+        switch (paramType.value) {
+          case GenericName.Bytes:
+            return 'ByteArray';
+          case GenericName.Long:
+            return 'Long';
+          case GenericName.UnsignedLong:
+          case GenericName.Uint16:
+          case GenericName.Uint32:
+          case GenericName.Uint8:
+            throw new Exception(
+              'Unsigned integers are not supported on FileGeneratorKotlin'
+            );
+          case GenericName.Float:
+            return 'Float';
+          case GenericName.Double:
+            return 'Double';
+          case GenericName.Boolean:
+            return 'Boolean';
+          case GenericName.Integer:
+          case GenericName.Int32:
+            return 'Int';
+          case GenericName.Int16:
+            return 'Short';
+          case GenericName.Int8:
+            return 'Byte';
+          case GenericName.NullTerminatedString:
+          case GenericName.String:
+            return 'String';
+        }
+        break;
+      case 'externalType':
+      case 'internalType':
+        return getClassName(paramType);
+      case 'template':
+        switch (paramType.template) {
+          case 'vector':
+            return `List<${this.#resolveMetadataParamType(paramType.value)}>`;
+          case 'map':
+            return `Map<${this.#resolveMetadataParamType(
+              paramType.key
+            )}, ${this.#resolveMetadataParamType(paramType.value)}>`;
+          case 'set':
+            return `Set<${this.#resolveMetadataParamType(paramType.value)}>`;
+          case 'optional':
+            return `${this.#resolveMetadataParamType(paramType.value)}?`;
+          case 'bigint':
+          case 'tuple':
+            throw new Exception(
+              `${paramType.template} is not supported by Kotlin code generator`
+            );
+        }
+        break;
+      case 'externalModuleType':
+        throw new Exception(
+          'External module types are not supported by FileGeneratorKotlin'
+        );
+    }
+    return 'Any';
+  }
+}

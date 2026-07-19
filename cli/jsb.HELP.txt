@@ -1,0 +1,50 @@
+Usage: jsb [options] <main-file> [options]
+Usage: jsb -o <output-directory> <main-file>
+Usage: jsb --output <output-directory> <main-file>
+Usage: jsb <main-file> -o <output-directory> --generator c99
+Usage: jsb <main-file> -o <output-directory> --generator c99 --indentation-size 4
+Usage: jsb <main-file> -o <output-directory> --generator c99 --indentation-size 4 --name c_project
+Usage: jsb <main-file> -o <output-directory> --indentation-size 2
+Usage: jsb <main-file> -o <output-directory> --indentation-size 8
+Usage: jsb <main-file> -o <output-directory> --name c_project_cmake_schema
+Usage: jsb <main-file> -o <output-directory> --generator c++17
+
+Options:
+
+  -h, --help
+    Print this help message and exit.
+
+  -o, --output <output-directory>
+    Output directory for generated files.
+
+  --generator <generator> (default: cpp17)
+    Generator to use. Available generators: c99, cpp17, typescript, kotlin.
+
+  --no-ts-config (typescript only)
+    Do not generate a tsconfig.json file in the output directory.
+
+  --extends <path> (typescript only)
+    Base tsconfig.json that the generated tsconfig.json will extend.
+
+  --unique-name-property-name <string> (typescript only)
+    Property name used to discriminate generated types/interfaces (default: _name).
+
+  -s, --sort-properties (typescript only)
+    Sort the properties within generated types alphabetically.
+
+  --indentation-size <indentation-size>
+    Indentation size for generated files.
+
+  --name <name>
+    Name of the CMake project (c99/cpp17). For the kotlin generator, this is the
+    Kotlin package name for the generated schema (e.g. com.test.app.schema).
+
+  --metadata-only
+    Generate metadata files using the same structure as the root directory, defined by the directory in which the <main-file> is,
+    the generated files will be dumped on <output-directory>/**.
+
+  --from-metadata <metadata-path>
+    Generate source code directly from previously dumped metadata JSON files instead of parsing a <main-file>.
+    <metadata-path> may be a single *.metadata.json file or a directory that is searched recursively.
+    This is mutually exclusive with --metadata-only, and no <main-file> is required in this mode.
+    Example: jsb --from-metadata out/metadata --generator c99 -o out/c --name app

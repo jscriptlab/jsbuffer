@@ -2,14 +2,17 @@ import CodeStream from 'textstreamjs';
 import { IGeneratedFile } from '../../core/File';
 import { IFileMetadata } from '../../parser/Parser';
 import {
+  getInitOptionalParameterFunctionName,
   getMetadataCompleteTypeReference,
   getMetadataPrefix,
-  getTuplePropertyName
+  getTuplePropertyName,
+  pointer
 } from './utilities';
 import GenericName from '../../parser/types/GenericName';
 import {
   IMetadataExternalTypeParamTypeDefinition,
   IMetadataInternalTypeParamTypeDefinition,
+  IMetadataParam,
   IMetadataParamTypeGeneric,
   IMetadataTraitDefinition,
   Metadata,
@@ -18,6 +21,7 @@ import {
 } from '../../parser/types/metadata';
 import Exception from '../../../exception/Exception';
 import MetadataFileCCodeGenerator from './MetadataFileCCodeGenerator';
+import assert from 'assert';
 
 export const genericTypeNames = [
   'uint8',
@@ -60,42 +64,126 @@ export default class TestGeneratorC extends CodeStream {
 
   // Generate a test.c file based on the metadata, calling `_encode` and `_decode` functions. Create the serializer and deserializer once
   public generate() {
-    this.write('#include <stdio.h>\n');
-    this.write('#include <assert.h>\n');
-    this.write('#include <stdlib.h>\n');
-    this.write('#include <string.h>\n');
+    this.append('#ifdef __AVR__\n');
+    this.write('#include <avr/sleep.h>\n');
+    this.append('#endif\n');
+    this.append('\n');
+
+    this.write('#include <jsb/jsb.h>\n');
     this.write('#include <jsb/serializer.h>\n');
     this.write('#include <jsb/deserializer.h>\n');
-    this.write('\n');
+    this.append('\n');
     for (const file of this.#files) {
       if (file.path.endsWith('.h')) {
         this.write(`#include "${file.path}"\n`);
       }
     }
-    this.write('\n');
-    this.write('#define JSB_ASSERT(expr) \\\n');
-    this.indentBlock(() => {
-      this.write(
-        'if((expr)) {} else { \\\n',
-        () => {
-          this.write('JSB_TRACE("test", "Assertion failed: %s", #expr); \\\n');
-          this.write('return 1; \\\n');
+    this.append('\n');
+    const assertFunctionImplementations: (
+      | {
+          type: 'custom';
+          includes: () => void;
+          condition: () => void;
+          error: () => void;
+        }
+      | {
+          type: 'original';
+        }
+    )[] = [
+      {
+        type: 'custom',
+        includes: () => {
+          this.append('#include <stdio.h>\n');
         },
-        '}\n'
-      );
-    });
-    this.write('\n');
-    this.write('int main() {\n');
+        condition: () => {
+          this.append('!defined(__AVR__) && defined(HAVE_FPRINTF)');
+        },
+        error: () => {
+          this.write(
+            'fprintf(stderr, "%s:%d: Assertion failed: %s", __FILE__, __LINE__, #expr); \\\n'
+          );
+        }
+      },
+      { type: 'original' }
+    ];
+    const lastAssertFunctionImplementation =
+      assertFunctionImplementations[assertFunctionImplementations.length - 1] ??
+      null;
+    const firstAssertFunctionImplementation =
+      assertFunctionImplementations[0] ?? null;
+    assert.strict.ok(lastAssertFunctionImplementation !== null);
+    assert.strict.ok(firstAssertFunctionImplementation !== null);
+    for (const fns of assertFunctionImplementations) {
+      // assert.strict.ok(
+      //   fns !== firstAssertFunctionImplementation && fns.type === 'original',
+      //   'The original implementation must be at the end. ' +
+      //     "It's the only one that fits inside an #else " +
+      //     "(that doesn't need a condition)"
+      // );
+      switch (fns.type) {
+        case 'original':
+          this.append('#else');
+          break;
+        case 'custom':
+          if (fns === firstAssertFunctionImplementation) {
+            this.append('#if');
+          } else if (fns !== lastAssertFunctionImplementation) {
+            this.append('#elif');
+          }
+          this.append(' ');
+          fns.condition();
+      }
+      this.append('\n');
+      switch (fns.type) {
+        case 'custom':
+          fns.includes();
+          this.append('\n');
+          break;
+        case 'original':
+      }
+      this.write('#define JSB_ASSERT(expr) \\\n');
+      this.indentBlock(() => {
+        this.write(
+          'if((expr)) {} else { \\\n',
+          () => {
+            if (fns.type === 'custom') {
+              fns.error();
+            }
+            this.write(
+              'JSB_TRACE("test", "Assertion failed: %s", #expr); \\\n'
+            );
+            this.write('return 1; \\\n');
+          },
+          '}\n'
+        );
+      });
+      if (fns === lastAssertFunctionImplementation) {
+        const previousAssertFunctionImplementation =
+          assertFunctionImplementations[
+            assertFunctionImplementations.indexOf(fns) - 1
+          ] ?? null;
+        assert.strict.ok(previousAssertFunctionImplementation !== null);
+        this.append('#endif ');
+        this.append('// ');
+        if (previousAssertFunctionImplementation.type === 'custom') {
+          previousAssertFunctionImplementation.condition();
+        }
+        this.append('\n');
+      }
+    }
+    this.append('\n');
+
+    this.write('int main(void) {\n');
     this.indentBlock(() => {
       this.write('struct jsb_serializer_t s;\n');
       this.write('struct jsb_deserializer_t d;\n');
-      this.write('\n');
+      this.append('\n');
 
       this.write('// It should return JSB_BAD_ARGUMENT if s is NULL\n');
       this.write(
         'JSB_ASSERT(jsb_serializer_init(NULL, 1) == JSB_BAD_ARGUMENT);\n'
       );
-      this.write('\n');
+      this.append('\n');
 
       this.write(
         '// It should return JSB_BAD_ARGUMENT if buffer size is zero\n'
@@ -103,13 +191,13 @@ export default class TestGeneratorC extends CodeStream {
       this.write(
         'JSB_ASSERT(jsb_serializer_init(&s, 0) == JSB_BAD_ARGUMENT);\n'
       );
-      this.write('\n');
+      this.append('\n');
 
       this.write(
         '// Initialize the serializer again in order to pass a valid buffer to the deserializer\n'
       );
       this.write('JSB_ASSERT(jsb_serializer_init(&s, 200) == JSB_OK);\n');
-      this.write('\n');
+      this.append('\n');
 
       this.write(
         '// It should not return JSB_BAD_ARGUMENT if buffer size is zero\n'
@@ -117,7 +205,7 @@ export default class TestGeneratorC extends CodeStream {
       this.write(
         'JSB_ASSERT(jsb_deserializer_init(&d, s.buffer, s.buffer_size) == JSB_OK);\n'
       );
-      this.write('\n');
+      this.append('\n');
 
       this.write(
         '// It should return JSB_BAD_ARGUMENT if deserializer is NULL\n'
@@ -125,15 +213,15 @@ export default class TestGeneratorC extends CodeStream {
       this.write(
         'JSB_ASSERT(jsb_deserializer_init(NULL, s.buffer, s.buffer_size) == JSB_BAD_ARGUMENT);\n'
       );
-      this.write('\n');
+      this.append('\n');
 
       this.write('// It should return JSB_BAD_ARGUMENT if buffer is NULL\n');
       this.write(
         'JSB_ASSERT(jsb_deserializer_init(&d, NULL, s.buffer_size) == JSB_BAD_ARGUMENT);\n'
       );
-      this.write('\n');
+      this.append('\n');
 
-      this.write('\n');
+      this.append('\n');
       this.append(
         '#if defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)\n'
       );
@@ -164,6 +252,10 @@ export default class TestGeneratorC extends CodeStream {
                     this.write(
                       `status = jsb_serializer_write_${typeName}(&s, ${value});\n`
                     );
+                    this.#writeStatusCheck('status', [
+                      'JSB_OK',
+                      'JSB_BUFFER_OVERFLOW'
+                    ]);
                   },
                   '} while(status != JSB_BUFFER_OVERFLOW);\n'
                 );
@@ -201,8 +293,8 @@ export default class TestGeneratorC extends CodeStream {
       this.append(
         '#endif // defined(JSB_SERIALIZER_BUFFER_SIZE) && !defined(JSB_SERIALIZER_USE_MALLOC)\n'
       );
-      this.write('\n');
-      this.write('\n');
+      this.append('\n');
+      this.append('\n');
       for (const fileMetadata of this.#fileMetadataList.values()) {
         for (const metadata of fileMetadata.metadata) {
           this.write(
@@ -246,6 +338,10 @@ export default class TestGeneratorC extends CodeStream {
                               metadata
                             )}_encode(&value, &s);\n`
                           );
+                          this.#writeStatusCheck('status', [
+                            'JSB_OK',
+                            'JSB_BUFFER_OVERFLOW'
+                          ]);
                         },
                         '} while(status != JSB_BUFFER_OVERFLOW);\n'
                       );
@@ -287,7 +383,7 @@ export default class TestGeneratorC extends CodeStream {
                   );
                   this.write(`${getMetadataPrefix(metadata)}_free(&value);\n`);
 
-                  this.write('\n');
+                  this.append('\n');
 
                   // Test the type with all sorts of values in its parameters
                   for (const param of metadata.params) {
@@ -300,12 +396,12 @@ export default class TestGeneratorC extends CodeStream {
                           )} new_value;\n`
                         );
                         this.write(
-                          `memset(&new_value, 0, sizeof(${getMetadataCompleteTypeReference(
+                          `jsb_memset(&new_value, 0, sizeof(${getMetadataCompleteTypeReference(
                             metadata
                           )}));\n`
                         );
                         this.write(
-                          `memset(&value, 0, sizeof(${getMetadataCompleteTypeReference(
+                          `jsb_memset(&value, 0, sizeof(${getMetadataCompleteTypeReference(
                             metadata
                           )}));\n`
                         );
@@ -325,6 +421,7 @@ export default class TestGeneratorC extends CodeStream {
                         this.#generateTestForParam(
                           param.type,
                           metadata,
+                          param,
                           `value.${param.name}`
                         );
                         this.write(
@@ -345,7 +442,7 @@ export default class TestGeneratorC extends CodeStream {
                           `JSB_ASSERT(memcmp(&new_value.${param.name}, &value.${param.name}, sizeof(value.${param.name})) == 0);\n`
                         );
                         this.write(
-                          `printf("Test passed for ${param.name} ✔\\n");\n`
+                          `JSB_TRACE("test", "Test passed ✔ for param: %s", "${param.name}");\n`
                         );
                       },
                       '}\n'
@@ -361,8 +458,22 @@ export default class TestGeneratorC extends CodeStream {
           );
         }
       }
-      this.write('\n');
+      this.append('\n');
+
       this.write('jsb_serializer_free(&s);\n');
+      this.append('\n');
+
+      this.write('JSB_TRACE("test", "All tests passed ✔");\n');
+      this.append('\n');
+
+      this.append('#ifdef __AVR__\n');
+      this.write('// Put AVR MCUs to sleep\n');
+      this.write('// Note: `asm("sleep")` would also work\n');
+      this.write('set_sleep_mode(SLEEP_MODE_PWR_DOWN);\n');
+      this.write('sleep_mode();\n');
+      this.append('#endif\n');
+      this.append('\n');
+
       this.write('return 0;\n');
     });
     this.write('}\n');
@@ -370,6 +481,22 @@ export default class TestGeneratorC extends CodeStream {
       path: 'test.c',
       contents: this.value()
     });
+  }
+
+  #writeStatusCheck(status: string, expected: string[]) {
+    assert.strict.ok(expected.length > 0, '`expected` array cannot be empty');
+
+    this.write(
+      '// If it does not return JSB_BUFFER_OVERFLOW, it MUST be JSB_OK.\n'
+    );
+    this.write(
+      '// Otherwise, some other issue has happened during execution.\n'
+    );
+    this.write(
+      `JSB_ASSERT(${expected
+        .map((arg) => `${status} == ${arg}`)
+        .join(' || ')});\n`
+    );
   }
 
   #getValueFromGenericName(
@@ -435,11 +562,29 @@ export default class TestGeneratorC extends CodeStream {
                 this.write('// Initialize the type struct again\n');
                 for (const prop of ['value', 'new_value']) {
                   this.write(
-                    `JSB_ASSERT(${getMetadataPrefix(metadata)}_init(&${prop}, ${
-                      item[1].name
-                    }) == JSB_OK);\n`
+                    `jsb_memset(${pointer(prop)}, 0, sizeof(${prop}));\n`
+                  );
+                  this.write(
+                    `JSB_ASSERT(${getMetadataPrefix(metadata)}_init(${pointer(
+                      prop
+                    )}, ${item[1].name}) == JSB_OK);\n`
                   );
                 }
+                this.write('/**\n');
+                this.write(
+                  ' * If we are not using dynamic memory allocation for the serializer\n'
+                );
+                this.write(
+                  ' * we need to make sure that we have enough memory left. To avoid inconclusive tests.\n'
+                );
+                this.write(' */\n');
+                this.append('#if !defined(JSB_SERIALIZER_USE_MALLOC)\n');
+                this.write(
+                  `JSB_ASSERT(JSB_SERIALIZER_CALCULATE_REMAINING((&s)) >= sizeof(${getMetadataCompleteTypeReference(
+                    metadata
+                  )}));\n`
+                );
+                this.append('#endif // !defined(JSB_SERIALIZER_USE_MALLOC)\n');
                 this.write(
                   'JSB_ASSERT(jsb_serializer_rewind(&s) == JSB_OK);\n'
                 );
@@ -503,15 +648,30 @@ export default class TestGeneratorC extends CodeStream {
                 ', '
               )}};\n`
             );
-            this.write(`strcpy((char*)${key}, (const char *) bytes);\n`);
+            this.write(`jsb_strncpy(${key}, bytes, ${byteLength});\n`);
+            // Test the string values with strcmp
+            this.write(
+              `JSB_ASSERT(strcmp((const char*)${key}, (const char*)bytes) == 0);\n`
+            );
           },
           '}\n'
         );
         break;
       case GenericName.NullTerminatedString:
-      case GenericName.String:
-        this.write(`strcpy((char*)${key}, "Test string");\n`);
+      case GenericName.String: {
+        this.write(
+          '{\n',
+          () => {
+            const value = 'This is a test string';
+            this.write(
+              `jsb_uint8_t test_value[${value.length}] = "${value}";\n`
+            );
+            this.write(`jsb_strncpy(${key}, test_value, ${value.length});\n`);
+          },
+          '}\n'
+        );
         break;
+      }
       case GenericName.Long:
         this.write(`${key} = 1234567890L;\n`);
         break;
@@ -552,10 +712,35 @@ export default class TestGeneratorC extends CodeStream {
   #generateTestForTemplateParam(
     metadataParamType: MetadataParamTypeTemplate,
     metadata: Metadata,
+    param: IMetadataParam,
     key: string
   ) {
     switch (metadataParamType.template) {
       case 'optional':
+        // this.#generateTestForParam(
+        //   metadataParamType.value,
+        //   metadata,
+        //   param,
+        //   `${key}.value`
+        // );
+        // this.write(
+        //   `JSB_ASSERT(${getInitOptionalParameterFunctionName(
+        //     metadata,
+        //     param
+        //   )}(&value, ${pointer(`${key}.value`)}) == JSB_OK);\n`
+        // );
+        // this.#generateTestForParam(
+        //   metadataParamType.value,
+        //   metadata,
+        //   param,
+        //   `${key}.value`
+        // );
+        this.write(
+          `JSB_ASSERT(${getInitOptionalParameterFunctionName(
+            metadata,
+            param
+          )}(&value, NULL) == JSB_OK);\n`
+        );
         break;
       case 'tuple': {
         let tupleItemIndex = 0;
@@ -563,6 +748,7 @@ export default class TestGeneratorC extends CodeStream {
           this.#generateTestForParam(
             arg,
             metadata,
+            param,
             `${key}.${getTuplePropertyName(tupleItemIndex)}`
           );
           tupleItemIndex++;
@@ -596,13 +782,19 @@ export default class TestGeneratorC extends CodeStream {
       throw new Exception('Metadata is not a type or call');
     }
     for (const param of metadata.params) {
-      this.#generateTestForParam(param.type, metadata, `${key}.${param.name}`);
+      this.#generateTestForParam(
+        param.type,
+        metadata,
+        param,
+        `${key}.${param.name}`
+      );
     }
   }
 
   #generateTestForParam(
     metadataParamType: MetadataParamType,
     root: Metadata,
+    param: IMetadataParam,
     key: string
   ) {
     switch (metadataParamType.type) {
@@ -610,7 +802,7 @@ export default class TestGeneratorC extends CodeStream {
         this.#generateTestForGenericParam(metadataParamType, root, key);
         break;
       case 'template':
-        this.#generateTestForTemplateParam(metadataParamType, root, key);
+        this.#generateTestForTemplateParam(metadataParamType, root, param, key);
         break;
       case 'internalType':
       case 'externalType': {
