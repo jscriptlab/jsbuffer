@@ -14,6 +14,84 @@ import { ASTGenerationException } from '../src/core/ASTGenerator';
 import { getArgument } from 'cli-argument-helper';
 import getBoolean from 'cli-argument-helper/boolean/getBoolean';
 import inspector from 'inspector';
+import loadFileMetadataList, {
+  METADATA_MANIFEST_FILE_NAME
+} from './loadFileMetadataList';
+import { IFileMetadata } from '../src/parser/Parser';
+
+enum Generator {
+  CPP_17 = 'cpp17',
+  C = 'c99'
+}
+
+/**
+ * Build the requested generator from an already-resolved metadata list. This is
+ * the single place that maps a `--generator` value to a concrete generator, so
+ * both the parse-from-source and the generate-from-metadata code paths share
+ * exactly the same behavior.
+ */
+function createGenerator(
+  desiredGenerator: string,
+  fileMetadataList: ReadonlyArray<IFileMetadata>,
+  options: { rootDir: string; name: string }
+): { generate: () => Promise<IGeneratedFile[] | null> } {
+  switch (desiredGenerator) {
+    case Generator.CPP_17:
+      return new FileGeneratorCPP(fileMetadataList, {
+        current: null,
+        rootDir: options.rootDir,
+        root: null,
+        cmake: {
+          project: options.name
+        }
+      });
+    case Generator.C:
+      return new FileGeneratorC(fileMetadataList, {
+        current: null,
+        rootDir: options.rootDir,
+        root: null,
+        cmake: {
+          project: options.name
+        }
+      });
+    default:
+      throw new Error(`Unknown generator "${desiredGenerator}"`);
+  }
+}
+
+/**
+ * Write the files produced by a generator to `outputDirectory`, creating any
+ * missing parent directories, and print a short summary.
+ */
+async function writeGeneratedFiles(
+  result: IGeneratedFile[] | null,
+  outputDirectory: string
+): Promise<void> {
+  if (result === null) {
+    throw new Error('Uncommon: Failed to generate the files');
+  }
+
+  let byteCount = 0;
+  let fileCount = 0;
+
+  for (const generatedFile of result) {
+    const filePath = path.resolve(outputDirectory, generatedFile.path);
+    const buffer = new TextEncoder().encode(generatedFile.contents);
+    try {
+      await fs.promises.mkdir(path.dirname(filePath), { recursive: true });
+      await fs.promises.writeFile(filePath, buffer);
+    } catch (reason) {
+      console.error(`Failed to write to ${filePath}: ${reason}`);
+      break;
+    }
+    byteCount += buffer.byteLength;
+    fileCount++;
+  }
+
+  console.log(
+    `Total of ${byteCount} bytes and ${fileCount} files written to "${outputDirectory}".`
+  );
+}
 
 function printHelp() {
   fs.createReadStream(path.resolve(__dirname, 'jsb.HELP.txt')).pipe(
@@ -61,8 +139,46 @@ function printHelp() {
    */
   const metadataOnly = getArgument(args, '--metadata-only');
 
+  /**
+   * If the from-metadata flag is set, the CLI will generate code directly from
+   * the metadata JSON files (as previously dumped by `--metadata-only`) instead
+   * of parsing a `.jsb` schema. This decouples parsing from code generation.
+   */
+  let fromMetadata =
+    getArgumentAssignment(args, '--from-metadata', getString) ?? null;
+
+  const desiredGenerator =
+    getArgumentAssignment(args, '--generator', getString) ?? Generator.CPP_17;
+
   if (outputDirectory === null) {
     throw new Error('Output directory should be defined');
+  }
+
+  outputDirectory = path.resolve(process.cwd(), outputDirectory);
+
+  /**
+   * Generate straight from metadata JSON files. No `.jsb` schema is parsed in
+   * this mode, which makes code generation reproducible from a committed set of
+   * metadata files.
+   */
+  if (fromMetadata !== null) {
+    if (metadataOnly !== null) {
+      throw new Error(
+        'The `--metadata-only` and `--from-metadata` flags are mutually exclusive'
+      );
+    }
+
+    fromMetadata = path.resolve(process.cwd(), fromMetadata);
+
+    const fileMetadataList = await loadFileMetadataList(fromMetadata);
+
+    const generator = createGenerator(desiredGenerator, fileMetadataList, {
+      rootDir: fromMetadata,
+      name
+    });
+
+    await writeGeneratedFiles(await generator.generate(), outputDirectory);
+    return;
   }
 
   let mainFilePath = args.shift() ?? null;
@@ -72,7 +188,6 @@ function printHelp() {
   }
 
   mainFilePath = path.resolve(process.cwd(), mainFilePath);
-  outputDirectory = path.resolve(process.cwd(), outputDirectory);
 
   /**
    * Make sure main file is readable
@@ -120,21 +235,16 @@ function printHelp() {
     }
   );
 
-  enum Generator {
-    CPP_17 = 'cpp17',
-    C = 'c99'
-  }
-
-  const desiredGenerator =
-    getArgumentAssignment(args, '--generator', getString) ?? Generator.CPP_17;
-
-  let generator: {
-    generate: () => Promise<IGeneratedFile[] | null>;
-  };
-
   const fileMetadataList = await parser.parse();
 
   if (metadataOnly !== null) {
+    /**
+     * Keep track of every metadata file we write, in parser order, so we can
+     * emit an ordered manifest. `--from-metadata` uses this manifest to restore
+     * the exact same file order, which makes generation from metadata
+     * byte-identical to generation straight from the source schema.
+     */
+    const manifestFiles = new Array<string>();
     for (const metadata of fileMetadataList) {
       const relativePath = metadata.path
         .replace(new RegExp(`^${configuration.rootDir}/`), '')
@@ -151,61 +261,24 @@ function printHelp() {
         metadataFilePath,
         JSON.stringify(metadata, null, indentationSize)
       );
+
+      manifestFiles.push(relativePath);
     }
+
+    // Write the ordered manifest that records the parser file order.
+    await fs.promises.writeFile(
+      path.resolve(configuration.outDir, METADATA_MANIFEST_FILE_NAME),
+      JSON.stringify({ files: manifestFiles }, null, indentationSize)
+    );
     return;
   }
 
-  switch (desiredGenerator) {
-    case Generator.CPP_17:
-      generator = new FileGeneratorCPP(fileMetadataList, {
-        current: null,
-        rootDir: configuration.rootDir,
-        root: null,
-        cmake: {
-          project: name
-        }
-      });
-      break;
-    case Generator.C:
-      generator = new FileGeneratorC(fileMetadataList, {
-        current: null,
-        rootDir: configuration.rootDir,
-        root: null,
-        cmake: {
-          project: name
-        }
-      });
-      break;
-    default:
-      throw new Error(`Unknown generator "${desiredGenerator}"`);
-  }
+  const generator = createGenerator(desiredGenerator, fileMetadataList, {
+    rootDir: configuration.rootDir,
+    name
+  });
 
-  const result = await generator.generate();
-
-  if (result === null) {
-    throw new Error('Uncommon: Failed to generate the files');
-  }
-
-  let byteCount = 0;
-  let fileCount = 0;
-
-  for (const generatedFile of result) {
-    const filePath = path.resolve(configuration.outDir, generatedFile.path);
-    const buffer = new TextEncoder().encode(generatedFile.contents);
-    try {
-      await fs.promises.mkdir(path.dirname(filePath), { recursive: true });
-      await fs.promises.writeFile(filePath, buffer);
-    } catch (reason) {
-      console.error(`Failed to write to ${filePath}: ${reason}`);
-      break;
-    }
-    byteCount += buffer.byteLength;
-    fileCount++;
-  }
-
-  console.log(
-    `Total of ${byteCount} bytes and ${fileCount} files written to "${configuration.outDir}".`
-  );
+  await writeGeneratedFiles(await generator.generate(), configuration.outDir);
 })().catch((reason) => {
   if (reason instanceof Exception || reason instanceof ASTGenerationException) {
     process.stderr.write(`${reason.what}\n`);

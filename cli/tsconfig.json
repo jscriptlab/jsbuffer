@@ -8,5 +8,5 @@
     { "path": "../src/generators/cpp" },
     { "path": "../src/generators/c" }
   ],
-  "include": ["index.ts", "jsb.ts"]
+  "include": ["index.ts", "jsb.ts", "loadFileMetadataList.ts"]
 }

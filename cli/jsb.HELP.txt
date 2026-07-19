@@ -29,3 +29,9 @@ Options:
   --metadata-only
     Generate metadata files using the same structure as the root directory, defined by the directory in which the <main-file> is,
     the generated files will be dumped on <output-directory>/**.
+
+  --from-metadata <metadata-path>
+    Generate source code directly from previously dumped metadata JSON files instead of parsing a <main-file>.
+    <metadata-path> may be a single *.metadata.json file or a directory that is searched recursively.
+    This is mutually exclusive with --metadata-only, and no <main-file> is required in this mode.
+    Example: jsb --from-metadata out/metadata --generator c99 -o out/c --name app

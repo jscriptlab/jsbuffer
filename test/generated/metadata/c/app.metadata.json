@@ -1,0 +1,2686 @@
+{
+  "path": "/home/user/jsbuffer/src/generators/c/test/app.jsb",
+  "metadata": [
+    {
+      "kind": "type",
+      "id": -576678332,
+      "position": {
+        "start": {
+          "type": 0,
+          "value": "type",
+          "position": {
+            "start": 38,
+            "end": 42
+          }
+        },
+        "end": {
+          "type": 6,
+          "value": "}",
+          "position": {
+            "start": 118,
+            "end": 119
+          }
+        }
+      },
+      "globalName": "app.DeepOptional",
+      "name": "DeepOptional",
+      "exported": true,
+      "params": [
+        {
+          "name": "value",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 60,
+                "end": 68
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 82,
+                "end": 83
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 60,
+                  "end": 68
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 75,
+                  "end": 76
+                }
+              }
+            },
+            "value": {
+              "type": "generic",
+              "value": "string",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "string",
+                  "position": {
+                    "start": 69,
+                    "end": 75
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "string",
+                  "position": {
+                    "start": 69,
+                    "end": 75
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value2",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 86,
+                "end": 94
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 116,
+                "end": 117
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 86,
+                  "end": 94
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 108,
+                  "end": 109
+                }
+              }
+            },
+            "value": {
+              "type": "template",
+              "template": "optional",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "optional",
+                  "position": {
+                    "start": 95,
+                    "end": 103
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": ">",
+                  "position": {
+                    "start": 107,
+                    "end": 108
+                  }
+                }
+              },
+              "value": {
+                "type": "generic",
+                "value": "int",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "int",
+                    "position": {
+                      "start": 104,
+                      "end": 107
+                    }
+                  },
+                  "end": {
+                    "type": 1,
+                    "value": "int",
+                    "position": {
+                      "start": 104,
+                      "end": 107
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "id": 1001184143,
+      "position": {
+        "start": {
+          "type": 0,
+          "value": "type",
+          "position": {
+            "start": 128,
+            "end": 132
+          }
+        },
+        "end": {
+          "type": 6,
+          "value": "}",
+          "position": {
+            "start": 1069,
+            "end": 1070
+          }
+        }
+      },
+      "globalName": "app.Message",
+      "name": "Message",
+      "exported": true,
+      "params": [
+        {
+          "name": "command",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "Command",
+              "position": {
+                "start": 145,
+                "end": 152
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 160,
+                "end": 161
+              }
+            }
+          },
+          "type": {
+            "type": "internalType",
+            "position": {
+              "start": {
+                "type": 0,
+                "value": "trait",
+                "position": {
+                  "start": 1247,
+                  "end": 1252
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": "}",
+                "position": {
+                  "start": 1262,
+                  "end": 1263
+                }
+              }
+            },
+            "interfaceName": "Command"
+          }
+        },
+        {
+          "name": "command1",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 164,
+                "end": 172
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 190,
+                "end": 191
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 164,
+                  "end": 172
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 180,
+                  "end": 181
+                }
+              }
+            },
+            "value": {
+              "type": "internalType",
+              "position": {
+                "start": {
+                  "type": 0,
+                  "value": "trait",
+                  "position": {
+                    "start": 1247,
+                    "end": 1252
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": "}",
+                  "position": {
+                    "start": 1262,
+                    "end": 1263
+                  }
+                }
+              },
+              "interfaceName": "Command"
+            }
+          }
+        },
+        {
+          "name": "command2",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 194,
+                "end": 202
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 230,
+                "end": 231
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 194,
+                  "end": 202
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 220,
+                  "end": 221
+                }
+              }
+            },
+            "value": {
+              "type": "template",
+              "template": "optional",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "optional",
+                  "position": {
+                    "start": 203,
+                    "end": 211
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": ">",
+                  "position": {
+                    "start": 219,
+                    "end": 220
+                  }
+                }
+              },
+              "value": {
+                "type": "internalType",
+                "position": {
+                  "start": {
+                    "type": 0,
+                    "value": "trait",
+                    "position": {
+                      "start": 1247,
+                      "end": 1252
+                    }
+                  },
+                  "end": {
+                    "type": 6,
+                    "value": "}",
+                    "position": {
+                      "start": 1262,
+                      "end": 1263
+                    }
+                  }
+                },
+                "interfaceName": "Command"
+              }
+            }
+          }
+        },
+        {
+          "name": "command3",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 234,
+                "end": 242
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 280,
+                "end": 281
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 234,
+                  "end": 242
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 270,
+                  "end": 271
+                }
+              }
+            },
+            "value": {
+              "type": "template",
+              "template": "optional",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "optional",
+                  "position": {
+                    "start": 243,
+                    "end": 251
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": ">",
+                  "position": {
+                    "start": 269,
+                    "end": 270
+                  }
+                }
+              },
+              "value": {
+                "type": "template",
+                "template": "optional",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "optional",
+                    "position": {
+                      "start": 252,
+                      "end": 260
+                    }
+                  },
+                  "end": {
+                    "type": 6,
+                    "value": ">",
+                    "position": {
+                      "start": 268,
+                      "end": 269
+                    }
+                  }
+                },
+                "value": {
+                  "type": "internalType",
+                  "position": {
+                    "start": {
+                      "type": 0,
+                      "value": "trait",
+                      "position": {
+                        "start": 1247,
+                        "end": 1252
+                      }
+                    },
+                    "end": {
+                      "type": 6,
+                      "value": "}",
+                      "position": {
+                        "start": 1262,
+                        "end": 1263
+                      }
+                    }
+                  },
+                  "interfaceName": "Command"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "command4",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 284,
+                "end": 292
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 340,
+                "end": 341
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 284,
+                  "end": 292
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 330,
+                  "end": 331
+                }
+              }
+            },
+            "value": {
+              "type": "template",
+              "template": "optional",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "optional",
+                  "position": {
+                    "start": 293,
+                    "end": 301
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": ">",
+                  "position": {
+                    "start": 329,
+                    "end": 330
+                  }
+                }
+              },
+              "value": {
+                "type": "template",
+                "template": "optional",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "optional",
+                    "position": {
+                      "start": 302,
+                      "end": 310
+                    }
+                  },
+                  "end": {
+                    "type": 6,
+                    "value": ">",
+                    "position": {
+                      "start": 328,
+                      "end": 329
+                    }
+                  }
+                },
+                "value": {
+                  "type": "template",
+                  "template": "optional",
+                  "position": {
+                    "start": {
+                      "type": 1,
+                      "value": "optional",
+                      "position": {
+                        "start": 311,
+                        "end": 319
+                      }
+                    },
+                    "end": {
+                      "type": 6,
+                      "value": ">",
+                      "position": {
+                        "start": 327,
+                        "end": 328
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "internalType",
+                    "position": {
+                      "start": {
+                        "type": 0,
+                        "value": "trait",
+                        "position": {
+                          "start": 1247,
+                          "end": 1252
+                        }
+                      },
+                      "end": {
+                        "type": 6,
+                        "value": "}",
+                        "position": {
+                          "start": 1262,
+                          "end": 1263
+                        }
+                      }
+                    },
+                    "interfaceName": "Command"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value1",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 344,
+                "end": 352
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 394,
+                "end": 395
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 344,
+                  "end": 352
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 386,
+                  "end": 387
+                }
+              }
+            },
+            "value": {
+              "type": "template",
+              "template": "optional",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "optional",
+                  "position": {
+                    "start": 353,
+                    "end": 361
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": ">",
+                  "position": {
+                    "start": 385,
+                    "end": 386
+                  }
+                }
+              },
+              "value": {
+                "type": "template",
+                "template": "optional",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "optional",
+                    "position": {
+                      "start": 362,
+                      "end": 370
+                    }
+                  },
+                  "end": {
+                    "type": 6,
+                    "value": ">",
+                    "position": {
+                      "start": 384,
+                      "end": 385
+                    }
+                  }
+                },
+                "value": {
+                  "type": "template",
+                  "template": "optional",
+                  "position": {
+                    "start": {
+                      "type": 1,
+                      "value": "optional",
+                      "position": {
+                        "start": 371,
+                        "end": 379
+                      }
+                    },
+                    "end": {
+                      "type": 6,
+                      "value": ">",
+                      "position": {
+                        "start": 383,
+                        "end": 384
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "generic",
+                    "value": "int",
+                    "position": {
+                      "start": {
+                        "type": 1,
+                        "value": "int",
+                        "position": {
+                          "start": 380,
+                          "end": 383
+                        }
+                      },
+                      "end": {
+                        "type": 1,
+                        "value": "int",
+                        "position": {
+                          "start": 380,
+                          "end": 383
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value2",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 398,
+                "end": 406
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 450,
+                "end": 451
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 398,
+                  "end": 406
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 442,
+                  "end": 443
+                }
+              }
+            },
+            "value": {
+              "type": "template",
+              "template": "optional",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "optional",
+                  "position": {
+                    "start": 407,
+                    "end": 415
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": ">",
+                  "position": {
+                    "start": 441,
+                    "end": 442
+                  }
+                }
+              },
+              "value": {
+                "type": "template",
+                "template": "optional",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "optional",
+                    "position": {
+                      "start": 416,
+                      "end": 424
+                    }
+                  },
+                  "end": {
+                    "type": 6,
+                    "value": ">",
+                    "position": {
+                      "start": 440,
+                      "end": 441
+                    }
+                  }
+                },
+                "value": {
+                  "type": "template",
+                  "template": "optional",
+                  "position": {
+                    "start": {
+                      "type": 1,
+                      "value": "optional",
+                      "position": {
+                        "start": 425,
+                        "end": 433
+                      }
+                    },
+                    "end": {
+                      "type": 6,
+                      "value": ">",
+                      "position": {
+                        "start": 439,
+                        "end": 440
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "generic",
+                    "value": "int16",
+                    "position": {
+                      "start": {
+                        "type": 1,
+                        "value": "int16",
+                        "position": {
+                          "start": 434,
+                          "end": 439
+                        }
+                      },
+                      "end": {
+                        "type": 1,
+                        "value": "int16",
+                        "position": {
+                          "start": 434,
+                          "end": 439
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value3",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 454,
+                "end": 462
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 505,
+                "end": 506
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 454,
+                  "end": 462
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 497,
+                  "end": 498
+                }
+              }
+            },
+            "value": {
+              "type": "template",
+              "template": "optional",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "optional",
+                  "position": {
+                    "start": 463,
+                    "end": 471
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": ">",
+                  "position": {
+                    "start": 496,
+                    "end": 497
+                  }
+                }
+              },
+              "value": {
+                "type": "template",
+                "template": "optional",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "optional",
+                    "position": {
+                      "start": 472,
+                      "end": 480
+                    }
+                  },
+                  "end": {
+                    "type": 6,
+                    "value": ">",
+                    "position": {
+                      "start": 495,
+                      "end": 496
+                    }
+                  }
+                },
+                "value": {
+                  "type": "template",
+                  "template": "optional",
+                  "position": {
+                    "start": {
+                      "type": 1,
+                      "value": "optional",
+                      "position": {
+                        "start": 481,
+                        "end": 489
+                      }
+                    },
+                    "end": {
+                      "type": 6,
+                      "value": ">",
+                      "position": {
+                        "start": 494,
+                        "end": 495
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "generic",
+                    "value": "int8",
+                    "position": {
+                      "start": {
+                        "type": 1,
+                        "value": "int8",
+                        "position": {
+                          "start": 490,
+                          "end": 494
+                        }
+                      },
+                      "end": {
+                        "type": 1,
+                        "value": "int8",
+                        "position": {
+                          "start": 490,
+                          "end": 494
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value4",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 509,
+                "end": 517
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 561,
+                "end": 562
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 509,
+                  "end": 517
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 553,
+                  "end": 554
+                }
+              }
+            },
+            "value": {
+              "type": "template",
+              "template": "optional",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "optional",
+                  "position": {
+                    "start": 518,
+                    "end": 526
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": ">",
+                  "position": {
+                    "start": 552,
+                    "end": 553
+                  }
+                }
+              },
+              "value": {
+                "type": "template",
+                "template": "optional",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "optional",
+                    "position": {
+                      "start": 527,
+                      "end": 535
+                    }
+                  },
+                  "end": {
+                    "type": 6,
+                    "value": ">",
+                    "position": {
+                      "start": 551,
+                      "end": 552
+                    }
+                  }
+                },
+                "value": {
+                  "type": "template",
+                  "template": "optional",
+                  "position": {
+                    "start": {
+                      "type": 1,
+                      "value": "optional",
+                      "position": {
+                        "start": 536,
+                        "end": 544
+                      }
+                    },
+                    "end": {
+                      "type": 6,
+                      "value": ">",
+                      "position": {
+                        "start": 550,
+                        "end": 551
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "generic",
+                    "value": "int32",
+                    "position": {
+                      "start": {
+                        "type": 1,
+                        "value": "int32",
+                        "position": {
+                          "start": 545,
+                          "end": 550
+                        }
+                      },
+                      "end": {
+                        "type": 1,
+                        "value": "int32",
+                        "position": {
+                          "start": 545,
+                          "end": 550
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value5",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 565,
+                "end": 573
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 617,
+                "end": 618
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 565,
+                  "end": 573
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 609,
+                  "end": 610
+                }
+              }
+            },
+            "value": {
+              "type": "template",
+              "template": "optional",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "optional",
+                  "position": {
+                    "start": 574,
+                    "end": 582
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": ">",
+                  "position": {
+                    "start": 608,
+                    "end": 609
+                  }
+                }
+              },
+              "value": {
+                "type": "template",
+                "template": "optional",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "optional",
+                    "position": {
+                      "start": 583,
+                      "end": 591
+                    }
+                  },
+                  "end": {
+                    "type": 6,
+                    "value": ">",
+                    "position": {
+                      "start": 607,
+                      "end": 608
+                    }
+                  }
+                },
+                "value": {
+                  "type": "template",
+                  "template": "optional",
+                  "position": {
+                    "start": {
+                      "type": 1,
+                      "value": "optional",
+                      "position": {
+                        "start": 592,
+                        "end": 600
+                      }
+                    },
+                    "end": {
+                      "type": 6,
+                      "value": ">",
+                      "position": {
+                        "start": 606,
+                        "end": 607
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "generic",
+                    "value": "uint8",
+                    "position": {
+                      "start": {
+                        "type": 1,
+                        "value": "uint8",
+                        "position": {
+                          "start": 601,
+                          "end": 606
+                        }
+                      },
+                      "end": {
+                        "type": 1,
+                        "value": "uint8",
+                        "position": {
+                          "start": 601,
+                          "end": 606
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value6",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 621,
+                "end": 629
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 674,
+                "end": 675
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 621,
+                  "end": 629
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 666,
+                  "end": 667
+                }
+              }
+            },
+            "value": {
+              "type": "template",
+              "template": "optional",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "optional",
+                  "position": {
+                    "start": 630,
+                    "end": 638
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": ">",
+                  "position": {
+                    "start": 665,
+                    "end": 666
+                  }
+                }
+              },
+              "value": {
+                "type": "template",
+                "template": "optional",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "optional",
+                    "position": {
+                      "start": 639,
+                      "end": 647
+                    }
+                  },
+                  "end": {
+                    "type": 6,
+                    "value": ">",
+                    "position": {
+                      "start": 664,
+                      "end": 665
+                    }
+                  }
+                },
+                "value": {
+                  "type": "template",
+                  "template": "optional",
+                  "position": {
+                    "start": {
+                      "type": 1,
+                      "value": "optional",
+                      "position": {
+                        "start": 648,
+                        "end": 656
+                      }
+                    },
+                    "end": {
+                      "type": 6,
+                      "value": ">",
+                      "position": {
+                        "start": 663,
+                        "end": 664
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "generic",
+                    "value": "uint16",
+                    "position": {
+                      "start": {
+                        "type": 1,
+                        "value": "uint16",
+                        "position": {
+                          "start": 657,
+                          "end": 663
+                        }
+                      },
+                      "end": {
+                        "type": 1,
+                        "value": "uint16",
+                        "position": {
+                          "start": 657,
+                          "end": 663
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value7",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 678,
+                "end": 686
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 731,
+                "end": 732
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 678,
+                  "end": 686
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 723,
+                  "end": 724
+                }
+              }
+            },
+            "value": {
+              "type": "template",
+              "template": "optional",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "optional",
+                  "position": {
+                    "start": 687,
+                    "end": 695
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": ">",
+                  "position": {
+                    "start": 722,
+                    "end": 723
+                  }
+                }
+              },
+              "value": {
+                "type": "template",
+                "template": "optional",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "optional",
+                    "position": {
+                      "start": 696,
+                      "end": 704
+                    }
+                  },
+                  "end": {
+                    "type": 6,
+                    "value": ">",
+                    "position": {
+                      "start": 721,
+                      "end": 722
+                    }
+                  }
+                },
+                "value": {
+                  "type": "template",
+                  "template": "optional",
+                  "position": {
+                    "start": {
+                      "type": 1,
+                      "value": "optional",
+                      "position": {
+                        "start": 705,
+                        "end": 713
+                      }
+                    },
+                    "end": {
+                      "type": 6,
+                      "value": ">",
+                      "position": {
+                        "start": 720,
+                        "end": 721
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "generic",
+                    "value": "uint32",
+                    "position": {
+                      "start": {
+                        "type": 1,
+                        "value": "uint32",
+                        "position": {
+                          "start": 714,
+                          "end": 720
+                        }
+                      },
+                      "end": {
+                        "type": 1,
+                        "value": "uint32",
+                        "position": {
+                          "start": 714,
+                          "end": 720
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value8",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 735,
+                "end": 743
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 788,
+                "end": 789
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 735,
+                  "end": 743
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 780,
+                  "end": 781
+                }
+              }
+            },
+            "value": {
+              "type": "template",
+              "template": "optional",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "optional",
+                  "position": {
+                    "start": 744,
+                    "end": 752
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": ">",
+                  "position": {
+                    "start": 779,
+                    "end": 780
+                  }
+                }
+              },
+              "value": {
+                "type": "template",
+                "template": "optional",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "optional",
+                    "position": {
+                      "start": 753,
+                      "end": 761
+                    }
+                  },
+                  "end": {
+                    "type": 6,
+                    "value": ">",
+                    "position": {
+                      "start": 778,
+                      "end": 779
+                    }
+                  }
+                },
+                "value": {
+                  "type": "template",
+                  "template": "optional",
+                  "position": {
+                    "start": {
+                      "type": 1,
+                      "value": "optional",
+                      "position": {
+                        "start": 762,
+                        "end": 770
+                      }
+                    },
+                    "end": {
+                      "type": 6,
+                      "value": ">",
+                      "position": {
+                        "start": 777,
+                        "end": 778
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "generic",
+                    "value": "string",
+                    "position": {
+                      "start": {
+                        "type": 1,
+                        "value": "string",
+                        "position": {
+                          "start": 771,
+                          "end": 777
+                        }
+                      },
+                      "end": {
+                        "type": 1,
+                        "value": "string",
+                        "position": {
+                          "start": 771,
+                          "end": 777
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value9",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 792,
+                "end": 800
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 812,
+                "end": 813
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 792,
+                  "end": 800
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 804,
+                  "end": 805
+                }
+              }
+            },
+            "value": {
+              "type": "generic",
+              "value": "int",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "int",
+                  "position": {
+                    "start": 801,
+                    "end": 804
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "int",
+                  "position": {
+                    "start": 801,
+                    "end": 804
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value10",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 816,
+                "end": 824
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 839,
+                "end": 840
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 816,
+                  "end": 824
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 830,
+                  "end": 831
+                }
+              }
+            },
+            "value": {
+              "type": "generic",
+              "value": "int16",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "int16",
+                  "position": {
+                    "start": 825,
+                    "end": 830
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "int16",
+                  "position": {
+                    "start": 825,
+                    "end": 830
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value11",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 843,
+                "end": 851
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 865,
+                "end": 866
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 843,
+                  "end": 851
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 856,
+                  "end": 857
+                }
+              }
+            },
+            "value": {
+              "type": "generic",
+              "value": "int8",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "int8",
+                  "position": {
+                    "start": 852,
+                    "end": 856
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "int8",
+                  "position": {
+                    "start": 852,
+                    "end": 856
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value12",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 869,
+                "end": 877
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 892,
+                "end": 893
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 869,
+                  "end": 877
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 883,
+                  "end": 884
+                }
+              }
+            },
+            "value": {
+              "type": "generic",
+              "value": "int32",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "int32",
+                  "position": {
+                    "start": 878,
+                    "end": 883
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "int32",
+                  "position": {
+                    "start": 878,
+                    "end": 883
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value13",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 896,
+                "end": 904
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 919,
+                "end": 920
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 896,
+                  "end": 904
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 910,
+                  "end": 911
+                }
+              }
+            },
+            "value": {
+              "type": "generic",
+              "value": "uint8",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "uint8",
+                  "position": {
+                    "start": 905,
+                    "end": 910
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "uint8",
+                  "position": {
+                    "start": 905,
+                    "end": 910
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value14",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 923,
+                "end": 931
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 947,
+                "end": 948
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 923,
+                  "end": 931
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 938,
+                  "end": 939
+                }
+              }
+            },
+            "value": {
+              "type": "generic",
+              "value": "uint16",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "uint16",
+                  "position": {
+                    "start": 932,
+                    "end": 938
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "uint16",
+                  "position": {
+                    "start": 932,
+                    "end": 938
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value15",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 951,
+                "end": 959
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 975,
+                "end": 976
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 951,
+                  "end": 959
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 966,
+                  "end": 967
+                }
+              }
+            },
+            "value": {
+              "type": "generic",
+              "value": "uint32",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "uint32",
+                  "position": {
+                    "start": 960,
+                    "end": 966
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "uint32",
+                  "position": {
+                    "start": 960,
+                    "end": 966
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value16",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 979,
+                "end": 987
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 1003,
+                "end": 1004
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 979,
+                  "end": 987
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 994,
+                  "end": 995
+                }
+              }
+            },
+            "value": {
+              "type": "generic",
+              "value": "string",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "string",
+                  "position": {
+                    "start": 988,
+                    "end": 994
+                  }
+                },
+                "end": {
+                  "type": 1,
+                  "value": "string",
+                  "position": {
+                    "start": 988,
+                    "end": 994
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value17",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "optional",
+              "position": {
+                "start": 1007,
+                "end": 1015
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 1067,
+                "end": 1068
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "template": "optional",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "optional",
+                "position": {
+                  "start": 1007,
+                  "end": 1015
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 1058,
+                  "end": 1059
+                }
+              }
+            },
+            "value": {
+              "type": "template",
+              "template": "optional",
+              "position": {
+                "start": {
+                  "type": 1,
+                  "value": "optional",
+                  "position": {
+                    "start": 1016,
+                    "end": 1024
+                  }
+                },
+                "end": {
+                  "type": 6,
+                  "value": ">",
+                  "position": {
+                    "start": 1057,
+                    "end": 1058
+                  }
+                }
+              },
+              "value": {
+                "type": "template",
+                "template": "optional",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "optional",
+                    "position": {
+                      "start": 1025,
+                      "end": 1033
+                    }
+                  },
+                  "end": {
+                    "type": 6,
+                    "value": ">",
+                    "position": {
+                      "start": 1056,
+                      "end": 1057
+                    }
+                  }
+                },
+                "value": {
+                  "type": "template",
+                  "template": "optional",
+                  "position": {
+                    "start": {
+                      "type": 1,
+                      "value": "optional",
+                      "position": {
+                        "start": 1034,
+                        "end": 1042
+                      }
+                    },
+                    "end": {
+                      "type": 6,
+                      "value": ">",
+                      "position": {
+                        "start": 1055,
+                        "end": 1056
+                      }
+                    }
+                  },
+                  "value": {
+                    "type": "internalType",
+                    "position": {
+                      "start": {
+                        "type": 0,
+                        "value": "type",
+                        "position": {
+                          "start": 38,
+                          "end": 42
+                        }
+                      },
+                      "end": {
+                        "type": 6,
+                        "value": "}",
+                        "position": {
+                          "start": 118,
+                          "end": 119
+                        }
+                      }
+                    },
+                    "interfaceName": "DeepOptional"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "id": 1407274108,
+      "position": {
+        "start": {
+          "type": 0,
+          "value": "type",
+          "position": {
+            "start": 1079,
+            "end": 1083
+          }
+        },
+        "end": {
+          "type": 6,
+          "value": "}",
+          "position": {
+            "start": 1145,
+            "end": 1146
+          }
+        }
+      },
+      "globalName": "app.CommandMoveForward",
+      "name": "CommandMoveForward",
+      "exported": true,
+      "params": [
+        {
+          "name": "stop",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "bool",
+              "position": {
+                "start": 1117,
+                "end": 1121
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 1126,
+                "end": 1127
+              }
+            }
+          },
+          "type": {
+            "type": "generic",
+            "value": "bool",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "bool",
+                "position": {
+                  "start": 1117,
+                  "end": 1121
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "bool",
+                "position": {
+                  "start": 1117,
+                  "end": 1121
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value2",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "double",
+              "position": {
+                "start": 1130,
+                "end": 1136
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 1143,
+                "end": 1144
+              }
+            }
+          },
+          "type": {
+            "type": "generic",
+            "value": "double",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "double",
+                "position": {
+                  "start": 1130,
+                  "end": 1136
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "double",
+                "position": {
+                  "start": 1130,
+                  "end": 1136
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "id": 985001043,
+      "position": {
+        "start": {
+          "type": 0,
+          "value": "type",
+          "position": {
+            "start": 1155,
+            "end": 1159
+          }
+        },
+        "end": {
+          "type": 6,
+          "value": "}",
+          "position": {
+            "start": 1237,
+            "end": 1238
+          }
+        }
+      },
+      "globalName": "app.CommandMoveBackwards",
+      "name": "CommandMoveBackwards",
+      "exported": true,
+      "params": [
+        {
+          "name": "stop",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "bool",
+              "position": {
+                "start": 1195,
+                "end": 1199
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 1204,
+                "end": 1205
+              }
+            }
+          },
+          "type": {
+            "type": "generic",
+            "value": "bool",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "bool",
+                "position": {
+                  "start": 1195,
+                  "end": 1199
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "bool",
+                "position": {
+                  "start": 1195,
+                  "end": 1199
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "bytes",
+              "position": {
+                "start": 1208,
+                "end": 1213
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 1219,
+                "end": 1220
+              }
+            }
+          },
+          "type": {
+            "type": "generic",
+            "value": "bytes",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "bytes",
+                "position": {
+                  "start": 1208,
+                  "end": 1213
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "bytes",
+                "position": {
+                  "start": 1208,
+                  "end": 1213
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "value2",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "float",
+              "position": {
+                "start": 1223,
+                "end": 1228
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 1235,
+                "end": 1236
+              }
+            }
+          },
+          "type": {
+            "type": "generic",
+            "value": "float",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "float",
+                "position": {
+                  "start": 1223,
+                  "end": 1228
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "float",
+                "position": {
+                  "start": 1223,
+                  "end": 1228
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "trait",
+      "position": {
+        "start": {
+          "type": 0,
+          "value": "trait",
+          "position": {
+            "start": 1247,
+            "end": 1252
+          }
+        },
+        "end": {
+          "type": 6,
+          "value": "}",
+          "position": {
+            "start": 1262,
+            "end": 1263
+          }
+        }
+      },
+      "name": "Command",
+      "globalName": "app.Command",
+      "exported": true,
+      "nodes": [
+        {
+          "type": "externalType",
+          "position": {
+            "start": {
+              "type": 0,
+              "value": "type",
+              "position": {
+                "start": 1079,
+                "end": 1083
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": "}",
+              "position": {
+                "start": 1145,
+                "end": 1146
+              }
+            }
+          },
+          "name": "CommandMoveForward",
+          "relativePath": "./app.jsb"
+        },
+        {
+          "type": "externalType",
+          "position": {
+            "start": {
+              "type": 0,
+              "value": "type",
+              "position": {
+                "start": 1155,
+                "end": 1159
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": "}",
+              "position": {
+                "start": 1237,
+                "end": 1238
+              }
+            }
+          },
+          "name": "CommandMoveBackwards",
+          "relativePath": "./app.jsb"
+        }
+      ]
+    }
+  ]
+}
