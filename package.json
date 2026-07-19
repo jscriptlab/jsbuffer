@@ -26,7 +26,7 @@
     "test:coverage": "npx nyc npm test"
   },
   "dependencies": {
-    "bn.js": "^5.2.1",
+    "bn.js": "^5.2.5",
     "chalk": "^4.1.2",
     "cli-argument-helper": "0.x",
     "crc": "4.x",
@@ -47,8 +47,7 @@
     "eslint": "^8.52.0",
     "glob": "^10.5.0",
     "jsbuffer": "^1.0.2",
-    "nyc": "^15.1.0",
-    "openwiki": "^0.2.0",
+    "nyc": "^18.0.0",
     "prettier": "^3.0.3",
     "sarg": "^5.0.12",
     "ts-node": "^10.9.1",

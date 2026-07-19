@@ -18,12 +18,12 @@ Complete reference for the jsbuffer type system.
 | `int8` | `number` | 8-bit signed integer | `writeInt8`/`readInt8` |
 | `int16` | `number` | 16-bit signed integer | `writeInt16`/`readInt16` |
 | `int32` | `number` | 32-bit signed integer | `writeInt32`/`readInt32` |
-| `int64` | `number` | 64-bit signed integer | `writeInt64`/`readInt64` |
+| `long` | `string` | 64-bit signed integer (decimal string to preserve precision) | `writeSignedLong`/`readSignedLong` |
 | `uint` | `number` | 32-bit unsigned integer | `writeUInt32`/`readUInt32` |
 | `uint8` | `number` | 8-bit unsigned integer | `writeUInt8`/`readUInt8` |
 | `uint16` | `number` | 16-bit unsigned integer | `writeUInt16`/`readUInt16` |
 | `uint32` | `number` | 32-bit unsigned integer | `writeUInt32`/`readUInt32` |
-| `uint64` | `number` | 64-bit unsigned integer | `writeUInt64`/`readUInt64` |
+| `ulong` | `string` | 64-bit unsigned integer (decimal string to preserve precision) | `writeUnsignedLong`/`readUnsignedLong` |
 | `float` | `number` | 32-bit IEEE 754 | `writeFloat`/`readFloat` |
 | `double` | `number` | 64-bit IEEE 754 | `writeDouble`/`readDouble` |
 | `bool` | `boolean` | Boolean | `writeBool`/`readBool` (1 byte) |

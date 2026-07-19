@@ -48,24 +48,13 @@ This generates TypeScript files in `src/generated/` with interfaces and codec fu
 - [Schema Language Overview](/openwiki/schema-language/overview.md) - Syntax, keywords, file structure
 - [Types & Templates](/openwiki/schema-language/types.md) - Built-in types, templates (vector, set, map, optional, tuple, bigint)
 - [Calls & Traits](/openwiki/schema-language/calls-traits.md) - RPC-style calls, trait definitions, imports/exports
-- [Examples](/openwiki/schema-language/examples.md) - Real examples from test schemas
+- [Imports & Exports](/openwiki/schema-language/imports.md) - Sharing definitions across schema files
 
 ### ⚙️ Generated Output
 - [Generated Output Overview](/openwiki/generated-output/overview.md) - Interfaces, encode/decode, compare, default, update functions
-- [Codec Integration](/openwiki/generated-output/codec-integration.md) - Using `@jsbuffer/codec` Serializer/Deserializer/Codec
-- [CRC Headers](/openwiki/generated-output/crc-headers.md) - Type/call identification via CRC32 headers
 
 ### 🛠️ Development Workflows
-- [Development Workflow](/openwiki/workflows/development.md) - Build, test, lint, release commands
 - [CLI Usage](/openwiki/workflows/cli-usage.md) - All CLI options, examples, configuration
-- [Testing Infrastructure](/openwiki/workflows/testing.md) - Virtual FS testing, schema test generation, coverage
-
-### 📁 Source Map
-- [Source Map](/openwiki/source-map.md) - File-by-file guide to key source files and their roles
-
-### 📦 Operations
-- [Release History](/openwiki/operations/release.md) - Version history from git tags
-- [Dependencies](/openwiki/operations/dependencies.md) - Key dependencies and their roles
 
 ## Quick Links
 
@@ -74,15 +63,13 @@ This generates TypeScript files in `src/generated/` with interfaces and codec fu
 | Install & run CLI | [CLI Usage](/openwiki/workflows/cli-usage.md) |
 | Write schema files | [Schema Language Overview](/openwiki/schema-language/overview.md) |
 | Understand generated code | [Generated Output Overview](/openwiki/generated-output/overview.md) |
-| Run tests | [Testing Infrastructure](/openwiki/workflows/testing.md) |
-| Contribute/Develop | [Development Workflow](/openwiki/workflows/development.md) |
-| Find source files | [Source Map](/openwiki/source-map.md) |
+| Share definitions across files | [Imports & Exports](/openwiki/schema-language/imports.md) |
 
 ## Key Concepts
 
 ### Schema Language
 The schema language defines **types**, **calls** (RPC-style request/response), and **traits** (polymorphic types). It supports:
-- Primitive types: `int`, `int8`, `int16`, `int32`, `int64`, `uint`, `uint8`, `uint16`, `uint32`, `uint64`, `float`, `double`, `bool`, `string`, `bytes`
+- Primitive types: `int`, `int8`, `int16`, `int32`, `long`, `uint`, `uint8`, `uint16`, `uint32`, `ulong`, `float`, `double`, `bool`, `string`, `bytes`
 - Templates: `vector<T>`, `set<T>`, `map<K,V>`, `optional<T>`, `tuple<T...>`, `bigint<N>`
 - User-defined types, calls, and traits with imports/exports
 
@@ -120,7 +107,6 @@ Every generated type and call gets a **CRC32 header** written during encoding an
 1. **Read the [CLI Usage](/openwiki/workflows/cli-usage.md)** guide for all command-line options
 2. **Study the [Schema Language](/openwiki/schema-language/overview.md)** to write your own schemas
 3. **Explore [Generated Output](/openwiki/generated-output/overview.md)** to understand what code gets produced
-4. **Check [Development Workflow](/openwiki/workflows/development.md)** if you want to contribute
 
 ## Repository Context
 
