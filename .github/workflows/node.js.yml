@@ -9,6 +9,10 @@ on:
   pull_request:
     branches: ['master']
 
+# This is a read-only CI workflow; grant the GITHUB_TOKEN nothing more.
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,7 +39,6 @@ jobs:
   changeset:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
         with:
@@ -45,5 +48,10 @@ jobs:
           node-version: 20.x
           cache: 'npm'
       - run: npm ci
+      # Non-blocking reminder: surface a warning annotation when a PR touches
+      # the package but has no changeset, without failing the check (docs-only
+      # and CI-only PRs legitimately have none).
       - name: Check for a changeset
-        run: npx changeset status --since=origin/master
+        run: |
+          npx changeset status --since=origin/master \
+            || echo "::warning title=No changeset found::This PR changes the package but has no changeset. If it affects the published output, add one with 'npx changeset'. Docs-only or CI-only changes can ignore this."
