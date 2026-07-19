@@ -9,6 +9,10 @@ on:
   # Run on every pull request, regardless of the target branch.
   pull_request:
 
+# Least-privilege GITHUB_TOKEN: these jobs only need to read the repo.
+permissions:
+  contents: read
+
 jobs:
   lint:
     runs-on: ubuntu-latest
