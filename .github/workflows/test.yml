@@ -48,6 +48,9 @@ jobs:
       - run: npm ci
       - run: npm run build
       - name: Run tests with coverage
+        # Use bash so the pipe runs with `-o pipefail`; otherwise a failure in
+        # `npm run test:coverage` would be masked by tee's successful exit.
+        shell: bash
         run: npm run test:coverage | tee coverage.txt
       - name: Publish coverage report to the job summary
         if: always()
