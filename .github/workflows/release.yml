@@ -1,0 +1,55 @@
+# Publishes jsbuffer to npm via Changesets.
+#
+# Flow:
+#   * Contributors add a changeset to their PR (`npx changeset`).
+#   * On every push to `master` (i.e. a merged PR) this workflow runs the
+#     Changesets action, which either:
+#       - opens/updates a "Version Packages" PR that bumps the version and
+#         updates CHANGELOG.md by consuming the pending changesets, or
+#       - publishes to npm (+ git tag + GitHub release) once that
+#         "Version Packages" PR is itself merged.
+#
+# Required setup:
+#   * Repo secret NPM_TOKEN: an npm "Automation" (or granular) access token.
+#   * Settings > Actions > General > Workflow permissions:
+#       "Allow GitHub Actions to create and approve pull requests" enabled.
+name: Release
+
+on:
+  push:
+    branches: ['master']
+
+# Never run two releases for the same ref at once.
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write # push the version-bump commit, git tags and GitHub release
+  pull-requests: write # open/update the "Version Packages" PR
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Changesets needs full history to diff against baseBranch
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: npm ci
+
+      - name: Create Release Pull Request or Publish to npm
+        uses: changesets/action@v1
+        with:
+          version: npm run version # `changeset version`
+          publish: npm run release # build + `changeset publish`
+          commit: 'chore: release jsbuffer'
+          title: 'chore: release jsbuffer'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

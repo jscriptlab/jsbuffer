@@ -19,11 +19,31 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: yarn
-      - run: yarn run test
+      # The repo uses an npm lockfile, so install/test with npm (was `yarn`).
+      - run: npm ci
+      - run: npm test
+
+  # Reminds contributors to add a changeset when a PR changes the package.
+  # Non-blocking: docs-only PRs legitimately have no changeset, so this is a
+  # visible signal rather than a hard gate.
+  changeset:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # needed to diff against the base branch
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+      - run: npm ci
+      - name: Check for a changeset
+        run: npx changeset status --since=origin/master
