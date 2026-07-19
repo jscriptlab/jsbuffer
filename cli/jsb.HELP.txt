@@ -18,7 +18,7 @@ Options:
     Output directory for generated files.
 
   --generator <generator> (default: cpp17)
-    Generator to use. Available generators: c99, cpp17, typescript.
+    Generator to use. Available generators: c99, cpp17, typescript, kotlin.
 
   --no-ts-config (typescript only)
     Do not generate a tsconfig.json file in the output directory.
@@ -36,7 +36,8 @@ Options:
     Indentation size for generated files.
 
   --name <name>
-    Name of the CMake project.
+    Name of the CMake project (c99/cpp17). For the kotlin generator, this is the
+    Kotlin package name for the generated schema (e.g. com.test.app.schema).
 
   --metadata-only
     Generate metadata files using the same structure as the root directory, defined by the directory in which the <main-file> is,

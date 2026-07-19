@@ -1,0 +1,25 @@
+import { Post } from "./Post";
+import {
+  Request,
+  RequestResponse
+} from "./Request";
+import "./protocol";
+import "./tests";
+import { ClientMessage } from "./protocol";
+
+export type Comment {
+  int id;
+  long postId;
+  string text;
+}
+
+export type User : RequestResponse {
+  int id;
+  string name;
+  vector<Comment> comments;
+  vector<Post> posts;
+}
+
+export call GetCurrentUser : Request => User {
+  int id;
+}

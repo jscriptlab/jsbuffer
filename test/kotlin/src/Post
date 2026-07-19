@@ -1,0 +1,16 @@
+import { Request } from "./Request";
+
+export type PostLike {
+  int userId;
+
+}
+
+export type Post {
+  long id;
+  int userId;
+  vector<optional<PostLike>> likes;
+}
+
+export call GetPost : Request => Post {
+  int id;
+}

@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import Parser, { IConfiguration } from '../src/parser/Parser';
 import FileGeneratorCPP from '../src/generators/cpp/FileGeneratorCPP';
 import FileGeneratorC from '../src/generators/c/FileGeneratorC';
+import FileGeneratorKotlin from '../src/generators/kotlin/FileGeneratorKotlin';
 import { getString } from 'cli-argument-helper/string';
 import { getInteger } from 'cli-argument-helper/number';
 import getArgumentAssignment from 'cli-argument-helper/getArgumentAssignment';
@@ -23,7 +24,8 @@ import { FileGenerator } from '../code-generator';
 enum Generator {
   CPP_17 = 'cpp17',
   C = 'c99',
-  TYPESCRIPT = 'typescript'
+  TYPESCRIPT = 'typescript',
+  KOTLIN = 'kotlin'
 }
 
 /**
@@ -55,6 +57,16 @@ function createGenerator(
         cmake: {
           project: options.name
         }
+      });
+    case Generator.KOTLIN:
+      /**
+       * The Kotlin generator resolves cross-file references from the in-memory
+       * metadata list (like the C/C++ generators), so it works in both the
+       * parse-from-source and `--from-metadata` paths. `--name` is reused as the
+       * Kotlin package name (e.g. `com.test.app.schema`).
+       */
+      return FileGeneratorKotlin.fromFileMetadataList(fileMetadataList, {
+        schemaName: options.name
       });
     case Generator.TYPESCRIPT:
       /**
