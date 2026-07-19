@@ -25,6 +25,7 @@
       "globalName": "test.ImportMe",
       "name": "ImportMe",
       "exported": true,
+      "traits": [],
       "params": [
         {
           "name": "value",

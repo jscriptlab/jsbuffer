@@ -146,6 +146,30 @@
       "globalName": "protocol.main.Void",
       "name": "Void",
       "exported": true,
+      "traits": [
+        {
+          "type": "internalType",
+          "position": {
+            "start": {
+              "type": 0,
+              "value": "trait",
+              "position": {
+                "start": 31,
+                "end": 36
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": "}",
+              "position": {
+                "start": 47,
+                "end": 48
+              }
+            }
+          },
+          "interfaceName": "Response"
+        }
+      ],
       "params": [
         {
           "name": "value",
@@ -216,6 +240,30 @@
       "globalName": "protocol.main.User",
       "name": "User",
       "exported": true,
+      "traits": [
+        {
+          "type": "internalType",
+          "position": {
+            "start": {
+              "type": 0,
+              "value": "trait",
+              "position": {
+                "start": 31,
+                "end": 36
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": "}",
+              "position": {
+                "start": 47,
+                "end": 48
+              }
+            }
+          },
+          "interfaceName": "Response"
+        }
+      ],
       "params": [
         {
           "name": "id",
@@ -329,6 +377,52 @@
       "globalName": "protocol.main.GetUser",
       "name": "GetUser",
       "exported": true,
+      "traits": [
+        {
+          "type": "internalType",
+          "position": {
+            "start": {
+              "type": 0,
+              "value": "trait",
+              "position": {
+                "start": 7,
+                "end": 12
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": "}",
+              "position": {
+                "start": 22,
+                "end": 23
+              }
+            }
+          },
+          "interfaceName": "Request"
+        }
+      ],
+      "returnType": {
+        "type": "internalType",
+        "position": {
+          "start": {
+            "type": 0,
+            "value": "type",
+            "position": {
+              "start": 141,
+              "end": 145
+            }
+          },
+          "end": {
+            "type": 6,
+            "value": "}",
+            "position": {
+              "start": 189,
+              "end": 190
+            }
+          }
+        },
+        "interfaceName": "User"
+      },
       "params": [
         {
           "name": "id",
@@ -399,6 +493,7 @@
       "globalName": "protocol.main.TupleTest",
       "name": "TupleTest",
       "exported": true,
+      "traits": [],
       "params": [
         {
           "name": "values",

@@ -25,6 +25,7 @@
       "globalName": "event.Event",
       "name": "Event",
       "exported": true,
+      "traits": [],
       "params": [
         {
           "name": "seconds",

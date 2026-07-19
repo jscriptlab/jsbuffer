@@ -25,6 +25,7 @@
       "globalName": "app.DeepOptional",
       "name": "DeepOptional",
       "exported": true,
+      "traits": [],
       "params": [
         {
           "name": "value",
@@ -204,6 +205,7 @@
       "globalName": "app.Message",
       "name": "Message",
       "exported": true,
+      "traits": [],
       "params": [
         {
           "name": "command",
@@ -2365,6 +2367,30 @@
       "globalName": "app.CommandMoveForward",
       "name": "CommandMoveForward",
       "exported": true,
+      "traits": [
+        {
+          "type": "internalType",
+          "position": {
+            "start": {
+              "type": 0,
+              "value": "trait",
+              "position": {
+                "start": 1247,
+                "end": 1252
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": "}",
+              "position": {
+                "start": 1262,
+                "end": 1263
+              }
+            }
+          },
+          "interfaceName": "Command"
+        }
+      ],
       "params": [
         {
           "name": "stop",
@@ -2478,6 +2504,30 @@
       "globalName": "app.CommandMoveBackwards",
       "name": "CommandMoveBackwards",
       "exported": true,
+      "traits": [
+        {
+          "type": "internalType",
+          "position": {
+            "start": {
+              "type": 0,
+              "value": "trait",
+              "position": {
+                "start": 1247,
+                "end": 1252
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": "}",
+              "position": {
+                "start": 1262,
+                "end": 1263
+              }
+            }
+          },
+          "interfaceName": "Command"
+        }
+      ],
       "params": [
         {
           "name": "stop",

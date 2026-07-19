@@ -25,6 +25,7 @@
       "globalName": "schema_internal_test.internal.ImportMeWithId",
       "name": "ImportMeWithId",
       "exported": true,
+      "traits": [],
       "params": [
         {
           "name": "id",

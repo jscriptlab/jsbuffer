@@ -6,6 +6,16 @@ export interface IMetadataTypeDefinition {
   id: number;
   name: string;
   params: IMetadataParam[];
+  /**
+   * Traits (interfaces) this type or call belongs to. Empty when the type does
+   * not extend any trait. Required by generators that model traits as
+   * sum/sealed types (e.g. the Kotlin generator).
+   */
+  traits: MetadataParamType[];
+  /**
+   * Return type of a call. Only present when `kind` is `'call'`.
+   */
+  returnType?: MetadataParamType;
   globalName: string;
   exported: boolean;
   position: INodePosition;
