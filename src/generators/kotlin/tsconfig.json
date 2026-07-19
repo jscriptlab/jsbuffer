@@ -1,0 +1,17 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "include": [
+    "FileGeneratorKotlin.ts",
+    "GenericName.ts",
+    "stringUtilities.ts",
+    "types.ts"
+  ],
+  "compilerOptions": {
+    "types": ["node"]
+  },
+  "references": [
+    { "path": "../../parser" },
+    { "path": "../../core" },
+    { "path": "../../../exception" }
+  ]
+}

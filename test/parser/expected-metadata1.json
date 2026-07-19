@@ -26,6 +26,7 @@
         "globalName": "test_schema.Message",
         "name": "Message",
         "exported": false,
+        "traits": [],
         "params": [
           {
             "name": "id",
@@ -162,6 +163,7 @@
         "globalName": "test_schema.AcknowledgeMessage",
         "name": "AcknowledgeMessage",
         "exported": false,
+        "traits": [],
         "params": [
           {
             "name": "id",
@@ -232,6 +234,7 @@
         "globalName": "test_schema.ImportLocalType",
         "name": "ImportLocalType",
         "exported": false,
+        "traits": [],
         "params": [
           {
             "name": "message",
@@ -307,6 +310,7 @@
         "globalName": "schema_internal_test.internal.ImportMeWithId",
         "name": "ImportMeWithId",
         "exported": true,
+        "traits": [],
         "params": [
           {
             "name": "id",
@@ -426,6 +430,7 @@
         "globalName": "event.Event",
         "name": "Event",
         "exported": true,
+        "traits": [],
         "params": [
           {
             "name": "seconds",
@@ -587,6 +592,7 @@
         "globalName": "test.ImportMe",
         "name": "ImportMe",
         "exported": true,
+        "traits": [],
         "params": [
           {
             "name": "value",
