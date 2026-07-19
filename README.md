@@ -30,6 +30,7 @@ The new `jsb` command-line tool supports generating code for additional language
 - C99
 - C++17
 - TypeScript (`--generator typescript`, byte-identical to the original `jsbuffer` CLI)
+- Kotlin (`--generator kotlin`; `--name` is the Kotlin package name)
 
 ### Usage
 
