@@ -39,7 +39,7 @@
     "schema:from-metadata": "npm run schema:cpp17:from-metadata",
     "schema:cpp17:from-metadata": "npm run cli:new -- --from-metadata test/generated/metadata/cpp -o test/generated/from-metadata/cpp --generator cpp17 --indentation-size 2 --name app",
     "schema:c99:from-metadata": "npm run cli:new -- --from-metadata test/generated/metadata/c -o test/generated/from-metadata/c --generator c99 --indentation-size 2 --name app",
-    "schema:typescript": "npm run cli -- test/schema -o test/generated/typescript --no-ts-config --indentation-size 2",
+    "schema:typescript": "npm run cli:new -- test/schema -o test/generated/typescript --generator typescript --no-ts-config --indentation-size 2",
     "schema:cpp17": "npm run cli:new -- test/parser/test_schema.jsb -o test/generated/cpp --indentation-size 2",
     "schema:c99:simple": "npm run cli:new -- src/generators/c/test/simple_schema.jsb --generator c99 -o test/generated/c/schemas/avr --indentation-size 2 --name avr_simple_schema",
     "schema:c99:advanced": "npm run cli:new -- src/generators/c/test/app.jsb --generator c99 -o test/generated/c/schemas/app --indentation-size 2 --name app",

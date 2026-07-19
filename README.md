@@ -29,6 +29,7 @@ The new `jsb` command-line tool supports generating code for additional language
 
 - C99
 - C++17
+- TypeScript (`--generator typescript`, byte-identical to the original `jsbuffer` CLI)
 
 ### Usage
 

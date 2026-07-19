@@ -18,10 +18,12 @@ import loadFileMetadataList, {
   METADATA_MANIFEST_FILE_NAME
 } from './loadFileMetadataList';
 import { IFileMetadata } from '../src/parser/Parser';
+import { FileGenerator } from '../code-generator';
 
 enum Generator {
   CPP_17 = 'cpp17',
-  C = 'c99'
+  C = 'c99',
+  TYPESCRIPT = 'typescript'
 }
 
 /**
@@ -54,9 +56,57 @@ function createGenerator(
           project: options.name
         }
       });
+    case Generator.TYPESCRIPT:
+      /**
+       * The TypeScript generator is driven straight from a `.jsb` schema by the
+       * legacy, battle-tested {@link FileGenerator} (see `generateTypeScript`),
+       * so it is never reached through this metadata-list factory.
+       */
+      throw new Error(
+        'The "typescript" generator is not supported in --from-metadata mode yet'
+      );
     default:
       throw new Error(`Unknown generator "${desiredGenerator}"`);
   }
+}
+
+/**
+ * Generate TypeScript source code from a `.jsb` schema.
+ *
+ * This reuses the proven legacy {@link FileGenerator}, so the unified `jsb` CLI
+ * produces byte-identical TypeScript to the original `jsbuffer` CLI, keeping
+ * TypeScript code generation at 100% fidelity.
+ */
+async function generateTypeScript(
+  mainFilePath: string,
+  outputDirectory: string,
+  options: {
+    indentationSize: number;
+    typeScriptConfiguration: Record<string, unknown> | null;
+    uniqueNamePropertyName: string | null;
+    sortProperties: boolean;
+  }
+): Promise<void> {
+  const generator = new FileGenerator(
+    {
+      path: mainFilePath
+    },
+    {
+      root: null,
+      textDecoder: new TextDecoder(),
+      textEncoder: new TextEncoder(),
+      sortProperties: options.sortProperties,
+      uniqueNamePropertyName: options.uniqueNamePropertyName,
+      compilerOptions: {
+        outDir: outputDirectory,
+        rootDir: path.dirname(mainFilePath)
+      },
+      typeScriptConfiguration: options.typeScriptConfiguration,
+      indentationSize: options.indentationSize
+    }
+  );
+  await generator.generate();
+  console.log(`TypeScript files written to "${outputDirectory}".`);
 }
 
 /**
@@ -150,6 +200,19 @@ function printHelp() {
   const desiredGenerator =
     getArgumentAssignment(args, '--generator', getString) ?? Generator.CPP_17;
 
+  /**
+   * TypeScript-specific options (mirroring the original `jsbuffer` CLI). They
+   * are ignored by the other generators.
+   */
+  const noTypeScriptConfig = getArgument(args, '--no-ts-config') !== null;
+  const tsExtends = getArgumentAssignment(args, '--extends', getString);
+  const uniqueNamePropertyName =
+    getArgumentAssignment(args, '--unique-name-property-name', getString) ??
+    null;
+  const sortProperties =
+    (getArgument(args, '--sort-properties') ?? getArgument(args, '-s')) !==
+    null;
+
   if (outputDirectory === null) {
     throw new Error('Output directory should be defined');
   }
@@ -209,6 +272,38 @@ function printHelp() {
     }
   } catch (reason) {
     await fs.promises.mkdir(outputDirectory, { recursive: true });
+  }
+
+  /**
+   * The TypeScript generator is driven straight from the `.jsb` schema by the
+   * legacy generator, keeping 100% fidelity with the original `jsbuffer` CLI.
+   */
+  if (desiredGenerator === Generator.TYPESCRIPT) {
+    if (metadataOnly !== null) {
+      /**
+       * `--metadata-only` is language-agnostic, so fall through to the parser
+       * path below instead of running the TypeScript generator.
+       */
+    } else {
+      let typeScriptConfiguration: Record<string, unknown> | null = {};
+      if (noTypeScriptConfig) {
+        typeScriptConfiguration = null;
+      } else if (tsExtends !== null) {
+        typeScriptConfiguration = {
+          extends: path.relative(
+            outputDirectory,
+            path.resolve(process.cwd(), tsExtends)
+          )
+        };
+      }
+      await generateTypeScript(mainFilePath, outputDirectory, {
+        indentationSize,
+        typeScriptConfiguration,
+        uniqueNamePropertyName,
+        sortProperties
+      });
+      return;
+    }
   }
 
   /**

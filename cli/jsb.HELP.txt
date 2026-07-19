@@ -18,7 +18,19 @@ Options:
     Output directory for generated files.
 
   --generator <generator> (default: cpp17)
-    Generator to use. Available generators: c99, cpp17.
+    Generator to use. Available generators: c99, cpp17, typescript.
+
+  --no-ts-config (typescript only)
+    Do not generate a tsconfig.json file in the output directory.
+
+  --extends <path> (typescript only)
+    Base tsconfig.json that the generated tsconfig.json will extend.
+
+  --unique-name-property-name <string> (typescript only)
+    Property name used to discriminate generated types/interfaces (default: _name).
+
+  -s, --sort-properties (typescript only)
+    Sort the properties within generated types alphabetically.
 
   --indentation-size <indentation-size>
     Indentation size for generated files.
