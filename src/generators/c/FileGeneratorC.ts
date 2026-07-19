@@ -14,6 +14,29 @@ import MetadataFileCCodeGenerator from './MetadataFileCCodeGenerator';
 import { Metadata } from '../../parser/types/metadata';
 import * as fs from 'fs';
 
+/**
+ * Read the original schema file contents, returning an empty buffer when the
+ * file does not exist. The contents are only needed to render source snippets
+ * in error messages, so their absence (e.g. when generating from metadata JSON
+ * files alone) must not prevent code generation.
+ */
+async function readSourceContentsOrEmpty(
+  filePath: string
+): Promise<Uint8Array> {
+  try {
+    return await fs.promises.readFile(filePath);
+  } catch (reason) {
+    if (
+      typeof reason === 'object' &&
+      reason !== null &&
+      (reason as { code?: unknown }).code === 'ENOENT'
+    ) {
+      return new Uint8Array();
+    }
+    throw reason;
+  }
+}
+
 export interface IFileGeneratorCOptions {
   /**
    * Absolute path of the root directory of the schema
@@ -82,7 +105,13 @@ export default class FileGeneratorC extends CodeStream {
           current: fileMetadata,
           sourceFileExtension: this.#options.sourceFileExtension,
           generators: this.#generators,
-          contents: await fs.promises.readFile(fileMetadata.path),
+          /**
+           * The original schema contents are only used to render source
+           * snippets in error messages. When generating straight from metadata
+           * JSON files (`jsb --from-metadata`), the `.jsb` sources may not be
+           * present, so fall back to an empty buffer instead of failing.
+           */
+          contents: await readSourceContentsOrEmpty(fileMetadata.path),
           parent: this
         });
         for (const metadata of fileMetadata.metadata) {

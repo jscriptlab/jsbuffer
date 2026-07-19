@@ -174,8 +174,18 @@ function printHelp() {
     }
   }
 
-  const indentationSize =
-    getArgumentAssignment(args, '--indentation-size', getInteger) ?? 2;
+  /**
+   * Whether `--indentation-size` was explicitly provided. The default differs
+   * per generator: the native generators default to 2, while the TypeScript
+   * generator defaults to 4 to stay byte-identical with the legacy `jsbuffer`
+   * CLI even when the flag is omitted.
+   */
+  const explicitIndentationSize = getArgumentAssignment(
+    args,
+    '--indentation-size',
+    getInteger
+  );
+  const indentationSize = explicitIndentationSize ?? 2;
 
   const name = getArgumentAssignment(args, '--name', getString) ?? 'schema';
 
@@ -297,7 +307,10 @@ function printHelp() {
         };
       }
       await generateTypeScript(mainFilePath, outputDirectory, {
-        indentationSize,
+        /**
+         * Match the legacy `jsbuffer` CLI default of 4 when the flag is omitted.
+         */
+        indentationSize: explicitIndentationSize ?? 4,
         typeScriptConfiguration,
         uniqueNamePropertyName,
         sortProperties

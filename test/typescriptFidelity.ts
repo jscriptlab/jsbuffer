@@ -72,47 +72,63 @@ test('jsb --generator typescript is byte-identical to the legacy jsbuffer CLI', 
   }
 
   try {
-    const unifiedDir = path.resolve(workDir, 'unified');
-    const legacyDir = path.resolve(workDir, 'legacy');
+    /**
+     * Run each scenario twice: once with an explicit `--indentation-size` and
+     * once with it omitted. The default case guards that the unified CLI keeps
+     * the legacy default indentation (4) instead of its own native default (2).
+     */
+    const scenarios: ReadonlyArray<{ label: string; indentation: string[] }> = [
+      {
+        label: 'explicit --indentation-size 2',
+        indentation: ['--indentation-size', '2']
+      },
+      { label: 'default indentation (flag omitted)', indentation: [] }
+    ];
 
-    await spawn('node', [
-      unifiedCli,
-      mainSchema,
-      '-o',
-      unifiedDir,
-      '--generator',
-      'typescript',
-      '--no-ts-config',
-      '--indentation-size',
-      '2'
-    ]).wait();
+    for (const scenario of scenarios) {
+      const unifiedDir = path.resolve(workDir, `unified-${scenario.label}`);
+      const legacyDir = path.resolve(workDir, `legacy-${scenario.label}`);
 
-    await spawn('node', [
-      legacyCli,
-      mainSchema,
-      '-o',
-      legacyDir,
-      '--no-ts-config',
-      '--indentation-size',
-      '2'
-    ]).wait();
+      await spawn('node', [
+        unifiedCli,
+        mainSchema,
+        '-o',
+        unifiedDir,
+        '--generator',
+        'typescript',
+        '--no-ts-config',
+        ...scenario.indentation
+      ]).wait();
 
-    const unified = await readGeneratedTypeScript(unifiedDir);
-    const legacy = await readGeneratedTypeScript(legacyDir);
+      await spawn('node', [
+        legacyCli,
+        mainSchema,
+        '-o',
+        legacyDir,
+        '--no-ts-config',
+        ...scenario.indentation
+      ]).wait();
 
-    t.deepEqual(
-      Array.from(unified.keys()).sort(),
-      Array.from(legacy.keys()).sort(),
-      'the unified CLI must generate the same set of TypeScript files'
-    );
-    t.true(unified.size > 0, 'expected at least one generated TypeScript file');
+      const unified = await readGeneratedTypeScript(unifiedDir);
+      const legacy = await readGeneratedTypeScript(legacyDir);
 
-    for (const [relativePath, contents] of legacy) {
-      t.is(
-        unified.get(relativePath),
-        contents,
-        `"${relativePath}" must be byte-identical between the unified and legacy CLIs`
+      t.deepEqual(
+        Array.from(unified.keys()).sort(),
+        Array.from(legacy.keys()).sort(),
+        `[${scenario.label}] the unified CLI must generate the same set of TypeScript files`
       );
+      t.true(
+        unified.size > 0,
+        `[${scenario.label}] expected at least one generated TypeScript file`
+      );
+
+      for (const [relativePath, contents] of legacy) {
+        t.is(
+          unified.get(relativePath),
+          contents,
+          `[${scenario.label}] "${relativePath}" must be byte-identical between the unified and legacy CLIs`
+        );
+      }
     }
   } finally {
     if (previousConfig !== null) {

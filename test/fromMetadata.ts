@@ -125,6 +125,80 @@ test('--from-metadata: C99 output is byte-identical to generating from source', 
   });
 });
 
+test('--from-metadata generates C99 even when the original .jsb sources are absent', async (t) => {
+  t.timeout(Time.milliseconds.Minute * 5);
+
+  const rootDir = await fs.promises.mkdtemp(
+    path.resolve(os.tmpdir(), 'jsb-from-metadata-no-src-')
+  );
+  try {
+    const metadataDir = path.resolve(rootDir, 'metadata');
+    const outDir = path.resolve(rootDir, 'c');
+
+    await run([
+      'src/generators/c/test/app.jsb',
+      '--metadata-only',
+      '-o',
+      metadataDir,
+      '--name',
+      'app'
+    ]);
+
+    /**
+     * Rewrite every metadata file's `path` to point at a non-existent location,
+     * simulating consuming the metadata on another machine (or after the `.jsb`
+     * files were removed). Generation must still succeed.
+     */
+    async function rewritePaths(directory: string) {
+      const entries = await fs.promises.readdir(directory, {
+        withFileTypes: true
+      });
+      for (const entry of entries) {
+        const absolutePath = path.resolve(directory, entry.name);
+        if (entry.isDirectory()) {
+          await rewritePaths(absolutePath);
+        } else if (entry.name.endsWith('.metadata.json')) {
+          const parsed = JSON.parse(
+            await fs.promises.readFile(absolutePath, 'utf8')
+          );
+          parsed.path = path.resolve(
+            '/nonexistent-schema-root',
+            path.basename(parsed.path)
+          );
+          await fs.promises.writeFile(
+            absolutePath,
+            JSON.stringify(parsed, null, 2)
+          );
+        }
+      }
+    }
+    await rewritePaths(metadataDir);
+
+    await run([
+      '--from-metadata',
+      metadataDir,
+      '-o',
+      outDir,
+      '--generator',
+      'c99',
+      '--name',
+      'app'
+    ]);
+
+    const generated = await readDirectoryTree(outDir);
+    t.true(
+      generated.size > 0,
+      'C99 files must be generated from metadata alone, without the .jsb sources'
+    );
+    t.true(
+      Array.from(generated.keys()).some((file) => file.endsWith('.c')),
+      'expected at least one generated .c file'
+    );
+  } finally {
+    await fs.promises.rm(rootDir, { recursive: true, force: true });
+  }
+});
+
 test('--from-metadata and --metadata-only are mutually exclusive', async (t) => {
   const { stderr } = spawn(
     'node',
