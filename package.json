@@ -23,7 +23,10 @@
     "build:all": "npm run schema && npm run build && npm run lint",
     "prepublishOnly": "npm run build:all && npm run test",
     "test": "TS_NODE_PROJECT=test/tsconfig.json npx sarg --bail --require ts-node/register \"test/**/*.ts\" --ignore \"test/**/*.d.ts\"",
-    "test:coverage": "npx nyc npm test"
+    "test:coverage": "npx nyc npm test",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "npm run build:all && changeset publish"
   },
   "dependencies": {
     "bn.js": "^5.2.5",
@@ -35,6 +38,8 @@
     "textstreamjs": "0.x"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.7.0",
+    "@changesets/cli": "^2.31.1",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@jsbuffer/codec": "^1.0.7",
     "@types/bn.js": "^5.1.3",
