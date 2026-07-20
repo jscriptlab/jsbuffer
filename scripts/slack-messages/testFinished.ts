@@ -1,5 +1,5 @@
 import { SayArguments } from '@slack/bolt';
-import env from '../../src/utilities/env';
+import env from '../env';
 
 const initialPayload = ({
   EVENT_HEAD_COMMIT_TIMESTAMP,
@@ -14,7 +14,6 @@ const initialPayload = ({
       type: 'header',
       text: {
         type: 'plain_text',
-        emoji: true,
         text: 'Tests passed ✅'
       }
     },
@@ -42,7 +41,7 @@ const initialPayload = ({
     {
       type: 'section',
       text: {
-        text: `${EVENT_HEAD_COMMIT_TIMESTAMP}`,
+        text: EVENT_HEAD_COMMIT_TIMESTAMP,
         type: 'mrkdwn'
       }
     }
@@ -67,9 +66,7 @@ function context() {
 
 type Context = ReturnType<typeof context>;
 
-export const text = () => 'Tests passed!';
-
-export const blocks = () => {
+export default () => {
   const {
     EVENT_HEAD_COMMIT_URL,
     EVENT_REF,
@@ -107,6 +104,7 @@ export const blocks = () => {
         )}...${EVENT_AFTER_COMMIT.substring(0, 7)}>`
       }
     },
+    // ! Maybe convert `test-finished-slack-message.json` to a `.ts` file
     {
       type: 'divider'
     },

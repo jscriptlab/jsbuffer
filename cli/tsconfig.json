@@ -6,7 +6,8 @@
   "references": [
     { "path": "../code-generator" },
     { "path": "../src/generators/cpp" },
-    { "path": "../src/generators/c" }
+    { "path": "../src/generators/c" },
+    { "path": "../src/generators/kotlin" }
   ],
-  "include": ["index.ts", "jsb.ts"]
+  "include": ["index.ts", "jsb.ts", "loadFileMetadataList.ts"]
 }

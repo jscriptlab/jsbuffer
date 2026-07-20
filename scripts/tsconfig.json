@@ -5,9 +5,6 @@
   "references": [
     {
       "path": "../code-generator"
-    },
-    {
-      "path": "../src/utilities"
     }
   ],
   "extends": "../tsconfig.base.json"

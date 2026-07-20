@@ -8,7 +8,7 @@ import { TextDecoder, TextEncoder } from 'util';
 import { getArgument } from 'cli-argument-helper';
 import { getString } from 'cli-argument-helper/string';
 import { getInteger } from 'cli-argument-helper/number';
-import getNamedArgument from 'cli-argument-helper/getNamedArgument';
+import getArgumentAssignment from 'cli-argument-helper/getArgumentAssignment';
 import Exception from '../exception/Exception';
 import CodeStream from 'textstreamjs';
 import chalk from 'chalk';
@@ -105,17 +105,17 @@ function getHelpText() {
 
 (async () => {
   const args = Array.from(process.argv).slice(2);
-  const uniqueNamePropertyName = getNamedArgument(
+  const uniqueNamePropertyName = getArgumentAssignment(
     args,
     '--unique-name-property-name',
     getString
   );
-  const tsExtends = getNamedArgument(args, '--extends', getString);
+  const tsExtends = getArgumentAssignment(args, '--extends', getString);
   const indentationSize =
-    getNamedArgument(args, '--indentation-size', getInteger) ?? 4;
+    getArgumentAssignment(args, '--indentation-size', getInteger) ?? 4;
   let outDir =
-    getNamedArgument(args, '-o', getString) ??
-    getNamedArgument(args, '--output', getString) ??
+    getArgumentAssignment(args, '-o', getString) ??
+    getArgumentAssignment(args, '--output', getString) ??
     'schema';
   const noTypeScriptConfig = getArgument(args, '--no-ts-config') !== null;
   const sortProperties =

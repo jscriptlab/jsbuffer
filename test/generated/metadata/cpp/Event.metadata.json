@@ -1,0 +1,162 @@
+{
+  "path": "/home/user/jsbuffer/test/parser/Event.jsb",
+  "metadata": [
+    {
+      "kind": "type",
+      "id": -56900045,
+      "position": {
+        "start": {
+          "type": 0,
+          "value": "type",
+          "position": {
+            "start": 7,
+            "end": 11
+          }
+        },
+        "end": {
+          "type": 6,
+          "value": "}",
+          "position": {
+            "start": 69,
+            "end": 70
+          }
+        }
+      },
+      "globalName": "event.Event",
+      "name": "Event",
+      "exported": true,
+      "traits": [],
+      "params": [
+        {
+          "name": "seconds",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "long",
+              "position": {
+                "start": 22,
+                "end": 26
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 34,
+                "end": 35
+              }
+            }
+          },
+          "type": {
+            "type": "generic",
+            "value": "long",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "long",
+                "position": {
+                  "start": 22,
+                  "end": 26
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "long",
+                "position": {
+                  "start": 22,
+                  "end": 26
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "nanoseconds",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "long",
+              "position": {
+                "start": 38,
+                "end": 42
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 54,
+                "end": 55
+              }
+            }
+          },
+          "type": {
+            "type": "generic",
+            "value": "long",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "long",
+                "position": {
+                  "start": 38,
+                  "end": 42
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "long",
+                "position": {
+                  "start": 38,
+                  "end": 42
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "bit",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "uint8",
+              "position": {
+                "start": 58,
+                "end": 63
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 67,
+                "end": 68
+              }
+            }
+          },
+          "type": {
+            "type": "generic",
+            "value": "uint8",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "uint8",
+                "position": {
+                  "start": 58,
+                  "end": 63
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "uint8",
+                "position": {
+                  "start": 58,
+                  "end": 63
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

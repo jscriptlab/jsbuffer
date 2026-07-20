@@ -55,7 +55,7 @@ void rand_fill_double(void* buffer, jsb_size_t size) {
 
 #elif defined(__unix__)
 
-void rand_init(void) {
+void rand_init() {
   srand((unsigned int)time(NULL));
 }
 

@@ -4,7 +4,7 @@
 #include <string.h>
 #endif
 
-#ifdef MEMCPY_TYPE
+#ifdef HAVE_MEMCPY
 void* jsb_memcpy(void* dest, const void* src, jsb_uint32_t len) {
   return memcpy(dest, src, len);
 }
@@ -23,7 +23,7 @@ void* jsb_memcpy(void* dest, const void* src, jsb_uint32_t len) {
 
 void* jsb_strncpy(jsb_uint8_t* dest, const jsb_uint8_t* src,
                   const jsb_uint32_t len) {
-#if defined(STRNCPY_TYPE)
+#if defined(HAVE_STRNCPY)
   return strncpy((char*)dest, (const char*)src, len);
 #else
   if (dest == NULL || src == NULL) {
@@ -32,11 +32,11 @@ void* jsb_strncpy(jsb_uint8_t* dest, const jsb_uint8_t* src,
   jsb_memcpy(dest, src, len);
   dest[len] = '\0';
   return dest;
-#endif // STRNCPY_TYPE
+#endif // HAVE_STRNCPY
 }
 
 void* jsb_strcpy(jsb_uint8_t* dest, const jsb_uint8_t* src) {
-#ifdef STRCPY_TYPE
+#ifdef HAVE_STRCPY
   return strcpy((char*)dest, (const char*)src);
 #else
   if (dest == NULL || src == NULL) {
@@ -49,10 +49,10 @@ void* jsb_strcpy(jsb_uint8_t* dest, const jsb_uint8_t* src) {
     ;
 
   return original_dest;
-#endif // STRCPY_TYPE
+#endif // HAVE_STRCPY
 }
 
-#ifdef STRLEN_TYPE
+#ifdef HAVE_STRLEN
 jsb_uint32_t jsb_strlen(const jsb_string_t str) {
   return strlen((const char*)str);
 }
@@ -69,12 +69,12 @@ jsb_uint32_t jsb_strlen(const jsb_string_t str) {
 }
 #endif
 
-#ifdef MEMSET_TYPE
+#ifdef HAVE_MEMSET
 void* jsb_memset(void* dest, const jsb_uint8_t value, const jsb_uint32_t len) {
   return memset(dest, value, len);
 }
 #else
-void* jsb_memset(void* dest, const jsb_uint8_t value, jsb_uint32_t len) {
+void* jsb_memset(void* dest, const jsb_uint8_t value, const jsb_uint32_t len) {
   if (dest == NULL) {
     return NULL;
   }
@@ -83,4 +83,4 @@ void* jsb_memset(void* dest, const jsb_uint8_t value, jsb_uint32_t len) {
   }
   return dest;
 }
-#endif // MEMSET_TYPE
+#endif // HAVE_MEMSET

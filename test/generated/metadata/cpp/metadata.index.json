@@ -1,0 +1,8 @@
+{
+  "files": [
+    "test_schema.metadata.json",
+    "schema_internal_test/internal.metadata.json",
+    "Event.metadata.json",
+    "Test.metadata.json"
+  ]
+}

@@ -1,0 +1,766 @@
+{
+  "path": "/home/user/jsbuffer/src/generators/c/test/protocol/main.jsb",
+  "metadata": [
+    {
+      "kind": "trait",
+      "position": {
+        "start": {
+          "type": 0,
+          "value": "trait",
+          "position": {
+            "start": 7,
+            "end": 12
+          }
+        },
+        "end": {
+          "type": 6,
+          "value": "}",
+          "position": {
+            "start": 22,
+            "end": 23
+          }
+        }
+      },
+      "name": "Request",
+      "globalName": "protocol.main.Request",
+      "exported": true,
+      "nodes": [
+        {
+          "type": "externalType",
+          "position": {
+            "start": {
+              "type": 0,
+              "value": "call",
+              "position": {
+                "start": 199,
+                "end": 203
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": "}",
+              "position": {
+                "start": 242,
+                "end": 243
+              }
+            }
+          },
+          "name": "GetUser",
+          "relativePath": "./main.jsb"
+        }
+      ]
+    },
+    {
+      "kind": "trait",
+      "position": {
+        "start": {
+          "type": 0,
+          "value": "trait",
+          "position": {
+            "start": 31,
+            "end": 36
+          }
+        },
+        "end": {
+          "type": 6,
+          "value": "}",
+          "position": {
+            "start": 47,
+            "end": 48
+          }
+        }
+      },
+      "name": "Response",
+      "globalName": "protocol.main.Response",
+      "exported": true,
+      "nodes": [
+        {
+          "type": "externalType",
+          "position": {
+            "start": {
+              "type": 0,
+              "value": "type",
+              "position": {
+                "start": 57,
+                "end": 61
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": "}",
+              "position": {
+                "start": 131,
+                "end": 132
+              }
+            }
+          },
+          "name": "Void",
+          "relativePath": "./main.jsb"
+        },
+        {
+          "type": "externalType",
+          "position": {
+            "start": {
+              "type": 0,
+              "value": "type",
+              "position": {
+                "start": 141,
+                "end": 145
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": "}",
+              "position": {
+                "start": 189,
+                "end": 190
+              }
+            }
+          },
+          "name": "User",
+          "relativePath": "./main.jsb"
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "id": 357013552,
+      "position": {
+        "start": {
+          "type": 0,
+          "value": "type",
+          "position": {
+            "start": 57,
+            "end": 61
+          }
+        },
+        "end": {
+          "type": 6,
+          "value": "}",
+          "position": {
+            "start": 131,
+            "end": 132
+          }
+        }
+      },
+      "globalName": "protocol.main.Void",
+      "name": "Void",
+      "exported": true,
+      "traits": [
+        {
+          "type": "internalType",
+          "position": {
+            "start": {
+              "type": 0,
+              "value": "trait",
+              "position": {
+                "start": 31,
+                "end": 36
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": "}",
+              "position": {
+                "start": 47,
+                "end": 48
+              }
+            }
+          },
+          "interfaceName": "Response"
+        }
+      ],
+      "params": [
+        {
+          "name": "value",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "int",
+              "position": {
+                "start": 120,
+                "end": 123
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 129,
+                "end": 130
+              }
+            }
+          },
+          "type": {
+            "type": "generic",
+            "value": "int",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "int",
+                "position": {
+                  "start": 120,
+                  "end": 123
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "int",
+                "position": {
+                  "start": 120,
+                  "end": 123
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "id": 1081421617,
+      "position": {
+        "start": {
+          "type": 0,
+          "value": "type",
+          "position": {
+            "start": 141,
+            "end": 145
+          }
+        },
+        "end": {
+          "type": 6,
+          "value": "}",
+          "position": {
+            "start": 189,
+            "end": 190
+          }
+        }
+      },
+      "globalName": "protocol.main.User",
+      "name": "User",
+      "exported": true,
+      "traits": [
+        {
+          "type": "internalType",
+          "position": {
+            "start": {
+              "type": 0,
+              "value": "trait",
+              "position": {
+                "start": 31,
+                "end": 36
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": "}",
+              "position": {
+                "start": 47,
+                "end": 48
+              }
+            }
+          },
+          "interfaceName": "Response"
+        }
+      ],
+      "params": [
+        {
+          "name": "id",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "int",
+              "position": {
+                "start": 166,
+                "end": 169
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 172,
+                "end": 173
+              }
+            }
+          },
+          "type": {
+            "type": "generic",
+            "value": "int",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "int",
+                "position": {
+                  "start": 166,
+                  "end": 169
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "int",
+                "position": {
+                  "start": 166,
+                  "end": 169
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "name",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "string",
+              "position": {
+                "start": 176,
+                "end": 182
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 187,
+                "end": 188
+              }
+            }
+          },
+          "type": {
+            "type": "generic",
+            "value": "string",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "string",
+                "position": {
+                  "start": 176,
+                  "end": 182
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "string",
+                "position": {
+                  "start": 176,
+                  "end": 182
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "call",
+      "id": -1150313593,
+      "position": {
+        "start": {
+          "type": 0,
+          "value": "call",
+          "position": {
+            "start": 199,
+            "end": 203
+          }
+        },
+        "end": {
+          "type": 6,
+          "value": "}",
+          "position": {
+            "start": 242,
+            "end": 243
+          }
+        }
+      },
+      "globalName": "protocol.main.GetUser",
+      "name": "GetUser",
+      "exported": true,
+      "traits": [
+        {
+          "type": "internalType",
+          "position": {
+            "start": {
+              "type": 0,
+              "value": "trait",
+              "position": {
+                "start": 7,
+                "end": 12
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": "}",
+              "position": {
+                "start": 22,
+                "end": 23
+              }
+            }
+          },
+          "interfaceName": "Request"
+        }
+      ],
+      "returnType": {
+        "type": "internalType",
+        "position": {
+          "start": {
+            "type": 0,
+            "value": "type",
+            "position": {
+              "start": 141,
+              "end": 145
+            }
+          },
+          "end": {
+            "type": 6,
+            "value": "}",
+            "position": {
+              "start": 189,
+              "end": 190
+            }
+          }
+        },
+        "interfaceName": "User"
+      },
+      "params": [
+        {
+          "name": "id",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "int",
+              "position": {
+                "start": 234,
+                "end": 237
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 240,
+                "end": 241
+              }
+            }
+          },
+          "type": {
+            "type": "generic",
+            "value": "int",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "int",
+                "position": {
+                  "start": 234,
+                  "end": 237
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "int",
+                "position": {
+                  "start": 234,
+                  "end": 237
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "id": -1894699296,
+      "position": {
+        "start": {
+          "type": 0,
+          "value": "type",
+          "position": {
+            "start": 252,
+            "end": 256
+          }
+        },
+        "end": {
+          "type": 6,
+          "value": "}",
+          "position": {
+            "start": 351,
+            "end": 352
+          }
+        }
+      },
+      "globalName": "protocol.main.TupleTest",
+      "name": "TupleTest",
+      "exported": true,
+      "traits": [],
+      "params": [
+        {
+          "name": "values",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "tuple",
+              "position": {
+                "start": 271,
+                "end": 276
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 349,
+                "end": 350
+              }
+            }
+          },
+          "type": {
+            "type": "template",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "tuple",
+                "position": {
+                  "start": 271,
+                  "end": 276
+                }
+              },
+              "end": {
+                "type": 6,
+                "value": ">",
+                "position": {
+                  "start": 341,
+                  "end": 342
+                }
+              }
+            },
+            "template": "tuple",
+            "args": [
+              {
+                "type": "generic",
+                "value": "int",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "int",
+                    "position": {
+                      "start": 277,
+                      "end": 280
+                    }
+                  },
+                  "end": {
+                    "type": 1,
+                    "value": "int",
+                    "position": {
+                      "start": 277,
+                      "end": 280
+                    }
+                  }
+                }
+              },
+              {
+                "type": "generic",
+                "value": "string",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "string",
+                    "position": {
+                      "start": 282,
+                      "end": 288
+                    }
+                  },
+                  "end": {
+                    "type": 1,
+                    "value": "string",
+                    "position": {
+                      "start": 282,
+                      "end": 288
+                    }
+                  }
+                }
+              },
+              {
+                "type": "generic",
+                "value": "int",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "int",
+                    "position": {
+                      "start": 290,
+                      "end": 293
+                    }
+                  },
+                  "end": {
+                    "type": 1,
+                    "value": "int",
+                    "position": {
+                      "start": 290,
+                      "end": 293
+                    }
+                  }
+                }
+              },
+              {
+                "type": "internalType",
+                "position": {
+                  "start": {
+                    "type": 0,
+                    "value": "type",
+                    "position": {
+                      "start": 141,
+                      "end": 145
+                    }
+                  },
+                  "end": {
+                    "type": 6,
+                    "value": "}",
+                    "position": {
+                      "start": 189,
+                      "end": 190
+                    }
+                  }
+                },
+                "interfaceName": "User"
+              },
+              {
+                "type": "internalType",
+                "position": {
+                  "start": {
+                    "type": 0,
+                    "value": "type",
+                    "position": {
+                      "start": 57,
+                      "end": 61
+                    }
+                  },
+                  "end": {
+                    "type": 6,
+                    "value": "}",
+                    "position": {
+                      "start": 131,
+                      "end": 132
+                    }
+                  }
+                },
+                "interfaceName": "Void"
+              },
+              {
+                "type": "generic",
+                "value": "uint16",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "uint16",
+                    "position": {
+                      "start": 307,
+                      "end": 313
+                    }
+                  },
+                  "end": {
+                    "type": 1,
+                    "value": "uint16",
+                    "position": {
+                      "start": 307,
+                      "end": 313
+                    }
+                  }
+                }
+              },
+              {
+                "type": "generic",
+                "value": "uint32",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "uint32",
+                    "position": {
+                      "start": 315,
+                      "end": 321
+                    }
+                  },
+                  "end": {
+                    "type": 1,
+                    "value": "uint32",
+                    "position": {
+                      "start": 315,
+                      "end": 321
+                    }
+                  }
+                }
+              },
+              {
+                "type": "generic",
+                "value": "int16",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "int16",
+                    "position": {
+                      "start": 323,
+                      "end": 328
+                    }
+                  },
+                  "end": {
+                    "type": 1,
+                    "value": "int16",
+                    "position": {
+                      "start": 323,
+                      "end": 328
+                    }
+                  }
+                }
+              },
+              {
+                "type": "generic",
+                "value": "int8",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "int8",
+                    "position": {
+                      "start": 330,
+                      "end": 334
+                    }
+                  },
+                  "end": {
+                    "type": 1,
+                    "value": "int8",
+                    "position": {
+                      "start": 330,
+                      "end": 334
+                    }
+                  }
+                }
+              },
+              {
+                "type": "generic",
+                "value": "uint8",
+                "position": {
+                  "start": {
+                    "type": 1,
+                    "value": "uint8",
+                    "position": {
+                      "start": 336,
+                      "end": 341
+                    }
+                  },
+                  "end": {
+                    "type": 1,
+                    "value": "uint8",
+                    "position": {
+                      "start": 336,
+                      "end": 341
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

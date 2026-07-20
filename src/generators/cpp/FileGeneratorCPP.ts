@@ -71,7 +71,6 @@ export interface IFileGeneratorCPPOptions {
   cmake: {
     project: string;
   };
-  indentationSize: number;
 }
 
 export default class FileGeneratorCPP extends CodeStream {
@@ -82,26 +81,15 @@ export default class FileGeneratorCPP extends CodeStream {
   readonly #root;
   readonly #files: IGeneratedFile[] = [];
   readonly #cmake;
-  /**
-   * Maps a file path to a FileGeneratorCPP instance
-   */
-  readonly #indentationSize;
   public constructor(
     fileMetadataList: ReadonlyArray<IFileMetadata>,
-    {
-      current = null,
-      root = null,
-      cmake,
-      rootDir,
-      indentationSize
-    }: IFileGeneratorCPPOptions
+    { current = null, root = null, cmake, rootDir }: IFileGeneratorCPPOptions
   ) {
     super();
     this.#root = root;
     this.#cmake = cmake ?? {
       project: 'schema'
     };
-    this.#indentationSize = indentationSize;
     this.#generators = new Map<string, FileGeneratorCPP>();
     this.#current = current;
     this.#rootDir = rootDir;
@@ -122,7 +110,6 @@ export default class FileGeneratorCPP extends CodeStream {
         this.#generators.set(
           path,
           new FileGeneratorCPP(Array.from(this.#fileMetadataList.values()), {
-            indentationSize: this.#indentationSize,
             current: fileMetadata,
             root: this,
             rootDir: this.#rootDir,

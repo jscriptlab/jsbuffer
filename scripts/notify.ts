@@ -1,44 +1,28 @@
-import { App } from '@slack/bolt';
-import { ChatPostMessageArguments } from '@slack/web-api';
-import * as testFinished from './slack-messages/testFinished';
-import env from '../src/utilities/env';
+import { App, KnownBlock, Block } from '@slack/bolt';
+import testFinished from './slack-messages/testFinished';
+import env from './env';
 import { getString } from 'cli-argument-helper/string';
-import getNamedArgument from 'cli-argument-helper/getNamedArgument';
-import { getArgument } from 'cli-argument-helper';
-import assert from 'node:assert';
-import github from '@actions/github';
+import getArgumentAssignment from 'cli-argument-helper/getArgumentAssignment';
 
 (async () => {
-  github;
   const args = process.argv.slice(2);
-
   const app = new App({
     signingSecret: env('SLACK_SIGNING_SECRET'),
     token: env('SLACK_BOT_TOKEN')
   });
 
-  const notificationType = getNamedArgument(
+  await app.start(3000);
+  const notificationType = getArgumentAssignment(
     args,
     '--notification-type',
     getString
   );
 
-  assert.strict.ok(
-    notificationType !== null,
-    '--notification-type is required'
-  );
-
-  let chatPostMessageArguments: ChatPostMessageArguments;
-
-  const channel = 'jsbuffer';
+  let blocks: (KnownBlock | Block)[] = [];
 
   switch (notificationType) {
     case 'test-finished':
-      chatPostMessageArguments = {
-        channel,
-        blocks: testFinished.blocks(),
-        text: testFinished.text()
-      };
+      blocks = testFinished();
       break;
 
     default:
@@ -46,24 +30,13 @@ import github from '@actions/github';
       process.exit(1);
   }
 
-  if (getArgument(args, '--dump-json') !== null) {
-    process.stdout.write(JSON.stringify(chatPostMessageArguments));
-    process.exitCode = 0;
-    return;
-  }
-
-  await app.start(3000);
-
-  try {
-    await app.client.chat.postMessage({
-      ...chatPostMessageArguments
-    });
-  } catch (err) {
-    console.error(err);
-  }
+  await app.client.chat.postMessage({
+    channel: 'jsbuffer',
+    blocks
+  });
 
   await app.stop();
-})().catch((err) => {
-  console.error(err);
+})().catch((reason) => {
+  console.error(reason);
   process.exit(1);
 });

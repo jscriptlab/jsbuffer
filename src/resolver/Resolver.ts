@@ -10,9 +10,7 @@ import CodeStream from 'textstreamjs';
 export interface IResolverOptions {
   generators: Map<string, Resolver>;
   current: IFileMetadata;
-  // TODO: Do not extend `CodeStream`
   parent: CodeStream | null;
-  indentationSize: number;
 }
 
 /**
@@ -23,15 +21,8 @@ export default class Resolver extends CodeStream {
   readonly #generators: Map<string, Resolver>;
   readonly #current: IFileMetadata;
 
-  public constructor({
-    generators,
-    current,
-    parent,
-    indentationSize
-  }: IResolverOptions) {
-    super(parent ?? undefined, {
-      indentationSize
-    });
+  public constructor({ generators, current, parent }: IResolverOptions) {
+    super(parent ?? undefined);
     this.#generators = generators;
     this.#current = current;
   }

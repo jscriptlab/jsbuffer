@@ -1,0 +1,120 @@
+{
+  "path": "/home/user/jsbuffer/test/parser/schema_internal_test/internal.jsb",
+  "metadata": [
+    {
+      "kind": "type",
+      "id": 1543151611,
+      "position": {
+        "start": {
+          "type": 0,
+          "value": "type",
+          "position": {
+            "start": 48,
+            "end": 52
+          }
+        },
+        "end": {
+          "type": 6,
+          "value": "}",
+          "position": {
+            "start": 100,
+            "end": 101
+          }
+        }
+      },
+      "globalName": "schema_internal_test.internal.ImportMeWithId",
+      "name": "ImportMeWithId",
+      "exported": true,
+      "traits": [],
+      "params": [
+        {
+          "name": "id",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "uint32",
+              "position": {
+                "start": 72,
+                "end": 78
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 81,
+                "end": 82
+              }
+            }
+          },
+          "type": {
+            "type": "generic",
+            "value": "uint32",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "uint32",
+                "position": {
+                  "start": 72,
+                  "end": 78
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "uint32",
+                "position": {
+                  "start": 72,
+                  "end": 78
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "data",
+          "position": {
+            "start": {
+              "type": 1,
+              "value": "ImportMe",
+              "position": {
+                "start": 85,
+                "end": 93
+              }
+            },
+            "end": {
+              "type": 6,
+              "value": ";",
+              "position": {
+                "start": 98,
+                "end": 99
+              }
+            }
+          },
+          "type": {
+            "type": "externalType",
+            "position": {
+              "start": {
+                "type": 1,
+                "value": "ImportMe",
+                "position": {
+                  "start": 85,
+                  "end": 93
+                }
+              },
+              "end": {
+                "type": 1,
+                "value": "ImportMe",
+                "position": {
+                  "start": 85,
+                  "end": 93
+                }
+              }
+            },
+            "name": "ImportMe",
+            "relativePath": "../Test.jsb"
+          }
+        }
+      ]
+    }
+  ]
+}

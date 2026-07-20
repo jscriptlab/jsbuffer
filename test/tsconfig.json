@@ -14,7 +14,6 @@
     { "path": "../src/configuration" },
     { "path": "../src/generators/c" },
     { "path": "../src/generators/cpp" },
-    { "path": "../src/utilities" },
     { "path": "../src/core" },
     {
       "path": "../code-generator"
