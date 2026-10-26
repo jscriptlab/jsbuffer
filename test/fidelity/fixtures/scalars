@@ -1,0 +1,18 @@
+// Every primitive recognized by the original 1.x resolver.
+export type Scalars {
+  int intAlias;
+  int32 signed32;
+  uint32 unsigned32;
+  int16 signed16;
+  uint16 unsigned16;
+  int8 signed8;
+  uint8 unsigned8;
+  long signed64;
+  ulong unsigned64;
+  float single;
+  double real;
+  bool flag;
+  string text;
+  null_terminated_string terminated;
+  bytes data;
+}

@@ -1,0 +1,13 @@
+// Original comment formatting is output, not a normalization opportunity.
+export trait Result {}
+
+// Keep declaration and parameter comments and original member order.
+export type Value : Result {
+  // The last-named property deliberately appears first.
+  int z;
+  string a;
+}
+
+export call Read => Result {
+  optional<tuple<int, vector<string>>> arguments;
+}

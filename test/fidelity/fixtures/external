@@ -1,0 +1,2 @@
+import { Shared } from "shared-fixture/schema";
+export type Consumer { Shared value; }
