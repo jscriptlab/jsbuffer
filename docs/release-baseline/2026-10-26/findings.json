@@ -1,0 +1,50 @@
+{
+  "originalSourceCommit": "b4089d8a86a71a11507756ecb48838487e546033",
+  "originalFileGeneratorBlob": "c85eeb4350e740589da5e920c916acf64ff5b49b",
+  "masterFileGeneratorBlob": "c85eeb4350e740589da5e920c916acf64ff5b49b",
+  "candidateLegacySourceMatchesLater1x": true,
+  "publishedLatestGitHeadIsCandidateAncestor": false,
+  "metadataBackendDiagnostics": 190,
+  "unfrozenOracleFailure": {
+    "textstreamjsVersion": "0.1.0",
+    "error": "TypeError: Cannot read private member #indentationSize from an object whose class did not declare it",
+    "resolution": "Use original source-lock runtime version pins in isolated oracle; published jsbuffer bytes unchanged."
+  },
+  "formatterFailure": {
+    "observedExitCode": 0,
+    "stderrContainsENOENT": true,
+    "source": "scripts/index.ts:427-429",
+    "owner": "VQ-1182"
+  },
+  "metadataFields": {
+    "file": [
+      "path",
+      "metadata"
+    ],
+    "typeOrCall": [
+      "kind",
+      "id",
+      "name",
+      "params",
+      "traits",
+      "returnType",
+      "globalName",
+      "exported",
+      "position"
+    ],
+    "trait": [
+      "kind",
+      "name",
+      "globalName",
+      "exported",
+      "nodes",
+      "position"
+    ],
+    "param": [
+      "name",
+      "type",
+      "position"
+    ],
+    "gap": "No comments or import declaration/alias presentation fields are declared in these metadata interfaces. VQ-1175 must preserve the presentation data required by original raw output."
+  }
+}

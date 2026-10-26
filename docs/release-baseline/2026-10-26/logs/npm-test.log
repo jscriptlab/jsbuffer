@@ -1,0 +1,145 @@
+
+> jsbuffer@2.0.12 test
+> npx ava --fail-fast && npx ts-node scripts --generate-c99-codec --clang-format
+
+
+  ✔ ASTGenerator › ASTGenerator: it should throw UnexpectedToken in case an unexpected token is find in the main iteration
+  ✔ ASTGenerator › ASTGenerator: it should read call statement
+  ✔ ASTGenerator › ASTGenerator: it should handle errors in case of weird token types after import statement
+  ✔ ASTGenerator › ASTGenerator: it should handle errors in case of weird token types export statement
+  ✔ ASTGenerator › ASTGenerator: it should expect { after trait name
+  ✔ ASTGenerator › ASTGenerator: it should throw UnexpectedKeywordName
+  ✔ ASTGenerator › ASTGenerator##expectKeyword: it should call #expectKeyword after export
+  ✔ ASTGenerator › ASTGenerator: it should tokenize files
+  ✔ Codec › Codec#encode: it should support encoding several times in a row
+  ✔ Codec › Codec#decode: it should support decode
+  ✔ Deserializer › Deserializer: it should deserialize max signed long
+  ✔ Deserializer › Deserializer: it should deserialize min signed long
+  ✔ Deserializer › Deserializer: it should deserialize unsigned long
+  ✔ Deserializer › Deserializer: it should throw in case we try to read more than what we have
+  ✔ Deserializer › Deserializer: it should rewind 4 bytes
+  ✔ Deserializer › Deserializer: it should throw if we try to rewind more than what we have
+  - [skip] FileGenerator › it should support bigint<uint64> template 2
+  - [skip] FileGenerator › it should throw if an unknown template is used
+  - [skip] FileGenerator › it should support bigint<int> template 1
+  - [skip] FileGenerator › it should allow importing external schemas in a cascading format
+  - [skip] FileGenerator › it should allow two imports of the same file coming from different files
+  - [skip] FileGenerator › it should be able to test long types
+  - [skip] FileGenerator › it should be able to test deep types
+  - [skip] FileGenerator › it should work with multiple types and complex templates
+  - [skip] FileGenerator › it should compile external types
+  - [skip] FileGenerator › it should test all sorts of generic parameters
+  - [skip] FileGenerator › it should allow importing external schemas when file is being imported from inside a folder
+  - [skip] FileGenerator › it should resolve the following external schemas scenario: C uses A, B; A, B uses Shared
+  - [skip] FileGenerator › it should allow namespaced node_modules external schemas even if schema source files come from inside a folder
+  - [skip] FileGenerator › it should allow namespaced node_modules external schemas
+  - [skip] FileGenerator › it should allow importing external schemas
+  - [skip] FileGenerator › it should not allow importing of unexported traits
+  - [skip] FileGenerator › it should support comments before types
+  - [skip] FileGenerator › it should not allow importing of unexported types
+  - [skip] FileGenerator › it should throw for unsupported templates
+  ✔ Serializer › it should write signed 32-bit integer
+  ✔ Serializer › it should write signed 8-bit integer
+  ✔ Serializer › it should write unsigned 8-bit integer
+  ✔ Serializer › it should write double
+  ✔ Serializer › it should write float
+  ✔ Serializer › it should rewind the serializer
+  ✔ Serializer › it should reallocate internal array buffer
+  ✔ Serializer › it should write unsigned 16-bit integer
+  ✔ Serializer › it should write signed 16-bit integer
+  ✔ Serializer › it should write string
+  ✔ Serializer › it should write string 2
+  ✔ Serializer › it should write null-terminated string
+  ✔ Serializer › it should write sequence of null-terminated strings
+  ✔ Tokenizer › Tokenizer: it should tokenize literal number
+  ✔ Tokenizer › Tokenizer#comments: it should only return the comment tokens in the calls to `comments` method
+  ✔ Tokenizer › Tokenizer#tokens: it deal with leading multi-line comments
+  ✔ Tokenizer › Tokenizer#tokens: it deal with trailing multi-line comments
+  ✔ Tokenizer › Tokenizer#comments: it should return comments from the call
+  ✔ Tokenizer › Tokenizer#tokenize: it should throw a formatted error in case in case an unknown character is found during tokenization
+  ✔ Tokenizer › Tokenizer: it should tokenize files
+  ✔ fromMetadata › --from-metadata and --metadata-only are mutually exclusive
+Total of 7555 bytes and 13 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-from-metadata-ItvMBS/direct".
+Ignoring test-cases for trait: Command
+Ignoring test-cases for trait: Command
+Total of 417550 bytes and 48 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-from-metadata-no-src-zBmNe9/c".
+Total of 417550 bytes and 48 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-from-metadata-z9mNEL/direct".
+  ✔ fromMetadata › --from-metadata generates C99 even when the original .jsb sources are absent (151ms)
+Total of 7555 bytes and 13 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-from-metadata-ItvMBS/from-metadata".
+  ✔ fromMetadata › --from-metadata: C++17 output is byte-identical to generating from source (188ms)
+Ignoring test-cases for trait: Command
+Total of 417550 bytes and 48 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-from-metadata-z9mNEL/from-metadata".
+  ✔ fromMetadata › --from-metadata: C99 output is byte-identical to generating from source (221ms)
+/Users/victorqueiroz/Projects/jsbuffer-vq38/node_modules/.cache/jsbuffer
+Total of 7567 bytes and 13 files written to "/Users/victorqueiroz/Projects/jsbuffer-vq38/test/generated/cpp".
+  ✔ jsb › FileGeneratorC: it should throw a detailed error in case there's an invalid token
+Total of 91438 bytes and 20 files written to "/Users/victorqueiroz/Projects/jsbuffer-vq38/test/generated/c/schemas/avr".
+Ignoring test-cases for trait: Command
+Total of 417550 bytes and 48 files written to "/Users/victorqueiroz/Projects/jsbuffer-vq38/test/generated/c/schemas/app".
+{ c: '/usr/bin/clang', cxx: '/usr/bin/clang++' }
+/Users/victorqueiroz/Projects/jsbuffer-vq38/node_modules/.cache/jsbuffer
+Running CMake with args:
+	* -DMCU=atmega2560
+	* -DF_CPU=16000000UL
+	* -DJSB_TOLERATE_TYPE_OVERFLOW=OFF
+	* -DJSB_SERIALIZER_BUFFER_SIZE=200
+	* -DJSB_MAX_STRING_SIZE=30
+	* -DJSB_CPP=OFF
+	* -DJSB_TRACE=OFF
+	* -DJSB_SCHEMA_CPP=OFF
+	* -DJSB_SCHEMA_NO_ASSIGNMENT_ENUMS=ON
+	* -DAVR_TOOLCHAIN_PATH=/usr
+	* -DCMAKE_TOOLCHAIN_FILE=/Users/victorqueiroz/Projects/jsbuffer-vq38/test/toolchains/AVR.cmake
+	* -G
+	* Unix Makefiles
+	* -DJSB_SCHEMA_TESTS=ON
+	* -DCMAKE_BUILD_TYPE=Release
+	* --log-level=NOTICE
+	* -B
+	* /Users/victorqueiroz/Projects/jsbuffer-vq38/node_modules/.cache/jsbuffer/cmake-build-test-jsb-Xyfgwv
+	* -S
+	* /Users/victorqueiroz/Projects/jsbuffer-vq38
+CMake Warning (deprecated) at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+This warning is for project developers.  Use -Wno-author or -Wno-deprecated
+to suppress it.
+
+CMake Error at CMakeLists.txt:2 (project):
+  The CMAKE_C_COMPILER:
+
+    /usr/bin/avr-gcc
+
+  is not a full path to an existing compiler tool.
+
+  Tell CMake where to find the compiler by setting either the environment
+  variable "CC" or the CMake cache entry CMAKE_C_COMPILER to the full path to
+  the compiler, or to the compiler name if it is in the PATH.
+
+
+-- Configuring incomplete, errors occurred!
+  ✘ [fail]: jsb › it should successfully generate a CMake C and C++ project Rejected promise returned by test
+  ─
+
+  jsb › it should successfully generate a CMake C and C++ project
+
+  Rejected promise returned by test. Reason:
+
+  Exception {
+    what: 'Process exited with code: 1',
+  }
+
+  Error
+      at file:///Users/victorqueiroz/Projects/jsbuffer-vq38/node_modules/ava/lib/test.js:604:28
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  ─
+
+  `--fail-fast` is on. 5 test files were skipped.
+
+  1 test failed
+  19 tests skipped

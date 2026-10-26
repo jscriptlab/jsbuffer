@@ -1,0 +1,150 @@
+{
+  "registryUrl": "https://registry.npmjs.org/jsbuffer",
+  "registrySnapshotSha256": "927775ccd3edd2ef4151985fc1e9e50510014e05cb9af4baa2e93318f4db2132",
+  "distTags": {
+    "latest": "2.0.12"
+  },
+  "packages": [
+    {
+      "name": "jsbuffer",
+      "version": "1.0.2",
+      "registryGitHead": "68d2e0187992b7daa5557d372c835a3c869bc75f",
+      "publishedAt": "2023-08-14T16:50:18.592Z",
+      "dist": {
+        "shasum": "c48e4d1c1064934b0524a1e9e04654fc5324a61f",
+        "tarball": "https://registry.npmjs.org/jsbuffer/-/jsbuffer-1.0.2.tgz",
+        "fileCount": 66,
+        "integrity": "sha512-bZHGB+KL5d1pL9VFDV0tnCBrAfqXFBXNsoZao1yZezLfGoplvjwQSfRrDvsL5i/bah9QqwaUxrMk1Yf1a7QpXQ==",
+        "signatures": [
+          {
+            "sig": "MEQCIBZftEJEgBxJfkFgL+DnmNJUHhjs+3rp7e+/eMxXTh7lAiAhd5bQPuZUyFLGPwnA7tFwUuBHjZCcg8JCGbiLdERkLw==",
+            "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+          }
+        ],
+        "unpackedSize": 282442
+      },
+      "acquiredBytes": 49195,
+      "sha256": "a16c78d53e95e0bfb13f80b94706657111d53ba0d2af3fa9928639da3443d242",
+      "verifiedSha512": "sha512-bZHGB+KL5d1pL9VFDV0tnCBrAfqXFBXNsoZao1yZezLfGoplvjwQSfRrDvsL5i/bah9QqwaUxrMk1Yf1a7QpXQ==",
+      "verifiedSha1": "c48e4d1c1064934b0524a1e9e04654fc5324a61f",
+      "localAcquisition": ".audit-vq38/oracles/jsbuffer-1.0.2.tgz",
+      "gitHeadAvailable": {
+        "command": [
+          "git",
+          "cat-file",
+          "-t",
+          "68d2e0187992b7daa5557d372c835a3c869bc75f"
+        ],
+        "exitCode": 0,
+        "stdout": "commit\n",
+        "stderr": ""
+      }
+    },
+    {
+      "name": "jsbuffer",
+      "version": "1.0.28",
+      "registryGitHead": "b4089d8a86a71a11507756ecb48838487e546033",
+      "publishedAt": "2023-10-21T21:11:52.026Z",
+      "dist": {
+        "shasum": "652d64fb73bf41bfdb9f497119a8f366e2cbf8cf",
+        "tarball": "https://registry.npmjs.org/jsbuffer/-/jsbuffer-1.0.28.tgz",
+        "fileCount": 74,
+        "integrity": "sha512-VhDckgmUZKrZtggn/meuJS0RJnsNbB6cfZybY1FMTW/djxXuMRiLOLYdsB75VS0puc3Zn7f8/gEoBK4xvSTw4w==",
+        "signatures": [
+          {
+            "sig": "MEUCIQD5KWCn+orbGPdWbeuak0aoUsgnt/fhfLeVNZafjp4RlQIgKr6F6LIftXCeP+e0WKJQgyzwTjLbjP0qGAHdTueJ0W0=",
+            "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+          }
+        ],
+        "unpackedSize": 360896
+      },
+      "acquiredBytes": 61840,
+      "sha256": "7c374259f6750ed250b3ba6f68aa2bafe9a18a85eabee3d944db19b7c6d49562",
+      "verifiedSha512": "sha512-VhDckgmUZKrZtggn/meuJS0RJnsNbB6cfZybY1FMTW/djxXuMRiLOLYdsB75VS0puc3Zn7f8/gEoBK4xvSTw4w==",
+      "verifiedSha1": "652d64fb73bf41bfdb9f497119a8f366e2cbf8cf",
+      "localAcquisition": ".audit-vq38/oracles/jsbuffer-1.0.28.tgz",
+      "gitHeadAvailable": {
+        "command": [
+          "git",
+          "cat-file",
+          "-t",
+          "b4089d8a86a71a11507756ecb48838487e546033"
+        ],
+        "exitCode": 0,
+        "stdout": "commit\n",
+        "stderr": ""
+      }
+    },
+    {
+      "name": "jsbuffer",
+      "version": "1.0.40",
+      "registryGitHead": "372984bb530fee622c4647e435b06cb0b11a3cf5",
+      "publishedAt": "2024-08-30T17:57:17.134Z",
+      "dist": {
+        "shasum": "230e11574a21f1f1210042b7dac545743b8b876c",
+        "tarball": "https://registry.npmjs.org/jsbuffer/-/jsbuffer-1.0.40.tgz",
+        "fileCount": 122,
+        "integrity": "sha512-SLjlrIf5BiuMfr0Ij0Ioiuf+aiix18ikpa8cJCkSMaG2c9tPhvg4AIKYZLME0wtsxekiDmstQcekakfSR1CDsg==",
+        "signatures": [
+          {
+            "sig": "MEUCIQDQkGe4N3jCWIsaLmAGE94RqL4C0Ch3993ZQL3Mrok43wIgKmlM+vT5tnrs513jmb1S0exMwpafQ7oOpDAzgXP/W6I=",
+            "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA"
+          }
+        ],
+        "unpackedSize": 543804
+      },
+      "acquiredBytes": 91004,
+      "sha256": "387cf7f1af3a1dd4e60576d8093c33f114712ebbb4f1add03382337f9b52279b",
+      "verifiedSha512": "sha512-SLjlrIf5BiuMfr0Ij0Ioiuf+aiix18ikpa8cJCkSMaG2c9tPhvg4AIKYZLME0wtsxekiDmstQcekakfSR1CDsg==",
+      "verifiedSha1": "230e11574a21f1f1210042b7dac545743b8b876c",
+      "localAcquisition": ".audit-vq38/oracles/jsbuffer-1.0.40.tgz",
+      "gitHeadAvailable": {
+        "command": [
+          "git",
+          "cat-file",
+          "-t",
+          "372984bb530fee622c4647e435b06cb0b11a3cf5"
+        ],
+        "exitCode": 0,
+        "stdout": "commit\n",
+        "stderr": ""
+      }
+    },
+    {
+      "name": "jsbuffer",
+      "version": "2.0.12",
+      "registryGitHead": "b61df11ad7756eba85fd18781de12e69a481494c",
+      "publishedAt": "2024-10-22T00:30:36.059Z",
+      "dist": {
+        "integrity": "sha512-vdzig57iz37MmUW3YXjg4L7ip8VIQCfzGyvNOib6zNMOVOHzO+pKh0fKJfmvAkLPlynsNYKDv8m2CBZ1Ii5Tew==",
+        "shasum": "36a4bce9d61ec65b55030c0420261b92b7ea0031",
+        "tarball": "https://registry.npmjs.org/jsbuffer/-/jsbuffer-2.0.12.tgz",
+        "fileCount": 170,
+        "unpackedSize": 748443,
+        "signatures": [
+          {
+            "keyid": "SHA256:jl3bwswu80PjjokCgh0o2w5c2U4LhQAE57gj9cz1kzA",
+            "sig": "MEYCIQDQxRYYpT+KjsgKSNIJWMWTQgjmqgGUwNEYB64FDx2wZwIhAKdAnhmkGuBtqpZrlb6pViNKWdcWH/v/R47NlBLeHegA"
+          }
+        ]
+      },
+      "acquiredBytes": 123665,
+      "sha256": "e5f5bace6375ecf1945b05021fac1b3e8b9b13950604b1bbe92295a35c3d27b1",
+      "verifiedSha512": "sha512-vdzig57iz37MmUW3YXjg4L7ip8VIQCfzGyvNOib6zNMOVOHzO+pKh0fKJfmvAkLPlynsNYKDv8m2CBZ1Ii5Tew==",
+      "verifiedSha1": "36a4bce9d61ec65b55030c0420261b92b7ea0031",
+      "localAcquisition": ".audit-vq38/oracles/jsbuffer-2.0.12.tgz",
+      "gitHeadAvailable": {
+        "command": [
+          "git",
+          "cat-file",
+          "-t",
+          "b61df11ad7756eba85fd18781de12e69a481494c"
+        ],
+        "exitCode": 0,
+        "stdout": "commit\n",
+        "stderr": ""
+      }
+    }
+  ],
+  "limits": "Hashes establish acquired package identity. Registry gitHead is publisher metadata; it is not an independent build attestation. Source-map and generation comparisons are recorded separately."
+}

@@ -1,0 +1,13 @@
+export trait A {}
+
+type B : A {
+  int a;
+}
+
+type C : A {
+  int a;
+}
+
+type D : A {
+  int a;
+}

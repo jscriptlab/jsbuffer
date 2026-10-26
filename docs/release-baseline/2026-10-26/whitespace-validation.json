@@ -1,0 +1,10 @@
+{
+  "authoredFilesExitCode": 0,
+  "allEvidenceExitCode": 2,
+  "rawEvidenceDiagnosticsByFile": {
+    "docs/release-baseline/2026-10-26/generated-after-tests.patch": 365,
+    "docs/release-baseline/2026-10-26/logs/build.log": 1,
+    "docs/release-baseline/2026-10-26/original-to-later-source.patch": 8
+  },
+  "disposition": "Raw patches and command logs retain their original whitespace. Authored report, Python and structured JSON pass git diff --check. No reference bytes were normalized."
+}

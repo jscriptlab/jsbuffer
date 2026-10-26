@@ -1,0 +1,15 @@
+{
+  "command": [
+    "npm",
+    "test"
+  ],
+  "cwd": "/Users/victorqueiroz/Projects/jsbuffer-vq38",
+  "nodeBin": "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin",
+  "startedAt": "2026-10-26T18:24:22.467349+00:00",
+  "elapsedSeconds": 7.897,
+  "timeoutSeconds": 240,
+  "timedOut": false,
+  "exitCode": 1,
+  "status": "failed",
+  "log": "logs/npm-test.log"
+}

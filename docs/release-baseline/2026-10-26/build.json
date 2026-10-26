@@ -1,0 +1,16 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "build"
+  ],
+  "cwd": "/Users/victorqueiroz/Projects/jsbuffer-vq38",
+  "nodeBin": "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin",
+  "startedAt": "2026-10-26T18:23:20.459852+00:00",
+  "elapsedSeconds": 3.351,
+  "timeoutSeconds": 180,
+  "timedOut": false,
+  "exitCode": 0,
+  "status": "passed",
+  "log": "logs/build.log"
+}

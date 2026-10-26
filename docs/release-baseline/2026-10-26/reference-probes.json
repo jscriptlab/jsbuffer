@@ -1,0 +1,3199 @@
+{
+  "runs": [
+    {
+      "profile": "original-1.0.28",
+      "scenario": "default",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.28/node_modules/jsbuffer/cli/index.js",
+        "source/schema"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 348,
+          "sha256": "cd1811c58de080fe5c7081cc99a01e95932f6533ca89fabeaca108bf4b58f7c3"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2044,
+          "sha256": "368fed34f7fdca83785e3edd998559faa4f64a158189d02f4b75af771a6b81a1"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "a726201988a4da0e5ba2e825a9ab788d6b5b94bbbaaea30dc458b89f321d7bbd"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1047,
+          "sha256": "839a8e83a1ac0a545b5ac6f00385c619718501b6b7124eeb230f74b6f0c3a40f"
+        },
+        "testLong.ts": {
+          "bytes": 7431,
+          "sha256": "dd5cb5df0c28d389450f0ab212cbd5c2bce84fd74b4ccc90703596f2eee69f74"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1170,
+          "sha256": "8c3544f9cb1b2c4eea0e96a2bed0683a014e7af5a8d4d75701833907776a1c9e"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6055,
+          "sha256": "dbb251a3df6c434a59a2e16fed8b37cbb3fe54f54d1e09f96ca8a6665ed6ec01"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1431,
+          "sha256": "eb18c370045202952dcdba25e07f2d377323847e97485f1246baf61dfaca06d9"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8036,
+          "sha256": "a25fac000fca361f95927f3b11ef0b2913b69928fd39118370a1eb58e5168f70"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2192,
+          "sha256": "7f4506f39104dc55f38d18c4bbc72549ac72024a41ed9eaf457df670a3a94f80"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11778,
+          "sha256": "02dce57c890476768ead87f52825739e5e294b29545dcf945ea1dab5434a080b"
+        },
+        "tsconfig.json": {
+          "bytes": 271,
+          "sha256": "79d90de4d8b862b7b127d6be893d96d94bd700ef1607633c27d1e83340e9ab29"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4832,
+          "sha256": "c5b4bdab65a38c4d3cdbb937ca336bb1c62f2ae4e9fa548cec5a5cade1831587"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29624,
+          "sha256": "d9090c3149a524ef4291b2d876bef8894f0f766d359f66eb255679c24bcc3f54"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../schema\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"] }"
+    },
+    {
+      "profile": "original-1.0.28",
+      "scenario": "indent2",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.28/node_modules/jsbuffer/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--indentation-size",
+        "2"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3111,
+          "sha256": "44d2e9d33ac99337786842e4825f8efe6ad15ceb2bd9ae46b5840c3c106a7a44"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 12744,
+          "sha256": "8ff80f96815fdbaad0804f0d07556a3afa6283db164f413c54ab26c58d49fa12"
+        },
+        "__types__.ts": {
+          "bytes": 1087,
+          "sha256": "bfd34154ebe0b0e64bb31257c20c452a07e3b2a9ea9444f41a8536ec61fdb739"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 348,
+          "sha256": "cd1811c58de080fe5c7081cc99a01e95932f6533ca89fabeaca108bf4b58f7c3"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 1896,
+          "sha256": "99b24dbb6312128d736dc869f6621bfe4696d030e1333be13bafdcf50bd3f3de"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6270,
+          "sha256": "ea5b01908d9111034820e4f261bc6811a5deac99adda85d4750f9be963f27c5d"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 7754,
+          "sha256": "9da9286b88851338a3464ff5e851c04ded72ed1b687a42802d5298153446dffc"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 96044,
+          "sha256": "1da4fd279def6a9e2c581da1f6b5da9dc94c253273398be85d01d6fe07a4c3f8"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1047,
+          "sha256": "839a8e83a1ac0a545b5ac6f00385c619718501b6b7124eeb230f74b6f0c3a40f"
+        },
+        "testLong.ts": {
+          "bytes": 6787,
+          "sha256": "a14c92df4c159fd0307e223cab0e5d0a7e0109cc0ce82cd4db676951b4fda03a"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1170,
+          "sha256": "8c3544f9cb1b2c4eea0e96a2bed0683a014e7af5a8d4d75701833907776a1c9e"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 5599,
+          "sha256": "395cf1603fe6116137945b567d7c41126de97c520e8e9d7f573e46f6eb228c56"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1431,
+          "sha256": "eb18c370045202952dcdba25e07f2d377323847e97485f1246baf61dfaca06d9"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 7382,
+          "sha256": "e7e3dd221c500b8f38df5d36d1ea8942a2a71fa39e2928375e54209199cdf505"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2192,
+          "sha256": "7f4506f39104dc55f38d18c4bbc72549ac72024a41ed9eaf457df670a3a94f80"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 10764,
+          "sha256": "7bdeec1ef933d496e576d46dc2db0768e480515369908e5e0664420fe14f4473"
+        },
+        "tsconfig.json": {
+          "bytes": 271,
+          "sha256": "79d90de4d8b862b7b127d6be893d96d94bd700ef1607633c27d1e83340e9ab29"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4832,
+          "sha256": "c5b4bdab65a38c4d3cdbb937ca336bb1c62f2ae4e9fa548cec5a5cade1831587"
+        },
+        "tupleTest2.ts": {
+          "bytes": 27810,
+          "sha256": "2c9bdd742a1ff51db594d425a3097629c5bccd20a486a5aa07875eca346b9d79"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n  \"outDir\": \"../output\",\n  \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"] }"
+    },
+    {
+      "profile": "original-1.0.28",
+      "scenario": "sort",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.28/node_modules/jsbuffer/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--sort-properties"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2131,
+          "sha256": "a26a74da40bfd4d29806ba8f476fdaae3314cf2f57a4fe91f053e047b6c87ec5"
+        },
+        "User.ts": {
+          "bytes": 13750,
+          "sha256": "cb7613080059f0079d7d1a2d0ad53a64c0d7d7ab724c603907319f92856381e9"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 348,
+          "sha256": "cd1811c58de080fe5c7081cc99a01e95932f6533ca89fabeaca108bf4b58f7c3"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2044,
+          "sha256": "368fed34f7fdca83785e3edd998559faa4f64a158189d02f4b75af771a6b81a1"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "a0030d4c0329401df3c8491a9964e1cdf4b86870f207daccea12cfdc235ec2f0"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "c6d5aa9468b0a2f278ebba789e2dc2b47cdcd92044f9e292610eaef51537b872"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "6d03ee3356d5eb199884fb983c19ed21289bea70e27f0c78efa0e3f013917ac6"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "477225d6611f0ccbad1932a799ba17c88c23b107268a0ee6a26a2ea154d6e646"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1047,
+          "sha256": "839a8e83a1ac0a545b5ac6f00385c619718501b6b7124eeb230f74b6f0c3a40f"
+        },
+        "testLong.ts": {
+          "bytes": 7431,
+          "sha256": "dd5cb5df0c28d389450f0ab212cbd5c2bce84fd74b4ccc90703596f2eee69f74"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1170,
+          "sha256": "8c3544f9cb1b2c4eea0e96a2bed0683a014e7af5a8d4d75701833907776a1c9e"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6055,
+          "sha256": "dbb251a3df6c434a59a2e16fed8b37cbb3fe54f54d1e09f96ca8a6665ed6ec01"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1431,
+          "sha256": "eb18c370045202952dcdba25e07f2d377323847e97485f1246baf61dfaca06d9"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8036,
+          "sha256": "a25fac000fca361f95927f3b11ef0b2913b69928fd39118370a1eb58e5168f70"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2192,
+          "sha256": "7f4506f39104dc55f38d18c4bbc72549ac72024a41ed9eaf457df670a3a94f80"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11778,
+          "sha256": "02dce57c890476768ead87f52825739e5e294b29545dcf945ea1dab5434a080b"
+        },
+        "tsconfig.json": {
+          "bytes": 271,
+          "sha256": "79d90de4d8b862b7b127d6be893d96d94bd700ef1607633c27d1e83340e9ab29"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4834,
+          "sha256": "1345922f5716c4b9206ab9f67491bffcd20e7148ee83fc6ec942d50be95408e4"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29626,
+          "sha256": "f0d249c22e5689d80abaefa6598ee309a05d7978bd9bd4c638160551a67e1ce2"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"] }"
+    },
+    {
+      "profile": "original-1.0.28",
+      "scenario": "unique-name",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.28/node_modules/jsbuffer/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--unique-name-property-name",
+        "kind"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 348,
+          "sha256": "cd1811c58de080fe5c7081cc99a01e95932f6533ca89fabeaca108bf4b58f7c3"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2044,
+          "sha256": "368fed34f7fdca83785e3edd998559faa4f64a158189d02f4b75af771a6b81a1"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102419,
+          "sha256": "15c6710c1e735235a086e11a445084d0dee94ea5a2aab6ff6daffce262695a30"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1047,
+          "sha256": "839a8e83a1ac0a545b5ac6f00385c619718501b6b7124eeb230f74b6f0c3a40f"
+        },
+        "testLong.ts": {
+          "bytes": 7431,
+          "sha256": "dd5cb5df0c28d389450f0ab212cbd5c2bce84fd74b4ccc90703596f2eee69f74"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1170,
+          "sha256": "8c3544f9cb1b2c4eea0e96a2bed0683a014e7af5a8d4d75701833907776a1c9e"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6055,
+          "sha256": "dbb251a3df6c434a59a2e16fed8b37cbb3fe54f54d1e09f96ca8a6665ed6ec01"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1431,
+          "sha256": "eb18c370045202952dcdba25e07f2d377323847e97485f1246baf61dfaca06d9"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8036,
+          "sha256": "a25fac000fca361f95927f3b11ef0b2913b69928fd39118370a1eb58e5168f70"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2192,
+          "sha256": "7f4506f39104dc55f38d18c4bbc72549ac72024a41ed9eaf457df670a3a94f80"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11778,
+          "sha256": "02dce57c890476768ead87f52825739e5e294b29545dcf945ea1dab5434a080b"
+        },
+        "tsconfig.json": {
+          "bytes": 271,
+          "sha256": "79d90de4d8b862b7b127d6be893d96d94bd700ef1607633c27d1e83340e9ab29"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4832,
+          "sha256": "c5b4bdab65a38c4d3cdbb937ca336bb1c62f2ae4e9fa548cec5a5cade1831587"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29624,
+          "sha256": "d9090c3149a524ef4291b2d876bef8894f0f766d359f66eb255679c24bcc3f54"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"] }"
+    },
+    {
+      "profile": "original-1.0.28",
+      "scenario": "no-tsconfig",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.28/node_modules/jsbuffer/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--no-ts-config"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 348,
+          "sha256": "cd1811c58de080fe5c7081cc99a01e95932f6533ca89fabeaca108bf4b58f7c3"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2044,
+          "sha256": "368fed34f7fdca83785e3edd998559faa4f64a158189d02f4b75af771a6b81a1"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "a726201988a4da0e5ba2e825a9ab788d6b5b94bbbaaea30dc458b89f321d7bbd"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1047,
+          "sha256": "839a8e83a1ac0a545b5ac6f00385c619718501b6b7124eeb230f74b6f0c3a40f"
+        },
+        "testLong.ts": {
+          "bytes": 7431,
+          "sha256": "dd5cb5df0c28d389450f0ab212cbd5c2bce84fd74b4ccc90703596f2eee69f74"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1170,
+          "sha256": "8c3544f9cb1b2c4eea0e96a2bed0683a014e7af5a8d4d75701833907776a1c9e"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6055,
+          "sha256": "dbb251a3df6c434a59a2e16fed8b37cbb3fe54f54d1e09f96ca8a6665ed6ec01"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1431,
+          "sha256": "eb18c370045202952dcdba25e07f2d377323847e97485f1246baf61dfaca06d9"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8036,
+          "sha256": "a25fac000fca361f95927f3b11ef0b2913b69928fd39118370a1eb58e5168f70"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2192,
+          "sha256": "7f4506f39104dc55f38d18c4bbc72549ac72024a41ed9eaf457df670a3a94f80"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11778,
+          "sha256": "02dce57c890476768ead87f52825739e5e294b29545dcf945ea1dab5434a080b"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4832,
+          "sha256": "c5b4bdab65a38c4d3cdbb937ca336bb1c62f2ae4e9fa548cec5a5cade1831587"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29624,
+          "sha256": "d9090c3149a524ef4291b2d876bef8894f0f766d359f66eb255679c24bcc3f54"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": null
+    },
+    {
+      "profile": "original-1.0.28",
+      "scenario": "extends-parent",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.28/node_modules/jsbuffer/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--extends",
+        "base.json"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 348,
+          "sha256": "cd1811c58de080fe5c7081cc99a01e95932f6533ca89fabeaca108bf4b58f7c3"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2044,
+          "sha256": "368fed34f7fdca83785e3edd998559faa4f64a158189d02f4b75af771a6b81a1"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "a726201988a4da0e5ba2e825a9ab788d6b5b94bbbaaea30dc458b89f321d7bbd"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1047,
+          "sha256": "839a8e83a1ac0a545b5ac6f00385c619718501b6b7124eeb230f74b6f0c3a40f"
+        },
+        "testLong.ts": {
+          "bytes": 7431,
+          "sha256": "dd5cb5df0c28d389450f0ab212cbd5c2bce84fd74b4ccc90703596f2eee69f74"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1170,
+          "sha256": "8c3544f9cb1b2c4eea0e96a2bed0683a014e7af5a8d4d75701833907776a1c9e"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6055,
+          "sha256": "dbb251a3df6c434a59a2e16fed8b37cbb3fe54f54d1e09f96ca8a6665ed6ec01"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1431,
+          "sha256": "eb18c370045202952dcdba25e07f2d377323847e97485f1246baf61dfaca06d9"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8036,
+          "sha256": "a25fac000fca361f95927f3b11ef0b2913b69928fd39118370a1eb58e5168f70"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2192,
+          "sha256": "7f4506f39104dc55f38d18c4bbc72549ac72024a41ed9eaf457df670a3a94f80"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11778,
+          "sha256": "02dce57c890476768ead87f52825739e5e294b29545dcf945ea1dab5434a080b"
+        },
+        "tsconfig.json": {
+          "bytes": 298,
+          "sha256": "ab16c2caac3f67087cfa748597e011b39526918b86a9e49b43a3d6e89110d1d7"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4832,
+          "sha256": "c5b4bdab65a38c4d3cdbb937ca336bb1c62f2ae4e9fa548cec5a5cade1831587"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29624,
+          "sha256": "d9090c3149a524ef4291b2d876bef8894f0f766d359f66eb255679c24bcc3f54"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"], \"extends\": \"../base.json\" }"
+    },
+    {
+      "profile": "original-1.0.28",
+      "scenario": "extends-sibling",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.28/node_modules/jsbuffer/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--extends",
+        "config/base.json"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 348,
+          "sha256": "cd1811c58de080fe5c7081cc99a01e95932f6533ca89fabeaca108bf4b58f7c3"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2044,
+          "sha256": "368fed34f7fdca83785e3edd998559faa4f64a158189d02f4b75af771a6b81a1"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "a726201988a4da0e5ba2e825a9ab788d6b5b94bbbaaea30dc458b89f321d7bbd"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1047,
+          "sha256": "839a8e83a1ac0a545b5ac6f00385c619718501b6b7124eeb230f74b6f0c3a40f"
+        },
+        "testLong.ts": {
+          "bytes": 7431,
+          "sha256": "dd5cb5df0c28d389450f0ab212cbd5c2bce84fd74b4ccc90703596f2eee69f74"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1170,
+          "sha256": "8c3544f9cb1b2c4eea0e96a2bed0683a014e7af5a8d4d75701833907776a1c9e"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6055,
+          "sha256": "dbb251a3df6c434a59a2e16fed8b37cbb3fe54f54d1e09f96ca8a6665ed6ec01"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1431,
+          "sha256": "eb18c370045202952dcdba25e07f2d377323847e97485f1246baf61dfaca06d9"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8036,
+          "sha256": "a25fac000fca361f95927f3b11ef0b2913b69928fd39118370a1eb58e5168f70"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2192,
+          "sha256": "7f4506f39104dc55f38d18c4bbc72549ac72024a41ed9eaf457df670a3a94f80"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11778,
+          "sha256": "02dce57c890476768ead87f52825739e5e294b29545dcf945ea1dab5434a080b"
+        },
+        "tsconfig.json": {
+          "bytes": 305,
+          "sha256": "fc96076932254148899e0e144a9d5f4415b18a6492e771a2af200f98df9862f8"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4832,
+          "sha256": "c5b4bdab65a38c4d3cdbb937ca336bb1c62f2ae4e9fa548cec5a5cade1831587"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29624,
+          "sha256": "d9090c3149a524ef4291b2d876bef8894f0f766d359f66eb255679c24bcc3f54"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"], \"extends\": \"../config/base.json\" }"
+    },
+    {
+      "profile": "original-1.0.28",
+      "scenario": "extends-same-directory",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.28/node_modules/jsbuffer/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--extends",
+        "output/base.json"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 348,
+          "sha256": "cd1811c58de080fe5c7081cc99a01e95932f6533ca89fabeaca108bf4b58f7c3"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2044,
+          "sha256": "368fed34f7fdca83785e3edd998559faa4f64a158189d02f4b75af771a6b81a1"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "a726201988a4da0e5ba2e825a9ab788d6b5b94bbbaaea30dc458b89f321d7bbd"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1047,
+          "sha256": "839a8e83a1ac0a545b5ac6f00385c619718501b6b7124eeb230f74b6f0c3a40f"
+        },
+        "testLong.ts": {
+          "bytes": 7431,
+          "sha256": "dd5cb5df0c28d389450f0ab212cbd5c2bce84fd74b4ccc90703596f2eee69f74"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1170,
+          "sha256": "8c3544f9cb1b2c4eea0e96a2bed0683a014e7af5a8d4d75701833907776a1c9e"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6055,
+          "sha256": "dbb251a3df6c434a59a2e16fed8b37cbb3fe54f54d1e09f96ca8a6665ed6ec01"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1431,
+          "sha256": "eb18c370045202952dcdba25e07f2d377323847e97485f1246baf61dfaca06d9"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8036,
+          "sha256": "a25fac000fca361f95927f3b11ef0b2913b69928fd39118370a1eb58e5168f70"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2192,
+          "sha256": "7f4506f39104dc55f38d18c4bbc72549ac72024a41ed9eaf457df670a3a94f80"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11778,
+          "sha256": "02dce57c890476768ead87f52825739e5e294b29545dcf945ea1dab5434a080b"
+        },
+        "tsconfig.json": {
+          "bytes": 295,
+          "sha256": "c745f48ebae4d26213f27f82e0eafcf40e8b5b64d8df16e4e2b129c6664cd885"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4832,
+          "sha256": "c5b4bdab65a38c4d3cdbb937ca336bb1c62f2ae4e9fa548cec5a5cade1831587"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29624,
+          "sha256": "d9090c3149a524ef4291b2d876bef8894f0f766d359f66eb255679c24bcc3f54"
+        }
+      },
+      "preexistingOutputInputs": [
+        "base.json"
+      ],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"], \"extends\": \"base.json\" }"
+    },
+    {
+      "profile": "original-1.0.28",
+      "scenario": "wire-names",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.28/node_modules/jsbuffer/cli/index.js",
+        "source/WireNames.jsb",
+        "-o",
+        "output"
+      ],
+      "exitCode": 0,
+      "files": {
+        "WireNames.jsb.metadata.json": {
+          "bytes": 445,
+          "sha256": "5661a8888c7429c424afc5bb6d249d782a04ad29d4c560a7df724e25c019c74f"
+        },
+        "WireNames.jsb.ts": {
+          "bytes": 2854,
+          "sha256": "e1f3e0b5264fcc23ff5b841fdfb70a2ea132f4f2e0ce98f13903432f309cf425"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "tsconfig.json": {
+          "bytes": 76,
+          "sha256": "0ea2697ecbcff545a63aee8546b1a9c8be8dfbee6ad64fbff1f63e325f7437af"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"WireNames.jsb\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"WireNames.jsb.ts\", \"__types__.ts\"] }"
+    },
+    {
+      "profile": "later-1.0.40",
+      "scenario": "default",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.40/node_modules/jsbuffer/cli/index.js",
+        "source/schema"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2048,
+          "sha256": "264b73b8707084c8137c1639fbbf630daed40f50dc307049a00e7d3935c13236"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "a726201988a4da0e5ba2e825a9ab788d6b5b94bbbaaea30dc458b89f321d7bbd"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 7443,
+          "sha256": "d687488e9d89b1fa86908e186a4bcd40256fb8cf80519c3f1f7bdb57fd262503"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6091,
+          "sha256": "8354a82f2fe8ff4e88454c17dfeebea52e53c2f0a8eb87f63a1a6295a312c014"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8132,
+          "sha256": "41e4d988e9041ab1a8e657b022254df58436daac775375da81dda327b6dd2049"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11850,
+          "sha256": "e04990366e926bd9997f9b1b1f59c531e7bfd1e6e61c5ad1dbc3ba5575ddc290"
+        },
+        "tsconfig.json": {
+          "bytes": 271,
+          "sha256": "79d90de4d8b862b7b127d6be893d96d94bd700ef1607633c27d1e83340e9ab29"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4844,
+          "sha256": "5e3e1872c33631749149fb2c0afb35b66e8c1926c1e7f8d92bf03c9c988d5853"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29648,
+          "sha256": "d8e8f90958bb92fbf0457204737aa55628b3a68ba58343ec559cd5df96941280"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../schema\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"] }"
+    },
+    {
+      "profile": "later-1.0.40",
+      "scenario": "indent2",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.40/node_modules/jsbuffer/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--indentation-size",
+        "2"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3111,
+          "sha256": "44d2e9d33ac99337786842e4825f8efe6ad15ceb2bd9ae46b5840c3c106a7a44"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 12744,
+          "sha256": "8ff80f96815fdbaad0804f0d07556a3afa6283db164f413c54ab26c58d49fa12"
+        },
+        "__types__.ts": {
+          "bytes": 1087,
+          "sha256": "bfd34154ebe0b0e64bb31257c20c452a07e3b2a9ea9444f41a8536ec61fdb739"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 1900,
+          "sha256": "b418e2b30eb73300ebff0696e14521dacc01a21159a611d390ef12afefdc0cee"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6270,
+          "sha256": "ea5b01908d9111034820e4f261bc6811a5deac99adda85d4750f9be963f27c5d"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 7754,
+          "sha256": "9da9286b88851338a3464ff5e851c04ded72ed1b687a42802d5298153446dffc"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 96044,
+          "sha256": "1da4fd279def6a9e2c581da1f6b5da9dc94c253273398be85d01d6fe07a4c3f8"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 6799,
+          "sha256": "6f62f62126b444aac4c71c30dfc57cd6a87544efb99766ca597b949e058e5dc2"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 5635,
+          "sha256": "8e9baa6f2ad3edc44911393ffa66b22dfc4f44a7a8c1db1bbef66f9c216682af"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 7478,
+          "sha256": "fdae3be04292531c9a929be732de757f61f651af48ba82c1020e8e97406ec537"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 10836,
+          "sha256": "dcefddc858a4f4ab0aa91a626caa9a7f26d3c11a6f431a617ba567ec0e86c5e2"
+        },
+        "tsconfig.json": {
+          "bytes": 271,
+          "sha256": "79d90de4d8b862b7b127d6be893d96d94bd700ef1607633c27d1e83340e9ab29"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4844,
+          "sha256": "5e3e1872c33631749149fb2c0afb35b66e8c1926c1e7f8d92bf03c9c988d5853"
+        },
+        "tupleTest2.ts": {
+          "bytes": 27834,
+          "sha256": "b67767172476194472d91d11e85b6ee5a34030a677a8e23d7874013e41e447c0"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n  \"outDir\": \"../output\",\n  \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"] }"
+    },
+    {
+      "profile": "later-1.0.40",
+      "scenario": "sort",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.40/node_modules/jsbuffer/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--sort-properties"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2131,
+          "sha256": "a26a74da40bfd4d29806ba8f476fdaae3314cf2f57a4fe91f053e047b6c87ec5"
+        },
+        "User.ts": {
+          "bytes": 13750,
+          "sha256": "cb7613080059f0079d7d1a2d0ad53a64c0d7d7ab724c603907319f92856381e9"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2048,
+          "sha256": "264b73b8707084c8137c1639fbbf630daed40f50dc307049a00e7d3935c13236"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "a0030d4c0329401df3c8491a9964e1cdf4b86870f207daccea12cfdc235ec2f0"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "c6d5aa9468b0a2f278ebba789e2dc2b47cdcd92044f9e292610eaef51537b872"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "6d03ee3356d5eb199884fb983c19ed21289bea70e27f0c78efa0e3f013917ac6"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "477225d6611f0ccbad1932a799ba17c88c23b107268a0ee6a26a2ea154d6e646"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 7443,
+          "sha256": "d687488e9d89b1fa86908e186a4bcd40256fb8cf80519c3f1f7bdb57fd262503"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6091,
+          "sha256": "8354a82f2fe8ff4e88454c17dfeebea52e53c2f0a8eb87f63a1a6295a312c014"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8132,
+          "sha256": "41e4d988e9041ab1a8e657b022254df58436daac775375da81dda327b6dd2049"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11850,
+          "sha256": "e04990366e926bd9997f9b1b1f59c531e7bfd1e6e61c5ad1dbc3ba5575ddc290"
+        },
+        "tsconfig.json": {
+          "bytes": 271,
+          "sha256": "79d90de4d8b862b7b127d6be893d96d94bd700ef1607633c27d1e83340e9ab29"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4846,
+          "sha256": "07dbe13df843ce191a6951d65eb642bece53dd949b3e8504551eb01e574a304e"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29650,
+          "sha256": "e038a13c373d5d246fe93021dc1df877696936517aa1b8ccc78995a257774f73"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"] }"
+    },
+    {
+      "profile": "later-1.0.40",
+      "scenario": "unique-name",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.40/node_modules/jsbuffer/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--unique-name-property-name",
+        "kind"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2048,
+          "sha256": "264b73b8707084c8137c1639fbbf630daed40f50dc307049a00e7d3935c13236"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102419,
+          "sha256": "15c6710c1e735235a086e11a445084d0dee94ea5a2aab6ff6daffce262695a30"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 7443,
+          "sha256": "d687488e9d89b1fa86908e186a4bcd40256fb8cf80519c3f1f7bdb57fd262503"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6091,
+          "sha256": "8354a82f2fe8ff4e88454c17dfeebea52e53c2f0a8eb87f63a1a6295a312c014"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8132,
+          "sha256": "41e4d988e9041ab1a8e657b022254df58436daac775375da81dda327b6dd2049"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11850,
+          "sha256": "e04990366e926bd9997f9b1b1f59c531e7bfd1e6e61c5ad1dbc3ba5575ddc290"
+        },
+        "tsconfig.json": {
+          "bytes": 271,
+          "sha256": "79d90de4d8b862b7b127d6be893d96d94bd700ef1607633c27d1e83340e9ab29"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4844,
+          "sha256": "5e3e1872c33631749149fb2c0afb35b66e8c1926c1e7f8d92bf03c9c988d5853"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29648,
+          "sha256": "d8e8f90958bb92fbf0457204737aa55628b3a68ba58343ec559cd5df96941280"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"] }"
+    },
+    {
+      "profile": "later-1.0.40",
+      "scenario": "no-tsconfig",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.40/node_modules/jsbuffer/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--no-ts-config"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2048,
+          "sha256": "264b73b8707084c8137c1639fbbf630daed40f50dc307049a00e7d3935c13236"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "a726201988a4da0e5ba2e825a9ab788d6b5b94bbbaaea30dc458b89f321d7bbd"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 7443,
+          "sha256": "d687488e9d89b1fa86908e186a4bcd40256fb8cf80519c3f1f7bdb57fd262503"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6091,
+          "sha256": "8354a82f2fe8ff4e88454c17dfeebea52e53c2f0a8eb87f63a1a6295a312c014"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8132,
+          "sha256": "41e4d988e9041ab1a8e657b022254df58436daac775375da81dda327b6dd2049"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11850,
+          "sha256": "e04990366e926bd9997f9b1b1f59c531e7bfd1e6e61c5ad1dbc3ba5575ddc290"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4844,
+          "sha256": "5e3e1872c33631749149fb2c0afb35b66e8c1926c1e7f8d92bf03c9c988d5853"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29648,
+          "sha256": "d8e8f90958bb92fbf0457204737aa55628b3a68ba58343ec559cd5df96941280"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": null
+    },
+    {
+      "profile": "later-1.0.40",
+      "scenario": "extends-parent",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.40/node_modules/jsbuffer/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--extends",
+        "base.json"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2048,
+          "sha256": "264b73b8707084c8137c1639fbbf630daed40f50dc307049a00e7d3935c13236"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "a726201988a4da0e5ba2e825a9ab788d6b5b94bbbaaea30dc458b89f321d7bbd"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 7443,
+          "sha256": "d687488e9d89b1fa86908e186a4bcd40256fb8cf80519c3f1f7bdb57fd262503"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6091,
+          "sha256": "8354a82f2fe8ff4e88454c17dfeebea52e53c2f0a8eb87f63a1a6295a312c014"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8132,
+          "sha256": "41e4d988e9041ab1a8e657b022254df58436daac775375da81dda327b6dd2049"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11850,
+          "sha256": "e04990366e926bd9997f9b1b1f59c531e7bfd1e6e61c5ad1dbc3ba5575ddc290"
+        },
+        "tsconfig.json": {
+          "bytes": 298,
+          "sha256": "ab16c2caac3f67087cfa748597e011b39526918b86a9e49b43a3d6e89110d1d7"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4844,
+          "sha256": "5e3e1872c33631749149fb2c0afb35b66e8c1926c1e7f8d92bf03c9c988d5853"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29648,
+          "sha256": "d8e8f90958bb92fbf0457204737aa55628b3a68ba58343ec559cd5df96941280"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"], \"extends\": \"../base.json\" }"
+    },
+    {
+      "profile": "later-1.0.40",
+      "scenario": "extends-sibling",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.40/node_modules/jsbuffer/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--extends",
+        "config/base.json"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2048,
+          "sha256": "264b73b8707084c8137c1639fbbf630daed40f50dc307049a00e7d3935c13236"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "a726201988a4da0e5ba2e825a9ab788d6b5b94bbbaaea30dc458b89f321d7bbd"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 7443,
+          "sha256": "d687488e9d89b1fa86908e186a4bcd40256fb8cf80519c3f1f7bdb57fd262503"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6091,
+          "sha256": "8354a82f2fe8ff4e88454c17dfeebea52e53c2f0a8eb87f63a1a6295a312c014"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8132,
+          "sha256": "41e4d988e9041ab1a8e657b022254df58436daac775375da81dda327b6dd2049"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11850,
+          "sha256": "e04990366e926bd9997f9b1b1f59c531e7bfd1e6e61c5ad1dbc3ba5575ddc290"
+        },
+        "tsconfig.json": {
+          "bytes": 305,
+          "sha256": "fc96076932254148899e0e144a9d5f4415b18a6492e771a2af200f98df9862f8"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4844,
+          "sha256": "5e3e1872c33631749149fb2c0afb35b66e8c1926c1e7f8d92bf03c9c988d5853"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29648,
+          "sha256": "d8e8f90958bb92fbf0457204737aa55628b3a68ba58343ec559cd5df96941280"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"], \"extends\": \"../config/base.json\" }"
+    },
+    {
+      "profile": "later-1.0.40",
+      "scenario": "extends-same-directory",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.40/node_modules/jsbuffer/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--extends",
+        "output/base.json"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2048,
+          "sha256": "264b73b8707084c8137c1639fbbf630daed40f50dc307049a00e7d3935c13236"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "a726201988a4da0e5ba2e825a9ab788d6b5b94bbbaaea30dc458b89f321d7bbd"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 7443,
+          "sha256": "d687488e9d89b1fa86908e186a4bcd40256fb8cf80519c3f1f7bdb57fd262503"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6091,
+          "sha256": "8354a82f2fe8ff4e88454c17dfeebea52e53c2f0a8eb87f63a1a6295a312c014"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8132,
+          "sha256": "41e4d988e9041ab1a8e657b022254df58436daac775375da81dda327b6dd2049"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11850,
+          "sha256": "e04990366e926bd9997f9b1b1f59c531e7bfd1e6e61c5ad1dbc3ba5575ddc290"
+        },
+        "tsconfig.json": {
+          "bytes": 295,
+          "sha256": "c745f48ebae4d26213f27f82e0eafcf40e8b5b64d8df16e4e2b129c6664cd885"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4844,
+          "sha256": "5e3e1872c33631749149fb2c0afb35b66e8c1926c1e7f8d92bf03c9c988d5853"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29648,
+          "sha256": "d8e8f90958bb92fbf0457204737aa55628b3a68ba58343ec559cd5df96941280"
+        }
+      },
+      "preexistingOutputInputs": [
+        "base.json"
+      ],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"], \"extends\": \"base.json\" }"
+    },
+    {
+      "profile": "later-1.0.40",
+      "scenario": "wire-names",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/oracles/1.0.40/node_modules/jsbuffer/cli/index.js",
+        "source/WireNames.jsb",
+        "-o",
+        "output"
+      ],
+      "exitCode": 0,
+      "files": {
+        "WireNames.jsb.metadata.json": {
+          "bytes": 439,
+          "sha256": "56316457400d18b4d8b6e7dbaa3d67a6bd600b25485cc496fe65a96017b449dd"
+        },
+        "WireNames.jsb.ts": {
+          "bytes": 2836,
+          "sha256": "523325978c39d2023c8b177632907bd973896b303adcd65babf2c79fd9fd1108"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "tsconfig.json": {
+          "bytes": 76,
+          "sha256": "0ea2697ecbcff545a63aee8546b1a9c8be8dfbee6ad64fbff1f63e325f7437af"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"WireNames.jsb\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"WireNames.jsb.ts\", \"__types__.ts\"] }"
+    },
+    {
+      "profile": "candidate-legacy",
+      "scenario": "default",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/cli/index.js",
+        "source/schema"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2048,
+          "sha256": "264b73b8707084c8137c1639fbbf630daed40f50dc307049a00e7d3935c13236"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "a726201988a4da0e5ba2e825a9ab788d6b5b94bbbaaea30dc458b89f321d7bbd"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 7443,
+          "sha256": "d687488e9d89b1fa86908e186a4bcd40256fb8cf80519c3f1f7bdb57fd262503"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6091,
+          "sha256": "8354a82f2fe8ff4e88454c17dfeebea52e53c2f0a8eb87f63a1a6295a312c014"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8132,
+          "sha256": "41e4d988e9041ab1a8e657b022254df58436daac775375da81dda327b6dd2049"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11850,
+          "sha256": "e04990366e926bd9997f9b1b1f59c531e7bfd1e6e61c5ad1dbc3ba5575ddc290"
+        },
+        "tsconfig.json": {
+          "bytes": 271,
+          "sha256": "79d90de4d8b862b7b127d6be893d96d94bd700ef1607633c27d1e83340e9ab29"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4844,
+          "sha256": "5e3e1872c33631749149fb2c0afb35b66e8c1926c1e7f8d92bf03c9c988d5853"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29648,
+          "sha256": "d8e8f90958bb92fbf0457204737aa55628b3a68ba58343ec559cd5df96941280"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../schema\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"] }"
+    },
+    {
+      "profile": "candidate-legacy",
+      "scenario": "indent2",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--indentation-size",
+        "2"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3111,
+          "sha256": "44d2e9d33ac99337786842e4825f8efe6ad15ceb2bd9ae46b5840c3c106a7a44"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 12744,
+          "sha256": "8ff80f96815fdbaad0804f0d07556a3afa6283db164f413c54ab26c58d49fa12"
+        },
+        "__types__.ts": {
+          "bytes": 1087,
+          "sha256": "bfd34154ebe0b0e64bb31257c20c452a07e3b2a9ea9444f41a8536ec61fdb739"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 1900,
+          "sha256": "b418e2b30eb73300ebff0696e14521dacc01a21159a611d390ef12afefdc0cee"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6270,
+          "sha256": "ea5b01908d9111034820e4f261bc6811a5deac99adda85d4750f9be963f27c5d"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 7754,
+          "sha256": "9da9286b88851338a3464ff5e851c04ded72ed1b687a42802d5298153446dffc"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 96044,
+          "sha256": "1da4fd279def6a9e2c581da1f6b5da9dc94c253273398be85d01d6fe07a4c3f8"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 6799,
+          "sha256": "6f62f62126b444aac4c71c30dfc57cd6a87544efb99766ca597b949e058e5dc2"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 5635,
+          "sha256": "8e9baa6f2ad3edc44911393ffa66b22dfc4f44a7a8c1db1bbef66f9c216682af"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 7478,
+          "sha256": "fdae3be04292531c9a929be732de757f61f651af48ba82c1020e8e97406ec537"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 10836,
+          "sha256": "dcefddc858a4f4ab0aa91a626caa9a7f26d3c11a6f431a617ba567ec0e86c5e2"
+        },
+        "tsconfig.json": {
+          "bytes": 271,
+          "sha256": "79d90de4d8b862b7b127d6be893d96d94bd700ef1607633c27d1e83340e9ab29"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4844,
+          "sha256": "5e3e1872c33631749149fb2c0afb35b66e8c1926c1e7f8d92bf03c9c988d5853"
+        },
+        "tupleTest2.ts": {
+          "bytes": 27834,
+          "sha256": "b67767172476194472d91d11e85b6ee5a34030a677a8e23d7874013e41e447c0"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n  \"outDir\": \"../output\",\n  \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"] }"
+    },
+    {
+      "profile": "candidate-legacy",
+      "scenario": "sort",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--sort-properties"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2131,
+          "sha256": "a26a74da40bfd4d29806ba8f476fdaae3314cf2f57a4fe91f053e047b6c87ec5"
+        },
+        "User.ts": {
+          "bytes": 13750,
+          "sha256": "cb7613080059f0079d7d1a2d0ad53a64c0d7d7ab724c603907319f92856381e9"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2048,
+          "sha256": "264b73b8707084c8137c1639fbbf630daed40f50dc307049a00e7d3935c13236"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "a0030d4c0329401df3c8491a9964e1cdf4b86870f207daccea12cfdc235ec2f0"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "c6d5aa9468b0a2f278ebba789e2dc2b47cdcd92044f9e292610eaef51537b872"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "6d03ee3356d5eb199884fb983c19ed21289bea70e27f0c78efa0e3f013917ac6"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "477225d6611f0ccbad1932a799ba17c88c23b107268a0ee6a26a2ea154d6e646"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 7443,
+          "sha256": "d687488e9d89b1fa86908e186a4bcd40256fb8cf80519c3f1f7bdb57fd262503"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6091,
+          "sha256": "8354a82f2fe8ff4e88454c17dfeebea52e53c2f0a8eb87f63a1a6295a312c014"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8132,
+          "sha256": "41e4d988e9041ab1a8e657b022254df58436daac775375da81dda327b6dd2049"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11850,
+          "sha256": "e04990366e926bd9997f9b1b1f59c531e7bfd1e6e61c5ad1dbc3ba5575ddc290"
+        },
+        "tsconfig.json": {
+          "bytes": 271,
+          "sha256": "79d90de4d8b862b7b127d6be893d96d94bd700ef1607633c27d1e83340e9ab29"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4846,
+          "sha256": "07dbe13df843ce191a6951d65eb642bece53dd949b3e8504551eb01e574a304e"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29650,
+          "sha256": "e038a13c373d5d246fe93021dc1df877696936517aa1b8ccc78995a257774f73"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"] }"
+    },
+    {
+      "profile": "candidate-legacy",
+      "scenario": "unique-name",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--unique-name-property-name",
+        "kind"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2048,
+          "sha256": "264b73b8707084c8137c1639fbbf630daed40f50dc307049a00e7d3935c13236"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102419,
+          "sha256": "15c6710c1e735235a086e11a445084d0dee94ea5a2aab6ff6daffce262695a30"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 7443,
+          "sha256": "d687488e9d89b1fa86908e186a4bcd40256fb8cf80519c3f1f7bdb57fd262503"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6091,
+          "sha256": "8354a82f2fe8ff4e88454c17dfeebea52e53c2f0a8eb87f63a1a6295a312c014"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8132,
+          "sha256": "41e4d988e9041ab1a8e657b022254df58436daac775375da81dda327b6dd2049"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11850,
+          "sha256": "e04990366e926bd9997f9b1b1f59c531e7bfd1e6e61c5ad1dbc3ba5575ddc290"
+        },
+        "tsconfig.json": {
+          "bytes": 271,
+          "sha256": "79d90de4d8b862b7b127d6be893d96d94bd700ef1607633c27d1e83340e9ab29"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4844,
+          "sha256": "5e3e1872c33631749149fb2c0afb35b66e8c1926c1e7f8d92bf03c9c988d5853"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29648,
+          "sha256": "d8e8f90958bb92fbf0457204737aa55628b3a68ba58343ec559cd5df96941280"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"] }"
+    },
+    {
+      "profile": "candidate-legacy",
+      "scenario": "no-tsconfig",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--no-ts-config"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2048,
+          "sha256": "264b73b8707084c8137c1639fbbf630daed40f50dc307049a00e7d3935c13236"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "a726201988a4da0e5ba2e825a9ab788d6b5b94bbbaaea30dc458b89f321d7bbd"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 7443,
+          "sha256": "d687488e9d89b1fa86908e186a4bcd40256fb8cf80519c3f1f7bdb57fd262503"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6091,
+          "sha256": "8354a82f2fe8ff4e88454c17dfeebea52e53c2f0a8eb87f63a1a6295a312c014"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8132,
+          "sha256": "41e4d988e9041ab1a8e657b022254df58436daac775375da81dda327b6dd2049"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11850,
+          "sha256": "e04990366e926bd9997f9b1b1f59c531e7bfd1e6e61c5ad1dbc3ba5575ddc290"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4844,
+          "sha256": "5e3e1872c33631749149fb2c0afb35b66e8c1926c1e7f8d92bf03c9c988d5853"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29648,
+          "sha256": "d8e8f90958bb92fbf0457204737aa55628b3a68ba58343ec559cd5df96941280"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": null
+    },
+    {
+      "profile": "candidate-legacy",
+      "scenario": "extends-parent",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--extends",
+        "base.json"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2048,
+          "sha256": "264b73b8707084c8137c1639fbbf630daed40f50dc307049a00e7d3935c13236"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "a726201988a4da0e5ba2e825a9ab788d6b5b94bbbaaea30dc458b89f321d7bbd"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 7443,
+          "sha256": "d687488e9d89b1fa86908e186a4bcd40256fb8cf80519c3f1f7bdb57fd262503"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6091,
+          "sha256": "8354a82f2fe8ff4e88454c17dfeebea52e53c2f0a8eb87f63a1a6295a312c014"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8132,
+          "sha256": "41e4d988e9041ab1a8e657b022254df58436daac775375da81dda327b6dd2049"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11850,
+          "sha256": "e04990366e926bd9997f9b1b1f59c531e7bfd1e6e61c5ad1dbc3ba5575ddc290"
+        },
+        "tsconfig.json": {
+          "bytes": 298,
+          "sha256": "ab16c2caac3f67087cfa748597e011b39526918b86a9e49b43a3d6e89110d1d7"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4844,
+          "sha256": "5e3e1872c33631749149fb2c0afb35b66e8c1926c1e7f8d92bf03c9c988d5853"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29648,
+          "sha256": "d8e8f90958bb92fbf0457204737aa55628b3a68ba58343ec559cd5df96941280"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"], \"extends\": \"../base.json\" }"
+    },
+    {
+      "profile": "candidate-legacy",
+      "scenario": "extends-sibling",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--extends",
+        "config/base.json"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2048,
+          "sha256": "264b73b8707084c8137c1639fbbf630daed40f50dc307049a00e7d3935c13236"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "a726201988a4da0e5ba2e825a9ab788d6b5b94bbbaaea30dc458b89f321d7bbd"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 7443,
+          "sha256": "d687488e9d89b1fa86908e186a4bcd40256fb8cf80519c3f1f7bdb57fd262503"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6091,
+          "sha256": "8354a82f2fe8ff4e88454c17dfeebea52e53c2f0a8eb87f63a1a6295a312c014"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8132,
+          "sha256": "41e4d988e9041ab1a8e657b022254df58436daac775375da81dda327b6dd2049"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11850,
+          "sha256": "e04990366e926bd9997f9b1b1f59c531e7bfd1e6e61c5ad1dbc3ba5575ddc290"
+        },
+        "tsconfig.json": {
+          "bytes": 305,
+          "sha256": "fc96076932254148899e0e144a9d5f4415b18a6492e771a2af200f98df9862f8"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4844,
+          "sha256": "5e3e1872c33631749149fb2c0afb35b66e8c1926c1e7f8d92bf03c9c988d5853"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29648,
+          "sha256": "d8e8f90958bb92fbf0457204737aa55628b3a68ba58343ec559cd5df96941280"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"], \"extends\": \"../config/base.json\" }"
+    },
+    {
+      "profile": "candidate-legacy",
+      "scenario": "extends-same-directory",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/cli/index.js",
+        "source/schema",
+        "-o",
+        "output",
+        "--extends",
+        "output/base.json"
+      ],
+      "exitCode": 0,
+      "files": {
+        "Request.metadata.json": {
+          "bytes": 545,
+          "sha256": "8c274d9fdea69370178de5932ae72d03751675c9bdd1fd557430d0626f623a7a"
+        },
+        "Request.ts": {
+          "bytes": 3321,
+          "sha256": "c20e29c0ce87f0bc88ec8df49f1e58bac3dd1126fa864ef6426cebf013c2d754"
+        },
+        "User.metadata.json": {
+          "bytes": 2139,
+          "sha256": "9c25f9589d945b99a7b957fa205d00e5448fcdd0b2ef77b53fcec8cc20c1b675"
+        },
+        "User.ts": {
+          "bytes": 13762,
+          "sha256": "3d1de308a72febf16502dc10b4fbca7150b59614d38f3b71825d74cf852e931f"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "conversation/SecondUser.metadata.json": {
+          "bytes": 350,
+          "sha256": "32a8ef6fd0d67c072624130fdd1055d94c8017a384294bf9b186e45cd4bb334a"
+        },
+        "conversation/SecondUser.ts": {
+          "bytes": 2048,
+          "sha256": "264b73b8707084c8137c1639fbbf630daed40f50dc307049a00e7d3935c13236"
+        },
+        "conversation/index.metadata.json": {
+          "bytes": 1056,
+          "sha256": "c192ec1b25e6df99b9265efd01847bd502325165f183eeb5d325582595853e13"
+        },
+        "conversation/index.ts": {
+          "bytes": 6700,
+          "sha256": "c559192a41d247ae486e48b4d53834daaab9c2b0ecf2d4eed8f8cf6f72021747"
+        },
+        "message.metadata.json": {
+          "bytes": 1202,
+          "sha256": "7fd5b5a4fead3d136eae8cf577b60c15d739bf18645d4b89478d2c2aa377f7e9"
+        },
+        "message.ts": {
+          "bytes": 8328,
+          "sha256": "657239bca5bb4771f8566b503e3414aab0f6f22da958ec3ad791686a5fe03111"
+        },
+        "schema.metadata.json": {
+          "bytes": 15536,
+          "sha256": "d93379cb156325cb70c1621616d118f6b0894a245fccf05c577f3f6a8815d75f"
+        },
+        "schema.ts": {
+          "bytes": 102494,
+          "sha256": "a726201988a4da0e5ba2e825a9ab788d6b5b94bbbaaea30dc458b89f321d7bbd"
+        },
+        "testLong.metadata.json": {
+          "bytes": 1053,
+          "sha256": "3df85f246aba0ed04941f265c15d26882f4da73efc9712f80c48cead95bbf01f"
+        },
+        "testLong.ts": {
+          "bytes": 7443,
+          "sha256": "d687488e9d89b1fa86908e186a4bcd40256fb8cf80519c3f1f7bdb57fd262503"
+        },
+        "testTraitOnParam.metadata.json": {
+          "bytes": 1188,
+          "sha256": "5997fb5a779b9ec69e4f725e18d7b3bfea6635163574f6096650ecc4d29969f1"
+        },
+        "testTraitOnParam.ts": {
+          "bytes": 6091,
+          "sha256": "8354a82f2fe8ff4e88454c17dfeebea52e53c2f0a8eb87f63a1a6295a312c014"
+        },
+        "testTraitOnParamTrait.metadata.json": {
+          "bytes": 1455,
+          "sha256": "6da6980aed823675c5c28ee79fe4d3a69f2856972b5e91ccff4346cf4c7f11b1"
+        },
+        "testTraitOnParamTrait.ts": {
+          "bytes": 8132,
+          "sha256": "41e4d988e9041ab1a8e657b022254df58436daac775375da81dda327b6dd2049"
+        },
+        "testUpdateFunction.metadata.json": {
+          "bytes": 2212,
+          "sha256": "28c26dfd493477aa1a62c7ca59e32249ba9ce129b6d384264d5f3dc5833d4e16"
+        },
+        "testUpdateFunction.ts": {
+          "bytes": 11850,
+          "sha256": "e04990366e926bd9997f9b1b1f59c531e7bfd1e6e61c5ad1dbc3ba5575ddc290"
+        },
+        "tsconfig.json": {
+          "bytes": 295,
+          "sha256": "c745f48ebae4d26213f27f82e0eafcf40e8b5b64d8df16e4e2b129c6664cd885"
+        },
+        "tupleTest2.metadata.json": {
+          "bytes": 4844,
+          "sha256": "5e3e1872c33631749149fb2c0afb35b66e8c1926c1e7f8d92bf03c9c988d5853"
+        },
+        "tupleTest2.ts": {
+          "bytes": 29648,
+          "sha256": "d8e8f90958bb92fbf0457204737aa55628b3a68ba58343ec559cd5df96941280"
+        }
+      },
+      "preexistingOutputInputs": [
+        "base.json"
+      ],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"schema\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"User.ts\", \"conversation/index.ts\", \"message.ts\", \"Request.ts\", \"tupleTest2.ts\", \"testLong.ts\", \"testUpdateFunction.ts\", \"testTraitOnParam.ts\", \"conversation/SecondUser.ts\", \"testTraitOnParamTrait.ts\", \"schema.ts\", \"__types__.ts\"], \"extends\": \"base.json\" }"
+    },
+    {
+      "profile": "candidate-legacy",
+      "scenario": "wire-names",
+      "command": [
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin/node",
+        "/Users/victorqueiroz/Projects/jsbuffer-vq38/cli/index.js",
+        "source/WireNames.jsb",
+        "-o",
+        "output"
+      ],
+      "exitCode": 0,
+      "files": {
+        "WireNames.jsb.metadata.json": {
+          "bytes": 439,
+          "sha256": "56316457400d18b4d8b6e7dbaa3d67a6bd600b25485cc496fe65a96017b449dd"
+        },
+        "WireNames.jsb.ts": {
+          "bytes": 2836,
+          "sha256": "523325978c39d2023c8b177632907bd973896b303adcd65babf2c79fd9fd1108"
+        },
+        "__types__.ts": {
+          "bytes": 1139,
+          "sha256": "8d92be82e7753840defc8f19488790d5f759e4f4167fdc3301a7c2537d83f30f"
+        },
+        "tsconfig.json": {
+          "bytes": 76,
+          "sha256": "0ea2697ecbcff545a63aee8546b1a9c8be8dfbee6ad64fbff1f63e325f7437af"
+        }
+      },
+      "preexistingOutputInputs": [],
+      "cliSideEffect": "{\n    \"outDir\": \"../output\",\n    \"mainFile\": \"WireNames.jsb\"\n}",
+      "tsconfig": "{ \"compilerOptions\": {  }, \"include\": [\"WireNames.jsb.ts\", \"__types__.ts\"] }"
+    }
+  ],
+  "comparisons": [
+    {
+      "scenario": "default",
+      "comparedToOriginal": "later-1.0.40",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "default",
+      "comparedToOriginal": "candidate-legacy",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "indent2",
+      "comparedToOriginal": "later-1.0.40",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "indent2",
+      "comparedToOriginal": "candidate-legacy",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "sort",
+      "comparedToOriginal": "later-1.0.40",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "sort",
+      "comparedToOriginal": "candidate-legacy",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "unique-name",
+      "comparedToOriginal": "later-1.0.40",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "unique-name",
+      "comparedToOriginal": "candidate-legacy",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "no-tsconfig",
+      "comparedToOriginal": "later-1.0.40",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "no-tsconfig",
+      "comparedToOriginal": "candidate-legacy",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "extends-parent",
+      "comparedToOriginal": "later-1.0.40",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "extends-parent",
+      "comparedToOriginal": "candidate-legacy",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "extends-sibling",
+      "comparedToOriginal": "later-1.0.40",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "extends-sibling",
+      "comparedToOriginal": "candidate-legacy",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "extends-same-directory",
+      "comparedToOriginal": "later-1.0.40",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "extends-same-directory",
+      "comparedToOriginal": "candidate-legacy",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "conversation/SecondUser.metadata.json",
+        "conversation/SecondUser.ts",
+        "testLong.metadata.json",
+        "testLong.ts",
+        "testTraitOnParam.metadata.json",
+        "testTraitOnParam.ts",
+        "testTraitOnParamTrait.metadata.json",
+        "testTraitOnParamTrait.ts",
+        "testUpdateFunction.metadata.json",
+        "testUpdateFunction.ts",
+        "tupleTest2.metadata.json",
+        "tupleTest2.ts"
+      ]
+    },
+    {
+      "scenario": "wire-names",
+      "comparedToOriginal": "later-1.0.40",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "WireNames.jsb.metadata.json",
+        "WireNames.jsb.ts"
+      ]
+    },
+    {
+      "scenario": "wire-names",
+      "comparedToOriginal": "candidate-legacy",
+      "bothExitedZero": true,
+      "missing": [],
+      "extra": [],
+      "differentBytes": [
+        "WireNames.jsb.metadata.json",
+        "WireNames.jsb.ts"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "command": [
+    "node",
+    "node_modules/ava/entrypoints/cli.mjs",
+    "test/ASTGenerator.js",
+    "test/Codec.js",
+    "test/Deserializer.js",
+    "test/FileGenerator.js",
+    "test/Serializer.js",
+    "test/Tokenizer.js",
+    "test/fromMetadata.js",
+    "test/kotlin.js",
+    "test/schema.js",
+    "test/stringUtilities.js",
+    "test/typescriptFidelity.js"
+  ],
+  "cwd": "/Users/victorqueiroz/Projects/jsbuffer-vq38",
+  "nodeBin": "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin",
+  "startedAt": "2026-10-26T18:25:45.451606+00:00",
+  "elapsedSeconds": 4.423,
+  "timeoutSeconds": 180,
+  "timedOut": false,
+  "exitCode": 0,
+  "status": "passed",
+  "log": "logs/non-native-tests.log"
+}

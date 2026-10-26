@@ -1,0 +1,17 @@
+{
+  "name": "jsbuffer-vq38-oracle-1-0-40",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "jsbuffer": "file:../jsbuffer-1.0.40.tgz"
+  },
+  "overrides": {
+    "bn.js": "5.2.1",
+    "chalk": "4.1.2",
+    "cli-argument-helper": "0.0.8",
+    "crc": "4.3.2",
+    "jsbi": "4.3.0",
+    "long": "5.2.3",
+    "textstreamjs": "0.0.4"
+  }
+}

@@ -1,0 +1,361 @@
+{
+  "issue": "VQ-38",
+  "candidate": "63c86049823b6be45ccf9f1b1cb60faac1ce1e8d",
+  "integrationLine": "develop",
+  "reference": {
+    "package": "jsbuffer",
+    "version": "1.0.28",
+    "sourceCommit": "b4089d8a86a71a11507756ecb48838487e546033",
+    "tag": "v1.0.28",
+    "fileGeneratorBlob": "c85eeb4350e740589da5e920c916acf64ff5b49b",
+    "decision": "Original master FileGenerator is the same blob as this published reference. Keep later 1.0.40 as an explicit separate profile.",
+    "packageIdentity": "package-provenance.json",
+    "runtimeLock": "oracle-1.0.28.package-lock.json",
+    "inputs": "input-provenance.json"
+  },
+  "gates": {
+    "exactOutput": {
+      "required": [
+        "identical relative file set",
+        "identical raw bytes",
+        "all applicable default and explicit configurations",
+        "generated code compilation",
+        "runtime and wire behavior"
+      ],
+      "forbidden": [
+        "whitespace normalization",
+        "golden rewrites hiding differences",
+        "undocumented exclusions"
+      ]
+    },
+    "nativeArchitecture": {
+      "inputs": [
+        "complete persisted IFileMetadata/Metadata semantic data",
+        "explicit generator configuration"
+      ],
+      "outputContract": "IGeneratedFile { path: string, contents: string }[] through shared jsb generator integration",
+      "required": [
+        "generate with original sources unavailable",
+        "same backend for parsed schema and persisted metadata paths",
+        "independent architecture review"
+      ],
+      "forbidden": [
+        "legacy FileGenerator production delegation",
+        "embedded source reparsing",
+        "opening schema source files from metadata generation"
+      ],
+      "referenceUse": "isolated test oracle only",
+      "terminology": "Keep Metadata until M6 after verified publication"
+    }
+  },
+  "featureMatrix": [
+    {
+      "area": "primitives",
+      "features": [
+        "bytes",
+        "long",
+        "ulong",
+        "float",
+        "double",
+        "bool",
+        "int",
+        "uint32",
+        "int32",
+        "uint16",
+        "int16",
+        "uint8",
+        "int8",
+        "null_terminated_string",
+        "string"
+      ],
+      "acceptance": "Preserve all recognized 1.x names, representations, widths and codec calls; int aliases int32 and long/ulong use strings.",
+      "originalSource": "https://github.com/jscriptlab/jsbuffer/blob/b4089d8a86a71a11507756ecb48838487e546033/code-generator/GenericName.ts",
+      "coverage": "Source inventory and bounded probes only; full differential/runtime acceptance remains VQ-1174 and VQ-1178."
+    },
+    {
+      "area": "templates",
+      "features": [
+        "vector<T>",
+        "set<T>",
+        "map<K,V>",
+        "optional<T>",
+        "tuple<T...>",
+        "bigint<literal bits>"
+      ],
+      "acceptance": "Preserve nesting, element order, null optional values, Map/Set construction, tuples, and string bigint representations. Literal bit arguments are distinct from the skipped historical bigint<int> tests.",
+      "originalSource": "https://github.com/jscriptlab/jsbuffer/blob/b4089d8a86a71a11507756ecb48838487e546033/code-generator/FileGenerator.ts",
+      "coverage": "Source inventory and bounded probes only; full differential/runtime acceptance remains VQ-1174 and VQ-1178."
+    },
+    {
+      "area": "declarations",
+      "features": [
+        "type",
+        "call",
+        "trait",
+        "export",
+        "comments"
+      ],
+      "acceptance": "Preserve declaration/member order, visibility, call returns, trait membership/dispatch, comments and original interface/function names.",
+      "originalSource": "https://github.com/jscriptlab/jsbuffer/blob/b4089d8a86a71a11507756ecb48838487e546033/code-generator/FileGenerator.ts",
+      "coverage": "Source inventory and bounded probes only; full differential/runtime acceptance remains VQ-1174 and VQ-1178."
+    },
+    {
+      "area": "imports",
+      "features": [
+        "local imports",
+        "transitive imports",
+        "external package schemas",
+        "namespaced packages",
+        "trait dependencies"
+      ],
+      "acceptance": "Preserve aliases, public exports, relative paths, requirement/import order, external-module output suppression and jsbufferconfig lookup behavior. Many external-import runtime tests are currently skipped.",
+      "originalSource": "https://github.com/jscriptlab/jsbuffer/blob/b4089d8a86a71a11507756ecb48838487e546033/code-generator/FileGenerator.ts",
+      "coverage": "Source inventory and bounded probes only; full differential/runtime acceptance remains VQ-1174 and VQ-1178."
+    },
+    {
+      "area": "defaults",
+      "features": [
+        "integer 0",
+        "float/double 0.0",
+        "boolean false",
+        "empty strings",
+        "long/ulong/bigint \"0\"",
+        "bytes new Uint8Array(0)",
+        "optional null",
+        "vector []",
+        "Map/Set empty collections",
+        "recursive tuple/type defaults"
+      ],
+      "acceptance": "Compare exact emitted expressions, helper calls, and runtime values.",
+      "originalSource": "https://github.com/jscriptlab/jsbuffer/blob/b4089d8a86a71a11507756ecb48838487e546033/code-generator/FileGenerator.ts",
+      "coverage": "Source inventory and bounded probes only; full differential/runtime acceptance remains VQ-1174 and VQ-1178."
+    },
+    {
+      "area": "helpers",
+      "features": [
+        "interfaces",
+        "input parameter types",
+        "constructors",
+        "encode/decode",
+        "is guards",
+        "default creators",
+        "compare",
+        "update",
+        "trait helpers",
+        "RequestResult",
+        "IRequest",
+        "ISerializer",
+        "IDeserializer"
+      ],
+      "acceptance": "Compare complete helper files and symbol sets; runtime checks must cover structural sharing/reference behavior as well as values.",
+      "originalSource": "https://github.com/jscriptlab/jsbuffer/blob/b4089d8a86a71a11507756ecb48838487e546033/code-generator/FileGenerator.ts",
+      "coverage": "Source inventory and bounded probes only; full differential/runtime acceptance remains VQ-1174 and VQ-1178."
+    },
+    {
+      "area": "wire",
+      "features": [
+        "CRC32 type/call headers",
+        "sort-properties effects",
+        "trait dispatch",
+        "integer boundaries",
+        "long/ulong",
+        "float/double",
+        "string and null-terminated string",
+        "bytes",
+        "container lengths",
+        "optional flags",
+        "truncation and bounds"
+      ],
+      "acceptance": "Prove against shared wire fixtures and runtime behavior separately from source-byte equality. Current probe byte matches do not prove all wire cases.",
+      "originalSource": "https://github.com/jscriptlab/jsbuffer/blob/b4089d8a86a71a11507756ecb48838487e546033/code-generator/FileGenerator.ts",
+      "coverage": "Source inventory and bounded probes only; full differential/runtime acceptance remains VQ-1174 and VQ-1178."
+    },
+    {
+      "area": "file-output",
+      "features": [
+        "one .ts per internal schema",
+        "matching .metadata.json sidecars",
+        "__types__.ts",
+        "optional tsconfig.json"
+      ],
+      "acceptance": "Require identical relative file sets and raw bytes, including JSON key/array order, whitespace, comments, trailing newlines and helper/config contents.",
+      "originalSource": "https://github.com/jscriptlab/jsbuffer/blob/b4089d8a86a71a11507756ecb48838487e546033/code-generator/FileGenerator.ts",
+      "coverage": "Source inventory and bounded probes only; full differential/runtime acceptance remains VQ-1174 and VQ-1178."
+    },
+    {
+      "area": "cli-side-effect",
+      "features": [
+        "jsbufferconfig.json next to main schema"
+      ],
+      "acceptance": "Keep the relative mainFile/outDir fields and indentation. Record separately from generated output files.",
+      "originalSource": "https://github.com/jscriptlab/jsbuffer/blob/b4089d8a86a71a11507756ecb48838487e546033/cli/index.ts",
+      "coverage": "Source inventory and bounded probes only; full differential/runtime acceptance remains VQ-1174 and VQ-1178."
+    },
+    {
+      "area": "identity",
+      "features": [
+        "path casing",
+        "definition casing",
+        "underscores",
+        "file extensions",
+        "globalName",
+        "CRC signature inputs"
+      ],
+      "acceptance": "Use original 1.0.28 identity rules. Later dashCase/camelCase rules are observed differences, not an approved exception.",
+      "originalSource": "https://github.com/jscriptlab/jsbuffer/blob/b4089d8a86a71a11507756ecb48838487e546033/code-generator/fileGeneratorUtilities.ts",
+      "coverage": "Source inventory and bounded probes only; full differential/runtime acceptance remains VQ-1174 and VQ-1178."
+    }
+  ],
+  "configurationMatrix": [
+    {
+      "name": "output",
+      "flags": [
+        "-o",
+        "--output"
+      ],
+      "default": "schema relative to cwd",
+      "rule": "CLI resolves absolute output directory; generated paths remain relative to schema root."
+    },
+    {
+      "name": "indentationSize",
+      "flags": [
+        "--indentation-size"
+      ],
+      "default": 4,
+      "rule": "Preserve exact spaces and formatting in TS/config and CLI side effects; metadata JSON remains in the original serialization format."
+    },
+    {
+      "name": "uniqueNamePropertyName",
+      "flags": [
+        "--unique-name-property-name"
+      ],
+      "default": "_name",
+      "rule": "Constructor null/undefined coalesces to _name. Preserve the custom property across interfaces, guards, defaults and updates. CLI help says undefined but runtime default is _name."
+    },
+    {
+      "name": "typeScriptConfiguration",
+      "flags": [
+        "--no-ts-config"
+      ],
+      "default": "emit tsconfig.json",
+      "rule": "With --no-ts-config no tsconfig is emitted; programmatic null/undefined suppresses it. Preserve generated include order and supplied config merge/serialization."
+    },
+    {
+      "name": "extends",
+      "flags": [
+        "--extends"
+      ],
+      "default": null,
+      "rule": "Resolve input against cwd and emit original relative path from output; compilation and known-report variants are tracked by VQ-45."
+    },
+    {
+      "name": "sortProperties",
+      "flags": [
+        "--sort-properties",
+        "-s"
+      ],
+      "default": false,
+      "rule": "Preserve source order when false and original sorting semantics when true, across imported schemas, emitted code, metadata and CRCs."
+    },
+    {
+      "name": "mainFile",
+      "flags": [
+        "positional"
+      ],
+      "default": null,
+      "rule": "Required readable schema file; preserve root-relative paths and import resolution."
+    },
+    {
+      "name": "help",
+      "flags": [
+        "--help",
+        "-h"
+      ],
+      "default": false,
+      "rule": "Preserve public CLI behavior, with any help/default corrections recorded explicitly."
+    },
+    {
+      "name": "programmatic options",
+      "default": {
+        "root": null,
+        "externalModule": false
+      },
+      "required": [
+        "textEncoder",
+        "textDecoder",
+        "indentationSize",
+        "compilerOptions.rootDir",
+        "compilerOptions.outDir"
+      ],
+      "rule": "Record programmatic configuration separately from CLI defaults; outDir must be absolute. Native metadata generation receives all required configuration explicitly."
+    }
+  ],
+  "targets": [
+    {
+      "target": "TypeScript/JavaScript",
+      "baseline": "Node 20.17.0, TypeScript 5.2.2, @jsbuffer/codec 1.0.7 on macOS arm64",
+      "evidence": "79 non-native tests passed; 20 skipped. Original-reference runtime acceptance remains open."
+    },
+    {
+      "target": "C99 and C++17",
+      "declared": [
+        "native x86_64",
+        "i386 secondary compilation/runtime"
+      ],
+      "observedToolchain": "Apple Clang 21.0.0; /usr/bin/gcc and g++ are also Apple Clang, not GNU GCC; CMake 4.4.4",
+      "status": "native execution unrun after AVR failure; Linux execution not refreshed by this audit"
+    },
+    {
+      "target": "AVR C99",
+      "declaredMCUs": [
+        "atmega2560",
+        "atmega1281",
+        "atmega1280",
+        "atmega328p"
+      ],
+      "required": [
+        "avr-gcc",
+        "avr-g++",
+        "avr-size",
+        "avr-objcopy",
+        "avr-libc",
+        "simavr"
+      ],
+      "status": "full npm test failed: /usr/bin/avr-gcc missing; compile/simulation not accepted"
+    },
+    {
+      "target": "Kotlin",
+      "required": [
+        "pinned kotlinc",
+        "compatible JDK",
+        "shared wire fixture runtime"
+      ],
+      "status": "generation comparisons passed; kotlinc missing; compilation/runtime unrun; Java 27.0.1 available"
+    },
+    {
+      "target": "CI platform and Node policy",
+      "observedMasterMatrix": [
+        "18.x",
+        "20.x",
+        "22.x",
+        "24.x"
+      ],
+      "candidateNvmrc": "v20.17.0",
+      "requiredFollowUp": "VQ-52 and VQ-1182 must reconcile these policies and mandatory toolchains at the actual release candidate"
+    }
+  ],
+  "existingIssueMap": {
+    "referenceHarness": "VQ-1174",
+    "metadataSemantics": "VQ-1175",
+    "backendAudit": "VQ-36",
+    "backendImplementation": "VQ-1176",
+    "cliIntegration": "VQ-1177",
+    "independentAcceptance": "VQ-1178",
+    "selfDependency": "VQ-54",
+    "tsconfig": "VQ-45",
+    "regeneration": "VQ-50",
+    "toolchains": "VQ-53",
+    "ciFailurePropagation": "VQ-1182"
+  },
+  "releaseReadiness": false
+}

@@ -1,0 +1,4 @@
+
+> jsbuffer@2.0.12 build
+> npx tsc -b test scripts cli code-generator src/generators/c src/generators/cpp src/generators/kotlin src/core --force
+

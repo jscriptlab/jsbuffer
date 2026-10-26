@@ -1,0 +1,200 @@
+diff --git a/code-generator/FileGenerator.ts b/code-generator/FileGenerator.ts
+index c85eeb4..eb4135b 100644
+--- a/code-generator/FileGenerator.ts
++++ b/code-generator/FileGenerator.ts
+@@ -1,6 +1,5 @@
+ import ASTGenerator, {
+   ASTGeneratorOutputNode,
+-  EOF,
+   INodeCallDefinition,
+   INodeExportStatement,
+   INodeParamDefinition,
+@@ -8,11 +7,11 @@ import ASTGenerator, {
+   INodeTypeDefinition,
+   NodeType,
+   NodeTypeExpression
+-} from '../src/ASTGenerator';
++} from '../src/core/ASTGenerator';
+ import CodeStream from 'textstreamjs';
+ import fs from 'fs';
+ import path from 'path';
+-import Tokenizer from '../src/Tokenizer';
++import Tokenizer from '../src/core/Tokenizer';
+ import Exception from '../exception/Exception';
+ import {
+   getDecodeFunctionName,
+@@ -270,12 +269,19 @@ export default class FileGenerator extends CodeStream {
+     }
+   }
+   async #preprocess() {
++    const contents = await fs.promises.readFile(this.#file.path);
+     const tokenizer = new Tokenizer({
++      file: this.#file.path,
+       textDecoder: this.#textDecoder,
+       textEncoder: this.#textEncoder,
+-      contents: await fs.promises.readFile(this.#file.path)
++      contents
+     });
+-    this.#nodes = new ASTGenerator(tokenizer.tokenize().tokens()).generate();
++    this.#nodes = new ASTGenerator({
++      contents,
++      file: this.#file.path,
++      textDecoder: this.#textDecoder,
++      tokens: tokenizer.tokenize().tokens()
++    }).generate();
+     if (this.#sortProperties) {
+       this.#iterate((node) => {
+         switch (node.type) {
+@@ -2756,7 +2762,7 @@ export default class FileGenerator extends CodeStream {
+   #node() {
+     const node = this.#nodes[this.#offset];
+     if (typeof node === 'undefined') {
+-      throw new EOF();
++      throw new Exception('Tried to get node, but it was undefined');
+     }
+     return node;
+   }
+diff --git a/code-generator/fileGeneratorUtilities.ts b/code-generator/fileGeneratorUtilities.ts
+index af8f309..ed0571c 100644
+--- a/code-generator/fileGeneratorUtilities.ts
++++ b/code-generator/fileGeneratorUtilities.ts
+@@ -4,18 +4,18 @@ import {
+   INodeTraitDefinition,
+   INodeTypeDefinition,
+   NodeType
+-} from '../src/ASTGenerator';
+-import { lowerFirst, upperFirst } from './stringUtilities';
++} from '../src/core/ASTGenerator';
++import { camelCase, dashCase, upperFirst } from './stringUtilities';
+ 
+ export function getEncodeFunctionName(
+   node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
+ ) {
+   switch (node.type) {
+     case NodeType.TraitDefinition:
+-      return `encode${upperFirst(node.name.value)}Trait`;
++      return `encode${transformNodeNameValue(node.name.value)}Trait`;
+     case NodeType.TypeDefinition:
+     case NodeType.CallDefinition:
+-      return `encode${upperFirst(node.name.value)}`;
++      return `encode${transformNodeNameValue(node.name.value)}`;
+   }
+ }
+ 
+@@ -24,10 +24,10 @@ export function getDecodeFunctionName(
+ ) {
+   switch (node.type) {
+     case NodeType.TraitDefinition:
+-      return `decode${upperFirst(node.name.value)}Trait`;
++      return `decode${transformNodeNameValue(node.name.value)}Trait`;
+     case NodeType.TypeDefinition:
+     case NodeType.CallDefinition:
+-      return `decode${upperFirst(node.name.value)}`;
++      return `decode${transformNodeNameValue(node.name.value)}`;
+   }
+ }
+ 
+@@ -35,7 +35,12 @@ export function getTypeDefinitionOrCallDefinitionNamePropertyValue(
+   node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition,
+   file: string
+ ) {
+-  return `${file.split('/').map(lowerFirst).join('.')}.${node.name.value}`;
++  return `${file
++    // Remove the .jsb extension only if it is at the end of the string
++    .replace(/\.jsb$/, '')
++    .split('/')
++    .map(dashCase)
++    .join('.')}.${node.name.value}`;
+ }
+ 
+ export function getCompareFunctionName(
+@@ -44,16 +49,16 @@ export function getCompareFunctionName(
+   switch (node.type) {
+     case NodeType.CallDefinition:
+     case NodeType.TypeDefinition:
+-      return `compare${upperFirst(node.name.value)}`;
++      return `compare${transformNodeNameValue(node.name.value)}`;
+     case NodeType.TraitDefinition:
+-      return `compare${upperFirst(node.name.value)}Trait`;
++      return `compare${transformNodeNameValue(node.name.value)}Trait`;
+   }
+ }
+ 
+ export function getUpdateFunctionName(
+   node: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
+ ) {
+-  return `update${upperFirst(node.name.value)}`;
++  return `update${transformNodeNameValue(node.name.value)}`;
+ }
+ 
+ export function integerRangeFromBits({
+@@ -88,7 +93,7 @@ export function getTypeDefinitionOrCallDefinitionObjectCreator(
+ ) {
+   switch (value.type) {
+     case NodeType.CallDefinition:
+-      return upperFirst(value.name.value);
++      return transformNodeNameValue(value.name.value);
+     case NodeType.TypeDefinition:
+       return value.name.value;
+   }
+@@ -97,7 +102,7 @@ export function getTypeDefinitionOrCallDefinitionObjectCreator(
+ export function getValidateDefinitionFunctionName(
+   value: INodeTypeDefinition | INodeCallDefinition | INodeTraitDefinition
+ ) {
+-  let out = `is${upperFirst(value.name.value)}`;
++  let out = `is${transformNodeNameValue(value.name.value)}`;
+   switch (value.type) {
+     case NodeType.TraitDefinition:
+       out = `${out}Trait`;
+@@ -118,9 +123,9 @@ export function getDefaultFunctionName(
+   switch (node.type) {
+     case NodeType.CallDefinition:
+     case NodeType.TypeDefinition:
+-      return `default${upperFirst(node.name.value)}`;
++      return `default${transformNodeNameValue(node.name.value)}`;
+     case NodeType.TraitDefinition:
+-      return `default${upperFirst(node.name.value)}Trait`;
++      return `default${transformNodeNameValue(node.name.value)}Trait`;
+   }
+ }
+ 
+@@ -129,3 +134,7 @@ export function getTypeInputParamsInterfaceName(
+ ) {
+   return `${value.name.value}InputParams`;
+ }
++
++function transformNodeNameValue(value: string) {
++  return upperFirst(camelCase(value));
++}
+diff --git a/code-generator/stringUtilities.ts b/code-generator/stringUtilities.ts
+index b414ffb..374f787 100644
+--- a/code-generator/stringUtilities.ts
++++ b/code-generator/stringUtilities.ts
+@@ -6,6 +6,27 @@ export function lowerFirst(value: string) {
+   return `${value[0]?.toLowerCase()}${value.substring(1)}`;
+ }
+ 
++export function camelCase(value: string) {
++  return value.replace(/[-_](.)/g, (_, group) => group.toUpperCase());
++}
++
++export function dashCase(value: string) {
++  return (
++    value
++      .normalize('NFD')
++      // Insert dashes before any uppercase letters that follow a lowercase letter or a number
++      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
++      // Convert spaces, underscores, and multiple dashes to a single dash
++      .replace(/[\s_]+|[-]+/g, '-')
++      // Convert to lowercase
++      .toLowerCase()
++      // Remove any non-alphanumeric characters except for dashes
++      .replace(/[^a-z0-9-]/gi, '')
++      // Ensure it doesn't start or end with a dash
++      .replace(/^-|-$/g, '')
++  );
++}
++
+ export function enforceLocalImport(value: string) {
+   if (!value.startsWith('.')) {
+     return `./${value}`;

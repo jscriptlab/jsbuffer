@@ -1,0 +1,21 @@
+trait E  {}
+
+type A : E {
+  int a;
+}
+
+type B : E {
+  string a;
+}
+
+type C : E {
+  double a;
+}
+
+type D : E {
+  float a;
+}
+
+export type test {
+  E traitParam;
+}

@@ -1,0 +1,28 @@
+
+type user {
+  int id;
+  string firstName;
+  string lastName;
+}
+type post {
+  int id;
+  string title;
+  vector<comment> comments;
+}
+type comment {
+  int id;
+  string title;
+  string contents;
+}
+
+type tupleTest {
+  tuple<user,post,comment,vector<comment>,vector<optional<comment>>> data;
+}
+
+type tupleTupleTest{
+  tuple<tuple<int,string,vector<tuple<string,int>>>,int,string,double> a;
+}
+
+type superTupleTupleTest{
+  tuple<tuple<tuple<int>,int>,double> a;
+}
