@@ -1,130 +1,98 @@
-import { SayArguments } from '@slack/bolt';
-import env from '../env';
+import type { KnownBlock } from '@slack/bolt';
 
-const initialPayload = ({
-  EVENT_HEAD_COMMIT_TIMESTAMP,
-  EVENT_PUSHER_EMAIL,
-  EVENT_HEAD_COMMIT_URL,
-  EVENT_PUSHER_NAME,
-  EVENT_HEAD_COMMIT_MESSAGE,
-  EVENT_HEAD_COMMIT_ID
-}: Context): SayArguments => ({
-  blocks: [
-    {
-      type: 'header',
-      text: {
-        type: 'plain_text',
-        text: 'Tests passed ✅'
-      }
-    },
-    {
-      type: 'section',
-      text: {
-        text: `<${EVENT_HEAD_COMMIT_URL}|${EVENT_HEAD_COMMIT_ID}>`,
-        type: 'mrkdwn'
-      }
-    },
-    {
-      type: 'section',
-      text: {
-        type: 'mrkdwn',
-        text: `${EVENT_HEAD_COMMIT_MESSAGE}`
-      }
-    },
-    {
-      type: 'section',
-      text: {
-        text: `${EVENT_PUSHER_NAME} <${EVENT_PUSHER_EMAIL}>`,
-        type: 'mrkdwn'
-      }
-    },
-    {
-      type: 'section',
-      text: {
-        text: EVENT_HEAD_COMMIT_TIMESTAMP,
-        type: 'mrkdwn'
-      }
-    }
-  ]
-});
-
-function context() {
-  return {
-    TRIGGERING_ACTOR: env('TRIGGERING_ACTOR'),
-    EVENT_HEAD_COMMIT_MESSAGE: env('EVENT_HEAD_COMMIT_MESSAGE'),
-    EVENT_HEAD_COMMIT_URL: env('EVENT_HEAD_COMMIT_URL'),
-    EVENT_HEAD_COMMIT_TIMESTAMP: env('EVENT_HEAD_COMMIT_TIMESTAMP'),
-    EVENT_HEAD_COMMIT_ID: env('EVENT_HEAD_COMMIT_ID'),
-    EVENT_PUSHER_NAME: env('EVENT_PUSHER_NAME'),
-    EVENT_PUSHER_EMAIL: env('EVENT_PUSHER_EMAIL'),
-    EVENT_REF: env('EVENT_REF'),
-    EVENT_COMPARE_URL: env('EVENT_COMPARE_URL'),
-    EVENT_BEFORE_COMMIT: env('EVENT_BEFORE_COMMIT'),
-    EVENT_AFTER_COMMIT: env('EVENT_AFTER_COMMIT')
+export interface NotificationEvent {
+  repository?: { html_url?: string; full_name?: string };
+  sender?: { login?: string };
+  pusher?: { name?: string; email?: string };
+  head_commit?: {
+    id?: string;
+    message?: string;
+    url?: string;
+    timestamp?: string;
   };
+  pull_request?: {
+    number?: number;
+    title?: string;
+    html_url?: string;
+    user?: { login?: string };
+    head?: { sha?: string; ref?: string };
+  };
+  ref?: string;
+  compare?: string;
+  forced?: boolean;
 }
 
-type Context = ReturnType<typeof context>;
+function escape(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
 
-export default () => {
-  const {
-    EVENT_HEAD_COMMIT_URL,
-    EVENT_REF,
-    TRIGGERING_ACTOR,
-    EVENT_COMPARE_URL,
-    EVENT_BEFORE_COMMIT,
-    EVENT_AFTER_COMMIT,
-    EVENT_PUSHER_NAME
-  } = context();
-  let blocks = initialPayload(context()).blocks ?? null;
-  if (!Array.isArray(blocks)) {
-    throw new Error('blocks is not an array');
-  }
-  if (blocks === null) {
-    blocks = [];
-  }
-  blocks.push(
-    {
+export default function testFinished(
+  event: NotificationEvent = {},
+  environment: NodeJS.ProcessEnv = process.env
+): { text: string; blocks: KnownBlock[] } {
+  const pr = event.pull_request;
+  const result = environment['TEST_RESULT'] ?? 'success';
+  const title = result === 'success' ? 'Tests passed ✅' : 'Tests ' + result;
+  const actor =
+    pr?.user?.login ||
+    event.pusher?.name ||
+    event.sender?.login ||
+    environment['TRIGGERING_ACTOR'] ||
+    environment['GITHUB_ACTOR'] ||
+    'Unknown actor';
+  const ref =
+    pr?.head?.ref ||
+    event.ref ||
+    environment['EVENT_REF'] ||
+    environment['GITHUB_HEAD_REF'] ||
+    environment['GITHUB_REF'] ||
+    'unknown branch';
+  const sha =
+    pr?.head?.sha ||
+    event.head_commit?.id ||
+    environment['EVENT_HEAD_COMMIT_ID'] ||
+    environment['GITHUB_SHA'] ||
+    'unknown commit';
+  const message =
+    pr?.title ||
+    event.head_commit?.message ||
+    environment['EVENT_HEAD_COMMIT_MESSAGE'] ||
+    'No commit message provided';
+  const url =
+    pr?.html_url ||
+    event.head_commit?.url ||
+    environment['EVENT_HEAD_COMMIT_URL'];
+  const blocks: KnownBlock[] = [
+    { type: 'header', text: { type: 'plain_text', text: title } }
+  ];
+  const section = (text: string) =>
+    blocks.push({
       type: 'section',
-      text: {
-        type: 'mrkdwn',
-        text: `${EVENT_PUSHER_NAME} <${EVENT_HEAD_COMMIT_URL}|pushed> to <${EVENT_REF}|${EVENT_REF.replace(
-          'refs/heads/',
-          ''
-        )}>`
-      }
-    },
-    {
-      type: 'section',
-      text: {
-        type: 'mrkdwn',
-        text: `<${EVENT_COMPARE_URL}|${EVENT_BEFORE_COMMIT.substring(
-          0,
-          7
-        )}...${EVENT_AFTER_COMMIT.substring(0, 7)}>`
-      }
-    },
-    // ! Maybe convert `test-finished-slack-message.json` to a `.ts` file
-    {
-      type: 'divider'
-    },
-    {
-      type: 'section',
-      text: {
-        text: `Triggered by **${TRIGGERING_ACTOR}**`,
-        type: 'mrkdwn'
-      }
-    }
-  );
-  if ('COMMIT_FORCED' in process.env) {
+      text: { type: 'mrkdwn', text: escape(text).slice(0, 3000) }
+    });
+  section(actor + ' · ' + ref + ' · ' + sha.slice(0, 7));
+  section(message);
+  if (url && /^https:\/\//.test(url)) {
     blocks.push({
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: '**This commit was forced**'
+        text:
+          '<' +
+          encodeURI(url).replace(/\|/g, '%7C') +
+          '|' +
+          (pr ? 'Pull request' : 'Commit') +
+          '>'
       }
     });
   }
-
-  return blocks;
-};
+  const timestamp =
+    event.head_commit?.timestamp || environment['EVENT_HEAD_COMMIT_TIMESTAMP'];
+  if (timestamp?.trim()) section(timestamp);
+  if (event.forced === true || environment['COMMIT_FORCED'] === 'true')
+    section('This commit was forced');
+  return { text: title + ': ' + ref + ' (' + sha.slice(0, 7) + ')', blocks };
+}
