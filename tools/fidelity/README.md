@@ -77,3 +77,7 @@ npm run fidelity:metadata -- --adapter '["node", "/absolute/path/to/native-adapt
 Adapters execute in a temporary working directory, write their complete generated files into `outputDirectory`, and exit nonzero on failure. Use absolute script paths; arguments are passed directly without a shell. Removing the temporary sources checks the input boundary, while the production architecture still requires independent review for hidden source dependencies.
 
 Reference generation always uses the verified published package. There is no command to rewrite or normalize expected bytes. New fixtures/configurations require an explicit reviewed source change; the old default reference and original package remain fixed. The original self-dependency elsewhere in the repository is unchanged pending VQ-54.
+
+## Recorded candidate results
+
+[The verification summary](../../docs/fidelity-harness/2026-10-26/summary.json) identifies the tested commit, commands and hashes for the compressed full JSON reports. The oracle matched all 20 scenarios; the current legacy candidate matched 5 and differed in 15, including the known 12 differing files in the default output. Metadata comparison failed in all 20 scenarios: 3 during external-import metadata export and 17 at generation. These are measured candidate failures, not passing release checks.

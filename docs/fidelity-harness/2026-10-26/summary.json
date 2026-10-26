@@ -1,0 +1,54 @@
+{
+  "testedCandidateGitHead": "e7877b6e78d555f778ce2fd9d37926aec93517a7",
+  "referenceSourceCommit": "b4089d8a86a71a11507756ecb48838487e546033",
+  "node": "v20.17.0",
+  "harnessTests": {
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0
+  },
+  "scenarioCount": 20,
+  "reports": [
+    {
+      "mode": "oracle",
+      "command": "npm run fidelity:compare -- --mode oracle --report .cache/fidelity-reports/oracle.json",
+      "expectedExitCode": 0,
+      "statuses": {
+        "matched": 20
+      },
+      "failureStages": {},
+      "file": "oracle.json.gz",
+      "jsonSha256": "abcf12f0706c896756587d265a688e88e85c92a5e2df849439c728abef27d0e5",
+      "gzipSha256": "e6e27e29157ba287075d99207c3b723d96ea7e09609e42d0c9fc2419d382e52e"
+    },
+    {
+      "mode": "legacy",
+      "command": "npm run fidelity:compare -- --mode legacy --report .cache/fidelity-reports/legacy.json",
+      "expectedExitCode": 1,
+      "statuses": {
+        "matched": 5,
+        "mismatch": 15
+      },
+      "failureStages": {},
+      "file": "legacy.json.gz",
+      "jsonSha256": "10d33b7d7a609c7698ac83b51ba8c89f455ba8c437a2dcf1d44c1a3c27c0c16a",
+      "gzipSha256": "92ee3c1c1e9d25cec07080b864ca0be82f3c40feb843a5b5aedab9fe21b9ccd7"
+    },
+    {
+      "mode": "metadata",
+      "command": "npm run fidelity:metadata -- --report .cache/fidelity-reports/metadata.json",
+      "expectedExitCode": 1,
+      "statuses": {
+        "candidate-generation-failed": 20
+      },
+      "failureStages": {
+        "metadata-export": 3,
+        "metadata-generation": 17
+      },
+      "file": "metadata.json.gz",
+      "jsonSha256": "b78a1ae2cc023d3343c9ae4bf41b8ae5f72f765d7e05c791c7a98ca22cf23ced",
+      "gzipSha256": "35dfe530b250a4f95c6290adbaf8fa28efe4ea3128e72b7ac6c0a5a6d7784941"
+    }
+  ],
+  "limits": "Harness verification is complete at this candidate; TypeScript byte parity, metadata semantics, compilation/runtime and release acceptance remain open. Raw reports include commands, hashes and captured diagnostics."
+}
