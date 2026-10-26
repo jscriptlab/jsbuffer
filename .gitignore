@@ -6,5 +6,5 @@ tsconfig.tsbuildinfo
 !.eslintrc.js
 /.nyc_output
 /.history
-/yarn-error.log
+/npm-debug.log*
 /.vscode/settings.json
