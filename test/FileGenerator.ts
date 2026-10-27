@@ -543,7 +543,7 @@ test.skip('it should throw for unsupported templates', async () => {
   });
 });
 
-test('it should compile and round-trip signed and unsigned 16-bit fields', async () => {
+test('it should compile and round-trip signed and unsigned 16-bit fields', async (t) => {
   const directory = await fs.mkdtemp(path.join(__dirname, '../.int16-'));
   try {
     const schema = path.join(directory, 'words');
@@ -590,7 +590,7 @@ export function roundTrip(littleEndian: boolean, signed: number, unsigned: numbe
       noEmitOnError: true
     });
     const diagnostics = ts.getPreEmitDiagnostics(program);
-    assert.strict.equal(
+    t.is(
       diagnostics.length,
       0,
       ts.formatDiagnosticsWithColorAndContext(diagnostics, {
@@ -599,7 +599,7 @@ export function roundTrip(littleEndian: boolean, signed: number, unsigned: numbe
         getNewLine: () => '\n'
       })
     );
-    assert.strict.equal(program.emit().emitSkipped, false);
+    t.is(program.emit().emitSkipped, false);
     const { roundTrip } = require(path.join(output, 'consumer.js')) as {
       roundTrip: (
         littleEndian: boolean,
@@ -611,8 +611,8 @@ export function roundTrip(littleEndian: boolean, signed: number, unsigned: numbe
       for (const signed of [-32768, -1, 0, 1, 32767]) {
         for (const unsigned of [0, 1, 65535]) {
           const result = roundTrip(littleEndian, signed, unsigned);
-          assert.strict.deepEqual(result.decoded, result.value);
-          assert.strict.equal(result.byteLength, 8);
+          t.deepEqual(result.decoded, result.value);
+          t.is(result.byteLength, 8);
         }
       }
     }
