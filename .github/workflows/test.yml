@@ -33,6 +33,8 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build
+      - name: Verify test and coverage failure propagation
+        run: npm run test:infrastructure
       - name: Verify generated 16-bit consumers
         env:
           TS_NODE_PROJECT: test/tsconfig.json

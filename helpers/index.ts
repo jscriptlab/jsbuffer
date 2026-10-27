@@ -66,6 +66,22 @@ export async function generateWithVirtualFs({
       cwd: rootDir,
     }).wait();
   const pack = () => runCommand('npm', ['pack']);
+  // Keep generated-program coverage separate from the repository's NYC hooks.
+  // env clears inherited coverage metadata after the parent's spawn hooks run,
+  // while preserving NODE_OPTIONS and other user configuration (macOS/Linux).
+  const runCoverage = (args: string[]) =>
+    runCommand('env', [
+      ...Object.keys(process.env)
+        .filter((name) => /^(NYC_|NODE_PRELOAD_)/.test(name))
+        .flatMap((name) => ['-u', name]),
+      process.execPath,
+      require.resolve('nyc/bin/nyc.js'),
+      '--cwd',
+      rootDir,
+      '--nycrc-path',
+      path.join(rootDir, '.nycrc'),
+      ...args,
+    ]);
   const test = async () => {
     /**
      * generate and create files using the code generator
@@ -75,8 +91,8 @@ export async function generateWithVirtualFs({
     /**
      * compile typescript project
      */
-    await runCommand('npx', [
-      'tsc',
+    await runCommand(process.execPath, [
+      require.resolve('typescript/bin/tsc'),
       '--project',
       path.join(outDirBaseName, 'tsconfig.json'),
     ]);
@@ -94,8 +110,8 @@ export async function generateWithVirtualFs({
     );
 
     await runCommand('node', [internalTestFile]);
-    await runCommand('npx', ['nyc', 'node', internalTestFile]);
-    await runCommand('npx', ['nyc', 'check-coverage']);
+    await runCoverage([process.execPath, internalTestFile]);
+    await runCoverage(['check-coverage']);
     /**
      * pack the package into .tgz file
      */
@@ -143,6 +159,7 @@ export async function generateWithVirtualFs({
         compilerOptions: {
           esModuleInterop: true,
           strict: true,
+          types: [],
           declaration: true,
           target: 'ESNext',
           module: 'CommonJS',
@@ -157,6 +174,12 @@ export async function generateWithVirtualFs({
     name: path.basename(rootDir),
     version: '0.0.1',
     files: [...Object.keys(paths), '__compiled__/**/*.{js,d.ts,json}'],
+    devDependencies: Object.fromEntries(
+      ['@jsbuffer/codec', 'typescript', 'nyc'].map((name) => [
+        name,
+        (require(`${name}/package.json`) as { version: string }).version,
+      ]),
+    ),
     ...packageInfo,
   };
   await fs.promises.writeFile(
@@ -164,16 +187,8 @@ export async function generateWithVirtualFs({
     JSON.stringify(packageInfo, null, 4)
   );
 
-  /**
-   * install typescript package
-   */
-  await runCommand('npm', [
-    'install',
-    '--save-dev',
-    '@jsbuffer/codec@^1',
-    'typescript@^5',
-    'nyc@^15',
-  ]);
+  // Fixtures resolve the npm-ci-locked dependencies from the enclosing repo.
+  // Only tests of external package imports need a fixture-local npm install.
   return {
     test,
     installPackages,
