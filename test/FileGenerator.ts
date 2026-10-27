@@ -3,6 +3,10 @@ import assert from 'assert';
 import { generateWithVirtualFs } from '../helpers';
 import { spawn } from 'child-process-utilities';
 import CodeStream from 'textstreamjs';
+import fs from 'fs/promises';
+import path from 'path';
+import ts from 'typescript';
+import FileGenerator from '../code-generator/FileGenerator';
 
 test.skip('it should support bigint<uint64> template 2', async () => {
   const createImport = (a: string) => `import { ${a} } from "./${a}";`;
@@ -537,4 +541,82 @@ test.skip('it should throw for unsupported templates', async () => {
       })
     ).fileGenerator.generate();
   });
+});
+
+test('it should compile and round-trip signed and unsigned 16-bit fields', async () => {
+  const directory = await fs.mkdtemp(path.join(__dirname, '../.int16-'));
+  try {
+    const schema = path.join(directory, 'words');
+    const output = path.join(directory, 'generated');
+    await fs.writeFile(
+      schema,
+      'export type Words { int16 signed; uint16 unsigned; }\n'
+    );
+    await new FileGenerator(
+      { path: schema },
+      {
+        compilerOptions: { rootDir: directory, outDir: output },
+        root: null,
+        indentationSize: 2,
+        textDecoder: new TextDecoder(),
+        textEncoder: new TextEncoder()
+      }
+    ).generate();
+    const consumer = path.join(output, 'consumer.ts');
+    await fs.writeFile(
+      consumer,
+      `import { Serializer, Deserializer } from '@jsbuffer/codec';
+import { Words, encodeWords, decodeWords } from './words';
+export function roundTrip(littleEndian: boolean, signed: number, unsigned: number) {
+  const serializer = new Serializer({ textEncoder: new TextEncoder(), littleEndian });
+  const value = Words({ signed, unsigned });
+  encodeWords(serializer, value);
+  const bytes = serializer.view();
+  const decoded = decodeWords(new Deserializer({
+    buffer: bytes, textDecoder: new TextDecoder(), littleEndian,
+  }));
+  return { value, decoded, byteLength: bytes.byteLength };
+}
+`
+    );
+    const program = ts.createProgram([consumer], {
+      target: ts.ScriptTarget.ES2020,
+      module: ts.ModuleKind.CommonJS,
+      moduleResolution: ts.ModuleResolutionKind.Node10,
+      strict: true,
+      esModuleInterop: true,
+      skipLibCheck: true,
+      types: [],
+      noEmitOnError: true
+    });
+    const diagnostics = ts.getPreEmitDiagnostics(program);
+    assert.strict.equal(
+      diagnostics.length,
+      0,
+      ts.formatDiagnosticsWithColorAndContext(diagnostics, {
+        getCurrentDirectory: () => directory,
+        getCanonicalFileName: (fileName) => fileName,
+        getNewLine: () => '\n'
+      })
+    );
+    assert.strict.equal(program.emit().emitSkipped, false);
+    const { roundTrip } = require(path.join(output, 'consumer.js')) as {
+      roundTrip: (
+        littleEndian: boolean,
+        signed: number,
+        unsigned: number
+      ) => { value: unknown; decoded: unknown; byteLength: number };
+    };
+    for (const littleEndian of [true, false]) {
+      for (const signed of [-32768, -1, 0, 1, 32767]) {
+        for (const unsigned of [0, 1, 65535]) {
+          const result = roundTrip(littleEndian, signed, unsigned);
+          assert.strict.deepEqual(result.decoded, result.value);
+          assert.strict.equal(result.byteLength, 8);
+        }
+      }
+    }
+  } finally {
+    await fs.rm(directory, { recursive: true, force: true });
+  }
 });
