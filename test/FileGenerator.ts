@@ -530,7 +530,7 @@ suite.test('it should not allow importing of unexported traits', async () => {
 });
 
 suite.test('it should support comments before types', async () => {
-  (
+  await (
     await generateWithVirtualFs({
       paths: {
         index: [
