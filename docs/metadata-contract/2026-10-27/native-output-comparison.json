@@ -1,0 +1,554 @@
+{
+  "node": "v20.17.0",
+  "beforeNode": "v26.12.1",
+  "sourceHead": "895be18b98a2b4cf8991192e346edb5d91f67c45",
+  "referenceTree": "a466a392b5361a40d6d514a50fdf02b67590142f",
+  "cases": {
+    "c99": {
+      "entry": "src/generators/c/test/app.jsb",
+      "name": "app",
+      "expected": {
+        "CMakeLists.txt": {
+          "bytes": 1221,
+          "sha256": "83ac37892e310d7847f6a72d03f6b76515953b465be79fd9c6e39dc756d71f30"
+        },
+        "app/command_move_backwards.c": {
+          "bytes": 3978,
+          "sha256": "de977243760b21a489639c934a095de9e97287d2e9ad1b83d4a7a269526cb4e6"
+        },
+        "app/command_move_backwards.h": {
+          "bytes": 879,
+          "sha256": "54b3179383dbd1d1cdb866e5d045f17ea9481d5cdf5274ebbffcd8350f93e11b"
+        },
+        "app/command_move_forward.c": {
+          "bytes": 2395,
+          "sha256": "9d0c15b39ce97716893b5634f3e693de6a71e6d04641eb791fd53ad6127d1fab"
+        },
+        "app/command_move_forward.h": {
+          "bytes": 792,
+          "sha256": "75d7f190fd24d93d714cb3f5ec3ed4af52ee702fd3af5953febc4414b416b703"
+        },
+        "app/command_trait.c": {
+          "bytes": 4588,
+          "sha256": "765699f3432131ca9ea2f7d2200e1d0e8bf38d1fa19c35ced154fd5fd3f92263"
+        },
+        "app/command_trait.h": {
+          "bytes": 1255,
+          "sha256": "2908b0b66e1ab881c6d1198852373cfeb0ee13c7964f2b1947b9048b732b6f25"
+        },
+        "app/deep_optional.c": {
+          "bytes": 6883,
+          "sha256": "801cb1e79687934a19cc2490e1b0b1c4698f2e53a28b6177daa403ad0ad40684"
+        },
+        "app/deep_optional.h": {
+          "bytes": 2003,
+          "sha256": "1de94bbefaed54440ba29e4757fa77251c8ee52d0bbe70360f431d4956e282e4"
+        },
+        "app/message.c": {
+          "bytes": 82843,
+          "sha256": "aa6902d480f4647086716924831525a6a4e924e8c863c3c7f4c4a1208f4ae362"
+        },
+        "app/message.h": {
+          "bytes": 16214,
+          "sha256": "6eca6db53d5de219339f57a52b56204fa9eee8b255519e130a1881da564f971a"
+        },
+        "protocol/main/get_user.c": {
+          "bytes": 1740,
+          "sha256": "e6a6fe5d9463a522d45f935aa3a026abbb155719a2436fd743e28fadc75379f8"
+        },
+        "protocol/main/get_user.h": {
+          "bytes": 727,
+          "sha256": "50255a92c849f4df9ac4f59d2321c8b5a7869bdebab7f4ac99fff9d9d5e0241d"
+        },
+        "protocol/main/request_trait.c": {
+          "bytes": 3752,
+          "sha256": "0bf8304d695d31f820b342d27dc66a77acfd00495b3d1bd2a7c5ff6abfc15080"
+        },
+        "protocol/main/request_trait.h": {
+          "bytes": 1222,
+          "sha256": "e2c4268f36bf8c05d3afcad4cd0cd739252bca534e9d0cdefde06dcc78f7e487"
+        },
+        "protocol/main/response_trait.c": {
+          "bytes": 4820,
+          "sha256": "90cf58501cf831cebd7bbc236e04cc2394dd4e4ddd1c76dbcbec4f788443274a"
+        },
+        "protocol/main/response_trait.h": {
+          "bytes": 1372,
+          "sha256": "b5e4324e408f87209e87ca7b1e5bac0ef8b39615c6dd9063adc905289dac2d2b"
+        },
+        "protocol/main/tuple_test.c": {
+          "bytes": 5135,
+          "sha256": "ac0ba22ced86e93d8d01a83a372113080b80b8f0e623b8410a390cb490955bee"
+        },
+        "protocol/main/tuple_test.h": {
+          "bytes": 1207,
+          "sha256": "ed3cc069ad774f6569352d49e8621705884b882b94ddac0b1b12c093c6d92e64"
+        },
+        "protocol/main/user.c": {
+          "bytes": 3207,
+          "sha256": "01a00e2b273280c7c07583a9c74624324901b56ae6b3cb74ff8026adcfb13c6b"
+        },
+        "protocol/main/user.h": {
+          "bytes": 743,
+          "sha256": "ebea5bd3917d9204370c74371f388b69d4ba8055d3580c1a3ee7e94a80cf66b8"
+        },
+        "protocol/main/void.c": {
+          "bytes": 1676,
+          "sha256": "f47e4e9f44f5aacd694fee34d5f4c28d38aea0355049ae161cea728dc2ddf1c6"
+        },
+        "protocol/main/void.h": {
+          "bytes": 682,
+          "sha256": "b7d7f9e0b33c589787a7447fdb12693500e835ffdfefe8b8111c14022a571faa"
+        },
+        "test.c": {
+          "bytes": 59441,
+          "sha256": "e60d695ad17e8004df118641154bb70092004b6f66623c7cb296cede19e26313"
+        }
+      },
+      "actual": {
+        "CMakeLists.txt": {
+          "bytes": 1221,
+          "sha256": "83ac37892e310d7847f6a72d03f6b76515953b465be79fd9c6e39dc756d71f30"
+        },
+        "app/command_move_backwards.c": {
+          "bytes": 3978,
+          "sha256": "de977243760b21a489639c934a095de9e97287d2e9ad1b83d4a7a269526cb4e6"
+        },
+        "app/command_move_backwards.h": {
+          "bytes": 879,
+          "sha256": "54b3179383dbd1d1cdb866e5d045f17ea9481d5cdf5274ebbffcd8350f93e11b"
+        },
+        "app/command_move_forward.c": {
+          "bytes": 2395,
+          "sha256": "9d0c15b39ce97716893b5634f3e693de6a71e6d04641eb791fd53ad6127d1fab"
+        },
+        "app/command_move_forward.h": {
+          "bytes": 792,
+          "sha256": "75d7f190fd24d93d714cb3f5ec3ed4af52ee702fd3af5953febc4414b416b703"
+        },
+        "app/command_trait.c": {
+          "bytes": 4588,
+          "sha256": "765699f3432131ca9ea2f7d2200e1d0e8bf38d1fa19c35ced154fd5fd3f92263"
+        },
+        "app/command_trait.h": {
+          "bytes": 1255,
+          "sha256": "2908b0b66e1ab881c6d1198852373cfeb0ee13c7964f2b1947b9048b732b6f25"
+        },
+        "app/deep_optional.c": {
+          "bytes": 6883,
+          "sha256": "801cb1e79687934a19cc2490e1b0b1c4698f2e53a28b6177daa403ad0ad40684"
+        },
+        "app/deep_optional.h": {
+          "bytes": 2003,
+          "sha256": "1de94bbefaed54440ba29e4757fa77251c8ee52d0bbe70360f431d4956e282e4"
+        },
+        "app/message.c": {
+          "bytes": 82843,
+          "sha256": "aa6902d480f4647086716924831525a6a4e924e8c863c3c7f4c4a1208f4ae362"
+        },
+        "app/message.h": {
+          "bytes": 16214,
+          "sha256": "6eca6db53d5de219339f57a52b56204fa9eee8b255519e130a1881da564f971a"
+        },
+        "protocol/main/get_user.c": {
+          "bytes": 1740,
+          "sha256": "e6a6fe5d9463a522d45f935aa3a026abbb155719a2436fd743e28fadc75379f8"
+        },
+        "protocol/main/get_user.h": {
+          "bytes": 727,
+          "sha256": "50255a92c849f4df9ac4f59d2321c8b5a7869bdebab7f4ac99fff9d9d5e0241d"
+        },
+        "protocol/main/request_trait.c": {
+          "bytes": 3752,
+          "sha256": "0bf8304d695d31f820b342d27dc66a77acfd00495b3d1bd2a7c5ff6abfc15080"
+        },
+        "protocol/main/request_trait.h": {
+          "bytes": 1222,
+          "sha256": "e2c4268f36bf8c05d3afcad4cd0cd739252bca534e9d0cdefde06dcc78f7e487"
+        },
+        "protocol/main/response_trait.c": {
+          "bytes": 4820,
+          "sha256": "90cf58501cf831cebd7bbc236e04cc2394dd4e4ddd1c76dbcbec4f788443274a"
+        },
+        "protocol/main/response_trait.h": {
+          "bytes": 1372,
+          "sha256": "b5e4324e408f87209e87ca7b1e5bac0ef8b39615c6dd9063adc905289dac2d2b"
+        },
+        "protocol/main/tuple_test.c": {
+          "bytes": 5135,
+          "sha256": "ac0ba22ced86e93d8d01a83a372113080b80b8f0e623b8410a390cb490955bee"
+        },
+        "protocol/main/tuple_test.h": {
+          "bytes": 1207,
+          "sha256": "ed3cc069ad774f6569352d49e8621705884b882b94ddac0b1b12c093c6d92e64"
+        },
+        "protocol/main/user.c": {
+          "bytes": 3207,
+          "sha256": "01a00e2b273280c7c07583a9c74624324901b56ae6b3cb74ff8026adcfb13c6b"
+        },
+        "protocol/main/user.h": {
+          "bytes": 743,
+          "sha256": "ebea5bd3917d9204370c74371f388b69d4ba8055d3580c1a3ee7e94a80cf66b8"
+        },
+        "protocol/main/void.c": {
+          "bytes": 1676,
+          "sha256": "f47e4e9f44f5aacd694fee34d5f4c28d38aea0355049ae161cea728dc2ddf1c6"
+        },
+        "protocol/main/void.h": {
+          "bytes": 682,
+          "sha256": "b7d7f9e0b33c589787a7447fdb12693500e835ffdfefe8b8111c14022a571faa"
+        },
+        "test.c": {
+          "bytes": 59441,
+          "sha256": "e60d695ad17e8004df118641154bb70092004b6f66623c7cb296cede19e26313"
+        }
+      },
+      "comparison": {
+        "equal": true,
+        "missing": [],
+        "extra": [],
+        "changed": []
+      }
+    },
+    "cpp17": {
+      "entry": "test/parser/test_schema.jsb",
+      "name": "app",
+      "expected": {
+        "CMakeLists.txt": {
+          "bytes": 639,
+          "sha256": "893c0ab7baa4c6aa5ec4e3121bedb03a1e72818d0dcac6723df8e481831353a0"
+        },
+        "event/Event.cpp": {
+          "bytes": 686,
+          "sha256": "911939b0f3093d126935c0c8ad417ea29bbcaed47dbd479cca35e7d6187a4602"
+        },
+        "event/Event.hpp": {
+          "bytes": 371,
+          "sha256": "526772810c7f88649c791e7ff6f9e9f7d0d147fd844eb1eca22f24bd247b82a2"
+        },
+        "schema_internal_test/internal/ImportMeWithId.cpp": {
+          "bytes": 780,
+          "sha256": "fd143e085e62737ae19a83ecc46e90510ad54c6bda6a85918917201cfd8e3f4d"
+        },
+        "schema_internal_test/internal/ImportMeWithId.hpp": {
+          "bytes": 536,
+          "sha256": "c21745d6d0b31162f1e62e617054b4b3d8d2be208759f3d11952a5ddcf7a315c"
+        },
+        "test/ImportMe.cpp": {
+          "bytes": 696,
+          "sha256": "437af7211af7ac577087df21f46660a1048bb2e9e6b5b0d5286bcdaa3a73af30"
+        },
+        "test/ImportMe.hpp": {
+          "bytes": 365,
+          "sha256": "aef4faed03ed063a6e8231334e72a5bf2f017d4ad631c1214cbc5d4315a5dba8"
+        },
+        "test_schema/AcknowledgeMessage.cpp": {
+          "bytes": 638,
+          "sha256": "14479cb3baea7fdf8d970255d97b2d949ea2872818aec0267683df2010e0252e"
+        },
+        "test_schema/AcknowledgeMessage.hpp": {
+          "bytes": 410,
+          "sha256": "f0477d72767704b1e96fdf288823f8bfa7102ece5ced2e52f06def35d09fdc13"
+        },
+        "test_schema/ImportLocalType.cpp": {
+          "bytes": 648,
+          "sha256": "dcf29f0b808762b0716245c2f8aa6f7a3f604f8d0465b14624be3c0fd2c14763"
+        },
+        "test_schema/ImportLocalType.hpp": {
+          "bytes": 442,
+          "sha256": "4bcb5b668b19f005b3385cddb0436a4003bca78773c22ef15425f9b86691e9bf"
+        },
+        "test_schema/Message.cpp": {
+          "bytes": 909,
+          "sha256": "b55d4c616c649d68a09d5ef2e1e81c656b4a0a070d6b4084b39ade471389b127"
+        },
+        "test_schema/Message.hpp": {
+          "bytes": 435,
+          "sha256": "e7413f3f8d042ecc102d03c2d463d4ca7c434a7e7c6564fbfc84d902375d134c"
+        }
+      },
+      "actual": {
+        "CMakeLists.txt": {
+          "bytes": 639,
+          "sha256": "893c0ab7baa4c6aa5ec4e3121bedb03a1e72818d0dcac6723df8e481831353a0"
+        },
+        "event/Event.cpp": {
+          "bytes": 686,
+          "sha256": "911939b0f3093d126935c0c8ad417ea29bbcaed47dbd479cca35e7d6187a4602"
+        },
+        "event/Event.hpp": {
+          "bytes": 371,
+          "sha256": "526772810c7f88649c791e7ff6f9e9f7d0d147fd844eb1eca22f24bd247b82a2"
+        },
+        "schema_internal_test/internal/ImportMeWithId.cpp": {
+          "bytes": 780,
+          "sha256": "fd143e085e62737ae19a83ecc46e90510ad54c6bda6a85918917201cfd8e3f4d"
+        },
+        "schema_internal_test/internal/ImportMeWithId.hpp": {
+          "bytes": 536,
+          "sha256": "c21745d6d0b31162f1e62e617054b4b3d8d2be208759f3d11952a5ddcf7a315c"
+        },
+        "test/ImportMe.cpp": {
+          "bytes": 696,
+          "sha256": "437af7211af7ac577087df21f46660a1048bb2e9e6b5b0d5286bcdaa3a73af30"
+        },
+        "test/ImportMe.hpp": {
+          "bytes": 365,
+          "sha256": "aef4faed03ed063a6e8231334e72a5bf2f017d4ad631c1214cbc5d4315a5dba8"
+        },
+        "test_schema/AcknowledgeMessage.cpp": {
+          "bytes": 638,
+          "sha256": "14479cb3baea7fdf8d970255d97b2d949ea2872818aec0267683df2010e0252e"
+        },
+        "test_schema/AcknowledgeMessage.hpp": {
+          "bytes": 410,
+          "sha256": "f0477d72767704b1e96fdf288823f8bfa7102ece5ced2e52f06def35d09fdc13"
+        },
+        "test_schema/ImportLocalType.cpp": {
+          "bytes": 648,
+          "sha256": "dcf29f0b808762b0716245c2f8aa6f7a3f604f8d0465b14624be3c0fd2c14763"
+        },
+        "test_schema/ImportLocalType.hpp": {
+          "bytes": 442,
+          "sha256": "4bcb5b668b19f005b3385cddb0436a4003bca78773c22ef15425f9b86691e9bf"
+        },
+        "test_schema/Message.cpp": {
+          "bytes": 909,
+          "sha256": "b55d4c616c649d68a09d5ef2e1e81c656b4a0a070d6b4084b39ade471389b127"
+        },
+        "test_schema/Message.hpp": {
+          "bytes": 435,
+          "sha256": "e7413f3f8d042ecc102d03c2d463d4ca7c434a7e7c6564fbfc84d902375d134c"
+        }
+      },
+      "comparison": {
+        "equal": true,
+        "missing": [],
+        "extra": [],
+        "changed": []
+      }
+    },
+    "kotlin": {
+      "entry": "test/kotlin/src/main",
+      "name": "com.test.app.schema",
+      "expected": {
+        "com/test/app/schema/error/Error.kt": {
+          "bytes": 1578,
+          "sha256": "4402487d27331457e5712757cdd995f7b87a5c2f2308160c4f838f7b5db4b9c1"
+        },
+        "com/test/app/schema/error/ErrorBadRequest.kt": {
+          "bytes": 496,
+          "sha256": "2d818890c3ffb472c33fa7b5e3fa7fe87c7f326f211f2a3a0ff5233fff2dc9ca"
+        },
+        "com/test/app/schema/error/ErrorInternalServerError.kt": {
+          "bytes": 523,
+          "sha256": "6b78c8bf66821c7f83b2d117845e5fb61ddacd9eccece9649a9f2d9e7dcce366"
+        },
+        "com/test/app/schema/error/ErrorNotFound.kt": {
+          "bytes": 494,
+          "sha256": "d42ed80e43c2bc4eced87f34f16436b53597eddc8bf59d2b421a8dcb1e047a84"
+        },
+        "com/test/app/schema/internal/Deserializer.kt": {
+          "bytes": 283,
+          "sha256": "33ba08dfe01ef324487866200799655a6abf17e28ac30f3d7cc02da7bc85b719"
+        },
+        "com/test/app/schema/internal/Encodable.kt": {
+          "bytes": 161,
+          "sha256": "fd81aa53413ab142bc3362a71b670075bae5f8b8c476e3294438dc32fd83029a"
+        },
+        "com/test/app/schema/internal/Serializer.kt": {
+          "bytes": 315,
+          "sha256": "239cd6cdac48fdd7e3aad625402d6f26f98e7ff3191ffa28da081167a7db9839"
+        },
+        "com/test/app/schema/main/Comment.kt": {
+          "bytes": 994,
+          "sha256": "7ae80534d488cf4531a8544a5109a613f9213601f029a447293107f7695ca353"
+        },
+        "com/test/app/schema/main/GetCurrentUser.kt": {
+          "bytes": 628,
+          "sha256": "02ad64f6efb8d60cd9dda918a89c5f87864ae06523a26e91dcc697e8c9df27ae"
+        },
+        "com/test/app/schema/main/User.kt": {
+          "bytes": 1674,
+          "sha256": "aaf1b369e6b2e4be79cdf1af6e91b5c60759082a21dd61b4a6c3f09cd92141a5"
+        },
+        "com/test/app/schema/post/GetPost.kt": {
+          "bytes": 609,
+          "sha256": "2e91da6a125581f222150822f72e9075654de98dcada0fb13424d2077cfc61e4"
+        },
+        "com/test/app/schema/post/Post.kt": {
+          "bytes": 1390,
+          "sha256": "59cd19cab084ceabd1eb487be2d884103dc31cf7682b429359ab44cd3470ef54"
+        },
+        "com/test/app/schema/post/PostLike.kt": {
+          "bytes": 581,
+          "sha256": "3ed0ae7334ec902fdd619cf9df62f55121ecc23417de33a82e40ee00370ea3c8"
+        },
+        "com/test/app/schema/protocol/ClientMessage.kt": {
+          "bytes": 1757,
+          "sha256": "48bead97ba67336a0acd347ae8c9c555580b1cdbefc97209f14044272f5908e7"
+        },
+        "com/test/app/schema/protocol/ClientMessageEncrypted.kt": {
+          "bytes": 842,
+          "sha256": "6a1a90048c0e0a6858e2e67fbd48a1e9ce9782458c3586e0b1e7a70e88161540"
+        },
+        "com/test/app/schema/protocol/ClientMessageMessagesAcknowledgment.kt": {
+          "bytes": 860,
+          "sha256": "f970259e5ac806d55012456039e247fc5cdd9de1bfbd601a594e5fd0d3ad128a"
+        },
+        "com/test/app/schema/protocol/ClientMessageRequest.kt": {
+          "bytes": 819,
+          "sha256": "526936f22ed5f14c3f3f5a6e1911460a37692390621136c1bf55aaf05bfeb851"
+        },
+        "com/test/app/schema/protocol/ServerMessage.kt": {
+          "bytes": 1415,
+          "sha256": "5150360a6150080bcdc8fbb5cc2c9fac3313fee29321435b65f2c25e90b40257"
+        },
+        "com/test/app/schema/protocol/ServerMessageRequestFailureResponse.kt": {
+          "bytes": 860,
+          "sha256": "8ece03aafe307ec654ab11c1a470668a3698136db794a3c5d6d8f16033ddc397"
+        },
+        "com/test/app/schema/protocol/ServerMessageRequestSuccessResponse.kt": {
+          "bytes": 866,
+          "sha256": "210dc57c06d1f3ac714dd4bfd58700c4d9a051f81064f650cf88fd9e2bacc319"
+        },
+        "com/test/app/schema/request/Request.kt": {
+          "bytes": 1137,
+          "sha256": "efcedc6026927cd9116e12fda9d27f4b8b37d157079821bb30a7e662d3e44aae"
+        },
+        "com/test/app/schema/request/RequestResponse.kt": {
+          "bytes": 779,
+          "sha256": "831cadc93e816bef6f7de4d3c1f42ee8e162d564168c824700833085ca63b87f"
+        },
+        "com/test/app/schema/tests/Test.kt": {
+          "bytes": 1229,
+          "sha256": "c06c8d1d92708fc99d89defec447caa742d6458c11e81eb06c5c6b6d10cd1700"
+        },
+        "com/test/app/schema/tests/TestDeepTraitArray1.kt": {
+          "bytes": 1424,
+          "sha256": "b27b4d7d5e6d808a032473535f1a75e5aaa0277cf1cbc9ad6415b30e2fe77e50"
+        },
+        "com/test/app/schema/tests/TestOptionalTraitArray1.kt": {
+          "bytes": 1928,
+          "sha256": "6570f59731168238f67f1596ce5858fd58dbb5e4b7b897e7c005c0736abac127"
+        },
+        "com/test/app/schema/tests/TestTrait.kt": {
+          "bytes": 1249,
+          "sha256": "a6d5730d605174344f0b67a8d6db8ce33ce3f560328c788efbf833c58d23df0c"
+        }
+      },
+      "actual": {
+        "com/test/app/schema/error/Error.kt": {
+          "bytes": 1578,
+          "sha256": "4402487d27331457e5712757cdd995f7b87a5c2f2308160c4f838f7b5db4b9c1"
+        },
+        "com/test/app/schema/error/ErrorBadRequest.kt": {
+          "bytes": 496,
+          "sha256": "2d818890c3ffb472c33fa7b5e3fa7fe87c7f326f211f2a3a0ff5233fff2dc9ca"
+        },
+        "com/test/app/schema/error/ErrorInternalServerError.kt": {
+          "bytes": 523,
+          "sha256": "6b78c8bf66821c7f83b2d117845e5fb61ddacd9eccece9649a9f2d9e7dcce366"
+        },
+        "com/test/app/schema/error/ErrorNotFound.kt": {
+          "bytes": 494,
+          "sha256": "d42ed80e43c2bc4eced87f34f16436b53597eddc8bf59d2b421a8dcb1e047a84"
+        },
+        "com/test/app/schema/internal/Deserializer.kt": {
+          "bytes": 283,
+          "sha256": "33ba08dfe01ef324487866200799655a6abf17e28ac30f3d7cc02da7bc85b719"
+        },
+        "com/test/app/schema/internal/Encodable.kt": {
+          "bytes": 161,
+          "sha256": "fd81aa53413ab142bc3362a71b670075bae5f8b8c476e3294438dc32fd83029a"
+        },
+        "com/test/app/schema/internal/Serializer.kt": {
+          "bytes": 315,
+          "sha256": "239cd6cdac48fdd7e3aad625402d6f26f98e7ff3191ffa28da081167a7db9839"
+        },
+        "com/test/app/schema/main/Comment.kt": {
+          "bytes": 994,
+          "sha256": "7ae80534d488cf4531a8544a5109a613f9213601f029a447293107f7695ca353"
+        },
+        "com/test/app/schema/main/GetCurrentUser.kt": {
+          "bytes": 628,
+          "sha256": "02ad64f6efb8d60cd9dda918a89c5f87864ae06523a26e91dcc697e8c9df27ae"
+        },
+        "com/test/app/schema/main/User.kt": {
+          "bytes": 1674,
+          "sha256": "aaf1b369e6b2e4be79cdf1af6e91b5c60759082a21dd61b4a6c3f09cd92141a5"
+        },
+        "com/test/app/schema/post/GetPost.kt": {
+          "bytes": 609,
+          "sha256": "2e91da6a125581f222150822f72e9075654de98dcada0fb13424d2077cfc61e4"
+        },
+        "com/test/app/schema/post/Post.kt": {
+          "bytes": 1390,
+          "sha256": "59cd19cab084ceabd1eb487be2d884103dc31cf7682b429359ab44cd3470ef54"
+        },
+        "com/test/app/schema/post/PostLike.kt": {
+          "bytes": 581,
+          "sha256": "3ed0ae7334ec902fdd619cf9df62f55121ecc23417de33a82e40ee00370ea3c8"
+        },
+        "com/test/app/schema/protocol/ClientMessage.kt": {
+          "bytes": 1757,
+          "sha256": "48bead97ba67336a0acd347ae8c9c555580b1cdbefc97209f14044272f5908e7"
+        },
+        "com/test/app/schema/protocol/ClientMessageEncrypted.kt": {
+          "bytes": 842,
+          "sha256": "6a1a90048c0e0a6858e2e67fbd48a1e9ce9782458c3586e0b1e7a70e88161540"
+        },
+        "com/test/app/schema/protocol/ClientMessageMessagesAcknowledgment.kt": {
+          "bytes": 860,
+          "sha256": "f970259e5ac806d55012456039e247fc5cdd9de1bfbd601a594e5fd0d3ad128a"
+        },
+        "com/test/app/schema/protocol/ClientMessageRequest.kt": {
+          "bytes": 819,
+          "sha256": "526936f22ed5f14c3f3f5a6e1911460a37692390621136c1bf55aaf05bfeb851"
+        },
+        "com/test/app/schema/protocol/ServerMessage.kt": {
+          "bytes": 1415,
+          "sha256": "5150360a6150080bcdc8fbb5cc2c9fac3313fee29321435b65f2c25e90b40257"
+        },
+        "com/test/app/schema/protocol/ServerMessageRequestFailureResponse.kt": {
+          "bytes": 860,
+          "sha256": "8ece03aafe307ec654ab11c1a470668a3698136db794a3c5d6d8f16033ddc397"
+        },
+        "com/test/app/schema/protocol/ServerMessageRequestSuccessResponse.kt": {
+          "bytes": 866,
+          "sha256": "210dc57c06d1f3ac714dd4bfd58700c4d9a051f81064f650cf88fd9e2bacc319"
+        },
+        "com/test/app/schema/request/Request.kt": {
+          "bytes": 1137,
+          "sha256": "efcedc6026927cd9116e12fda9d27f4b8b37d157079821bb30a7e662d3e44aae"
+        },
+        "com/test/app/schema/request/RequestResponse.kt": {
+          "bytes": 779,
+          "sha256": "831cadc93e816bef6f7de4d3c1f42ee8e162d564168c824700833085ca63b87f"
+        },
+        "com/test/app/schema/tests/Test.kt": {
+          "bytes": 1229,
+          "sha256": "c06c8d1d92708fc99d89defec447caa742d6458c11e81eb06c5c6b6d10cd1700"
+        },
+        "com/test/app/schema/tests/TestDeepTraitArray1.kt": {
+          "bytes": 1424,
+          "sha256": "b27b4d7d5e6d808a032473535f1a75e5aaa0277cf1cbc9ad6415b30e2fe77e50"
+        },
+        "com/test/app/schema/tests/TestOptionalTraitArray1.kt": {
+          "bytes": 1928,
+          "sha256": "6570f59731168238f67f1596ce5858fd58dbb5e4b7b897e7c005c0736abac127"
+        },
+        "com/test/app/schema/tests/TestTrait.kt": {
+          "bytes": 1249,
+          "sha256": "a6d5730d605174344f0b67a8d6db8ce33ce3f560328c788efbf833c58d23df0c"
+        }
+      },
+      "comparison": {
+        "equal": true,
+        "missing": [],
+        "extra": [],
+        "changed": []
+      }
+    }
+  }
+}
