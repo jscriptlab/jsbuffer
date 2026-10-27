@@ -1,0 +1,137 @@
+[
+  {
+    "id": "default",
+    "entry": "schema"
+  },
+  {
+    "id": "indent-zero",
+    "entry": "schema",
+    "flags": ["--indentation-size", "0"]
+  },
+  {
+    "id": "indent-two",
+    "entry": "schema",
+    "flags": ["--indentation-size", "2"]
+  },
+  {
+    "id": "indent-eight",
+    "entry": "schema",
+    "flags": ["--indentation-size", "8"]
+  },
+  {
+    "id": "sort-long",
+    "entry": "schema",
+    "flags": ["--sort-properties"]
+  },
+  {
+    "id": "sort-short",
+    "entry": "schema",
+    "flags": ["-s"]
+  },
+  {
+    "id": "unique-name",
+    "entry": "schema",
+    "flags": ["--unique-name-property-name", "kind"]
+  },
+  {
+    "id": "no-tsconfig",
+    "entry": "schema",
+    "flags": ["--no-ts-config"]
+  },
+  {
+    "id": "extends-parent",
+    "entry": "schema",
+    "flags": ["--extends", "base.json"],
+    "files": {
+      "base.json": "{\"compilerOptions\":{\"target\":\"ES2020\"}}\n"
+    }
+  },
+  {
+    "id": "extends-sibling",
+    "entry": "schema",
+    "flags": ["--extends", "config/base.json"],
+    "files": {
+      "config/base.json": "{\"compilerOptions\":{\"target\":\"ES2020\"}}\n"
+    }
+  },
+  {
+    "id": "extends-same-directory",
+    "entry": "schema",
+    "flags": ["--extends", "output/base.json"],
+    "files": {
+      "output/base.json": "{\"compilerOptions\":{\"target\":\"ES2020\"}}\n"
+    }
+  },
+  {
+    "id": "wire-names",
+    "entry": "WireNames.jsb"
+  },
+  {
+    "id": "scalars",
+    "entry": "scalars"
+  },
+  {
+    "id": "comments",
+    "entry": "comments"
+  },
+  {
+    "id": "external",
+    "entry": "external",
+    "files": {
+      "source/node_modules/shared-fixture/package.json": "{\"name\":\"shared-fixture\",\"version\":\"1.0.0\"}\n",
+      "source/node_modules/shared-fixture/jsbufferconfig.json": "{\"mainFile\":\"schema\",\"outDir\":\"generated\"}\n",
+      "source/node_modules/shared-fixture/schema": "export type Shared { int id; }\n"
+    }
+  },
+  {
+    "id": "namespaced-external",
+    "entry": "namespaced-external",
+    "files": {
+      "source/node_modules/@fixture/shared/package.json": "{\"name\":\"@fixture/shared\",\"version\":\"1.0.0\"}\n",
+      "source/node_modules/@fixture/shared/jsbufferconfig.json": "{\"mainFile\":\"schema\",\"outDir\":\"generated\"}\n",
+      "source/node_modules/@fixture/shared/schema": "export type Shared { int id; }\n"
+    }
+  },
+  {
+    "id": "programmatic-config",
+    "entry": "schema",
+    "api": {
+      "indentationSize": 3,
+      "uniqueNamePropertyName": "kind",
+      "sortProperties": true,
+      "typeScriptConfiguration": {
+        "compilerOptions": {
+          "strict": true,
+          "target": "ES2020"
+        },
+        "include": ["schema.ts"]
+      }
+    }
+  },
+  {
+    "id": "programmatic-no-config",
+    "entry": "schema",
+    "api": {
+      "typeScriptConfiguration": null
+    }
+  },
+  {
+    "id": "external-sorted",
+    "entry": "external",
+    "files": {
+      "source/node_modules/shared-fixture/package.json": "{\"name\":\"shared-fixture\",\"version\":\"1.0.0\"}\n",
+      "source/node_modules/shared-fixture/jsbufferconfig.json": "{\"mainFile\":\"schema\",\"outDir\":\"generated\"}\n",
+      "source/node_modules/shared-fixture/schema": "export type Shared { int id; }\n"
+    },
+    "flags": ["--sort-properties"]
+  },
+  {
+    "id": "programmatic-root",
+    "entry": "schema",
+    "api": {
+      "compilerOptions": {
+        "rootDir": "."
+      }
+    }
+  }
+]

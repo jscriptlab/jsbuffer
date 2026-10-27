@@ -51,7 +51,11 @@
     "test:coverage": "npx c8 npm test",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "npm run build:all && changeset publish"
+    "release": "npm run build:all && changeset publish",
+    "fidelity:setup": "node tools/fidelity/cli.mjs setup",
+    "fidelity:compare": "node tools/fidelity/cli.mjs compare",
+    "fidelity:metadata": "node tools/fidelity/cli.mjs compare --mode metadata",
+    "test:fidelity": "node --test --test-concurrency=1 test/fidelity/*.test.mjs"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.7.0",
