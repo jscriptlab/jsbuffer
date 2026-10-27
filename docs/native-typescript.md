@@ -71,6 +71,16 @@ Existing C99/C++17/Kotlin round-trip and output inventory checks remain separate
 ## Default 16-bit declaration fix and remaining original conflicts
 
 The user approved fixing the missing 16-bit interface declarations upstream.
+The original FileGenerator fix landed on `master` in
+[PR #41](https://github.com/jscriptlab/jsbuffer/pull/41), commit
+`e847642fbb3c3eda18649095f48289e04cbe6242`.
+[PR #42](https://github.com/jscriptlab/jsbuffer/pull/42) brought that fix and its
+strict compilation/runtime regression into `develop` as
+`b8fbaa414010b290b22462b2065be8175a3684e7`, using the existing AVA suite.
+PR #40 inherits this commit from `develop`; the original FileGenerator is no
+longer part of its diff. The earlier
+PR #40 capture under `docs/int16-support-types/2026-10-27/` predates that master
+merge and records the candidate-only implementation.
 Both the original FileGenerator and this backend now always emit readInt16,
 readUint16, writeInt16 and writeUint16. No compatibility option is required.
 Generated 16-bit consumers compile with strict TypeScript and run against the
