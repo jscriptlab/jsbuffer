@@ -76,6 +76,18 @@ npm run fidelity:metadata -- --adapter '["node", "/absolute/path/to/native-adapt
 
 Adapters execute in a temporary working directory, write their complete generated files into `outputDirectory`, and exit nonzero on failure. Use absolute script paths; arguments are passed directly without a shell. Removing the temporary sources checks the input boundary, while the production architecture still requires independent review for hidden source dependencies.
 
+The first native backend increment is available as the `native` adapter preset:
+
+```sh
+npm run fidelity:native -- --scenarios scalars --report /tmp/native-scalars.json
+npm run fidelity:metadata -- --adapter native --scenarios wire-names
+```
+
+Both fixtures match original bytes with sources removed. The native full corpus
+currently has 2 matches and 18 explicit failures; it exits 1. This preset calls
+the metadata backend directly and does not change production CLI dispatch.
+See [native backend scope and original compilation conflicts](../../docs/native-typescript.md).
+
 Reference generation always uses the verified published package. There is no command to rewrite or normalize expected bytes. New fixtures/configurations require an explicit reviewed source change; the old default reference and original package remain fixed. The original self-dependency elsewhere in the repository is unchanged pending VQ-54.
 
 ## Recorded candidate results
