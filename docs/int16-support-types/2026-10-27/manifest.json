@@ -1,0 +1,18 @@
+{
+  "consumer-tests.txt": {
+    "bytes": 1844,
+    "sha256": "38d3f16c667c980c9b78fd573cb680fb7343f471fdb565dd007ebaf012f01442"
+  },
+  "fidelity.tap": {
+    "bytes": 9878,
+    "sha256": "b994b8c108ea8742f78236f8cd94cad082d182ab6f455212710392fb11b70a73"
+  },
+  "full-corpus.json.gz": {
+    "bytes": 9397,
+    "sha256": "16d678286db15d7a5975f29e39b72eaecc1d8a00612d7ab8bfc820e54815fb7f"
+  },
+  "scalars.json.gz": {
+    "bytes": 2122,
+    "sha256": "d79b57cb52c52fcee9064e427ae23d4593dca193541d9ab771e1c992f67098c7"
+  }
+}
