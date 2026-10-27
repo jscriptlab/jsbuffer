@@ -1,0 +1,9 @@
+{
+  "reportedBy": "user",
+  "reportedAt": "2026-10-26",
+  "workflow": "release.yml",
+  "environmentVariable": "NPM_TOKEN",
+  "statement": "Configured release.yml on NPM as the publishing workflow; environment variable is NPM_TOKEN.",
+  "readinessIssue": "VQ-1185",
+  "verificationState": "User-reported configuration; no credential values read, no publish attempted. Verify workflow identity, authentication mode and token availability during publication readiness."
+}

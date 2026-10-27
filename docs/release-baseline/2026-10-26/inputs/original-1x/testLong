@@ -1,0 +1,12 @@
+type A {
+  long a;
+}
+type B {
+  ulong a;
+}
+
+type C {
+  long a;
+  ulong b;
+  int c;
+}

@@ -1,0 +1,117 @@
+
+  ✔ ASTGenerator › ASTGenerator: it should throw UnexpectedToken in case an unexpected token is find in the main iteration
+  ✔ ASTGenerator › ASTGenerator: it should read call statement
+  ✔ ASTGenerator › ASTGenerator: it should handle errors in case of weird token types after import statement
+  ✔ ASTGenerator › ASTGenerator: it should handle errors in case of weird token types export statement
+  ✔ ASTGenerator › ASTGenerator: it should expect { after trait name
+  ✔ ASTGenerator › ASTGenerator: it should throw UnexpectedKeywordName
+  ✔ ASTGenerator › ASTGenerator##expectKeyword: it should call #expectKeyword after export
+  ✔ ASTGenerator › ASTGenerator: it should tokenize files
+  ✔ Codec › Codec#encode: it should support encoding several times in a row
+  ✔ Codec › Codec#decode: it should support decode
+  ✔ Deserializer › Deserializer: it should deserialize max signed long
+  ✔ Deserializer › Deserializer: it should deserialize min signed long
+  ✔ Deserializer › Deserializer: it should deserialize unsigned long
+  ✔ Deserializer › Deserializer: it should throw in case we try to read more than what we have
+  ✔ Deserializer › Deserializer: it should rewind 4 bytes
+  ✔ Deserializer › Deserializer: it should throw if we try to rewind more than what we have
+  - [skip] FileGenerator › it should support bigint<uint64> template 2
+  - [skip] FileGenerator › it should throw if an unknown template is used
+  - [skip] FileGenerator › it should support bigint<int> template 1
+  - [skip] FileGenerator › it should allow importing external schemas in a cascading format
+  - [skip] FileGenerator › it should allow two imports of the same file coming from different files
+  - [skip] FileGenerator › it should be able to test long types
+  - [skip] FileGenerator › it should be able to test deep types
+  - [skip] FileGenerator › it should work with multiple types and complex templates
+  - [skip] FileGenerator › it should compile external types
+  - [skip] FileGenerator › it should test all sorts of generic parameters
+  - [skip] FileGenerator › it should allow importing external schemas when file is being imported from inside a folder
+  - [skip] FileGenerator › it should resolve the following external schemas scenario: C uses A, B; A, B uses Shared
+  - [skip] FileGenerator › it should allow namespaced node_modules external schemas even if schema source files come from inside a folder
+  - [skip] FileGenerator › it should allow namespaced node_modules external schemas
+  - [skip] FileGenerator › it should allow importing external schemas
+  - [skip] FileGenerator › it should not allow importing of unexported traits
+  - [skip] FileGenerator › it should support comments before types
+  - [skip] FileGenerator › it should not allow importing of unexported types
+  - [skip] FileGenerator › it should throw for unsupported templates
+  ✔ Serializer › it should write signed 32-bit integer
+  ✔ Serializer › it should write signed 8-bit integer
+  ✔ Serializer › it should write unsigned 8-bit integer
+  ✔ Serializer › it should write double
+  ✔ Serializer › it should write float
+  ✔ Serializer › it should rewind the serializer
+  ✔ Serializer › it should reallocate internal array buffer
+  ✔ Serializer › it should write unsigned 16-bit integer
+  ✔ Serializer › it should write signed 16-bit integer
+  ✔ Serializer › it should write string
+  ✔ Serializer › it should write string 2
+  ✔ Serializer › it should write null-terminated string
+  ✔ Serializer › it should write sequence of null-terminated strings
+  ✔ Tokenizer › Tokenizer: it should tokenize literal number
+  ✔ Tokenizer › Tokenizer#comments: it should only return the comment tokens in the calls to `comments` method
+  ✔ Tokenizer › Tokenizer#tokens: it deal with leading multi-line comments
+  ✔ Tokenizer › Tokenizer#tokens: it deal with trailing multi-line comments
+  ✔ Tokenizer › Tokenizer#comments: it should return comments from the call
+  ✔ Tokenizer › Tokenizer#tokenize: it should throw a formatted error in case in case an unknown character is found during tokenization
+  ✔ Tokenizer › Tokenizer: it should tokenize files
+  ✔ fromMetadata › --from-metadata and --metadata-only are mutually exclusive (207ms)
+Total of 7555 bytes and 13 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-from-metadata-ZdG5Mv/direct".
+Ignoring test-cases for trait: Command
+Ignoring test-cases for trait: Command
+Total of 417550 bytes and 48 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-from-metadata-no-src-1t5h5I/c".
+  ✔ fromMetadata › --from-metadata generates C99 even when the original .jsb sources are absent (348ms)
+Total of 417550 bytes and 48 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-from-metadata-wRg5gC/direct".
+Total of 7555 bytes and 13 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-from-metadata-ZdG5Mv/from-metadata".
+  ✔ fromMetadata › --from-metadata: C++17 output is byte-identical to generating from source (405ms)
+Ignoring test-cases for trait: Command
+Total of 417550 bytes and 48 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-from-metadata-wRg5gC/from-metadata".
+  ✔ fromMetadata › --from-metadata: C99 output is byte-identical to generating from source (466ms)
+Total of 24891 bytes and 26 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-kotlin-HfbTDJ/kotlin".
+  ✔ kotlin › kotlin: generates a Kotlin source tree from a .jsb schema (102ms)
+Total of 24891 bytes and 26 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-kotlin-from-metadata-JSKhKT/direct".
+Total of 24891 bytes and 26 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-kotlin-from-metadata-JSKhKT/from-metadata".
+  ✔ kotlin › kotlin: --from-metadata output is byte-identical to generating from source (216ms)
+  ✔ schema › it should not include the .jsb extension in the namespace
+  ✔ schema › it should encode Request trait
+  ✔ schema › it should encode map
+  ✔ schema › it should compare types with map template as parameters
+  ✔ schema › it should compare types with set<t> has a param type
+  ✔ schema › it should encode/decode types with set<t> has a param type
+  ✔ schema › it should allow maps using object types even if they're not reliable
+  ✔ schema › it should compare types with complex map template as parameters
+  ✔ schema › it should should keep reference if no changes are requested even if the type is using complex type
+  ✔ schema › it should should change the reference if no changes are requested even if the type is using complex type
+  ✔ schema › it should encode/decode types with complex map template as parameters
+  ✔ schema › it should encode get post by id call
+  ✔ schema › it should encode types with buffers in it
+  ✔ schema › definitions with no params might be initialized with no params
+  ✔ schema › it should encode tuple
+  ✔ schema › it should support tuple inside tuple types
+  ✔ schema › it should change type with tuple reference only when changes are made
+  ✔ schema › it should compare tuples
+  ✔ schema › it should update types with parameters that are using trait types
+  ✔ schema › it should encode types with parameters using long generic type
+  - [skip] stringUtilities › dashCase with special characters
+  ✔ stringUtilities › dashCase simple words
+  ✔ stringUtilities › dashCase with spaces
+  ✔ stringUtilities › dashCase with underscore
+  ✔ stringUtilities › dashCase with multiple caps
+  ✔ stringUtilities › dashCase with mixed cases and spaces
+  ✔ stringUtilities › dashCase with multiple dashes
+  ✔ stringUtilities › that dashCase should not handle special characters
+  ✔ stringUtilities › dashCase with numbers
+  ✔ stringUtilities › dashCase with leading and trailing spaces
+  ✔ stringUtilities › dashCase with non-English characters
+  ✔ stringUtilities › dashCase with camelCase and numbers
+  ✔ stringUtilities › dashCase with all caps
+  ✔ stringUtilities › dashCase empty string
+  ✔ stringUtilities › dashCase string with only special characters
+  ✔ stringUtilities › it should lower first
+  ✔ stringUtilities › it should upper first
+TypeScript files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-ts-fidelity-VA1NLN/unified-explicit --indentation-size 2".
+TypeScript files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-ts-fidelity-VA1NLN/unified-default indentation (flag omitted)".
+  ✔ typescriptFidelity › jsb --generator typescript is byte-identical to the legacy jsbuffer CLI (699ms)
+  ─
+
+  79 tests passed
+  20 tests skipped

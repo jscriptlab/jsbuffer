@@ -1,0 +1,17 @@
+{
+  "command": [
+    "npm",
+    "ci",
+    "--no-audit",
+    "--no-fund"
+  ],
+  "cwd": "/Users/victorqueiroz/Projects/jsbuffer-vq38",
+  "nodeBin": "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin",
+  "startedAt": "2026-10-26T18:22:45.898145+00:00",
+  "elapsedSeconds": 12.976,
+  "timeoutSeconds": 240,
+  "timedOut": false,
+  "exitCode": 0,
+  "status": "passed",
+  "log": "logs/npm-ci.log"
+}

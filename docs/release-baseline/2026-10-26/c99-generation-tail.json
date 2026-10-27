@@ -1,0 +1,18 @@
+{
+  "command": [
+    "node",
+    "node_modules/ts-node/dist/bin.js",
+    "scripts",
+    "--generate-c99-codec",
+    "--clang-format"
+  ],
+  "cwd": "/Users/victorqueiroz/Projects/jsbuffer-vq38",
+  "nodeBin": "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin",
+  "startedAt": "2026-10-26T18:27:44.025481+00:00",
+  "elapsedSeconds": 0.782,
+  "timeoutSeconds": 60,
+  "timedOut": false,
+  "exitCode": 0,
+  "status": "passed",
+  "log": "logs/c99-generation-tail.log"
+}

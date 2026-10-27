@@ -1,0 +1,85 @@
+[
+  {
+    "path": "inputs/original-1x/Request",
+    "sourcePath": "test/Request",
+    "sourceCommit": "b4089d8a86a71a11507756ecb48838487e546033",
+    "bytes": 22,
+    "sha256": "131b26be0e326225faf710a704a830fd651d07442b17f2cd2d40d97d709d9c23"
+  },
+  {
+    "path": "inputs/original-1x/User",
+    "sourcePath": "test/User",
+    "sourceCommit": "b4089d8a86a71a11507756ecb48838487e546033",
+    "bytes": 242,
+    "sha256": "eeb71a99611a368b28c912ea695156ccf0b66c168fb4854faf6dcffe788ddf6f"
+  },
+  {
+    "path": "inputs/original-1x/conversation/SecondUser",
+    "sourcePath": "test/conversation/SecondUser",
+    "sourceCommit": "b4089d8a86a71a11507756ecb48838487e546033",
+    "bytes": 40,
+    "sha256": "0f372b54105410ea281a7fdef81bdcd7e1ed1a09526976e51fc83cc8f6b76270"
+  },
+  {
+    "path": "inputs/original-1x/conversation/index",
+    "sourcePath": "test/conversation/index",
+    "sourceCommit": "b4089d8a86a71a11507756ecb48838487e546033",
+    "bytes": 157,
+    "sha256": "2a0ff7fc09a221f5915c9d1a031eb9bdf1675043e59db5dc2b64e7f734e63abf"
+  },
+  {
+    "path": "inputs/original-1x/message",
+    "sourcePath": "test/message",
+    "sourceCommit": "b4089d8a86a71a11507756ecb48838487e546033",
+    "bytes": 133,
+    "sha256": "c82fb54a400c73f585f08aae8a9c637a9bd09121f79b7a88d47a5ad21c79de5d"
+  },
+  {
+    "path": "inputs/original-1x/schema",
+    "sourcePath": "test/schema",
+    "sourceCommit": "b4089d8a86a71a11507756ecb48838487e546033",
+    "bytes": 1903,
+    "sha256": "9ee4a19f42df92c8ccbc2bd35b0c37eda1f73765a2311047433029e4f5ff8b4e"
+  },
+  {
+    "path": "inputs/original-1x/testLong",
+    "sourcePath": "test/testLong",
+    "sourceCommit": "b4089d8a86a71a11507756ecb48838487e546033",
+    "bytes": 85,
+    "sha256": "2ca03bbdd542d72bbc091a2e59002aba859358045beb8f9b38e3aa49f6bb3edc"
+  },
+  {
+    "path": "inputs/original-1x/testTraitOnParam",
+    "sourcePath": "test/testTraitOnParam",
+    "sourceCommit": "b4089d8a86a71a11507756ecb48838487e546033",
+    "bytes": 117,
+    "sha256": "b6513411dcc07ca593fbd9ec6d127a36b05f6e204dd3c663057034a7f3ad7220"
+  },
+  {
+    "path": "inputs/original-1x/testTraitOnParamTrait",
+    "sourcePath": "test/testTraitOnParamTrait",
+    "sourceCommit": "b4089d8a86a71a11507756ecb48838487e546033",
+    "bytes": 93,
+    "sha256": "bb9eb466f2809a435145ed4ef706b39359048bf7c2f609c1ba2111dd6baa32e0"
+  },
+  {
+    "path": "inputs/original-1x/testUpdateFunction",
+    "sourcePath": "test/testUpdateFunction",
+    "sourceCommit": "b4089d8a86a71a11507756ecb48838487e546033",
+    "bytes": 158,
+    "sha256": "0ab9927450d7c51ad513208c4419db85656e6bf5023cc0d834631bea7655d320"
+  },
+  {
+    "path": "inputs/original-1x/tupleTest2",
+    "sourcePath": "test/tupleTest2",
+    "sourceCommit": "b4089d8a86a71a11507756ecb48838487e546033",
+    "bytes": 457,
+    "sha256": "730fb24d447ce4ca075b4acfcf2f3c61a6768da7dfa69178bf8191b054754adc"
+  },
+  {
+    "path": "inputs/WireNames.jsb",
+    "origin": "Authored bounded naming probe for VQ-38",
+    "bytes": 108,
+    "sha256": "505e5300d67f6ce082ffa86d9eb4fef3b2eb3e80ac14f82d32df64b13e4f0215"
+  }
+]

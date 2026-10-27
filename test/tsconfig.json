@@ -9,6 +9,7 @@
     "types": ["node"]
   },
   "references": [
+    { "path": "../scripts" },
     { "path": "../helpers" },
     { "path": "../src/parser" },
     { "path": "../src/configuration" },

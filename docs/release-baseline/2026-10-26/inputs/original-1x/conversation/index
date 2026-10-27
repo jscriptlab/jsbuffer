@@ -1,0 +1,9 @@
+import {User} from "./SecondUser";
+
+export type Conversation  {
+  int id;
+  User user;
+}
+export type Conversations {
+  vector<Conversation> conversations;
+}

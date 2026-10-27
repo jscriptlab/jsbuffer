@@ -1,0 +1,194 @@
+src/generators/typescript/FileGeneratorTypeScript.ts(2,16): error TS2307: Cannot find module 'fs' or its corresponding type declarations.
+src/generators/typescript/FileGeneratorTypeScript.ts(3,18): error TS2307: Cannot find module 'path' or its corresponding type declarations.
+src/generators/typescript/FileGeneratorTypeScript.ts(193,9): error TS6133: '#updateMetadataObjects' is declared but its value is never read.
+src/generators/typescript/FileGeneratorTypeScript.ts(196,14): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(197,14): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(198,14): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(199,16): error TS2339: Property '#metadataObjects' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(200,18): error TS2339: Property '#getMetadataFromCallOrTypeDefinition' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(206,9): error TS6133: '#importTraitDependencies' is declared but its value is never read.
+src/generators/typescript/FileGeneratorTypeScript.ts(209,14): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(210,30): error TS2339: Property '#traits' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(216,20): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(224,9): error TS6133: '#iterateFileGenerators' is declared but its value is never read.
+src/generators/typescript/FileGeneratorTypeScript.ts(231,9): error TS6133: '#processExternalSchemaImports' is declared but its value is never read.
+src/generators/typescript/FileGeneratorTypeScript.ts(231,45): error TS2304: Cannot find name 'ASTGeneratorOutputNode'.
+src/generators/typescript/FileGeneratorTypeScript.ts(242,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(260,17): error TS2345: Argument of type '{ path: any; }' is not assignable to parameter of type 'readonly IFileMetadata[]'.
+  Object literal may only specify known properties, and 'path' does not exist in type 'readonly IFileMetadata[]'.
+src/generators/typescript/FileGeneratorTypeScript.ts(342,23): error TS2304: Cannot find name 'ASTGeneratorOutputNode'.
+src/generators/typescript/FileGeneratorTypeScript.ts(343,29): error TS2551: Property '#nodes' does not exist on type 'FileGeneratorTypeScript'. Did you mean '#node'?
+src/generators/typescript/FileGeneratorTypeScript.ts(346,14): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(349,14): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(350,14): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(351,14): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(352,14): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(360,3): error TS6133: '#updateImportsBasedOnUsage' is declared but its value is never read.
+src/generators/typescript/FileGeneratorTypeScript.ts(360,36): error TS2304: Cannot find name 'ASTGeneratorOutputNode'.
+src/generators/typescript/FileGeneratorTypeScript.ts(362,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(365,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(367,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(368,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(383,25): error TS2304: Cannot find name 'IExternalModule'.
+src/generators/typescript/FileGeneratorTypeScript.ts(390,14): error TS2551: Property '#file' does not exist on type 'FileGeneratorTypeScript'. Did you mean '#files'?
+src/generators/typescript/FileGeneratorTypeScript.ts(403,25): error TS2304: Cannot find name 'IConfiguration'.
+src/generators/typescript/FileGeneratorTypeScript.ts(421,50): error TS2551: Property '#file' does not exist on type 'FileGeneratorTypeScript'. Did you mean '#files'?
+src/generators/typescript/FileGeneratorTypeScript.ts(440,9): error TS6133: '#updateOriginalImportsAndSetDefinitions' is declared but its value is never read.
+src/generators/typescript/FileGeneratorTypeScript.ts(440,55): error TS2304: Cannot find name 'ASTGeneratorOutputNode'.
+src/generators/typescript/FileGeneratorTypeScript.ts(442,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(445,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(465,15): error TS2345: Argument of type '{ path: string; }' is not assignable to parameter of type 'readonly IFileMetadata[]'.
+  Object literal may only specify known properties, and 'path' does not exist in type 'readonly IFileMetadata[]'.
+src/generators/typescript/FileGeneratorTypeScript.ts(492,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(493,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(494,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(495,14): error TS2339: Property '#definitions' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(503,3): error TS6133: '#fillTraits' is declared but its value is never read.
+src/generators/typescript/FileGeneratorTypeScript.ts(504,26): error TS2339: Property '#definitions' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(507,14): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(509,14): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(510,14): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(515,39): error TS2339: Property '#traits' does not exist on type 'any'.
+src/generators/typescript/FileGeneratorTypeScript.ts(521,29): error TS2339: Property '#traits' does not exist on type 'any'.
+src/generators/typescript/FileGeneratorTypeScript.ts(533,9): error TS6133: '#generateFiles' is declared but its value is never read.
+src/generators/typescript/FileGeneratorTypeScript.ts(534,29): error TS2304: Cannot find name 'IOutputFile'.
+src/generators/typescript/FileGeneratorTypeScript.ts(543,50): error TS2551: Property '#file' does not exist on type 'FileGeneratorTypeScript'. Did you mean '#files'?
+src/generators/typescript/FileGeneratorTypeScript.ts(549,15): error TS2304: Cannot find name 'getMetadataFileName'.
+src/generators/typescript/FileGeneratorTypeScript.ts(551,27): error TS2339: Property '#metadataObjects' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(553,19): error TS18046: 'a' is of type 'unknown'.
+src/generators/typescript/FileGeneratorTypeScript.ts(558,31): error TS2339: Property '#metadataObjects' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(676,14): error TS2551: Property '#file' does not exist on type 'FileGeneratorTypeScript'. Did you mean '#files'?
+src/generators/typescript/FileGeneratorTypeScript.ts(686,19): error TS2304: Cannot find name 'enforceLocalImport'.
+src/generators/typescript/FileGeneratorTypeScript.ts(688,46): error TS2551: Property '#file' does not exist on type 'FileGeneratorTypeScript'. Did you mean '#files'?
+src/generators/typescript/FileGeneratorTypeScript.ts(696,26): error TS2339: Property '#imports' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(751,6): error TS2304: Cannot find name 'IOutputFile'.
+src/generators/typescript/FileGeneratorTypeScript.ts(752,27): error TS2304: Cannot find name 'JavaScriptObjectStringify'.
+src/generators/typescript/FileGeneratorTypeScript.ts(765,25): error TS2304: Cannot find name 'IOutputFile'.
+src/generators/typescript/FileGeneratorTypeScript.ts(845,9): error TS6133: '#setExportsAndValidateImports' is declared but its value is never read.
+src/generators/typescript/FileGeneratorTypeScript.ts(845,45): error TS2304: Cannot find name 'ASTGeneratorOutputNode'.
+src/generators/typescript/FileGeneratorTypeScript.ts(847,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(848,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(849,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(851,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(856,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(863,21): error TS2304: Cannot find name 'ExceptionInternalError'.
+src/generators/typescript/FileGeneratorTypeScript.ts(870,19): error TS2304: Cannot find name 'ASTNodePreprocessingFailure'.
+src/generators/typescript/FileGeneratorTypeScript.ts(895,17): error TS2345: Argument of type 'IMetadataParam' is not assignable to parameter of type 'MetadataParamType'.
+  Property 'importPath' is missing in type 'IMetadataParam' but required in type '{ type: "externalModuleType"; name: string; importPath: string; position: INodePosition; }'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1072,23): error TS2304: Cannot find name 'UnsupportedTemplate'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1072,43): error TS2304: Cannot find name 'expression'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1091,42): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1092,35): error TS2339: Property 'fileGenerator' does not exist on type 'IMetadataExternalTypeParamTypeDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1116,26): error TS2551: Property 'value' does not exist on type 'string'. Did you mean 'valueOf'?
+src/generators/typescript/FileGeneratorTypeScript.ts(1118,49): error TS2339: Property 'typeExpression' does not exist on type 'IMetadataParam'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1131,56): error TS2304: Cannot find name 'ResolvedType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1177,19): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/generators/typescript/FileGeneratorTypeScript.ts(1185,12): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1208,19): error TS2339: Property 'typeExpression' does not exist on type 'IMetadataParam'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1294,68): error TS2551: Property 'value' does not exist on type 'string'. Did you mean 'valueOf'?
+src/generators/typescript/FileGeneratorTypeScript.ts(1298,34): error TS2339: Property 'params' does not exist on type 'Metadata'.
+  Property 'params' does not exist on type 'IMetadataTraitDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1325,11): error TS2304: Cannot find name 'INodeTraitDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1326,12): error TS2304: Cannot find name 'ResolvedType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1350,12): error TS2304: Cannot find name 'ResolvedType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1393,32): error TS2304: Cannot find name 'integerRangeFromBits'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1397,31): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1434,23): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1502,29): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1509,30): error TS2304: Cannot find name 'integerRangeFromBits'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1536,17): error TS2304: Cannot find name 'INodeExportStatement'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1538,14): error TS2551: Property '#exports' does not exist on type 'FileGeneratorTypeScript'. Did you mean '#export'?
+src/generators/typescript/FileGeneratorTypeScript.ts(1539,17): error TS2304: Cannot find name 'DuplicateExport'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1541,10): error TS2551: Property '#exports' does not exist on type 'FileGeneratorTypeScript'. Did you mean '#export'?
+src/generators/typescript/FileGeneratorTypeScript.ts(1544,21): error TS2304: Cannot find name 'NodeTypeExpression'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1554,19): error TS2304: Cannot find name 'ResolvedType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1599,48): error TS7006: Parameter 't' implicitly has an 'any' type.
+src/generators/typescript/FileGeneratorTypeScript.ts(1622,21): error TS2304: Cannot find name 'UnhandledResolvedType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1632,42): error TS2304: Cannot find name 'NodeTypeExpression'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1632,63): error TS2304: Cannot find name 'ResolvedType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1634,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1640,60): error TS7006: Parameter 't' implicitly has an 'any' type.
+src/generators/typescript/FileGeneratorTypeScript.ts(1647,25): error TS2304: Cannot find name 'InvalidTemplateArgumentCount'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1658,25): error TS2304: Cannot find name 'InvalidTemplateArgumentCount'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1676,25): error TS2304: Cannot find name 'InvalidTemplateArgumentCount'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1686,40): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1697,23): error TS2304: Cannot find name 'UnsupportedTemplate'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1699,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1728,12): error TS2339: Property '#definitions' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1732,17): error TS2304: Cannot find name 'UnsupportedTypeExpression'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1745,26): error TS2339: Property '#imports' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1758,11): error TS2304: Cannot find name 'INodeCallDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1758,33): error TS2304: Cannot find name 'INodeTypeDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1761,23): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1763,12): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1789,12): error TS2304: Cannot find name 'getTypeDefinitionOrCallDefinitionNamePropertyValue'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1791,32): error TS2551: Property '#file' does not exist on type 'FileGeneratorTypeScript'. Did you mean '#files'?
+src/generators/typescript/FileGeneratorTypeScript.ts(1794,44): error TS2304: Cannot find name 'ResolvedType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1798,18): error TS2339: Property '#definitions' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1799,18): error TS2551: Property '#exports' does not exist on type 'FileGeneratorTypeScript'. Did you mean '#export'?
+src/generators/typescript/FileGeneratorTypeScript.ts(1800,31): error TS2339: Property '#exports' does not exist on type 'any'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1802,19): error TS2304: Cannot find name 'TypeExpressionNotExported'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1807,17): error TS2304: Cannot find name 'UnsupportedGenericExpression'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1812,12): error TS2304: Cannot find name 'INodeTraitDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1813,11): error TS2304: Cannot find name 'ResolvedType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1817,17): error TS2304: Cannot find name 'UnexpectedTraitOutputNodeCount'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1825,16): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1836,12): error TS2304: Cannot find name 'INodeTraitDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1837,11): error TS2304: Cannot find name 'ResolvedType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1839,10): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1861,22): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1897,58): error TS2304: Cannot find name 'ResolvedType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1903,34): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1915,12): error TS2304: Cannot find name 'INodeTraitDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1916,11): error TS2304: Cannot find name 'ResolvedType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1967,12): error TS2304: Cannot find name 'INodeTraitDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1968,11): error TS2304: Cannot find name 'ResolvedType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1973,10): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1979,26): error TS2304: Cannot find name 'getDecodeFunctionName'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1993,42): error TS2304: Cannot find name 'getDecodeFunctionName'.
+src/generators/typescript/FileGeneratorTypeScript.ts(1998,22): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2021,10): error TS2304: Cannot find name 'NodeTypeExpression'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2175,21): error TS2304: Cannot find name 'UnsupportedTemplate'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2178,43): error TS2339: Property '#exports' does not exist on type 'any'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2180,19): error TS2304: Cannot find name 'TypeNotFound'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2184,41): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2190,41): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2204,10): error TS2304: Cannot find name 'NodeTypeExpression'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2392,21): error TS2304: Cannot find name 'UnsupportedTemplate'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2406,34): error TS2304: Cannot find name 'getDecodeFunctionName'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2419,37): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2420,19): error TS2304: Cannot find name 'getDecodeFunctionName'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2432,11): error TS2304: Cannot find name 'INodeTraitDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2432,34): error TS2304: Cannot find name 'INodeCallDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2432,56): error TS2304: Cannot find name 'INodeTypeDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2435,35): error TS2551: Property '#file' does not exist on type 'FileGeneratorTypeScript'. Did you mean '#files'?
+src/generators/typescript/FileGeneratorTypeScript.ts(2437,23): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2450,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2451,12): error TS2304: Cannot find name 'NodeType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2455,19): error TS7006: Parameter 'p' implicitly has an 'any' type.
+src/generators/typescript/FileGeneratorTypeScript.ts(2474,11): error TS2304: Cannot find name 'INodeTraitDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2474,34): error TS2304: Cannot find name 'INodeCallDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2474,56): error TS2304: Cannot find name 'INodeTypeDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2476,15): error TS2304: Cannot find name 'crc'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2483,10): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2498,65): error TS2551: Property 'value' does not exist on type 'string'. Did you mean 'valueOf'?
+src/generators/typescript/FileGeneratorTypeScript.ts(2500,63): error TS2551: Property 'value' does not exist on type 'string'. Did you mean 'valueOf'?
+src/generators/typescript/FileGeneratorTypeScript.ts(2502,15): error TS2339: Property 'typeExpression' does not exist on type 'IMetadataParam'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2519,11): error TS2304: Cannot find name 'INodeCallDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2519,33): error TS2304: Cannot find name 'INodeTypeDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2522,10): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2528,26): error TS2304: Cannot find name 'getDecodeFunctionName'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2579,11): error TS2304: Cannot find name 'INodeCallDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2579,33): error TS2304: Cannot find name 'INodeTypeDefinition'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2627,58): error TS2339: Property 'typeExpression' does not exist on type 'IMetadataParam'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2629,19): error TS2551: Property 'value' does not exist on type 'string'. Did you mean 'valueOf'?
+src/generators/typescript/FileGeneratorTypeScript.ts(2636,37): error TS2304: Cannot find name 'ResolvedType'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2662,12): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2665,10): error TS2339: Property '#import' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2670,3): error TS6133: '#node' is declared but its value is never read.
+src/generators/typescript/FileGeneratorTypeScript.ts(2671,23): error TS2551: Property '#nodes' does not exist on type 'FileGeneratorTypeScript'. Did you mean '#node'?
+src/generators/typescript/FileGeneratorTypeScript.ts(2671,35): error TS2339: Property '#offset' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2677,3): error TS6133: '#eof' is declared but its value is never read.
+src/generators/typescript/FileGeneratorTypeScript.ts(2678,17): error TS2339: Property '#offset' does not exist on type 'FileGeneratorTypeScript'.
+src/generators/typescript/FileGeneratorTypeScript.ts(2678,34): error TS2551: Property '#nodes' does not exist on type 'FileGeneratorTypeScript'. Did you mean '#node'?
+src/generators/typescript/FileGeneratorTypeScript.ts(355,11): error TS2578: Unused '@ts-expect-error' directive.

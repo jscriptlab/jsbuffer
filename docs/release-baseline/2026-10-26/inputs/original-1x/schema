@@ -1,0 +1,118 @@
+import { User } from "./User";
+import { Conversations } from "./conversation/index";
+import "./message";
+import { Request } from "./Request";
+import "./tupleTest2";
+import "./testLong";
+import "./testUpdateFunction";
+import "./testTraitOnParam";
+
+type testMap{
+  map<string,string> a;
+}
+
+export type testBigInt {
+  bigint<2000> beforeA;
+  bigint<1024> a;
+  bigint<512> b;
+  bigint<256> c;
+  bigint<128> d;
+  bigint<64> e;
+  bigint<32> f;
+}
+
+type testMap2 {
+  map<optional<string>,string> a;
+  map<optional<string>,tuple<string,map<int,int>>> b;
+}
+
+type testMap3 {
+  map<testMap2,string> a;
+}
+
+type testSet {
+  set<string> a;
+  set<int> b;
+}
+
+type testSet2 {
+  set<string> a;
+  set<map<string,string>> b;
+  set<tuple<int,int>> c;
+}
+
+type Void {
+
+}
+
+type msg {
+  bytes data;
+}
+
+trait Result {}
+
+type Users : Result {
+  vector<User> users;
+}
+
+export call GetUserById : Request => Users {
+  uint32 userId;
+}
+
+type Post {
+  int id;
+}
+
+type Posts : Result {
+  vector<Post> posts;
+}
+
+export call GetPostById : Request => Posts {
+  uint32 postId;
+}
+
+export call GetConversations : Request => Conversations {}
+
+type Coordinates {
+  double latitude;
+  double longitude;
+}
+
+type ShouldSupportSeveralSequentialVectorParams{
+  vector<int> a;
+  vector<double> b;
+  vector<string> c;
+  vector<float> d;
+  vector<uint32> e;
+  vector<optional<vector<uint32>>> f;
+  tuple<int,float,double,vector<uint32>,optional<string>> g;
+}
+
+type simpleTupleTest {
+  tuple<int,float,double,vector<uint32>,optional<string>> a;
+  vector<tuple<int,float,double,vector<uint32>,optional<string>>> b;
+}
+
+type emptyNode {}
+
+
+type user {
+  int id;
+  string name;
+}
+
+type supportNullTerminatedString{
+  null_terminated_string value;
+}
+
+type nullTerminatedStringList {
+  vector<null_terminated_string> value;
+}
+
+type normalStringList {
+  vector<string> value;
+}
+
+type boolAndTuple {
+  tuple<bool, bool, tuple<bool,bool>> sorryIJustLoveTuples;
+}

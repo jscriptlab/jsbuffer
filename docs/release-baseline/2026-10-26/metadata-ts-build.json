@@ -1,0 +1,18 @@
+{
+  "command": [
+    "node",
+    "node_modules/typescript/bin/tsc",
+    "-b",
+    "src/generators/typescript",
+    "--force"
+  ],
+  "cwd": "/Users/victorqueiroz/Projects/jsbuffer-vq38",
+  "nodeBin": "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin",
+  "startedAt": "2026-10-26T18:28:48.340695+00:00",
+  "elapsedSeconds": 1.163,
+  "timeoutSeconds": 120,
+  "timedOut": false,
+  "exitCode": 2,
+  "status": "failed",
+  "log": "logs/metadata-ts-build.log"
+}

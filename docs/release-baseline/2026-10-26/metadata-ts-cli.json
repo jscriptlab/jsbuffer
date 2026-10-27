@@ -1,0 +1,21 @@
+{
+  "command": [
+    "node",
+    "cli/jsb.js",
+    "--from-metadata",
+    "test/generated/metadata/cpp",
+    "--generator",
+    "typescript",
+    "-o",
+    ".audit-vq38/ts-metadata-output"
+  ],
+  "cwd": "/Users/victorqueiroz/Projects/jsbuffer-vq38",
+  "nodeBin": "/Users/victorqueiroz/Projects/jsbuffer-vq38/.audit-vq38/toolchains/node-v20.17.0-darwin-arm64/bin",
+  "startedAt": "2026-10-26T18:31:08.953149+00:00",
+  "elapsedSeconds": 0.521,
+  "timeoutSeconds": 30,
+  "timedOut": false,
+  "exitCode": 1,
+  "status": "failed",
+  "log": "logs/metadata-ts-cli.log"
+}

@@ -1,0 +1,9 @@
+{
+  "version": "20.17.0",
+  "platform": "darwin-arm64",
+  "tarballUrl": "https://nodejs.org/dist/v20.17.0/node-v20.17.0-darwin-arm64.tar.xz",
+  "checksumUrl": "https://nodejs.org/dist/v20.17.0/SHASUMS256.txt",
+  "sha256": "c35696d723c9802c6d074abcdd6dc58ac338e1bb2c5692edcbbb2c6dc8d23918",
+  "bytes": 21724716,
+  "checksumVerified": true
+}
