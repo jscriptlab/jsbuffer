@@ -617,7 +617,7 @@ export default class Parser extends CodeStream {
       if ((reason as NodeJS.ErrnoException).code !== 'ENOENT') throw reason;
       directory = path.dirname(start);
     }
-    while (true) {
+    for (;;) {
       const candidate = path.join(directory, name);
       try {
         await fs.promises.access(candidate);

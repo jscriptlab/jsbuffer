@@ -446,7 +446,7 @@ export function validateFileMetadata(
     names.add(item['name']);
     requireValue(typeof item['exported'] === 'boolean', p, 'missing exported');
     position(item['position'], `${p}/position`);
-    let params: string[] = [];
+    const params: string[] = [];
     if (item['kind'] === 'trait') {
       array(item['nodes'], `${p}/nodes`);
       item['nodes'].forEach((type, j) => validateType(type, `${p}/nodes/${j}`));
