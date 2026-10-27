@@ -4,6 +4,12 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
+import {
+  correctedProfile,
+  correctedFile,
+  declarationCorrections,
+  correctInt16Interfaces
+} from './reference-profile.mjs';
 
 export const root = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -139,8 +145,11 @@ export async function oracleIdentity() {
 
 export async function prepareOracle({
   cache = path.join(root, '.cache/fidelity-oracle'),
-  tarball
+  tarball,
+  profile = 'int16-interfaces'
 } = {}) {
+  if (!['published', 'int16-interfaces'].includes(profile))
+    throw new Error('Unknown reference profile: ' + profile);
   cache = path.resolve(cache);
   for (const entry of await json(
     path.join(baseline, 'input-provenance.json')
@@ -214,7 +223,65 @@ export async function prepareOracle({
       'Installed original package files differ from the acquired published artifact'
     );
   }
-  return { directory: packageDirectory, pin, install };
+  if (profile === 'published')
+    return {
+      directory: packageDirectory,
+      publishedDirectory: packageDirectory,
+      pin: { ...pin, outputProfile: 'published' },
+      install
+    };
+  const correctedDirectory = path.join(
+    directory,
+    'node_modules/jsbuffer-int16-reference'
+  );
+  await fs.rm(correctedDirectory, { recursive: true, force: true });
+  await fs.cp(packageDirectory, correctedDirectory, { recursive: true });
+  const originalSource = installed.get(correctedFile);
+  const correctedSource = Buffer.from(
+    correctInt16Interfaces(originalSource.toString('utf8'))
+  );
+  await fs.writeFile(
+    path.join(correctedDirectory, correctedFile),
+    correctedSource
+  );
+  const correctedFiles = new Map(
+    [...(await readTree(correctedDirectory))].filter(
+      ([name]) => !name.startsWith('node_modules/')
+    )
+  );
+  if (
+    correctedFiles.size !== names.length ||
+    names.some(
+      (name) =>
+        !correctedFiles.has(name) ||
+        sha256(correctedFiles.get(name)) !==
+          (name === correctedFile
+            ? sha256(correctedSource)
+            : published.files[name].sha256)
+    )
+  )
+    throw new Error(
+      'Corrected reference changed files outside the approved declaration patch'
+    );
+  return {
+    directory: correctedDirectory,
+    publishedDirectory: packageDirectory,
+    pin: {
+      ...pin,
+      outputProfile: correctedProfile,
+      correction: {
+        file: correctedFile,
+        patch: 'tools/fidelity/reference-profile.mjs',
+        patchSha256: sha256(
+          await fs.readFile(new URL('./reference-profile.mjs', import.meta.url))
+        ),
+        originalSourceSha256: sha256(originalSource),
+        correctedSourceSha256: sha256(correctedSource),
+        declarations: declarationCorrections.map(([, added]) => added)
+      }
+    },
+    install
+  };
 }
 
 export async function scenarios() {

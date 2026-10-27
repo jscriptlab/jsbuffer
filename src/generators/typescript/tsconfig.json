@@ -1,8 +1,10 @@
 {
   "extends": "../../../tsconfig.base.json",
-  "include": ["FileGeneratorTypeScript.ts", "types.ts", "fileGeneratorUtilities.ts"],
-  "references": [
-    { "path": "../../parser" },
-    { "path": "../../../code-generator" }
-  ]
+  "include": [
+    "FileGeneratorTypeScript.ts",
+    "types.ts",
+    "fileGeneratorUtilities.ts",
+    "rendering.ts"
+  ],
+  "references": [{ "path": "../../parser" }, { "path": "../../core" }]
 }

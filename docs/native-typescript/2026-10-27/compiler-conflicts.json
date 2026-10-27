@@ -1,0 +1,50 @@
+{
+  "typescript": "5.2.2",
+  "settings": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "diagnostics": [
+    {
+      "code": 2551,
+      "file": "scalars.ts",
+      "start": 5792,
+      "message": "Property 'writeInt16' does not exist on type 'ISerializer'. Did you mean 'writeUint8'?"
+    },
+    {
+      "code": 2551,
+      "file": "scalars.ts",
+      "start": 5908,
+      "message": "Property 'writeUint16' does not exist on type 'ISerializer'. Did you mean 'writeUint8'?"
+    },
+    {
+      "code": 2339,
+      "file": "scalars.ts",
+      "start": 7941,
+      "message": "Property 'readInt16' does not exist on type 'IDeserializer'."
+    },
+    {
+      "code": 2551,
+      "file": "scalars.ts",
+      "start": 8025,
+      "message": "Property 'readUint16' does not exist on type 'IDeserializer'. Did you mean 'readUint8'?"
+    },
+    {
+      "code": 2454,
+      "file": "scalars.ts",
+      "start": 8948,
+      "message": "Variable 'signed8' is used before being assigned."
+    },
+    {
+      "code": 2454,
+      "file": "scalars.ts",
+      "start": 8965,
+      "message": "Variable 'unsigned8' is used before being assigned."
+    }
+  ],
+  "nativeMatchesOriginal": true
+}

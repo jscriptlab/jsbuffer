@@ -1,10 +1,10 @@
 import JSBI from 'jsbi';
 import { IMetadataTypeDefinition, Metadata } from '../../parser/types/metadata';
-import {
-  camelCase,
-  dashCase,
-  upperFirst
-} from '../../../code-generator/stringUtilities';
+import { originalGlobalName } from '../../parser/metadataContract';
+
+function upperFirst(value: string) {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
 
 export function getEncodeFunctionName(node: Metadata) {
   switch (node.kind) {
@@ -30,12 +30,7 @@ export function getTypeDefinitionOrCallDefinitionNamePropertyValue(
   node: Metadata,
   file: string
 ) {
-  return `${file
-    // Remove the .jsb extension only if it is at the end of the string
-    .replace(/\.jsb$/, '')
-    .split('/')
-    .map(dashCase)
-    .join('.')}.${node.name}`;
+  return originalGlobalName(file, node.name);
 }
 
 export function getCompareFunctionName(node: Metadata) {
@@ -119,5 +114,5 @@ export function getTypeInputParamsInterfaceName(value: Metadata) {
 }
 
 function transformNodeNameValue(value: string) {
-  return upperFirst(camelCase(value));
+  return upperFirst(value);
 }
