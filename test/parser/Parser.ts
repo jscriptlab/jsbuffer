@@ -34,8 +34,10 @@ test('it should generate file metadata list', async (t) => {
 
   let givenFileMetadataList = await parser.parse();
 
+  // The additive file contract has its own graph/compatibility tests. Keep
+  // this frozen assertion focused on the existing consumer payload.
   givenFileMetadataList = givenFileMetadataList.map((fileMetadata) => ({
-    ...fileMetadata,
+    metadata: fileMetadata.metadata,
     path: fileMetadata.path.replace(
       new RegExp(`^${path.dirname(mainFilePath)}/`),
       ''

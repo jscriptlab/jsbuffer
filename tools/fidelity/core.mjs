@@ -221,7 +221,7 @@ export async function scenarios() {
   return json(path.join(fixtureRoot, 'scenarios.json'));
 }
 
-async function seed(directory, scenario) {
+export async function seed(directory, scenario) {
   const source = path.join(directory, 'source');
   await fs.mkdir(directory, { recursive: true });
   await fs.cp(path.join(baseline, 'inputs/original-1x'), source, {

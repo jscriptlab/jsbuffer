@@ -25,6 +25,13 @@ import GenericName from './types/GenericName';
 import { IMetadataParam, Metadata, MetadataParamType } from './types/metadata';
 import lowerFirst from '../utilities/string/lowerFirst';
 import ErrorFormatter from '../core/ErrorFormatter';
+import {
+  IMetadataFileContract,
+  originalCRCInput,
+  originalGlobalName,
+  signedCRC32,
+  visitMetadataReferences
+} from './metadataContract';
 
 export type InputRequirement =
   | {
@@ -145,6 +152,7 @@ export interface IParserOptions {
 export interface IFileMetadata {
   path: string;
   metadata: Metadata[];
+  contract?: IMetadataFileContract;
 }
 
 export interface IFile {
@@ -196,6 +204,9 @@ export default class Parser extends CodeStream {
   readonly #externalModule;
   readonly #sortProperties;
   readonly #configuration;
+  readonly #sourceParamOrder = new Map<string, string[]>();
+  readonly #sourceImports: IMetadataFileContract['imports'] = [];
+  #preprocessState: 'new' | 'processing' | 'done' = 'new';
   #nodes: Array<ASTGeneratorOutputNode> = [];
   public constructor(
     file: IFile,
@@ -235,7 +246,7 @@ export default class Parser extends CodeStream {
      */
     await this.#iterateFileGenerators((f) => f.#updateMetadataObjects());
 
-    return [
+    const files: IFileMetadata[] = [
       {
         path: this.#file.path,
         metadata: Array.from(this.#metadataObjects)
@@ -245,6 +256,102 @@ export default class Parser extends CodeStream {
         metadata: Array.from(f.#metadataObjects)
       }))
     ];
+    const parsers = [this, ...this.#fileGenerators.values()];
+    files.forEach((file, i) => {
+      file.contract = parsers[i]!.#metadataContract(file.metadata, i);
+    });
+    return files;
+  }
+  #logicalPath() {
+    const relative = path.relative(
+      this.#root().#configuration.rootDir,
+      this.#file.path
+    );
+    if (
+      !relative ||
+      relative === '..' ||
+      relative.startsWith(`..${path.sep}`) ||
+      path.isAbsolute(relative)
+    ) {
+      throw new Exception(`Schema is outside of rootDir: ${this.#file.path}`);
+    }
+    return relative.split(path.sep).join('/');
+  }
+  #metadataContract(
+    metadata: Metadata[],
+    fileOrder: number
+  ): IMetadataFileContract {
+    const logicalPath = this.#logicalPath();
+    const references: IMetadataFileContract['references'] = [];
+    const parsers = [this.#root(), ...this.#root().#fileGenerators.values()];
+    visitMetadataReferences(metadata, (type, at) => {
+      const name =
+        type.type === 'internalType' ? type.interfaceName : type.name;
+      const importPath =
+        type.type === 'externalType'
+          ? type.relativePath
+          : type.type === 'externalModuleType'
+          ? type.importPath
+          : null;
+      const target =
+        importPath === null
+          ? this
+          : parsers.find(
+              (parser) =>
+                parser.#sourceImportToOutDirImport(this, parser.#file.path) ===
+                importPath
+            );
+      if (!target)
+        throw new Exception(
+          `Unresolved metadata reference: ${logicalPath}${at}`
+        );
+      references.push({ at, file: target.#logicalPath(), name });
+    });
+    return {
+      version: 1,
+      profile: 'jsbuffer@1.0.28',
+      logicalPath,
+      entryPoint: this.#root().#logicalPath(),
+      fileOrder,
+      outputPath: this.#externalModule ? null : `${logicalPath}.ts`,
+      module: this.#externalModule
+        ? {
+            root:
+              path
+                .relative(
+                  this.#root().#configuration.rootDir,
+                  this.#configuration.rootDir
+                )
+                .split(path.sep)
+                .join('/') || '.',
+            outDir:
+              path
+                .relative(
+                  this.#configuration.rootDir,
+                  this.#configuration.outDir
+                )
+                .split(path.sep)
+                .join('/') || '.',
+            importPath: this.#sourceImportToOutDirImport(this, this.#file.path)
+              .split(path.sep)
+              .join('/')
+          }
+        : null,
+      sortProperties: this.#sortProperties,
+      imports: this.#sourceImports,
+      exports: Array.from(this.#exports.keys()),
+      declarations: metadata.map((item) => {
+        const crcInput = originalCRCInput(logicalPath, item);
+        return {
+          name: item.name,
+          globalName: originalGlobalName(logicalPath, item.name),
+          sourceParamOrder: this.#sourceParamOrder.get(item.name) ?? [],
+          crcInput,
+          id: signedCRC32(crcInput)
+        };
+      }),
+      references
+    };
   }
   async #updateMetadataObjects() {
     this.#iterate((node, parent) => {
@@ -283,6 +390,8 @@ export default class Parser extends CodeStream {
     }
   }
   async #preprocess() {
+    if (this.#preprocessState !== 'new') return;
+    this.#preprocessState = 'processing';
     const contents = this.#file.contents;
     const tokenizer = new Tokenizer({
       file: this.#file.path,
@@ -296,6 +405,17 @@ export default class Parser extends CodeStream {
       textDecoder: this.#textDecoder,
       tokens: tokenizer.tokenize().tokens()
     }).generate();
+    this.#iterate((node) => {
+      if (
+        node.type === NodeType.TypeDefinition ||
+        node.type === NodeType.CallDefinition
+      ) {
+        this.#sourceParamOrder.set(
+          node.name.value,
+          node.parameters.map((p) => p.name.value)
+        );
+      }
+    });
     if (this.#sortProperties) {
       this.#iterate((node) => {
         switch (node.type) {
@@ -316,9 +436,51 @@ export default class Parser extends CodeStream {
     /**
      * preprocess all external schemas
      */
-    for (const fileGenerator of this.#fileGenerators.values()) {
+    // As in original 1.x, package entry points are registered before local files.
+    for (const node of this.#nodes) {
+      if (
+        node.type !== NodeType.ImportStatement ||
+        node.from.value.startsWith('.')
+      )
+        continue;
+      const { externalModule } = await this.#resolveModulePathToAbsolutePath(
+        node.from.value
+      );
+      if (!externalModule) continue;
+      const rootDir = path.dirname(externalModule.configFile);
+      const mainFile = path.resolve(
+        rootDir,
+        externalModule.configuration.mainFile
+      );
+      const root = this.#root();
+      if (!root.#fileGenerators.has(mainFile)) {
+        root.#fileGenerators.set(
+          mainFile,
+          new Parser(
+            { path: mainFile, contents: await fs.promises.readFile(mainFile) },
+            {
+              root,
+              externalModule: true,
+              configuration: {
+                ...externalModule.configuration,
+                rootDir,
+                outDir: path.resolve(
+                  rootDir,
+                  externalModule.configuration.outDir
+                )
+              },
+              textDecoder: this.#textDecoder,
+              textEncoder: this.#textEncoder,
+              sortProperties: this.#sortProperties,
+              indentationSize: this.#indentationSize
+            }
+          )
+        );
+      }
+    }
+    for (const fileGenerator of this.#root().#fileGenerators.values()) {
       if (fileGenerator.#externalModule) {
-        fileGenerator.#preprocess();
+        await fileGenerator.#preprocess();
       }
     }
     for (const node of this.#nodes) {
@@ -331,9 +493,7 @@ export default class Parser extends CodeStream {
      * preprocess all available file generators available
      */
     for (const fileGenerator of this.#fileGenerators.values()) {
-      if (!fileGenerator.#externalModule) {
-        await fileGenerator.#preprocess();
-      }
+      if (!fileGenerator.#externalModule) await fileGenerator.#preprocess();
     }
     for (const node of this.#nodes) {
       await this.#setExportsAndValidateImports(node);
@@ -342,6 +502,7 @@ export default class Parser extends CodeStream {
      * fill the traits for this file generator
      */
     this.#fillTraits();
+    this.#preprocessState = 'done';
   }
   #iterate(
     fn: (
@@ -395,7 +556,37 @@ export default class Parser extends CodeStream {
     const compilerOptions = this.#configuration;
 
     if (!modulePath.startsWith('.')) {
-      throw new Exception('Currently only relative imports are supported');
+      const nodeModulesFolderPath = await this.#closestPath(
+        this.#file.path,
+        'node_modules'
+      );
+      if (!nodeModulesFolderPath)
+        throw new Exception('Failed to find closest node_modules folder');
+      inputFile = path.resolve(nodeModulesFolderPath, modulePath);
+      const configFile = await this.#closestPath(
+        inputFile,
+        'jsbufferconfig.json'
+      );
+      if (!configFile)
+        throw new Exception(`No jsbufferconfig found for: ${modulePath}`);
+      const configuration: unknown = JSON.parse(
+        await fs.promises.readFile(configFile, 'utf8')
+      );
+      if (
+        typeof configuration !== 'object' ||
+        configuration === null ||
+        !('mainFile' in configuration) ||
+        typeof configuration.mainFile !== 'string' ||
+        !('outDir' in configuration) ||
+        typeof configuration.outDir !== 'string'
+      ) {
+        throw new Exception(`Invalid jsbufferconfig: ${configFile}`);
+      }
+      externalModule = {
+        nodeModulesFolderPath,
+        configFile,
+        configuration: configuration as IConfiguration
+      };
     } else {
       externalModule = null;
       inputFile = path.resolve(path.dirname(this.#file.path), modulePath);
@@ -417,6 +608,28 @@ export default class Parser extends CodeStream {
       externalModule
     };
   }
+  async #closestPath(start: string, name: string): Promise<string | null> {
+    let directory = start;
+    try {
+      if (!(await fs.promises.stat(start)).isDirectory())
+        directory = path.dirname(start);
+    } catch (reason) {
+      if ((reason as NodeJS.ErrnoException).code !== 'ENOENT') throw reason;
+      directory = path.dirname(start);
+    }
+    while (true) {
+      const candidate = path.join(directory, name);
+      try {
+        await fs.promises.access(candidate);
+        return candidate;
+      } catch (reason) {
+        if ((reason as NodeJS.ErrnoException).code !== 'ENOENT') throw reason;
+      }
+      const parent = path.dirname(directory);
+      if (parent === directory) return null;
+      directory = parent;
+    }
+  }
   async #updateOriginalImportsAndSetDefinitions(node: ASTGeneratorOutputNode) {
     switch (node.type) {
       case NodeType.ExportStatement:
@@ -435,6 +648,8 @@ export default class Parser extends CodeStream {
         };
         let fileGenerator = root.#fileGenerators.get(inputFile);
         if (!fileGenerator) {
+          if (externalModule)
+            throw new Exception(`Could not find external schema: ${inputFile}`);
           fileGenerator = new Parser(
             {
               path: inputFile,
@@ -449,6 +664,17 @@ export default class Parser extends CodeStream {
           );
           root.#fileGenerators.set(inputFile, fileGenerator);
         }
+        this.#sourceImports.push({
+          specifier: node.from.value,
+          file: fileGenerator.#logicalPath(),
+          importPath: fileGenerator
+            .#sourceImportToOutDirImport(this, fileGenerator.#file.path)
+            .split(path.sep)
+            .join('/'),
+          identifiers: node.requirements
+            ? node.requirements.map((req) => req.value)
+            : null
+        });
         let originalImport = this.#originalImports.get(fileGenerator);
         if (!originalImport) {
           originalImport = {

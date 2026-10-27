@@ -1,7 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { IFileMetadata } from '../src/parser/Parser';
-import { Metadata } from '../src/parser/types/metadata';
+import {
+  validateFileMetadata,
+  validateMetadataGraph
+} from '../src/parser/metadataContract';
 
 /**
  * Name of the ordered manifest written next to the metadata files by
@@ -53,8 +56,9 @@ async function readManifest(
   let contents: string;
   try {
     contents = await fs.promises.readFile(manifestPath, 'utf8');
-  } catch {
-    return null;
+  } catch (reason) {
+    if ((reason as NodeJS.ErrnoException).code === 'ENOENT') return null;
+    throw reason;
   }
   let parsed: unknown;
   try {
@@ -72,24 +76,12 @@ async function readManifest(
   return parsed;
 }
 
-function isMetadataArray(value: unknown): value is Metadata[] {
-  return (
-    Array.isArray(value) &&
-    value.every(
-      (item) =>
-        typeof item === 'object' &&
-        item !== null &&
-        typeof (item as { kind?: unknown }).kind === 'string'
-    )
-  );
-}
-
 /**
  * Parse a single `*.metadata.json` file into an {@link IFileMetadata} object.
  *
  * The metadata files dumped by the `--metadata-only` flag hold the full
- * `IFileMetadata` structure (`{ path, metadata }`), so we validate the minimal
- * shape and hand it back untouched.
+ * `IFileMetadata` structure. Old dumps retain their minimal validation; a
+ * versioned contract is validated in full and returned without reordering.
  */
 export function parseFileMetadata(
   contents: string,
@@ -103,17 +95,8 @@ export function parseFileMetadata(
       `Failed to parse metadata file "${sourceFilePath}" as JSON: ${reason}`
     );
   }
-  if (
-    typeof parsed !== 'object' ||
-    parsed === null ||
-    typeof (parsed as { path?: unknown }).path !== 'string' ||
-    !isMetadataArray((parsed as { metadata?: unknown }).metadata)
-  ) {
-    throw new Error(
-      `Metadata file "${sourceFilePath}" does not contain a valid { path, metadata } object`
-    );
-  }
-  return parsed as IFileMetadata;
+  validateFileMetadata(parsed, sourceFilePath);
+  return parsed;
 }
 
 /**
@@ -124,7 +107,8 @@ export function parseFileMetadata(
  * metadata JSON files, without re-parsing the original `.jsb` schema.
  */
 export default async function loadFileMetadataList(
-  metadataPath: string
+  metadataPath: string,
+  options: { requireContract?: boolean } = {}
 ): Promise<IFileMetadata[]> {
   const stat = await fs.promises.stat(metadataPath);
 
@@ -136,6 +120,22 @@ export default async function loadFileMetadataList(
      */
     const manifest = await readManifest(metadataPath);
     if (manifest !== null) {
+      if (new Set(manifest.files).size !== manifest.files.length)
+        throw new Error('Duplicate metadata manifest entries');
+      for (const file of manifest.files) {
+        const relative = path.relative(
+          metadataPath,
+          path.resolve(metadataPath, file)
+        );
+        if (
+          !file.endsWith('.metadata.json') ||
+          path.isAbsolute(file) ||
+          relative === '..' ||
+          relative.startsWith(`..${path.sep}`)
+        ) {
+          throw new Error(`Invalid metadata manifest path: ${file}`);
+        }
+      }
       files = manifest.files.map((file) => path.resolve(metadataPath, file));
     } else {
       files = await collectMetadataFiles(metadataPath);
@@ -161,5 +161,6 @@ export default async function loadFileMetadataList(
     const contents = await fs.promises.readFile(file, 'utf8');
     fileMetadataList.push(parseFileMetadata(contents, file));
   }
+  validateMetadataGraph(fileMetadataList, options);
   return fileMetadataList;
 }
