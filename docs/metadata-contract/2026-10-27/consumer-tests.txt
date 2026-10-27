@@ -1,0 +1,22 @@
+
+  ✔ parser › Parser › it should generate file metadata list
+  ✔ fromMetadata › --from-metadata and --metadata-only are mutually exclusive (114ms)
+  ✔ fromMetadata › --from-metadata generates C99 even when the original .jsb sources are absent (207ms)
+  ✔ fromMetadata › --from-metadata: C++17 output is byte-identical to generating from source (275ms)
+  ✔ fromMetadata › --from-metadata: C99 output is byte-identical to generating from source (314ms)
+  ✔ kotlin › kotlin: generates a Kotlin source tree from a .jsb schema (190ms)
+  ✔ kotlin › kotlin: --from-metadata output is byte-identical to generating from source (614ms)
+  ─
+
+  7 tests passed
+Ignoring test-cases for trait: Command
+Total of 7555 bytes and 13 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-from-metadata-vTycbo/direct".
+Ignoring test-cases for trait: Command
+Total of 417550 bytes and 48 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-from-metadata-no-src-S19Nk5/c".
+Total of 417550 bytes and 48 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-from-metadata-OO6VlB/direct".
+Total of 7555 bytes and 13 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-from-metadata-vTycbo/from-metadata".
+Ignoring test-cases for trait: Command
+Total of 417550 bytes and 48 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-from-metadata-OO6VlB/from-metadata".
+Total of 24891 bytes and 26 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-kotlin-XFDLUc/kotlin".
+Total of 24891 bytes and 26 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-kotlin-from-metadata-uvWhje/direct".
+Total of 24891 bytes and 26 files written to "/var/folders/jc/l84z8gv90lg5gj18r9ckpvhm0000gn/T/jsb-kotlin-from-metadata-uvWhje/from-metadata".

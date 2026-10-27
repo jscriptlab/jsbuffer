@@ -1,0 +1,18 @@
+{
+  "consumer-tests.txt": {
+    "bytes": 1860,
+    "sha256": "28564f2434e00a091d9f578a6f7c335240ea4dd4676ca82da8abc4b7a47a4f76"
+  },
+  "contract-fidelity.tap": {
+    "bytes": 7046,
+    "sha256": "9a932629239b2a10e570931ffc927aa91f02b29b6f704ca1afd491b1775f4808"
+  },
+  "metadata-generation.json.gz": {
+    "bytes": 10067,
+    "sha256": "8189987e6be7212831f5a9f740d9283a707c26ca137faaf917a1650ff598f38d"
+  },
+  "native-output-comparison.json": {
+    "bytes": 22273,
+    "sha256": "99f8ada10d205280a3ed475d40472f3e75aae58ba1e23afa94014c1e6bfb091c"
+  }
+}

@@ -20,6 +20,10 @@ import loadFileMetadataList, {
 } from './loadFileMetadataList';
 import { IFileMetadata } from '../src/parser/Parser';
 import { FileGenerator } from '../code-generator';
+import {
+  serializeFileMetadata,
+  validateMetadataGraph
+} from '../src/parser/metadataContract';
 
 enum Generator {
   CPP_17 = 'cpp17',
@@ -351,13 +355,14 @@ function printHelp() {
       textEncoder: new TextEncoder(),
       root: null,
       indentationSize,
-      sortProperties: false
+      sortProperties: metadataOnly !== null ? sortProperties : false
     }
   );
 
   const fileMetadataList = await parser.parse();
 
   if (metadataOnly !== null) {
+    validateMetadataGraph(fileMetadataList, { requireContract: true });
     /**
      * Keep track of every metadata file we write, in parser order, so we can
      * emit an ordered manifest. `--from-metadata` uses this manifest to restore
@@ -370,6 +375,9 @@ function printHelp() {
         .replace(new RegExp(`^${configuration.rootDir}/`), '')
         .replace(/(\.jsb)?$/, '.metadata.json');
       const metadataFilePath = path.resolve(configuration.outDir, relativePath);
+      if (manifestFiles.includes(relativePath)) {
+        throw new Error(`Conflicting metadata output path: ${relativePath}`);
+      }
 
       // Make sure the directory exists
       await fs.promises.mkdir(path.dirname(metadataFilePath), {
@@ -379,7 +387,7 @@ function printHelp() {
       // Write the metadata to the file
       await fs.promises.writeFile(
         metadataFilePath,
-        JSON.stringify(metadata, null, indentationSize)
+        serializeFileMetadata(metadata, indentationSize)
       );
 
       manifestFiles.push(relativePath);
