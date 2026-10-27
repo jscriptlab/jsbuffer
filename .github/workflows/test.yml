@@ -33,6 +33,19 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build
+      - name: Verify generated 16-bit consumers
+        env:
+          TS_NODE_PROJECT: test/tsconfig.json
+        run: |
+          node -r ts-node/register <<'NODE'
+          const suite = require('./test/FileGenerator.ts').default;
+          const regression = suite.tests.get('it should compile and round-trip signed and unsigned 16-bit fields');
+          if (!regression) throw new Error('Missing 16-bit regression');
+          regression.run().then(() => console.log('16-bit compilation and 30 round trips passed')).catch(error => {
+            console.error(error);
+            process.exitCode = 1;
+          });
+          NODE
       - run: npm test
 
   coverage:

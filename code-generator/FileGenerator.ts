@@ -752,6 +752,7 @@ export default class FileGenerator extends CodeStream {
         this.write('writeUint8(value: number): void;\n');
         this.write('writeBuffer(value: Uint8Array): void;\n');
         this.write('writeUint32(value: number): void;\n');
+        this.write('writeUint16(value: number): void;\n');
         this.write('writeString(value: string): void;\n');
         this.write('writeSignedBigInt(value: string, bits: number): void;\n');
         this.write('writeUnsignedBigInt(value: string, bits: number): void;\n');
@@ -759,6 +760,7 @@ export default class FileGenerator extends CodeStream {
         this.write('writeSignedLong(value: string): void;\n');
         this.write('writeUnsignedLong(value: string): void;\n');
         this.write('writeInt32(value: number): void;\n');
+        this.write('writeInt16(value: number): void;\n');
         this.write('writeDouble(value: number): void;\n');
         this.write('writeFloat(value: number): void;\n');
       },
@@ -772,11 +774,13 @@ export default class FileGenerator extends CodeStream {
         this.write('readSignedBigInt(bits: number): string;\n');
         this.write('readUnsignedBigInt(bits: number): string;\n');
         this.write('readUint32(): number;\n');
+        this.write('readUint16(): number;\n');
         this.write('readString(): string;\n');
         this.write('readNullTerminatedString(): string;\n');
         this.write('readSignedLong(): string;\n');
         this.write('readUnsignedLong(): string;\n');
         this.write('readInt32(): number;\n');
+        this.write('readInt16(): number;\n');
         this.write('readDouble(): number;\n');
         this.write('readFloat(): number;\n');
         this.write('rewind(bytes: number): void;\n');
