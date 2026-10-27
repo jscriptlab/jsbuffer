@@ -1,0 +1,26 @@
+{
+  "compiler-conflicts.json": {
+    "bytes": 1281,
+    "sha256": "528206cbe2bebc61597d763291fcc2bb844f00dcbc4304df8de998661df05060"
+  },
+  "consumer-output-comparison.json": {
+    "bytes": 21982,
+    "sha256": "f4f3988393c154ffb5a2e94574837dfb9e2901cbe52dff192f12a73f568a37da"
+  },
+  "consumer-tests.txt": {
+    "bytes": 1844,
+    "sha256": "5dbd02a1120d5db195522d3d2aa627001a78cbd2454ca67e4ba644bd47f53d9f"
+  },
+  "fidelity.tap": {
+    "bytes": 10403,
+    "sha256": "a86b995642560afb0022817c2f9e7cfe03495f31f7416ef8b608e65b2e805baf"
+  },
+  "full-corpus.json.gz": {
+    "bytes": 9094,
+    "sha256": "aeec2d798b297719f90e8a84cb8fdb6cfc586dc784e8f80fc65faa2b67e1a217"
+  },
+  "scalars.json.gz": {
+    "bytes": 1833,
+    "sha256": "ee595696a148c77bc119fe39254e30a5db3d33665aaf9b43a6cb98e296a396d0"
+  }
+}

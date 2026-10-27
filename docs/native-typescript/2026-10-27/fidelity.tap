@@ -1,0 +1,337 @@
+
+> jsbuffer@2.0.12 test:fidelity
+> node --test --test-concurrency=1 test/fidelity/*.test.mjs
+
+TAP version 13
+# Subtest: CLI writes matching and failed reports and returns the corresponding exit status
+ok 1 - CLI writes matching and failed reports and returns the corresponding exit status
+  ---
+  duration_ms: 1097.178666
+  ...
+# Subtest: CLI rejects unknown modes and malformed adapter commands
+ok 2 - CLI rejects unknown modes and malformed adapter commands
+  ---
+  duration_ms: 67.650708
+  ...
+# Subtest: identical raw byte trees match, including binary and empty files
+ok 3 - identical raw byte trees match, including binary and empty files
+  ---
+  duration_ms: 0.610708
+  ...
+# Subtest: missing and extra files fail independently of matching files
+ok 4 - missing and extra files fail independently of matching files
+  ---
+  duration_ms: 0.546041
+  ...
+# Subtest: one-byte changes include the exact offset and file identities
+ok 5 - one-byte changes include the exact offset and file identities
+  ---
+  duration_ms: 0.365625
+  ...
+# Subtest: line endings are not normalized
+ok 6 - line endings are not normalized
+  ---
+  duration_ms: 0.079458
+  ...
+# Subtest: trailing newline are not normalized
+ok 7 - trailing newline are not normalized
+  ---
+  duration_ms: 0.118208
+  ...
+# Subtest: spaces are not normalized
+ok 8 - spaces are not normalized
+  ---
+  duration_ms: 0.055375
+  ...
+# Subtest: JSON order are not normalized
+ok 9 - JSON order are not normalized
+  ---
+  duration_ms: 0.111209
+  ...
+# Subtest: UTF-8 bytes are not normalized
+ok 10 - UTF-8 bytes are not normalized
+  ---
+  duration_ms: 0.11575
+  ...
+# Subtest: an empty reference fails rather than accepting empty output
+ok 11 - an empty reference fails rather than accepting empty output
+  ---
+  duration_ms: 0.217375
+  ...
+# Subtest: directory inventory preserves nested filenames and rejects symbolic links
+ok 12 - directory inventory preserves nested filenames and rejects symbolic links
+  ---
+  duration_ms: 5.333708
+  ...
+# Subtest: failed and timed-out commands retain their non-success result
+ok 13 - failed and timed-out commands retain their non-success result
+  ---
+  duration_ms: 439.504458
+  ...
+# Subtest: all 20 cases persist and reload after source removal with original identities, CRCs, and member order
+    # Subtest: default
+    ok 1 - default
+      ---
+      duration_ms: 155.990792
+      ...
+    # Subtest: indent-zero
+    ok 2 - indent-zero
+      ---
+      duration_ms: 141.493042
+      ...
+    # Subtest: indent-two
+    ok 3 - indent-two
+      ---
+      duration_ms: 140.023584
+      ...
+    # Subtest: indent-eight
+    ok 4 - indent-eight
+      ---
+      duration_ms: 140.245042
+      ...
+    # Subtest: sort-long
+    ok 5 - sort-long
+      ---
+      duration_ms: 165.548667
+      ...
+    # Subtest: sort-short
+    ok 6 - sort-short
+      ---
+      duration_ms: 154.295708
+      ...
+    # Subtest: unique-name
+    ok 7 - unique-name
+      ---
+      duration_ms: 137.949208
+      ...
+    # Subtest: no-tsconfig
+    ok 8 - no-tsconfig
+      ---
+      duration_ms: 141.104833
+      ...
+    # Subtest: extends-parent
+    ok 9 - extends-parent
+      ---
+      duration_ms: 139.787167
+      ...
+    # Subtest: extends-sibling
+    ok 10 - extends-sibling
+      ---
+      duration_ms: 143.954833
+      ...
+    # Subtest: extends-same-directory
+    ok 11 - extends-same-directory
+      ---
+      duration_ms: 146.445208
+      ...
+    # Subtest: wire-names
+    ok 12 - wire-names
+      ---
+      duration_ms: 102.446208
+      ...
+    # Subtest: scalars
+    ok 13 - scalars
+      ---
+      duration_ms: 99.825208
+      ...
+    # Subtest: comments
+    ok 14 - comments
+      ---
+      duration_ms: 94.729584
+      ...
+    # Subtest: external
+    ok 15 - external
+      ---
+      duration_ms: 98.124625
+      ...
+    # Subtest: namespaced-external
+    ok 16 - namespaced-external
+      ---
+      duration_ms: 97.144584
+      ...
+    # Subtest: programmatic-config
+    ok 17 - programmatic-config
+      ---
+      duration_ms: 154.004083
+      ...
+    # Subtest: programmatic-no-config
+    ok 18 - programmatic-no-config
+      ---
+      duration_ms: 137.290125
+      ...
+    # Subtest: external-sorted
+    ok 19 - external-sorted
+      ---
+      duration_ms: 98.757792
+      ...
+    # Subtest: programmatic-root
+    ok 20 - programmatic-root
+      ---
+      duration_ms: 79.298166
+      ...
+    1..20
+ok 14 - all 20 cases persist and reload after source removal with original identities, CRCs, and member order
+  ---
+  duration_ms: 2915.185708
+  ...
+# Subtest: reject incomplete contracts, semantic mismatches, and missing graph dependencies
+ok 15 - reject incomplete contracts, semantic mismatches, and missing graph dependencies
+  ---
+  duration_ms: 20.478958
+  ...
+# Subtest: default and sorted identities can be selected from either persisted member order
+ok 16 - default and sorted identities can be selected from either persisted member order
+  ---
+  duration_ms: 183.990083
+  ...
+# Subtest: package metadata rejects inconsistent compiled output identity
+ok 17 - package metadata rejects inconsistent compiled output identity
+  ---
+  duration_ms: 6.259959
+  ...
+# Subtest: manifest order is enforced and invalid or duplicate paths fail
+ok 18 - manifest order is enforced and invalid or duplicate paths fail
+  ---
+  duration_ms: 12.433958
+  ...
+# Subtest: line comments do not change pinned original generated bytes
+ok 19 - line comments do not change pinned original generated bytes
+  ---
+  duration_ms: 129.619708
+  ...
+# Subtest: native scalar and wire-name output matches every original file after source removal
+ok 20 - native scalar and wire-name output matches every original file after source removal
+  ---
+  duration_ms: 556.068375
+  ...
+# Subtest: native scalar options preserve original formatting, order and API configuration
+    # Subtest: indent-zero
+    ok 1 - indent-zero
+      ---
+      duration_ms: 146.753167
+      ...
+    # Subtest: indent-two
+    ok 2 - indent-two
+      ---
+      duration_ms: 142.140458
+      ...
+    # Subtest: indent-eight
+    ok 3 - indent-eight
+      ---
+      duration_ms: 140.281167
+      ...
+    # Subtest: sort-long
+    ok 4 - sort-long
+      ---
+      duration_ms: 160.238708
+      ...
+    # Subtest: sort-short
+    ok 5 - sort-short
+      ---
+      duration_ms: 156.63925
+      ...
+    # Subtest: unique-name
+    ok 6 - unique-name
+      ---
+      duration_ms: 139.110666
+      ...
+    # Subtest: no-tsconfig
+    ok 7 - no-tsconfig
+      ---
+      duration_ms: 144.46325
+      ...
+    # Subtest: extends-parent
+    ok 8 - extends-parent
+      ---
+      duration_ms: 146.268958
+      ...
+    # Subtest: extends-sibling
+    ok 9 - extends-sibling
+      ---
+      duration_ms: 142.804625
+      ...
+    # Subtest: extends-same-directory
+    ok 10 - extends-same-directory
+      ---
+      duration_ms: 142.799167
+      ...
+    # Subtest: programmatic-config
+    ok 11 - programmatic-config
+      ---
+      duration_ms: 155.602916
+      ...
+    # Subtest: programmatic-no-config
+    ok 12 - programmatic-no-config
+      ---
+      duration_ms: 141.968333
+      ...
+    1..12
+ok 21 - native scalar options preserve original formatting, order and API configuration
+  ---
+  duration_ms: 1760.459083
+  ...
+# Subtest: renderer uses metadata names and declaration order beyond the scalar fixture
+ok 22 - renderer uses metadata names and declaration order beyond the scalar fixture
+  ---
+  duration_ms: 138.95275
+  ...
+# Subtest: unsupported features fail visibly through the native adapter
+ok 23 - unsupported features fail visibly through the native adapter
+  ---
+  duration_ms: 597.003334
+  ...
+# Subtest: native backend generates with filesystem and frontend/legacy module imports denied
+ok 24 - native backend generates with filesystem and frontend/legacy module imports denied
+  ---
+  duration_ms: 97.214375
+  ...
+# Subtest: original scalar compilation conflicts remain explicit and identical
+ok 25 - original scalar compilation conflicts remain explicit and identical
+  ---
+  duration_ms: 595.950292
+  ...
+# Preserved original compile diagnostics: [{"code":2551,"file":"scalars.ts","start":5792,"message":"Property 'writeInt16' does not exist on type 'ISerializer'. Did you mean 'writeUint8'?"},{"code":2551,"file":"scalars.ts","start":5908,"message":"Property 'writeUint16' does not exist on type 'ISerializer'. Did you mean 'writeUint8'?"},{"code":2339,"file":"scalars.ts","start":7941,"message":"Property 'readInt16' does not exist on type 'IDeserializer'."},{"code":2551,"file":"scalars.ts","start":8025,"message":"Property 'readUint16' does not exist on type 'IDeserializer'. Did you mean 'readUint8'?"},{"code":2454,"file":"scalars.ts","start":8948,"message":"Variable 'signed8' is used before being assigned."},{"code":2454,"file":"scalars.ts","start":8965,"message":"Variable 'unsigned8' is used before being assigned."}]
+# Subtest: all declared supported options and feature fixtures reproduce the pinned oracle
+ok 26 - all declared supported options and feature fixtures reproduce the pinned oracle
+  ---
+  duration_ms: 2949.341125
+  ...
+# Subtest: an independent candidate using different indentation produces a reported mismatch
+ok 27 - an independent candidate using different indentation produces a reported mismatch
+  ---
+  duration_ms: 161.523375
+  ...
+# Subtest: metadata adapters receive persisted data with schema sources removed
+ok 28 - metadata adapters receive persisted data with schema sources removed
+  ---
+  duration_ms: 147.5575
+  ...
+# Subtest: an unavailable metadata adapter is reported as failure, with no legacy fallback
+ok 29 - an unavailable metadata adapter is reported as failure, with no legacy fallback
+  ---
+  duration_ms: 140.300334
+  ...
+# Subtest: candidate command failure cannot become a matching empty tree
+ok 30 - candidate command failure cannot become a matching empty tree
+  ---
+  duration_ms: 106.337792
+  ...
+# Subtest: external schemas outside the original schema root remain an explicit oracle failure
+ok 31 - external schemas outside the original schema root remain an explicit oracle failure
+  ---
+  duration_ms: 49.660083
+  ...
+# Subtest: C-style block comments are rejected by the pinned original parser
+ok 32 - C-style block comments are rejected by the pinned original parser
+  ---
+  duration_ms: 45.851417
+  ...
+1..32
+# tests 64
+# suites 0
+# pass 64
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12473.174166
