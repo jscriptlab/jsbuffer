@@ -11,6 +11,12 @@ recorded in [the frozen baseline](release-baseline/2026-10-26). Later 1.x naming
 changes are not the target. This contract is preparation for VQ-1176; it does not
 implement a TypeScript renderer or pass the TypeScript release gate.
 
+The subsequently approved default 16-bit support-interface correction adds four
+method declarations in both generators. It changes no metadata fields, names,
+CRCs or wire data. The metadata profile keeps its original wire semantics;
+comparison reports separately identify the corrected output reference profile
+`jsbuffer@1.0.28+int16-interfaces.1`.
+
 ## Dependency map
 
 | Original output dependency | Persisted field or explicit input |

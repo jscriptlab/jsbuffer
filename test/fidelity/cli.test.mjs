@@ -48,6 +48,7 @@ test('CLI writes matching and failed reports and returns the corresponding exit 
 test('CLI rejects unknown modes and malformed adapter commands', async () => {
   for (const args of [
     ['compare', '--mode', 'unknown'],
+    ['compare', '--reference-profile', 'unknown'],
     ['compare', '--mode', 'metadata', '--adapter', '"shell command"']
   ]) {
     const result = await run([

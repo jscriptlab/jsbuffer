@@ -15,7 +15,7 @@ import {
 
 let oracle, definitions;
 before(async () => {
-  oracle = await prepareOracle();
+  oracle = await prepareOracle({ profile: 'published' });
   definitions = await scenarios();
 });
 

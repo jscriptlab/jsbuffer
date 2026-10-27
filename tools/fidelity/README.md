@@ -88,7 +88,18 @@ currently has 2 matches and 18 explicit failures; it exits 1. This preset calls
 the metadata backend directly and does not change production CLI dispatch.
 See [native backend scope and original compilation conflicts](../../docs/native-typescript.md).
 
-Reference generation always uses the verified published package. There is no command to rewrite or normalize expected bytes. New fixtures/configurations require an explicit reviewed source change; the old default reference and original package remain fixed. The original self-dependency elsewhere in the repository is unchanged pending VQ-54.
+The default reference is `jsbuffer@1.0.28+int16-interfaces.1`, reflecting the
+user-approved upstream fix for missing 16-bit interface declarations. Setup
+verifies the published archive and all 74 files, copies the package within the
+isolated runtime environment, then applies exactly four declaration additions
+to the generator source. Every other package file is verified unchanged.
+Reports record the profile, script hash and before/after source hashes.
+Comparison remains raw bytes; the correction occurs before reference generation.
+
+Use `--reference-profile published` for the pristine published control. Its
+default 24-file output still matches the frozen baseline. No production option
+re-enables the incomplete interfaces. The original self-dependency elsewhere in
+the repository is unchanged pending VQ-54.
 
 ## Recorded candidate results
 

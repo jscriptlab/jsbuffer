@@ -1,5 +1,11 @@
 # Native TypeScript first-increment verification
 
+This is the historical pre-fix snapshot at source 42f56da. The subsequent
+default 16-bit declaration fix supersedes four errors in compiler-conflicts.json.
+That JSON is retained as historical evidence; current tests require 16-bit
+consumers to compile and run, without an expected-diagnostic allowance. See
+[the current fix verification](../../int16-support-types/2026-10-27/README.md).
+
 Source: `42f56da7eab1ee364e459d90aad8921bce067b51`.
 Base: `2b50a5954fe6e4b9aea59f07264a209814e481a9`, the PR #39 squash merge
 into develop. [Implementation and boundaries](../../native-typescript.md).

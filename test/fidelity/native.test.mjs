@@ -10,9 +10,7 @@ import {
   scenarios,
   compareScenario,
   seed,
-  run,
-  readTree,
-  compareTrees
+  run
 } from '../../tools/fidelity/core.mjs';
 
 const require = createRequire(import.meta.url);
@@ -203,88 +201,5 @@ new Generator(files).generate().then(result=>process.stdout.write(JSON.stringify
   await assert.rejects(
     new Generator(legacy).generate(),
     /contract is required/
-  );
-});
-
-test('original scalar compilation conflicts remain explicit and identical', async (t) => {
-  const dir = await temp(t),
-    scenario = definitions.find((s) => s.id === 'scalars');
-  const context = await seed(path.join(dir, 'reference'), scenario);
-  await checked(
-    [
-      process.execPath,
-      path.join(oracle.directory, 'cli/index.js'),
-      'source/scalars',
-      '-o',
-      context.output
-    ],
-    context.directory
-  );
-  const metadata = path.join(context.directory, 'metadata');
-  await checked(
-    [
-      process.execPath,
-      path.join(root, 'cli/jsb.js'),
-      'source/scalars',
-      '--metadata-only',
-      '-o',
-      metadata
-    ],
-    context.directory
-  );
-  await fs.rm(context.source, { recursive: true });
-  const request = path.join(dir, 'request.json'),
-    output = path.join(dir, 'candidate');
-  await fs.writeFile(
-    request,
-    JSON.stringify({
-      metadataDirectory: metadata,
-      outputDirectory: output,
-      configuration: { flags: [], api: null, logicalEntry: 'scalars' }
-    })
-  );
-  await checked([...adapter, request], context.directory);
-  assert.equal(
-    compareTrees(await readTree(context.output), await readTree(output)).equal,
-    true
-  );
-  const ts = require('typescript');
-  const diagnostics = (directory) => {
-    const program = ts.createProgram(
-      [
-        path.join(directory, 'scalars.ts'),
-        path.join(directory, '__types__.ts')
-      ],
-      {
-        target: ts.ScriptTarget.ES2020,
-        module: ts.ModuleKind.CommonJS,
-        moduleResolution: ts.ModuleResolutionKind.Node10,
-        strict: true,
-        esModuleInterop: true,
-        skipLibCheck: true,
-        noEmit: true,
-        types: [],
-        baseUrl: root,
-        paths: { jsbi: [path.join(root, 'node_modules/jsbi/jsbi.d.ts')] }
-      }
-    );
-    return ts.getPreEmitDiagnostics(program).map((d) => ({
-      code: d.code,
-      file: path.basename(d.file?.fileName ?? ''),
-      start: d.start,
-      message: ts.flattenDiagnosticMessageText(d.messageText, '\n')
-    }));
-  };
-  const original = diagnostics(context.output),
-    native = diagnostics(output);
-  assert.deepEqual(native, original);
-  assert.ok(
-    original.some(
-      (d) => d.code === 2339 && /(?:read|write)(?:Int16|Uint16)/.test(d.message)
-    )
-  );
-  assert.ok(original.some((d) => d.code === 2454));
-  t.diagnostic(
-    'Preserved original compile diagnostics: ' + JSON.stringify(original)
   );
 });

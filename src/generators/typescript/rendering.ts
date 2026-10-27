@@ -65,6 +65,7 @@ export function renderSupportTypes(indentationSize: number): string {
       'writeUint8(value: number): void;',
       'writeBuffer(value: Uint8Array): void;',
       'writeUint32(value: number): void;',
+      'writeUint16(value: number): void;',
       'writeString(value: string): void;',
       'writeSignedBigInt(value: string, bits: number): void;',
       'writeUnsignedBigInt(value: string, bits: number): void;',
@@ -72,6 +73,7 @@ export function renderSupportTypes(indentationSize: number): string {
       'writeSignedLong(value: string): void;',
       'writeUnsignedLong(value: string): void;',
       'writeInt32(value: number): void;',
+      'writeInt16(value: number): void;',
       'writeDouble(value: number): void;',
       'writeFloat(value: number): void;'
     ])
@@ -84,11 +86,13 @@ export function renderSupportTypes(indentationSize: number): string {
       'readSignedBigInt(bits: number): string;',
       'readUnsignedBigInt(bits: number): string;',
       'readUint32(): number;',
+      'readUint16(): number;',
       'readString(): string;',
       'readNullTerminatedString(): string;',
       'readSignedLong(): string;',
       'readUnsignedLong(): string;',
       'readInt32(): number;',
+      'readInt16(): number;',
       'readDouble(): number;',
       'readFloat(): number;',
       'rewind(bytes: number): void;'

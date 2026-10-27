@@ -19,8 +19,8 @@ sorting, indentation (including zero), discriminator configuration and explicit
 tsconfig options come from metadata/configuration. Original serialization and
 whitespace are preserved, rather than passed through a source formatter.
 
-The original scalar fixture matches all four files (18,509 bytes total) after
-the source tree is removed. The wire-name fixture also matches without any
+The scalar fixture matches all four files against the corrected original
+reference after the source tree is removed. The wire-name fixture also matches without any
 fixture-specific rendering. Twelve additional scalar configuration cases and a
 renamed/multiple/empty-declaration schema compare against fresh original output.
 The full agreed corpus currently has **2 matched / 18 failed** scenarios.
@@ -62,31 +62,39 @@ points, and every legacy `code-generator` module before importing the backend.
 It still generates all scalar files with diagnostic paths relocated to an
 unavailable root. This is an import-boundary test, not an OS security sandbox.
 
-The 18 native tests (including configuration subtests) join the previous 46
-fidelity/contract tests. Commands, full raw comparisons, test output, compiler
-diagnostics and hashes are preserved under `docs/native-typescript/2026-10-27/`.
+The native tests and default 16-bit compilation/runtime regressions join the
+existing fidelity/contract tests. The current suite has 65 passing tests. The
+first increment's historical results are under `docs/native-typescript/2026-10-27/`;
+the subsequent default declaration fix is recorded under `docs/int16-support-types/2026-10-27/`.
 Existing C99/C++17/Kotlin round-trip and output inventory checks remain separate.
 
-## Original output conflicts, still unresolved
+## Default 16-bit declaration fix and remaining original conflicts
 
-Exact output reproduces the pinned original's omissions:
+The user approved fixing the missing 16-bit interface declarations upstream.
+Both the original FileGenerator and this backend now always emit readInt16,
+readUint16, writeInt16 and writeUint16. No compatibility option is required.
+Generated 16-bit consumers compile with strict TypeScript and run against the
+real codec through both public schema routes and the metadata route.
+
+Active comparisons use `jsbuffer@1.0.28+int16-interfaces.1`: a verified copy of
+the original generator with exactly those four declarations added. Reports
+include original/corrected source hashes and the correction script hash. The
+published archive, its 74-file inventory and frozen original outputs remain
+unchanged; `--reference-profile published` selects that historical control.
+Comparisons read raw bytes after the corrected reference generates output.
+
+The previous expected-compilation-failure test was removed. Its six-diagnostic
+JSON is historical evidence at source 42f56da, superseded for the four 16-bit
+method errors by this fix. Current 16-bit regression tests require zero
+diagnostics. Separate original defects remain under VQ-1178:
 
 - `int8`/`uint8` parameters get no encode/decode operations. Their decoder locals
   are returned without assignment.
-- Generated code uses Int16/Uint16 codec methods absent from the emitted support
-  interfaces.
 - Generated validation still checks `_name` even when a custom discriminator
   property is emitted elsewhere.
 
-Compiling the original and native scalar output with locked TypeScript 5.2.2,
-ES2020/CommonJS, strict mode and esModuleInterop produces the same six
-diagnostics: four missing support-interface methods and two unassigned locals.
-The test asserts that measured conflict; it does not claim compilation passes.
-The custom-discriminator behavior is preserved in the byte comparisons and
-source rendering, without a runtime acceptance claim.
-
-VQ-1178 must resolve the conflict between exact original bytes and working
-generated programs explicitly. No original output, comparison normalization or
-runtime acceptance rule was changed by this increment. Next VQ-1176 work expands
+These independent 8-bit/custom-discriminator issues still need an explicit
+decision; the 16-bit declaration issue is resolved by the approved default fix.
+Next VQ-1176 work expands
 the renderer to templates, references/imports, traits and calls until all 20
 scenarios match; VQ-1177 then integrates the production routes.
