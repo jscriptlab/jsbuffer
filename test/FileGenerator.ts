@@ -498,7 +498,7 @@ test.skip('it should not allow importing of unexported traits', async () => {
 });
 
 test.skip('it should support comments before types', async () => {
-  (
+  await (
     await generateWithVirtualFs({
       paths: {
         index: [
