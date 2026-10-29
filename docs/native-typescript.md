@@ -1,7 +1,8 @@
-# Native TypeScript backend: primitive types
+# Native TypeScript backend: primitives, vectors and optionals
 
-This is the first VQ-1176 increment, based on the metadata contract merged by
-PR #39 as `2b50a5954fe6e4b9aea59f07264a209814e481a9`.
+The primitive VQ-1176 increment merged through PR #40. The next increment adds
+recursive `vector<T>` and `optional<T>` rendering, based on the same metadata
+contract introduced by PR #39.
 `src/generators/typescript/FileGeneratorTypeScript.ts` accepts persisted
 `IFileMetadata[]` and explicit options, and returns the shared `IGeneratedFile[]`
 records. It does not read or write files. The previously excluded, unfinished
@@ -11,24 +12,36 @@ name spelling; its AST-dependent methods and legacy module dependency are gone.
 
 ## Supported output
 
-Types with primitive-only parameters emit interfaces, validation, creators,
+Types with primitive parameters and supported vector/optional combinations emit interfaces, validation, creators,
 encode/decode, defaults, comparison and update functions, compact original
 metadata sidecars, `__types__.ts`, and optional tsconfig output. All 15 primitive
 names are represented. Declaration order, original wire names, signed CRCs,
 sorting, indentation (including zero), discriminator configuration and explicit
 tsconfig options come from metadata/configuration. Original serialization and
 whitespace are preserved, rather than passed through a source formatter.
+Vectors and optionals recurse over the 13 primitive names with implemented
+codec operations. Their generated types, validation, codecs, defaults,
+comparison, updates and compact metadata sidecars follow the original emitter,
+including its local-variable depth counters. Examples include
+`vector<optional<vector<uint32>>>` and `optional<vector<optional<bool>>>`.
+Defaults are empty arrays and null; wire operations retain the four-byte vector
+length and one-byte optional marker.
 
 The scalar fixture matches all four files against the corrected original
 reference after the source tree is removed. The wire-name fixture also matches without any
 fixture-specific rendering. Twelve additional scalar configuration cases and a
 renamed/multiple/empty-declaration schema compare against fresh original output.
-The full agreed corpus currently has **2 matched / 18 failed** scenarios.
+Thirteen dedicated vector/optional configuration variants and a renamed,
+multiple/empty-declaration case also match every output byte after source
+removal. The full agreed corpus still has **2 matched / 18 failed** scenarios;
+the dedicated template checks are reported separately from that composite corpus.
 
-Calls, traits, templates, references and schema imports/modules remain
+Calls, traits, set/map/tuple/bigint templates, references and schema imports/modules remain
 unsupported and fail before the adapter writes output. Reserved metadata keys
 `__proto__`/`__all` and generated-file path collisions fail explicitly. VQ-1176
 remains In Progress; these results do not discharge its full acceptance.
+New templates reject `int8`/`uint8` leaves explicitly while their existing
+original-codec omission remains a VQ-1178 wire-compatibility decision.
 
 ## Direct differential adapter
 
@@ -63,7 +76,13 @@ It still generates all scalar files with diagnostic paths relocated to an
 unavailable root. This is an import-boundary test, not an OS security sandbox.
 
 The native tests and default 16-bit compilation/runtime regressions join the
-existing fidelity/contract tests. The current suite has 65 passing tests. The
+existing fidelity/contract tests. The suite has 83 passing tests, including 18
+new vector/optional checks. Strict reference/native consumers compile with zero
+diagnostics. Real-codec checks cover defaults, empty/populated and nullable
+values, nested arrays, UTF-8, boundary values, both byte orders, cross-decoding,
+wire lengths, CRC rejection, comparison and immutable updates. A fresh-process
+template probe also denies filesystem/frontend/legacy imports.
+The vector/optional evidence is under `docs/native-typescript/2026-10-29/`. The
 first increment's historical results are under `docs/native-typescript/2026-10-27/`;
 the subsequent default declaration fix is recorded under `docs/int16-support-types/2026-10-27/`.
 Existing C99/C++17/Kotlin round-trip and output inventory checks remain separate.
@@ -106,5 +125,5 @@ diagnostics. Separate original defects remain under VQ-1178:
 These independent 8-bit/custom-discriminator issues still need an explicit
 decision; the 16-bit declaration issue is resolved by the approved default fix.
 Next VQ-1176 work expands
-the renderer to templates, references/imports, traits and calls until all 20
+the renderer to the remaining templates, references/imports, traits and calls until all 20
 scenarios match; VQ-1177 then integrates the production routes.
