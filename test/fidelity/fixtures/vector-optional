@@ -1,0 +1,20 @@
+// Recursive combinations over the verified primitive codecs.
+export type Containers {
+  int32 first;
+  vector<int16> signed;
+  vector<uint16> unsigned;
+  optional<string> title;
+  vector<string> words;
+  vector<bytes> blocks;
+  vector<optional<vector<uint32>>> nested;
+  optional<vector<optional<bool>>> selection;
+  optional<optional<int32>> repeated;
+  vector<vector<bytes>> matrix;
+  optional<null_terminated_string> terminated;
+  vector<long> longs;
+  vector<float> singles;
+  optional<ulong> limit;
+  optional<bytes> packet;
+  optional<double> real;
+  int32 last;
+}
