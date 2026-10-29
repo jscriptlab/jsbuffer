@@ -1,0 +1,25 @@
+{
+  "sourceCommit": "d9df71a573c248a8846b1f659059c31492c256a8",
+  "baseCommit": "f2c3956bc86c5dfef1f2edbe0b22ad5908bfdbff",
+  "referenceProfile": "jsbuffer@1.0.28+int16-interfaces.1",
+  "environment": {
+    "node": "20.17.0",
+    "npm": "10.8.2",
+    "typescript": "5.2.2",
+    "platform": "macOS arm64"
+  },
+  "artifacts": {
+    "targeted.tap": {
+      "bytes": 2660,
+      "sha256": "a824271ebd0f1ee4b3f6beb23c35da9b59db4ffa28c4c37c3f57064a70294577"
+    },
+    "fidelity.tap": {
+      "bytes": 12458,
+      "sha256": "47f2b2d3f8533c8a4621d39b72fa1b01dc345019873db5cd4edf44a582787ef5"
+    },
+    "full-corpus.json.gz": {
+      "bytes": 9501,
+      "sha256": "ca4c0c9737b5095eca6cd8cffe0c17bdac2a0b1ae7fa6d0eb72daebed8ce08cc"
+    }
+  }
+}

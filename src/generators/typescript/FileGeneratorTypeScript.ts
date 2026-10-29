@@ -1,6 +1,9 @@
 import type { IFileMetadata } from '../../parser/Parser';
 import type { IGeneratedFile } from '../../core/File';
-import type { IMetadataTypeDefinition } from '../../parser/types/metadata';
+import type {
+  IMetadataTypeDefinition,
+  MetadataParamType
+} from '../../parser/types/metadata';
 import {
   localImport,
   originalTypeScriptDeclaration,
@@ -25,7 +28,40 @@ import {
   renderSupportTypes
 } from './rendering';
 
-type ScalarDefinition = IMetadataTypeDefinition & { kind: 'type' };
+type TypeDefinition = IMetadataTypeDefinition & { kind: 'type' };
+type CompactType =
+  | { type: 'generic'; value: GenericName }
+  | { type: 'template'; template: 'vector' | 'optional'; value: CompactType };
+
+function supportedType(type: MetadataParamType, nested = false): boolean {
+  return (
+    // Do not expand the known original 8-bit codec omission into new templates.
+    // Its wire-compatibility decision remains VQ-1178.
+    (type.type === 'generic' &&
+      (!nested ||
+        codecMethods.has(type.value) ||
+        type.value === GenericName.Boolean ||
+        type.value === GenericName.Bytes)) ||
+    (type.type === 'template' &&
+      (type.template === 'vector' || type.template === 'optional') &&
+      supportedType(type.value, true))
+  );
+}
+
+function compactType(type: MetadataParamType): CompactType {
+  if (type.type === 'generic') return { type: 'generic', value: type.value };
+  if (
+    type.type === 'template' &&
+    (type.template === 'vector' || type.template === 'optional')
+  ) {
+    return {
+      type: 'template',
+      template: type.template,
+      value: compactType(type.value)
+    };
+  }
+  throw new Error('Unsupported native TypeScript metadata type');
+}
 const integerTypes = new Map<GenericName, { bits: number; signed: boolean }>([
   [GenericName.Integer, { bits: 32, signed: true }],
   [GenericName.Int32, { bits: 32, signed: true }],
@@ -53,7 +89,7 @@ const codecMethods = new Map<GenericName, string>([
 
 /** Metadata/configuration in, shared generated-file records out. No I/O or
  * schema/legacy-generator dependency belongs in this backend. This increment
- * supports type definitions whose parameters are all primitives.
+ * supports primitive types and recursive vector/optional templates.
  */
 export default class FileGeneratorTypeScript
   implements IFileGeneratorTypeScript
@@ -79,10 +115,10 @@ export default class FileGeneratorTypeScript
         if (
           declaration.kind !== 'type' ||
           declaration.traits.length ||
-          declaration.params.some((param) => param.type.type !== 'generic')
+          declaration.params.some((param) => !supportedType(param.type))
         ) {
           throw new Error(
-            'Native TypeScript currently supports primitive-only type definitions; calls, traits, templates and references are not implemented yet'
+            'Native TypeScript supports primitives and vector/optional templates over verified primitive codecs; calls, traits, other templates, references and 8-bit template codecs are not implemented yet'
           );
         }
         if (declaration.name === '__proto__' || declaration.name === '__all')
@@ -95,13 +131,9 @@ export default class FileGeneratorTypeScript
     for (const file of [...this.files.slice(1), this.files[0]!]) {
       const declarations = file.metadata.map(
         (_, i) =>
-          originalTypeScriptDeclaration(
-            file,
-            i,
-            this.options
-          ) as ScalarDefinition
+          originalTypeScriptDeclaration(file, i, this.options) as TypeDefinition
       );
-      const renderer = new ScalarFileRenderer(
+      const renderer = new TypeFileRenderer(
         file.contract!.logicalPath,
         declarations,
         indentationSize,
@@ -116,7 +148,7 @@ export default class FileGeneratorTypeScript
         name: declaration.name,
         params: declaration.params.map((param) => ({
           name: param.name,
-          type: { type: 'generic', value: scalarType(param.type) }
+          type: compactType(param.type)
         }))
       }));
       generated.push({
@@ -148,20 +180,12 @@ export default class FileGeneratorTypeScript
   }
 }
 
-function scalarType(
-  type: IMetadataTypeDefinition['params'][number]['type']
-): GenericName {
-  if (type.type !== 'generic')
-    throw new Error('Expected a primitive metadata type');
-  return type.value;
-}
-
-class ScalarFileRenderer {
+class TypeFileRenderer {
   private readonly writer: CodeWriter;
   private readonly imports = new Set<string>();
   constructor(
     private readonly logicalPath: string,
-    private readonly declarations: ScalarDefinition[],
+    private readonly declarations: TypeDefinition[],
     indentationSize: number,
     private readonly uniqueName: string
   ) {
@@ -188,17 +212,17 @@ class ScalarFileRenderer {
       )}";\n`
     );
   }
-  private parameters(d: ScalarDefinition) {
+  private parameters(d: TypeDefinition) {
     for (const p of d.params)
       this.writer.line(`${p.name}: ${originalTypeString(p.type, true)};`);
   }
-  private interface(d: ScalarDefinition) {
+  private interface(d: TypeDefinition) {
     this.writer.block(`export interface ${d.name}  {`, () => {
       this.writer.line(`${this.uniqueName}: '${d.globalName}';`);
       this.parameters(d);
     });
   }
-  private validation(type: GenericName, value: string): string {
+  private primitiveValidation(type: GenericName, value: string): string {
     const range = integerTypes.get(type);
     if (range) {
       this.imports.add('import JSBI from "jsbi";\n');
@@ -218,7 +242,28 @@ class ScalarFileRenderer {
         : 'string';
     return `typeof ${value} === '${primitive}'`;
   }
-  private assertion(d: ScalarDefinition) {
+  private validation(
+    type: MetadataParamType,
+    value: string,
+    depth: number
+  ): [string, number] {
+    if (type.type === 'generic')
+      return [this.primitiveValidation(type.value, value), depth];
+    if (type.type === 'template' && type.template === 'optional') {
+      const [inner, next] = this.validation(type.value, 'x', depth + 1);
+      return [`${value} === null ? true : ((x) => (${inner}))(${value})`, next];
+    }
+    if (type.type === 'template' && type.template === 'vector') {
+      const [inner] = this.validation(type.value, 'p', depth + 1);
+      // The original does not propagate validation depth out of vectors.
+      return [
+        `(Array.isArray(${value}) || ${value} instanceof Set) && Array.from(${value}).every(p => (${inner}))`,
+        depth
+      ];
+    }
+    throw new Error('Unsupported native TypeScript validation type');
+  }
+  private assertion(d: TypeDefinition) {
     const w = this.writer;
     w.block(
       `export function ${getValidateDefinitionFunctionName(
@@ -229,9 +274,11 @@ class ScalarFileRenderer {
         w.line(
           `if(!(typeof value === 'object' && value !== null && '_name' in value && typeof value['_name'] === 'string' && value['_name'] === "${d.globalName}")) return false;`
         );
-        d.params.forEach((p, i) => {
-          const v = `__v${i}`,
-            expression = this.validation(scalarType(p.type), v);
+        let depth = 0;
+        d.params.forEach((p) => {
+          const v = `__v${depth}`;
+          const [expression, next] = this.validation(p.type, v, depth);
+          depth = next + 1;
           w.block(
             'if(!(',
             () =>
@@ -245,7 +292,7 @@ class ScalarFileRenderer {
       }
     );
   }
-  private creator(d: ScalarDefinition) {
+  private creator(d: TypeDefinition) {
     const w = this.writer,
       params = getTypeInputParamsInterfaceName(d);
     w.block(`export interface ${params} {`, () => this.parameters(d));
@@ -275,7 +322,45 @@ class ScalarFileRenderer {
       }
     );
   }
-  private encoder(d: ScalarDefinition) {
+  private encodeType(
+    type: MetadataParamType,
+    value: string,
+    depth: number
+  ): number {
+    const w = this.writer;
+    if (type.type === 'generic') {
+      const method = codecMethods.get(type.value);
+      if (method) w.line(`__s.write${method}(${value});`);
+      else if (type.value === GenericName.Boolean)
+        w.line(`__s.writeUint8(${value} === true ? 1 : 0);`);
+      else if (type.value === GenericName.Bytes) {
+        w.line(`__s.writeUint32(${value}.byteLength);`);
+        w.line(`__s.writeBuffer(${value});`);
+      }
+      // The original's omitted 8-bit branches remain a separate acceptance decision.
+    } else if (type.type === 'template' && type.template === 'optional') {
+      w.block(
+        `if(${value} === null) {`,
+        () => w.line('__s.writeUint8(0);'),
+        '} else {'
+      );
+      w.indent(() => {
+        w.line('__s.writeUint8(1);');
+        depth = this.encodeType(type.value, value, depth + 1);
+      });
+      w.line('}');
+    } else if (type.type === 'template' && type.template === 'vector') {
+      const item = `__item${depth}`,
+        length = `__l${depth}`;
+      w.line(`const ${length} = ${value}.length;`);
+      w.line(`__s.writeUint32(${length});`);
+      w.block(`for(const ${item} of ${value}) {`, () => {
+        depth = this.encodeType(type.value, item, depth + 1);
+      });
+    } else throw new Error('Unsupported native TypeScript encoding type');
+    return depth;
+  }
+  private encoder(d: TypeDefinition) {
     const w = this.writer;
     this.supportImport('ISerializer');
     w.block(
@@ -284,26 +369,60 @@ class ScalarFileRenderer {
       }: ${d.name}) {`,
       () => {
         w.line(`__s.writeInt32(${d.id});`);
-        d.params.forEach((p, i) => {
+        let depth = 0;
+        d.params.forEach((p) => {
           w.comment(`encoding param: ${p.name}`);
-          const value = `__pv${i}`,
-            type = scalarType(p.type),
-            method = codecMethods.get(type);
+          const value = `__pv${depth}`;
           w.line(`const ${value} = value['${p.name}'];`);
-          if (method) w.line(`__s.write${method}(${value});`);
-          else if (type === GenericName.Boolean)
-            w.line(`__s.writeUint8(${value} === true ? 1 : 0);`);
-          else if (type === GenericName.Bytes) {
-            w.line(`__s.writeUint32(${value}.byteLength);`);
-            w.line(`__s.writeBuffer(${value});`);
-          }
-          // Original 1.0.28 omits int8/uint8 codec branches. Preserve bytes and
-          // record the legacy conflict for independent runtime acceptance.
+          depth = this.encodeType(p.type, value, depth + 1);
         });
       }
     );
   }
-  private decoder(d: ScalarDefinition) {
+  private decodeType(
+    type: MetadataParamType,
+    value: string,
+    depth: number
+  ): number {
+    const w = this.writer;
+    if (type.type === 'generic') {
+      const method = codecMethods.get(type.value);
+      if (method) w.line(`${value} = __d.read${method}();`);
+      else if (type.value === GenericName.Boolean)
+        w.line(`${value} = __d.readUint8() === 1;`);
+      else if (type.value === GenericName.Bytes)
+        w.line(`${value} = __d.readBuffer(__d.readUint32());`);
+    } else if (type.type === 'template' && type.template === 'optional') {
+      w.block(
+        'if(__d.readUint8() === 1) {',
+        () => {
+          depth = this.decodeType(type.value, value, depth + 1);
+        },
+        '} else {'
+      );
+      w.indent(() => w.line(`${value} = null;`));
+      w.line('}');
+    } else if (type.type === 'template' && type.template === 'vector') {
+      const index = `__i${depth}`,
+        length = `__l${depth}`,
+        out = `__o${depth}`;
+      w.line(`const ${length} = __d.readUint32();`);
+      w.line(
+        `const ${out} = new Array<${originalTypeString(
+          type.value
+        )}>(${length});`
+      );
+      w.line(`${value} = ${out};`);
+      w.block(
+        `for(let ${index} = 0; ${index} < ${length}; ${index}++) {`,
+        () => {
+          depth = this.decodeType(type.value, `${out}[${index}]`, depth + 1);
+        }
+      );
+    } else throw new Error('Unsupported native TypeScript decoding type');
+    return depth;
+  }
+  private decoder(d: TypeDefinition) {
     const w = this.writer;
     this.supportImport('IDeserializer');
     w.block(
@@ -316,15 +435,10 @@ class ScalarFileRenderer {
         w.line(`if(__id !== ${d.id}) return null;`);
         for (const p of d.params)
           w.line(`let ${p.name}: ${originalTypeString(p.type)};`);
+        let depth = 0;
         for (const p of d.params) {
           w.comment(`decoding param: ${p.name}`);
-          const type = scalarType(p.type),
-            method = codecMethods.get(type);
-          if (method) w.line(`${p.name} = __d.read${method}();`);
-          else if (type === GenericName.Boolean)
-            w.line(`${p.name} = __d.readUint8() === 1;`);
-          else if (type === GenericName.Bytes)
-            w.line(`${p.name} = __d.readBuffer(__d.readUint32());`);
+          depth = this.decodeType(p.type, p.name, depth + 1);
         }
         w.block(
           'return {',
@@ -339,7 +453,28 @@ class ScalarFileRenderer {
       }
     );
   }
-  private defaultCreator(d: ScalarDefinition) {
+  private defaultValue(type: MetadataParamType): string {
+    if (type.type === 'template') {
+      if (type.template === 'vector') return '[]';
+      if (type.template === 'optional') return 'null';
+      throw new Error('Unsupported native TypeScript default type');
+    }
+    if (type.type !== 'generic')
+      throw new Error('Expected a primitive metadata type');
+    const t = type.value;
+    return t === GenericName.Bytes
+      ? 'new Uint8Array(0)'
+      : t === GenericName.Boolean
+      ? 'false'
+      : t === GenericName.Float || t === GenericName.Double
+      ? '0.0'
+      : t === GenericName.Long || t === GenericName.UnsignedLong
+      ? '"0"'
+      : t === GenericName.String || t === GenericName.NullTerminatedString
+      ? '""'
+      : '0';
+  }
+  private defaultCreator(d: TypeDefinition) {
     const w = this.writer;
     w.block(
       `export function ${getDefaultFunctionName(
@@ -352,21 +487,7 @@ class ScalarFileRenderer {
           `return ${d.name}({`,
           () => {
             for (const p of d.params) {
-              const t = scalarType(p.type);
-              const value =
-                t === GenericName.Bytes
-                  ? 'new Uint8Array(0)'
-                  : t === GenericName.Boolean
-                  ? 'false'
-                  : t === GenericName.Float || t === GenericName.Double
-                  ? '0.0'
-                  : t === GenericName.Long || t === GenericName.UnsignedLong
-                  ? '"0"'
-                  : t === GenericName.String ||
-                    t === GenericName.NullTerminatedString
-                  ? '""'
-                  : '0';
-              w.line(`${p.name}: ${value},`);
+              w.line(`${p.name}: ${this.defaultValue(p.type)},`);
             }
             w.line('...params');
           },
@@ -375,12 +496,42 @@ class ScalarFileRenderer {
       }
     );
   }
-  private comparison(type: GenericName, left: string, right: string): string {
-    return type === GenericName.Bytes
-      ? `${left}.byteLength === ${right}.byteLength && ${left}.every((__byte,index) => ${right}[index] === __byte)`
-      : `${left} === ${right}`;
+  private comparison(
+    type: MetadataParamType,
+    left: string,
+    right: string,
+    depth: number
+  ): [string, number] {
+    if (type.type === 'generic') {
+      return [
+        type.value === GenericName.Bytes
+          ? `${left}.byteLength === ${right}.byteLength && ${left}.every((__byte,index) => ${right}[index] === __byte)`
+          : `${left} === ${right}`,
+        depth
+      ];
+    }
+    if (type.type === 'template' && type.template === 'optional') {
+      const a = `__dp${depth}1`,
+        b = `__dp${depth}2`;
+      const [inner, next] = this.comparison(type.value, a, b, depth + 1);
+      return [
+        `((${a}, ${b}) => ${a} !== null && ${b} !== null ? ${inner} : ${a} === ${b})(${left},${right})`,
+        next
+      ];
+    }
+    if (type.type === 'template' && type.template === 'vector') {
+      const item = `__originalItem${depth}`,
+        index = `__index${depth}`,
+        other = `__item${depth}`;
+      const [inner, next] = this.comparison(type.value, item, other, depth + 1);
+      return [
+        `${left}.length === ${right}.length && Array.from(${left}).every((${item},${index}) => (typeof ${item} === 'undefined' ? false : (${other} => typeof ${other} === 'undefined' ? false : (${inner}))(Array.from(${right})[${index}])))`,
+        next
+      ];
+    }
+    throw new Error('Unsupported native TypeScript comparison type');
   }
-  private compare(d: ScalarDefinition) {
+  private compare(d: TypeDefinition) {
     const w = this.writer;
     w.block(
       `export function ${getCompareFunctionName(d)}(__a: ${d.name}, __b: ${
@@ -398,10 +549,11 @@ class ScalarFileRenderer {
               w.comment(`compare parameter ${p.name}`);
               w.line(
                 this.comparison(
-                  scalarType(p.type),
+                  p.type,
                   `__a['${p.name}']`,
-                  `__b['${p.name}']`
-                ) + (i < d.params.length - 1 ? ' &&' : '')
+                  `__b['${p.name}']`,
+                  i
+                )[0] + (i < d.params.length - 1 ? ' &&' : '')
               );
             }),
           ');'
@@ -409,7 +561,7 @@ class ScalarFileRenderer {
       }
     );
   }
-  private update(d: ScalarDefinition) {
+  private update(d: TypeDefinition) {
     const w = this.writer,
       argument = d.params.length ? 'changes' : '_';
     w.block(
@@ -417,13 +569,16 @@ class ScalarFileRenderer {
         d.name
       }, ${argument}: Partial<${getTypeInputParamsInterfaceName(d)}>) {`,
       () => {
+        let depth = 0;
         for (const p of d.params)
           w.block(`if(typeof changes['${p.name}'] !== 'undefined') {`, () => {
-            const expression = this.comparison(
-              scalarType(p.type),
+            const [expression, next] = this.comparison(
+              p.type,
               `changes['${p.name}']`,
-              `value['${p.name}']`
+              `value['${p.name}']`,
+              depth + 1
             );
+            depth = next;
             w.block(`if(!(${expression})) {`, () =>
               w.block(
                 `value = ${d.name}({`,

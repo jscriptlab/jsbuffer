@@ -1,0 +1,432 @@
+
+> jsbuffer@2.0.12 test:fidelity
+> node --test --test-concurrency=1 test/fidelity/*.test.mjs
+
+TAP version 13
+# Subtest: CLI writes matching and failed reports and returns the corresponding exit status
+ok 1 - CLI writes matching and failed reports and returns the corresponding exit status
+  ---
+  duration_ms: 3719.81025
+  ...
+# Subtest: CLI rejects unknown modes and malformed adapter commands
+ok 2 - CLI rejects unknown modes and malformed adapter commands
+  ---
+  duration_ms: 191.864834
+  ...
+# Subtest: identical raw byte trees match, including binary and empty files
+ok 3 - identical raw byte trees match, including binary and empty files
+  ---
+  duration_ms: 1.314083
+  ...
+# Subtest: missing and extra files fail independently of matching files
+ok 4 - missing and extra files fail independently of matching files
+  ---
+  duration_ms: 1.202292
+  ...
+# Subtest: one-byte changes include the exact offset and file identities
+ok 5 - one-byte changes include the exact offset and file identities
+  ---
+  duration_ms: 0.491292
+  ...
+# Subtest: line endings are not normalized
+ok 6 - line endings are not normalized
+  ---
+  duration_ms: 0.193416
+  ...
+# Subtest: trailing newline are not normalized
+ok 7 - trailing newline are not normalized
+  ---
+  duration_ms: 0.084958
+  ...
+# Subtest: spaces are not normalized
+ok 8 - spaces are not normalized
+  ---
+  duration_ms: 0.071375
+  ...
+# Subtest: JSON order are not normalized
+ok 9 - JSON order are not normalized
+  ---
+  duration_ms: 0.162417
+  ...
+# Subtest: UTF-8 bytes are not normalized
+ok 10 - UTF-8 bytes are not normalized
+  ---
+  duration_ms: 0.161459
+  ...
+# Subtest: an empty reference fails rather than accepting empty output
+ok 11 - an empty reference fails rather than accepting empty output
+  ---
+  duration_ms: 0.428833
+  ...
+# Subtest: directory inventory preserves nested filenames and rejects symbolic links
+ok 12 - directory inventory preserves nested filenames and rejects symbolic links
+  ---
+  duration_ms: 11.233792
+  ...
+# Subtest: failed and timed-out commands retain their non-success result
+ok 13 - failed and timed-out commands retain their non-success result
+  ---
+  duration_ms: 473.060958
+  ...
+# Subtest: default reference corrects only the approved interface declarations and preserves the published control
+ok 14 - default reference corrects only the approved interface declarations and preserves the published control
+  ---
+  duration_ms: 1138.20625
+  ...
+# Subtest: legacy and native defaults generate compilable, functioning signed/unsigned 16-bit consumers
+ok 15 - legacy and native defaults generate compilable, functioning signed/unsigned 16-bit consumers
+  ---
+  duration_ms: 1446.720416
+  ...
+# Subtest: all 20 cases persist and reload after source removal with original identities, CRCs, and member order
+    # Subtest: default
+    ok 1 - default
+      ---
+      duration_ms: 387.661458
+      ...
+    # Subtest: indent-zero
+    ok 2 - indent-zero
+      ---
+      duration_ms: 405.605875
+      ...
+    # Subtest: indent-two
+    ok 3 - indent-two
+      ---
+      duration_ms: 535.669125
+      ...
+    # Subtest: indent-eight
+    ok 4 - indent-eight
+      ---
+      duration_ms: 1161.497292
+      ...
+    # Subtest: sort-long
+    ok 5 - sort-long
+      ---
+      duration_ms: 627.892583
+      ...
+    # Subtest: sort-short
+    ok 6 - sort-short
+      ---
+      duration_ms: 433.473917
+      ...
+    # Subtest: unique-name
+    ok 7 - unique-name
+      ---
+      duration_ms: 310.048625
+      ...
+    # Subtest: no-tsconfig
+    ok 8 - no-tsconfig
+      ---
+      duration_ms: 378.421125
+      ...
+    # Subtest: extends-parent
+    ok 9 - extends-parent
+      ---
+      duration_ms: 339.864583
+      ...
+    # Subtest: extends-sibling
+    ok 10 - extends-sibling
+      ---
+      duration_ms: 260.306833
+      ...
+    # Subtest: extends-same-directory
+    ok 11 - extends-same-directory
+      ---
+      duration_ms: 371.2435
+      ...
+    # Subtest: wire-names
+    ok 12 - wire-names
+      ---
+      duration_ms: 251.134959
+      ...
+    # Subtest: scalars
+    ok 13 - scalars
+      ---
+      duration_ms: 204.318958
+      ...
+    # Subtest: comments
+    ok 14 - comments
+      ---
+      duration_ms: 174.980958
+      ...
+    # Subtest: external
+    ok 15 - external
+      ---
+      duration_ms: 260.672417
+      ...
+    # Subtest: namespaced-external
+    ok 16 - namespaced-external
+      ---
+      duration_ms: 181.225667
+      ...
+    # Subtest: programmatic-config
+    ok 17 - programmatic-config
+      ---
+      duration_ms: 272.622
+      ...
+    # Subtest: programmatic-no-config
+    ok 18 - programmatic-no-config
+      ---
+      duration_ms: 203.423833
+      ...
+    # Subtest: external-sorted
+    ok 19 - external-sorted
+      ---
+      duration_ms: 145.068458
+      ...
+    # Subtest: programmatic-root
+    ok 20 - programmatic-root
+      ---
+      duration_ms: 136.300583
+      ...
+    1..20
+ok 16 - all 20 cases persist and reload after source removal with original identities, CRCs, and member order
+  ---
+  duration_ms: 7923.268583
+  ...
+# Subtest: reject incomplete contracts, semantic mismatches, and missing graph dependencies
+ok 17 - reject incomplete contracts, semantic mismatches, and missing graph dependencies
+  ---
+  duration_ms: 36.759041
+  ...
+# Subtest: default and sorted identities can be selected from either persisted member order
+ok 18 - default and sorted identities can be selected from either persisted member order
+  ---
+  duration_ms: 331.593958
+  ...
+# Subtest: package metadata rejects inconsistent compiled output identity
+ok 19 - package metadata rejects inconsistent compiled output identity
+  ---
+  duration_ms: 12.007833
+  ...
+# Subtest: manifest order is enforced and invalid or duplicate paths fail
+ok 20 - manifest order is enforced and invalid or duplicate paths fail
+  ---
+  duration_ms: 20.570916
+  ...
+# Subtest: line comments do not change pinned original generated bytes
+ok 21 - line comments do not change pinned original generated bytes
+  ---
+  duration_ms: 218.572375
+  ...
+# Subtest: native scalar and wire-name output matches every original file after source removal
+ok 22 - native scalar and wire-name output matches every original file after source removal
+  ---
+  duration_ms: 3120.60775
+  ...
+# Subtest: native scalar options preserve original formatting, order and API configuration
+    # Subtest: indent-zero
+    ok 1 - indent-zero
+      ---
+      duration_ms: 391.360333
+      ...
+    # Subtest: indent-two
+    ok 2 - indent-two
+      ---
+      duration_ms: 372.365625
+      ...
+    # Subtest: indent-eight
+    ok 3 - indent-eight
+      ---
+      duration_ms: 252.618208
+      ...
+    # Subtest: sort-long
+    ok 4 - sort-long
+      ---
+      duration_ms: 339.02475
+      ...
+    # Subtest: sort-short
+    ok 5 - sort-short
+      ---
+      duration_ms: 452.458708
+      ...
+    # Subtest: unique-name
+    ok 6 - unique-name
+      ---
+      duration_ms: 436.480292
+      ...
+    # Subtest: no-tsconfig
+    ok 7 - no-tsconfig
+      ---
+      duration_ms: 307.712917
+      ...
+    # Subtest: extends-parent
+    ok 8 - extends-parent
+      ---
+      duration_ms: 300.321792
+      ...
+    # Subtest: extends-sibling
+    ok 9 - extends-sibling
+      ---
+      duration_ms: 237.229125
+      ...
+    # Subtest: extends-same-directory
+    ok 10 - extends-same-directory
+      ---
+      duration_ms: 265.682125
+      ...
+    # Subtest: programmatic-config
+    ok 11 - programmatic-config
+      ---
+      duration_ms: 310.281958
+      ...
+    # Subtest: programmatic-no-config
+    ok 12 - programmatic-no-config
+      ---
+      duration_ms: 270.887167
+      ...
+    1..12
+ok 23 - native scalar options preserve original formatting, order and API configuration
+  ---
+  duration_ms: 3940.35375
+  ...
+# Subtest: renderer uses metadata names and declaration order beyond the scalar fixture
+ok 24 - renderer uses metadata names and declaration order beyond the scalar fixture
+  ---
+  duration_ms: 355.162542
+  ...
+# Subtest: unsupported features fail visibly through the native adapter
+ok 25 - unsupported features fail visibly through the native adapter
+  ---
+  duration_ms: 1185.584083
+  ...
+# Subtest: native backend generates with filesystem and frontend/legacy module imports denied
+ok 26 - native backend generates with filesystem and frontend/legacy module imports denied
+  ---
+  duration_ms: 248.534208
+  ...
+# Subtest: all declared supported options and feature fixtures reproduce the pinned oracle
+ok 27 - all declared supported options and feature fixtures reproduce the pinned oracle
+  ---
+  duration_ms: 6939.377125
+  ...
+# Subtest: an independent candidate using different indentation produces a reported mismatch
+ok 28 - an independent candidate using different indentation produces a reported mismatch
+  ---
+  duration_ms: 329.298708
+  ...
+# Subtest: metadata adapters receive persisted data with schema sources removed
+ok 29 - metadata adapters receive persisted data with schema sources removed
+  ---
+  duration_ms: 597.416083
+  ...
+# Subtest: an unavailable metadata adapter is reported as failure, with no legacy fallback
+ok 30 - an unavailable metadata adapter is reported as failure, with no legacy fallback
+  ---
+  duration_ms: 522.893417
+  ...
+# Subtest: candidate command failure cannot become a matching empty tree
+ok 31 - candidate command failure cannot become a matching empty tree
+  ---
+  duration_ms: 357.975709
+  ...
+# Subtest: external schemas outside the original schema root remain an explicit oracle failure
+ok 32 - external schemas outside the original schema root remain an explicit oracle failure
+  ---
+  duration_ms: 117.161958
+  ...
+# Subtest: C-style block comments are rejected by the pinned original parser
+ok 33 - C-style block comments are rejected by the pinned original parser
+  ---
+  duration_ms: 163.325333
+  ...
+# Subtest: vector/optional output preserves original files, bytes, options and recursive metadata
+    # Subtest: default
+    ok 1 - default
+      ---
+      duration_ms: 302.206208
+      ...
+    # Subtest: indent-zero
+    ok 2 - indent-zero
+      ---
+      duration_ms: 193.300959
+      ...
+    # Subtest: indent-two
+    ok 3 - indent-two
+      ---
+      duration_ms: 233.74325
+      ...
+    # Subtest: indent-eight
+    ok 4 - indent-eight
+      ---
+      duration_ms: 263.350667
+      ...
+    # Subtest: sort-long
+    ok 5 - sort-long
+      ---
+      duration_ms: 277.618875
+      ...
+    # Subtest: sort-short
+    ok 6 - sort-short
+      ---
+      duration_ms: 269.633041
+      ...
+    # Subtest: unique-name
+    ok 7 - unique-name
+      ---
+      duration_ms: 252.048709
+      ...
+    # Subtest: no-tsconfig
+    ok 8 - no-tsconfig
+      ---
+      duration_ms: 409.040833
+      ...
+    # Subtest: extends-parent
+    ok 9 - extends-parent
+      ---
+      duration_ms: 385.143875
+      ...
+    # Subtest: extends-sibling
+    ok 10 - extends-sibling
+      ---
+      duration_ms: 519.877958
+      ...
+    # Subtest: extends-same-directory
+    ok 11 - extends-same-directory
+      ---
+      duration_ms: 560.143208
+      ...
+    # Subtest: programmatic-config
+    ok 12 - programmatic-config
+      ---
+      duration_ms: 595.007417
+      ...
+    # Subtest: programmatic-no-config
+    ok 13 - programmatic-no-config
+      ---
+      duration_ms: 496.832083
+      ...
+    1..13
+ok 34 - vector/optional output preserves original files, bytes, options and recursive metadata
+  ---
+  duration_ms: 7431.039875
+  ...
+# Subtest: unsupported types nested under vector/optional remain explicit generation failures
+ok 35 - unsupported types nested under vector/optional remain explicit generation failures
+  ---
+  duration_ms: 1295.514291
+  ...
+# Subtest: recursive templates preserve renamed, empty and multiple declarations
+ok 36 - recursive templates preserve renamed, empty and multiple declarations
+  ---
+  duration_ms: 231.966958
+  ...
+# Subtest: strict consumers and real codecs verify recursive values, defaults, validation, comparison and updates
+ok 37 - strict consumers and real codecs verify recursive values, defaults, validation, comparison and updates
+  ---
+  duration_ms: 1680.843167
+  ...
+# Subtest: recursive template generation works in a fresh process with filesystem/frontend/legacy imports denied
+ok 38 - recursive template generation works in a fresh process with filesystem/frontend/legacy imports denied
+  ---
+  duration_ms: 515.629833
+  ...
+1..38
+# tests 83
+# suites 0
+# pass 83
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 45264.705333

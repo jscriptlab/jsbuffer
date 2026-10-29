@@ -108,7 +108,7 @@ test('unsupported features fail visibly through the native adapter', async () =>
     {
       id: 'native-template',
       entry: 'items',
-      files: { 'source/items': 'export type Items { vector<int> ids; }\n' }
+      files: { 'source/items': 'export type Items { map<string,int> ids; }\n' }
     },
     {
       id: 'native-call',

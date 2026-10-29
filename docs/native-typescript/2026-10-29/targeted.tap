@@ -1,0 +1,101 @@
+TAP version 13
+# Subtest: vector/optional output preserves original files, bytes, options and recursive metadata
+    # Subtest: default
+    ok 1 - default
+      ---
+      duration_ms: 177.581291
+      ...
+    # Subtest: indent-zero
+    ok 2 - indent-zero
+      ---
+      duration_ms: 153.417584
+      ...
+    # Subtest: indent-two
+    ok 3 - indent-two
+      ---
+      duration_ms: 161.508959
+      ...
+    # Subtest: indent-eight
+    ok 4 - indent-eight
+      ---
+      duration_ms: 152.611625
+      ...
+    # Subtest: sort-long
+    ok 5 - sort-long
+      ---
+      duration_ms: 169.915875
+      ...
+    # Subtest: sort-short
+    ok 6 - sort-short
+      ---
+      duration_ms: 167.953959
+      ...
+    # Subtest: unique-name
+    ok 7 - unique-name
+      ---
+      duration_ms: 161.565292
+      ...
+    # Subtest: no-tsconfig
+    ok 8 - no-tsconfig
+      ---
+      duration_ms: 152.388833
+      ...
+    # Subtest: extends-parent
+    ok 9 - extends-parent
+      ---
+      duration_ms: 166.317333
+      ...
+    # Subtest: extends-sibling
+    ok 10 - extends-sibling
+      ---
+      duration_ms: 180.024
+      ...
+    # Subtest: extends-same-directory
+    ok 11 - extends-same-directory
+      ---
+      duration_ms: 149.906417
+      ...
+    # Subtest: programmatic-config
+    ok 12 - programmatic-config
+      ---
+      duration_ms: 164.384166
+      ...
+    # Subtest: programmatic-no-config
+    ok 13 - programmatic-no-config
+      ---
+      duration_ms: 151.702917
+      ...
+    1..13
+ok 1 - vector/optional output preserves original files, bytes, options and recursive metadata
+  ---
+  duration_ms: 2646.696
+  ...
+# Subtest: unsupported types nested under vector/optional remain explicit generation failures
+ok 2 - unsupported types nested under vector/optional remain explicit generation failures
+  ---
+  duration_ms: 761.31675
+  ...
+# Subtest: recursive templates preserve renamed, empty and multiple declarations
+ok 3 - recursive templates preserve renamed, empty and multiple declarations
+  ---
+  duration_ms: 156.087583
+  ...
+# Subtest: strict consumers and real codecs verify recursive values, defaults, validation, comparison and updates
+ok 4 - strict consumers and real codecs verify recursive values, defaults, validation, comparison and updates
+  ---
+  duration_ms: 981.074917
+  ...
+# Subtest: recursive template generation works in a fresh process with filesystem/frontend/legacy imports denied
+ok 5 - recursive template generation works in a fresh process with filesystem/frontend/legacy imports denied
+  ---
+  duration_ms: 195.661542
+  ...
+1..5
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4807.478333

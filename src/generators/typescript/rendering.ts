@@ -10,13 +10,16 @@ export class CodeWriter {
   }
   block(open: string, body: () => void, close = '}') {
     this.line(open);
+    this.indent(body);
+    this.line(close);
+  }
+  indent(body: () => void) {
     this.depth++;
     try {
       body();
     } finally {
       this.depth--;
     }
-    this.line(close);
   }
   comment(value: string) {
     this.line('/**');
